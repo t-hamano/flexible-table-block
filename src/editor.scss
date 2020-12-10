@@ -1,0 +1,34 @@
+.wp-block-ultimate-table-block-table {
+
+	table {
+
+		th,
+		td {
+
+			&.cell-selected {
+				position: relative;
+
+				::before {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					border: 2px #2196f3 solid;
+					content: "";
+					pointer-events: none;
+				}
+			}
+
+			.block-editor-rich-text__editable {
+				min-width: 50px;
+				border: 1px dotted #999;
+			}
+		}
+	}
+}
+
+[data-type="ultimate-table/ultimate-table"][data-align="center"] table {
+	margin-right: auto;
+	margin-left: auto;
+}
