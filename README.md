@@ -1,4 +1,4 @@
-# Ultimate Table Block
+# Flexible Table Block
 WordPressのブロックエディターに、柔軟な構成のテーブルを作成することが出来るカスタムブロックを追加します。
 
 ## 概要

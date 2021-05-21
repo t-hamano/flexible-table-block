@@ -50,7 +50,7 @@ export default function({ attributes, className }) {
 	return (
 		<div className={ classNames  } >
 			<div
-				className="wp-block-ultimate-table-block-table__wrap"
+				className="wp-block-flexible-table-block-table__wrap"
 				style={{
 					width: tableWidthVal
 				}}

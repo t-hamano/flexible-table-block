@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name: Ultimate Table Block
+ * Plugin Name: Flexible Table Block
  * Description: A block that allows you to create flexible configuration tables..
  * Version: 1.0.0
  * Author: Tetsuaki Hamano
  * Author URI: https://github.com/t-hamano
  * License: GPL2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: ultimate-table-block
- * @package ultimate-table-block
+ * Text Domain: flexible-table-block
+ * @package flexible-table-block
  * @author Tetsuaki Hamano
  * @license GPL-2.0+
  */
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 
 $asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php' );
 
-function ultimate_table_block_register_block() {
+function flexible_table_block_register_block() {
 
 	if ( ! function_exists( 'register_block_type' ) ) {
 		return;
@@ -31,7 +31,7 @@ function ultimate_table_block_register_block() {
 
 	//ブロック用スクリプト
 	wp_register_script(
-		'ultimate-table-block-script',
+		'flexible-table-block-script',
 		plugins_url( 'build/index.js', __FILE__ ),
 		$asset_file['dependencies'],
 		$asset_file['version']
@@ -39,7 +39,7 @@ function ultimate_table_block_register_block() {
 
 	// フロントエンド用スタイル
 	wp_register_style(
-		'ultimate-table-block-style',
+		'flexible-table-block-style',
 		plugins_url( 'build/style-index.css', __FILE__ ),
 		array(),
 		filemtime( plugin_dir_path( __FILE__ ) . 'build/style-index.css' )
@@ -47,7 +47,7 @@ function ultimate_table_block_register_block() {
 
 	//エディター用スタイル
 	wp_register_style(
-		'ultimate-table-block-editor',
+		'flexible-table-block-editor',
 		plugins_url( 'build/index.css', __FILE__ ),
 		array(),
 		filemtime( plugin_dir_path( __FILE__ ) . 'build/index.css' )
@@ -55,12 +55,12 @@ function ultimate_table_block_register_block() {
 
 	//ブロックタイプの登録
 	register_block_type(
-		'ultimate-table-block/table',
+		'flexible-table-block/table',
 		array(
-			'editor_script' => 'ultimate-table-block-script',
-			'editor_style'  => 'ultimate-table-block-editor',
-			'style'         => 'ultimate-table-block-style',
+			'editor_script' => 'flexible-table-block-script',
+			'editor_style'  => 'flexible-table-block-editor',
+			'style'         => 'flexible-table-block-style',
 		)
 	);
 }
-add_action( 'init', 'ultimate_table_block_register_block' );
+add_action( 'init', 'flexible_table_block_register_block' );

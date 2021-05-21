@@ -7,8 +7,8 @@ import save from './save';
 import './style.scss';
 import './editor.scss';
 
-registerBlockType( 'ultimate-table-block/table', {
-	title: 'Ultimate Table',
+registerBlockType( 'flexible-table-block/table', {
+	title: 'Flexible Table',
 	description: '柔軟な構成のテーブルを作成することが出来ます。',
 	icon,
 	category: 'common',

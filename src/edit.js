@@ -850,7 +850,7 @@ class utbTable extends Component {
 		if ( ! body.length ) {
 			return (
 				<Placeholder
-					label={ 'Ultimate Table' }
+					label={ 'Flexible Table' }
 					icon={ <BlockIcon icon={ blockTable } showColors /> }
 					instructions={ '複数のセルを選択する場合は、Ctrlキーを押したままにしてください。セルを範囲選択する場合は、Shiftキーを押したままにしてください。' }
 				>
@@ -1138,7 +1138,7 @@ class utbTable extends Component {
 				</InspectorControls>
 				<div className={ classNames  } >
 					<div
-						className="wp-block-ultimate-table-block-table__wrap"
+						className="wp-block-flexible-table-block-table__wrap"
 						style={{
 							width: tableWidthVal
 						}}

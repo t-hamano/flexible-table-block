@@ -1,7 +1,7 @@
-.wp-block-ultimate-table-block-table {
+.wp-block-flexible-table-block-table {
 	margin-bottom: 2em;
 
-	.wp-block-ultimate-table-block-table__wrap {
+	.wp-block-flexible-table-block-table__wrap {
 		max-width: 100%;
 
 		table {
@@ -75,7 +75,7 @@
 		&.is-scroll-on-mobile {
 			overflow-x: scroll;
 
-			.wp-block-ultimate-table-block-table__wrap {
+			.wp-block-flexible-table-block-table__wrap {
 				max-width: none;
 			}
 		}
