@@ -12,6 +12,7 @@
     "wp-coding-standards/wpcs": "*"
 	},
 	"scripts": {
-		"phpcs": "phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
+		"phpcs": "phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs",
+		"lint": "phpcs ./ --standard=./phpcs.ruleset.xml"
 	}
 }

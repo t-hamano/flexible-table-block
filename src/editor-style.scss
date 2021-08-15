@@ -1,0 +1,456 @@
+// Table Styles
+.wp-block-flexible-table-block-table {
+
+	> table {
+
+		&.has-fixed-layout {
+			table-layout: fixed;
+		}
+
+		thead,
+		tbody,
+		tfoot {
+			position: relative;
+
+			th,
+			td {
+				position: relative;
+
+				&.is-selected::after {
+					position: absolute;
+					top: 2px;
+					right: 2px;
+					bottom: 2px;
+					left: 2px;
+					border: 2px solid var(--wp-admin-theme-color);
+					content: "";
+					pointer-events: none;
+				}
+			}
+		}
+
+		figcaption {
+			position: relative;
+			z-index: 1;
+		}
+	}
+
+	&.is-selected > table {
+
+		th,
+		td {
+
+			.block-editor-rich-text__editable {
+				border: 1px dotted #eaeaea;
+			}
+		}
+	}
+
+	&.is-content-justification-left,
+	&.is-content-justification-center,
+	&.is-content-justification-right {
+		display: flex;
+		flex-flow: column;
+
+		figcaption {
+			align-self: stretch;
+		}
+	}
+
+	&.is-content-justification-left {
+		align-items: flex-start;
+	}
+
+	&.is-content-justification-center {
+		align-items: center;
+	}
+
+	&.is-content-justification-right {
+		align-items: flex-end;
+	}
+
+	&.show-dot-on-th th::before {
+		position: absolute;
+		top: 4px;
+		right: 4px;
+		z-index: 1;
+		width: 6px;
+		height: 6px;
+		background: var(--wp-admin-theme-color);
+		border-radius: 50%;
+		content: "";
+	}
+
+	.ftb-placeholder {
+
+		&__table {
+			width: 100%;
+			text-align: center;
+			vertical-align: middle;
+			table-layout: fixed;
+			border-collapse: separate;
+			border-spacing: 3px;
+
+			th,
+			td {
+				padding: 0 !important;
+			}
+
+			thead th,
+			tfoot td {
+				background-color: var(--wp-admin-theme-color);
+			}
+
+			tbody td {
+				border: 1px #1e1e1e solid;
+			}
+
+
+			&.is-overflow-col tr *:nth-last-child(2) {
+				position: relative;
+				background-color: transparent;
+				border: none;
+
+				&::before {
+					display: block;
+					line-height: 0;
+					content: "...";
+				}
+			}
+
+			&.is-overflow-row {
+
+				tbody tr:nth-last-child(2) td {
+					position: relative;
+					border: none;
+
+					&::before {
+						display: block;
+						line-height: 0;
+						content: "...";
+					}
+				}
+			}
+		}
+
+		&__form {
+			display: block !important;
+			flex-wrap: nowrap;
+
+			.components-base-control {
+				width: 100px;
+
+				&.components-toggle-control {
+					width: auto;
+				}
+			}
+
+			.components-base-control__field {
+				margin-right: 8px;
+				margin-bottom: 0;
+
+				.components-text-control__input {
+					height: 36px;
+				}
+			}
+		}
+
+		&__row {
+			display: flex;
+			align-items: flex-end;
+			margin-top: 16px;
+		}
+	}
+
+	.ftb-table-cell-label {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		height: auto;
+		padding: 0 3px;
+		font-size: 11px;
+		line-height: 18px;
+		border-radius: 0;
+	}
+}
+
+// Setting Component Styles
+.ftb-button-group {
+	display: block;
+
+	.components-button {
+		vertical-align: top;
+	}
+}
+
+.ftb-reset-settings-control .components-base-control__field {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.ftb-base-control-row {
+	display: flex;
+
+	> *:first-child {
+		margin-right: 16px;
+	}
+}
+
+.ftb-percent-group {
+	margin-top: 8px;
+}
+
+.ftb-border-radius-control,
+.ftb-border-width-control,
+.ftb-border-style-control,
+.ftb-border-spacing-control,
+.ftb-border-color-control,
+.ftb-color-control {
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 12px;
+	}
+}
+
+.ftb-border-radius-control,
+.ftb-border-width-control,
+.ftb-border-spacing-control {
+
+	&__header-control {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 30px;
+
+		.components-unit-control-wrapper {
+			max-width: 80px;
+			margin-right: auto;
+		}
+	}
+
+	&__input-controls {
+		display: flex;
+		padding-top: 8px;
+
+		.components-unit-control-wrapper {
+			max-width: 60px;
+			margin-left: -1px;
+
+			.components-input-control {
+				border-radius: 0;
+			}
+
+			&:first-child .components-input-control {
+				border-radius: 2px 0 0 2px;
+			}
+
+			&:last-child .components-input-control {
+				border-radius: 0 2px 2px 0;
+			}
+		}
+	}
+}
+
+.ftb-border-style-control {
+
+	&__button-controls {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+	}
+
+	&__button-controls-row {
+		display: flex;
+
+		&:not(:first-child) {
+			padding-top: 8px;
+		}
+	}
+}
+
+.ftb-border-color-control,
+.ftb-color-control {
+
+	&__controls {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+	}
+
+	&__controls-row {
+		display: flex;
+		align-items: center;
+
+		&:not(:first-child) {
+			padding-top: 8px;
+		}
+	}
+
+	&__indicator {
+		width: 40px;
+		height: 20px;
+		padding: 0;
+
+		.component-color-indicator {
+			position: relative;
+			flex: 1;
+			height: 100%;
+			margin: 0;
+
+			&--none::before {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				background-image: linear-gradient(to right top, transparent 46%, #cc1818 calc(46% + 1px), #cc1818 calc(54% - 1px), transparent 54%);
+				content: "";
+			}
+		}
+	}
+
+	&__popover .components-popover__content {
+		padding: 16px;
+	}
+}
+
+.ftb-global-setting {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 16px 16px 16px;
+}
+
+// Modal Component Styles
+.ftb-global-setting-modal {
+	max-width: 600px;
+
+	h2 {
+		font-size: 1.2em;
+	}
+
+	hr {
+		margin: 1em 0;
+	}
+
+	.components-modal__content {
+		margin-bottom: 60px;
+		padding-bottom: 40px;
+	}
+
+	.components-range-control__mark {
+		background-color: #d7dade;
+	}
+
+	.components-range-control__mark-label {
+		color: currentColor;
+	}
+
+	.components-disabled label {
+		opacity: 0.3;
+	}
+
+	&__styles {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	&__styles-item {
+		width: calc(50% - 4px);
+		margin-bottom: 8px;
+		padding: 8px;
+		border: 1px var(--wp-admin-theme-color) solid;
+	}
+
+	&__styles-color {
+		position: relative;
+		padding-left: 28px;
+
+		.component-color-indicator {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			margin-top: -8px;
+			margin-left: 0;
+		}
+	}
+
+	&__buttons {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		height: 60px;
+		padding: 0 24px;
+		background: #fff;
+	}
+
+	&__confirm-popover .components-popover__content {
+		min-width: 150px;
+		padding: 8px;
+
+		p {
+			margin: 0 0 1em;
+		}
+	}
+
+	&__confirm-popover-buttons {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__notice {
+		position: absolute !important;
+		right: 24px;
+		bottom: 60px;
+		left: 24px;
+		z-index: 6;
+		margin: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+
+		&.is-dismissible {
+			padding-right: 8px;
+
+			svg {
+				width: 16px;
+				height: 16px;
+			}
+		}
+
+		.components-button {
+			align-self: center;
+		}
+	}
+
+	&__loading {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 5;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0.2);
+	}
+}
+
+.ftb-global-help-modal {
+	max-width: 600px;
+}
+
+@media screen and (max-width: 782px) {
+
+	.ftb-global-setting-modal__styles-item {
+		width: 100%;
+	}
+}
