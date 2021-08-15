@@ -14,6 +14,8 @@ import {
 	alignCenter
 } from '@wordpress/icons';
 
+export const PREVIEW_TABLE_HEIGHT_MIN = 200;
+
 export const BORDER_SPACING_MAX = 100;
 
 export const ALIGNMENT_CONTROLS = [

@@ -11,17 +11,35 @@ const INHERITED_COLUMN_ATTRIBUTES = [ 'align' ];
  * @param {Object} options
  * @param {number} options.rowCount    Row count for the table to create.
  * @param {number} options.columnCount Column count for the table to create.
+ * @param {boolean} options.hasHeader  With/without header section.
+ * @param {boolean} options.hasFooter  With/without footer section.
  *
  * @return {Object} New table state.
  */
-export function createTable({ rowCount, columnCount }) {
+export function createTable({ rowCount, columnCount, hasHeader, hasFooter }) {
 	return {
+		...hasHeader && {
+			head: [ {
+				cells: times( columnCount, () => ({
+					content: '',
+					tag: 'th'
+				}) )
+			} ]
+		},
 		body: times( rowCount, () => ({
 			cells: times( columnCount, () => ({
 				content: '',
 				tag: 'td'
 			}) )
-		}) )
+		}) ),
+		...hasFooter && {
+			foot: [ {
+				cells: times( columnCount, () => ({
+					content: '',
+					tag: 'th'
+				}) )
+			} ]
+		}
 	};
 }
 

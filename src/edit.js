@@ -62,7 +62,10 @@ import {
 	isEmptyTableSection
 } from './state';
 
-import { getTableStyle } from './helper';
+import {
+	previewTable,
+	getTableStyle
+} from './helper';
 
 import {
 	BORDER_SPACING_MAX,
@@ -96,6 +99,8 @@ function TableEdit({
 	} = attributes;
 	const [ initialRowCount, setInitialRowCount ] = useState( 2 );
 	const [ initialColumnCount, setInitialColumnCount ] = useState( 2 );
+	const [ initialHeaderSection, setInitialHeaderSection ] = useState( false );
+	const [ initialFooterSection, setInitialFooterSection ] = useState( false );
 	const [ selectedCell, setSelectedCell ] = useState();
 
 	const colorProps = useColorProps( attributes );
@@ -123,6 +128,24 @@ function TableEdit({
 	}
 
 	/**
+	 * Updates the initial header section setting used for table creation.
+	 *
+	 * @param {boolean} hasHeader New initial header section setting.
+	 */
+	function onToggleInitialHeaderSection( hasHeader ) {
+		setInitialHeaderSection( hasHeader );
+	}
+
+	/**
+	 * Updates the initial footer section setting used for table creation.
+	 *
+	 * @param {boolean} hasFooter New initial footer section setting.
+	 */
+	function onToggleInitialFooterSection( hasFooter ) {
+		setInitialFooterSection( hasFooter );
+	}
+
+	/**
 	 * Creates a table based on dimensions in local state.
 	 *
 	 * @param {Object} event Form submit event.
@@ -133,7 +156,9 @@ function TableEdit({
 		setAttributes(
 			createTable({
 				rowCount: parseInt( initialRowCount, 10 ) || 2,
-				columnCount: parseInt( initialColumnCount, 10 ) || 2
+				columnCount: parseInt( initialColumnCount, 10 ) || 2,
+				hasHeader: !! initialHeaderSection,
+				hasFooter: !! initialFooterSection
 			})
 		);
 	}
@@ -149,8 +174,6 @@ function TableEdit({
 	 * Toggles whether the table has a fixed layout or not.
 	 */
 	function onChangeSticky( value ) {
-		console.log( value );
-
 		setAttributes({ sticky: value });
 	}
 
@@ -611,27 +634,49 @@ function TableEdit({
 					icon={ <BlockIcon icon={ icon } showColors /> }
 					instructions={ __( 'Insert a table for sharing data.' ) }
 				>
-					<form onSubmit={ onCreateTable }>
-						<TextControl
-							type="number"
-							label={ __( 'Column count', 'flexible-spacer-block' ) }
-							value={ initialColumnCount }
-							onChange={ onChangeInitialColumnCount }
-							min="1"
-						/>
-						<TextControl
-							type="number"
-							label={ __( 'Row count', 'flexible-spacer-block' ) }
-							value={ initialRowCount }
-							onChange={ onChangeInitialRowCount }
-							min="1"
-						/>
-						<Button
-							variant="primary"
-							type="submit"
-						>
-							{ __( 'Create Table', 'flexible-spacer-block' ) }
-						</Button>
+					{
+						previewTable({
+							rowCount: parseInt( initialRowCount, 10 ) || 2,
+							columnCount: parseInt( initialColumnCount, 10 ) || 2,
+							hasHeader: !! initialHeaderSection,
+							hasFooter: !! initialFooterSection
+						})
+					}
+					<form className="wp-block-ftb-flexible-table__placeholder-form" onSubmit={ onCreateTable }>
+						<div className="wp-block-ftb-flexible-table__placeholder-row">
+							<ToggleControl
+								label={ __( 'Header section', 'flexible-spacer-block' ) }
+								checked={ !! initialHeaderSection }
+								onChange={ onToggleInitialHeaderSection }
+							/>
+							<ToggleControl
+								label={ __( 'Footer section', 'flexible-spacer-block' ) }
+								checked={ !! initialFooterSection }
+								onChange={ onToggleInitialFooterSection }
+							/>
+						</div>
+						<div className="wp-block-ftb-flexible-table__placeholder-row">
+							<TextControl
+								type="number"
+								label={ __( 'Column count', 'flexible-spacer-block' ) }
+								value={ initialColumnCount }
+								onChange={ onChangeInitialColumnCount }
+								min="1"
+							/>
+							<TextControl
+								type="number"
+								label={ __( 'Row count', 'flexible-spacer-block' ) }
+								value={ initialRowCount }
+								onChange={ onChangeInitialRowCount }
+								min="1"
+							/>
+							<Button
+								isPrimary
+								type="submit"
+							>
+								{ __( 'Create Table', 'flexible-spacer-block' ) }
+							</Button>
+						</div>
 					</form>
 				</Placeholder>
 			) }
