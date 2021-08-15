@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Flexible Table Block
- * Description: A block that allows you to create flexible configuration tables..
- * Version: 1.0.0
+ * Description: A block that allows you to create flexible configuration tables.
+ * Version: 2.0.0
  * Author: Tetsuaki Hamano
  * Author URI: https://github.com/t-hamano
  * License: GPL2 or later
@@ -13,53 +13,44 @@
  * @license GPL-2.0+
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 defined( 'ABSPATH' ) || exit;
 
-$asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php' );
+$ftb_data = get_file_data( __FILE__, array( 'TextDomain' => 'Text Domain' ) );
+
+define( 'FTB_NAMESPACE', $ftb_data['TextDomain'] );
+define( 'FTB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'FTB_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 
 function flexible_table_block_register_block() {
+	$asset_file = include( FTB_PATH . '/build/index.asset.php' );
 
-	if ( ! function_exists( 'register_block_type' ) ) {
-		return;
-	}
+	wp_register_style(
+		FTB_NAMESPACE . '-editor',
+		FTB_URL . '/build/index.css',
+		array(),
+		filemtime( FTB_PATH . '/build/index.css' ),
+	);
 
-	$asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php' );
+	wp_register_style(
+		FTB_NAMESPACE,
+		FTB_URL . '/build/style-index.css',
+		array(),
+		filemtime( FTB_PATH . '/build/style-index.css' ),
+	);
 
-	//ブロック用スクリプト
 	wp_register_script(
-		'flexible-table-block-script',
-		plugins_url( 'build/index.js', __FILE__ ),
+		FTB_NAMESPACE,
+		FTB_URL . '/build/index.js',
 		$asset_file['dependencies'],
 		$asset_file['version']
 	);
 
-	// フロントエンド用スタイル
-	wp_register_style(
-		'flexible-table-block-style',
-		plugins_url( 'build/style-index.css', __FILE__ ),
-		array(),
-		filemtime( plugin_dir_path( __FILE__ ) . 'build/style-index.css' )
-	);
-
-	//エディター用スタイル
-	wp_register_style(
-		'flexible-table-block-editor',
-		plugins_url( 'build/index.css', __FILE__ ),
-		array(),
-		filemtime( plugin_dir_path( __FILE__ ) . 'build/index.css' )
-	);
-
-	//ブロックタイプの登録
 	register_block_type(
-		'flexible-table-block/table',
+		__DIR__ . '/src',
 		array(
-			'editor_script' => 'flexible-table-block-script',
-			'editor_style'  => 'flexible-table-block-editor',
-			'style'         => 'flexible-table-block-style',
+			'editor_script' => FTB_NAMESPACE,
+			'editor_style'  => FTB_NAMESPACE . '-editor',
+			'style'         => FTB_NAMESPACE,
 		)
 	);
 }

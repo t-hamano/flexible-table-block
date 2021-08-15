@@ -1,76 +1,103 @@
+/**
+ * External dependencies
+ */
 import classnames from 'classnames';
-import { RichText } from '@wordpress/block-editor';
 
-export default function({ attributes, className }) {
+/**
+ * WordPress dependencies
+ */
+import {
+	RichText,
+	useBlockProps,
+	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles
+} from '@wordpress/block-editor';
 
+/**
+ * Internal dependencies
+ */
+import { getTableStyle } from './helper';
+
+export default function save({ attributes }) {
 	const {
-		head,
-		foot,
 		hasFixedLayout,
-		isStackedOnMobile,
-		isScrollOnMobile,
-		tableWidth,
-		fontSize,
-		lineHeight,
-		borderColor
+		sticky,
+		head,
+		body,
+		foot,
+		captionSide,
+		caption
 	} = attributes;
+	const isEmpty = ! head.length && ! body.length && ! foot.length;
 
-	const tableWidthVal = !! tableWidth ? tableWidth : undefined;
-	const fontSizeVal = !! fontSize ? fontSize + 'em' : undefined;
-	const lineHeightVal = !! lineHeight ? lineHeight : undefined;
-	const borderColorVal = !! borderColor ? borderColor : undefined;
-
-	const classNames = classnames(
-		'hoge',
-		className,
-		{
-			'has-fixed-layout': hasFixedLayout,
-			'is-stacked-on-mobile': isStackedOnMobile,
-			'is-scroll-on-mobile': isScrollOnMobile
-		}
-	);
-
-	function renderSection( section ) {
-		let sectionTagName = 'head' === section ? 'th' : 'td';
-		return attributes[section].map( ({cells}, rowIndex ) => (
-			<tr key={rowIndex}>
-				{cells.map( ({content, styles, colSpan, rowSpan}, colIndex ) => (
-					<RichText.Content
-						tagName={sectionTagName}
-						value={content}
-						key={colIndex}
-						style={styles}
-						colSpan={colSpan}
-						rowSpan={rowSpan}
-					/>
-				) )}
-			</tr>
-		) );
+	if ( isEmpty ) {
+		return null;
 	}
+
+	const colorProps = getColorClassesAndStyles( attributes );
+
+	const classes = classnames( colorProps.className, {
+		'has-fixed-layout': hasFixedLayout,
+		[ `is-sticky-${sticky}` ]: 'none' !== sticky
+	});
+
+	const hasCaption = ! RichText.isEmpty( caption );
+
+	const tableStyle = getTableStyle( attributes );
+
+	const Section = ({ type, rows }) => {
+		if ( ! rows.length ) {
+			return null;
+		}
+
+		const Tag = `t${ type }`;
+
+		return (
+			<Tag>
+				{ rows.map( ({ cells }, rowIndex ) => (
+					<tr key={ rowIndex }>
+						{ cells.map(
+							({ content, tag, textAlign }, cellIndex ) => {
+								const cellClasses = classnames({
+									[ `has-text-align-${ textAlign }` ]: textAlign
+								});
+
+								return (
+									<RichText.Content
+										className={
+											cellClasses ?
+												cellClasses :
+												undefined
+										}
+										data-text-align={ textAlign }
+										tagName={ tag }
+										value={ content }
+										key={ cellIndex }
+									/>
+								);
+							}
+						) }
+					</tr>
+				) ) }
+			</Tag>
+		);
+	};
+
 	return (
-		<div className={ classNames  } >
-			<div
-				className="wp-block-flexible-table-block-table__wrap"
-				style={{
-					width: tableWidthVal
-				}}
+		<figure { ...useBlockProps.save() }>
+			{ hasCaption && 'top' === captionSide && (
+				<RichText.Content tagName="figcaption" value={ caption } />
+			) }
+			<table
+				className={ '' === classes ? undefined : classes }
+				style={ { ...tableStyle, ...colorProps.style } }
 			>
-				<table
-					style={{
-						borderColor: borderColorVal,
-						fontSize: fontSizeVal,
-						lineHeight: lineHeightVal
-					}}
-				>
-					{!! head.length && (
-					<thead>{renderSection( 'head' )}</thead>
-					)}
-					<tbody>{renderSection( 'body' )}</tbody>
-					{!! foot.length && (
-						<tfoot>{renderSection( 'foot' )}</tfoot>
-					)}
-				</table>
-			</div>
-		</div>
+				<Section type="head" rows={ head } />
+				<Section type="body" rows={ body } />
+				<Section type="foot" rows={ foot } />
+			</table>
+			{ hasCaption && 'bottom' === captionSide && (
+				<RichText.Content tagName="figcaption" value={ caption } />
+			) }
+		</figure>
 	);
 }

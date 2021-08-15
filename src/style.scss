@@ -1,83 +1,54 @@
-.wp-block-flexible-table-block-table {
-	margin-bottom: 2em;
+.wp-block-ftb-flexible-table {
 
-	.wp-block-flexible-table-block-table__wrap {
-		max-width: 100%;
-
-		table {
-			width: 100%;
-			margin: 0;
-			line-height: 1.5;
-			border-color: #666;
-			border-collapse: collapse;
-
-			thead,
-			tbody,
-			tfoot,
-			tr {
-				line-height: inherit;
-				border-color: inherit;
-			}
-
-			th,
-			td {
-				padding: 0.5em;
-				font-weight: normal;
-				text-align: left;
-				border-color: inherit;
-				border-style: solid;
-				border-width: 1px;
-			}
-
-			thead,
-			tfoot {
-
-				th,
-				td {
-					background: #ddd;
-				}
-			}
-		}
+	> figcaption:first-child {
+		margin-bottom: calc(0.5 * var(--global--spacing-unit));
 	}
 
-	&.has-fixed-layout table {
+	table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	thead {
+		border-bottom: 3px solid;
+	}
+
+	tfoot {
+		border-top: 3px solid;
+	}
+
+	.has-fixed-layout {
+		width: 100%;
 		table-layout: fixed;
+
+		td,
+		th {
+			word-break: break-word;
+		}
 	}
 
-	&.aligncenter table {
-		margin-right: auto;
-		margin-left: auto;
+	.is-sticky-header thead th {
+		position: sticky;
+		top: 0;
+		z-index: 1;
 	}
 
-	@media screen and (max-width: 896px) {
+	th,
+	td {
+		padding: 0.5em;
+		word-break: normal;
+		border: 1px solid;
 
-		&.is-stacked-on-mobile table {
-
-			th,
-			td {
-				display: block;
-				width: 100% !important;
-			}
-
-			tr:not(:first-child) {
-
-				th,
-				td {
-					border-top: none;
-				}
-			}
-
-			tr:first-child > *:first-child {
-				border-bottom: none;
-			}
+		.has-vertical-align-top {
+			vertical-align: top;
 		}
 
-		&.is-scroll-on-mobile {
-			overflow-x: scroll;
+		.has-vertical-align-middle {
+			vertical-align: top;
+		}
 
-			.wp-block-flexible-table-block-table__wrap {
-				max-width: none;
-			}
+		.has-vertical-align-bottom {
+			vertical-align: top;
 		}
 	}
 }

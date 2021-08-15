@@ -1,0 +1,156 @@
+{
+	"apiVersion": 2,
+	"name": "ftb/flexible-table",
+	"title": "Flexible Table",
+	"category": "common",
+	"description": "Create flexible configuration tables.",
+	"textdomain": "flexible-table-block",
+	"attributes": {
+		"hasFixedLayout": {
+			"type": "boolean",
+			"default": false
+		},
+		"sticky": {
+			"type": "string"
+		},
+		"borderCollapse": {
+			"type": "string",
+			"default": "collapse"
+		},
+		"borderSpacingHorizontal": {
+			"type": "string",
+			"default": 0
+		},
+		"borderSpacingVertical": {
+			"type": "string",
+			"default": 0
+		},
+		"captionSide": {
+			"type": "string",
+			"default": "bottom"
+		},
+		"caption": {
+			"type": "string",
+			"default": [],
+			"source": "html",
+			"selector": "figcaption",
+			"query": {
+				"content": {
+					"type": "string",
+					"source": "html"
+				},
+				"align": {
+					"type": "string",
+					"source": "attribute",
+					"attribute": "data-align"
+				}
+			}
+		},
+		"head": {
+			"type": "array",
+			"default": [],
+			"source": "query",
+			"selector": "thead tr",
+			"query": {
+				"cells": {
+					"type": "array",
+					"default": [],
+					"source": "query",
+					"selector": "td,th",
+					"query": {
+						"content": {
+							"type": "string",
+							"source": "html"
+						},
+						"tag": {
+							"type": "string",
+							"default": "td",
+							"source": "tag"
+						},
+						"align": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-align"
+						}
+					}
+				}
+			}
+		},
+		"body": {
+			"type": "array",
+			"default": [],
+			"source": "query",
+			"selector": "tbody tr",
+			"query": {
+				"cells": {
+					"type": "array",
+					"default": [],
+					"source": "query",
+					"selector": "td,th",
+					"query": {
+						"content": {
+							"type": "string",
+							"source": "html"
+						},
+						"tag": {
+							"type": "string",
+							"default": "td",
+							"source": "tag"
+						},
+						"textAlign": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-text-align"
+						},
+						"verticalAlign": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-vertical-align"
+						}
+					}
+				}
+			}
+		},
+		"foot": {
+			"type": "array",
+			"default": [],
+			"source": "query",
+			"selector": "tfoot tr",
+			"query": {
+				"cells": {
+					"type": "array",
+					"default": [],
+					"source": "query",
+					"selector": "td,th",
+					"query": {
+						"content": {
+							"type": "string",
+							"source": "html"
+						},
+						"tag": {
+							"type": "string",
+							"default": "td",
+							"source": "tag"
+						},
+						"align": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "data-align"
+						}
+					}
+				}
+			}
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"align": true,
+		"color": {
+			"__experimentalSkipSerialization": true,
+			"gradients": true
+		},
+		"__experimentalSelector": ".wp-block-ftb-flexible-table > table"
+	},
+	"editorStyle": "flexible-table-block-editor",
+	"style": "flexible-table-block"
+}

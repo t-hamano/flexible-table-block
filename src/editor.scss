@@ -1,34 +1,19 @@
-.wp-block-flexible-table-block-table {
+.wp-block-ftb-flexible-table {
+	background: transparent;
 
-	table {
+	&__components-button-group {
+		display: block;
+	}
 
-		th,
-		td {
+	&__spacing-control {
+		display: flex;
 
-			&.cell-selected {
-				position: relative;
+		.components-unit-control-wrapper {
+			flex: 1;
 
-				::before {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					border: 2px #2196f3 solid;
-					content: "";
-					pointer-events: none;
-				}
-			}
-
-			.block-editor-rich-text__editable {
-				min-width: 50px;
-				border: 1px dotted #999;
+			+ .components-unit-control-wrapper {
+				margin-left: 10px;
 			}
 		}
 	}
-}
-
-[data-type="flexible-table/flexible-table"][data-align="center"] table {
-	margin-right: auto;
-	margin-left: auto;
 }
