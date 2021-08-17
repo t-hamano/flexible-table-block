@@ -21,6 +21,9 @@ export default function save({ attributes }) {
 	const {
 		hasFixedLayout,
 		sticky,
+		width,
+		minWidth,
+		maxWidth,
 		head,
 		body,
 		foot,

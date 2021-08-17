@@ -10,6 +10,15 @@
 			"type": "boolean",
 			"default": false
 		},
+		"width": {
+			"type": "string"
+		},
+		"maxWidth": {
+			"type": "string"
+		},
+		"minWidth": {
+			"type": "string"
+		},
 		"sticky": {
 			"type": "string"
 		},
@@ -18,12 +27,10 @@
 			"default": "collapse"
 		},
 		"borderSpacingHorizontal": {
-			"type": "string",
-			"default": 0
+			"type": "string"
 		},
 		"borderSpacingVertical": {
-			"type": "string",
-			"default": 0
+			"type": "string"
 		},
 		"captionSide": {
 			"type": "string",

@@ -63,33 +63,6 @@ export function getFirstRow( state ) {
 }
 
 /**
- * Gets styles for table.
- *
- * @param {Object} state Current table state.
- *
- * @return {Object} Table style.
- */
-export function getTableStyle( state ) {
-	const { borderCollapse } = state;
-	const borderSpacingHorizontal = 0 > parseFloat( state.borderSpacingHorizontal ) ? '0' : state.borderSpacingHorizontal;
-	const borderSpacingVertical = 0 > parseFloat( state.borderSpacingVertical ) ? '0' : state.borderSpacingVertical;
-
-	if ( ( 'collapse' === borderCollapse ) || ( '0' === borderSpacingHorizontal && '0' === borderSpacingVertical ) ) {
-		return {};
-	} else if ( borderSpacingHorizontal === borderSpacingVertical ) {
-		return {
-			borderCollapse: 'separate',
-			borderSpacing: borderSpacingHorizontal
-		};
-	} else {
-		return {
-			borderCollapse: 'separate',
-			borderSpacing: `${borderSpacingHorizontal} ${borderSpacingVertical}`
-		};
-	}
-}
-
-/**
  * Gets an attribute for a cell.
  *
  * @param {Object} state         Current table state.

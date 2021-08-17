@@ -63,6 +63,7 @@ import {
 } from './state';
 
 import {
+	toUnitVal,
 	previewTable,
 	getTableStyle
 } from './helper';
@@ -89,6 +90,9 @@ function TableEdit({
 	const {
 		hasFixedLayout,
 		sticky,
+		width,
+		minWidth,
+		maxWidth,
 		borderCollapse,
 		borderSpacingHorizontal,
 		borderSpacingVertical,
@@ -105,7 +109,11 @@ function TableEdit({
 
 	const colorProps = useColorProps( attributes );
 
-	const units = useCustomUnits({
+	const tabeWidthUnits = useCustomUnits({
+		availableUnits: [ 'px', 'em', 'rem', '%' ]
+	});
+
+	const borderSpacingUnits = useCustomUnits({
 		availableUnits: [ 'px', 'em', 'rem' ]
 	});
 
@@ -499,6 +507,48 @@ function TableEdit({
 								checked={ !! ( foot && foot.length ) }
 								onChange={ onToggleFooterSection }
 							/>
+							<BaseControl
+								label={ __( 'Width', 'flexible-spacer-block' ) }
+								id="flexible-table-block/width"
+							>
+								<UnitControl
+									labelPosition="top"
+									min="0"
+									value={ width }
+									onChange={ ( value ) => {
+										setAttributes({ width: toUnitVal( value ) });
+									} }
+									units={ tabeWidthUnits }
+								/>
+							</BaseControl>
+							<BaseControl
+								label={ __( 'Min width', 'flexible-spacer-block' ) }
+								id="flexible-table-block/width"
+							>
+								<UnitControl
+									labelPosition="top"
+									min="0"
+									value={ minWidth }
+									onChange={ ( value ) => {
+										setAttributes({ minWidth: toUnitVal( value ) });
+									} }
+									units={ tabeWidthUnits }
+								/>
+							</BaseControl>
+							<BaseControl
+								label={ __( 'Max width', 'flexible-spacer-block' ) }
+								id="flexible-table-block/width"
+							>
+								<UnitControl
+									labelPosition="top"
+									min="0"
+									value={ maxWidth }
+									onChange={ ( value ) => {
+										setAttributes({ maxWidth: toUnitVal( value ) });
+									} }
+									units={ tabeWidthUnits }
+								/>
+							</BaseControl>
 							<SelectControl
 								label={ __( 'Fixed control', 'flexible-spacer-block' ) }
 								value={ sticky }
@@ -521,8 +571,8 @@ function TableEdit({
 												isPrimary= { value === borderCollapse }
 												onClick={ () =>{
 													setAttributes({ borderCollapse: value });
-													setAttributes({ borderSpacingHorizontal: '0' });
-													setAttributes({ borderSpacingVertical: '0' });
+													setAttributes({ borderSpacingHorizontal: undefined });
+													setAttributes({ borderSpacingVertical: undefined });
 												} }
 											>
 												{ label }
@@ -542,24 +592,22 @@ function TableEdit({
 											labelPosition="top"
 											min="0"
 											max={ BORDER_SPACING_MAX }
-											value={ borderSpacingHorizontal || '' }
+											value={ borderSpacingHorizontal }
 											onChange={ ( value ) => {
-												value = 0 > parseFloat( value ) ? '0' : value;
-												setAttributes({ borderSpacingHorizontal: value });
+												setAttributes({ borderSpacingHorizontal: toUnitVal( value ) });
 											} }
-											units={ units }
+											units={ borderSpacingUnits }
 										/>
 										<UnitControl
 											label={ __( 'Vertical', 'flexible-spacer-block' ) }
 											labelPosition="top"
 											min="0"
 											max={ BORDER_SPACING_MAX }
-											value={ borderSpacingVertical || '' }
+											value={ borderSpacingVertical }
 											onChange={ ( value ) => {
-												value = 0 > parseFloat( value ) ? '0' : value;
-												setAttributes({ borderSpacingVertical: value });
+												setAttributes({ borderSpacingVertical: toUnitVal( value ) });
 											} }
-											units={ units }
+											units={ borderSpacingUnits }
 										/>
 									</div>
 								</BaseControl>

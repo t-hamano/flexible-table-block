@@ -9,6 +9,17 @@ import { times } from 'lodash';
 import { PREVIEW_TABLE_HEIGHT_MIN } from './constants';
 
 /**
+ * Sanitize the value of UnitControl.
+ *
+ * @param {string} value UnitControl value.
+ *
+ * @return {string} Sanitized UnitControl value.
+ */
+export function toUnitVal( value ) {
+	return ( isNaN( parseFloat( value ) ) || 0 > parseFloat( value ) ) ? undefined : value;
+}
+
+/**
  * Gets styles for table.
  *
  * @param {Object}  options
@@ -64,21 +75,17 @@ export function previewTable({rowCount, columnCount, hasHeader, hasFooter }) {
  * @return {Object} Table style.
  */
 export function getTableStyle( attributes ) {
-	const { borderCollapse } = attributes;
-	const borderSpacingHorizontal = 0 > parseFloat( attributes.borderSpacingHorizontal ) ? '0' : attributes.borderSpacingHorizontal;
-	const borderSpacingVertical = 0 > parseFloat( attributes.borderSpacingVertical ) ? '0' : attributes.borderSpacingVertical;
+	const { borderCollapse, width, minWidth, maxWidth } = attributes;
+	const borderSpacingHorizontal = undefined === attributes.borderSpacingHorizontal ? 0 : attributes.borderSpacingHorizontal;
+	const borderSpacingVertical = undefined === attributes.borderSpacingVertical ? 0 : attributes.borderSpacingVertical;
 
-	if ( ( 'collapse' === borderCollapse ) || ( '0' === borderSpacingHorizontal && '0' === borderSpacingVertical ) ) {
-		return {};
-	} else if ( borderSpacingHorizontal === borderSpacingVertical ) {
-		return {
-			borderCollapse: 'separate',
-			borderSpacing: borderSpacingHorizontal
-		};
-	} else {
-		return {
-			borderCollapse: 'separate',
-			borderSpacing: `${borderSpacingHorizontal} ${borderSpacingVertical}`
-		};
+	let styles = { width, minWidth, maxWidth };
+
+	if ( ( 'collapse' === borderCollapse ) || ( 0 === borderSpacingHorizontal && 0 === borderSpacingVertical ) ) {
+		return styles;
 	}
+
+	styles.borderCollapse = 'separate';
+	styles.borderSpacing = `${borderSpacingHorizontal} ${borderSpacingVertical}`;
+	return styles;
 }
