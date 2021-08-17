@@ -35,7 +35,7 @@ export function previewTable({rowCount, columnCount, hasHeader, hasFooter }) {
 	const cellheight = Math.max( 2, parseInt( PREVIEW_TABLE_HEIGHT_MIN / ( rowCount + Number( hasHeader ) + Number( hasFooter ) ) ) );
 
 	return (
-		<table className="wp-block-ftb-flexible-table__placeholder-table">
+		<table className="wp-block-ftb-table__placeholder-table">
 			{ hasHeader && (
 				<thead>
 					<tr>

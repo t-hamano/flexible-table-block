@@ -1,6 +1,6 @@
 {
 	"apiVersion": 2,
-	"name": "ftb/flexible-table",
+	"name": "ftb/table",
 	"title": "Flexible Table",
 	"category": "common",
 	"description": "Create flexible configuration tables.",
@@ -156,7 +156,7 @@
 			"__experimentalSkipSerialization": true,
 			"gradients": true
 		},
-		"__experimentalSelector": ".wp-block-ftb-flexible-table > table"
+		"__experimentalSelector": ".wp-block-ftb-table > table"
 	},
 	"editorStyle": "flexible-table-block-editor",
 	"style": "flexible-table-block"

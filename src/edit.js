@@ -562,13 +562,13 @@ function TableEdit({
 								id="flexible-table-block/cell-borders"
 							>
 								<ButtonGroup
-									className="wp-block-ftb-flexible-table__components-button-group"
+									className="wp-block-ftb-table__components-button-group"
 								>
 									{ BORDER_COLLAPSE_CONTROLS.map( ({ label, value }) => {
 										return (
 											<Button
 												key={ value }
-												isPrimary= { value === borderCollapse }
+												variant={ value === borderCollapse ? 'primary' : 'secondary' }
 												onClick={ () =>{
 													setAttributes({ borderCollapse: value });
 													setAttributes({ borderSpacingHorizontal: undefined });
@@ -586,7 +586,7 @@ function TableEdit({
 									label={ __( 'Distance between the borders', 'flexible-spacer-block' ) }
 									id="flexible-table-block/padding"
 								>
-									<div className="wp-block-ftb-flexible-table__spacing-control">
+									<div className="wp-block-ftb-table__spacing-control">
 										<UnitControl
 											label={ __( 'Horizontal', 'flexible-spacer-block' ) }
 											labelPosition="top"
@@ -617,13 +617,13 @@ function TableEdit({
 								id="flexible-table-block/caption-side"
 							>
 								<ButtonGroup
-									className="wp-block-ftb-flexible-table__components-button-group"
+									className="wp-block-ftb-table__components-button-group"
 								>
 									{ [ 'top', 'bottom' ].map( ( positionValue ) => {
 										return (
 											<Button
 												key={ positionValue }
-												isPrimary= { positionValue === captionSide }
+												variant={  positionValue === captionSide ? 'primary' : 'secondary' }
 												onClick={ () =>
 													setAttributes({ captionSide: positionValue })
 												}
@@ -690,8 +690,8 @@ function TableEdit({
 							hasFooter: !! initialFooterSection
 						})
 					}
-					<form className="wp-block-ftb-flexible-table__placeholder-form" onSubmit={ onCreateTable }>
-						<div className="wp-block-ftb-flexible-table__placeholder-row">
+					<form className="wp-block-ftb-table__placeholder-form" onSubmit={ onCreateTable }>
+						<div className="wp-block-ftb-table__placeholder-row">
 							<ToggleControl
 								label={ __( 'Header section', 'flexible-spacer-block' ) }
 								checked={ !! initialHeaderSection }
@@ -703,7 +703,7 @@ function TableEdit({
 								onChange={ onToggleInitialFooterSection }
 							/>
 						</div>
-						<div className="wp-block-ftb-flexible-table__placeholder-row">
+						<div className="wp-block-ftb-table__placeholder-row">
 							<TextControl
 								type="number"
 								label={ __( 'Column count', 'flexible-spacer-block' ) }
@@ -719,7 +719,7 @@ function TableEdit({
 								min="1"
 							/>
 							<Button
-								isPrimary
+								variant="primary"
 								type="submit"
 							>
 								{ __( 'Create Table', 'flexible-spacer-block' ) }
