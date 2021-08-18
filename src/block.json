@@ -1,9 +1,9 @@
 {
 	"apiVersion": 2,
-	"name": "ftb/table",
+	"name": "flexible-table-block/table",
 	"title": "Flexible Table",
 	"category": "common",
-	"description": "Create flexible configuration tables.",
+	"description": "Create flexible configuration table.",
 	"textdomain": "flexible-table-block",
 	"attributes": {
 		"hasFixedLayout": {
@@ -156,7 +156,16 @@
 			"__experimentalSkipSerialization": true,
 			"gradients": true
 		},
-		"__experimentalSelector": ".wp-block-ftb-table > table"
+		"fontSize": true,
+		"lineHeight": true,
+		"__experimentalBorder": {
+			"__experimentalSkipSerialization": true,
+			"color": true,
+			"style": true,
+			"width": true
+		},
+		"__experimentalFontFamily": true,
+		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},
 	"editorStyle": "flexible-table-block-editor",
 	"style": "flexible-table-block"

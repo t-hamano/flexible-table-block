@@ -1,41 +1,19 @@
 /**
- * External dependencies
- */
-import classnames from 'classnames';
-
-/**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
-
 import {
 	InspectorControls,
 	BlockControls,
-	RichText,
-	BlockIcon,
 	AlignmentControl,
-	useBlockProps,
-	__experimentalUseColorProps as useColorProps
+	useBlockProps
 } from '@wordpress/block-editor';
-
-import { __ } from '@wordpress/i18n';
-
 import {
-	BaseControl,
-	Button,
-	ButtonGroup,
 	PanelBody,
-	Placeholder,
-	SelectControl,
-	TextControl,
-	ToggleControl,
-	ToolbarDropdownMenu,
-	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits
+	ToolbarDropdownMenu
 } from '@wordpress/components';
-
 import {
-	blockTable as icon,
 	tableColumnAfter,
 	tableColumnBefore,
 	tableColumnDelete,
@@ -46,166 +24,39 @@ import {
 } from '@wordpress/icons';
 
 /**
+ * Internal components
+ */
+import TableSettingsControls from './components/TableSettingsControls';
+import CaptionSettingsControls from './components/CaptionSettingsControls';
+import CellsSettingsControls from './components/CellsSettingsControls';
+import Table from './components/Table';
+import TablePlaceholder from './components/TablePlaceholder';
+import TableCaption from './components/TableCaption';
+
+/**
  * Internal dependencies
  */
 import './editor.scss';
-
 import {
-	createTable,
 	updateSelectedCell,
 	getCellAttribute,
 	insertRow,
 	deleteRow,
 	insertColumn,
 	deleteColumn,
-	toggleSection,
 	isEmptyTableSection
 } from './state';
-
-import {
-	toUnitVal,
-	previewTable,
-	getTableStyle
-} from './helper';
-
-import {
-	BORDER_SPACING_MAX,
-	ALIGNMENT_CONTROLS,
-	BORDER_COLLAPSE_CONTROLS,
-	STICKY_CONTROLS,
-	CELL_ARIA_LABEL,
-	SECTION_PLACEHOLDER
-} from './constants';
-
-function TSection({ name, ...props }) {
-	const TagName = `t${ name }`;
-	return <TagName { ...props } />;
-}
+import { ALIGNMENT_CONTROLS } from './constants';
 
 function TableEdit({
 	attributes,
 	setAttributes,
+	insertBlocksAfter,
 	isSelected
 }) {
-	const {
-		hasFixedLayout,
-		sticky,
-		width,
-		minWidth,
-		maxWidth,
-		borderCollapse,
-		borderSpacingHorizontal,
-		borderSpacingVertical,
-		captionSide,
-		caption,
-		head,
-		foot
-	} = attributes;
-	const [ initialRowCount, setInitialRowCount ] = useState( 2 );
-	const [ initialColumnCount, setInitialColumnCount ] = useState( 2 );
-	const [ initialHeaderSection, setInitialHeaderSection ] = useState( false );
-	const [ initialFooterSection, setInitialFooterSection ] = useState( false );
+	const { captionSide	} = attributes;
+
 	const [ selectedCell, setSelectedCell ] = useState();
-
-	const colorProps = useColorProps( attributes );
-
-	const tabeWidthUnits = useCustomUnits({
-		availableUnits: [ 'px', 'em', 'rem', '%' ]
-	});
-
-	const borderSpacingUnits = useCustomUnits({
-		availableUnits: [ 'px', 'em', 'rem' ]
-	});
-
-	/**
-	 * Updates the initial column count used for table creation.
-	 *
-	 * @param {number} count New initial column count.
-	 */
-	function onChangeInitialColumnCount( count ) {
-		setInitialColumnCount( count );
-	}
-
-	/**
-	 * Updates the initial row count used for table creation.
-	 *
-	 * @param {number} count New initial row count.
-	 */
-	function onChangeInitialRowCount( count ) {
-		setInitialRowCount( count );
-	}
-
-	/**
-	 * Updates the initial header section setting used for table creation.
-	 *
-	 * @param {boolean} hasHeader New initial header section setting.
-	 */
-	function onToggleInitialHeaderSection( hasHeader ) {
-		setInitialHeaderSection( hasHeader );
-	}
-
-	/**
-	 * Updates the initial footer section setting used for table creation.
-	 *
-	 * @param {boolean} hasFooter New initial footer section setting.
-	 */
-	function onToggleInitialFooterSection( hasFooter ) {
-		setInitialFooterSection( hasFooter );
-	}
-
-	/**
-	 * Creates a table based on dimensions in local state.
-	 *
-	 * @param {Object} event Form submit event.
-	 */
-	function onCreateTable( event ) {
-		event.preventDefault();
-
-		setAttributes(
-			createTable({
-				rowCount: parseInt( initialRowCount, 10 ) || 2,
-				columnCount: parseInt( initialColumnCount, 10 ) || 2,
-				hasHeader: !! initialHeaderSection,
-				hasFooter: !! initialFooterSection
-			})
-		);
-	}
-
-	/**
-	 * Toggles whether the table has a fixed layout or not.
-	 */
-	function onChangeFixedLayout() {
-		setAttributes({ hasFixedLayout: ! hasFixedLayout });
-	}
-
-	/**
-	 * Toggles whether the table has a fixed layout or not.
-	 */
-	function onChangeSticky( value ) {
-		setAttributes({ sticky: value });
-	}
-
-	/**
-	 * Changes the content of the currently selected cell.
-	 *
-	 * @param {Array} content A RichText content value.
-	 */
-	function onChange( content ) {
-		if ( ! selectedCell ) {
-			return;
-		}
-
-		setAttributes(
-			updateSelectedCell(
-				attributes,
-				selectedCell,
-				( cellAttributes ) => ({
-					...cellAttributes,
-					content
-				})
-			)
-		);
-	}
 
 	/**
 	 * Align text within the a column.
@@ -246,20 +97,6 @@ function TableEdit({
 		}
 
 		return getCellAttribute( attributes, selectedCell, 'textAlign' );
-	}
-
-	/**
-	 * Add or remove a `head` table section.
-	 */
-	function onToggleHeaderSection() {
-		setAttributes( toggleSection( attributes, 'head' ) );
-	}
-
-	/**
-	 * Add or remove a `foot` table section.
-	 */
-	function onToggleFooterSection() {
-		setAttributes( toggleSection( attributes, 'foot' ) );
 	}
 
 	/**
@@ -425,49 +262,13 @@ function TableEdit({
 		}
 	];
 
-	const renderedSections = [ 'head', 'body', 'foot' ].map( ( name ) => (
-		<TSection name={ name } key={ name } >
-			{ attributes[ name ].map( ({ cells }, rowIndex ) => (
-				<tr key={ rowIndex }>
-					{ cells.map(
-						(
-							{ content, tag: CellTag, textAlign },
-							columnIndex
-						) => (
-							<RichText
-								tagName={ CellTag }
-								key={ columnIndex }
-								className={ classnames(
-									{
-										[ `has-text-align-${ textAlign }` ]: textAlign
-									}
-								) }
-								value={ content }
-								onChange={ onChange }
-								unstableOnFocus={ () => {
-									setSelectedCell({
-										sectionName: name,
-										rowIndex,
-										columnIndex,
-										type: 'cell'
-									});
-								} }
-								aria-label={ CELL_ARIA_LABEL[ name ] }
-								placeholder={ SECTION_PLACEHOLDER[ name ] }
-							/>
-						)
-					) }
-				</tr>
-			) ) }
-		</TSection>
-	) );
-
 	const isEmpty = ! sections.length;
-
-	const tableStyle = getTableStyle( attributes );
 
 	return (
 		<figure { ...useBlockProps() }>
+			{ isEmpty && (
+				<TablePlaceholder {...{ setAttributes }} />
+			) }
 			{ ! isEmpty && (
 				<>
 					<BlockControls group="block">
@@ -489,244 +290,14 @@ function TableEdit({
 						/>
 					</BlockControls>
 					<InspectorControls>
-						<PanelBody
-							title={ __( 'Table Settings', 'flexible-spacer-block' ) }
-						>
-							<ToggleControl
-								label={ __( 'Fixed width table cells', 'flexible-spacer-block' ) }
-								checked={ !! hasFixedLayout }
-								onChange={ onChangeFixedLayout }
-							/>
-							<ToggleControl
-								label={ __( 'Header section', 'flexible-spacer-block' ) }
-								checked={ !! ( head && head.length ) }
-								onChange={ onToggleHeaderSection }
-							/>
-							<ToggleControl
-								label={ __( 'Footer section', 'flexible-spacer-block' ) }
-								checked={ !! ( foot && foot.length ) }
-								onChange={ onToggleFooterSection }
-							/>
-							<BaseControl
-								label={ __( 'Width', 'flexible-spacer-block' ) }
-								id="flexible-table-block/width"
-							>
-								<UnitControl
-									labelPosition="top"
-									min="0"
-									value={ width }
-									onChange={ ( value ) => {
-										setAttributes({ width: toUnitVal( value ) });
-									} }
-									units={ tabeWidthUnits }
-								/>
-							</BaseControl>
-							<BaseControl
-								label={ __( 'Min width', 'flexible-spacer-block' ) }
-								id="flexible-table-block/width"
-							>
-								<UnitControl
-									labelPosition="top"
-									min="0"
-									value={ minWidth }
-									onChange={ ( value ) => {
-										setAttributes({ minWidth: toUnitVal( value ) });
-									} }
-									units={ tabeWidthUnits }
-								/>
-							</BaseControl>
-							<BaseControl
-								label={ __( 'Max width', 'flexible-spacer-block' ) }
-								id="flexible-table-block/width"
-							>
-								<UnitControl
-									labelPosition="top"
-									min="0"
-									value={ maxWidth }
-									onChange={ ( value ) => {
-										setAttributes({ maxWidth: toUnitVal( value ) });
-									} }
-									units={ tabeWidthUnits }
-								/>
-							</BaseControl>
-							<SelectControl
-								label={ __( 'Fixed control', 'flexible-spacer-block' ) }
-								value={ sticky }
-								onChange={ onChangeSticky }
-								options={ STICKY_CONTROLS.map( ({ label, value }) => {
-									return { label, value };
-								}) }
-							/>
-							<BaseControl
-								label={ __( 'Cell borders', 'flexible-spacer-block' ) }
-								id="flexible-table-block/cell-borders"
-							>
-								<ButtonGroup
-									className="wp-block-ftb-table__components-button-group"
-								>
-									{ BORDER_COLLAPSE_CONTROLS.map( ({ label, value }) => {
-										return (
-											<Button
-												key={ value }
-												variant={ value === borderCollapse ? 'primary' : 'secondary' }
-												onClick={ () =>{
-													setAttributes({ borderCollapse: value });
-													setAttributes({ borderSpacingHorizontal: undefined });
-													setAttributes({ borderSpacingVertical: undefined });
-												} }
-											>
-												{ label }
-											</Button>
-										);
-									}) }
-								</ButtonGroup>
-							</BaseControl>
-							{ 'separate' === borderCollapse && (
-								<BaseControl
-									label={ __( 'Distance between the borders', 'flexible-spacer-block' ) }
-									id="flexible-table-block/padding"
-								>
-									<div className="wp-block-ftb-table__spacing-control">
-										<UnitControl
-											label={ __( 'Horizontal', 'flexible-spacer-block' ) }
-											labelPosition="top"
-											min="0"
-											max={ BORDER_SPACING_MAX }
-											value={ borderSpacingHorizontal }
-											onChange={ ( value ) => {
-												setAttributes({ borderSpacingHorizontal: toUnitVal( value ) });
-											} }
-											units={ borderSpacingUnits }
-										/>
-										<UnitControl
-											label={ __( 'Vertical', 'flexible-spacer-block' ) }
-											labelPosition="top"
-											min="0"
-											max={ BORDER_SPACING_MAX }
-											value={ borderSpacingVertical }
-											onChange={ ( value ) => {
-												setAttributes({ borderSpacingVertical: toUnitVal( value ) });
-											} }
-											units={ borderSpacingUnits }
-										/>
-									</div>
-								</BaseControl>
-							)}
-							<BaseControl
-								label={ __( 'Caption position', 'flexible-spacer-block' ) }
-								id="flexible-table-block/caption-side"
-							>
-								<ButtonGroup
-									className="wp-block-ftb-table__components-button-group"
-								>
-									{ [ 'top', 'bottom' ].map( ( positionValue ) => {
-										return (
-											<Button
-												key={ positionValue }
-												variant={  positionValue === captionSide ? 'primary' : 'secondary' }
-												onClick={ () =>
-													setAttributes({ captionSide: positionValue })
-												}
-											>
-												{ positionValue }
-											</Button>
-										);
-									}) }
-								</ButtonGroup>
-							</BaseControl>
-						</PanelBody>
-						<PanelBody
-							title={ __( 'Cells Settings', 'flexible-spacer-block' ) }
-							initialOpen= { false }
-						></PanelBody>
+						<TableSettingsControls {...{ attributes, setAttributes }} />
+						<CaptionSettingsControls {...{ attributes, setAttributes }} />
+						<CellsSettingsControls {...{ attributes, setAttributes }} />
 					</InspectorControls>
-					{ 'top' === captionSide && (
-						<RichText
-							tagName="figcaption"
-							aria-label={ __( 'Table caption text', 'flexible-spacer-block' ) }
-							placeholder={ __( 'Add caption', 'flexible-spacer-block' ) }
-							value={ caption }
-							onChange={ ( value ) =>
-								setAttributes({ caption: value })
-							}
-						/>
-					)}
-					<table
-						className={ classnames(
-							colorProps.className,
-							{
-								'has-fixed-layout': hasFixedLayout,
-								[ `is-sticky-${sticky}` ]: 'none' !== sticky
-							}
-						) }
-						style={ { ...tableStyle, ...colorProps.style } }
-					>
-						{ renderedSections }
-					</table>
-					{ 'bottom' === captionSide && (
-						<RichText
-							tagName="figcaption"
-							aria-label={ __( 'Table caption text', 'flexible-spacer-block' ) }
-							placeholder={ __( 'Add caption', 'flexible-spacer-block' ) }
-							value={ caption }
-							onChange={ ( value ) =>
-								setAttributes({ caption: value })
-							}
-						/>
-					)}
+					{ 'top' === captionSide && <TableCaption {...{ attributes, setAttributes, insertBlocksAfter }} /> }
+					<Table {...{ attributes, setAttributes, selectedCell, setSelectedCell }} />
+					{ 'bottom' === captionSide && <TableCaption {...{ attributes, setAttributes, insertBlocksAfter }} /> }
 				</>
-			) }
-			{ isEmpty && (
-				<Placeholder
-					label={ __( 'Table', 'flexible-spacer-block' ) }
-					icon={ <BlockIcon icon={ icon } showColors /> }
-					instructions={ __( 'Insert a table for sharing data.' ) }
-				>
-					{
-						previewTable({
-							rowCount: parseInt( initialRowCount, 10 ) || 2,
-							columnCount: parseInt( initialColumnCount, 10 ) || 2,
-							hasHeader: !! initialHeaderSection,
-							hasFooter: !! initialFooterSection
-						})
-					}
-					<form className="wp-block-ftb-table__placeholder-form" onSubmit={ onCreateTable }>
-						<div className="wp-block-ftb-table__placeholder-row">
-							<ToggleControl
-								label={ __( 'Header section', 'flexible-spacer-block' ) }
-								checked={ !! initialHeaderSection }
-								onChange={ onToggleInitialHeaderSection }
-							/>
-							<ToggleControl
-								label={ __( 'Footer section', 'flexible-spacer-block' ) }
-								checked={ !! initialFooterSection }
-								onChange={ onToggleInitialFooterSection }
-							/>
-						</div>
-						<div className="wp-block-ftb-table__placeholder-row">
-							<TextControl
-								type="number"
-								label={ __( 'Column count', 'flexible-spacer-block' ) }
-								value={ initialColumnCount }
-								onChange={ onChangeInitialColumnCount }
-								min="1"
-							/>
-							<TextControl
-								type="number"
-								label={ __( 'Row count', 'flexible-spacer-block' ) }
-								value={ initialRowCount }
-								onChange={ onChangeInitialRowCount }
-								min="1"
-							/>
-							<Button
-								variant="primary"
-								type="submit"
-							>
-								{ __( 'Create Table', 'flexible-spacer-block' ) }
-							</Button>
-						</div>
-					</form>
-				</Placeholder>
 			) }
 		</figure>
 	);

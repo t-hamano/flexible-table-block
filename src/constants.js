@@ -39,7 +39,7 @@ export const ALIGNMENT_CONTROLS = [
 export const STICKY_CONTROLS = [
 	{
 		label: __( 'none', 'flexible-spacer-block' ),
-		value: null
+		value: 'none'
 	},
 	{
 		label: __( 'Fixed header', 'flexible-spacer-block' ),
