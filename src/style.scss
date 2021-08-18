@@ -1,20 +1,8 @@
 .wp-block-flexible-table-block-table {
 
-	> figcaption:first-child {
-		margin-bottom: calc(0.5 * var(--global--spacing-unit));
-	}
-
 	table {
 		width: 100%;
 		border-collapse: collapse;
-	}
-
-	thead {
-		border-bottom: 3px solid;
-	}
-
-	tfoot {
-		border-top: 3px solid;
 	}
 
 	.has-fixed-layout {
@@ -35,7 +23,6 @@
 
 	th,
 	td {
-		padding: 0.5em;
 		word-break: normal;
 		border: 1px solid;
 
