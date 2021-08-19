@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -10,17 +15,25 @@ export default function TableCaption({
 	setAttributes,
 	insertBlocksAfter
 }) {
-	const { caption } = attributes;
+	const { caption, captionAlign, captionFontSize } = attributes;
+
+	const onChange = ( value ) => {
+		setAttributes({ caption: value });
+	};
 
 	return (
 		<RichText
 			tagName="figcaption"
-			aria-label={ __( 'Table caption text', 'flexible-spacer-block' ) }
-			placeholder={ __( 'Add caption', 'flexible-spacer-block' ) }
-			value={ caption }
-			onChange={ ( value ) =>
-				setAttributes({ caption: value })
+			className={
+				classnames({
+					[ `has-text-align-${captionAlign}` ]: captionAlign
+				})
 			}
+			style={{ fontSize: captionFontSize }}
+			aria-label={ __( 'Table caption text', 'flexible-table-block' ) }
+			placeholder={ __( 'Add caption', 'flexible-table-block' ) }
+			value={ caption }
+			onChange={ onChange }
 			__unstableOnSplitAtEnd={ () =>
 				insertBlocksAfter( createBlock( 'core/paragraph' ) )
 			}

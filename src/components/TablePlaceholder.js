@@ -21,8 +21,8 @@ import {
 /**
  * Internal dependencies
  */
-import { createTable } from '../state';
-import { PREVIEW_TABLE_HEIGHT_MIN } from '../constants';
+import { createTable } from '../utils/state';
+import { PREVIEW_TABLE_HEIGHT_MIN } from '../utils/constants';
 
 export default function TablePlaceholder({
 	setAttributes
@@ -32,57 +32,34 @@ export default function TablePlaceholder({
 	const [ headerSection, setHeaderSection ] = useState( false );
 	const [ footerSection, setFooterSection ] = useState( false );
 
-	const cellheight = Math.max( 2, parseInt( PREVIEW_TABLE_HEIGHT_MIN / ( rowCount + Number( headerSection ) + Number( footerSection ) ) ) );
+	const cellStyle = {
+		height: Math.max( 2, parseInt( PREVIEW_TABLE_HEIGHT_MIN / ( rowCount + Number( headerSection ) + Number( footerSection ) ) ) )
+	};
 
-	/**
-	 * Creates a table based on settings.
-	 *
-	 * @param {Object} event Form submit event.
-	 */
-	function onCreateTable( event ) {
+	const onCreateTable = ( event ) => {
 		event.preventDefault();
 		setAttributes( createTable({ rowCount, columnCount, headerSection, footerSection }) );
-	}
+	};
 
-	/**
-	 * Updates column count used for table creation.
-	 *
-	 * @param {number} count column count.
-	 */
-	function onChangeColumnCount( count ) {
+	const onChangeColumnCount = ( count ) => {
 		setColumnCount( parseInt( count, 10 ) || 2 );
-	}
+	};
 
-	/**
-	 * Updates row count used for table creation.
-	 *
-	 * @param {number} count row count.
-	 */
-	function onChangeRowCount( count ) {
+	const onChangeRowCount = ( count ) => {
 		setRowCount( parseInt( count, 10 ) || 2 );
-	}
+	};
 
-	/**
-	 * Updates header section setting used for table creation.
-	 *
-	 * @param {boolean} headerSection header section setting.
-	 */
-	function onToggleHeaderSection( headerSection ) {
+	const onToggleHeaderSection = ( headerSection ) => {
 		setHeaderSection( !! headerSection );
-	}
+	};
 
-	/**
-	 * Updates footer section setting used for table creation.
-	 *
-	 * @param {boolean} footerSection footer section setting.
-	 */
-	function onToggleFooterSection( footerSection ) {
+	const onToggleFooterSection = ( footerSection ) => {
 		setFooterSection( !! footerSection );
-	}
+	};
 
 	return (
 		<Placeholder
-			label={ __( 'Table', 'flexible-spacer-block' ) }
+			label={ __( 'Table', 'flexible-table-block' ) }
 			icon={ <BlockIcon icon={ icon } showColors /> }
 			instructions={ __( 'Create flexible configuration table.' ) }
 		>
@@ -91,7 +68,7 @@ export default function TablePlaceholder({
 					<thead>
 						<tr>
 							{ times( columnCount, ( columnIndex ) => (
-								<th key={ columnIndex } style={ { height: cellheight } } />
+								<th key={ columnIndex } style={ { ...cellStyle } } />
 							) ) }
 						</tr>
 					</thead>
@@ -100,7 +77,7 @@ export default function TablePlaceholder({
 					{ times( rowCount, ( rowIndex ) => (
 						<tr key={ rowIndex }>
 							{ times( columnCount, ( columnIndex ) => (
-								<td key={ columnIndex } style={ { height: cellheight } } />
+								<td key={ columnIndex } style={ { ...cellStyle } } />
 							) ) }
 						</tr>
 					) ) }
@@ -109,7 +86,7 @@ export default function TablePlaceholder({
 					<tfoot>
 						<tr>
 							{ times( columnCount, ( columnIndex ) => (
-								<td key={ columnIndex } style={ { height: cellheight } } />
+								<td key={ columnIndex } style={ { ...cellStyle } } />
 							) ) }
 						</tr>
 					</tfoot>
@@ -118,12 +95,12 @@ export default function TablePlaceholder({
 			<form className="wp-block-flexible-table-block-table__placeholder-form" onSubmit={ onCreateTable }>
 				<div className="wp-block-flexible-table-block-table__placeholder-row">
 					<ToggleControl
-						label={ __( 'Header section', 'flexible-spacer-block' ) }
+						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
 						onChange={ onToggleHeaderSection }
 					/>
 					<ToggleControl
-						label={ __( 'Footer section', 'flexible-spacer-block' ) }
+						label={ __( 'Footer section', 'flexible-table-block' ) }
 						checked={ !! footerSection }
 						onChange={ onToggleFooterSection }
 					/>
@@ -131,14 +108,14 @@ export default function TablePlaceholder({
 				<div className="wp-block-flexible-table-block-table__placeholder-row">
 					<TextControl
 						type="number"
-						label={ __( 'Column count', 'flexible-spacer-block' ) }
+						label={ __( 'Column count', 'flexible-table-block' ) }
 						value={ columnCount }
 						onChange={ onChangeColumnCount }
 						min="1"
 					/>
 					<TextControl
 						type="number"
-						label={ __( 'Row count', 'flexible-spacer-block' ) }
+						label={ __( 'Row count', 'flexible-table-block' ) }
 						value={ rowCount }
 						onChange={ onChangeRowCount }
 						min="1"
@@ -147,7 +124,7 @@ export default function TablePlaceholder({
 						variant="primary"
 						type="submit"
 					>
-						{ __( 'Create Table', 'flexible-spacer-block' ) }
+						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</div>
 			</form>

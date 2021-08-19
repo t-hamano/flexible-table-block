@@ -10,15 +10,15 @@ export default {
 			{
 				cells: [
 					{
-						content: __( 'Version', 'flexible-spacer-block' ),
+						content: __( 'Version', 'flexible-table-block' ),
 						tag: 'th'
 					},
 					{
-						content: __( 'Jazz Musician', 'flexible-spacer-block' ),
+						content: __( 'Jazz Musician', 'flexible-table-block' ),
 						tag: 'th'
 					},
 					{
-						content: __( 'Release Date', 'flexible-spacer-block' ),
+						content: __( 'Release Date', 'flexible-table-block' ),
 						tag: 'th'
 					}
 				]

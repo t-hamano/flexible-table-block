@@ -6,11 +6,12 @@ module.exports = {
   ignoreFiles: [
 		"build/**/*.css",
 		"node_modules/**/*.css",
-		"vendor/**/*.css"
+		"vendor/**/*.css",
+		"**/*.js"
   ],
 	rules: {
 		"no-descending-specificity": null,
 		"font-weight-notation": null,
-		"selector-class-pattern": null
+		"selector-class-pattern": null,
 	}
 }

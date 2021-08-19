@@ -15,20 +15,19 @@ import {
 /**
  * Internal dependencies
  */
-import { getTableStyle } from './helper';
+import { getTableStyle } from './utils/helper';
 
 export default function save({ attributes }) {
 	const {
 		hasFixedLayout,
 		sticky,
-		width,
-		minWidth,
-		maxWidth,
 		head,
 		body,
 		foot,
+		caption,
 		captionSide,
-		caption
+		captionFontSize,
+		captionAlign
 	} = attributes;
 	const isEmpty = ! head.length && ! body.length && ! foot.length;
 
@@ -40,7 +39,7 @@ export default function save({ attributes }) {
 
 	const classes = classnames( colorProps.className, {
 		'has-fixed-layout': hasFixedLayout,
-		[ `is-sticky-${sticky}` ]: 'none' !== sticky
+		[ `is-sticky-${sticky}` ]: sticky
 	});
 
 	const hasCaption = ! RichText.isEmpty( caption );
@@ -85,11 +84,24 @@ export default function save({ attributes }) {
 		);
 	};
 
+	const Caption = () => {
+		return (
+			<RichText.Content
+				tagName="figcaption"
+				value={ caption }
+				className={
+					classnames({
+						[ `has-text-align-${captionAlign}` ]: captionAlign
+					})
+				}
+				style={{ fontSize: captionFontSize }}
+			/>
+		);
+	};
+
 	return (
 		<figure { ...useBlockProps.save() }>
-			{ hasCaption && 'top' === captionSide && (
-				<RichText.Content tagName="figcaption" value={ caption } />
-			) }
+			{ hasCaption && 'top' === captionSide && <Caption /> }
 			<table
 				className={ '' === classes ? undefined : classes }
 				style={ { ...tableStyle, ...colorProps.style } }
@@ -98,9 +110,7 @@ export default function save({ attributes }) {
 				<Section type="body" rows={ body } />
 				<Section type="foot" rows={ foot } />
 			</table>
-			{ hasCaption && 'bottom' === captionSide && (
-				<RichText.Content tagName="figcaption" value={ caption } />
-			) }
+			{ hasCaption && 'bottom' === captionSide && <Caption /> }
 		</figure>
 	);
 }

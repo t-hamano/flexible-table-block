@@ -16,13 +16,13 @@ import {
 /**
  * Internal dependencies
  */
-import { toggleSection } from '../state';
-import { toUnitVal } from '../helper';
+import { toggleSection } from '../utils/state';
+import { toUnitVal } from '../utils/helper';
 import {
 	BORDER_SPACING_MAX,
 	BORDER_COLLAPSE_CONTROLS,
 	STICKY_CONTROLS
-} from '../constants';
+} from '../utils/constants';
 
 export default function TableSettingsControl({
 	attributes,
@@ -41,7 +41,7 @@ export default function TableSettingsControl({
 		foot
 	} = attributes;
 
-	const tabeWidthUnits = useCustomUnits({
+	const tableWidthUnits = useCustomUnits({
 		availableUnits: [ 'px', 'em', 'rem', '%' ]
 	});
 
@@ -49,98 +49,108 @@ export default function TableSettingsControl({
 		availableUnits: [ 'px', 'em', 'rem' ]
 	});
 
-	/**
-	 * Toggles whether the table has a fixed layout or not.
-	 */
-	function onChangeFixedLayout() {
+	const onChangeFixedLayout = () => {
 		setAttributes({ hasFixedLayout: ! hasFixedLayout });
-	}
+	};
 
-	/**
-	 * Toggles whether the table has a fixed layout or not.
-	 */
-	function onChangeSticky( value ) {
+	const onChangeSticky = ( value ) => {
 		setAttributes({ sticky: 'none' === value ? undefined : value });
-	}
+	};
 
-	/**
-	 * Add or remove a `head` table section.
-	 */
-	function onToggleHeaderSection() {
+	const onToggleHeaderSection = () => {
 		setAttributes( toggleSection( attributes, 'head' ) );
-	}
+	};
 
-	/**
-	 * Add or remove a `foot` table section.
-	 */
-	function onToggleFooterSection() {
+	const onToggleFooterSection = () => {
 		setAttributes( toggleSection( attributes, 'foot' ) );
-	}
+	};
+
+	const onChangeWidth = ( value ) => {
+		setAttributes({ width: toUnitVal( value ) });
+	};
+
+	const onChangeMinWidth = ( value ) => {
+		setAttributes({ width: toUnitVal( value ) });
+	};
+
+	const onChangeMaxWidth = ( value ) => {
+		setAttributes({ width: toUnitVal( value ) });
+	};
+
+	const onChangeBorderCollapse = ( value ) => {
+		setAttributes({ borderCollapse: value });
+		if ( 'collapse' == value ) {
+			setAttributes({ borderSpacingHorizontal: undefined });
+			setAttributes({ borderSpacingVertical: undefined });
+		}
+	};
+
+	const onChangeBorderSpacingHorizontal = ( value ) => {
+		setAttributes({ borderSpacingHorizontal: value });
+	};
+
+	const onChangeBorderSpacingVertical = ( value ) => {
+		setAttributes({ borderSpacingVertical: value });
+	};
 
 	return (
 		<PanelBody
-			title={ __( 'Table Settings', 'flexible-spacer-block' ) }
+			title={ __( 'Table Settings', 'flexible-table-block' ) }
 			initialOpen= { false }
 		>
 			<ToggleControl
-				label={ __( 'Fixed width table cells', 'flexible-spacer-block' ) }
+				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
 				checked={ !! hasFixedLayout }
 				onChange={ onChangeFixedLayout }
 			/>
 			<ToggleControl
-				label={ __( 'Header section', 'flexible-spacer-block' ) }
+				label={ __( 'Header section', 'flexible-table-block' ) }
 				checked={ !! ( head && head.length ) }
 				onChange={ onToggleHeaderSection }
 			/>
 			<ToggleControl
-				label={ __( 'Footer section', 'flexible-spacer-block' ) }
+				label={ __( 'Footer section', 'flexible-table-block' ) }
 				checked={ !! ( foot && foot.length ) }
 				onChange={ onToggleFooterSection }
 			/>
 			<BaseControl
-				label={ __( 'Width', 'flexible-spacer-block' ) }
+				label={ __( 'Width', 'flexible-table-block' ) }
 				id="flexible-table-block/width"
 			>
 				<UnitControl
 					labelPosition="top"
 					min="0"
 					value={ width }
-					onChange={ ( value ) => {
-						setAttributes({ width: toUnitVal( value ) });
-					} }
-					units={ tabeWidthUnits }
+					onChange={ onChangeWidth }
+					units={ tableWidthUnits }
 				/>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Min width', 'flexible-spacer-block' ) }
+				label={ __( 'Min width', 'flexible-table-block' ) }
 				id="flexible-table-block/width"
 			>
 				<UnitControl
 					labelPosition="top"
 					min="0"
 					value={ minWidth }
-					onChange={ ( value ) => {
-						setAttributes({ minWidth: toUnitVal( value ) });
-					} }
-					units={ tabeWidthUnits }
+					onChange={ onChangeMinWidth }
+					units={ tableWidthUnits }
 				/>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Max width', 'flexible-spacer-block' ) }
+				label={ __( 'Max width', 'flexible-table-block' ) }
 				id="flexible-table-block/width"
 			>
 				<UnitControl
 					labelPosition="top"
 					min="0"
 					value={ maxWidth }
-					onChange={ ( value ) => {
-						setAttributes({ maxWidth: toUnitVal( value ) });
-					} }
-					units={ tabeWidthUnits }
+					onChange={ onChangeMaxWidth }
+					units={ tableWidthUnits }
 				/>
 			</BaseControl>
 			<SelectControl
-				label={ __( 'Fixed control', 'flexible-spacer-block' ) }
+				label={ __( 'Fixed control', 'flexible-table-block' ) }
 				value={ sticky }
 				onChange={ onChangeSticky }
 				options={ STICKY_CONTROLS.map( ({ label, value }) => {
@@ -148,7 +158,7 @@ export default function TableSettingsControl({
 				}) }
 			/>
 			<BaseControl
-				label={ __( 'Cell borders', 'flexible-spacer-block' ) }
+				label={ __( 'Cell borders', 'flexible-table-block' ) }
 				id="flexible-table-block/cell-borders"
 			>
 				<ButtonGroup
@@ -159,11 +169,9 @@ export default function TableSettingsControl({
 							<Button
 								key={ value }
 								variant={ value === borderCollapse ? 'primary' : 'secondary' }
-								onClick={ () =>{
-									setAttributes({ borderCollapse: value });
-									setAttributes({ borderSpacingHorizontal: undefined });
-									setAttributes({ borderSpacingVertical: undefined });
-								} }
+								onClick={ () =>
+									onChangeBorderCollapse( value )
+								}
 							>
 								{ label }
 							</Button>
@@ -173,30 +181,26 @@ export default function TableSettingsControl({
 			</BaseControl>
 			{ 'separate' === borderCollapse && (
 				<BaseControl
-					label={ __( 'Distance between the borders', 'flexible-spacer-block' ) }
+					label={ __( 'Distance between the borders', 'flexible-table-block' ) }
 					id="flexible-table-block/padding"
 				>
 					<div className="wp-block-flexible-table-block-table__spacing-control">
 						<UnitControl
-							label={ __( 'Horizontal', 'flexible-spacer-block' ) }
+							label={ __( 'Horizontal', 'flexible-table-block' ) }
 							labelPosition="top"
 							min="0"
 							max={ BORDER_SPACING_MAX }
 							value={ borderSpacingHorizontal }
-							onChange={ ( value ) => {
-								setAttributes({ borderSpacingHorizontal: toUnitVal( value ) });
-							} }
+							onChange={ onChangeBorderSpacingHorizontal }
 							units={ borderSpacingUnits }
 						/>
 						<UnitControl
-							label={ __( 'Vertical', 'flexible-spacer-block' ) }
+							label={ __( 'Vertical', 'flexible-table-block' ) }
 							labelPosition="top"
 							min="0"
 							max={ BORDER_SPACING_MAX }
 							value={ borderSpacingVertical }
-							onChange={ ( value ) => {
-								setAttributes({ borderSpacingVertical: toUnitVal( value ) });
-							} }
+							onChange={ onChangeBorderSpacingVertical }
 							units={ borderSpacingUnits }
 						/>
 					</div>

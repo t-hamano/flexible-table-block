@@ -10,7 +10,6 @@ import {
 	useBlockProps
 } from '@wordpress/block-editor';
 import {
-	PanelBody,
 	ToolbarDropdownMenu
 } from '@wordpress/components';
 import {
@@ -26,9 +25,10 @@ import {
 /**
  * Internal components
  */
-import TableSettingsControls from './components/TableSettingsControls';
-import CaptionSettingsControls from './components/CaptionSettingsControls';
-import CellsSettingsControls from './components/CellsSettingsControls';
+import TableControls from './controls/TableControls';
+import CaptionControls from './controls/CaptionControls';
+import CellsControls from './controls/CellsControls';
+
 import Table from './components/Table';
 import TablePlaceholder from './components/TablePlaceholder';
 import TableCaption from './components/TableCaption';
@@ -45,8 +45,8 @@ import {
 	insertColumn,
 	deleteColumn,
 	isEmptyTableSection
-} from './state';
-import { ALIGNMENT_CONTROLS } from './constants';
+} from './utils/state';
+import { ALIGNMENT_CONTROLS } from './utils/constants';
 
 function TableEdit({
 	attributes,
@@ -226,37 +226,37 @@ function TableEdit({
 	const tableControls = [
 		{
 			icon: tableRowBefore,
-			title: __( 'Insert row before', 'flexible-spacer-block' ),
+			title: __( 'Insert row before', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: onInsertRowBefore
 		},
 		{
 			icon: tableRowAfter,
-			title: __( 'Insert row after', 'flexible-spacer-block' ),
+			title: __( 'Insert row after', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: onInsertRowAfter
 		},
 		{
 			icon: tableRowDelete,
-			title: __( 'Delete row', 'flexible-spacer-block' ),
+			title: __( 'Delete row', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: onDeleteRow
 		},
 		{
 			icon: tableColumnBefore,
-			title: __( 'Insert column before', 'flexible-spacer-block' ),
+			title: __( 'Insert column before', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: onInsertColumnBefore
 		},
 		{
 			icon: tableColumnAfter,
-			title: __( 'Insert column after', 'flexible-spacer-block' ),
+			title: __( 'Insert column after', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: onInsertColumnAfter
 		},
 		{
 			icon: tableColumnDelete,
-			title: __( 'Delete column', 'flexible-spacer-block' ),
+			title: __( 'Delete column', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: onDeleteColumn
 		}
@@ -273,7 +273,7 @@ function TableEdit({
 				<>
 					<BlockControls group="block">
 						<AlignmentControl
-							label={ __( 'Change column alignment', 'flexible-spacer-block' ) }
+							label={ __( 'Change column alignment', 'flexible-table-block' ) }
 							alignmentControls={ ALIGNMENT_CONTROLS }
 							value={ getCellAlignment() }
 							onChange={ ( nextAlign ) =>
@@ -285,14 +285,14 @@ function TableEdit({
 						<ToolbarDropdownMenu
 							hasArrowIndicator
 							icon={ table }
-							label={ __( 'Edit table', 'flexible-spacer-block' ) }
+							label={ __( 'Edit table', 'flexible-table-block' ) }
 							controls={ tableControls }
 						/>
 					</BlockControls>
 					<InspectorControls>
-						<TableSettingsControls {...{ attributes, setAttributes }} />
-						<CaptionSettingsControls {...{ attributes, setAttributes }} />
-						<CellsSettingsControls {...{ attributes, setAttributes }} />
+						<TableControls {...{ attributes, setAttributes }} />
+						<CaptionControls {...{ attributes, setAttributes }} />
+						<CellsControls {...{ attributes, setAttributes }} />
 					</InspectorControls>
 					{ 'top' === captionSide && <TableCaption {...{ attributes, setAttributes, insertBlocksAfter }} /> }
 					<Table {...{ attributes, setAttributes, selectedCell, setSelectedCell }} />
