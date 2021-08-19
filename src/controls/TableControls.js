@@ -70,11 +70,11 @@ export default function TableSettingsControl({
 	};
 
 	const onChangeMinWidth = ( value ) => {
-		setAttributes({ width: toUnitVal( value ) });
+		setAttributes({ minWidth: toUnitVal( value ) });
 	};
 
 	const onChangeMaxWidth = ( value ) => {
-		setAttributes({ width: toUnitVal( value ) });
+		setAttributes({ maxWidth: toUnitVal( value ) });
 	};
 
 	const onChangeBorderCollapse = ( value ) => {
@@ -124,6 +124,24 @@ export default function TableSettingsControl({
 					onChange={ onChangeWidth }
 					units={ tableWidthUnits }
 				/>
+				<ButtonGroup
+					aria-label={ __( 'Percentage width' ) }
+					className="wp-block-flexible-table-block-table__components-percent-group"
+				>
+					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+						return (
+							<Button
+								key={ perWidth }
+								isSmall
+								onClick={ () =>
+									onChangeWidth( `${ perWidth }%` )
+								}
+							>
+								{ `${ perWidth }%` }
+							</Button>
+						);
+					}) }
+				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
 				label={ __( 'Min width', 'flexible-table-block' ) }
@@ -136,6 +154,24 @@ export default function TableSettingsControl({
 					onChange={ onChangeMinWidth }
 					units={ tableWidthUnits }
 				/>
+				<ButtonGroup
+					aria-label={ __( 'Percentage min width' ) }
+					className="wp-block-flexible-table-block-table__components-percent-group"
+				>
+					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+						return (
+							<Button
+								key={ perWidth }
+								isSmall
+								onClick={ () =>
+									onChangeMinWidth( `${ perWidth }%` )
+								}
+							>
+								{ `${ perWidth }%` }
+							</Button>
+						);
+					}) }
+				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
 				label={ __( 'Max width', 'flexible-table-block' ) }
@@ -148,6 +184,24 @@ export default function TableSettingsControl({
 					onChange={ onChangeMaxWidth }
 					units={ tableWidthUnits }
 				/>
+				<ButtonGroup
+					aria-label={ __( 'Percentage max width' ) }
+					className="wp-block-flexible-table-block-table__components-percent-group"
+				>
+					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+						return (
+							<Button
+								key={ perWidth }
+								isSmall
+								onClick={ () =>
+									onChangeMaxWidth( `${ perWidth }%` )
+								}
+							>
+								{ `${ perWidth }%` }
+							</Button>
+						);
+					}) }
+				</ButtonGroup>
 			</BaseControl>
 			<SelectControl
 				label={ __( 'Fixed control', 'flexible-table-block' ) }

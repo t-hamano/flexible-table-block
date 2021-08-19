@@ -10,7 +10,6 @@ import { times } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
-import { blockTable as icon } from '@wordpress/icons';
 import {
 	Button,
 	Placeholder,
@@ -23,6 +22,7 @@ import {
  */
 import { createTable } from '../utils/state';
 import { PREVIEW_TABLE_HEIGHT_MIN } from '../utils/constants';
+import icon from '../icon';
 
 export default function TablePlaceholder({
 	setAttributes

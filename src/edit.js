@@ -6,7 +6,6 @@ import { useEffect, useState } from '@wordpress/element';
 import {
 	InspectorControls,
 	BlockControls,
-	AlignmentControl,
 	useBlockProps
 } from '@wordpress/block-editor';
 import {
@@ -38,15 +37,14 @@ import TableCaption from './components/TableCaption';
  */
 import './editor.scss';
 import {
-	updateSelectedCell,
-	getCellAttribute,
 	insertRow,
 	deleteRow,
 	insertColumn,
-	deleteColumn,
-	isEmptyTableSection
+	deleteColumn
 } from './utils/state';
-import { ALIGNMENT_CONTROLS } from './utils/constants';
+import {
+	isEmptyTableSection
+} from './utils/helper';
 
 function TableEdit({
 	attributes,
@@ -57,47 +55,6 @@ function TableEdit({
 	const { captionSide	} = attributes;
 
 	const [ selectedCell, setSelectedCell ] = useState();
-
-	/**
-	 * Align text within the a column.
-	 *
-	 * @param {string} align The new alignment to apply to the column.
-	 */
-	function onChangeColumnAlignment( textAlign ) {
-		if ( ! selectedCell ) {
-			return;
-		}
-
-		// Convert the cell selection to a column selection so that alignment
-		// is applied to the entire column.
-		const columnSelection = {
-			type: 'column',
-			columnIndex: selectedCell.columnIndex
-		};
-
-		const newAttributes = updateSelectedCell(
-			attributes,
-			columnSelection,
-			( cellAttributes ) => ({
-				...cellAttributes,
-				textAlign
-			})
-		);
-		setAttributes( newAttributes );
-	}
-
-	/**
-	 * Get the alignment of the currently selected cell.
-	 *
-	 * @return {string} The new alignment to apply to the column.
-	 */
-	function getCellAlignment() {
-		if ( ! selectedCell ) {
-			return;
-		}
-
-		return getCellAttribute( attributes, selectedCell, 'textAlign' );
-	}
 
 	/**
 	 * Inserts a row at the currently selected row index, plus `delta`.
@@ -272,16 +229,6 @@ function TableEdit({
 			{ ! isEmpty && (
 				<>
 					<BlockControls group="block">
-						<AlignmentControl
-							label={ __( 'Change column alignment', 'flexible-table-block' ) }
-							alignmentControls={ ALIGNMENT_CONTROLS }
-							value={ getCellAlignment() }
-							onChange={ ( nextAlign ) =>
-								onChangeColumnAlignment( nextAlign )
-							}
-						/>
-					</BlockControls>
-					<BlockControls group="other">
 						<ToolbarDropdownMenu
 							hasArrowIndicator
 							icon={ table }

@@ -1,7 +1,17 @@
 /**
  * External dependencies
  */
-import { times, get, mapValues, every, pick } from 'lodash';
+import { times, get, mapValues, pick } from 'lodash';
+
+/**
+ * Internal dependencies
+ */
+import {
+	isEmptyTableSection,
+	isEmptyRow,
+	isCellSelected,
+	getFirstRow
+} from './helper';
 
 const INHERITED_COLUMN_ATTRIBUTES = [ 'align' ];
 
@@ -41,45 +51,6 @@ export function createTable({ rowCount, columnCount, headerSection, footerSectio
 			} ]
 		}
 	};
-}
-
-/**
- * Returns the first row in the table.
- *
- * @param {Object} state Current table state.
- *
- * @return {Object} The first table row.
- */
-export function getFirstRow( state ) {
-	if ( ! isEmptyTableSection( state.head ) ) {
-		return state.head[ 0 ];
-	}
-	if ( ! isEmptyTableSection( state.body ) ) {
-		return state.body[ 0 ];
-	}
-	if ( ! isEmptyTableSection( state.foot ) ) {
-		return state.foot[ 0 ];
-	}
-}
-
-/**
- * Gets an attribute for a cell.
- *
- * @param {Object} state         Current table state.
- * @param {Object} cellLocation  The location of the cell
- * @param {string} attributeName The name of the attribute to get the value of.
- *
- * @return {*} The attribute value.
- */
-export function getCellAttribute( state, cellLocation, attributeName ) {
-	const { sectionName, rowIndex, columnIndex } = cellLocation;
-	return get( state, [
-		sectionName,
-		rowIndex,
-		'cells',
-		columnIndex,
-		attributeName
-	]);
 }
 
 /**
@@ -129,35 +100,6 @@ export function updateSelectedCell( state, selection, updateCell ) {
 			};
 		});
 	});
-}
-
-/**
- * Returns whether the cell at `cellLocation` is included in the selection `selection`.
- *
- * @param {Object} cellLocation An object containing cell location properties.
- * @param {Object} selection    An object containing selection properties.
- *
- * @return {boolean} True if the cell is selected, false otherwise.
- */
-export function isCellSelected( cellLocation, selection ) {
-	if ( ! cellLocation || ! selection ) {
-		return false;
-	}
-
-	switch ( selection.type ) {
-		case 'column':
-			return (
-				'column' === selection.type &&
-				cellLocation.columnIndex === selection.columnIndex
-			);
-		case 'cell':
-			return (
-				'cell' === selection.type &&
-				cellLocation.sectionName === selection.sectionName &&
-				cellLocation.columnIndex === selection.columnIndex &&
-				cellLocation.rowIndex === selection.rowIndex
-			);
-	}
 }
 
 /**
@@ -323,24 +265,3 @@ export function toggleSection( state, sectionName ) {
 	return insertRow( state, { sectionName, rowIndex: 0, columnCount });
 }
 
-/**
- * Determines whether a table section is empty.
- *
- * @param {Object} section Table section state.
- *
- * @return {boolean} True if the table section is empty, false otherwise.
- */
-export function isEmptyTableSection( section ) {
-	return ! section || ! section.length || every( section, isEmptyRow );
-}
-
-/**
- * Determines whether a table row is empty.
- *
- * @param {Object} row Table row state.
- *
- * @return {boolean} True if the table section is empty, false otherwise.
- */
-export function isEmptyRow( row ) {
-	return ! ( row.cells && row.cells.length );
-}
