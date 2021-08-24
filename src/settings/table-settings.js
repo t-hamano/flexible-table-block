@@ -9,6 +9,7 @@ import {
 	PanelBody,
 	SelectControl,
 	ToggleControl,
+	__experimentalBoxControl as BoxControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits
 } from '@wordpress/components';
@@ -17,29 +18,49 @@ import {
  * Internal dependencies
  */
 import { toggleSection } from '../utils/state';
-import { toUnitVal } from '../utils/helper';
 import {
-	BORDER_SPACING_MAX,
-	BORDER_COLLAPSE_CONTROLS,
-	STICKY_CONTROLS
-} from '../utils/constants';
+	parseInlineCss,
+	parseCssValue,
+	toUnitVal,
+	cleanEmptyObject} from '../utils/helper';
 
-export default function TableSettingsControl({
-	attributes,
-	setAttributes
-}) {
+const STICKY_CONTROLS = [
+	{
+		label: __( 'none', 'flexible-table-block' ),
+		value: 'none'
+	},
+	{
+		label: __( 'Fixed header', 'flexible-table-block' ),
+		value: 'header'
+	},
+	{
+		label: __( 'Fixed first column', 'flexible-table-block' ),
+		value: 'first-column'
+	}
+];
+
+const BORDER_COLLAPSE_CONTROLS = [
+	{
+		label: __( 'Share', 'flexible-table-block' ),
+		value: 'collapse'
+	},
+	{
+		label: __( 'Separate', 'flexible-table-block' ),
+		value: 'separate'
+	}
+];
+
+export default function TableSettingsControl( props ) {
+	const { attributes, setAttributes } = props;
 	const {
+		tableStyles,
 		hasFixedLayout,
 		sticky,
-		width,
-		minWidth,
-		maxWidth,
-		borderCollapse,
-		borderSpacingHorizontal,
-		borderSpacingVertical,
 		head,
 		foot
 	} = attributes;
+
+	const tableStylesObj = parseInlineCss( tableStyles );
 
 	const tableWidthUnits = useCustomUnits({
 		availableUnits: [ 'px', 'em', 'rem', '%' ]
@@ -66,31 +87,74 @@ export default function TableSettingsControl({
 	};
 
 	const onChangeWidth = ( value ) => {
-		setAttributes({ width: toUnitVal( value ) });
-	};
-
-	const onChangeMinWidth = ( value ) => {
-		setAttributes({ minWidth: toUnitVal( value ) });
+		setAttributes({
+			tableStyles: cleanEmptyObject({
+				...tableStylesObj,
+				width: tableStylesObj?.width === value ? undefined : toUnitVal( value )
+			})
+		});
 	};
 
 	const onChangeMaxWidth = ( value ) => {
-		setAttributes({ maxWidth: toUnitVal( value ) });
+		setAttributes({
+			tableStyles: cleanEmptyObject({
+				...tableStylesObj,
+				maxWidth: tableStylesObj?.maxWidth === value ? undefined : toUnitVal( value )
+			})
+		});
 	};
 
-	const onChangeBorderCollapse = ( value ) => {
-		setAttributes({ borderCollapse: value });
-		if ( 'collapse' == value ) {
-			setAttributes({ borderSpacingHorizontal: undefined });
-			setAttributes({ borderSpacingVertical: undefined });
+	const onChangeMinWidth = ( value ) => {
+		setAttributes({
+			tableStyles: cleanEmptyObject({
+				...tableStylesObj,
+				minWidth: tableStylesObj?.minWidth === value ? undefined : toUnitVal( value )
+			})
+		});
+	};
+
+	const onToggleBorderCollapse = ( value ) => {
+		const borderCollapse = tableStylesObj?.borderCollapse === value ? undefined : value;
+		const borderSpacing = 'separate' === borderCollapse ? tableStylesObj?.borderSpacing : undefined;
+
+		setAttributes({
+			tableStyles: cleanEmptyObject({
+				...tableStylesObj,
+				borderCollapse,
+				borderSpacing
+			})
+		});
+	};
+
+	const onChangeBorderSpacing = ( values ) => {
+		if ( null === values.top && null === values.left ) {
+
+			// No value.
+			setAttributes({
+				tableStyles: cleanEmptyObject({
+					...tableStylesObj,
+					borderSpacing: undefined
+				})
+			});
+		} else if ( values.top === values.left ) {
+
+			// Shorthand value.
+			setAttributes({
+				tableStyles: cleanEmptyObject({
+					...tableStylesObj,
+					borderSpacing: values.top
+				})
+			});
+		} else {
+
+			// Longhand value.
+			setAttributes({
+				tableStyles: cleanEmptyObject({
+					...tableStylesObj,
+					borderSpacing: `${values.left} ${values.top}`
+				})
+			});
 		}
-	};
-
-	const onChangeBorderSpacingHorizontal = ( value ) => {
-		setAttributes({ borderSpacingHorizontal: value });
-	};
-
-	const onChangeBorderSpacingVertical = ( value ) => {
-		setAttributes({ borderSpacingVertical: value });
 	};
 
 	return (
@@ -113,6 +177,15 @@ export default function TableSettingsControl({
 				checked={ !! ( foot && foot.length ) }
 				onChange={ onToggleFooterSection }
 			/>
+			<SelectControl
+				label={ __( 'Fixed control', 'flexible-table-block' ) }
+				value={ sticky }
+				onChange={ onChangeSticky }
+				options={ STICKY_CONTROLS.map( ({ label, value }) => {
+					return { label, value };
+				}) }
+			/>
+			<hr/>
 			<BaseControl
 				label={ __( 'Width', 'flexible-table-block' ) }
 				id="flexible-table-block/width"
@@ -120,7 +193,7 @@ export default function TableSettingsControl({
 				<UnitControl
 					labelPosition="top"
 					min="0"
-					value={ width }
+					value={ tableStylesObj?.width }
 					onChange={ onChangeWidth }
 					units={ tableWidthUnits }
 				/>
@@ -133,6 +206,7 @@ export default function TableSettingsControl({
 							<Button
 								key={ perWidth }
 								isSmall
+								isPressed={ tableStylesObj?.width === `${ perWidth }%` }
 								onClick={ () =>
 									onChangeWidth( `${ perWidth }%` )
 								}
@@ -144,43 +218,13 @@ export default function TableSettingsControl({
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Min width', 'flexible-table-block' ) }
-				id="flexible-table-block/width"
-			>
-				<UnitControl
-					labelPosition="top"
-					min="0"
-					value={ minWidth }
-					onChange={ onChangeMinWidth }
-					units={ tableWidthUnits }
-				/>
-				<ButtonGroup
-					aria-label={ __( 'Percentage min width' ) }
-					className="wp-block-flexible-table-block-table__components-percent-group"
-				>
-					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						return (
-							<Button
-								key={ perWidth }
-								isSmall
-								onClick={ () =>
-									onChangeMinWidth( `${ perWidth }%` )
-								}
-							>
-								{ `${ perWidth }%` }
-							</Button>
-						);
-					}) }
-				</ButtonGroup>
-			</BaseControl>
-			<BaseControl
 				label={ __( 'Max width', 'flexible-table-block' ) }
-				id="flexible-table-block/width"
+				id="flexible-table-block/max-width"
 			>
 				<UnitControl
 					labelPosition="top"
 					min="0"
-					value={ maxWidth }
+					value={ tableStylesObj?.maxWidth }
 					onChange={ onChangeMaxWidth }
 					units={ tableWidthUnits }
 				/>
@@ -193,6 +237,7 @@ export default function TableSettingsControl({
 							<Button
 								key={ perWidth }
 								isSmall
+								isPressed={ tableStylesObj?.maxWidth === `${ perWidth }%` }
 								onClick={ () =>
 									onChangeMaxWidth( `${ perWidth }%` )
 								}
@@ -203,17 +248,41 @@ export default function TableSettingsControl({
 					}) }
 				</ButtonGroup>
 			</BaseControl>
-			<SelectControl
-				label={ __( 'Fixed control', 'flexible-table-block' ) }
-				value={ sticky }
-				onChange={ onChangeSticky }
-				options={ STICKY_CONTROLS.map( ({ label, value }) => {
-					return { label, value };
-				}) }
-			/>
+			<BaseControl
+				label={ __( 'Min width', 'flexible-table-block' ) }
+				id="flexible-table-block/min-width"
+			>
+				<UnitControl
+					labelPosition="top"
+					min="0"
+					value={ tableStylesObj?.minWidth }
+					onChange={ onChangeMinWidth }
+					units={ tableWidthUnits }
+				/>
+				<ButtonGroup
+					aria-label={ __( 'Percentage min width' ) }
+					className="wp-block-flexible-table-block-table__components-percent-group"
+				>
+					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+						return (
+							<Button
+								key={ perWidth }
+								isSmall
+								isPressed={ tableStylesObj?.minWidth === `${ perWidth }%` }
+								onClick={ () =>
+									onChangeMinWidth( `${ perWidth }%` )
+								}
+							>
+								{ `${ perWidth }%` }
+							</Button>
+						);
+					}) }
+				</ButtonGroup>
+			</BaseControl>
+			<hr/>
 			<BaseControl
 				label={ __( 'Cell borders', 'flexible-table-block' ) }
-				id="flexible-table-block/cell-borders"
+				id="flexible-table-block/border-collapse"
 			>
 				<ButtonGroup
 					className="wp-block-flexible-table-block-table__components-button-group"
@@ -222,9 +291,9 @@ export default function TableSettingsControl({
 						return (
 							<Button
 								key={ value }
-								variant={ value === borderCollapse ? 'primary' : 'secondary' }
+								isPressed={ value === tableStylesObj?.borderCollapse }
 								onClick={ () =>
-									onChangeBorderCollapse( value )
+									onToggleBorderCollapse( value )
 								}
 							>
 								{ label }
@@ -233,32 +302,14 @@ export default function TableSettingsControl({
 					}) }
 				</ButtonGroup>
 			</BaseControl>
-			{ 'separate' === borderCollapse && (
-				<BaseControl
-					label={ __( 'Distance between the borders', 'flexible-table-block' ) }
-					id="flexible-table-block/padding"
-				>
-					<div className="wp-block-flexible-table-block-table__spacing-control">
-						<UnitControl
-							label={ __( 'Horizontal', 'flexible-table-block' ) }
-							labelPosition="top"
-							min="0"
-							max={ BORDER_SPACING_MAX }
-							value={ borderSpacingHorizontal }
-							onChange={ onChangeBorderSpacingHorizontal }
-							units={ borderSpacingUnits }
-						/>
-						<UnitControl
-							label={ __( 'Vertical', 'flexible-table-block' ) }
-							labelPosition="top"
-							min="0"
-							max={ BORDER_SPACING_MAX }
-							value={ borderSpacingVertical }
-							onChange={ onChangeBorderSpacingVertical }
-							units={ borderSpacingUnits }
-						/>
-					</div>
-				</BaseControl>
+			{ 'separate' === tableStylesObj?.borderCollapse && (
+				<BoxControl
+					values={ parseCssValue( tableStylesObj?.borderSpacing, true ) }
+					onChange={ onChangeBorderSpacing }
+					label={ __( 'Border spacing', 'flexible-table-block' ) }
+					units={ borderSpacingUnits }
+					splitOnAxis={ true }
+				/>
 			)}
 		</PanelBody>
 	);

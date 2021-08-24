@@ -9,7 +9,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import './style.scss';
 import metadata from './block.json';
 import example from './example';
-import icon from './icon';
+import { fsbIcon as icon } from './icon';
 import edit from './edit';
 import save from './save';
 

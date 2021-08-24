@@ -15,27 +15,181 @@ export function toUnitVal( value ) {
 }
 
 /**
+ * External dependencies
+ */
+import { pickBy, isEmpty, isObject, identity, mapValues } from 'lodash';
+
+/**
+ * Removed falsy values from nested object.
+ *
+ * @param {*} object
+ * @return {*} Object cleaned from falsy values
+ */
+export const cleanEmptyObject = ( object ) => {
+	if ( ! isObject( object ) || Array.isArray( object ) ) {
+		return object;
+	}
+	const cleanedNestedObjects = pickBy(
+		mapValues( object, cleanEmptyObject ),
+		identity
+	);
+	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
+};
+
+/**
+ * Convert inline css string to object.
+ *
+ * @param {string} styles inline CSS.
+ *
+ * @return {Object} CSS styles.
+ */
+export function parseInlineCss( styles ) {
+	if ( 'string' !== typeof styles ) {
+			return styles;
+	}
+
+	return styles
+			.split( ';' )
+			.filter( style => style.split( ':' )[0] && style.split( ':' )[1])
+			.map( style => [
+					style.split( ':' )[0].trim().replace( /-./g, c => c.substr( 1 ).toUpperCase() ),
+					style.split( ':' )[1].trim()
+			])
+			.reduce( ( styleObj, style ) => ({
+					...styleObj,
+					[style[0]]: style[1]
+			}), {});
+}
+
+/**
+ * Convert css values to object taking into account shorthand.
+ *
+ * @param {string}  value   CSS value.
+ * @param {boolean} reverse Because the horizontal and vertical directions are specified in reverse in border-spacing.
+ *
+ * @return {Object} CSS values.
+ */
+export function parseCssValue( value, reverse = false ) {
+	if ( 'string' !== typeof value ) {
+			return {
+				top: null,
+				left: null,
+				right: null,
+				bottom: null
+			};
+	}
+
+	const values = value.split( ' ' );
+
+	switch ( values.length ) {
+		case 1:
+		return {
+			top: value,
+			left: value,
+			right: value,
+			bottom: value
+		};
+		case 2:
+
+			if ( reverse ) {
+
+				// border-spacing values.
+				return {
+					top: values[1],
+					left: values[0],
+					right: values[0],
+					bottom: values[1]
+				};
+			} else {
+
+				// Other property values.
+				return {
+					top: values[0],
+					left: values[1],
+					right: values[1],
+					bottom: values[0]
+				};
+			}
+		case 3:
+		return {
+			top: values[0],
+			left: values[1],
+			right: values[1],
+			bottom: values[2]
+		};
+		case 4:
+			return {
+				top: values[0],
+				left: values[1],
+				right: values[2],
+				bottom: values[3]
+			};
+		default:
+			return {
+				top: null,
+				left: null,
+				right: null,
+				bottom: null
+			};
+	}
+}
+
+/**
+ * Convert object to css values to object taking into account shorthand.
+ *
+ * @param {string} value CSS value.
+ *
+ * @return {Object} CSS values.
+ */
+export function createCssValue( value ) {
+	const values = value.split( ' ' );
+
+	switch ( values.length ) {
+		case 1:
+		return {
+			top: value,
+			left: value,
+			right: value,
+			bottom: value
+		};
+		case 2:
+			return {
+				top: values[0],
+				left: values[1],
+				right: values[1],
+				bottom: values[0]
+			};
+		case 3:
+		return {
+			top: values[0],
+			left: values[1],
+			right: values[1],
+			bottom: values[2]
+		};
+		case 4:
+			return {
+				top: values[0],
+				left: values[1],
+				right: values[2],
+				bottom: values[3]
+			};
+		default:
+			return {
+				top: undefined,
+				left: undefined,
+				right: undefined,
+				bottom: undefined
+			};
+	}
+}
+
+/**
  * Gets styles for table.
  *
  * @param {Object} attributes Table attributes.
  *
  * @return {Object} Table style.
  */
-export function getTableStyle( attributes ) {
-	const { borderCollapse, width, minWidth, maxWidth } = attributes;
-	const borderSpacingHorizontal = undefined === attributes.borderSpacingHorizontal ? 0 : attributes.borderSpacingHorizontal;
-	const borderSpacingVertical = undefined === attributes.borderSpacingVertical ? 0 : attributes.borderSpacingVertical;
-
-	let styles = { width, minWidth, maxWidth };
-
-	if ( ( 'collapse' === borderCollapse ) || ( 0 === borderSpacingHorizontal && 0 === borderSpacingVertical ) ) {
-		return styles;
-	}
-
-	styles.borderCollapse = 'separate';
-	styles.borderSpacing = `${borderSpacingHorizontal} ${borderSpacingVertical}`;
-	return styles;
-}
 
 /**
  * Determines whether a table row is empty.

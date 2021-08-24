@@ -22,7 +22,7 @@ import {
  */
 import { createTable } from '../utils/state';
 import { PREVIEW_TABLE_HEIGHT_MIN } from '../utils/constants';
-import icon from '../icon';
+import { fsbIcon as icon } from '../icon';
 
 export default function TablePlaceholder({
 	setAttributes
@@ -121,7 +121,7 @@ export default function TablePlaceholder({
 						min="1"
 					/>
 					<Button
-						variant="primary"
+						isPressed="primary"
 						type="submit"
 					>
 						{ __( 'Create Table', 'flexible-table-block' ) }

@@ -15,10 +15,11 @@ import {
 /**
  * Internal dependencies
  */
-import { getTableStyle } from './utils/helper';
+import { parseInlineCss } from './utils/helper';
 
 export default function save({ attributes }) {
 	const {
+		tableStyles,
 		hasFixedLayout,
 		sticky,
 		head,
@@ -29,6 +30,7 @@ export default function save({ attributes }) {
 		captionFontSize,
 		captionAlign
 	} = attributes;
+
 	const isEmpty = ! head.length && ! body.length && ! foot.length;
 
 	if ( isEmpty ) {
@@ -43,8 +45,6 @@ export default function save({ attributes }) {
 	});
 
 	const hasCaption = ! RichText.isEmpty( caption );
-
-	const tableStyle = getTableStyle( attributes );
 
 	const Section = ({ type, rows }) => {
 		if ( ! rows.length ) {
@@ -104,7 +104,7 @@ export default function save({ attributes }) {
 			{ hasCaption && 'top' === captionSide && <Caption /> }
 			<table
 				className={ '' === classes ? undefined : classes }
-				style={ { ...tableStyle, ...colorProps.style } }
+				style={ { ...parseInlineCss( tableStyles ), ...colorProps.style } }
 			>
 				<Section type="head" rows={ head } />
 				<Section type="body" rows={ body } />

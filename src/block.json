@@ -10,26 +10,13 @@
 			"type": "boolean",
 			"default": false
 		},
-		"width": {
-			"type": "string"
-		},
-		"maxWidth": {
-			"type": "string"
-		},
-		"minWidth": {
-			"type": "string"
+		"tableStyles": {
+			"type": "string",
+			"source": "attribute",
+			"selector": "table",
+			"attribute": "style"
 		},
 		"sticky": {
-			"type": "string"
-		},
-		"borderCollapse": {
-			"type": "string",
-			"default": "collapse"
-		},
-		"borderSpacingHorizontal": {
-			"type": "string"
-		},
-		"borderSpacingVertical": {
 			"type": "string"
 		},
 		"captionSide": {
@@ -162,15 +149,17 @@
 			"__experimentalSkipSerialization": true,
 			"gradients": true
 		},
-		"fontSize": true,
-		"lineHeight": true,
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true
+		},
 		"__experimentalBorder": {
 			"__experimentalSkipSerialization": true,
 			"color": true,
 			"style": true,
 			"width": true
 		},
-		"__experimentalFontFamily": true,
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},
 	"editorStyle": "flexible-table-block-editor",

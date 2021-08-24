@@ -17,7 +17,7 @@ import {
 import { toUnitVal } from '../utils/helper';
 import { ALIGNMENT_CONTROLS } from '../utils/constants';
 
-export default function CaptionControls({
+export default function CaptionSettings({
 	attributes,
 	setAttributes
 }) {
@@ -67,7 +67,7 @@ export default function CaptionControls({
 						return (
 							<Button
 								key={ value }
-								variant={  value === captionSide ? 'primary' : 'secondary' }
+								isPressed={  value === captionSide }
 								onClick={ () =>
 									onChangeCaptionSide( value )
 								}
@@ -90,7 +90,7 @@ export default function CaptionControls({
 							<Button
 								key={ align }
 								label= { title }
-								variant={  align === captionAlign ? 'primary' : 'secondary' }
+								isPressed={  align === captionAlign }
 								icon={ icon }
 								onClick={ () =>
 									onChangeCaptionAlign( align )

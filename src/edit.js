@@ -24,13 +24,13 @@ import {
 /**
  * Internal components
  */
-import TableControls from './controls/TableControls';
-import CaptionControls from './controls/CaptionControls';
-import CellsControls from './controls/CellsControls';
+import TableSettings from './settings/table-settings';
+import CaptionSettings from './settings/caption-settings';
+import CellsSettings from './settings/cells-settings';
 
-import Table from './components/Table';
-import TablePlaceholder from './components/TablePlaceholder';
-import TableCaption from './components/TableCaption';
+import Table from './components/table';
+import TablePlaceholder from './components/table-placeholder';
+import TableCaption from './components/table-caption';
 
 /**
  * Internal dependencies
@@ -180,7 +180,7 @@ function TableEdit({
 		( name ) => ! isEmptyTableSection( attributes[ name ])
 	);
 
-	const tableControls = [
+	const TableToolbarControls = [
 		{
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
@@ -233,13 +233,13 @@ function TableEdit({
 							hasArrowIndicator
 							icon={ table }
 							label={ __( 'Edit table', 'flexible-table-block' ) }
-							controls={ tableControls }
+							controls={ TableToolbarControls }
 						/>
 					</BlockControls>
 					<InspectorControls>
-						<TableControls {...{ attributes, setAttributes }} />
-						<CaptionControls {...{ attributes, setAttributes }} />
-						<CellsControls {...{ attributes, setAttributes }} />
+						<TableSettings {...{ attributes, setAttributes }} />
+						<CaptionSettings {...{ attributes, setAttributes }} />
+						<CellsSettings {...{ attributes, setAttributes }} />
 					</InspectorControls>
 					{ 'top' === captionSide && <TableCaption {...{ attributes, setAttributes, insertBlocksAfter }} /> }
 					<Table {...{ attributes, setAttributes, selectedCell, setSelectedCell }} />

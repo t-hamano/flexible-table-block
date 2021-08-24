@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import classnames from 'classnames';
-
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -11,12 +6,14 @@ import { __ } from '@wordpress/i18n';
 import {
 	alignLeft,
 	alignRight,
-	alignCenter
+	alignCenter,
+	lineDashed,
+	lineDotted,
+	lineSolid
 } from '@wordpress/icons';
 
 export const PREVIEW_TABLE_HEIGHT_MIN = 200;
 
-export const BORDER_SPACING_MAX = 100;
 
 export const ALIGNMENT_CONTROLS = [
 	{
@@ -33,32 +30,6 @@ export const ALIGNMENT_CONTROLS = [
 		icon: alignRight,
 		title: __( 'Align column right', 'flexible-table-block' ),
 		align: 'right'
-	}
-];
-
-export const STICKY_CONTROLS = [
-	{
-		label: __( 'none', 'flexible-table-block' ),
-		value: 'none'
-	},
-	{
-		label: __( 'Fixed header', 'flexible-table-block' ),
-		value: 'header'
-	},
-	{
-		label: __( 'Fixed first column', 'flexible-table-block' ),
-		value: 'first-column'
-	}
-];
-
-export const BORDER_COLLAPSE_CONTROLS = [
-	{
-		label: __( 'Share', 'flexible-table-block' ),
-		value: 'collapse'
-	},
-	{
-		label: __( 'Separate', 'flexible-table-block' ),
-		value: 'separate'
 	}
 ];
 

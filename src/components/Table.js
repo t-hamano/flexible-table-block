@@ -6,30 +6,35 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
+import {
+	RichText,
+	__experimentalUseColorProps as useColorProps
+ } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import { updateSelectedCell } from '../utils/state';
-import { getTableStyle } from '../utils/helper';
+import { parseInlineCss } from '../utils/helper';
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../utils/constants';
+
 
 function TSection({ name, ...props }) {
 	const TagName = `t${ name }`;
 	return <TagName { ...props } />;
 }
 
-export default function Table({
-	attributes,
-	setAttributes,
-	selectedCell,
-	setSelectedCell
-}) {
-	const { hasFixedLayout, sticky } = attributes;
+export default function Table( props ) {
+	const {
+		attributes,
+		setAttributes,
+		selectedCell,
+		setSelectedCell
+	} = props;
+
+	const { tableStyles, hasFixedLayout, sticky } = attributes;
 
 	const colorProps = useColorProps( attributes );
-	const tableStyle = getTableStyle( attributes );
 
 	const onChange = ( content ) => {
 		if ( ! selectedCell ) {
@@ -57,7 +62,7 @@ export default function Table({
 					[ `is-sticky-${sticky}` ]: sticky
 				}
 			) }
-			style={ { ...tableStyle, ...colorProps.style } }
+			style={ { ...parseInlineCss( tableStyles ), ...colorProps.style } }
 		>
 			{[ 'head', 'body', 'foot' ].map( ( name ) => (
 				<TSection name={ name } key={ name } >

@@ -9,15 +9,23 @@
 		margin-top: 8px;
 	}
 
-	&__spacing-control {
-		display: flex;
+	&__components-tab-border {
 
-		.components-unit-control-wrapper {
-			flex: 1;
+		.components-tab-panel {
 
-			+ .components-unit-control-wrapper {
-				margin-left: 10px;
+			&__tabs {
+				margin-bottom: 16px;
 			}
+
+			&__tabs-item {
+				height: 40px;
+				padding: 0 7px;
+			}
+		}
+
+		svg {
+			width: 24px;
+			height: 24px;
 		}
 	}
 
