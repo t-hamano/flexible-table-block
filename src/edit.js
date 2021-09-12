@@ -16,31 +16,28 @@ import {
 } from '@wordpress/icons';
 
 /**
- * Internal components
+ * Internal dependencies
  */
 import TableSettings from './settings/table-settings';
 import CaptionSettings from './settings/caption-settings';
 import CellsSettings from './settings/cells-settings';
 
-import Table from './components/table';
-import TablePlaceholder from './components/table-placeholder';
-import TableCaption from './components/table-caption';
+import Table from './elements/table';
+import TablePlaceholder from './elements/table-placeholder';
+import TableCaption from './elements/table-caption';
 
-/**
- * Internal dependencies
- */
 import './editor.scss';
 import { insertRow, deleteRow, insertColumn, deleteColumn } from './utils/state';
-import { parseInlineStyles, isEmptyTableSection } from './utils/helper';
+import { isEmptyTableSection } from './utils/helper';
+import { convertToObject } from './utils/style-converter';
 
 function TableEdit( props ) {
 	const { attributes, setAttributes, isSelected } = props;
-
 	const { tableStyles, captionSide } = attributes;
 
 	const [ selectedCell, setSelectedCell ] = useState();
 
-	const tableStylesObj = parseInlineStyles( tableStyles );
+	const tableStylesObj = convertToObject( tableStyles, 'table' );
 
 	/**
 	 * Inserts a row at the currently selected row index, plus `delta`.
@@ -62,7 +59,6 @@ function TableEdit( props ) {
 			} )
 		);
 
-		// Select the first cell of the new row
 		setSelectedCell( {
 			sectionName,
 			rowIndex: newRowIndex,
@@ -118,7 +114,6 @@ function TableEdit( props ) {
 			} )
 		);
 
-		// Select the first cell of the new column
 		setSelectedCell( {
 			rowIndex: 0,
 			columnIndex: newColumnIndex,
@@ -237,7 +232,7 @@ function TableEdit( props ) {
 							title={ __( 'Table Settings', 'flexible-table-block' ) }
 							initialOpen={ true }
 						>
-							<TableSettings { ...tableProps } />
+							<TableSettings { ...tableSettingProps } />
 						</PanelBody>
 						<PanelBody
 							title={ __( 'Caption Settings', 'flexible-table-block' ) }
@@ -248,7 +243,7 @@ function TableEdit( props ) {
 						<CellsSettings { ...props } />
 					</InspectorControls>
 					{ 'top' === captionSide && <TableCaption { ...props } /> }
-					<Table { ...tableSettingProps } />
+					<Table { ...tableProps } />
 					{ 'bottom' === captionSide && <TableCaption { ...props } /> }
 				</>
 			) }

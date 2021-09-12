@@ -51,9 +51,9 @@ export default function Table( props ) {
 				<TSection name={ name } key={ name }>
 					{ attributes[ name ].map( ( { cells }, rowIndex ) => (
 						<tr key={ rowIndex }>
-							{ cells.map( ( { content, tag: CellTag, textAlign }, columnIndex ) => (
+							{ cells.map( ( { content, tag, textAlign }, columnIndex ) => (
 								<RichText
-									tagName={ CellTag }
+									tagName={ tag }
 									key={ columnIndex }
 									className={ classnames( {
 										[ `has-text-align-${ textAlign }` ]: textAlign,

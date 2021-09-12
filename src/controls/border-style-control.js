@@ -15,8 +15,8 @@ import {
 /**
  * Internal dependencies
  */
-import { SideControlHeader, SideControlWrapper, SideControlRow } from './styles/common-styles';
-import SideControlIcon from './icons/side-control-icon';
+import { SideControlHeader, SideControlWrapper, SideControlRow } from './styles';
+import { SideControlIcon } from './icons';
 import { borderSolid, borderDotted, borderDashed, borderDouble } from '../icon';
 
 const DEFAULT_VALUES = {

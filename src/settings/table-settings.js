@@ -19,19 +19,18 @@ import { __experimentalBorderRadiusControl as BorderRadiusControl } from '@wordp
  */
 import BorderStyleControl from '../controls/border-style-control';
 import { BORDER_COLLAPSE_CONTROLS, STICKY_CONTROLS } from '../utils/constants';
-
-/**
- * Internal dependencies
- */
 import { toggleSection } from '../utils/state';
+import { toUnitVal } from '../utils/helper';
+import { convertToInline } from '../utils/style-converter';
 import {
-	getInlineStyle,
-	getBorderWidthStylesObj,
-	getBorderRadiusStylesObj,
-	toUnitVal,
-} from '../utils/helper';
+	updateBorderWidth,
+	updateBorderRadius,
+	updateBorderStyle,
+	updateBorderColor,
+	updateBorderSpacing,
+} from '../utils/style-updater';
 
-export default function TableSettingsControl( props ) {
+export default function TableSettings( props ) {
 	const { tableStylesObj, attributes, setAttributes } = props;
 	const { hasFixedLayout, sticky, head, foot } = attributes;
 
@@ -65,7 +64,7 @@ export default function TableSettingsControl( props ) {
 
 	const onChangeWidth = ( value ) => {
 		setAttributes( {
-			tableStyles: getInlineStyle( {
+			tableStyles: convertToInline( {
 				...tableStylesObj,
 				width: toUnitVal( value ),
 			} ),
@@ -74,7 +73,7 @@ export default function TableSettingsControl( props ) {
 
 	const onChangeMaxWidth = ( value ) => {
 		setAttributes( {
-			tableStyles: getInlineStyle( {
+			tableStyles: convertToInline( {
 				...tableStylesObj,
 				maxWidth: toUnitVal( value ),
 			} ),
@@ -83,7 +82,7 @@ export default function TableSettingsControl( props ) {
 
 	const onChangeMinWidth = ( value ) => {
 		setAttributes( {
-			tableStyles: getInlineStyle( {
+			tableStyles: convertToInline( {
 				...tableStylesObj,
 				minWidth: toUnitVal( value ),
 			} ),
@@ -91,50 +90,30 @@ export default function TableSettingsControl( props ) {
 	};
 
 	const onChangeBorderWidth = ( values ) => {
-		const borderWidthStylesObj = getBorderWidthStylesObj( values );
-		setAttributes( {
-			tableStyles: getInlineStyle( {
-				...tableStylesObj,
-				...borderWidthStylesObj,
-			} ),
-		} );
+		const newStylesObj = updateBorderWidth( tableStylesObj, values );
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 	const onChangeBorderRadius = ( values ) => {
-		const borderRadiusStylesObj = getBorderRadiusStylesObj( values );
-		setAttributes( {
-			tableStyles: getInlineStyle( {
-				...tableStylesObj,
-				...borderRadiusStylesObj,
-			} ),
-		} );
+		const newStylesObj = updateBorderRadius( tableStylesObj, values );
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	// const onChangeBorderStyle = ( value ) => {
-	// 	const borderStyleStylesObj = getBorderStyleStylesObj( values );
-	// 	setAttributes( {
-	// 		tableStyles: getInlineStyle( {
-	// 			...tableStylesObj,
-	// 			...borderStyleStylesObj,
-	// 		} ),
-	// 	} );
-	// };
+	const onChangeBorderStyle = ( values ) => {
+		const newStylesObj = updateBorderStyle( tableStylesObj, values );
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+	};
 
-	// const onChangeBorderCollor = ( value ) => {
-	// 	const borderColorStylesObj = getBorderColorStylesObj( values );
-	// 	setAttributes( {
-	// 		tableStyles: getInlineStyle( {
-	// 			...tableStylesObj,
-	// 			...borderColorStylesObj,
-	// 		} ),
-	// 	} );
-	// };
+	const onChangeBorderCollor = ( values ) => {
+		const newStylesObj = updateBorderColor( tableStylesObj, values );
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+	};
 
 	const onChangeBorderCollapse = ( value ) => {
 		const borderCollapse = tableStylesObj?.borderCollapse === value ? undefined : value;
 		const borderSpacing = 'separate' === borderCollapse ? tableStylesObj?.borderSpacing : undefined;
 
 		setAttributes( {
-			tableStyles: getInlineStyle( {
+			tableStyles: convertToInline( {
 				...tableStylesObj,
 				borderCollapse,
 				borderSpacing,
@@ -143,31 +122,8 @@ export default function TableSettingsControl( props ) {
 	};
 
 	const onChangeBorderSpacing = ( values ) => {
-		if ( null === values.top && null === values.left ) {
-			// No value.
-			setAttributes( {
-				tableStyles: getInlineStyle( {
-					...tableStylesObj,
-					borderSpacing: undefined,
-				} ),
-			} );
-		} else if ( values.top === values.left ) {
-			// Shorthand value.
-			setAttributes( {
-				tableStyles: getInlineStyle( {
-					...tableStylesObj,
-					borderSpacing: values.top,
-				} ),
-			} );
-		} else {
-			// Longhand value.
-			setAttributes( {
-				tableStyles: getInlineStyle( {
-					...tableStylesObj,
-					borderSpacing: `${ values.left } ${ values.top }`,
-				} ),
-			} );
-		}
+		const newStylesObj = updateBorderSpacing( tableStylesObj, values );
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	return (

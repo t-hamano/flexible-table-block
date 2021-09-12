@@ -15,7 +15,7 @@ import {
 /**
  * Internal dependencies
  */
-import { parseInlineStyles } from './utils/helper';
+import { inlineconvertToObject } from './utils/helper';
 
 export default function save( { attributes } ) {
 	const {
@@ -96,7 +96,7 @@ export default function save( { attributes } ) {
 			{ hasCaption && 'top' === captionSide && <Caption /> }
 			<table
 				className={ '' === classes ? undefined : classes }
-				style={ { ...parseInlineStyles( tableStyles ), ...colorProps.style } }
+				style={ { ...inlineconvertToObject( tableStyles ), ...colorProps.style } }
 			>
 				<Section type="head" rows={ head } />
 				<Section type="body" rows={ body } />
