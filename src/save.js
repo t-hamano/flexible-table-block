@@ -9,15 +9,15 @@ import classnames from 'classnames';
 import {
 	RichText,
 	useBlockProps,
-	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles
+	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,
 } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
-import { parseInlineCss } from './utils/helper';
+import { parseInlineStyles } from './utils/helper';
 
-export default function save({ attributes }) {
+export default function save( { attributes } ) {
 	const {
 		tableStyles,
 		hasFixedLayout,
@@ -28,7 +28,7 @@ export default function save({ attributes }) {
 		caption,
 		captionSide,
 		captionFontSize,
-		captionAlign
+		captionAlign,
 	} = attributes;
 
 	const isEmpty = ! head.length && ! body.length && ! foot.length;
@@ -41,12 +41,12 @@ export default function save({ attributes }) {
 
 	const classes = classnames( colorProps.className, {
 		'has-fixed-layout': hasFixedLayout,
-		[ `is-sticky-${sticky}` ]: sticky
-	});
+		[ `is-sticky-${ sticky }` ]: sticky,
+	} );
 
 	const hasCaption = ! RichText.isEmpty( caption );
 
-	const Section = ({ type, rows }) => {
+	const Section = ( { type, rows } ) => {
 		if ( ! rows.length ) {
 			return null;
 		}
@@ -55,29 +55,23 @@ export default function save({ attributes }) {
 
 		return (
 			<Tag>
-				{ rows.map( ({ cells }, rowIndex ) => (
+				{ rows.map( ( { cells }, rowIndex ) => (
 					<tr key={ rowIndex }>
-						{ cells.map(
-							({ content, tag, textAlign }, cellIndex ) => {
-								const cellClasses = classnames({
-									[ `has-text-align-${ textAlign }` ]: textAlign
-								});
+						{ cells.map( ( { content, tag, textAlign }, cellIndex ) => {
+							const cellClasses = classnames( {
+								[ `has-text-align-${ textAlign }` ]: textAlign,
+							} );
 
-								return (
-									<RichText.Content
-										className={
-											cellClasses ?
-												cellClasses :
-												undefined
-										}
-										data-text-align={ textAlign }
-										tagName={ tag }
-										value={ content }
-										key={ cellIndex }
-									/>
-								);
-							}
-						) }
+							return (
+								<RichText.Content
+									className={ cellClasses ? cellClasses : undefined }
+									data-text-align={ textAlign }
+									tagName={ tag }
+									value={ content }
+									key={ cellIndex }
+								/>
+							);
+						} ) }
 					</tr>
 				) ) }
 			</Tag>
@@ -89,12 +83,10 @@ export default function save({ attributes }) {
 			<RichText.Content
 				tagName="figcaption"
 				value={ caption }
-				className={
-					classnames({
-						[ `has-text-align-${captionAlign}` ]: captionAlign
-					})
-				}
-				style={{ fontSize: captionFontSize }}
+				className={ classnames( {
+					[ `has-text-align-${ captionAlign }` ]: captionAlign,
+				} ) }
+				style={ { fontSize: captionFontSize } }
 			/>
 		);
 	};
@@ -104,7 +96,7 @@ export default function save({ attributes }) {
 			{ hasCaption && 'top' === captionSide && <Caption /> }
 			<table
 				className={ '' === classes ? undefined : classes }
-				style={ { ...parseInlineCss( tableStyles ), ...colorProps.style } }
+				style={ { ...parseInlineStyles( tableStyles ), ...colorProps.style } }
 			>
 				<Section type="head" rows={ head } />
 				<Section type="body" rows={ body } />

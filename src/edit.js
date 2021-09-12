@@ -3,14 +3,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
-import {
-	InspectorControls,
-	BlockControls,
-	useBlockProps
-} from '@wordpress/block-editor';
-import {
-	ToolbarDropdownMenu
-} from '@wordpress/components';
+import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
+import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import {
 	tableColumnAfter,
 	tableColumnBefore,
@@ -18,7 +12,7 @@ import {
 	tableRowAfter,
 	tableRowBefore,
 	tableRowDelete,
-	table
+	table,
 } from '@wordpress/icons';
 
 /**
@@ -36,25 +30,17 @@ import TableCaption from './components/table-caption';
  * Internal dependencies
  */
 import './editor.scss';
-import {
-	insertRow,
-	deleteRow,
-	insertColumn,
-	deleteColumn
-} from './utils/state';
-import {
-	isEmptyTableSection
-} from './utils/helper';
+import { insertRow, deleteRow, insertColumn, deleteColumn } from './utils/state';
+import { parseInlineStyles, isEmptyTableSection } from './utils/helper';
 
-function TableEdit({
-	attributes,
-	setAttributes,
-	insertBlocksAfter,
-	isSelected
-}) {
-	const { captionSide	} = attributes;
+function TableEdit( props ) {
+	const { attributes, setAttributes, isSelected } = props;
+
+	const { tableStyles, captionSide } = attributes;
 
 	const [ selectedCell, setSelectedCell ] = useState();
+
+	const tableStylesObj = parseInlineStyles( tableStyles );
 
 	/**
 	 * Inserts a row at the currently selected row index, plus `delta`.
@@ -72,17 +58,17 @@ function TableEdit({
 		setAttributes(
 			insertRow( attributes, {
 				sectionName,
-				rowIndex: newRowIndex
-			})
+				rowIndex: newRowIndex,
+			} )
 		);
 
 		// Select the first cell of the new row
-		setSelectedCell({
+		setSelectedCell( {
 			sectionName,
 			rowIndex: newRowIndex,
 			columnIndex: 0,
-			type: 'cell'
-		});
+			type: 'cell',
+		} );
 	}
 
 	/**
@@ -110,7 +96,7 @@ function TableEdit({
 		const { sectionName, rowIndex } = selectedCell;
 
 		setSelectedCell();
-		setAttributes( deleteRow( attributes, { sectionName, rowIndex }) );
+		setAttributes( deleteRow( attributes, { sectionName, rowIndex } ) );
 	}
 
 	/**
@@ -128,16 +114,16 @@ function TableEdit({
 
 		setAttributes(
 			insertColumn( attributes, {
-				columnIndex: newColumnIndex
-			})
+				columnIndex: newColumnIndex,
+			} )
 		);
 
 		// Select the first cell of the new column
-		setSelectedCell({
+		setSelectedCell( {
 			rowIndex: 0,
 			columnIndex: newColumnIndex,
-			type: 'cell'
-		});
+			type: 'cell',
+		} );
 	}
 
 	/**
@@ -165,19 +151,17 @@ function TableEdit({
 		const { sectionName, columnIndex } = selectedCell;
 
 		setSelectedCell();
-		setAttributes(
-			deleteColumn( attributes, { sectionName, columnIndex })
-		);
+		setAttributes( deleteColumn( attributes, { sectionName, columnIndex } ) );
 	}
 
 	useEffect( () => {
 		if ( ! isSelected ) {
 			setSelectedCell();
 		}
-	}, [ isSelected ]);
+	}, [ isSelected ] );
 
 	const sections = [ 'head', 'body', 'foot' ].filter(
-		( name ) => ! isEmptyTableSection( attributes[ name ])
+		( name ) => ! isEmptyTableSection( attributes[ name ] )
 	);
 
 	const TableToolbarControls = [
@@ -185,47 +169,59 @@ function TableEdit({
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onInsertRowBefore
+			onClick: onInsertRowBefore,
 		},
 		{
 			icon: tableRowAfter,
 			title: __( 'Insert row after', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onInsertRowAfter
+			onClick: onInsertRowAfter,
 		},
 		{
 			icon: tableRowDelete,
 			title: __( 'Delete row', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onDeleteRow
+			onClick: onDeleteRow,
 		},
 		{
 			icon: tableColumnBefore,
 			title: __( 'Insert column before', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onInsertColumnBefore
+			onClick: onInsertColumnBefore,
 		},
 		{
 			icon: tableColumnAfter,
 			title: __( 'Insert column after', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onInsertColumnAfter
+			onClick: onInsertColumnAfter,
 		},
 		{
 			icon: tableColumnDelete,
 			title: __( 'Delete column', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onDeleteColumn
-		}
+			onClick: onDeleteColumn,
+		},
 	];
 
 	const isEmpty = ! sections.length;
 
+	const tableProps = {
+		...props,
+		tableStylesObj,
+		selectedCell,
+		setSelectedCell,
+	};
+
+	const tableSettingProps = {
+		...props,
+		tableStylesObj,
+		selectedCell,
+		setSelectedCell,
+	};
+
 	return (
 		<figure { ...useBlockProps() }>
-			{ isEmpty && (
-				<TablePlaceholder {...{ setAttributes }} />
-			) }
+			{ isEmpty && <TablePlaceholder { ...props } /> }
 			{ ! isEmpty && (
 				<>
 					<BlockControls group="block">
@@ -237,13 +233,23 @@ function TableEdit({
 						/>
 					</BlockControls>
 					<InspectorControls>
-						<TableSettings {...{ attributes, setAttributes }} />
-						<CaptionSettings {...{ attributes, setAttributes }} />
-						<CellsSettings {...{ attributes, setAttributes }} />
+						<PanelBody
+							title={ __( 'Table Settings', 'flexible-table-block' ) }
+							initialOpen={ true }
+						>
+							<TableSettings { ...tableProps } />
+						</PanelBody>
+						<PanelBody
+							title={ __( 'Caption Settings', 'flexible-table-block' ) }
+							initialOpen={ false }
+						>
+							<CaptionSettings { ...props } />
+						</PanelBody>
+						<CellsSettings { ...props } />
 					</InspectorControls>
-					{ 'top' === captionSide && <TableCaption {...{ attributes, setAttributes, insertBlocksAfter }} /> }
-					<Table {...{ attributes, setAttributes, selectedCell, setSelectedCell }} />
-					{ 'bottom' === captionSide && <TableCaption {...{ attributes, setAttributes, insertBlocksAfter }} /> }
+					{ 'top' === captionSide && <TableCaption { ...props } /> }
+					<Table { ...tableSettingProps } />
+					{ 'bottom' === captionSide && <TableCaption { ...props } /> }
 				</>
 			) }
 		</figure>

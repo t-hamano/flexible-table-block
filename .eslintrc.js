@@ -1,4 +1,19 @@
 module.exports = {
-	extends: 'wordpress',
-	parser: 'babel-eslint'
+	extends: [ 'plugin:@wordpress/eslint-plugin/recommended' ],
+	rules: {
+		'import/no-extraneous-dependencies': 'off',
+		'import/no-unresolved': 'off',
+		'@wordpress/no-unsafe-wp-apis': 'off',
+		'prettier/prettier': [
+			'error',
+			{
+				useTabs: true,
+				tabWidth: 2,
+				singleQuote: true,
+				printWidth: 100,
+				bracketSpacing: true,
+				parenSpacing: true,
+			},
+		],
+	},
 };

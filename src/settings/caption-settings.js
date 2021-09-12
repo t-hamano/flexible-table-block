@@ -6,9 +6,10 @@ import {
 	BaseControl,
 	Button,
 	ButtonGroup,
-	PanelBody,
 	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits
+	__experimentalUseCustomUnits as useCustomUnits,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 
 /**
@@ -17,33 +18,29 @@ import {
 import { toUnitVal } from '../utils/helper';
 import { ALIGNMENT_CONTROLS } from '../utils/constants';
 
-export default function CaptionSettings({
-	attributes,
-	setAttributes
-}) {
+export default function CaptionSettings( { attributes, setAttributes } ) {
 	const { captionFontSize, captionSide, captionAlign } = attributes;
 
-	const fontSizeUnits = useCustomUnits({
-		availableUnits: [ 'px', 'em', 'rem', '%' ]
-	});
+	const fontSizeUnits = useCustomUnits( {
+		availableUnits: [ 'px', 'em', 'rem', '%' ],
+	} );
 
 	const onChangeCaptionFontSize = ( value ) => {
-		setAttributes({ captionFontSize: toUnitVal( value ) });
+		setAttributes( { captionFontSize: toUnitVal( value ) } );
 	};
 
 	const onChangeCaptionSide = ( value ) => {
-		setAttributes({ captionSide: value });
+		setAttributes( { captionSide: value } );
 	};
 
 	const onChangeCaptionAlign = ( value ) => {
-		setAttributes({ captionAlign: value === captionAlign ? undefined : value  });
+		setAttributes( {
+			captionAlign: value === captionAlign ? undefined : value,
+		} );
 	};
 
 	return (
-		<PanelBody
-			title={ __( 'Caption Settings', 'flexible-table-block' ) }
-			initialOpen= { false }
-		>
+		<>
 			<BaseControl
 				label={ __( 'Font size', 'flexible-table-block' ) }
 				id="flexible-table-block/caption-font-size"
@@ -60,46 +57,35 @@ export default function CaptionSettings({
 				label={ __( 'Position', 'flexible-table-block' ) }
 				id="flexible-table-block/caption-side"
 			>
-				<ButtonGroup
-					className="wp-block-flexible-table-block-table__components-button-group"
+				<ToggleGroupControl
+					value={ captionSide }
+					onChange={ ( value ) => onChangeCaptionSide( value ) }
 				>
-					{ [ 'top', 'bottom' ].map( ( value ) => {
-						return (
-							<Button
-								key={ value }
-								isPressed={  value === captionSide }
-								onClick={ () =>
-									onChangeCaptionSide( value )
-								}
-							>
-								{ value }
-							</Button>
-						);
-					}) }
-				</ButtonGroup>
+					<ToggleGroupControlOption value="top" label={ __( 'Top', 'flexible-table-block' ) } />
+					<ToggleGroupControlOption
+						value="bottom"
+						label={ __( 'Bottom', 'flexible-table-block' ) }
+					/>
+				</ToggleGroupControl>
 			</BaseControl>
 			<BaseControl
 				label={ __( 'Text alignment', 'flexible-table-block' ) }
 				id="flexible-table-block/caption-align"
 			>
-				<ButtonGroup
-					className="wp-block-flexible-table-block-table__components-button-group"
-				>
-					{ ALIGNMENT_CONTROLS.map( ({ icon, title, align }) => {
+				<ButtonGroup className="ftb-components__button-group">
+					{ ALIGNMENT_CONTROLS.map( ( { icon, title, value } ) => {
 						return (
 							<Button
-								key={ align }
-								label= { title }
-								isPressed={  align === captionAlign }
+								key={ value }
+								label={ title }
+								variant={ value === captionAlign ? 'primary' : 'secondary' }
 								icon={ icon }
-								onClick={ () =>
-									onChangeCaptionAlign( align )
-								}
+								onClick={ () => onChangeCaptionAlign( value ) }
 							/>
 						);
-					}) }
+					} ) }
 				</ButtonGroup>
 			</BaseControl>
-		</PanelBody>
+		</>
 	);
 }

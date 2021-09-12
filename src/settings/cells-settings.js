@@ -8,7 +8,7 @@ export default function CellsSettings() {
 	return (
 		<PanelBody
 			title={ __( 'Cells Settings', 'flexible-table-block' ) }
-			initialOpen= { false }
+			initialOpen={ false }
 		></PanelBody>
 	);
 }

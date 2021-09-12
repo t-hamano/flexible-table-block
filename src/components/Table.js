@@ -6,33 +6,23 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-import {
-	RichText,
-	__experimentalUseColorProps as useColorProps
- } from '@wordpress/block-editor';
+import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import { updateSelectedCell } from '../utils/state';
-import { parseInlineCss } from '../utils/helper';
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../utils/constants';
 
-
-function TSection({ name, ...props }) {
+function TSection( { name, ...props } ) {
 	const TagName = `t${ name }`;
 	return <TagName { ...props } />;
 }
 
 export default function Table( props ) {
-	const {
-		attributes,
-		setAttributes,
-		selectedCell,
-		setSelectedCell
-	} = props;
+	const { attributes, setAttributes, tableStylesObj, selectedCell, setSelectedCell } = props;
 
-	const { tableStyles, hasFixedLayout, sticky } = attributes;
+	const { hasFixedLayout, sticky } = attributes;
 
 	const colorProps = useColorProps( attributes );
 
@@ -42,64 +32,50 @@ export default function Table( props ) {
 		}
 
 		setAttributes(
-			updateSelectedCell(
-				attributes,
-				selectedCell,
-				( cellAttributes ) => ({
-					...cellAttributes,
-					content
-				})
-			)
+			updateSelectedCell( attributes, selectedCell, ( cellAttributes ) => ( {
+				...cellAttributes,
+				content,
+			} ) )
 		);
 	};
 
 	return (
 		<table
-			className={ classnames(
-				colorProps.className,
-				{
-					'has-fixed-layout': hasFixedLayout,
-					[ `is-sticky-${sticky}` ]: sticky
-				}
-			) }
-			style={ { ...parseInlineCss( tableStyles ), ...colorProps.style } }
+			className={ classnames( colorProps.className, {
+				'has-fixed-layout': hasFixedLayout,
+				[ `is-sticky-${ sticky }` ]: sticky,
+			} ) }
+			style={ { ...tableStylesObj, ...colorProps.style } }
 		>
-			{[ 'head', 'body', 'foot' ].map( ( name ) => (
-				<TSection name={ name } key={ name } >
-					{ attributes[ name ].map( ({ cells }, rowIndex ) => (
+			{ [ 'head', 'body', 'foot' ].map( ( name ) => (
+				<TSection name={ name } key={ name }>
+					{ attributes[ name ].map( ( { cells }, rowIndex ) => (
 						<tr key={ rowIndex }>
-							{ cells.map(
-								(
-									{ content, tag: CellTag, textAlign },
-									columnIndex
-								) => (
-									<RichText
-										tagName={ CellTag }
-										key={ columnIndex }
-										className={ classnames(
-											{
-												[ `has-text-align-${ textAlign }` ]: textAlign
-											}
-										) }
-										value={ content }
-										onChange={ onChange }
-										unstableOnFocus={ () => {
-											setSelectedCell({
-												sectionName: name,
-												rowIndex,
-												columnIndex,
-												type: 'cell'
-											});
-										} }
-										aria-label={ CELL_ARIA_LABEL[ name ] }
-										placeholder={ SECTION_PLACEHOLDER[ name ] }
-									/>
-								)
-							) }
+							{ cells.map( ( { content, tag: CellTag, textAlign }, columnIndex ) => (
+								<RichText
+									tagName={ CellTag }
+									key={ columnIndex }
+									className={ classnames( {
+										[ `has-text-align-${ textAlign }` ]: textAlign,
+									} ) }
+									value={ content }
+									onChange={ onChange }
+									unstableOnFocus={ () => {
+										setSelectedCell( {
+											sectionName: name,
+											rowIndex,
+											columnIndex,
+											type: 'cell',
+										} );
+									} }
+									aria-label={ CELL_ARIA_LABEL[ name ] }
+									placeholder={ SECTION_PLACEHOLDER[ name ] }
+								/>
+							) ) }
 						</tr>
 					) ) }
 				</TSection>
-			) )}
+			) ) }
 		</table>
 	);
 }
