@@ -14,13 +14,13 @@ import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/comp
 /**
  * Internal dependencies
  */
-import { createTable } from '../utils/state';
+import { createTable } from '../utils/table-state';
 import {
 	PREVIEW_TABLE_HEIGHT_MIN,
 	PREVIEW_TABLE_ROW_MAX,
 	PREVIEW_TABLE_COL_MAX,
 } from '../utils/constants';
-import { fsbIcon as icon } from '../icon';
+import { fsbIcon as icon } from '../icons';
 
 export default function TablePlaceholder( { setAttributes } ) {
 	const [ rowCount, setRowCount ] = useState( 2 );
@@ -71,8 +71,8 @@ export default function TablePlaceholder( { setAttributes } ) {
 			icon={ <BlockIcon icon={ icon } showColors /> }
 			instructions={ __( 'Create flexible configuration table.' ) }
 		>
-			<div className="ftb-components__placeholder-table-wrap">
-				<table className="ftb-components__placeholder-table">
+			<div className="ftb-placeholder__table-wrap">
+				<table className="ftb-placeholder__table">
 					{ headerSection && (
 						<thead>
 							<tr>
@@ -102,8 +102,8 @@ export default function TablePlaceholder( { setAttributes } ) {
 					) }
 				</table>
 			</div>
-			<form className="ftb-components__placeholder-form" onSubmit={ onCreateTable }>
-				<div className="ftb-components__placeholder-row">
+			<form className="ftb-placeholder__form" onSubmit={ onCreateTable }>
+				<div className="ftb-placeholder__row">
 					<ToggleControl
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
@@ -115,7 +115,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 						onChange={ onToggleFooterSection }
 					/>
 				</div>
-				<div className="ftb-components__placeholder-row">
+				<div className="ftb-placeholder__row">
 					<TextControl
 						type="number"
 						label={ __( 'Column count', 'flexible-table-block' ) }

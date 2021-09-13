@@ -12,22 +12,30 @@ import {
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { __experimentalBorderRadiusControl as BorderRadiusControl } from '@wordpress/block-editor';
 
 /**
  * Internal components
  */
+import BorderRadiusControl from '../controls/border-radius-control';
+import BorderWidthControl from '../controls/border-width-control';
 import BorderStyleControl from '../controls/border-style-control';
-import { BORDER_COLLAPSE_CONTROLS, STICKY_CONTROLS } from '../utils/constants';
-import { toggleSection } from '../utils/state';
+
+import {
+	BORDER_COLLAPSE_CONTROLS,
+	STICKY_CONTROLS,
+	TABLE_WIDTH_UNITS,
+	BORDER_SPACING_UNITS,
+} from '../utils/constants';
+import { toggleSection } from '../utils/table-state';
 import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
+import { pickBorderWidth, pickBorderRadius, pickBorderSpacing } from '../utils/style-picker';
 import {
-	updateBorderWidth,
-	updateBorderRadius,
-	updateBorderStyle,
-	updateBorderColor,
-	updateBorderSpacing,
+	updateBorderWidthStyles,
+	updateBorderRadiusStyles,
+	updateBorderStyleStyles,
+	updateBorderColorStyles,
+	updateBorderSpacingStyles,
 } from '../utils/style-updater';
 
 export default function TableSettings( props ) {
@@ -35,15 +43,11 @@ export default function TableSettings( props ) {
 	const { hasFixedLayout, sticky, head, foot } = attributes;
 
 	const tableWidthUnits = useCustomUnits( {
-		availableUnits: [ 'px', 'em', 'rem', '%' ],
-	} );
-
-	const borderWidthUnits = useCustomUnits( {
-		availableUnits: [ 'px', 'em', 'rem' ],
+		availableUnits: TABLE_WIDTH_UNITS,
 	} );
 
 	const borderSpacingUnits = useCustomUnits( {
-		availableUnits: [ 'px', 'em', 'rem' ],
+		availableUnits: BORDER_SPACING_UNITS,
 	} );
 
 	const onChangeFixedLayout = () => {
@@ -90,21 +94,22 @@ export default function TableSettings( props ) {
 	};
 
 	const onChangeBorderWidth = ( values ) => {
-		const newStylesObj = updateBorderWidth( tableStylesObj, values );
+		const newStylesObj = updateBorderWidthStyles( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
+
 	const onChangeBorderRadius = ( values ) => {
-		const newStylesObj = updateBorderRadius( tableStylesObj, values );
+		const newStylesObj = updateBorderRadiusStyles( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeBorderStyle = ( values ) => {
-		const newStylesObj = updateBorderStyle( tableStylesObj, values );
+		const newStylesObj = updateBorderStyleStyles( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeBorderCollor = ( values ) => {
-		const newStylesObj = updateBorderColor( tableStylesObj, values );
+		const newStylesObj = updateBorderColorStyles( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
@@ -122,29 +127,26 @@ export default function TableSettings( props ) {
 	};
 
 	const onChangeBorderSpacing = ( values ) => {
-		const newStylesObj = updateBorderSpacing( tableStylesObj, values );
+		const newStylesObj = updateBorderSpacingStyles( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	return (
 		<>
+			<BorderRadiusControl
+				id="flexible-table-block/border-radius"
+				onChange={ onChangeBorderRadius }
+				values={ pickBorderRadius( tableStylesObj ) }
+			/>
+			<BorderWidthControl
+				id="flexible-table-block/border-width"
+				onChange={ onChangeBorderWidth }
+				values={ pickBorderWidth( tableStylesObj ) }
+			/>
 			<BorderStyleControl
 				id="flexible-table-block/border-style"
-				label={ __( 'Border style', 'flexible-table-block' ) }
 				onChange={ onChangeBorderStyle }
 				values={ tableStylesObj?.borderStyle }
-			/>
-			<div className="ftb-components__box-control">
-				<BoxControl
-					values={ tableStylesObj?.borderWidth }
-					onChange={ onChangeBorderWidth }
-					label={ __( 'Border Width', 'flexible-table-block' ) }
-					units={ borderWidthUnits }
-				/>
-			</div>
-			<BorderRadiusControl
-				onChange={ onChangeBorderRadius }
-				values={ tableStylesObj?.borderRadius }
 			/>
 			<hr />
 			<ToggleControl
@@ -179,17 +181,15 @@ export default function TableSettings( props ) {
 					onChange={ onChangeWidth }
 					units={ tableWidthUnits }
 				/>
-				<ButtonGroup
-					aria-label={ __( 'Percentage width' ) }
-					className="ftb-components__percent-group"
-				>
+				<ButtonGroup aria-label={ __( 'Percentage width' ) } className="ftb-percent-group">
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+						const isPressed = tableStylesObj?.width === `${ perWidth }%`;
 						return (
 							<Button
 								key={ perWidth }
 								isSmall
-								isPressed={ tableStylesObj?.width === `${ perWidth }%` }
-								onClick={ () => onChangeWidth( `${ perWidth }%` ) }
+								isPressed={ isPressed }
+								onClick={ () => onChangeWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -198,7 +198,7 @@ export default function TableSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Max width', 'flexible-table-block' ) }
+				label={ __( 'Max Width', 'flexible-table-block' ) }
 				id="flexible-table-block/max-width"
 			>
 				<UnitControl
@@ -208,17 +208,15 @@ export default function TableSettings( props ) {
 					onChange={ onChangeMaxWidth }
 					units={ tableWidthUnits }
 				/>
-				<ButtonGroup
-					aria-label={ __( 'Percentage max width' ) }
-					className="ftb-components__percent-group"
-				>
+				<ButtonGroup aria-label={ __( 'Percentage max width' ) } className="ftb-percent-group">
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+						const isPressed = tableStylesObj?.maxWidth === `${ perWidth }%`;
 						return (
 							<Button
 								key={ perWidth }
 								isSmall
-								isPressed={ tableStylesObj?.maxWidth === `${ perWidth }%` }
-								onClick={ () => onChangeMaxWidth( `${ perWidth }%` ) }
+								isPressed={ isPressed }
+								onClick={ () => onChangeMaxWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -227,7 +225,7 @@ export default function TableSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Min width', 'flexible-table-block' ) }
+				label={ __( 'Min Width', 'flexible-table-block' ) }
 				id="flexible-table-block/min-width"
 			>
 				<UnitControl
@@ -237,17 +235,15 @@ export default function TableSettings( props ) {
 					onChange={ onChangeMinWidth }
 					units={ tableWidthUnits }
 				/>
-				<ButtonGroup
-					aria-label={ __( 'Percentage min width' ) }
-					className="ftb-components__percent-group"
-				>
+				<ButtonGroup aria-label={ __( 'Percentage min width' ) } className="ftb-percent-group">
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+						const isPressed = tableStylesObj?.minWidth === `${ perWidth }%`;
 						return (
 							<Button
 								key={ perWidth }
 								isSmall
-								isPressed={ tableStylesObj?.minWidth === `${ perWidth }%` }
-								onClick={ () => onChangeMinWidth( `${ perWidth }%` ) }
+								isPressed={ isPressed }
+								onClick={ () => onChangeMinWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -260,7 +256,7 @@ export default function TableSettings( props ) {
 				label={ __( 'Cell borders', 'flexible-table-block' ) }
 				id="flexible-table-block/border-collapse"
 			>
-				<ButtonGroup className="ftb-components__button-group">
+				<ButtonGroup className="ftb-button-group">
 					{ BORDER_COLLAPSE_CONTROLS.map( ( { label, value } ) => {
 						return (
 							<Button
@@ -276,7 +272,7 @@ export default function TableSettings( props ) {
 			</BaseControl>
 			{ 'separate' === tableStylesObj?.borderCollapse && (
 				<BoxControl
-					values={ tableStylesObj?.borderSpacing }
+					values={ pickBorderSpacing( tableStylesObj ) }
 					onChange={ onChangeBorderSpacing }
 					label={ __( 'Border spacing', 'flexible-table-block' ) }
 					units={ borderSpacingUnits }

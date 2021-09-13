@@ -16,13 +16,13 @@ import {
  * Internal dependencies
  */
 import { toUnitVal } from '../utils/helper';
-import { ALIGNMENT_CONTROLS } from '../utils/constants';
+import { ALIGNMENT_CONTROLS, FONT_SIZE_UNITS } from '../utils/constants';
 
 export default function CaptionSettings( { attributes, setAttributes } ) {
 	const { captionFontSize, captionSide, captionAlign } = attributes;
 
 	const fontSizeUnits = useCustomUnits( {
-		availableUnits: [ 'px', 'em', 'rem', '%' ],
+		availableUnits: FONT_SIZE_UNITS,
 	} );
 
 	const onChangeCaptionFontSize = ( value ) => {
@@ -46,7 +46,6 @@ export default function CaptionSettings( { attributes, setAttributes } ) {
 				id="flexible-table-block/caption-font-size"
 			>
 				<UnitControl
-					labelPosition="top"
 					min="0"
 					value={ captionFontSize }
 					onChange={ onChangeCaptionFontSize }
@@ -72,7 +71,7 @@ export default function CaptionSettings( { attributes, setAttributes } ) {
 				label={ __( 'Text alignment', 'flexible-table-block' ) }
 				id="flexible-table-block/caption-align"
 			>
-				<ButtonGroup className="ftb-components__button-group">
+				<ButtonGroup className="ftb-button-group">
 					{ ALIGNMENT_CONTROLS.map( ( { icon, title, value } ) => {
 						return (
 							<Button

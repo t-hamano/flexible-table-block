@@ -18,6 +18,8 @@ import {
 /**
  * Internal dependencies
  */
+import './editor.scss';
+
 import TableSettings from './settings/table-settings';
 import CaptionSettings from './settings/caption-settings';
 import CellsSettings from './settings/cells-settings';
@@ -26,8 +28,7 @@ import Table from './elements/table';
 import TablePlaceholder from './elements/table-placeholder';
 import TableCaption from './elements/table-caption';
 
-import './editor.scss';
-import { insertRow, deleteRow, insertColumn, deleteColumn } from './utils/state';
+import { insertRow, deleteRow, insertColumn, deleteColumn } from './utils/table-state';
 import { isEmptyTableSection } from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 
@@ -37,7 +38,7 @@ function TableEdit( props ) {
 
 	const [ selectedCell, setSelectedCell ] = useState();
 
-	const tableStylesObj = convertToObject( tableStyles, 'table' );
+	const tableStylesObj = convertToObject( tableStyles );
 
 	/**
 	 * Inserts a row at the currently selected row index, plus `delta`.

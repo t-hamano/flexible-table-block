@@ -21,6 +21,7 @@ export const SideControlWrapper = styled.div`
 export const SideControlRow = styled.div`
 	display: flex;
 	padding-bottom: 8px;
+	align-items: center;
 `;
 
 export const ViewBox = styled.span`
@@ -28,16 +29,17 @@ export const ViewBox = styled.span`
 	height: 24px;
 	display: block;
 	position: relative;
+	margin-right: 8px;
 `;
 
 const strokeFocus = ( { isFocused = false } ) => {
 	return css( {
-		backgroundColor: 'currentColor',
 		opacity: isFocused ? 1 : 0.3,
 	} );
 };
 
-const Stroke = styled.span`
+const Side = styled.span`
+	background-color: currentColor;
 	box-sizing: border-box;
 	display: block;
 	pointer-events: none;
@@ -45,30 +47,71 @@ const Stroke = styled.span`
 	${ strokeFocus };
 `;
 
-export const TopStroke = styled( Stroke )`
+const Corner = styled.span`
+	box-sizing: border-box;
+	display: block;
+	pointer-events: none;
+	position: absolute;
+	width: 7px;
+	height: 7px;
+	${ strokeFocus };
+`;
+
+export const TopStroke = styled( Side )`
 	height: 2px;
-	left: 6px;
-	right: 6px;
-	top: 3px;
+	left: 7px;
+	right: 7px;
+	top: 4px;
 `;
 
-export const RightStroke = styled( Stroke )`
-	bottom: 6px;
-	top: 6px;
+export const RightStroke = styled( Side )`
+	background-color: currentColor;
+	bottom: 7px;
+	top: 7px;
 	width: 2px;
-	right: 3px;
+	right: 4px;
 `;
 
-export const BottomStroke = styled( Stroke )`
+export const BottomStroke = styled( Side )`
+	background-color: currentColor;
 	height: 2px;
-	left: 6px;
-	right: 6px;
-	bottom: 3px;
+	left: 7px;
+	right: 7px;
+	bottom: 4px;
 `;
 
-export const LeftStroke = styled( Stroke )`
-	bottom: 6px;
-	top: 6px;
+export const LeftStroke = styled( Side )`
+	background-color: currentColor;
+	bottom: 7px;
+	top: 7px;
 	width: 2px;
-	left: 3px;
+	left: 4px;
+`;
+
+export const TopLeftStroke = styled( Corner )`
+	top: 4px;
+	left: 4px;
+	border-left: 2px solid;
+	border-top: 2px solid;
+`;
+
+export const TopRightStroke = styled( Corner )`
+	top: 4px;
+	right: 4px;
+	border-top: 2px solid;
+	border-right: 2px solid;
+`;
+
+export const BottomRightStroke = styled( Corner )`
+	bottom: 4px;
+	right: 4px;
+	border-bottom: 2px solid;
+	border-right: 2px solid;
+`;
+
+export const BottomLeftStroke = styled( Corner )`
+	bottom: 4px;
+	left: 4px;
+	border-bottom: 2px solid;
+	border-left: 2px solid;
 `;

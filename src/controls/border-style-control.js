@@ -17,7 +17,7 @@ import {
  */
 import { SideControlHeader, SideControlWrapper, SideControlRow } from './styles';
 import { SideControlIcon } from './icons';
-import { borderSolid, borderDotted, borderDashed, borderDouble } from '../icon';
+import { borderSolid, borderDotted, borderDashed, borderDouble } from '../icons';
 
 const DEFAULT_VALUES = {
 	top: null,

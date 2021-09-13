@@ -1,5 +1,5 @@
 /**
- * Convert inline css styles to object.
+ * Convert inline CSS styles to object.
  *
  * @param {string} inlineStyles Inline CSS styles.
  * @return {Object} CSS styles object.
@@ -42,7 +42,8 @@ export function convertToInline( stylesObj ) {
 	const lines = Object.keys( stylesObj ).reduce( function ( result, key ) {
 		const property = key.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
 		const value = stylesObj[ key ];
-		if ( value ) {
+
+		if ( value !== undefined && ( typeof value === 'string' || value === 0 ) ) {
 			result.push( `${ property }:${ value };` );
 		}
 		return result;

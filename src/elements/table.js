@@ -11,7 +11,7 @@ import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpre
 /**
  * Internal dependencies
  */
-import { updateSelectedCell } from '../utils/state';
+import { updateSelectedCell } from '../utils/table-state';
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../utils/constants';
 
 function TSection( { name, ...props } ) {

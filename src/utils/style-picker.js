@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { parseCssValue } from './utils/helper';
+import { parseCssValue } from './helper';
 
 /**
  * Pick padding style as object from style object.
@@ -110,21 +110,21 @@ export function pickBorderStyle( stylesObj ) {
  * @return {Object} border-radius styles object.
  */
 export function pickBorderRadius( stylesObj ) {
-	if ( stylesObj.bordertyle ) {
+	if ( stylesObj.borderRadius ) {
 		const borderRadiusValues = parseCssValue( stylesObj.borderRadius );
 		return {
-			top: borderRadiusValues[ 0 ],
-			right: borderRadiusValues[ 1 ],
-			bottom: borderRadiusValues[ 2 ],
-			left: borderRadiusValues[ 3 ],
+			topLeft: borderRadiusValues[ 0 ],
+			topRight: borderRadiusValues[ 1 ],
+			bottomRight: borderRadiusValues[ 2 ],
+			bottomLeft: borderRadiusValues[ 3 ],
 		};
 	}
 
 	return {
-		top: stylesObj?.borderTopLeftRadius,
-		right: stylesObj?.borderTopRightRadius,
-		bottom: stylesObj?.borderBottomRightRadius,
-		left: stylesObj?.borderBottomLeftRadius,
+		topLeft: stylesObj?.borderTopLeftRadius,
+		topRight: stylesObj?.borderTopRightRadius,
+		bottomRight: stylesObj?.borderBottomRightRadius,
+		bottomLeft: stylesObj?.borderBottomLeftRadius,
 	};
 }
 

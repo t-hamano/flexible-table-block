@@ -15,7 +15,7 @@ import {
 /**
  * Internal dependencies
  */
-import { inlineconvertToObject } from './utils/helper';
+import { convertToObject } from './utils/style-converter';
 
 export default function save( { attributes } ) {
 	const {
@@ -36,6 +36,8 @@ export default function save( { attributes } ) {
 	if ( isEmpty ) {
 		return null;
 	}
+
+	const tableStylesObj = convertToObject( tableStyles );
 
 	const colorProps = getColorClassesAndStyles( attributes );
 
@@ -96,7 +98,7 @@ export default function save( { attributes } ) {
 			{ hasCaption && 'top' === captionSide && <Caption /> }
 			<table
 				className={ '' === classes ? undefined : classes }
-				style={ { ...inlineconvertToObject( tableStyles ), ...colorProps.style } }
+				style={ { ...tableStylesObj, ...colorProps.style } }
 			>
 				<Section type="head" rows={ head } />
 				<Section type="body" rows={ body } />

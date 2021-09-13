@@ -10,7 +10,14 @@ import { every, pickBy, isEmpty, isObject, identity, mapValues } from 'lodash';
  * @return {string} Sanitized UnitControl value.
  */
 export function toUnitVal( value ) {
-	return isNaN( parseFloat( value ) ) || 0 > parseFloat( value ) ? undefined : value;
+	const parsedValue = parseFloat( value );
+
+	if ( isNaN( parsedValue ) || 0 > parsedValue ) {
+		return undefined;
+	} else if ( parsedValue === 0 ) {
+		return 0;
+	}
+	return value;
 }
 
 /**

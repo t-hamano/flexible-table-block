@@ -1,38 +1,72 @@
-.ftb-components {
-	background: transparent;
+.ftb-box-control {
 
-	&__box-control {
+	> div {
+		max-width: 100%;
+	}
+}
 
-		> div {
-			max-width: 100%;
+.ftb-button-group {
+	display: block;
+}
+
+.ftb-percent-group {
+	margin-top: 8px;
+}
+
+.ftb-border-radius-control,
+.ftb-border-width-control {
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 12px;
+	}
+
+	&__header-control {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 30px;
+
+		.components-unit-control-wrapper {
+			max-width: 80px;
+			margin-right: auto;
 		}
 	}
 
-	&__button-group {
-		display: block;
-	}
+	&__input-controls {
+		display: flex;
+		padding-top: 8px;
 
-	&__percent-group {
-		margin-top: 8px;
-	}
+		.components-unit-control-wrapper {
+			max-width: 60px;
+			margin-left: -1px;
 
-	&__border-style-group {
-		margin-right: auto;
-		margin-left: 8px;
+			.components-input-control {
+				border-radius: 0;
+			}
 
-		.components-button.is-small.has-icon:not(.has-text) {
-			padding: 0;
-			vertical-align: top;
+			&:first-child .components-input-control {
+				border-radius: 2px 0 0 2px;
+			}
+
+			&:last-child .components-input-control {
+				border-radius: 0 2px 2px 0;
+			}
 		}
 	}
+}
 
-	&__placeholder-table-wrap {
+.ftb-placeholder {
+
+	&__table-wrap {
 		flex: 1;
 		padding: 16px;
 		background: #eaeaea;
 	}
 
-	&__placeholder-table {
+	&__table {
 		background: #fff;
 
 		thead,
@@ -47,7 +81,7 @@
 		}
 	}
 
-	&__placeholder-form {
+	&__form {
 		display: block !important;
 		flex-wrap: nowrap;
 
@@ -69,7 +103,7 @@
 		}
 	}
 
-	&__placeholder-row {
+	&__row {
 		display: flex;
 		align-items: flex-end;
 		margin-top: 16px;
