@@ -12,7 +12,7 @@ import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpre
  * Internal dependencies
  */
 import { updateSelectedCell } from '../utils/table-state';
-import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../utils/constants';
+import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from './constants';
 
 function TSection( { name, ...props } ) {
 	const TagName = `t${ name }`;
@@ -38,8 +38,6 @@ export default function Table( props ) {
 			} ) )
 		);
 	};
-
-	return <div className="hoge" style={ { ...tableStylesObj, ...colorProps.style } }></div>;
 
 	return (
 		<table

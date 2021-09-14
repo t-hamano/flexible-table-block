@@ -1,4 +1,9 @@
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Internal dependencies
  */
 import {
@@ -13,8 +18,47 @@ import {
 	BottomLeftStroke,
 } from './styles';
 
-// Icon showing active sides.
-export function SideControlIcon( { sides } ) {
+// Indicator control options.
+export const SIDES = [
+	{
+		label: __( 'Top', 'flexible-table-block' ),
+		value: 'top',
+	},
+	{
+		label: __( 'Right', 'flexible-table-block' ),
+		value: 'right',
+	},
+	{
+		label: __( 'Bottom', 'flexible-table-block' ),
+		value: 'bottom',
+	},
+	{
+		label: __( 'Left', 'flexible-table-block' ),
+		value: 'left',
+	},
+];
+
+export const CORNERS = [
+	{
+		label: __( 'Top Left', 'flexible-table-block' ),
+		value: 'topLeft',
+	},
+	{
+		label: __( 'Top Right', 'flexible-table-block' ),
+		value: 'topRight',
+	},
+	{
+		label: __( 'Bottom Right', 'flexible-table-block' ),
+		value: 'bottomRight',
+	},
+	{
+		label: __( 'Bottom Left', 'flexible-table-block' ),
+		value: 'bottomLeft',
+	},
+];
+
+// Indicator showing active sides.
+export function SideIndicatorControl( { sides } ) {
 	const top = ! sides || sides.includes( 'top' );
 	const right = ! sides || sides.includes( 'right' );
 	const bottom = ! sides || sides.includes( 'bottom' );
@@ -30,8 +74,8 @@ export function SideControlIcon( { sides } ) {
 	);
 }
 
-// Icon showing active corners.
-export function CornerControlIcon( { corners } ) {
+// Indicator showing active corners.
+export function CornerIndicatorControl( { corners } ) {
 	const topLeft = ! corners || corners.includes( 'topLeft' );
 	const topRight = ! corners || corners.includes( 'topRight' );
 	const bottomRight = ! corners || corners.includes( 'bottomRight' );

@@ -11,13 +11,14 @@ import {
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
+	__experimentalParseUnit as parseUnit,
 } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
-import { CORNERS, BORDER_RADIUS_UNITS } from '../utils/constants';
-import { CornerControlIcon } from './icons';
+import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS } from './constants';
+import { CORNERS, CornerIndicatorControl } from '../indicator-control';
 
 export default function BorderRadiusControl( { id, onChange, values } ) {
 	const isMixed = ! (
@@ -57,23 +58,29 @@ export default function BorderRadiusControl( { id, onChange, values } ) {
 		} );
 	};
 
-	const handleOnFocus = ( value ) => () => {
-		setCorner( value );
+	const handleOnFocus = ( focusCorner ) => () => {
+		setCorner( focusCorner );
 	};
 
-	const handleOnChangeAll = ( value ) => {
+	const handleOnChangeAll = ( inputValue ) => {
+		const [ value, unit ] = parseUnit( inputValue );
+		const parsedValue = `${ Math.min( MAX_BORDER_RADIUS[ unit ], value ) }${ unit }`;
+
 		onChange( {
-			topLeft: value,
-			topRight: value,
-			bottomRight: value,
-			bottomLeft: value,
+			topLeft: parsedValue,
+			topRight: parsedValue,
+			bottomRight: parsedValue,
+			bottomLeft: parsedValue,
 		} );
 	};
 
-	const handleOnChange = ( value, targetCorner ) => {
+	const handleOnChange = ( inputValue, targetCorner ) => {
+		const [ value, unit ] = parseUnit( inputValue );
+		const parsedValue = `${ Math.min( MAX_BORDER_RADIUS[ unit ], value ) }${ unit }`;
+
 		onChange( {
 			...values,
-			[ targetCorner ]: value,
+			[ targetCorner ]: parsedValue,
 		} );
 	};
 
@@ -86,7 +93,7 @@ export default function BorderRadiusControl( { id, onChange, values } ) {
 				</Button>
 			</div>
 			<div className="ftb-border-radius-control__header-control">
-				<CornerControlIcon corners={ corner === undefined ? undefined : [ corner ] } />
+				<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
 				{ isLinked && (
 					<UnitControl
 						placeholder={ allInputPlaceholder }
@@ -95,6 +102,7 @@ export default function BorderRadiusControl( { id, onChange, values } ) {
 						onChange={ handleOnChangeAll }
 						value={ allInputValue }
 						units={ borderRadiusUnits }
+						min="0"
 					/>
 				) }
 				<Tooltip text={ linkedLabel }>
@@ -122,6 +130,7 @@ export default function BorderRadiusControl( { id, onChange, values } ) {
 								} }
 								value={ values[ item.value ] }
 								units={ borderRadiusUnits }
+								min="0"
 							/>
 						);
 					} ) }

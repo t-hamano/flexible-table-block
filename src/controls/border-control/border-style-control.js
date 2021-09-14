@@ -15,8 +15,8 @@ import {
 /**
  * Internal dependencies
  */
-import { BORDER_STYLES, SIDES } from '../utils/constants';
-import { SideControlIcon } from './icons';
+import { BORDER_STYLES } from './constants';
+import { SIDES, SideIndicatorControl } from '../indicator-control';
 
 export default function BorderStyleControl( { id, onChange, values } ) {
 	const isMixed = ! (
@@ -82,7 +82,7 @@ export default function BorderStyleControl( { id, onChange, values } ) {
 				<div className="ftb-border-style-control__button-controls-inner">
 					{ isLinked && (
 						<div className="ftb-border-style-control__button-controls-row">
-							<SideControlIcon />
+							<SideIndicatorControl />
 							<ButtonGroup className="ftb-button-group">
 								{ BORDER_STYLES.map( ( borderStyle ) => {
 									return (
@@ -103,7 +103,7 @@ export default function BorderStyleControl( { id, onChange, values } ) {
 						SIDES.map( ( item ) => {
 							return (
 								<div className="ftb-border-style-control__button-controls-row" key={ item }>
-									<SideControlIcon sides={ [ item.value ] } />
+									<SideIndicatorControl sides={ [ item.value ] } />
 									<ButtonGroup className="ftb-button-group" aria-label={ item.label }>
 										{ BORDER_STYLES.map( ( borderStyle ) => {
 											return (

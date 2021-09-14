@@ -1,3 +1,7 @@
+.wp-block-flexible-table-block-table {
+	overflow-x: auto;
+}
+
 .ftb-button-group {
 	display: block;
 
@@ -11,7 +15,9 @@
 }
 
 .ftb-border-radius-control,
-.ftb-border-width-control {
+.ftb-border-width-control,
+.ftb-border-style-control,
+.ftb-border-color-control {
 
 	&__header {
 		display: flex;
@@ -19,6 +25,10 @@
 		justify-content: space-between;
 		padding-bottom: 12px;
 	}
+}
+
+.ftb-border-radius-control,
+.ftb-border-width-control {
 
 	&__header-control {
 		display: flex;
@@ -57,13 +67,6 @@
 
 .ftb-border-style-control {
 
-	&__header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding-bottom: 12px;
-	}
-
 	&__button-controls {
 		display: flex;
 		align-items: flex-start;
@@ -80,13 +83,6 @@
 }
 
 .ftb-border-color-control {
-
-	&__header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding-bottom: 12px;
-	}
 
 	&__controls {
 		display: flex;
@@ -125,22 +121,54 @@
 
 	&__table-wrap {
 		flex: 1;
-		padding: 16px;
-		background: #eaeaea;
 	}
 
 	&__table {
-		background: #fff;
-
-		thead,
-		tfoot {
-			background: var(--wp-admin-theme-color);
-		}
+		text-align: center;
+		vertical-align: middle;
+		table-layout: fixed;
+		border-collapse: separate;
+		border-spacing: 3px;
 
 		th,
 		td {
 			padding: 0 !important;
+		}
+
+		thead th,
+		tfoot td {
+			background: var(--wp-admin-theme-color);
+		}
+
+		tbody td {
 			border: 1px #1e1e1e solid;
+		}
+
+
+		&.is-overflow-col tr *:nth-last-child(2) {
+			position: relative;
+			background-color: transparent;
+			border: none;
+
+			&::before {
+				display: block;
+				line-height: 0;
+				content: "...";
+			}
+		}
+
+		&.is-overflow-row {
+
+			tbody tr:nth-last-child(2) td {
+				position: relative;
+				border: none;
+
+				&::before {
+					display: block;
+					line-height: 0;
+					content: "...";
+				}
+			}
 		}
 	}
 

@@ -1,0 +1,57 @@
+/**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
+
+// Collection of available units.
+export const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
+export const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ];
+export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ];
+
+// Fixed control setting options.
+export const STICKY_CONTROLS = [
+	{
+		label: __( 'none', 'flexible-table-block' ),
+		value: 'none',
+	},
+	{
+		label: __( 'Fixed header', 'flexible-table-block' ),
+		value: 'header',
+	},
+	{
+		label: __( 'Fixed first column', 'flexible-table-block' ),
+		value: 'first-column',
+	},
+];
+
+// Cell borders setting options.
+export const BORDER_COLLAPSE_CONTROLS = [
+	{
+		label: __( 'Share', 'flexible-table-block' ),
+		value: 'collapse',
+	},
+	{
+		label: __( 'Separate', 'flexible-table-block' ),
+		value: 'separate',
+	},
+];
+
+// Text alignment setting options.
+export const ALIGNMENT_CONTROLS = [
+	{
+		icon: alignLeft,
+		title: __( 'Align column left', 'flexible-table-block' ),
+		value: 'left',
+	},
+	{
+		icon: alignCenter,
+		title: __( 'Align column center', 'flexible-table-block' ),
+		value: 'center',
+	},
+	{
+		icon: alignRight,
+		title: __( 'Align column right', 'flexible-table-block' ),
+		value: 'right',
+	},
+];

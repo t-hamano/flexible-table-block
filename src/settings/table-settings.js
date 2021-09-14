@@ -16,17 +16,19 @@ import {
 /**
  * Internal components
  */
-import BorderRadiusControl from '../controls/border-radius-control';
-import BorderWidthControl from '../controls/border-width-control';
-import BorderStyleControl from '../controls/border-style-control';
-import BorderColorControl from '../controls/border-color-control';
+import {
+	BorderRadiusControl,
+	BorderWidthControl,
+	BorderStyleControl,
+	BorderColorControl,
+} from '../controls/border-control';
 
 import {
 	BORDER_COLLAPSE_CONTROLS,
 	STICKY_CONTROLS,
 	TABLE_WIDTH_UNITS,
 	BORDER_SPACING_UNITS,
-} from '../utils/constants';
+} from './constants';
 import { toggleSection } from '../utils/table-state';
 import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';

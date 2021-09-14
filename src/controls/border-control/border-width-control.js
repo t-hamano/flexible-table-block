@@ -11,13 +11,14 @@ import {
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
+	__experimentalParseUnit as parseUnit,
 } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
-import { SIDES, BORDER_WIDTH_UNITS } from '../utils/constants';
-import { SideControlIcon } from './icons';
+import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH } from './constants';
+import { SIDES, SideIndicatorControl } from '../indicator-control';
 
 export default function BorderRadiusControl( { id, onChange, values } ) {
 	const isMixed = ! (
@@ -57,23 +58,29 @@ export default function BorderRadiusControl( { id, onChange, values } ) {
 		} );
 	};
 
-	const handleOnFocus = ( value ) => () => {
-		setSide( value );
+	const handleOnFocus = ( focusSide ) => () => {
+		setSide( focusSide );
 	};
 
-	const handleOnChangeAll = ( value ) => {
+	const handleOnChangeAll = ( inputValue ) => {
+		const [ value, unit ] = parseUnit( inputValue );
+		const parsedValue = `${ Math.min( MAX_BORDER_WIDTH[ unit ], value ) }${ unit }`;
+
 		onChange( {
-			top: value,
-			right: value,
-			bottom: value,
-			left: value,
+			top: parsedValue,
+			right: parsedValue,
+			bottom: parsedValue,
+			left: parsedValue,
 		} );
 	};
 
-	const handleOnChange = ( value, targetSide ) => {
+	const handleOnChange = ( inputValue, targetSide ) => {
+		const [ value, unit ] = parseUnit( inputValue );
+		const parsedValue = `${ Math.min( MAX_BORDER_WIDTH[ unit ], value ) }${ unit }`;
+
 		onChange( {
 			...values,
-			[ targetSide ]: value,
+			[ targetSide ]: parsedValue,
 		} );
 	};
 
@@ -86,7 +93,7 @@ export default function BorderRadiusControl( { id, onChange, values } ) {
 				</Button>
 			</div>
 			<div className="ftb-border-width-control__header-control">
-				<SideControlIcon sides={ side === undefined ? undefined : [ side ] } />
+				<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
 				{ isLinked && (
 					<UnitControl
 						placeholder={ allInputPlaceholder }

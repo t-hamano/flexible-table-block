@@ -19,14 +19,12 @@ import {
 	ColorPalette,
 	__experimentalText as Text,
 } from '@wordpress/components';
-
 import { store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
-import { SIDES } from '../utils/constants';
-import { SideControlIcon } from './icons';
+import { SIDES, SideIndicatorControl } from '../indicator-control';
 
 export default function BorderColorControl( { id, onChange, values } ) {
 	const isMixed = ! (
@@ -66,20 +64,19 @@ export default function BorderColorControl( { id, onChange, values } ) {
 		} );
 	};
 
-	const handleOnChangeAll = ( value ) => {
+	const handleOnChangeAll = ( inputValue ) => {
 		onChange( {
-			top: value,
-			right: value,
-			bottom: value,
-			left: value,
+			top: inputValue,
+			right: inputValue,
+			bottom: inputValue,
+			left: inputValue,
 		} );
 	};
 
-	const handleOnChange = ( value, targetSide ) => {
-		const newValue = values[ targetSide ] && value === values[ targetSide ] ? null : value;
+	const handleOnChange = ( inputValue, targetSide ) => {
 		onChange( {
 			...values,
-			[ targetSide ]: newValue,
+			[ targetSide ]: inputValue,
 		} );
 	};
 
@@ -95,7 +92,7 @@ export default function BorderColorControl( { id, onChange, values } ) {
 				<div className="ftb-border-color-control__controls-inner">
 					{ isLinked && (
 						<div className="ftb-border-color-control__controls-row">
-							<SideControlIcon />
+							<SideIndicatorControl />
 							<Button
 								className="ftb-border-color-control__indicator"
 								onClick={ () => {
@@ -132,7 +129,7 @@ export default function BorderColorControl( { id, onChange, values } ) {
 						SIDES.map( ( item, index ) => {
 							return (
 								<div className="ftb-border-color-control__controls-row" key={ item }>
-									<SideControlIcon sides={ [ item.value ] } />
+									<SideIndicatorControl sides={ [ item.value ] } />
 									<Button
 										className="ftb-border-color-control__indicator"
 										onClick={ () => {
