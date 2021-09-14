@@ -1,8 +1,15 @@
 .wp-block-flexible-table-block-table {
+	padding: 1em;
+
+	.hoge {
+		height: 200px;
+		border: 1px solid #000;
+	}
 
 	table {
 		width: 100%;
-		background-color: #f00;
+		border: 1px solid #000;
+		// background-color: #f00;
 		border-collapse: collapse;
 	}
 
@@ -25,7 +32,7 @@
 	th,
 	td {
 		word-break: normal;
-		border: 1px solid;
+		// border: 1px solid;
 
 		.has-vertical-align-top {
 			vertical-align: top;

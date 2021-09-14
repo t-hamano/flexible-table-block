@@ -39,6 +39,8 @@ export default function Table( props ) {
 		);
 	};
 
+	return <div className="hoge" style={ { ...tableStylesObj, ...colorProps.style } }></div>;
+
 	return (
 		<table
 			className={ classnames( colorProps.className, {

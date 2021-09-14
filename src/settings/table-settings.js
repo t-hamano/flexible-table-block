@@ -19,6 +19,7 @@ import {
 import BorderRadiusControl from '../controls/border-radius-control';
 import BorderWidthControl from '../controls/border-width-control';
 import BorderStyleControl from '../controls/border-style-control';
+import BorderColorControl from '../controls/border-color-control';
 
 import {
 	BORDER_COLLAPSE_CONTROLS,
@@ -29,7 +30,13 @@ import {
 import { toggleSection } from '../utils/table-state';
 import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
-import { pickBorderWidth, pickBorderRadius, pickBorderSpacing } from '../utils/style-picker';
+import {
+	pickBorderWidth,
+	pickBorderRadius,
+	pickBorderStyle,
+	pickBorderColor,
+	pickBorderSpacing,
+} from '../utils/style-picker';
 import {
 	updateBorderWidthStyles,
 	updateBorderRadiusStyles,
@@ -108,7 +115,7 @@ export default function TableSettings( props ) {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeBorderCollor = ( values ) => {
+	const onChangeBorderColor = ( values ) => {
 		const newStylesObj = updateBorderColorStyles( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
@@ -146,7 +153,12 @@ export default function TableSettings( props ) {
 			<BorderStyleControl
 				id="flexible-table-block/border-style"
 				onChange={ onChangeBorderStyle }
-				values={ tableStylesObj?.borderStyle }
+				values={ pickBorderStyle( tableStylesObj ) }
+			/>
+			<BorderColorControl
+				id="flexible-table-block/border-color"
+				onChange={ onChangeBorderColor }
+				values={ pickBorderColor( tableStylesObj ) }
 			/>
 			<hr />
 			<ToggleControl

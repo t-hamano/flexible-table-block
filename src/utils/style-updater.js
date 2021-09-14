@@ -11,12 +11,13 @@ import { cleanEmptyObject, toUnitVal } from './helper';
  * @return {Object} New Styles object.
  */
 export function updateBorderSpacingStyles( styles, values ) {
-	delete styles.borderSpacing;
+	const newStyles = { ...styles };
+	delete newStyles.borderSpacing;
 
 	const cleanValues = cleanEmptyObject( values );
 
 	if ( ! cleanValues || typeof cleanValues !== 'object' ) {
-		return styles;
+		return newStyles;
 	}
 
 	const top = toUnitVal( cleanValues.top );
@@ -24,13 +25,13 @@ export function updateBorderSpacingStyles( styles, values ) {
 
 	if ( top === left ) {
 		return {
-			...styles,
+			...newStyles,
 			borderSpacing: top,
 		};
 	}
 
 	return {
-		...styles,
+		...newStyles,
 		borderSpacing: `${ left } ${ top }`,
 	};
 }
@@ -43,16 +44,17 @@ export function updateBorderSpacingStyles( styles, values ) {
  * @return {Object} New Styles object.
  */
 export function updateBorderWidthStyles( styles, values ) {
-	delete styles.borderWidth;
-	delete styles.borderTopWidth;
-	delete styles.borderRightWidth;
-	delete styles.borderBottomWidth;
-	delete styles.borderLeftWidth;
+	const newStyles = { ...styles };
+	delete newStyles.borderWidth;
+	delete newStyles.borderTopWidth;
+	delete newStyles.borderRightWidth;
+	delete newStyles.borderBottomWidth;
+	delete newStyles.borderLeftWidth;
 
 	const cleanValues = cleanEmptyObject( values );
 
 	if ( ! cleanValues || typeof cleanValues !== 'object' ) {
-		return styles;
+		return newStyles;
 	}
 
 	const top = toUnitVal( cleanValues.top );
@@ -62,7 +64,7 @@ export function updateBorderWidthStyles( styles, values ) {
 
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderTopWidth: top,
 			borderRightWidth: right,
 			borderBottomWidth: bottom,
@@ -72,23 +74,23 @@ export function updateBorderWidthStyles( styles, values ) {
 
 	if ( top === right && top === bottom && top === left ) {
 		return {
-			...styles,
+			...newStyles,
 			borderWidth: top,
 		};
 	} else if ( top === bottom && left === right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderWidth: `${ top } ${ left }`,
 		};
 	} else if ( left === right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderWidth: `${ top } ${ left } ${ bottom }`,
 		};
 	}
 
 	return {
-		...styles,
+		...newStyles,
 		borderWidth: `${ top } ${ right } ${ bottom } ${ left } `,
 	};
 }
@@ -101,25 +103,26 @@ export function updateBorderWidthStyles( styles, values ) {
  * @return {Object} New Styles object.
  */
 export function updateBorderRadiusStyles( styles, values ) {
-	delete styles.borderRadius;
-	delete styles.borderTopLeftRadius;
-	delete styles.borderTopRightRadius;
-	delete styles.borderBottomRightRadius;
-	delete styles.borderBottomLeftRadius;
+	const newStyles = { ...styles };
+	delete newStyles.borderRadius;
+	delete newStyles.borderTopLeftRadius;
+	delete newStyles.borderTopRightRadius;
+	delete newStyles.borderBottomRightRadius;
+	delete newStyles.borderBottomLeftRadius;
 
 	const cleanValues = cleanEmptyObject( values );
 
 	if ( ! cleanValues ) {
-		return styles;
+		return newStyles;
 	}
 
 	if ( typeof cleanValues !== 'object' && typeof cleanValues !== 'string' ) {
-		return styles;
+		return newStyles;
 	}
 
 	if ( typeof cleanValues === 'string' ) {
 		return {
-			...styles,
+			...newStyles,
 			borderRadius: toUnitVal( cleanValues ),
 		};
 	}
@@ -131,7 +134,7 @@ export function updateBorderRadiusStyles( styles, values ) {
 
 	if ( ! topLeft || ! topRight || ! bottomRight || ! bottomLeft ) {
 		return {
-			...styles,
+			...newStyles,
 			borderTopLeftRadius: topLeft,
 			borderTopRightRadius: topRight,
 			borderBottomRightRadius: bottomRight,
@@ -141,23 +144,23 @@ export function updateBorderRadiusStyles( styles, values ) {
 
 	if ( topLeft === topRight && topLeft === bottomRight && topLeft === bottomLeft ) {
 		return {
-			...styles,
+			...newStyles,
 			borderRadius: topLeft,
 		};
 	} else if ( topLeft === bottomRight && topRight === bottomLeft ) {
 		return {
-			...styles,
+			...newStyles,
 			borderRadius: `${ topLeft } ${ topRight }`,
 		};
 	} else if ( topRight === bottomLeft ) {
 		return {
-			...styles,
+			...newStyles,
 			borderRadius: `${ topLeft } ${ topRight } ${ bottomRight }`,
 		};
 	}
 
 	return {
-		...styles,
+		...newStyles,
 		borderRadius: `${ topLeft } ${ topRight } ${ bottomRight } ${ bottomLeft }`,
 	};
 }
@@ -170,26 +173,24 @@ export function updateBorderRadiusStyles( styles, values ) {
  * @return {Object} New Styles object.
  */
 export function updateBorderStyleStyles( styles, values ) {
-	delete styles.borderStyle;
-	delete styles.borderTopStyle;
-	delete styles.borderRightStyle;
-	delete styles.borderBottomStyle;
-	delete styles.borderLeftStyle;
+	const newStyles = { ...styles };
+	delete newStyles.borderStyle;
+	delete newStyles.borderTopStyle;
+	delete newStyles.borderRightStyle;
+	delete newStyles.borderBottomStyle;
+	delete newStyles.borderLeftStyle;
 
 	const cleanValues = cleanEmptyObject( values );
 
 	if ( ! cleanValues || typeof cleanValues !== 'object' ) {
-		return styles;
+		return newStyles;
 	}
 
-	const top = toUnitVal( cleanValues.top );
-	const right = toUnitVal( cleanValues.right );
-	const bottom = toUnitVal( cleanValues.bottom );
-	const left = toUnitVal( cleanValues.left );
+	const { top, right, bottom, left } = cleanValues;
 
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderTopStyle: top,
 			borderRightStyle: right,
 			borderBottomStyle: bottom,
@@ -199,23 +200,23 @@ export function updateBorderStyleStyles( styles, values ) {
 
 	if ( top === right && top === bottom && top === left ) {
 		return {
-			...styles,
+			...newStyles,
 			borderStyle: top,
 		};
 	} else if ( top === bottom && left === right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderStyle: `${ top } ${ left }`,
 		};
 	} else if ( left === right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderStyle: `${ top } ${ left } ${ bottom }`,
 		};
 	}
 
 	return {
-		...styles,
+		...newStyles,
 		borderTopStyle: top,
 		borderRightStyle: right,
 		borderBottomStyle: bottom,
@@ -231,26 +232,24 @@ export function updateBorderStyleStyles( styles, values ) {
  * @return {Object} New Styles object.
  */
 export function updateBorderColorStyles( styles, values ) {
-	delete styles.borderColor;
-	delete styles.borderTopColor;
-	delete styles.borderRightColor;
-	delete styles.borderBottomColor;
-	delete styles.borderLeftColor;
+	const newStyles = { ...styles };
+	delete newStyles.borderColor;
+	delete newStyles.borderTopColor;
+	delete newStyles.borderRightColor;
+	delete newStyles.borderBottomColor;
+	delete newStyles.borderLeftColor;
 
 	const cleanValues = cleanEmptyObject( values );
 
 	if ( ! cleanValues || typeof cleanValues !== 'object' ) {
-		return styles;
+		return newStyles;
 	}
 
-	const top = toUnitVal( cleanValues.top );
-	const right = toUnitVal( cleanValues.right );
-	const bottom = toUnitVal( cleanValues.bottom );
-	const left = toUnitVal( cleanValues.left );
+	const { top, right, bottom, left } = cleanValues;
 
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderTopColor: top,
 			borderRightColor: right,
 			borderBottomColor: bottom,
@@ -260,23 +259,23 @@ export function updateBorderColorStyles( styles, values ) {
 
 	if ( top === right && top === bottom && top === left ) {
 		return {
-			...styles,
+			...newStyles,
 			borderColor: top,
 		};
 	} else if ( top === bottom && left === right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderColor: `${ top } ${ left }`,
 		};
 	} else if ( left === right ) {
 		return {
-			...styles,
+			...newStyles,
 			borderColor: `${ top } ${ left } ${ bottom }`,
 		};
 	}
 
 	return {
-		...styles,
+		...newStyles,
 		borderTopColor: top,
 		borderRightColor: right,
 		borderBottomColor: bottom,

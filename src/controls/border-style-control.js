@@ -15,143 +15,113 @@ import {
 /**
  * Internal dependencies
  */
-import { SideControlHeader, SideControlWrapper, SideControlRow } from './styles';
+import { BORDER_STYLES, SIDES } from '../utils/constants';
 import { SideControlIcon } from './icons';
-import { borderSolid, borderDotted, borderDashed, borderDouble } from '../icons';
 
-const DEFAULT_VALUES = {
-	top: null,
-	right: null,
-	bottom: null,
-	left: null,
-};
+export default function BorderStyleControl( { id, onChange, values } ) {
+	const isMixed = ! (
+		values.top === values.right &&
+		values.top === values.bottom &&
+		values.top === values.left
+	);
 
-const LABELS = {
-	all: __( 'All', 'flexible-table-block' ),
-	top: __( 'Top', 'flexible-table-block' ),
-	bottom: __( 'Bottom', 'flexible-table-block' ),
-	left: __( 'Left', 'flexible-table-block' ),
-	right: __( 'Right', 'flexible-table-block' ),
-	mixed: __( 'Mixed', 'flexible-table-block' ),
-};
-
-const STYLES = [
-	{
-		label: __( 'Solid', 'flexible-table-block' ),
-		value: 'solid',
-		icon: borderSolid,
-	},
-	{
-		label: __( 'Dotted', 'flexible-table-block' ),
-		value: 'dotted',
-		icon: borderDotted,
-	},
-	{
-		label: __( 'Dashed', 'flexible-table-block' ),
-		value: 'dashed',
-		icon: borderDashed,
-	},
-	{
-		label: __( 'Double', 'flexible-table-block' ),
-		value: 'double',
-		icon: borderDouble,
-	},
-];
-
-export default function BorderStyleControl( { id, values, allowReset = true, onChange } ) {
-	const [ isLinked, setIsLinked ] = useState( false );
+	const [ isLinked, setIsLinked ] = useState( true );
 	const headingId = `${ id }-heading`;
-	const inputValues = values || DEFAULT_VALUES;
+
+	const controlLabel =
+		isMixed && isLinked
+			? __( 'Border Style (Mixed)', 'flexible-table-block' )
+			: __( 'Border Style', 'flexible-table-block' );
 
 	const linkedLabel = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
+	const allInputValue = isMixed ? undefined : values.top;
+
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
 	};
 
-	const handleOnReset = () => {};
+	const handleOnReset = () => {
+		setIsLinked( true );
+		onChange( {
+			top: null,
+			right: null,
+			bottom: null,
+			left: null,
+		} );
+	};
 
 	const handleOnClickAll = ( value ) => {
-		const nextValues = {
+		onChange( {
 			top: value,
 			right: value,
 			bottom: value,
 			left: value,
-		};
-		onChange( nextValues === inputValues ? DEFAULT_VALUES : nextValues );
+		} );
 	};
 
-	const handleOnClick = ( value, side ) => {
-		if ( inputValues[ side ] && value === inputValues[ side ] ) {
-			onChange( {
-				...inputValues,
-				[ side ]: value,
-			} );
-		} else {
-			onChange( {
-				...inputValues,
-				[ side ]: null,
-			} );
-		}
+	const handleOnClick = ( value, targetSide ) => {
+		const newValue = values[ targetSide ] && value === values[ targetSide ] ? null : value;
+		onChange( {
+			...values,
+			[ targetSide ]: newValue,
+		} );
 	};
 
 	return (
-		<BaseControl id={ id } aria-labelledby={ headingId }>
-			<SideControlHeader>
-				<Text id={ headingId }>{ __( 'Border Style', 'flexible-table-block' ) }</Text>
-				{ allowReset && (
-					<Button isSecondary isSmall onClick={ handleOnReset }>
-						{ __( 'Reset' ) }
-					</Button>
-				) }
-			</SideControlHeader>
-			<SideControlWrapper>
-				{ isLinked ? (
-					<>
-						<SideControlIcon />
-						<ButtonGroup className="ftb-components__border-style-group">
-							{ STYLES.map( ( borderStyle ) => {
-								return (
-									<Button
-										isSmall
-										key={ borderStyle }
-										icon={ borderStyle.icon }
-										aria-label={ borderStyle.label }
-										onClick={ () => handleOnClickAll( borderStyle.value ) }
-									/>
-								);
-							} ) }
-						</ButtonGroup>
-					</>
-				) : (
-					<div>
-						{ [ 'top', 'right', 'bottom', 'left' ].map( ( side ) => {
+		<BaseControl className="ftb-border-style-control" id={ id } aria-labelledby={ headingId }>
+			<div className="ftb-border-style-control__header">
+				<Text id={ headingId }>{ controlLabel }</Text>
+				<Button isSecondary isSmall onClick={ handleOnReset } value={ ! isMixed || values.top }>
+					{ __( 'Reset' ) }
+				</Button>
+			</div>
+			<div className="ftb-border-style-control__button-controls">
+				<div className="ftb-border-style-control__button-controls-inner">
+					{ isLinked && (
+						<div className="ftb-border-style-control__button-controls-row">
+							<SideControlIcon />
+							<ButtonGroup className="ftb-button-group">
+								{ BORDER_STYLES.map( ( borderStyle ) => {
+									return (
+										<Button
+											isSmall
+											isPressed={ allInputValue === borderStyle.value }
+											key={ borderStyle }
+											icon={ borderStyle.icon }
+											aria-label={ borderStyle.label }
+											onClick={ () => handleOnClickAll( borderStyle.value ) }
+										/>
+									);
+								} ) }
+							</ButtonGroup>
+						</div>
+					) }
+					{ ! isLinked &&
+						SIDES.map( ( item ) => {
 							return (
-								<SideControlRow key={ side }>
-									<SideControlIcon sides={ [ side ] } />
-									<ButtonGroup
-										className="ftb-components__border-style-group"
-										aria-label={ LABELS[ side ] }
-									>
-										{ STYLES.map( ( borderStyle ) => {
+								<div className="ftb-border-style-control__button-controls-row" key={ item }>
+									<SideControlIcon sides={ [ item.value ] } />
+									<ButtonGroup className="ftb-button-group" aria-label={ item.label }>
+										{ BORDER_STYLES.map( ( borderStyle ) => {
 											return (
 												<Button
 													isSmall
+													isPressed={ values[ item.value ] === borderStyle.value }
 													key={ borderStyle }
 													icon={ borderStyle.icon }
 													aria-label={ borderStyle.label }
-													onClick={ () => handleOnClick( borderStyle.value, side ) }
+													onClick={ () => handleOnClick( borderStyle.value, item.value ) }
 												/>
 											);
 										} ) }
 									</ButtonGroup>
-								</SideControlRow>
+								</div>
 							);
 						} ) }
-					</div>
-				) }
+				</div>
 				<Tooltip text={ linkedLabel }>
 					<span>
 						<Button
@@ -163,7 +133,7 @@ export default function BorderStyleControl( { id, values, allowReset = true, onC
 						/>
 					</span>
 				</Tooltip>
-			</SideControlWrapper>
+			</div>
 		</BaseControl>
 	);
 }

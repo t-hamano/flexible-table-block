@@ -1,18 +1,17 @@
 /**
  * WordPress dependencies
  */
-import { UNARYLIKE_TYPES } from '@babel/types';
 import { __ } from '@wordpress/i18n';
-
 import { alignLeft, alignRight, alignCenter } from '@wordpress/icons';
 
-// Minimum height of create table preview.
+/**
+ * Internal dependencies
+ */
+import { borderSolid, borderDotted, borderDashed, borderDouble } from '../icons';
+
+// Upper and lower limits for each settings.
 export const PREVIEW_TABLE_HEIGHT_MIN = 200;
-
-// Max col number of create table.
 export const PREVIEW_TABLE_COL_MAX = 100;
-
-// Max row number of create table.
 export const PREVIEW_TABLE_ROW_MAX = 100;
 
 // Fixed control setting options.
@@ -111,6 +110,30 @@ export const CORNERS = [
 	{
 		label: __( 'Bottom Left', 'flexible-table-block' ),
 		value: 'bottomLeft',
+	},
+];
+
+// Border Style setting options.
+export const BORDER_STYLES = [
+	{
+		label: __( 'Solid', 'flexible-table-block' ),
+		value: 'solid',
+		icon: borderSolid,
+	},
+	{
+		label: __( 'Dotted', 'flexible-table-block' ),
+		value: 'dotted',
+		icon: borderDotted,
+	},
+	{
+		label: __( 'Dashed', 'flexible-table-block' ),
+		value: 'dashed',
+		icon: borderDashed,
+	},
+	{
+		label: __( 'Double', 'flexible-table-block' ),
+		value: 'double',
+		icon: borderDouble,
 	},
 ];
 

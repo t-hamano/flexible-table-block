@@ -31,6 +31,8 @@ export default function BorderRadiusControl( { id, onChange, values } ) {
 	} );
 
 	const [ isLinked, setIsLinked ] = useState( true );
+	const [ corner, setCorner ] = useState( undefined );
+
 	const headingId = `${ id }-heading`;
 
 	const linkedLabel = isLinked
@@ -39,8 +41,6 @@ export default function BorderRadiusControl( { id, onChange, values } ) {
 
 	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
 	const allInputValue = isMixed ? undefined : values.topLeft;
-
-	const [ corner, setCorner ] = useState( undefined );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
