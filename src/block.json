@@ -23,28 +23,19 @@
 			"type": "string",
 			"default": "bottom"
 		},
-		"captionAlign": {
-			"type": "string"
+		"caption": {
+			"type": "string",
+			"source": "html",
+			"selector": "figcaption"
 		},
 		"captionFontSize": {
 			"type": "string"
 		},
-		"caption": {
+		"captionAlign": {
 			"type": "string",
-			"default": [],
-			"source": "html",
+			"source": "attribute",
 			"selector": "figcaption",
-			"query": {
-				"content": {
-					"type": "string",
-					"source": "html"
-				},
-				"align": {
-					"type": "string",
-					"source": "attribute",
-					"attribute": "data-align"
-				}
-			}
+			"attribute": "data-align"
 		},
 		"head": {
 			"type": "array",
@@ -153,12 +144,6 @@
 			"fontSize": true,
 			"lineHeight": true,
 			"__experimentalFontFamily": true
-		},
-		"__experimentalBorder": {
-			"__experimentalSkipSerialization": true,
-			"color": true,
-			"style": true,
-			"width": true
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},

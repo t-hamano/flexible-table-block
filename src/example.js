@@ -1,4 +1,3 @@
-
 /**
  * WordPress dependencies
  */
@@ -11,68 +10,68 @@ export default {
 				cells: [
 					{
 						content: __( 'Version', 'flexible-table-block' ),
-						tag: 'th'
+						tag: 'th',
 					},
 					{
 						content: __( 'Jazz Musician', 'flexible-table-block' ),
-						tag: 'th'
+						tag: 'th',
 					},
 					{
 						content: __( 'Release Date', 'flexible-table-block' ),
-						tag: 'th'
-					}
-				]
-			}
+						tag: 'th',
+					},
+				],
+			},
 		],
 		body: [
 			{
 				cells: [
 					{
 						content: '5.2',
-						tag: 'td'
+						tag: 'td',
 					},
 					{
 						content: 'Jaco Pastorius',
-						tag: 'td'
+						tag: 'td',
 					},
 					{
 						content: __( 'May 7, 2019' ),
-						tag: 'td'
-					}
-				]
+						tag: 'td',
+					},
+				],
 			},
 			{
 				cells: [
 					{
 						content: '5.1',
-						tag: 'td'
+						tag: 'td',
 					},
 					{
 						content: 'Betty Carter',
-						tag: 'td'
+						tag: 'td',
 					},
 					{
 						content: __( 'February 21, 2019' ),
-						tag: 'td'
-					}
-				]
+						tag: 'td',
+					},
+				],
 			},
 			{
 				cells: [
 					{
 						content: '5.0',
-						tag: 'td'
+						tag: 'td',
 					},
 					{
 						content: 'Bebo Valdés',
-						tag: 'td'
+						tag: 'td',
 					},
 					{
 						content: __( 'December 6, 2018' ),
-						tag: 'td'
-					}
-				]
-			}
-		]
-	}
+						tag: 'td',
+					},
+				],
+			},
+		],
+	},
 };

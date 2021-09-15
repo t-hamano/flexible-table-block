@@ -20,9 +20,7 @@ export default function TableCaption( { attributes, setAttributes, insertBlocksA
 	return (
 		<RichText
 			tagName="figcaption"
-			className={ classnames( {
-				[ `has-text-align-${ captionAlign }` ]: captionAlign,
-			} ) }
+			data-align={ captionAlign }
 			style={ { fontSize: captionFontSize } }
 			aria-label={ __( 'Table caption text', 'flexible-table-block' ) }
 			placeholder={ __( 'Add caption', 'flexible-table-block' ) }

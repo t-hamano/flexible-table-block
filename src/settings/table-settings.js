@@ -76,30 +76,27 @@ export default function TableSettings( props ) {
 	};
 
 	const onChangeWidth = ( value ) => {
-		setAttributes( {
-			tableStyles: convertToInline( {
-				...tableStylesObj,
-				width: toUnitVal( value ),
-			} ),
-		} );
+		const newStylesObj = {
+			...tableStylesObj,
+			width: toUnitVal( value ),
+		};
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeMaxWidth = ( value ) => {
-		setAttributes( {
-			tableStyles: convertToInline( {
-				...tableStylesObj,
-				maxWidth: toUnitVal( value ),
-			} ),
-		} );
+		const newStylesObj = {
+			...tableStylesObj,
+			maxWidth: toUnitVal( value ),
+		};
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeMinWidth = ( value ) => {
-		setAttributes( {
-			tableStyles: convertToInline( {
-				...tableStylesObj,
-				minWidth: toUnitVal( value ),
-			} ),
-		} );
+		const newStylesObj = {
+			...tableStylesObj,
+			minWidth: toUnitVal( value ),
+		};
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeBorderWidth = ( values ) => {
@@ -125,14 +122,12 @@ export default function TableSettings( props ) {
 	const onChangeBorderCollapse = ( value ) => {
 		const borderCollapse = tableStylesObj?.borderCollapse === value ? undefined : value;
 		const borderSpacing = 'separate' === borderCollapse ? tableStylesObj?.borderSpacing : undefined;
-
-		setAttributes( {
-			tableStyles: convertToInline( {
-				...tableStylesObj,
-				borderCollapse,
-				borderSpacing,
-			} ),
-		} );
+		const newStylesObj = {
+			...tableStylesObj,
+			borderCollapse,
+			borderSpacing,
+		};
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeBorderSpacing = ( values ) => {
@@ -142,27 +137,6 @@ export default function TableSettings( props ) {
 
 	return (
 		<>
-			<BorderRadiusControl
-				id="flexible-table-block/border-radius"
-				onChange={ onChangeBorderRadius }
-				values={ pickBorderRadius( tableStylesObj ) }
-			/>
-			<BorderWidthControl
-				id="flexible-table-block/border-width"
-				onChange={ onChangeBorderWidth }
-				values={ pickBorderWidth( tableStylesObj ) }
-			/>
-			<BorderStyleControl
-				id="flexible-table-block/border-style"
-				onChange={ onChangeBorderStyle }
-				values={ pickBorderStyle( tableStylesObj ) }
-			/>
-			<BorderColorControl
-				id="flexible-table-block/border-color"
-				onChange={ onChangeBorderColor }
-				values={ pickBorderColor( tableStylesObj ) }
-			/>
-			<hr />
 			<ToggleControl
 				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
 				checked={ !! hasFixedLayout }
@@ -187,7 +161,10 @@ export default function TableSettings( props ) {
 				} ) }
 			/>
 			<hr />
-			<BaseControl label={ __( 'Width', 'flexible-table-block' ) } id="flexible-table-block/width">
+			<BaseControl
+				label={ __( 'Width', 'flexible-table-block' ) }
+				id="flexible-table-block/table-width"
+			>
 				<UnitControl
 					labelPosition="top"
 					min="0"
@@ -213,7 +190,7 @@ export default function TableSettings( props ) {
 			</BaseControl>
 			<BaseControl
 				label={ __( 'Max Width', 'flexible-table-block' ) }
-				id="flexible-table-block/max-width"
+				id="flexible-table-block/table-max-width"
 			>
 				<UnitControl
 					labelPosition="top"
@@ -240,7 +217,7 @@ export default function TableSettings( props ) {
 			</BaseControl>
 			<BaseControl
 				label={ __( 'Min Width', 'flexible-table-block' ) }
-				id="flexible-table-block/min-width"
+				id="flexible-table-block/table-min-width"
 			>
 				<UnitControl
 					labelPosition="top"
@@ -266,16 +243,38 @@ export default function TableSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			<hr />
+			<BorderRadiusControl
+				id="flexible-table-block/table-border-radius"
+				onChange={ onChangeBorderRadius }
+				values={ pickBorderRadius( tableStylesObj ) }
+			/>
+			<BorderWidthControl
+				id="flexible-table-block/table-border-width"
+				onChange={ onChangeBorderWidth }
+				values={ pickBorderWidth( tableStylesObj ) }
+			/>
+			<BorderStyleControl
+				id="flexible-table-block/table-border-style"
+				onChange={ onChangeBorderStyle }
+				values={ pickBorderStyle( tableStylesObj ) }
+			/>
+			<BorderColorControl
+				id="flexible-table-block/table-border-color"
+				onChange={ onChangeBorderColor }
+				values={ pickBorderColor( tableStylesObj ) }
+			/>
+			<hr />
 			<BaseControl
 				label={ __( 'Cell borders', 'flexible-table-block' ) }
-				id="flexible-table-block/border-collapse"
+				id="flexible-table-block/table-border-collapse"
 			>
 				<ButtonGroup className="ftb-button-group">
-					{ BORDER_COLLAPSE_CONTROLS.map( ( { label, value } ) => {
+					{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
 						return (
 							<Button
 								key={ value }
 								variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
+								icon={ icon }
 								onClick={ () => onChangeBorderCollapse( value ) }
 							>
 								{ label }

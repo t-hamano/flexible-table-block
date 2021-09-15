@@ -18,8 +18,8 @@ import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/comp
 import { createTable } from '../utils/table-state';
 import {
 	MIN_PREVIEW_TABLE_HEIGHT,
-	MAX_PREVIEW_TABLE_ROW,
 	MAX_PREVIEW_TABLE_COL,
+	MAX_PREVIEW_TABLE_ROW,
 	THRESHOLD_PREVIEW_TABLE_COL,
 	THRESHOLD_PREVIEW_TABLE_ROW,
 } from './constants';
@@ -31,11 +31,9 @@ export default function TablePlaceholder( { setAttributes } ) {
 	const [ headerSection, setHeaderSection ] = useState( false );
 	const [ footerSection, setFooterSection ] = useState( false );
 
+	const totalRowCount = rowCount + Number( headerSection ) + Number( footerSection );
 	const cellHeight = parseInt(
-		MIN_PREVIEW_TABLE_HEIGHT /
-			( Math.min( THRESHOLD_PREVIEW_TABLE_ROW, rowCount ) +
-				Number( headerSection ) +
-				Number( footerSection ) )
+		MIN_PREVIEW_TABLE_HEIGHT / Math.min( THRESHOLD_PREVIEW_TABLE_ROW, totalRowCount )
 	);
 
 	const onCreateTable = ( event ) => {
@@ -77,7 +75,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 	};
 
 	const tableClass = classnames( 'ftb-placeholder__table', {
-		'is-overflow-row': rowCount > THRESHOLD_PREVIEW_TABLE_ROW,
+		'is-overflow-row': totalRowCount > THRESHOLD_PREVIEW_TABLE_ROW,
 		'is-overflow-col': columnCount > THRESHOLD_PREVIEW_TABLE_COL,
 	} );
 

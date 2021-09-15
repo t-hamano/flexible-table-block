@@ -41,15 +41,15 @@
 
 	figcaption {
 
-		&.has-text-align-left {
+		&[data-align="left"] {
 			text-align: left;
 		}
 
-		&.has-text-align-center {
+		&[data-align="center"] {
 			text-align: center;
 		}
 
-		&.has-text-align-right {
+		&[data-align="right"] {
 			text-align: right;
 		}
 	}

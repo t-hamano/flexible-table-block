@@ -72,11 +72,11 @@ export default function CaptionSettings( { attributes, setAttributes } ) {
 				id="flexible-table-block/caption-align"
 			>
 				<ButtonGroup className="ftb-button-group">
-					{ ALIGNMENT_CONTROLS.map( ( { icon, title, value } ) => {
+					{ ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
 						return (
 							<Button
 								key={ value }
-								label={ title }
+								label={ label }
 								variant={ value === captionAlign ? 'primary' : 'secondary' }
 								icon={ icon }
 								onClick={ () => onChangeCaptionAlign( value ) }

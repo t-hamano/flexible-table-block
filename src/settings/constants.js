@@ -4,6 +4,11 @@
 import { __ } from '@wordpress/i18n';
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
 
+/**
+ * Internal dependencies
+ */
+import { borderCollapse, borderSeparate } from './icons';
+
 // Collection of available units.
 export const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
 export const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ];
@@ -28,10 +33,12 @@ export const STICKY_CONTROLS = [
 // Cell borders setting options.
 export const BORDER_COLLAPSE_CONTROLS = [
 	{
+		icon: borderCollapse,
 		label: __( 'Share', 'flexible-table-block' ),
 		value: 'collapse',
 	},
 	{
+		icon: borderSeparate,
 		label: __( 'Separate', 'flexible-table-block' ),
 		value: 'separate',
 	},
@@ -41,17 +48,17 @@ export const BORDER_COLLAPSE_CONTROLS = [
 export const ALIGNMENT_CONTROLS = [
 	{
 		icon: alignLeft,
-		title: __( 'Align column left', 'flexible-table-block' ),
+		label: __( 'Align left', 'flexible-table-block' ),
 		value: 'left',
 	},
 	{
 		icon: alignCenter,
-		title: __( 'Align column center', 'flexible-table-block' ),
+		label: __( 'Align center', 'flexible-table-block' ),
 		value: 'center',
 	},
 	{
 		icon: alignRight,
-		title: __( 'Align column right', 'flexible-table-block' ),
+		label: __( 'Align right', 'flexible-table-block' ),
 		value: 'right',
 	},
 ];

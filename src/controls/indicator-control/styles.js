@@ -13,9 +13,7 @@ export const ViewBox = styled.span`
 `;
 
 const strokeFocus = ( { isFocused = false } ) => {
-	return css( {
-		opacity: isFocused ? 1 : 0.3,
-	} );
+	return css( { opacity: isFocused ? 1 : 0.3 } );
 };
 
 const Side = styled.span`

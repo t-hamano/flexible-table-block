@@ -236,16 +236,16 @@ function TableEdit( props ) {
 							<TableSettings { ...tableSettingProps } />
 						</PanelBody>
 						<PanelBody
-							title={ __( 'Caption Settings', 'flexible-table-block' ) }
-							initialOpen={ false }
-						>
-							<CaptionSettings { ...props } />
-						</PanelBody>
-						<PanelBody
 							title={ __( 'Cell Settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
 							<CellsSettings { ...props } />
+						</PanelBody>
+						<PanelBody
+							title={ __( 'Caption Settings', 'flexible-table-block' ) }
+							initialOpen={ false }
+						>
+							<CaptionSettings { ...props } />
 						</PanelBody>
 					</InspectorControls>
 					{ 'top' === captionSide && <TableCaption { ...props } /> }

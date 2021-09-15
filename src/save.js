@@ -83,11 +83,9 @@ export default function save( { attributes } ) {
 	const Caption = () => {
 		return (
 			<RichText.Content
+				data-align={ captionAlign }
 				tagName="figcaption"
 				value={ caption }
-				className={ classnames( {
-					[ `has-text-align-${ captionAlign }` ]: captionAlign,
-				} ) }
 				style={ { fontSize: captionFontSize } }
 			/>
 		);
