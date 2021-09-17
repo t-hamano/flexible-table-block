@@ -18,7 +18,7 @@ import {
 import { toUnitVal } from '../utils/helper';
 import { ALIGNMENT_CONTROLS, FONT_SIZE_UNITS } from './constants';
 
-export default function CaptionSettings( { attributes, setAttributes } ) {
+export default function TableCaptionSettings( { attributes, setAttributes } ) {
 	const { captionFontSize, captionSide, captionAlign } = attributes;
 
 	const fontSizeUnits = useCustomUnits( {

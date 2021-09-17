@@ -91,7 +91,7 @@ export default function BorderStyleControl( { id, onChange, values } ) {
 											isPressed={ allInputValue === borderStyle.value }
 											key={ borderStyle }
 											icon={ borderStyle.icon }
-											aria-label={ borderStyle.label }
+											label={ borderStyle.label }
 											onClick={ () => handleOnClickAll( borderStyle.value ) }
 										/>
 									);
@@ -112,7 +112,7 @@ export default function BorderStyleControl( { id, onChange, values } ) {
 													isPressed={ values[ item.value ] === borderStyle.value }
 													key={ borderStyle }
 													icon={ borderStyle.icon }
-													aria-label={ borderStyle.label }
+													label={ borderStyle.label }
 													onClick={ () => handleOnClick( borderStyle.value, item.value ) }
 												/>
 											);

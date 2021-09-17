@@ -23,5 +23,9 @@
 		"opener": "^1.5.2",
 		"stylelint-config-rational-order": "^0.1.2"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"codemirror": "^5.62.3",
+		"react-codemirror": "^1.0.0",
+		"react-codemirror2": "^7.2.1"
+	}
 }

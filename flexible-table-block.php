@@ -18,40 +18,10 @@ defined( 'ABSPATH' ) || exit;
 $ftb_data = get_file_data( __FILE__, array( 'TextDomain' => 'Text Domain' ) );
 
 define( 'FTB_NAMESPACE', $ftb_data['TextDomain'] );
+define( 'FTB_OPTION_PREFIX', str_replace( '-', '_', FTB_NAMESPACE ) );
 define( 'FTB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'FTB_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 
-function flexible_table_block_register_block() {
-	$asset_file = include( FTB_PATH . '/build/index.asset.php' );
+require_once __DIR__ . '/classes/class-init.php';
 
-	wp_register_style(
-		FTB_NAMESPACE . '-editor',
-		FTB_URL . '/build/index.css',
-		array(),
-		filemtime( FTB_PATH . '/build/index.css' ),
-	);
-
-	wp_register_style(
-		FTB_NAMESPACE,
-		FTB_URL . '/build/style-index.css',
-		array(),
-		filemtime( FTB_PATH . '/build/style-index.css' ),
-	);
-
-	wp_register_script(
-		FTB_NAMESPACE,
-		FTB_URL . '/build/index.js',
-		$asset_file['dependencies'],
-		$asset_file['version']
-	);
-
-	register_block_type(
-		__DIR__ . '/src',
-		array(
-			'editor_script' => FTB_NAMESPACE,
-			'editor_style'  => FTB_NAMESPACE . '-editor',
-			'style'         => FTB_NAMESPACE,
-		)
-	);
-}
-add_action( 'init', 'flexible_table_block_register_block' );
+new flexible_table_block\Init();

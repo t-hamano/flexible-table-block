@@ -172,7 +172,10 @@ export default function TableSettings( props ) {
 					onChange={ onChangeWidth }
 					units={ tableWidthUnits }
 				/>
-				<ButtonGroup aria-label={ __( 'Percentage width' ) } className="ftb-percent-group">
+				<ButtonGroup
+					aria-label={ __( 'Percentage width', 'flexible-table-block' ) }
+					className="ftb-percent-group"
+				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
 						const isPressed = tableStylesObj?.width === `${ perWidth }%`;
 						return (

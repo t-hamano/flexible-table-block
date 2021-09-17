@@ -1,5 +1,35 @@
 .wp-block-flexible-table-block-table {
-	overflow-x: auto;
+
+	&.is-selected.show-section-label {
+
+		thead,
+		tbody,
+		tfoot {
+			position: relative;
+
+			&:not(:empty)::before {
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding: 0 4px;
+				color: #fff;
+				font-size: 10px;
+				background: var(--wp-admin-theme-color);
+			}
+		}
+
+		thead:not(:empty)::before {
+			content: "<thead>";
+		}
+
+		tbody:not(:empty)::before {
+			content: "<tbody>";
+		}
+
+		tfoot:not(:empty)::before {
+			content: "<tfoot>";
+		}
+	}
 }
 
 .ftb-button-group {
@@ -198,5 +228,99 @@
 		display: flex;
 		align-items: flex-end;
 		margin-top: 16px;
+	}
+}
+
+.ftb-global-setting {
+	padding: 0 16px 16px 16px;
+
+	.components-button {
+		display: block;
+		margin-left: auto;
+	}
+}
+
+.ftb-global-setting-modal {
+
+	hr {
+		margin: 1em 0;
+	}
+
+	.components-modal__content {
+		margin-bottom: 60px;
+		padding-bottom: 30px;
+	}
+
+	.components-base-control {
+		margin-bottom: 16px;
+	}
+
+	.CodeMirror {
+		height: 200px;
+		border: 1px solid #dcdcde;
+	}
+
+	&__buttons {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		height: 60px;
+		padding: 0 24px;
+		background: #fff;
+	}
+
+	&__confirm-popover .components-popover__content {
+		min-width: 150px;
+		padding: 8px;
+
+		p {
+			margin: 0 0 1em;
+		}
+	}
+
+	&__confirm-popover-buttons {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__notice {
+		position: absolute !important;
+		right: 24px;
+		bottom: 60px;
+		left: 24px;
+		z-index: 5;
+		margin: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+
+		&.is-dismissible {
+			padding-right: 8px;
+
+			svg {
+				width: 16px;
+				height: 16px;
+			}
+		}
+
+		.components-button {
+			align-self: center;
+		}
+	}
+
+	&__loading {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 5;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0.2);
 	}
 }

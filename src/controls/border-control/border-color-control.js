@@ -99,7 +99,7 @@ export default function BorderColorControl( { id, onChange, values } ) {
 									setIsPickerOpen( true );
 									setPickerIndex( undefined );
 								} }
-								aria-label={ __( 'All', 'flexible-table-block' ) }
+								label={ __( 'All', 'flexible-table-block' ) }
 							>
 								{ isMixed ? (
 									__( 'Mixed', 'flexible-table-block' )
@@ -136,7 +136,7 @@ export default function BorderColorControl( { id, onChange, values } ) {
 											setIsPickerOpen( true );
 											setPickerIndex( index );
 										} }
-										aria-label={ item.label }
+										label={ item.label }
 									>
 										<ColorIndicator colorValue={ values[ item.value ] } />
 									</Button>

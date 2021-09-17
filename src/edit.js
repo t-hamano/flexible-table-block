@@ -1,8 +1,14 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import {
@@ -20,13 +26,10 @@ import {
  */
 import './editor.scss';
 
-import TableSettings from './settings/table-settings';
-import CaptionSettings from './settings/caption-settings';
-import CellsSettings from './settings/cells-settings';
+import { STORE_NAME } from './store';
 
-import Table from './elements/table';
-import TablePlaceholder from './elements/table-placeholder';
-import TableCaption from './elements/table-caption';
+import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
+import { Table, TablePlaceholder, TableCaption } from './elements';
 
 import { insertRow, deleteRow, insertColumn, deleteColumn } from './utils/table-state';
 import { isEmptyTableSection } from './utils/helper';
@@ -35,10 +38,13 @@ import { convertToObject } from './utils/style-converter';
 function TableEdit( props ) {
 	const { attributes, setAttributes, isSelected } = props;
 	const { tableStyles, captionSide } = attributes;
-
 	const [ selectedCell, setSelectedCell ] = useState();
 
 	const tableStylesObj = convertToObject( tableStyles );
+
+	const options = useSelect( ( select ) => {
+		return select( STORE_NAME ).getOptions();
+	} );
 
 	/**
 	 * Inserts a row at the currently selected row index, plus `delta`.
@@ -201,6 +207,12 @@ function TableEdit( props ) {
 
 	const isEmpty = ! sections.length;
 
+	const blockProps = useBlockProps( {
+		className: classnames( {
+			'show-section-label': options.show_section_label,
+		} ),
+	} );
+
 	const tableProps = {
 		...props,
 		tableStylesObj,
@@ -216,7 +228,7 @@ function TableEdit( props ) {
 	};
 
 	return (
-		<figure { ...useBlockProps() }>
+		<figure { ...blockProps }>
 			{ isEmpty && <TablePlaceholder { ...props } /> }
 			{ ! isEmpty && (
 				<>
@@ -239,13 +251,13 @@ function TableEdit( props ) {
 							title={ __( 'Cell Settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
-							<CellsSettings { ...props } />
+							<TableCellSettings { ...props } />
 						</PanelBody>
 						<PanelBody
 							title={ __( 'Caption Settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
-							<CaptionSettings { ...props } />
+							<TableCaptionSettings { ...props } />
 						</PanelBody>
 					</InspectorControls>
 					{ 'top' === captionSide && <TableCaption { ...props } /> }

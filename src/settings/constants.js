@@ -9,6 +9,37 @@ import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
  */
 import { borderCollapse, borderSeparate } from './icons';
 
+// CodeMirror options.
+export const CODEMIRROR_OPTIONS = {
+	mode: 'css',
+	indentUnit: 2,
+	indentWithTabs: true,
+	lineNumbers: true,
+	direction: 'ltr',
+	autoCloseBrackets: true,
+	autoCloseTags: true,
+	tabSize: 2,
+};
+
+// Default settings.
+export const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
+
+// Upper or lower limits for settings.
+export const MIN_RESPONSIVE_BREAKPOINT = 200;
+export const MAX_RESPONSIVE_BREAKPOINT = 1200;
+
+// Markers for Responsive Breakpoints.
+export const RESPONSIVE_BREAKPOINTS = [
+	{
+		value: MIN_RESPONSIVE_BREAKPOINT,
+		label: `${ MIN_RESPONSIVE_BREAKPOINT }px`,
+	},
+	{
+		value: MAX_RESPONSIVE_BREAKPOINT,
+		label: `${ MAX_RESPONSIVE_BREAKPOINT }px`,
+	},
+];
+
 // Collection of available units.
 export const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
 export const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ];

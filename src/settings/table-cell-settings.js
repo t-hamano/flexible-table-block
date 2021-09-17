@@ -2,6 +2,6 @@
  * WordPress dependencies
  */
 
-export default function CellsSettings() {
+export default function TableCellSettings() {
 	return <div>hoge</div>;
 }

@@ -19,8 +19,20 @@ function TSection( { name, ...props } ) {
 	return <TagName { ...props } />;
 }
 
+function Cell( { name, ...props } ) {
+	const TagName = name;
+	return <TagName { ...props } />;
+}
+
 export default function Table( props ) {
-	const { attributes, setAttributes, tableStylesObj, selectedCell, setSelectedCell } = props;
+	const {
+		attributes,
+		setAttributes,
+		tableStylesObj,
+		isSelected,
+		selectedCell,
+		setSelectedCell,
+	} = props;
 
 	const { hasFixedLayout, sticky } = attributes;
 
@@ -40,42 +52,47 @@ export default function Table( props ) {
 	};
 
 	return (
-		<table
-			className={ classnames( colorProps.className, {
-				'has-fixed-layout': hasFixedLayout,
-				[ `is-sticky-${ sticky }` ]: sticky,
-			} ) }
-			style={ { ...tableStylesObj, ...colorProps.style } }
-		>
-			{ [ 'head', 'body', 'foot' ].map( ( name ) => (
-				<TSection name={ name } key={ name }>
-					{ attributes[ name ].map( ( { cells }, rowIndex ) => (
-						<tr key={ rowIndex }>
-							{ cells.map( ( { content, tag, textAlign }, columnIndex ) => (
-								<RichText
-									tagName={ tag }
-									key={ columnIndex }
-									className={ classnames( {
-										[ `has-text-align-${ textAlign }` ]: textAlign,
-									} ) }
-									value={ content }
-									onChange={ onChange }
-									unstableOnFocus={ () => {
-										setSelectedCell( {
-											sectionName: name,
-											rowIndex,
-											columnIndex,
-											type: 'cell',
-										} );
-									} }
-									aria-label={ CELL_ARIA_LABEL[ name ] }
-									placeholder={ SECTION_PLACEHOLDER[ name ] }
-								/>
+		<>
+			<table
+				className={ classnames( colorProps.className, {
+					'has-fixed-layout': hasFixedLayout,
+					[ `is-sticky-${ sticky }` ]: sticky,
+				} ) }
+				style={ { ...tableStylesObj, ...colorProps.style } }
+			>
+				{ [ 'head', 'body', 'foot' ].map( ( name ) => {
+					return (
+						<TSection name={ name } key={ name }>
+							{ attributes[ name ].map( ( { cells }, rowIndex ) => (
+								<tr key={ rowIndex }>
+									{ cells.map( ( { content, tag, textAlign }, columnIndex ) => (
+										<Cell name={ tag } key={ name }>
+											<RichText
+												key={ columnIndex }
+												className={ classnames( {
+													[ `has-text-align-${ textAlign }` ]: textAlign,
+												} ) }
+												value={ content }
+												onChange={ onChange }
+												unstableOnFocus={ () => {
+													setSelectedCell( {
+														sectionName: name,
+														rowIndex,
+														columnIndex,
+														type: 'cell',
+													} );
+												} }
+												aria-label={ CELL_ARIA_LABEL[ name ] }
+												placeholder={ SECTION_PLACEHOLDER[ name ] }
+											/>
+										</Cell>
+									) ) }
+								</tr>
 							) ) }
-						</tr>
-					) ) }
-				</TSection>
-			) ) }
-		</table>
+						</TSection>
+					);
+				} ) }
+			</table>
+		</>
 	);
 }

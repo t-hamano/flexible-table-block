@@ -1,12 +1,10 @@
 .wp-block-flexible-table-block-table {
-	padding: 1em;
 
 	table {
 		width: 100%;
 	}
 
 	.has-fixed-layout {
-		width: 100%;
 		table-layout: fixed;
 
 		td,
@@ -26,16 +24,28 @@
 		word-break: normal;
 		border: 1px solid;
 
-		.has-vertical-align-top {
+		&[data-valign="top"] {
 			vertical-align: top;
 		}
 
-		.has-vertical-align-middle {
-			vertical-align: top;
+		&[data-valign="middle"] {
+			vertical-align: middle;
 		}
 
-		.has-vertical-align-bottom {
-			vertical-align: top;
+		&[data-valign="bottom"] {
+			vertical-align: bottom;
+		}
+
+		&[data-halign="left"] {
+			text-align: left;
+		}
+
+		&[data-halign="center"] {
+			text-align: center;
+		}
+
+		&[data-halign="right"] {
+			text-align: right;
 		}
 	}
 
