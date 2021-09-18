@@ -25,7 +25,6 @@
 	},
 	"dependencies": {
 		"codemirror": "^5.62.3",
-		"react-codemirror": "^1.0.0",
 		"react-codemirror2": "^7.2.1"
 	}
 }

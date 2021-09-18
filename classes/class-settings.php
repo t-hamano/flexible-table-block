@@ -12,11 +12,18 @@ class Settings {
 	const BLOCK_STYLE = <<< EOM
 	.wp-block-flexible-table-block-table table {
 		width: 100%;
+		max-width: 100%;
+		border-spacing: 0;
+		border-collapse: separate;
+		overflow: hidden;
 	}
 	.wp-block-flexible-table-block-table th,
 	.wp-block-flexible-table-block-table td {
 		word-break: normal;
 		border: 1px solid;
+	}
+	.wp-block-flexible-table-block-table th {
+		background: #ddd;
 	}
 	EOM;
 
@@ -42,7 +49,7 @@ class Settings {
 				'max' => 1200,
 			),
 		),
-		// Global CSS.
+		// Global Block CSS.
 		'css'                 => array(
 			'type'              => 'string',
 			'default'           => self::BLOCK_STYLE,

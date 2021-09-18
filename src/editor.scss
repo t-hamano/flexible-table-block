@@ -255,6 +255,14 @@
 		margin-bottom: 16px;
 	}
 
+	.components-range-control__mark {
+		background-color: #d7dade;
+	}
+
+	.components-range-control__mark-label {
+		color: currentColor;
+	}
+
 	.CodeMirror {
 		height: 200px;
 		border: 1px solid #dcdcde;

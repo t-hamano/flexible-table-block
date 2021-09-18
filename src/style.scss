@@ -1,9 +1,5 @@
 .wp-block-flexible-table-block-table {
 
-	table {
-		width: 100%;
-	}
-
 	.has-fixed-layout {
 		table-layout: fixed;
 
@@ -21,8 +17,6 @@
 
 	th,
 	td {
-		word-break: normal;
-		border: 1px solid;
 
 		&[data-valign="top"] {
 			vertical-align: top;

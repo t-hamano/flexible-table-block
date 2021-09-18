@@ -11,7 +11,6 @@ import {
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
-	__experimentalParseUnit as parseUnit,
 } from '@wordpress/components';
 
 /**
@@ -19,15 +18,21 @@ import {
  */
 import { SIDES, SideIndicatorControl } from '../indicator-control';
 
-const BORDER_WIDTH_UNITS = [ 'px', 'em', 'rem' ];
+const PADDING_UNITS = [ 'px', '%', 'em', 'rem', 'vw', 'vh' ];
 
-const MAX_BORDER_WIDTH = {
-	px: 100,
-	em: 20,
-	rem: 20,
+const DEFAULT_VALUES = {
+	top: null,
+	right: null,
+	bottom: null,
+	left: null,
 };
 
-export default function BorderWidthControl( { id, onChange, values } ) {
+export default function PaddingControl( { id, onChange, values: valuesProp } ) {
+	const values = {
+		...DEFAULT_VALUES,
+		...valuesProp,
+	};
+
 	const isMixed = ! (
 		values.top === values.right &&
 		values.top === values.bottom &&
@@ -35,7 +40,7 @@ export default function BorderWidthControl( { id, onChange, values } ) {
 	);
 
 	const borderWidthUnits = useCustomUnits( {
-		availableUnits: BORDER_WIDTH_UNITS,
+		availableUnits: PADDING_UNITS,
 	} );
 
 	const [ isLinked, setIsLinked ] = useState( true );
@@ -70,31 +75,25 @@ export default function BorderWidthControl( { id, onChange, values } ) {
 	};
 
 	const handleOnChangeAll = ( inputValue ) => {
-		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_WIDTH[ unit ], value ) }${ unit }`;
-
 		onChange( {
-			top: parsedValue,
-			right: parsedValue,
-			bottom: parsedValue,
-			left: parsedValue,
+			top: inputValue,
+			right: inputValue,
+			bottom: inputValue,
+			left: inputValue,
 		} );
 	};
 
 	const handleOnChange = ( inputValue, targetSide ) => {
-		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_WIDTH[ unit ], value ) }${ unit }`;
-
 		onChange( {
 			...values,
-			[ targetSide ]: parsedValue,
+			[ targetSide ]: inputValue,
 		} );
 	};
 
 	return (
 		<BaseControl className="ftb-border-width-control" id={ id } aria-labelledby={ headingId }>
 			<div className="ftb-border-width-control__header">
-				<Text id={ headingId }>{ __( 'Border Width', 'flexible-table-block' ) }</Text>
+				<Text id={ headingId }>{ __( 'Padding', 'flexible-table-block' ) }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset }>
 					{ __( 'Reset' ) }
 				</Button>

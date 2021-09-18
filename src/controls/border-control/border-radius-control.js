@@ -17,8 +17,15 @@ import {
 /**
  * Internal dependencies
  */
-import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS } from './constants';
 import { CORNERS, CornerIndicatorControl } from '../indicator-control';
+
+const BORDER_RADIUS_UNITS = [ 'px', 'em', 'rem' ];
+
+const MAX_BORDER_RADIUS = {
+	px: 100,
+	em: 20,
+	rem: 20,
+};
 
 export default function BorderRadiusControl( { id, onChange, values } ) {
 	const isMixed = ! (

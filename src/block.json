@@ -147,6 +147,5 @@
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},
-	"editorStyle": "flexible-table-block-editor",
-	"style": "flexible-table-block"
+	"editorStyle": "flexible-table-block-editor"
 }

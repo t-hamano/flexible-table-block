@@ -4,6 +4,65 @@
 import { cleanEmptyObject, toUnitVal } from './helper';
 
 /**
+ * Update padding style of styles object.
+ *
+ * @param {Object} styles Styles object.
+ * @param {Object} values padding values object.
+ * @return {Object} New Styles object.
+ */
+export function updatePaddingStyles( styles, values ) {
+	const newStyles = { ...styles };
+	delete newStyles.padding;
+	delete newStyles.paddingTop;
+	delete newStyles.paddingRight;
+	delete newStyles.paddingBottom;
+	delete newStyles.paddingLeft;
+
+	const cleanValues = cleanEmptyObject( values );
+
+	if ( ! cleanValues || typeof cleanValues !== 'object' ) {
+		return newStyles;
+	}
+
+	const top = toUnitVal( cleanValues.top );
+	const right = toUnitVal( cleanValues.right );
+	const bottom = toUnitVal( cleanValues.bottom );
+	const left = toUnitVal( cleanValues.left );
+
+	if ( ! top || ! right || ! bottom || ! right ) {
+		return {
+			...newStyles,
+			paddingTop: top,
+			paddingRight: right,
+			paddingBottom: bottom,
+			paddingLeft: left,
+		};
+	}
+
+	if ( top === right && top === bottom && top === left ) {
+		return {
+			...newStyles,
+			padding: top,
+		};
+	} else if ( top === bottom && left === right ) {
+		return {
+			...newStyles,
+			padding: `${ top } ${ left }`,
+		};
+	} else if ( left === right ) {
+		return {
+			...newStyles,
+			padding: `${ top } ${ left } ${ bottom }`,
+		};
+	}
+
+	return {
+		...newStyles,
+		padding: `${ top } ${ right } ${ bottom } ${ left } `,
+	};
+}
+
+/**
  * Update border-spacing style of styles object.
  *
  * @param {Object} styles Styles object.

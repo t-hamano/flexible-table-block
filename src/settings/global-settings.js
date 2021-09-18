@@ -31,15 +31,35 @@ import { mobile, desktop } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import {
-	CODEMIRROR_OPTIONS,
-	MIN_RESPONSIVE_BREAKPOINT,
-	MAX_RESPONSIVE_BREAKPOINT,
-	DEFAULT_RESPONSIVE_BREAKPOINT,
-	RESPONSIVE_BREAKPOINTS,
-} from './constants';
+import { minifyCss } from '../utils/helper';
 import { STORE_NAME } from '../store';
-import { store } from '@wordpress/block-editor';
+
+const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
+
+const MIN_RESPONSIVE_BREAKPOINT = 200;
+const MAX_RESPONSIVE_BREAKPOINT = 1200;
+
+const RESPONSIVE_BREAKPOINTS = [
+	{
+		value: MIN_RESPONSIVE_BREAKPOINT,
+		label: `${ MIN_RESPONSIVE_BREAKPOINT }px`,
+	},
+	{
+		value: MAX_RESPONSIVE_BREAKPOINT,
+		label: `${ MAX_RESPONSIVE_BREAKPOINT }px`,
+	},
+];
+
+const CODEMIRROR_OPTIONS = {
+	mode: 'css',
+	indentUnit: 2,
+	indentWithTabs: true,
+	lineNumbers: true,
+	direction: 'ltr',
+	autoCloseBrackets: true,
+	autoCloseTags: true,
+	tabSize: 2,
+};
 
 /* eslint-disable no-undef */
 export default function GlobalSettings() {
@@ -98,6 +118,11 @@ export default function GlobalSettings() {
 					status: response.status,
 					message: response.message,
 				} );
+
+				// Update inline CSS.
+				document.getElementById( 'flexible-table-block-editor-inline-css' ).textContent = minifyCss(
+					optionsState.css
+				);
 			} )
 			.catch( ( response ) => {
 				document.querySelectorAll( '.ftb-global-setting-modal' )[ 0 ].focus();
@@ -131,6 +156,11 @@ export default function GlobalSettings() {
 
 			setOptionsState( response.options );
 			setOptions( response.options );
+
+			// Update inline CSS.
+			document.getElementById( 'flexible-table-block-editor-inline-css' ).textContent = minifyCss(
+				response.options.css
+			);
 		} );
 	};
 
@@ -188,6 +218,7 @@ export default function GlobalSettings() {
 								beforeIcon={ mobile }
 								afterIcon={ desktop }
 								allowReset
+								trackColor="transparent"
 								min={ MIN_RESPONSIVE_BREAKPOINT }
 								max={ MAX_RESPONSIVE_BREAKPOINT }
 								renderTooltipContent={ tooltip }
@@ -206,10 +237,10 @@ export default function GlobalSettings() {
 							/>
 							<hr />
 							<BaseControl
-								label={ __( 'Global CSS', 'flexible-table-block' ) }
+								label={ __( 'Global Block CSS', 'flexible-table-block' ) }
 								id="flexible-table-block/global-setting-css"
 								help={ __(
-									'Defines the default style. This CSS will be applied to both the frontend and the block editor.',
+									'Defines the default table style. This CSS will be applied to both the frontend and the block editor.',
 									'flexible-spacer-block'
 								) }
 							>

@@ -3,6 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
+import { borderSolid, borderDotted, borderDashed, borderDouble } from './icons';
 import { useState } from '@wordpress/element';
 import {
 	BaseControl,
@@ -15,8 +16,30 @@ import {
 /**
  * Internal dependencies
  */
-import { BORDER_STYLES } from './constants';
 import { SIDES, SideIndicatorControl } from '../indicator-control';
+
+const BORDER_STYLES = [
+	{
+		label: __( 'Solid', 'flexible-table-block' ),
+		value: 'solid',
+		icon: borderSolid,
+	},
+	{
+		label: __( 'Dotted', 'flexible-table-block' ),
+		value: 'dotted',
+		icon: borderDotted,
+	},
+	{
+		label: __( 'Dashed', 'flexible-table-block' ),
+		value: 'dashed',
+		icon: borderDashed,
+	},
+	{
+		label: __( 'Double', 'flexible-table-block' ),
+		value: 'double',
+		icon: borderDouble,
+	},
+];
 
 export default function BorderStyleControl( { id, onChange, values } ) {
 	const isMixed = ! (

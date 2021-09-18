@@ -15,8 +15,8 @@ import {
 /**
  * Internal dependencies
  */
+import { FONT_SIZE_UNITS, ALIGNMENT_CONTROLS } from '../constants';
 import { toUnitVal } from '../utils/helper';
-import { ALIGNMENT_CONTROLS, FONT_SIZE_UNITS } from './constants';
 
 export default function TableCaptionSettings( { attributes, setAttributes } ) {
 	const { captionFontSize, captionSide, captionAlign } = attributes;

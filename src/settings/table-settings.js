@@ -22,17 +22,12 @@ import {
 	BorderStyleControl,
 	BorderColorControl,
 } from '../controls/border-control';
-
-import {
-	BORDER_COLLAPSE_CONTROLS,
-	STICKY_CONTROLS,
-	TABLE_WIDTH_UNITS,
-	BORDER_SPACING_UNITS,
-} from './constants';
+import PaddingControl from '../controls/padding-control';
 import { toggleSection } from '../utils/table-state';
 import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
 import {
+	pickPadding,
 	pickBorderWidth,
 	pickBorderRadius,
 	pickBorderStyle,
@@ -40,12 +35,48 @@ import {
 	pickBorderSpacing,
 } from '../utils/style-picker';
 import {
+	updatePaddingStyles,
 	updateBorderWidthStyles,
 	updateBorderRadiusStyles,
 	updateBorderStyleStyles,
 	updateBorderColorStyles,
 	updateBorderSpacingStyles,
 } from '../utils/style-updater';
+import {
+	borderCollapse as borderCollapseIcon,
+	borderSeparate as borderSeparateIcon,
+} from './icons';
+
+const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
+const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ];
+
+const BORDER_COLLAPSE_CONTROLS = [
+	{
+		icon: borderCollapseIcon,
+		label: __( 'Share', 'flexible-table-block' ),
+		value: 'collapse',
+	},
+	{
+		icon: borderSeparateIcon,
+		label: __( 'Separate', 'flexible-table-block' ),
+		value: 'separate',
+	},
+];
+
+const STICKY_CONTROLS = [
+	{
+		label: __( 'none', 'flexible-table-block' ),
+		value: 'none',
+	},
+	{
+		label: __( 'Fixed header', 'flexible-table-block' ),
+		value: 'header',
+	},
+	{
+		label: __( 'Fixed first column', 'flexible-table-block' ),
+		value: 'first-column',
+	},
+];
 
 export default function TableSettings( props ) {
 	const { tableStylesObj, attributes, setAttributes } = props;
@@ -96,6 +127,11 @@ export default function TableSettings( props ) {
 			...tableStylesObj,
 			minWidth: toUnitVal( value ),
 		};
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+	};
+
+	const onChangePadding = ( values ) => {
+		const newStylesObj = updatePaddingStyles( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
@@ -245,6 +281,12 @@ export default function TableSettings( props ) {
 					} ) }
 				</ButtonGroup>
 			</BaseControl>
+			<hr />
+			<PaddingControl
+				id="flexible-table-block/table-padding"
+				onChange={ onChangePadding }
+				values={ pickPadding( tableStylesObj ) }
+			/>
 			<hr />
 			<BorderRadiusControl
 				id="flexible-table-block/table-border-radius"
