@@ -81,6 +81,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 
 	return (
 		<Placeholder
+			className="ftb-placeholder"
 			label={ __( 'Table', 'flexible-table-block' ) }
 			icon={ <BlockIcon icon={ icon } showColors /> }
 			instructions={ __( 'Create flexible configuration table.' ) }

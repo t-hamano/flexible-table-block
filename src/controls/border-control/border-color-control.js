@@ -26,7 +26,19 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
  */
 import { SIDES, SideIndicatorControl } from '../indicator-control';
 
-export default function BorderColorControl( { id, onChange, values } ) {
+const DEFAULT_VALUES = {
+	top: null,
+	right: null,
+	bottom: null,
+	left: null,
+};
+
+export default function BorderColorControl( { id, onChange, values: valuesProp } ) {
+	const values = {
+		...DEFAULT_VALUES,
+		...valuesProp,
+	};
+
 	const isMixed = ! (
 		values.top === values.right &&
 		values.top === values.bottom &&

@@ -2,8 +2,6 @@
  * External dependencies
  */
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
 import 'codemirror/mode/css/css';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
@@ -31,7 +29,6 @@ import { mobile, desktop } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import { minifyCss } from '../utils/helper';
 import { STORE_NAME } from '../store';
 
 const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
@@ -120,9 +117,10 @@ export default function GlobalSettings() {
 				} );
 
 				// Update inline CSS.
-				document.getElementById( 'flexible-table-block-editor-inline-css' ).textContent = minifyCss(
-					optionsState.css
-				);
+				const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
+				if ( styleSheet.length ) {
+					styleSheet.textContent = optionsState.css;
+				}
 			} )
 			.catch( ( response ) => {
 				document.querySelectorAll( '.ftb-global-setting-modal' )[ 0 ].focus();
@@ -158,9 +156,10 @@ export default function GlobalSettings() {
 			setOptions( response.options );
 
 			// Update inline CSS.
-			document.getElementById( 'flexible-table-block-editor-inline-css' ).textContent = minifyCss(
-				response.options.css
-			);
+			const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
+			if ( styleSheet.length ) {
+				styleSheet.textContent = response.options.css;
+			}
 		} );
 	};
 
@@ -189,11 +188,21 @@ export default function GlobalSettings() {
 							) }
 							<ToggleControl
 								label={ __( 'Show section labels on table in the editor', 'flexible-table-block' ) }
-								checked={ optionsState.show_section_label }
+								checked={ optionsState.show_label_on_section }
 								onChange={ ( value ) => {
 									setOptionsState( {
 										...optionsState,
-										show_section_label: value,
+										show_label_on_section: value,
+									} );
+								} }
+							/>
+							<ToggleControl
+								label={ __( 'Show dot on th tag in the editor', 'flexible-table-block' ) }
+								checked={ optionsState.show_dot_on_th }
+								onChange={ ( value ) => {
+									setOptionsState( {
+										...optionsState,
+										show_dot_on_th: value,
 									} );
 								} }
 							/>

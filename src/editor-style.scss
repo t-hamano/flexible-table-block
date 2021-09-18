@@ -1,37 +1,156 @@
+// CodeMirror Styles
+@import "../node_modules/codemirror/lib/codemirror";
+@import "../node_modules/codemirror/theme/material";
+
+// Block Styles
 .wp-block-flexible-table-block-table {
 
-	&.is-selected.show-section-label {
+	&.is-content-justification-left,
+	&.is-content-justification-center,
+	&.is-content-justification-right {
+		display: flex;
+		flex-flow: column;
+
+		figcaption {
+			align-self: stretch;
+		}
+	}
+
+	&.is-content-justification-left {
+		align-items: flex-start;
+	}
+
+	&.is-content-justification-center {
+		align-items: center;
+	}
+
+	&.is-content-justification-right {
+		align-items: flex-end;
+	}
+
+	&.show-label-on-section > table {
 
 		thead,
 		tbody,
 		tfoot {
 			position: relative;
+		}
+	}
 
-			&:not(:empty)::before {
-				position: absolute;
-				top: 0;
-				left: 0;
-				padding: 0 4px;
-				color: #fff;
-				font-size: 10px;
-				background: var(--wp-admin-theme-color);
+	&.show-dot-on-th > table th {
+		position: relative;
+
+		&::before {
+			position: absolute;
+			top: 6px;
+			right: 6px;
+			z-index: 1;
+			width: 6px;
+			height: 6px;
+			background: var(--wp-admin-theme-color);
+			border-radius: 50%;
+			content: "";
+		}
+	}
+
+	.ftb-placeholder {
+
+		&__table-wrap {
+			flex: 1;
+		}
+
+		&__table {
+			text-align: center;
+			vertical-align: middle;
+			table-layout: fixed;
+			border-collapse: separate;
+			border-spacing: 3px;
+
+			th,
+			td {
+				padding: 0 !important;
+			}
+
+			thead th,
+			tfoot td {
+				background-color: var(--wp-admin-theme-color);
+			}
+
+			tbody td {
+				border: 1px #1e1e1e solid;
+			}
+
+
+			&.is-overflow-col tr *:nth-last-child(2) {
+				position: relative;
+				background-color: transparent;
+				border: none;
+
+				&::before {
+					display: block;
+					line-height: 0;
+					content: "...";
+				}
+			}
+
+			&.is-overflow-row {
+
+				tbody tr:nth-last-child(2) td {
+					position: relative;
+					border: none;
+
+					&::before {
+						display: block;
+						line-height: 0;
+						content: "...";
+					}
+				}
 			}
 		}
 
-		thead:not(:empty)::before {
-			content: "<thead>";
+		&__form {
+			display: block !important;
+			flex-wrap: nowrap;
+
+			.components-base-control {
+				width: 100px;
+
+				&.components-toggle-control {
+					width: auto;
+				}
+			}
+
+			.components-base-control__field {
+				margin-right: 8px;
+				margin-bottom: 0;
+
+				.components-text-control__input {
+					height: 36px;
+				}
+			}
 		}
 
-		tbody:not(:empty)::before {
-			content: "<tbody>";
-		}
-
-		tfoot:not(:empty)::before {
-			content: "<tfoot>";
+		&__row {
+			display: flex;
+			align-items: flex-end;
+			margin-top: 16px;
 		}
 	}
+
+	.ftb-table-section-label {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: auto;
+		padding: 0 3px;
+		font-size: 11px;
+		line-height: 18px;
+		border-radius: 0;
+	}
+
 }
 
+// Component & Settings Styles
 .ftb-button-group {
 	display: block;
 
@@ -147,90 +266,6 @@
 	}
 }
 
-.ftb-placeholder {
-
-	&__table-wrap {
-		flex: 1;
-	}
-
-	&__table {
-		text-align: center;
-		vertical-align: middle;
-		table-layout: fixed;
-		border-collapse: separate;
-		border-spacing: 3px;
-
-		th,
-		td {
-			padding: 0 !important;
-		}
-
-		thead th,
-		tfoot td {
-			background: var(--wp-admin-theme-color);
-		}
-
-		tbody td {
-			border: 1px #1e1e1e solid;
-		}
-
-
-		&.is-overflow-col tr *:nth-last-child(2) {
-			position: relative;
-			background-color: transparent;
-			border: none;
-
-			&::before {
-				display: block;
-				line-height: 0;
-				content: "...";
-			}
-		}
-
-		&.is-overflow-row {
-
-			tbody tr:nth-last-child(2) td {
-				position: relative;
-				border: none;
-
-				&::before {
-					display: block;
-					line-height: 0;
-					content: "...";
-				}
-			}
-		}
-	}
-
-	&__form {
-		display: block !important;
-		flex-wrap: nowrap;
-
-		.components-base-control {
-			width: 100px;
-
-			&.components-toggle-control {
-				width: auto;
-			}
-		}
-
-		.components-base-control__field {
-			margin-right: 8px;
-			margin-bottom: 0;
-
-			.components-text-control__input {
-				height: 36px;
-			}
-		}
-	}
-
-	&__row {
-		display: flex;
-		align-items: flex-end;
-		margin-top: 16px;
-	}
-}
-
 .ftb-global-setting {
 	padding: 0 16px 16px 16px;
 
@@ -264,7 +299,7 @@
 	}
 
 	.CodeMirror {
-		height: 200px;
+		height: 300px;
 		border: 1px solid #dcdcde;
 	}
 
@@ -300,7 +335,7 @@
 		right: 24px;
 		bottom: 60px;
 		left: 24px;
-		z-index: 5;
+		z-index: 6;
 		margin: 0;
 		padding-top: 0;
 		padding-bottom: 0;
@@ -332,3 +367,4 @@
 		background: rgba(0, 0, 0, 0.2);
 	}
 }
+

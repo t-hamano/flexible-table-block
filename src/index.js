@@ -1,12 +1,7 @@
-import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
-import apiFetch from '@wordpress/api-fetch';
-import { store as coreStore } from '@wordpress/core-data';
-
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls } from '@wordpress/block-editor';
 import { addFilter } from '@wordpress/hooks';
@@ -16,7 +11,6 @@ import { createHigherOrderComponent } from '@wordpress/compose';
  * Internal dependencies
  */
 import './store';
-import './style.scss';
 import metadata from './block.json';
 import example from './example';
 import { blockIcon as icon } from './icons';
@@ -25,11 +19,17 @@ import save from './save';
 import { GlobalSettings } from './settings';
 
 // Register block.
-registerBlockType( metadata, {
+registerBlockType( metadata.name, {
 	icon,
 	example,
 	edit,
 	save,
+	styles: [
+		{
+			name: 'stripes',
+			label: __( 'Stripes' ),
+		},
+	],
 } );
 
 // Add Global Setting to InspectorControls.

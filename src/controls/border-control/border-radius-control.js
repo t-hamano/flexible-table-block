@@ -27,7 +27,19 @@ const MAX_BORDER_RADIUS = {
 	rem: 20,
 };
 
-export default function BorderRadiusControl( { id, onChange, values } ) {
+const DEFAULT_VALUES = {
+	topLeft: null,
+	topRight: null,
+	bottomRight: null,
+	bottomLeft: null,
+};
+
+export default function BorderRadiusControl( { id, onChange, values: valuesProp } ) {
+	const values = {
+		...DEFAULT_VALUES,
+		...valuesProp,
+	};
+
 	const isMixed = ! (
 		values.topLeft === values.topRight &&
 		values.topLeft === values.bottomRight &&

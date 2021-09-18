@@ -6,18 +6,33 @@
 	"description": "Create flexible configuration table.",
 	"textdomain": "flexible-table-block",
 	"attributes": {
+		"contentJustification": {
+			"type": "string"
+		},
 		"hasFixedLayout": {
 			"type": "boolean",
 			"default": false
+		},
+		"isScrollOnPc": {
+			"type": "boolean",
+			"default": false
+		},
+		"isScrollOnMobile": {
+			"type": "boolean",
+			"default": false
+		},
+		"isStackedOnMobile": {
+			"type": "boolean",
+			"default": false
+		},
+		"sticky": {
+			"type": "string"
 		},
 		"tableStyles": {
 			"type": "string",
 			"source": "attribute",
 			"selector": "table",
 			"attribute": "style"
-		},
-		"sticky": {
-			"type": "string"
 		},
 		"captionSide": {
 			"type": "string",
@@ -118,6 +133,21 @@
 							"type": "string",
 							"source": "html"
 						},
+						"styles": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "style"
+						},
+						"colSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "colspan"
+						},
+						"rowSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "rowspan"
+						},
 						"tag": {
 							"type": "string",
 							"default": "td",
@@ -146,6 +176,5 @@
 			"__experimentalFontFamily": true
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
-	},
-	"editorStyle": "flexible-table-block-editor"
+	}
 }

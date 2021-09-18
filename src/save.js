@@ -21,6 +21,9 @@ export default function save( { attributes } ) {
 	const {
 		tableStyles,
 		hasFixedLayout,
+		isStackedOnMobile,
+		isScrollOnPc,
+		isScrollOnMobile,
 		sticky,
 		head,
 		body,
@@ -41,8 +44,16 @@ export default function save( { attributes } ) {
 
 	const colorProps = getColorClassesAndStyles( attributes );
 
-	const classes = classnames( colorProps.className, {
+	const blockProps = useBlockProps.save( {
+		className: classnames( {
+			'is-scroll-on-pc': isScrollOnPc,
+			'is-scroll-on-mobile': isScrollOnMobile,
+		} ),
+	} );
+
+	const tableClasses = classnames( colorProps.className, {
 		'has-fixed-layout': hasFixedLayout,
+		'is-stacked-on-mobile': isStackedOnMobile,
 		[ `is-sticky-${ sticky }` ]: sticky,
 	} );
 
@@ -92,10 +103,10 @@ export default function save( { attributes } ) {
 	};
 
 	return (
-		<figure { ...useBlockProps.save() }>
+		<figure { ...blockProps }>
 			{ hasCaption && 'top' === captionSide && <Caption /> }
 			<table
-				className={ '' === classes ? undefined : classes }
+				className={ '' === tableClasses ? undefined : tableClasses }
 				style={ { ...tableStylesObj, ...colorProps.style } }
 			>
 				<Section type="head" rows={ head } />

@@ -10,18 +10,18 @@ namespace flexible_table_block;
 class Helper {
 
 	/**
-	 * Get common css.
+	 * Get a responsive style with variable breakpoints.
 	 *
 	 * @return string
 	 */
-	public static function get_common_css( $breakpoint ) {
+	public static function get_responsive_css( $breakpoint ) {
+		$max_width = $breakpoint;
+		$min_width = $max_width + 1;
+
 		$css .= <<<EOM
-		@media screen and (max-width:{$breakpoint}px) {
-			.wp-block-flexible-table-block-table.is-sticky-header thead th {
-				position: sticky;
-				top: 0;
-				z-index: 1;
-			}
+		@media screen and (min-width:{$min_width}px) {
+		}
+		@media screen and (max-width:{$max_width}px) {
 		}
 		EOM;
 
@@ -35,15 +35,17 @@ class Helper {
 	 */
 	public static function minify_css( $css ) {
 		// Minify CSS.
-		$css = str_replace( array( "\n", "\t" ), '', $css );
-		$css = str_replace( '  ', ' ', $css );
-		$css = str_replace( ' {', '{', $css );
-		$css = str_replace( '{ ', '{', $css );
-		$css = str_replace( ' }', '}', $css );
-		$css = str_replace( '} ', '}', $css );
-		$css = str_replace( ', ', ',', $css );
-		$css = str_replace( '; ', ';', $css );
-		$css = str_replace( ': ', ':', $css );
+		$replaces = array();
+
+    // phpcs:disable Generic.Formatting.MultipleStatementAlignment
+		$replaces['/@charset [^;]+;/'] = '';
+		$replaces['/([\s:]url\()[\"\']([^\"\']+)[\"\'](\)[\s;}])/'] = '${1}${2}${3}';
+		$replaces['/(\/\*(?=[!]).*?\*\/|\"(?:(?!(?<!\\\)\").)*\"|\'(?:(?!(?<!\\\)\').)*\')|\s+/'] = '${1} ';
+		$replaces['/(\/\*(?=[!]).*?\*\/|\"(?:(?!(?<!\\\)\").)*\"|\'(?:(?!(?<!\\\)\').)*\')|\/\*.*?\*\/|\s+([:])\s+|\s+([)])|([(:])\s+/s'] = '${1}${2}${3}${4}';
+		$replaces['/\s*(\/\*(?=[!]).*?\*\/|\"(?:(?!(?<!\\\)\").)*\"|\'(?:(?!(?<!\\\)\').)*\'|[ :]calc\([^;}]+\)[ ;}]|[!$&+,\/;<=>?@^_{|}~]|\A|\z)\s*/s'] = '${1}';
+    // phpcs:enable
+
+		$css = preg_replace( array_keys( $replaces ), array_values( $replaces ), $css );
 		return $css;
 	}
 }

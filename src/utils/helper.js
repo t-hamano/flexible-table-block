@@ -21,26 +21,6 @@ export function toUnitVal( value ) {
 }
 
 /**
- * Minify inline CSS styles.
- *
- * @param {string} css inline CSS styles.
- * @return {string} Minified inline CSS styles.
- */
-export function minifyCss( css ) {
-	return css
-		.replace( /\n/g, '' )
-		.replace( /\t/g, '' )
-		.replace( /  /g, ' ' )
-		.replace( / {/g, '{' )
-		.replace( /{ /g, '{' )
-		.replace( / }/g, '}' )
-		.replace( /} /g, '}' )
-		.replace( /, /g, ',' )
-		.replace( /; /g, ';' )
-		.replace( /: /g, ':' );
-}
-
-/**
  * Removed falsy values from nested object.
  *
  * @param {*} object

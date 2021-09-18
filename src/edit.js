@@ -9,7 +9,12 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
+import {
+	InspectorControls,
+	BlockControls,
+	JustifyContentControl,
+	useBlockProps,
+} from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import {
 	tableColumnAfter,
@@ -24,8 +29,6 @@ import {
 /**
  * Internal dependencies
  */
-import './editor.scss';
-
 import { STORE_NAME } from './store';
 
 import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
@@ -35,9 +38,17 @@ import { insertRow, deleteRow, insertColumn, deleteColumn } from './utils/table-
 import { isEmptyTableSection } from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 
+const JUSTIFY_CONTROLS = [ 'left', 'center', 'right' ];
+
 function TableEdit( props ) {
 	const { attributes, setAttributes, isSelected } = props;
-	const { tableStyles, captionSide } = attributes;
+	const {
+		contentJustification,
+		isScrollOnPc,
+		isScrollOnMobile,
+		tableStyles,
+		captionSide,
+	} = attributes;
 	const [ selectedCell, setSelectedCell ] = useState();
 
 	const tableStylesObj = convertToObject( tableStyles );
@@ -209,7 +220,11 @@ function TableEdit( props ) {
 
 	const blockProps = useBlockProps( {
 		className: classnames( {
-			'show-section-label': options.show_section_label,
+			[ `is-content-justification-${ contentJustification }` ]: contentJustification,
+			'show-label-on-section': options.show_label_on_section && isSelected,
+			'show-dot-on-th': options.show_dot_on_th && isSelected,
+			'is-scroll-on-pc': isScrollOnPc,
+			'is-scroll-on-mobile': isScrollOnMobile,
 		} ),
 	} );
 
@@ -233,6 +248,15 @@ function TableEdit( props ) {
 			{ ! isEmpty && (
 				<>
 					<BlockControls group="block">
+						<JustifyContentControl
+							allowedControls={ JUSTIFY_CONTROLS }
+							value={ contentJustification }
+							onChange={ ( value ) => setAttributes( { contentJustification: value } ) }
+							popoverProps={ {
+								position: 'bottom right',
+								isAlternate: true,
+							} }
+						/>
 						<ToolbarDropdownMenu
 							hasArrowIndicator
 							icon={ table }

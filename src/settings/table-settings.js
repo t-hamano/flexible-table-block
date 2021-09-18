@@ -80,7 +80,15 @@ const STICKY_CONTROLS = [
 
 export default function TableSettings( props ) {
 	const { tableStylesObj, attributes, setAttributes } = props;
-	const { hasFixedLayout, sticky, head, foot } = attributes;
+	const {
+		hasFixedLayout,
+		isStackedOnMobile,
+		isScrollOnPc,
+		isScrollOnMobile,
+		sticky,
+		head,
+		foot,
+	} = attributes;
 
 	const tableWidthUnits = useCustomUnits( {
 		availableUnits: TABLE_WIDTH_UNITS,
@@ -90,8 +98,20 @@ export default function TableSettings( props ) {
 		availableUnits: BORDER_SPACING_UNITS,
 	} );
 
-	const onChangeFixedLayout = () => {
+	const onChangeHasFixedLayout = () => {
 		setAttributes( { hasFixedLayout: ! hasFixedLayout } );
+	};
+
+	const onChangeIsStackedOnMobile = () => {
+		setAttributes( { isStackedOnMobile: ! isStackedOnMobile } );
+	};
+
+	const onChangeIsScrollOnPc = () => {
+		setAttributes( { isScrollOnPc: ! isScrollOnPc } );
+	};
+
+	const onChangeIsScrollOnMobile = () => {
+		setAttributes( { isScrollOnMobile: ! isScrollOnMobile } );
 	};
 
 	const onChangeSticky = ( value ) => {
@@ -174,11 +194,6 @@ export default function TableSettings( props ) {
 	return (
 		<>
 			<ToggleControl
-				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
-				checked={ !! hasFixedLayout }
-				onChange={ onChangeFixedLayout }
-			/>
-			<ToggleControl
 				label={ __( 'Header section', 'flexible-table-block' ) }
 				checked={ !! ( head && head.length ) }
 				onChange={ onToggleHeaderSection }
@@ -188,6 +203,27 @@ export default function TableSettings( props ) {
 				checked={ !! ( foot && foot.length ) }
 				onChange={ onToggleFooterSection }
 			/>
+			<hr />
+			<ToggleControl
+				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
+				checked={ !! hasFixedLayout }
+				onChange={ onChangeHasFixedLayout }
+			/>
+			<ToggleControl
+				label={ __( 'Scroll on PC view', 'flexible-table-block' ) }
+				checked={ !! isScrollOnPc }
+				onChange={ onChangeIsScrollOnPc }
+			/>
+			<ToggleControl
+				label={ __( 'Scroll on Mobile view', 'flexible-table-block' ) }
+				checked={ !! isScrollOnMobile }
+				onChange={ onChangeIsScrollOnMobile }
+			/>
+			<ToggleControl
+				label={ __( 'Stack on mobile', 'flexible-table-block' ) }
+				checked={ !! isStackedOnMobile }
+				onChange={ onChangeIsStackedOnMobile }
+			/>
 			<SelectControl
 				label={ __( 'Fixed control', 'flexible-table-block' ) }
 				value={ sticky }
@@ -195,6 +231,14 @@ export default function TableSettings( props ) {
 				options={ STICKY_CONTROLS.map( ( { label, value } ) => {
 					return { label, value };
 				} ) }
+				help={
+					isStackedOnMobile && sticky
+						? __(
+								'Fixed control is only enable for PC view because "Stack on mobile" is enabled.',
+								'flexible-table-block'
+						  )
+						: ''
+				}
 			/>
 			<hr />
 			<BaseControl

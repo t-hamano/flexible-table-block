@@ -7,6 +7,7 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
+import { Button } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -34,14 +35,12 @@ export default function Table( props ) {
 		setSelectedCell,
 	} = props;
 
-	const { hasFixedLayout, sticky } = attributes;
+	const { hasFixedLayout, isStackedOnMobile, sticky } = attributes;
 
 	const colorProps = useColorProps( attributes );
 
 	const onChange = ( content ) => {
-		if ( ! selectedCell ) {
-			return;
-		}
+		if ( ! selectedCell ) return;
 
 		setAttributes(
 			updateSelectedCell( attributes, selectedCell, ( cellAttributes ) => ( {
@@ -56,6 +55,7 @@ export default function Table( props ) {
 			<table
 				className={ classnames( colorProps.className, {
 					'has-fixed-layout': hasFixedLayout,
+					'is-stacked-on-mobile': isStackedOnMobile,
 					[ `is-sticky-${ sticky }` ]: sticky,
 				} ) }
 				style={ { ...tableStylesObj, ...colorProps.style } }
@@ -66,7 +66,18 @@ export default function Table( props ) {
 							{ attributes[ name ].map( ( { cells }, rowIndex ) => (
 								<tr key={ rowIndex }>
 									{ cells.map( ( { content, tag, textAlign }, columnIndex ) => (
-										<Cell name={ tag } key={ name }>
+										<Cell name={ tag } key={ columnIndex }>
+											{ isSelected && rowIndex === 0 && columnIndex === 0 && (
+												<Button
+													className="ftb-table-section-label"
+													variant="primary"
+													onClick={ () => {
+														//ここにセクション選択の処理
+													} }
+												>
+													{ `<t${ name }>` }
+												</Button>
+											) }
 											<RichText
 												key={ columnIndex }
 												className={ classnames( {

@@ -43,7 +43,7 @@ export function createTable( { rowCount, columnCount, headerSection, footerSecti
 				{
 					cells: times( columnCount, () => ( {
 						content: '',
-						tag: 'th',
+						tag: 'td',
 					} ) ),
 				},
 			],

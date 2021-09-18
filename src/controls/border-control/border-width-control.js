@@ -27,7 +27,19 @@ const MAX_BORDER_WIDTH = {
 	rem: 20,
 };
 
-export default function BorderWidthControl( { id, onChange, values } ) {
+const DEFAULT_VALUES = {
+	top: null,
+	right: null,
+	bottom: null,
+	left: null,
+};
+
+export default function BorderWidthControl( { id, onChange, values: valuesProp } ) {
+	const values = {
+		...DEFAULT_VALUES,
+		...valuesProp,
+	};
+
 	const isMixed = ! (
 		values.top === values.right &&
 		values.top === values.bottom &&
