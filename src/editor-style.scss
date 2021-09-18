@@ -5,6 +5,10 @@
 // Block Styles
 .wp-block-flexible-table-block-table {
 
+	&.is-selected {
+		padding-top: 24px;
+	}
+
 	&.is-content-justification-left,
 	&.is-content-justification-center,
 	&.is-content-justification-right {
@@ -137,17 +141,20 @@
 		}
 	}
 
-	.ftb-table-section-label {
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: auto;
-		padding: 0 3px;
-		font-size: 11px;
-		line-height: 18px;
-		border-radius: 0;
-	}
+	.ftb-table-cell {
 
+		&__label {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1;
+			height: auto;
+			padding: 0 3px;
+			font-size: 11px;
+			line-height: 18px;
+			border-radius: 0;
+		}
+	}
 }
 
 // Component & Settings Styles

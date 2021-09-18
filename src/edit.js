@@ -57,18 +57,13 @@ function TableEdit( props ) {
 		return select( STORE_NAME ).getOptions();
 	} );
 
-	/**
-	 * Inserts a row at the currently selected row index, plus `delta`.
-	 *
-	 * @param {number} delta Offset for selected row index at which to insert.
-	 */
-	function onInsertRow( delta ) {
+	function onInsertRow( offset ) {
 		if ( ! selectedCell ) {
 			return;
 		}
 
 		const { sectionName, rowIndex } = selectedCell;
-		const newRowIndex = rowIndex + delta;
+		const newRowIndex = rowIndex + offset;
 
 		setAttributes(
 			insertRow( attributes, {
@@ -85,23 +80,6 @@ function TableEdit( props ) {
 		} );
 	}
 
-	/**
-	 * Inserts a row before the currently selected row.
-	 */
-	function onInsertRowBefore() {
-		onInsertRow( 0 );
-	}
-
-	/**
-	 * Inserts a row after the currently selected row.
-	 */
-	function onInsertRowAfter() {
-		onInsertRow( 1 );
-	}
-
-	/**
-	 * Deletes the currently selected row.
-	 */
 	function onDeleteRow() {
 		if ( ! selectedCell ) {
 			return;
@@ -113,18 +91,13 @@ function TableEdit( props ) {
 		setAttributes( deleteRow( attributes, { sectionName, rowIndex } ) );
 	}
 
-	/**
-	 * Inserts a column at the currently selected column index, plus `delta`.
-	 *
-	 * @param {number} delta Offset for selected column index at which to insert.
-	 */
-	function onInsertColumn( delta = 0 ) {
+	function onInsertColumn( offset = 0 ) {
 		if ( ! selectedCell ) {
 			return;
 		}
 
 		const { columnIndex } = selectedCell;
-		const newColumnIndex = columnIndex + delta;
+		const newColumnIndex = columnIndex + offset;
 
 		setAttributes(
 			insertColumn( attributes, {
@@ -139,23 +112,6 @@ function TableEdit( props ) {
 		} );
 	}
 
-	/**
-	 * Inserts a column before the currently selected column.
-	 */
-	function onInsertColumnBefore() {
-		onInsertColumn( 0 );
-	}
-
-	/**
-	 * Inserts a column after the currently selected column.
-	 */
-	function onInsertColumnAfter() {
-		onInsertColumn( 1 );
-	}
-
-	/**
-	 * Deletes the currently selected column.
-	 */
 	function onDeleteColumn() {
 		if ( ! selectedCell ) {
 			return;
@@ -182,13 +138,17 @@ function TableEdit( props ) {
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onInsertRowBefore,
+			onClick: () => {
+				onInsertRow( 0 );
+			},
 		},
 		{
 			icon: tableRowAfter,
 			title: __( 'Insert row after', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onInsertRowAfter,
+			onClick: () => {
+				onInsertRow( 1 );
+			},
 		},
 		{
 			icon: tableRowDelete,
@@ -200,13 +160,17 @@ function TableEdit( props ) {
 			icon: tableColumnBefore,
 			title: __( 'Insert column before', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onInsertColumnBefore,
+			onClick: () => {
+				onInsertColumn( 0 );
+			},
 		},
 		{
 			icon: tableColumnAfter,
 			title: __( 'Insert column after', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onInsertColumnAfter,
+			onClick: () => {
+				onInsertColumn( 1 );
+			},
 		},
 		{
 			icon: tableColumnDelete,

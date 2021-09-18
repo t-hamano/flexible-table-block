@@ -68,6 +68,21 @@
 							"type": "string",
 							"source": "html"
 						},
+						"styles": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "style"
+						},
+						"colSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "colspan"
+						},
+						"rowSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "rowspan"
+						},
 						"tag": {
 							"type": "string",
 							"default": "td",
@@ -97,6 +112,21 @@
 						"content": {
 							"type": "string",
 							"source": "html"
+						},
+						"styles": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "style"
+						},
+						"colSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "colspan"
+						},
+						"rowSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "rowspan"
 						},
 						"tag": {
 							"type": "string",

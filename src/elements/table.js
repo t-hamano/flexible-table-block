@@ -6,14 +6,22 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
+import { plus } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
-import { updateSelectedCell } from '../utils/table-state';
+import { insertRow, insertColumn, updateSelectedCell } from '../utils/table-state';
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from './constants';
+import {
+	InserterButtonRowBefore,
+	InserterButtonRowAfter,
+	InserterButtonColumnBefore,
+	InserterButtonColumnAfter,
+} from './styles';
 
 function TSection( { name, ...props } ) {
 	const TagName = `t${ name }`;
@@ -39,6 +47,28 @@ export default function Table( props ) {
 
 	const colorProps = useColorProps( attributes );
 
+	function onInsertRow( { sectionName, rowIndex, offset } ) {
+		const newRowIndex = rowIndex + offset;
+
+		setAttributes(
+			insertRow( attributes, {
+				sectionName,
+				rowIndex: newRowIndex,
+			} )
+		);
+	}
+
+	function onInsertColumn( { sectionName, columnIndex, offset } ) {
+		const newColumnIndex = columnIndex + offset;
+
+		setAttributes(
+			insertColumn( attributes, {
+				sectionName,
+				columnIndex: newColumnIndex,
+			} )
+		);
+	}
+
 	const onChange = ( content ) => {
 		if ( ! selectedCell ) return;
 
@@ -60,23 +90,67 @@ export default function Table( props ) {
 				} ) }
 				style={ { ...tableStylesObj, ...colorProps.style } }
 			>
-				{ [ 'head', 'body', 'foot' ].map( ( name ) => {
+				{ [ 'head', 'body', 'foot' ].map( ( sectionName, sectionIndex, section ) => {
 					return (
-						<TSection name={ name } key={ name }>
-							{ attributes[ name ].map( ( { cells }, rowIndex ) => (
+						<TSection name={ sectionName } key={ sectionName }>
+							{ attributes[ sectionName ].map( ( { cells }, rowIndex, row ) => (
 								<tr key={ rowIndex }>
-									{ cells.map( ( { content, tag, textAlign }, columnIndex ) => (
+									{ cells.map( ( { content, tag, textAlign }, columnIndex, column ) => (
 										<Cell name={ tag } key={ columnIndex }>
 											{ isSelected && rowIndex === 0 && columnIndex === 0 && (
 												<Button
-													className="ftb-table-section-label"
+													className="ftb-table-cell__label"
 													variant="primary"
 													onClick={ () => {
 														//ここにセクション選択の処理
 													} }
 												>
-													{ `<t${ name }>` }
+													{ `<t${ sectionName }>` }
 												</Button>
+											) }
+											{ isSelected && sectionIndex === 0 && rowIndex === 0 && columnIndex === 0 && (
+												<InserterButtonColumnBefore
+													icon={ plus }
+													iconSize="18"
+													label={ __( 'Insert column before', 'flexible-table-block' ) }
+													onClick={ () => {
+														onInsertColumn( { sectionName, columnIndex, offset: 0 } );
+													} }
+												/>
+											) }
+											{ isSelected && sectionIndex === 0 && rowIndex === 0 && (
+												<InserterButtonColumnAfter
+													icon={ plus }
+													iconSize="18"
+													label={ __( 'Insert column after', 'flexible-table-block' ) }
+													onClick={ () => {
+														onInsertColumn( { sectionName, columnIndex, offset: 1 } );
+													} }
+												/>
+											) }
+											{ isSelected && rowIndex === 0 && columnIndex === 0 && (
+												<InserterButtonRowBefore
+													hasPrevSection={ sectionIndex > 0 }
+													icon={ plus }
+													iconSize="18"
+													label={ __( 'Insert row before', 'flexible-table-block' ) }
+													onClick={ () => {
+														onInsertRow( { sectionName, rowIndex, offset: 0 } );
+													} }
+												/>
+											) }
+											{ isSelected && columnIndex === 0 && (
+												<InserterButtonRowAfter
+													hasNextSection={
+														sectionIndex < section.length - 1 && rowIndex === row.length - 1
+													}
+													icon={ plus }
+													iconSize="18"
+													label={ __( 'Insert row after', 'flexible-table-block' ) }
+													onClick={ () => {
+														onInsertRow( { sectionName, rowIndex, offset: 1 } );
+													} }
+												/>
 											) }
 											<RichText
 												key={ columnIndex }
@@ -87,14 +161,14 @@ export default function Table( props ) {
 												onChange={ onChange }
 												unstableOnFocus={ () => {
 													setSelectedCell( {
-														sectionName: name,
+														sectionName,
 														rowIndex,
 														columnIndex,
 														type: 'cell',
 													} );
 												} }
-												aria-label={ CELL_ARIA_LABEL[ name ] }
-												placeholder={ SECTION_PLACEHOLDER[ name ] }
+												aria-label={ CELL_ARIA_LABEL[ sectionName ] }
+												placeholder={ SECTION_PLACEHOLDER[ sectionName ] }
 											/>
 										</Cell>
 									) ) }

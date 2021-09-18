@@ -118,7 +118,7 @@ export default function GlobalSettings() {
 
 				// Update inline CSS.
 				const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
-				if ( styleSheet.length ) {
+				if ( styleSheet ) {
 					styleSheet.textContent = optionsState.css;
 				}
 			} )
@@ -157,7 +157,7 @@ export default function GlobalSettings() {
 
 			// Update inline CSS.
 			const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
-			if ( styleSheet.length ) {
+			if ( styleSheet ) {
 				styleSheet.textContent = response.options.css;
 			}
 		} );
