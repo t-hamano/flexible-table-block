@@ -187,7 +187,7 @@ export default function GlobalSettings() {
 								</div>
 							) }
 							<ToggleControl
-								label={ __( 'Show section labels on table in the editor', 'flexible-table-block' ) }
+								label={ __( 'Show section labels in the editor', 'flexible-table-block' ) }
 								checked={ optionsState.show_label_on_section }
 								onChange={ ( value ) => {
 									setOptionsState( {
@@ -197,12 +197,15 @@ export default function GlobalSettings() {
 								} }
 							/>
 							<ToggleControl
-								label={ __( 'Show insert row/column buttons.', 'flexible-table-block' ) }
-								checked={ optionsState.show_insert_button }
+								label={ __(
+									'Show insert row/column and select row/column buttons in the editor',
+									'flexible-table-block'
+								) }
+								checked={ optionsState.show_control_button }
 								onChange={ ( value ) => {
 									setOptionsState( {
 										...optionsState,
-										show_insert_button: value,
+										show_control_button: value,
 									} );
 								} }
 							/>

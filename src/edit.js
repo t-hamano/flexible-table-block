@@ -42,15 +42,9 @@ const JUSTIFY_CONTROLS = [ 'left', 'center', 'right' ];
 
 function TableEdit( props ) {
 	const { attributes, setAttributes, isSelected, insertBlocksAfter } = props;
-	const {
-		contentJustification,
-		isScrollOnPc,
-		isScrollOnMobile,
-		tableStyles,
-		captionStyles,
-		captionSide,
-	} = attributes;
+	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCell, setSelectedCell ] = useState();
+	const [ selectedLine, setSelectedLine ] = useState();
 
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
@@ -90,6 +84,7 @@ function TableEdit( props ) {
 		const { sectionName, rowIndex } = selectedCell;
 
 		setSelectedCell();
+		setSelectedLine();
 		setAttributes( deleteRow( attributes, { sectionName, rowIndex } ) );
 	}
 
@@ -119,15 +114,17 @@ function TableEdit( props ) {
 			return;
 		}
 
-		const { sectionName, columnIndex } = selectedCell;
+		const { columnIndex } = selectedCell;
 
 		setSelectedCell();
-		setAttributes( deleteColumn( attributes, { sectionName, columnIndex } ) );
+		setSelectedLine();
+		setAttributes( deleteColumn( attributes, { columnIndex } ) );
 	}
 
 	useEffect( () => {
 		if ( ! isSelected ) {
 			setSelectedCell();
+			setSelectedLine();
 		}
 	}, [ isSelected ] );
 
@@ -190,11 +187,10 @@ function TableEdit( props ) {
 		className: classnames( {
 			[ `is-content-justification-${ contentJustification }` ]: contentJustification,
 			'show-dot-on-th': options.show_dot_on_th && isSelected,
-			'is-scroll-on-pc': isScrollOnPc,
-			'is-scroll-on-mobile': isScrollOnMobile,
 		} ),
 		style: {
-			paddingTop: isSelected ? '24px' : undefined,
+			paddingTop: isSelected && options.show_control_button ? '40px' : undefined,
+			paddingLeft: isSelected && options.show_control_button ? '40px' : undefined,
 		},
 	} );
 
@@ -205,6 +201,8 @@ function TableEdit( props ) {
 		tableStylesObj,
 		selectedCell,
 		setSelectedCell,
+		selectedLine,
+		setSelectedLine,
 	};
 
 	const tableSettingProps = {

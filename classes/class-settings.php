@@ -49,7 +49,7 @@ class Settings {
 			'default' => true,
 		),
 		// Show insert row/column buttons.
-		'show_insert_button'    => array(
+		'show_control_button'   => array(
 			'type'    => 'boolean',
 			'default' => true,
 		),

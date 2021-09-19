@@ -8,19 +8,28 @@ import classnames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
-import { Button } from '@wordpress/components';
-import { plus } from '@wordpress/icons';
+import { Button, Popover } from '@wordpress/components';
+import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
-import { insertRow, insertColumn, updateSelectedCell } from '../utils/table-state';
+import {
+	insertRow,
+	insertColumn,
+	deleteRow,
+	deleteColumn,
+	updateSelectedCell,
+} from '../utils/table-state';
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from './constants';
 import {
-	InserterButtonRowBefore,
-	InserterButtonRowAfter,
-	InserterButtonColumnBefore,
-	InserterButtonColumnAfter,
+	ButtonRowBeforeInserter,
+	ButtonRowAfterInserter,
+	ButtonColumnBeforeInserter,
+	ButtonColumnAfterInserter,
+	ButtonRowSelector,
+	ButtonColumnSelector,
+	ButtonDeleter,
 } from './styles';
 
 function TSection( { name, ...props } ) {
@@ -43,6 +52,8 @@ export default function Table( props ) {
 		isSelected,
 		selectedCell,
 		setSelectedCell,
+		selectedLine,
+		setSelectedLine,
 	} = props;
 
 	const { hasFixedLayout, isStackedOnMobile, sticky } = attributes;
@@ -58,6 +69,7 @@ export default function Table( props ) {
 				rowIndex: newRowIndex,
 			} )
 		);
+		setSelectedLine();
 	}
 
 	function onInsertColumn( { sectionName, columnIndex, offset } ) {
@@ -69,6 +81,19 @@ export default function Table( props ) {
 				columnIndex: newColumnIndex,
 			} )
 		);
+		setSelectedLine();
+	}
+
+	function onDeleteRow( { sectionName, rowIndex } ) {
+		setAttributes( deleteRow( attributes, { sectionName, rowIndex } ) );
+		setSelectedCell();
+		setSelectedLine();
+	}
+
+	function onDeleteColumn( columnIndex ) {
+		setAttributes( deleteColumn( attributes, { columnIndex } ) );
+		setSelectedCell();
+		setSelectedLine();
 	}
 
 	const onChange = ( content ) => {
@@ -113,51 +138,116 @@ export default function Table( props ) {
 														{ `<t${ sectionName }>` }
 													</Button>
 												) }
-											{ isSelected && options.show_insert_button && (
+											{ isSelected && options.show_control_button && (
 												<>
 													{ sectionIndex === 0 && rowIndex === 0 && columnIndex === 0 && (
-														<InserterButtonColumnBefore
+														<ButtonColumnBeforeInserter
+															label={ __( 'Insert column before', 'flexible-table-block' ) }
 															icon={ plus }
 															iconSize="18"
-															label={ __( 'Insert column before', 'flexible-table-block' ) }
 															onClick={ () => {
 																onInsertColumn( { sectionName, columnIndex, offset: 0 } );
 															} }
 														/>
 													) }
 													{ sectionIndex === 0 && rowIndex === 0 && (
-														<InserterButtonColumnAfter
-															icon={ plus }
-															iconSize="18"
-															label={ __( 'Insert column after', 'flexible-table-block' ) }
-															onClick={ () => {
-																onInsertColumn( { sectionName, columnIndex, offset: 1 } );
-															} }
-														/>
+														<>
+															<ButtonColumnAfterInserter
+																label={ __( 'Insert column after', 'flexible-table-block' ) }
+																icon={ plus }
+																iconSize="18"
+																onClick={ () => {
+																	onInsertColumn( { sectionName, columnIndex, offset: 1 } );
+																} }
+															/>
+															<ButtonColumnSelector
+																label={ __( 'Select column', 'flexible-table-block' ) }
+																icon={ moreHorizontal }
+																iconSize="18"
+																variant={
+																	selectedLine?.direction === 'column' &&
+																	selectedLine?.columnIndex === columnIndex
+																		? 'primary'
+																		: undefined
+																}
+																onClick={ () => {
+																	setSelectedLine( { direction: 'column', columnIndex } );
+																} }
+															>
+																{ selectedLine?.direction === 'column' &&
+																	selectedLine?.columnIndex === columnIndex && (
+																		<Popover focusOnMount="false" position="top right">
+																			<ButtonDeleter
+																				label={ __( 'Delete column', 'flexible-table-block' ) }
+																				icon={ trash }
+																				iconSize={ 20 }
+																				onClick={ ( event ) => {
+																					onDeleteColumn( columnIndex );
+																					event.stopPropagation();
+																				} }
+																			/>
+																		</Popover>
+																	) }
+															</ButtonColumnSelector>
+														</>
 													) }
 													{ rowIndex === 0 && columnIndex === 0 && (
-														<InserterButtonRowBefore
-															hasPrevSection={ sectionIndex > 0 }
+														<ButtonRowBeforeInserter
+															label={ __( 'Insert row before', 'flexible-table-block' ) }
 															icon={ plus }
 															iconSize="18"
-															label={ __( 'Insert row before', 'flexible-table-block' ) }
+															hasPrevSection={ sectionIndex > 0 }
 															onClick={ () => {
 																onInsertRow( { sectionName, rowIndex, offset: 0 } );
 															} }
 														/>
 													) }
 													{ columnIndex === 0 && (
-														<InserterButtonRowAfter
-															hasNextSection={
-																sectionIndex < section.length - 1 && rowIndex === row.length - 1
-															}
-															icon={ plus }
-															iconSize="18"
-															label={ __( 'Insert row after', 'flexible-table-block' ) }
-															onClick={ () => {
-																onInsertRow( { sectionName, rowIndex, offset: 1 } );
-															} }
-														/>
+														<>
+															<ButtonRowAfterInserter
+																label={ __( 'Insert row after', 'flexible-table-block' ) }
+																icon={ plus }
+																iconSize="18"
+																hasNextSection={
+																	sectionIndex < section.length - 1 && rowIndex === row.length - 1
+																}
+																onClick={ () => {
+																	onInsertRow( { sectionName, rowIndex, offset: 1 } );
+																} }
+															/>
+															<ButtonRowSelector
+																label={ __( 'Select row', 'flexible-table-block' ) }
+																icon={ moreVertical }
+																iconSize="18"
+																variant={
+																	selectedLine?.direction === 'row' &&
+																	selectedLine?.sectionName === sectionName &&
+																	selectedLine?.rowIndex === rowIndex
+																		? 'primary'
+																		: undefined
+																}
+																onClick={ () => {
+																	setSelectedLine( { direction: 'row', sectionName, rowIndex } );
+																} }
+															>
+																{ selectedLine?.direction === 'row' &&
+																	selectedLine?.sectionName === sectionName &&
+																	selectedLine?.rowIndex === rowIndex && (
+																		<Popover focusOnMount="false" position="top left">
+																			<ButtonDeleter
+																				label={ __( 'Delete row', 'flexible-table-block' ) }
+																				icon={ trash }
+																				iconSize={ 20 }
+																				isSmall
+																				onClick={ ( event ) => {
+																					onDeleteRow( { sectionName, rowIndex } );
+																					event.stopPropagation();
+																				} }
+																			/>
+																		</Popover>
+																	) }
+															</ButtonRowSelector>
+														</>
 													) }
 												</>
 											) }
@@ -166,6 +256,7 @@ export default function Table( props ) {
 												value={ content }
 												onChange={ onChange }
 												unstableOnFocus={ () => {
+													setSelectedLine();
 													setSelectedCell( {
 														sectionName,
 														rowIndex,
