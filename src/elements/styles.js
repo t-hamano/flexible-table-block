@@ -28,7 +28,8 @@ const Inserter = styled( Button )`
 			content: '';
 		}
 
-		&:hover {
+		&:hover,
+		&:focus {
 			background: var( --wp-admin-theme-color );
 			color: #fff;
 
