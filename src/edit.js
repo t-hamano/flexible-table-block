@@ -41,17 +41,19 @@ import { convertToObject } from './utils/style-converter';
 const JUSTIFY_CONTROLS = [ 'left', 'center', 'right' ];
 
 function TableEdit( props ) {
-	const { attributes, setAttributes, isSelected } = props;
+	const { attributes, setAttributes, isSelected, insertBlocksAfter } = props;
 	const {
 		contentJustification,
 		isScrollOnPc,
 		isScrollOnMobile,
 		tableStyles,
+		captionStyles,
 		captionSide,
 	} = attributes;
 	const [ selectedCell, setSelectedCell ] = useState();
 
 	const tableStylesObj = convertToObject( tableStyles );
+	const captionStylesObj = convertToObject( captionStyles );
 
 	const options = useSelect( ( select ) => {
 		return select( STORE_NAME ).getOptions();
@@ -129,10 +131,6 @@ function TableEdit( props ) {
 		}
 	}, [ isSelected ] );
 
-	const sections = [ 'head', 'body', 'foot' ].filter(
-		( name ) => ! isEmptyTableSection( attributes[ name ] )
-	);
-
 	const TableToolbarControls = [
 		{
 			icon: tableRowBefore,
@@ -180,20 +178,30 @@ function TableEdit( props ) {
 		},
 	];
 
-	const isEmpty = ! sections.length;
+	const filteredSections = [ 'head', 'body', 'foot' ].filter(
+		( name ) => ! isEmptyTableSection( attributes[ name ] )
+	);
 
-	const blockProps = useBlockProps( {
+	const isEmpty = ! filteredSections.length;
+
+	const tablePlaceholderProps = useBlockProps();
+
+	const tableFigureProps = useBlockProps( {
 		className: classnames( {
 			[ `is-content-justification-${ contentJustification }` ]: contentJustification,
-			'show-label-on-section': options.show_label_on_section && isSelected,
 			'show-dot-on-th': options.show_dot_on_th && isSelected,
 			'is-scroll-on-pc': isScrollOnPc,
 			'is-scroll-on-mobile': isScrollOnMobile,
 		} ),
+		style: {
+			paddingTop: isSelected ? '24px' : undefined,
+		},
 	} );
 
 	const tableProps = {
 		...props,
+		options,
+		filteredSections,
 		tableStylesObj,
 		selectedCell,
 		setSelectedCell,
@@ -206,11 +214,32 @@ function TableEdit( props ) {
 		setSelectedCell,
 	};
 
+	const tableCellSettingProps = {
+		...props,
+		selectedCell,
+		setSelectedCell,
+	};
+
+	const tableCaptionProps = {
+		...props,
+		captionStylesObj,
+		insertBlocksAfter,
+	};
+
+	const tableCaptionSettingProps = {
+		...props,
+		captionStylesObj,
+	};
+
 	return (
-		<figure { ...blockProps }>
-			{ isEmpty && <TablePlaceholder { ...props } /> }
+		<>
+			{ isEmpty && (
+				<div { ...tablePlaceholderProps }>
+					<TablePlaceholder { ...props } />
+				</div>
+			) }
 			{ ! isEmpty && (
-				<>
+				<figure { ...tableFigureProps }>
 					<BlockControls group="block">
 						<JustifyContentControl
 							allowedControls={ JUSTIFY_CONTROLS }
@@ -231,7 +260,7 @@ function TableEdit( props ) {
 					<InspectorControls>
 						<PanelBody
 							title={ __( 'Table Settings', 'flexible-table-block' ) }
-							initialOpen={ true }
+							initialOpen={ false }
 						>
 							<TableSettings { ...tableSettingProps } />
 						</PanelBody>
@@ -239,21 +268,21 @@ function TableEdit( props ) {
 							title={ __( 'Cell Settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
-							<TableCellSettings { ...props } />
+							<TableCellSettings { ...tableCellSettingProps } />
 						</PanelBody>
 						<PanelBody
 							title={ __( 'Caption Settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
-							<TableCaptionSettings { ...props } />
+							<TableCaptionSettings { ...tableCaptionSettingProps } />
 						</PanelBody>
 					</InspectorControls>
-					{ 'top' === captionSide && <TableCaption { ...props } /> }
+					{ 'top' === captionSide && <TableCaption { ...tableCaptionProps } /> }
 					<Table { ...tableProps } />
-					{ 'bottom' === captionSide && <TableCaption { ...props } /> }
-				</>
+					{ 'bottom' === captionSide && <TableCaption { ...tableCaptionProps } /> }
+				</figure>
 			) }
-		</figure>
+		</>
 	);
 }
 

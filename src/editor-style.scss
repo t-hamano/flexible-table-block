@@ -5,8 +5,18 @@
 // Block Styles
 .wp-block-flexible-table-block-table {
 
-	&.is-selected {
-		padding-top: 24px;
+	> table {
+
+		thead,
+		tbody,
+		tfoot {
+			position: relative;
+
+			th,
+			td {
+				position: relative;
+			}
+		}
 	}
 
 	&.is-content-justification-left,
@@ -32,29 +42,16 @@
 		align-items: flex-end;
 	}
 
-	&.show-label-on-section > table {
-
-		thead,
-		tbody,
-		tfoot {
-			position: relative;
-		}
-	}
-
-	&.show-dot-on-th > table th {
-		position: relative;
-
-		&::before {
-			position: absolute;
-			top: 6px;
-			right: 6px;
-			z-index: 1;
-			width: 6px;
-			height: 6px;
-			background: var(--wp-admin-theme-color);
-			border-radius: 50%;
-			content: "";
-		}
+	&.show-dot-on-th th::before {
+		position: absolute;
+		top: 6px;
+		right: 6px;
+		z-index: 1;
+		width: 6px;
+		height: 6px;
+		background: var(--wp-admin-theme-color);
+		border-radius: 50%;
+		content: "";
 	}
 
 	.ftb-placeholder {

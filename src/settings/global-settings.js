@@ -197,7 +197,17 @@ export default function GlobalSettings() {
 								} }
 							/>
 							<ToggleControl
-								label={ __( 'Show dot on th tag in the editor', 'flexible-table-block' ) }
+								label={ __( 'Show insert row/column buttons.', 'flexible-table-block' ) }
+								checked={ optionsState.show_insert_button }
+								onChange={ ( value ) => {
+									setOptionsState( {
+										...optionsState,
+										show_insert_button: value,
+									} );
+								} }
+							/>
+							<ToggleControl
+								label={ __( 'Show dot on <th> tag in the editor', 'flexible-table-block' ) }
 								checked={ optionsState.show_dot_on_th }
 								onChange={ ( value ) => {
 									setOptionsState( {

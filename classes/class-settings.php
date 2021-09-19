@@ -10,23 +10,31 @@ namespace flexible_table_block;
 class Settings {
 
 	const BLOCK_STYLE = <<< EOM
+	/* Table Style */
 	.wp-block-flexible-table-block-table table {
 		width: 100%;
 		max-width: 100%;
-		border-collapse: collapse;
+		border-collapse: separate;
 	}
+
+	/* Cell Style */
 	.wp-block-flexible-table-block-table th,
 	.wp-block-flexible-table-block-table td {
 		word-break: normal;
 		border: 1px solid;
 		text-align: left;
+		padding: 1em;
 	}
 	.wp-block-flexible-table-block-table th {
 		background-color: #ddd;
 	}
+
+	/* Stripe Style */
 	.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) {
 		background-color: #eee;
 	}
+
+	/* Figcaption Style */
 	.wp-block-flexible-table-block-table figcaption {
 		margin: 0.5em 0;
 	}
@@ -37,6 +45,11 @@ class Settings {
 
 		// Show section labels on table in the editor.
 		'show_label_on_section' => array(
+			'type'    => 'boolean',
+			'default' => true,
+		),
+		// Show insert row/column buttons.
+		'show_insert_button'    => array(
 			'type'    => 'boolean',
 			'default' => true,
 		),

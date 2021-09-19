@@ -43,14 +43,11 @@
 			"source": "html",
 			"selector": "figcaption"
 		},
-		"captionFontSize": {
-			"type": "string"
-		},
-		"captionAlign": {
+		"captionStyles": {
 			"type": "string",
 			"source": "attribute",
 			"selector": "figcaption",
-			"attribute": "data-align"
+			"attribute": "style"
 		},
 		"head": {
 			"type": "array",
@@ -87,11 +84,6 @@
 							"type": "string",
 							"default": "td",
 							"source": "tag"
-						},
-						"align": {
-							"type": "string",
-							"source": "attribute",
-							"attribute": "data-align"
 						}
 					}
 				}
@@ -132,16 +124,6 @@
 							"type": "string",
 							"default": "td",
 							"source": "tag"
-						},
-						"textAlign": {
-							"type": "string",
-							"source": "attribute",
-							"attribute": "data-text-align"
-						},
-						"verticalAlign": {
-							"type": "string",
-							"source": "attribute",
-							"attribute": "data-vertical-align"
 						}
 					}
 				}
@@ -182,11 +164,6 @@
 							"type": "string",
 							"default": "td",
 							"source": "tag"
-						},
-						"align": {
-							"type": "string",
-							"source": "attribute",
-							"attribute": "data-align"
 						}
 					}
 				}

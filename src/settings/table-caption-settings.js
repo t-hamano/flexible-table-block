@@ -17,16 +17,22 @@ import {
  */
 import { FONT_SIZE_UNITS, ALIGNMENT_CONTROLS } from '../constants';
 import { toUnitVal } from '../utils/helper';
+import { convertToInline } from '../utils/style-converter';
 
-export default function TableCaptionSettings( { attributes, setAttributes } ) {
-	const { captionFontSize, captionSide, captionAlign } = attributes;
+export default function TableCaptionSettings( props ) {
+	const { captionStylesObj, attributes, setAttributes } = props;
+	const { captionSide } = attributes;
 
 	const fontSizeUnits = useCustomUnits( {
 		availableUnits: FONT_SIZE_UNITS,
 	} );
 
 	const onChangeCaptionFontSize = ( value ) => {
-		setAttributes( { captionFontSize: toUnitVal( value ) } );
+		const newStylesObj = {
+			...captionStylesObj,
+			fontSize: toUnitVal( value ),
+		};
+		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeCaptionSide = ( value ) => {
@@ -34,9 +40,11 @@ export default function TableCaptionSettings( { attributes, setAttributes } ) {
 	};
 
 	const onChangeCaptionAlign = ( value ) => {
-		setAttributes( {
-			captionAlign: value === captionAlign ? undefined : value,
-		} );
+		const newStylesObj = {
+			...captionStylesObj,
+			textAlign: value === captionStylesObj ? undefined : value,
+		};
+		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
 	return (
@@ -47,7 +55,7 @@ export default function TableCaptionSettings( { attributes, setAttributes } ) {
 			>
 				<UnitControl
 					min="0"
-					value={ captionFontSize }
+					value={ captionStylesObj?.fontSize }
 					onChange={ onChangeCaptionFontSize }
 					units={ fontSizeUnits }
 				/>
@@ -77,7 +85,7 @@ export default function TableCaptionSettings( { attributes, setAttributes } ) {
 							<Button
 								key={ value }
 								label={ label }
-								variant={ value === captionAlign ? 'primary' : 'secondary' }
+								variant={ value === captionStylesObj?.textAlign ? 'primary' : 'secondary' }
 								icon={ icon }
 								onClick={ () => onChangeCaptionAlign( value ) }
 							/>

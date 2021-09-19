@@ -43,20 +43,20 @@ const Inserter = styled( Button )`
 
 export const InserterButtonRowBefore = styled( Inserter )`
 	left: -24px;
-	margin-top: ${ ( props ) => ( props.hasPrevSection ? '-18px' : '-28px' ) };
+	top: ${ ( props ) => ( props.hasPrevSection ? '3px' : '-9px' ) };
 `;
 
 export const InserterButtonRowAfter = styled( Inserter )`
 	left: -24px;
-	margin-top: ${ ( props ) => ( props.hasNextSection ? '24px' : '36px' ) };
+	bottom: ${ ( props ) => ( props.hasNextSection ? '3px' : '-9px' ) };
 `;
 
 export const InserterButtonColumnBefore = styled( Inserter )`
-	left: -9px;
-	margin-top: -44px;
+	left: -10px;
+	top: -24px;
 `;
 
 export const InserterButtonColumnAfter = styled( Inserter )`
-	right: -9px;
-	margin-top: -44px;
+	right: -10px;
+	top: -24px;
 `;

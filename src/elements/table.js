@@ -35,6 +35,8 @@ function Cell( { name, ...props } ) {
 
 export default function Table( props ) {
 	const {
+		filteredSections,
+		options,
 		attributes,
 		setAttributes,
 		tableStylesObj,
@@ -90,73 +92,77 @@ export default function Table( props ) {
 				} ) }
 				style={ { ...tableStylesObj, ...colorProps.style } }
 			>
-				{ [ 'head', 'body', 'foot' ].map( ( sectionName, sectionIndex, section ) => {
+				{ filteredSections.map( ( sectionName, sectionIndex, section ) => {
 					return (
 						<TSection name={ sectionName } key={ sectionName }>
 							{ attributes[ sectionName ].map( ( { cells }, rowIndex, row ) => (
 								<tr key={ rowIndex }>
-									{ cells.map( ( { content, tag, textAlign }, columnIndex, column ) => (
+									{ cells.map( ( { content, tag }, columnIndex ) => (
 										<Cell name={ tag } key={ columnIndex }>
-											{ isSelected && rowIndex === 0 && columnIndex === 0 && (
-												<Button
-													className="ftb-table-cell__label"
-													variant="primary"
-													onClick={ () => {
-														//ここにセクション選択の処理
-													} }
-												>
-													{ `<t${ sectionName }>` }
-												</Button>
-											) }
-											{ isSelected && sectionIndex === 0 && rowIndex === 0 && columnIndex === 0 && (
-												<InserterButtonColumnBefore
-													icon={ plus }
-													iconSize="18"
-													label={ __( 'Insert column before', 'flexible-table-block' ) }
-													onClick={ () => {
-														onInsertColumn( { sectionName, columnIndex, offset: 0 } );
-													} }
-												/>
-											) }
-											{ isSelected && sectionIndex === 0 && rowIndex === 0 && (
-												<InserterButtonColumnAfter
-													icon={ plus }
-													iconSize="18"
-													label={ __( 'Insert column after', 'flexible-table-block' ) }
-													onClick={ () => {
-														onInsertColumn( { sectionName, columnIndex, offset: 1 } );
-													} }
-												/>
-											) }
-											{ isSelected && rowIndex === 0 && columnIndex === 0 && (
-												<InserterButtonRowBefore
-													hasPrevSection={ sectionIndex > 0 }
-													icon={ plus }
-													iconSize="18"
-													label={ __( 'Insert row before', 'flexible-table-block' ) }
-													onClick={ () => {
-														onInsertRow( { sectionName, rowIndex, offset: 0 } );
-													} }
-												/>
-											) }
-											{ isSelected && columnIndex === 0 && (
-												<InserterButtonRowAfter
-													hasNextSection={
-														sectionIndex < section.length - 1 && rowIndex === row.length - 1
-													}
-													icon={ plus }
-													iconSize="18"
-													label={ __( 'Insert row after', 'flexible-table-block' ) }
-													onClick={ () => {
-														onInsertRow( { sectionName, rowIndex, offset: 1 } );
-													} }
-												/>
+											{ isSelected &&
+												options.show_label_on_section &&
+												rowIndex === 0 &&
+												columnIndex === 0 && (
+													<Button
+														className="ftb-table-cell__label"
+														variant="primary"
+														onClick={ () => {
+															//ここにセクション選択の処理
+														} }
+													>
+														{ `<t${ sectionName }>` }
+													</Button>
+												) }
+											{ isSelected && options.show_insert_button && (
+												<>
+													{ sectionIndex === 0 && rowIndex === 0 && columnIndex === 0 && (
+														<InserterButtonColumnBefore
+															icon={ plus }
+															iconSize="18"
+															label={ __( 'Insert column before', 'flexible-table-block' ) }
+															onClick={ () => {
+																onInsertColumn( { sectionName, columnIndex, offset: 0 } );
+															} }
+														/>
+													) }
+													{ sectionIndex === 0 && rowIndex === 0 && (
+														<InserterButtonColumnAfter
+															icon={ plus }
+															iconSize="18"
+															label={ __( 'Insert column after', 'flexible-table-block' ) }
+															onClick={ () => {
+																onInsertColumn( { sectionName, columnIndex, offset: 1 } );
+															} }
+														/>
+													) }
+													{ rowIndex === 0 && columnIndex === 0 && (
+														<InserterButtonRowBefore
+															hasPrevSection={ sectionIndex > 0 }
+															icon={ plus }
+															iconSize="18"
+															label={ __( 'Insert row before', 'flexible-table-block' ) }
+															onClick={ () => {
+																onInsertRow( { sectionName, rowIndex, offset: 0 } );
+															} }
+														/>
+													) }
+													{ columnIndex === 0 && (
+														<InserterButtonRowAfter
+															hasNextSection={
+																sectionIndex < section.length - 1 && rowIndex === row.length - 1
+															}
+															icon={ plus }
+															iconSize="18"
+															label={ __( 'Insert row after', 'flexible-table-block' ) }
+															onClick={ () => {
+																onInsertRow( { sectionName, rowIndex, offset: 1 } );
+															} }
+														/>
+													) }
+												</>
 											) }
 											<RichText
 												key={ columnIndex }
-												className={ classnames( {
-													[ `has-text-align-${ textAlign }` ]: textAlign,
-												} ) }
 												value={ content }
 												onChange={ onChange }
 												unstableOnFocus={ () => {
