@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -16,9 +21,9 @@ import {
 /**
  * Internal dependencies
  */
-import { SIDES, SideIndicatorControl } from '../indicator-control';
 
-const PADDING_UNITS = [ 'px', '%', 'em', 'rem', 'vw', 'vh' ];
+import { PADDING_UNITS } from '../constants';
+import { SIDES, SideIndicatorControl } from './indicator-control';
 
 const DEFAULT_VALUES = {
 	top: null,
@@ -27,19 +32,21 @@ const DEFAULT_VALUES = {
 	left: null,
 };
 
-export default function PaddingControl( { id, onChange, values: valuesProp } ) {
-	const values = {
-		...DEFAULT_VALUES,
-		...valuesProp,
-	};
+export default function PaddingControl( {
+	id,
+	label = __( 'Padding', 'flexible-table-block' ),
+	className,
+	onChange,
+	values: valuesProp,
+	allowSides = true,
+} ) {
+	const values = { ...DEFAULT_VALUES, ...valuesProp };
 
-	const isMixed = ! (
-		values.top === values.right &&
-		values.top === values.bottom &&
-		values.top === values.left
-	);
+	const isMixed =
+		allowSides &&
+		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
-	const borderWidthUnits = useCustomUnits( {
+	const paddingUnits = useCustomUnits( {
 		availableUnits: PADDING_UNITS,
 	} );
 
@@ -54,6 +61,8 @@ export default function PaddingControl( { id, onChange, values: valuesProp } ) {
 
 	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
 	const allInputValue = isMixed ? undefined : values.top;
+
+	const classNames = classnames( 'ftb-border-width-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -70,7 +79,7 @@ export default function PaddingControl( { id, onChange, values: valuesProp } ) {
 		} );
 	};
 
-	const handleOnFocus = ( focusSide ) => () => {
+	const handleOnFocus = ( focusSide ) => {
 		setSide( focusSide );
 	};
 
@@ -91,38 +100,40 @@ export default function PaddingControl( { id, onChange, values: valuesProp } ) {
 	};
 
 	return (
-		<BaseControl className="ftb-border-width-control" id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
 			<div className="ftb-border-width-control__header">
-				<Text id={ headingId }>{ __( 'Padding', 'flexible-table-block' ) }</Text>
+				<Text id={ headingId }>{ label }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset }>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-width-control__header-control">
 				<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-				{ isLinked && (
+				{ ( isLinked || ! allowSides ) && (
 					<UnitControl
 						placeholder={ allInputPlaceholder }
 						aria-label={ __( 'All', 'flexible-table-block' ) }
 						onFocus={ handleOnFocus }
 						onChange={ handleOnChangeAll }
 						value={ allInputValue }
-						units={ borderWidthUnits }
+						units={ paddingUnits }
 					/>
 				) }
-				<Tooltip text={ linkedLabel }>
-					<span>
-						<Button
-							variant={ isLinked ? 'primary' : 'secondary' }
-							isSmall
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							iconSize="16"
-						/>
-					</span>
-				</Tooltip>
+				{ allowSides && (
+					<Tooltip text={ linkedLabel }>
+						<span>
+							<Button
+								variant={ isLinked ? 'primary' : 'secondary' }
+								isSmall
+								onClick={ toggleLinked }
+								icon={ isLinked ? link : linkOff }
+								iconSize="16"
+							/>
+						</span>
+					</Tooltip>
+				) }
 			</div>
-			{ ! isLinked && (
+			{ ! isLinked && allowSides && (
 				<div className="ftb-border-width-control__input-controls">
 					{ SIDES.map( ( item ) => {
 						return (
@@ -134,7 +145,7 @@ export default function PaddingControl( { id, onChange, values: valuesProp } ) {
 									handleOnChange( value, item.value );
 								} }
 								value={ values[ item.value ] }
-								units={ borderWidthUnits }
+								units={ paddingUnits }
 							/>
 						);
 					} ) }

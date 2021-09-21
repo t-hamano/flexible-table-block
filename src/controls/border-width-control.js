@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -17,15 +22,8 @@ import {
 /**
  * Internal dependencies
  */
-import { SIDES, SideIndicatorControl } from '../indicator-control';
-
-const BORDER_WIDTH_UNITS = [ 'px', 'em', 'rem' ];
-
-const MAX_BORDER_WIDTH = {
-	px: 100,
-	em: 20,
-	rem: 20,
-};
+import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH } from '../constants';
+import { SIDES, SideIndicatorControl } from './indicator-control';
 
 const DEFAULT_VALUES = {
 	top: null,
@@ -34,17 +32,22 @@ const DEFAULT_VALUES = {
 	left: null,
 };
 
-export default function BorderWidthControl( { id, onChange, values: valuesProp } ) {
+export default function BorderWidthControl( {
+	id,
+	label = __( 'Border Width', 'flexible-table-block' ),
+	className,
+	onChange,
+	values: valuesProp,
+	allowSides = true,
+} ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
 
-	const isMixed = ! (
-		values.top === values.right &&
-		values.top === values.bottom &&
-		values.top === values.left
-	);
+	const isMixed =
+		allowSides &&
+		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
 	const borderWidthUnits = useCustomUnits( {
 		availableUnits: BORDER_WIDTH_UNITS,
@@ -62,6 +65,8 @@ export default function BorderWidthControl( { id, onChange, values: valuesProp }
 	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
 	const allInputValue = isMixed ? undefined : values.top;
 
+	const classNames = classnames( 'ftb-border-width-control', className );
+
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
 		setSide( undefined );
@@ -77,7 +82,7 @@ export default function BorderWidthControl( { id, onChange, values: valuesProp }
 		} );
 	};
 
-	const handleOnFocus = ( focusSide ) => () => {
+	const handleOnFocus = ( focusSide ) => {
 		setSide( focusSide );
 	};
 
@@ -104,16 +109,16 @@ export default function BorderWidthControl( { id, onChange, values: valuesProp }
 	};
 
 	return (
-		<BaseControl className="ftb-border-width-control" id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
 			<div className="ftb-border-width-control__header">
-				<Text id={ headingId }>{ __( 'Border Width', 'flexible-table-block' ) }</Text>
+				<Text id={ headingId }>{ label }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset }>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-width-control__header-control">
 				<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-				{ isLinked && (
+				{ ( isLinked || ! allowSides ) && (
 					<UnitControl
 						placeholder={ allInputPlaceholder }
 						aria-label={ __( 'All', 'flexible-table-block' ) }
@@ -123,19 +128,21 @@ export default function BorderWidthControl( { id, onChange, values: valuesProp }
 						units={ borderWidthUnits }
 					/>
 				) }
-				<Tooltip text={ linkedLabel }>
-					<span>
-						<Button
-							variant={ isLinked ? 'primary' : 'secondary' }
-							isSmall
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							iconSize="16"
-						/>
-					</span>
-				</Tooltip>
+				{ allowSides && (
+					<Tooltip text={ linkedLabel }>
+						<span>
+							<Button
+								variant={ isLinked ? 'primary' : 'secondary' }
+								isSmall
+								onClick={ toggleLinked }
+								icon={ isLinked ? link : linkOff }
+								iconSize="16"
+							/>
+						</span>
+					</Tooltip>
+				) }
 			</div>
-			{ ! isLinked && (
+			{ ! isLinked && allowSides && (
 				<div className="ftb-border-width-control__input-controls">
 					{ SIDES.map( ( item ) => {
 						return (

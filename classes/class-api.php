@@ -24,7 +24,7 @@ class Api {
 
 		register_rest_route(
 			FTB_NAMESPACE . '/v1',
-			'/get_options',
+			'/options',
 			array(
 				array(
 					'methods'             => 'GET',
@@ -33,13 +33,6 @@ class Api {
 						return current_user_can( 'edit_posts' );
 					},
 				),
-			)
-		);
-
-		register_rest_route(
-			FTB_NAMESPACE . '/v1',
-			'/update_options',
-			array(
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'update_options' ),
@@ -53,18 +46,17 @@ class Api {
 						}
 					},
 				),
-			)
-		);
-
-		register_rest_route(
-			FTB_NAMESPACE . '/v1',
-			'/delete_options',
-			array(
 				array(
-					'methods'             => 'POST',
+					'methods'             => 'DELETE',
 					'callback'            => array( $this, 'delete_options' ),
 					'permission_callback' => function () {
-						return current_user_can( 'edit_posts' );
+						$show_global_setting = get_option( FTB_OPTION_PREFIX . '_show_global_setting', Settings::OPTIONS['show_global_setting']['default'] );
+
+						if ( $show_global_setting ) {
+							return current_user_can( 'edit_posts' );
+						} else {
+							return current_user_can( 'administrator' );
+						}
 					},
 				),
 			)
@@ -77,8 +69,9 @@ class Api {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_options() {
-		error_log( print_r( wp_get_current_user()->roles, true ) );
-		return rest_ensure_response( Settings::get_options() );
+		$options              = Settings::get_options();
+		$options['block_css'] = Helper::minify_css( Helper::get_block_css() );
+		return rest_ensure_response( $options );
 	}
 
 	/**
@@ -99,15 +92,23 @@ class Api {
 				$value = (bool) $value;
 			}
 
+			if ( 'array' === Settings::OPTIONS[ $key ]['type'] ) {
+				if ( ! is_array( $value ) ) {
+					continue;
+				}
+
+				$new_value = array();
+				foreach ( $value as $array_key => $array_value ) {
+					if ( isset( Settings::OPTIONS[ $key ]['default'][ $array_key ] ) ) {
+						$new_value[ $array_key ] = $array_value;
+					}
+				}
+			}
+
 			if ( isset( Settings::OPTIONS[ $key ]['range'] ) ) {
 				$min   = Settings::OPTIONS[ $key ]['range']['min'];
 				$max   = Settings::OPTIONS[ $key ]['range']['max'];
 				$value = min( max( $value, $min ), $max );
-			}
-
-			if ( isset( Settings::OPTIONS[ $key ]['sanitize_callback'] ) ) {
-				$callback = Settings::OPTIONS[ $key ]['sanitize_callback'];
-				$value    = call_user_func( array( $this, $callback ), $value );
 			}
 
 			if ( is_wp_error( $value ) ) {
@@ -124,8 +125,9 @@ class Api {
 
 		return rest_ensure_response(
 			array(
-				'status'  => 'success',
-				'message' => __( 'Setting saved.', 'flexible-table-block' ),
+				'status'    => 'success',
+				'message'   => __( 'Setting saved.', 'flexible-table-block' ),
+				'block_css' => Helper::minify_css( Helper::get_block_css() ),
 			)
 		);
 	}
@@ -141,25 +143,12 @@ class Api {
 		}
 		return rest_ensure_response(
 			array(
-				'options' => Settings::get_options(),
-				'status'  => 'success',
-				'message' => __( 'Settings have been reset.', 'flexible-table-block' ),
+				'options'   => Settings::get_options(),
+				'status'    => 'success',
+				'message'   => __( 'Settings have been reset.', 'flexible-table-block' ),
+				'block_css' => Helper::minify_css( Helper::get_block_css() ),
 			)
 		);
-	}
-
-	/**
-	 * Validate a received value for being valid CSS.
-	 *
-	 * @param string $value CSS to validate.
-	 * @return true|WP_Error
-	 */
-	public static function sanitize_css( $value ) {
-		if ( preg_match( '#</?\w+#', $value ) ) {
-			return new \WP_Error( 'illegal_markup', __( 'Markup is not allowed in CSS.', 'flexible-table-block' ) );
-		}
-
-		return $value;
 	}
 }
 

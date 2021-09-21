@@ -51,7 +51,7 @@ export default function save( { attributes } ) {
 		} ),
 	} );
 
-	const tableClasses = classnames( colorProps.className, {
+	const tableClass = classnames( colorProps.className, {
 		'has-fixed-layout': hasFixedLayout,
 		'is-stacked-on-mobile': isStackedOnMobile,
 		[ `is-sticky-${ sticky }` ]: sticky,
@@ -70,20 +70,8 @@ export default function save( { attributes } ) {
 			<Tag>
 				{ rows.map( ( { cells }, rowIndex ) => (
 					<tr key={ rowIndex }>
-						{ cells.map( ( { content, tag, textAlign }, cellIndex ) => {
-							const cellClasses = classnames( {
-								[ `has-text-align-${ textAlign }` ]: textAlign,
-							} );
-
-							return (
-								<RichText.Content
-									className={ cellClasses ? cellClasses : undefined }
-									data-text-align={ textAlign }
-									tagName={ tag }
-									value={ content }
-									key={ cellIndex }
-								/>
-							);
+						{ cells.map( ( { content, tag }, cellIndex ) => {
+							return <RichText.Content tagName={ tag } value={ content } key={ cellIndex } />;
 						} ) }
 					</tr>
 				) ) }
@@ -106,7 +94,7 @@ export default function save( { attributes } ) {
 		<figure { ...blockProps }>
 			{ hasCaption && 'top' === captionSide && <Caption /> }
 			<table
-				className={ '' === tableClasses ? undefined : tableClasses }
+				className={ tableClass ?? undefined }
 				style={ { ...tableStylesObj, ...colorProps.style } }
 			>
 				<Section type="head" rows={ head } />

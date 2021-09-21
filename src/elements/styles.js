@@ -4,8 +4,7 @@
 import styled from '@emotion/styled';
 import { Button } from '@wordpress/components';
 
-// Row & Column inserter button.
-const Inserter = styled( Button )`
+const ButtonInserter = styled( Button )`
 	&.components-button.has-icon {
 		position: absolute;
 		width: 18px;
@@ -44,28 +43,27 @@ const Inserter = styled( Button )`
 	}
 `;
 
-export const ButtonRowBeforeInserter = styled( Inserter )`
+export const ButtonRowBeforeInserter = styled( ButtonInserter )`
 	left: -44px;
 	top: ${ ( props ) => ( props.hasPrevSection ? '3px' : '-9px' ) };
 `;
 
-export const ButtonRowAfterInserter = styled( Inserter )`
+export const ButtonRowAfterInserter = styled( ButtonInserter )`
 	left: -44px;
 	bottom: ${ ( props ) => ( props.hasNextSection ? '3px' : '-9px' ) };
 `;
 
-export const ButtonColumnBeforeInserter = styled( Inserter )`
+export const ButtonColumnBeforeInserter = styled( ButtonInserter )`
 	left: -10px;
 	top: -44px;
 `;
 
-export const ButtonColumnAfterInserter = styled( Inserter )`
+export const ButtonColumnAfterInserter = styled( ButtonInserter )`
 	right: -10px;
 	top: -44px;
 `;
 
-// Row & Column select button.
-const Selector = styled( Button )`
+const ButtonSelector = styled( Button )`
 	background: #eaeaea;
 
 	&.components-button.has-icon {
@@ -84,7 +82,7 @@ const Selector = styled( Button )`
 	}
 `;
 
-export const ButtonRowSelector = styled( Selector )`
+export const ButtonRowSelector = styled( ButtonSelector )`
 	left: -20px;
 	border-radius: 2px 0 0 2px;
 	width: 18px;
@@ -92,7 +90,7 @@ export const ButtonRowSelector = styled( Selector )`
 	top: 1px;
 `;
 
-export const ButtonColumnSelector = styled( Selector )`
+export const ButtonColumnSelector = styled( ButtonSelector )`
 	left: 1px;
 	border-radius: 2px 2px 0 0;
 	height: 18px;

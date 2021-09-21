@@ -15,14 +15,14 @@ import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/comp
 /**
  * Internal dependencies
  */
-import { createTable } from '../utils/table-state';
 import {
 	MIN_PREVIEW_TABLE_HEIGHT,
 	MAX_PREVIEW_TABLE_COL,
 	MAX_PREVIEW_TABLE_ROW,
 	THRESHOLD_PREVIEW_TABLE_COL,
 	THRESHOLD_PREVIEW_TABLE_ROW,
-} from './constants';
+} from '../constants';
+import { createTable } from '../utils/table-state';
 import { blockIcon as icon } from '../icons';
 
 export default function TablePlaceholder( { setAttributes } ) {
@@ -48,8 +48,8 @@ export default function TablePlaceholder( { setAttributes } ) {
 		);
 	};
 
-	const onChangeColumnCount = ( inputValue ) => {
-		const parsedValue = parseInt( inputValue, 10 );
+	const onChangeColumnCount = ( value ) => {
+		const parsedValue = parseInt( value, 10 );
 		if ( isNaN( parsedValue ) ) {
 			setColumnCount( undefined );
 		} else {
@@ -57,8 +57,8 @@ export default function TablePlaceholder( { setAttributes } ) {
 		}
 	};
 
-	const onChangeRowCount = ( inputValue ) => {
-		const parsedValue = parseInt( inputValue, 10 );
+	const onChangeRowCount = ( value ) => {
+		const parsedValue = parseInt( value, 10 );
 		if ( isNaN( parsedValue ) ) {
 			setRowCount( undefined );
 		} else {
@@ -84,7 +84,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 			className="ftb-placeholder"
 			label={ __( 'Table', 'flexible-table-block' ) }
 			icon={ <BlockIcon icon={ icon } showColors /> }
-			instructions={ __( 'Create flexible configuration table.' ) }
+			instructions={ __( 'Create flexible configuration table.', 'flexible-table-block' ) }
 		>
 			<div
 				className="ftb-placeholder__table-wrap"

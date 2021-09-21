@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -17,15 +22,8 @@ import {
 /**
  * Internal dependencies
  */
-import { CORNERS, CornerIndicatorControl } from '../indicator-control';
-
-const BORDER_RADIUS_UNITS = [ 'px', 'em', 'rem' ];
-
-const MAX_BORDER_RADIUS = {
-	px: 100,
-	em: 20,
-	rem: 20,
-};
+import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS } from '../constants';
+import { CORNERS, CornerIndicatorControl } from './indicator-control';
 
 const DEFAULT_VALUES = {
 	topLeft: null,
@@ -34,17 +32,26 @@ const DEFAULT_VALUES = {
 	bottomLeft: null,
 };
 
-export default function BorderRadiusControl( { id, onChange, values: valuesProp } ) {
+export default function BorderRadiusControl( {
+	id,
+	label = __( 'Border Radius', 'flexible-table-block' ),
+	className,
+	onChange,
+	values: valuesProp,
+	allowSides = true,
+} ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
 
-	const isMixed = ! (
-		values.topLeft === values.topRight &&
-		values.topLeft === values.bottomRight &&
-		values.topLeft === values.bottomLeft
-	);
+	const isMixed =
+		allowSides &&
+		! (
+			values.topLeft === values.topRight &&
+			values.topLeft === values.bottomRight &&
+			values.topLeft === values.bottomLeft
+		);
 
 	const borderRadiusUnits = useCustomUnits( {
 		availableUnits: BORDER_RADIUS_UNITS,
@@ -62,6 +69,8 @@ export default function BorderRadiusControl( { id, onChange, values: valuesProp 
 	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
 	const allInputValue = isMixed ? undefined : values.topLeft;
 
+	const classNames = classnames( 'ftb-border-radius-control', className );
+
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
 		setCorner( undefined );
@@ -77,7 +86,7 @@ export default function BorderRadiusControl( { id, onChange, values: valuesProp 
 		} );
 	};
 
-	const handleOnFocus = ( focusCorner ) => () => {
+	const handleOnFocus = ( focusCorner ) => {
 		setCorner( focusCorner );
 	};
 
@@ -104,9 +113,9 @@ export default function BorderRadiusControl( { id, onChange, values: valuesProp 
 	};
 
 	return (
-		<BaseControl className="ftb-border-radius-control" id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
 			<div className="ftb-border-radius-control__header">
-				<Text id={ headingId }>{ __( 'Border Radius', 'flexible-table-block' ) }</Text>
+				<Text id={ headingId }>{ label }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset }>
 					{ __( 'Reset' ) }
 				</Button>

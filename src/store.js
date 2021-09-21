@@ -1,14 +1,17 @@
 /**
  * WordPress dependencies
  */
-
 import apiFetch from '@wordpress/api-fetch';
 import { registerStore } from '@wordpress/data';
+
+/**
+ * Internal dependencies
+ */
+import { STORE_NAME, REST_API_ROUTE } from './constants';
 
 const DEFAULT_STATE = {
 	options: {},
 };
-const STORE_NAME = 'flexible-table-block';
 
 const actions = {
 	getOptions( path ) {
@@ -54,7 +57,7 @@ const controls = {
 
 const resolvers = {
 	*getOptions() {
-		const options = yield actions.getOptions( '/flexible-table-block/v1/get_options/' );
+		const options = yield actions.getOptions( REST_API_ROUTE );
 		return actions.setOptions( options );
 	},
 };

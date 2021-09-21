@@ -16,10 +16,10 @@ class Enqueue {
 		// Register block
 		add_action( 'init', array( $this, 'register_block' ) );
 
-		// Enqueue front-end inline styles
+		// Enqueue front-end styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		// Enqueue block-editor inline styles
+		// Enqueue block-editor styles
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 	}
 
@@ -37,7 +37,7 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue front-end styles.
+	 * Enqueue front-end styles
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_style(
@@ -47,16 +47,14 @@ class Enqueue {
 			filemtime( FTB_PATH . '/build/style.css' ),
 		);
 
-		$breakpoint     = get_option( FTB_OPTION_PREFIX . '_breakpoint', Settings::OPTIONS['breakpoint']['default'] );
-		$responsive_css = Helper::get_responsive_css( $breakpoint );
-		$block_css      = get_option( FTB_OPTION_PREFIX . '_css', Settings::OPTIONS['css']['default'] );
-		$css            = Helper::minify_css( $responsive_css . $block_css );
-		$css            = $responsive_css . $block_css;
+		$responsive_css = Helper::get_responsive_css();
+		$block_css      = Helper::get_block_css();
+		$css            = Helper::minify_css( $block_css . $responsive_css );
 		wp_add_inline_style( FTB_NAMESPACE, $css );
 	}
 
 	/**
-	 * Enqueue block-editor styles.
+	 * Enqueue block-editor styles
 	 */
 	public function enqueue_block_editor_assets() {
 		$asset_file = include( FTB_PATH . '/build/index.asset.php' );
@@ -77,9 +75,8 @@ class Enqueue {
 
 		$breakpoint     = get_option( FTB_OPTION_PREFIX . '_breakpoint', Settings::OPTIONS['breakpoint']['default'] );
 		$responsive_css = Helper::get_responsive_css( $breakpoint );
-		$block_css      = get_option( FTB_OPTION_PREFIX . '_css', Settings::OPTIONS['css']['default'] );
+		$block_css      = Helper::get_block_css();
 		$css            = Helper::minify_css( $responsive_css . $block_css );
-		$css            = $responsive_css . $block_css;
 		wp_add_inline_style( FTB_NAMESPACE, $css );
 	}
 }

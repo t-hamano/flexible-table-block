@@ -9,37 +9,6 @@ namespace flexible_table_block;
 
 class Settings {
 
-	const BLOCK_STYLE = <<< EOM
-	/* Table Style */
-	.wp-block-flexible-table-block-table table {
-		width: 100%;
-		max-width: 100%;
-		border-collapse: separate;
-	}
-
-	/* Cell Style */
-	.wp-block-flexible-table-block-table th,
-	.wp-block-flexible-table-block-table td {
-		word-break: normal;
-		border: 1px solid;
-		text-align: left;
-		padding: 1em;
-	}
-	.wp-block-flexible-table-block-table th {
-		background-color: #ddd;
-	}
-
-	/* Stripe Style */
-	.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) {
-		background-color: #eee;
-	}
-
-	/* Figcaption Style */
-	.wp-block-flexible-table-block-table figcaption {
-		margin: 0.5em 0;
-	}
-	EOM;
-
 	// Default options.
 	const OPTIONS = array(
 
@@ -72,11 +41,22 @@ class Settings {
 				'max' => 1200,
 			),
 		),
-		// Global Block CSS.
-		'css'                   => array(
-			'type'              => 'string',
-			'default'           => self::BLOCK_STYLE,
-			'sanitize_callback' => 'sanitize_css',
+		// Default table style.
+		'block_style'           => array(
+			'type'    => 'array',
+			'default' => array(
+				'table_width'           => '100%',
+				'table_max_width'       => '100%',
+				'table_border_collapse' => 'collapse',
+				'row_odd_color'         => '#eee',
+				'row_even_color'        => '#ccc',
+				'cell_padding'          => '1em',
+				'cell_border_width'     => '1px',
+				'cell_border_style'     => 'solid',
+				'cell_border_color'     => '#333',
+				'cell_text_align'       => 'left',
+				'cell_vertical_align'   => 'middle',
+			),
 		),
 	);
 

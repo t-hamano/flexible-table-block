@@ -17,12 +17,18 @@ import {
  * Internal components
  */
 import {
+	TABLE_WIDTH_UNITS,
+	BORDER_SPACING_UNITS,
+	BORDER_COLLAPSE_CONTROLS,
+	STICKY_CONTROLS,
+} from '../constants';
+import {
 	BorderRadiusControl,
 	BorderWidthControl,
 	BorderStyleControl,
 	BorderColorControl,
-} from '../controls/border-control';
-import PaddingControl from '../controls/padding-control';
+	PaddingControl,
+} from '../controls';
 import { toggleSection } from '../utils/table-state';
 import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
@@ -35,48 +41,13 @@ import {
 	pickBorderSpacing,
 } from '../utils/style-picker';
 import {
-	updatePaddingStyles,
+	updatePadding,
 	updateBorderWidthStyles,
-	updateBorderRadiusStyles,
-	updateBorderStyleStyles,
-	updateBorderColorStyles,
+	updateBorderRadius,
+	updateBorderStyle,
+	updateBorderColor,
 	updateBorderSpacingStyles,
 } from '../utils/style-updater';
-import {
-	borderCollapse as borderCollapseIcon,
-	borderSeparate as borderSeparateIcon,
-} from './icons';
-
-const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
-const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ];
-
-const BORDER_COLLAPSE_CONTROLS = [
-	{
-		icon: borderCollapseIcon,
-		label: __( 'Share', 'flexible-table-block' ),
-		value: 'collapse',
-	},
-	{
-		icon: borderSeparateIcon,
-		label: __( 'Separate', 'flexible-table-block' ),
-		value: 'separate',
-	},
-];
-
-const STICKY_CONTROLS = [
-	{
-		label: __( 'none', 'flexible-table-block' ),
-		value: 'none',
-	},
-	{
-		label: __( 'Fixed header', 'flexible-table-block' ),
-		value: 'header',
-	},
-	{
-		label: __( 'Fixed first column', 'flexible-table-block' ),
-		value: 'first-column',
-	},
-];
 
 export default function TableSettings( props ) {
 	const { tableStylesObj, attributes, setAttributes } = props;
@@ -151,7 +122,7 @@ export default function TableSettings( props ) {
 	};
 
 	const onChangePadding = ( values ) => {
-		const newStylesObj = updatePaddingStyles( tableStylesObj, values );
+		const newStylesObj = updatePadding( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
@@ -161,17 +132,17 @@ export default function TableSettings( props ) {
 	};
 
 	const onChangeBorderRadius = ( values ) => {
-		const newStylesObj = updateBorderRadiusStyles( tableStylesObj, values );
+		const newStylesObj = updateBorderRadius( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeBorderStyle = ( values ) => {
-		const newStylesObj = updateBorderStyleStyles( tableStylesObj, values );
+		const newStylesObj = updateBorderStyle( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
 	const onChangeBorderColor = ( values ) => {
-		const newStylesObj = updateBorderColorStyles( tableStylesObj, values );
+		const newStylesObj = updateBorderColor( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
@@ -232,12 +203,12 @@ export default function TableSettings( props ) {
 					return { label, value };
 				} ) }
 				help={
-					isStackedOnMobile && sticky
-						? __(
-								'Fixed control is only enable for PC view because "Stack on mobile" is enabled.',
-								'flexible-table-block'
-						  )
-						: ''
+					isStackedOnMobile &&
+					sticky &&
+					__(
+						'Fixed control is only enable for PC view because "Stack on mobile" is enabled.',
+						'flexible-table-block'
+					)
 				}
 			/>
 			<hr />
@@ -262,7 +233,7 @@ export default function TableSettings( props ) {
 							<Button
 								key={ perWidth }
 								isSmall
-								isPressed={ isPressed }
+								variant={ isPressed ? 'primary' : undefined }
 								onClick={ () => onChangeWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
@@ -289,7 +260,7 @@ export default function TableSettings( props ) {
 							<Button
 								key={ perWidth }
 								isSmall
-								isPressed={ isPressed }
+								variant={ isPressed ? 'primary' : undefined }
 								onClick={ () => onChangeMaxWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
@@ -316,7 +287,7 @@ export default function TableSettings( props ) {
 							<Button
 								key={ perWidth }
 								isSmall
-								isPressed={ isPressed }
+								variant={ isPressed ? 'primary' : undefined }
 								onClick={ () => onChangeMinWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }

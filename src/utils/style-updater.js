@@ -10,7 +10,7 @@ import { cleanEmptyObject, toUnitVal } from './helper';
  * @param {Object} values padding values object.
  * @return {Object} New Styles object.
  */
-export function updatePaddingStyles( styles, values ) {
+export function updatePadding( styles, values ) {
 	const newStyles = { ...styles };
 	delete newStyles.padding;
 	delete newStyles.paddingTop;
@@ -161,7 +161,7 @@ export function updateBorderWidthStyles( styles, values ) {
  * @param {Object} values border-radius values object.
  * @return {Object} New Styles object.
  */
-export function updateBorderRadiusStyles( styles, values ) {
+export function updateBorderRadius( styles, values ) {
 	const newStyles = { ...styles };
 	delete newStyles.borderRadius;
 	delete newStyles.borderTopLeftRadius;
@@ -231,7 +231,7 @@ export function updateBorderRadiusStyles( styles, values ) {
  * @param {Object} values border-style values object.
  * @return {Object} New Styles object.
  */
-export function updateBorderStyleStyles( styles, values ) {
+export function updateBorderStyle( styles, values ) {
 	const newStyles = { ...styles };
 	delete newStyles.borderStyle;
 	delete newStyles.borderTopStyle;
@@ -290,7 +290,7 @@ export function updateBorderStyleStyles( styles, values ) {
  * @param {Object} values border-color values object.
  * @return {Object} New Styles object.
  */
-export function updateBorderColorStyles( styles, values ) {
+export function updateBorderColor( styles, values ) {
 	const newStyles = { ...styles };
 	delete newStyles.borderColor;
 	delete newStyles.borderTopColor;

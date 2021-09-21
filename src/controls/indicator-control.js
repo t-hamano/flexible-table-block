@@ -18,7 +18,6 @@ import {
 	BottomLeftStroke,
 } from './styles';
 
-// Indicator control options.
 export const SIDES = [
 	{
 		label: __( 'Top', 'flexible-table-block' ),
@@ -57,7 +56,6 @@ export const CORNERS = [
 	},
 ];
 
-// Indicator showing active sides.
 export function SideIndicatorControl( { sides } ) {
 	const top = ! sides || sides.includes( 'top' );
 	const right = ! sides || sides.includes( 'right' );
@@ -74,7 +72,6 @@ export function SideIndicatorControl( { sides } ) {
 	);
 }
 
-// Indicator showing active corners.
 export function CornerIndicatorControl( { corners } ) {
 	const topLeft = ! corners || corners.includes( 'topLeft' );
 	const topRight = ! corners || corners.includes( 'topRight' );

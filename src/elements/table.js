@@ -21,7 +21,7 @@ import {
 	deleteColumn,
 	updateSelectedCell,
 } from '../utils/table-state';
-import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from './constants';
+import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../constants';
 import {
 	ButtonRowBeforeInserter,
 	ButtonRowAfterInserter,

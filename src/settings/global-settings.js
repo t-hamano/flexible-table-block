@@ -1,12 +1,4 @@
 /**
- * External dependencies
- */
-import { Controlled as CodeMirror } from 'react-codemirror2';
-import 'codemirror/mode/css/css';
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/addon/edit/closetag';
-
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -16,49 +8,44 @@ import apiFetch from '@wordpress/api-fetch';
 import { store as coreStore } from '@wordpress/core-data';
 import {
 	Button,
+	ButtonGroup,
+	BaseControl,
 	RangeControl,
 	ToggleControl,
 	Modal,
 	Spinner,
-	BaseControl,
 	Popover,
 	Notice,
+	ColorPalette,
+	ColorIndicator,
+	__experimentalUnitControl as UnitControl,
+	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 import { mobile, desktop } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../store';
+import {
+	STORE_NAME,
+	REST_API_ROUTE,
+	TABLE_WIDTH_UNITS,
+	BORDER_COLLAPSE_CONTROLS,
+	DEFAULT_RESPONSIVE_BREAKPOINT,
+	MIN_RESPONSIVE_BREAKPOINT,
+	MAX_RESPONSIVE_BREAKPOINT,
+	RESPONSIVE_BREAKPOINTS,
+	TEXT_ALIGNMENT_CONTROLS,
+	VERTICAL_ALIGNMENT_CONTROLS,
+} from '../constants';
+import {
+	BorderWidthControl,
+	BorderStyleControl,
+	BorderColorControl,
+	PaddingControl,
+} from '../controls';
+import { toUnitVal } from '../utils/helper';
 
-const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
-
-const MIN_RESPONSIVE_BREAKPOINT = 200;
-const MAX_RESPONSIVE_BREAKPOINT = 1200;
-
-const RESPONSIVE_BREAKPOINTS = [
-	{
-		value: MIN_RESPONSIVE_BREAKPOINT,
-		label: `${ MIN_RESPONSIVE_BREAKPOINT }px`,
-	},
-	{
-		value: MAX_RESPONSIVE_BREAKPOINT,
-		label: `${ MAX_RESPONSIVE_BREAKPOINT }px`,
-	},
-];
-
-const CODEMIRROR_OPTIONS = {
-	mode: 'css',
-	indentUnit: 2,
-	indentWithTabs: true,
-	lineNumbers: true,
-	direction: 'ltr',
-	autoCloseBrackets: true,
-	autoCloseTags: true,
-	tabSize: 2,
-};
-
-/* eslint-disable no-undef */
 export default function GlobalSettings() {
 	const storeOptions = useSelect( ( select ) => {
 		return select( STORE_NAME ).getOptions();
@@ -68,50 +55,52 @@ export default function GlobalSettings() {
 		return select( coreStore ).canUser( 'create', 'users' );
 	} );
 
+	const tableWidthUnits = useCustomUnits( {
+		availableUnits: TABLE_WIDTH_UNITS,
+	} );
+
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
-	const [ notice, setNotice ] = useState( { isShow: false } );
+	const [ notice, setNotice ] = useState();
 	const [ isResetPopup, setIsResetPopup ] = useState( false );
 	const [ isWaiting, setIsWaiting ] = useState( false );
-	const [ optionsState, setOptionsState ] = useState( storeOptions );
+	const [ options, setOptions ] = useState( storeOptions );
 
-	const { setOptions } = useDispatch( STORE_NAME );
+	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
 
-	const tooltip = ( value ) => `${ value }px`;
+	const breakpointTooltip = ( value ) => `${ value }px`;
 
 	// Fallback if the component is mounted before the store's API response is returned.
 	useEffect( () => {
-		if ( 0 !== Object.keys( optionsState ).length ) return;
-
+		if ( 0 !== Object.keys( options ).length ) return;
 		apiFetch( {
-			path: '/flexible-table-block/v1/get_options',
+			path: REST_API_ROUTE,
 			method: 'GET',
 		} ).then( ( response ) => {
-			setOptionsState( response );
+			setOptions( response );
 		} );
 	}, [] );
 
 	// Initialize notice message.
 	useEffect( () => {
-		setNotice( { isShow: false } );
+		setNotice();
 	}, [ isModalOpen ] );
 
-	// Update state and store options.
+	// Update options.
 	const handleUpdateOptions = () => {
 		setIsWaiting( true );
-		setNotice( { isShow: false } );
-		setOptions( optionsState );
+		setNotice();
+		setStoreOptions( options );
 
 		apiFetch( {
-			path: '/flexible-table-block/v1/update_options',
+			path: REST_API_ROUTE,
 			method: 'POST',
-			data: optionsState,
+			data: options,
 		} )
 			.then( ( response ) => {
-				document.querySelectorAll( '.ftb-global-setting-modal' )[ 0 ].focus();
+				document.querySelector( '.ftb-global-setting-modal' ).focus();
 
 				setIsWaiting( false );
 				setNotice( {
-					isShow: true,
 					status: response.status,
 					message: response.message,
 				} );
@@ -119,15 +108,14 @@ export default function GlobalSettings() {
 				// Update inline CSS.
 				const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
 				if ( styleSheet ) {
-					styleSheet.textContent = optionsState.css;
+					styleSheet.textContent = response.block_css;
 				}
 			} )
 			.catch( ( response ) => {
-				document.querySelectorAll( '.ftb-global-setting-modal' )[ 0 ].focus();
+				document.querySelector( '.ftb-global-setting-modal' ).focus();
 
 				setIsWaiting( false );
 				setNotice( {
-					isShow: true,
 					status: 'error',
 					message: response.message,
 				} );
@@ -137,35 +125,34 @@ export default function GlobalSettings() {
 	// Reset state and store options.
 	const handleResetOptions = () => {
 		setIsWaiting( true );
-		setNotice( { isShow: false } );
+		setNotice();
 
 		apiFetch( {
-			path: '/flexible-table-block/v1/delete_options',
-			method: 'POST',
+			path: REST_API_ROUTE,
+			method: 'DELETE',
 		} ).then( ( response ) => {
-			document.querySelectorAll( '.ftb-global-setting-modal' )[ 0 ].focus();
+			document.querySelector( '.ftb-global-setting-modal' ).focus();
 			setIsWaiting( false );
 
 			setNotice( {
-				isShow: true,
 				status: response.status,
 				message: response.message,
 			} );
 
-			setOptionsState( response.options );
 			setOptions( response.options );
+			setStoreOptions( response.options );
 
 			// Update inline CSS.
 			const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
 			if ( styleSheet ) {
-				styleSheet.textContent = response.options.css;
+				styleSheet.textContent = response.block_css;
 			}
 		} );
 	};
 
 	return (
 		<div className="ftb-global-setting">
-			{ ( isAdministrator || optionsState.show_global_setting ) && (
+			{ ( isAdministrator || options.show_global_setting ) && (
 				<>
 					<Button
 						variant="link"
@@ -188,10 +175,10 @@ export default function GlobalSettings() {
 							) }
 							<ToggleControl
 								label={ __( 'Show section labels in the editor', 'flexible-table-block' ) }
-								checked={ optionsState.show_label_on_section }
+								checked={ !! options.show_label_on_section }
 								onChange={ ( value ) => {
-									setOptionsState( {
-										...optionsState,
+									setOptions( {
+										...options,
 										show_label_on_section: value,
 									} );
 								} }
@@ -201,20 +188,20 @@ export default function GlobalSettings() {
 									'Show insert row/column and select row/column buttons in the editor',
 									'flexible-table-block'
 								) }
-								checked={ optionsState.show_control_button }
+								checked={ !! options.show_control_button }
 								onChange={ ( value ) => {
-									setOptionsState( {
-										...optionsState,
+									setOptions( {
+										...options,
 										show_control_button: value,
 									} );
 								} }
 							/>
 							<ToggleControl
 								label={ __( 'Show dot on <th> tag in the editor', 'flexible-table-block' ) }
-								checked={ optionsState.show_dot_on_th }
+								checked={ !! options.show_dot_on_th }
 								onChange={ ( value ) => {
-									setOptionsState( {
-										...optionsState,
+									setOptions( {
+										...options,
 										show_dot_on_th: value,
 									} );
 								} }
@@ -225,10 +212,10 @@ export default function GlobalSettings() {
 										'Show global settings link to non-administrative users',
 										'flexible-table-block'
 									) }
-									checked={ optionsState.show_global_setting }
+									checked={ !! options.show_global_setting }
 									onChange={ ( value ) => {
-										setOptionsState( {
-											...optionsState,
+										setOptions( {
+											...options,
 											show_global_setting: value,
 										} );
 									} }
@@ -236,64 +223,293 @@ export default function GlobalSettings() {
 							) }
 							<hr />
 							<RangeControl
-								label={ __( 'Responsive breakpoint (px)', 'flexible-spacer-block' ) }
+								label={ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
 								beforeIcon={ mobile }
 								afterIcon={ desktop }
 								allowReset
 								trackColor="transparent"
 								min={ MIN_RESPONSIVE_BREAKPOINT }
 								max={ MAX_RESPONSIVE_BREAKPOINT }
-								renderTooltipContent={ tooltip }
+								renderTooltipContent={ breakpointTooltip }
 								marks={ RESPONSIVE_BREAKPOINTS }
-								value={ parseInt( optionsState.breakpoint ) }
+								value={ parseInt( options.breakpoint ) }
 								onChange={ ( value ) => {
-									setOptionsState( {
-										...optionsState,
+									setOptions( {
+										...options,
 										breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
 									} );
 								} }
 								help={ __(
 									'Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.',
-									'flexible-spacer-block'
+									'flexible-table-block'
 								) }
 							/>
 							<hr />
-							<BaseControl
-								label={ __( 'Global Block CSS', 'flexible-table-block' ) }
-								id="flexible-table-block/global-setting-css"
-								help={ __(
-									'Defines the default table style. This CSS will be applied to both the frontend and the block editor.',
-									'flexible-spacer-block'
-								) }
-							>
-								<div id="flexible-table-block/global-setting-css">
-									<CodeMirror
-										value={ optionsState.css }
-										options={ CODEMIRROR_OPTIONS }
-										onBeforeChange={ ( editor, data, value ) => {
-											setOptionsState( {
-												...optionsState,
-												css: value,
+							<h2>{ __( 'Default Table Style', 'flexible-table-block' ) }</h2>
+							<div className="ftb-global-setting-modal__styles">
+								<BaseControl
+									label={ __( 'Width', 'flexible-table-block' ) }
+									id="flexible-table-block/global-table-width"
+									className="ftb-global-setting-modal__styles-item"
+								>
+									<UnitControl
+										labelPosition="top"
+										min="0"
+										units={ tableWidthUnits }
+										value={ options.block_style?.table_width }
+										onChange={ ( value ) => {
+											setOptions( {
+												...options,
+												block_style: {
+													...options.block_style,
+													table_width: toUnitVal( value ),
+												},
 											} );
 										} }
-										onKeyUp={ ( editor, event ) => {
-											// Prefer code indent with tab key, close modal with Escape key.
-											if ( event.key === 'Tab' ) {
-												event.stopPropagation();
-											} else if ( event.key === 'Escape' ) {
-												setIsModalOpen( false );
-											}
+									/>
+								</BaseControl>
+								<BaseControl
+									label={ __( 'Max Width', 'flexible-table-block' ) }
+									id="flexible-table-block/global-table-max-width"
+									className="ftb-global-setting-modal__styles-item"
+								>
+									<UnitControl
+										labelPosition="top"
+										min="0"
+										units={ tableWidthUnits }
+										value={ options.block_style?.table_max_width }
+										onChange={ ( value ) => {
+											setOptions( {
+												...options,
+												block_style: {
+													...options.block_style,
+													table_max_width: toUnitVal( value ),
+												},
+											} );
 										} }
 									/>
-								</div>
-							</BaseControl>
-							{ notice.isShow && (
+								</BaseControl>
+								<BaseControl
+									label={ __( 'Stripe Background Color ( odd rows )', 'flexible-table-block' ) }
+									id="flexible-table-block/global-row-odd-color"
+									className="ftb-global-setting-modal__styles-item"
+								>
+									<div className="ftb-global-setting-modal__styles-color">
+										<ColorIndicator colorValue={ options.block_style?.row_odd_color } />
+										<ColorPalette
+											value={ options.block_style?.row_odd_color }
+											onChange={ ( value ) => {
+												setOptions( {
+													...options,
+													block_style: {
+														...options.block_style,
+														row_odd_color: value,
+													},
+												} );
+											} }
+										/>
+									</div>
+								</BaseControl>
+								<BaseControl
+									label={ __( 'Stripe Background Color ( even rows )', 'flexible-table-block' ) }
+									id="flexible-table-block/global-row-even-color"
+									className="ftb-global-setting-modal__styles-item"
+								>
+									<div className="ftb-global-setting-modal__styles-color">
+										<ColorIndicator colorValue={ options.block_style?.row_even_color } />
+										<ColorPalette
+											value={ options.block_style?.row_even_color }
+											onChange={ ( value ) => {
+												setOptions( {
+													...options,
+													block_style: {
+														...options.block_style,
+														row_even_color: value,
+													},
+												} );
+											} }
+										/>
+									</div>
+								</BaseControl>
+								<BaseControl
+									label={ __( 'Cell borders', 'flexible-table-block' ) }
+									id="flexible-table-block/table-border-collapse"
+									className="ftb-global-setting-modal__styles-item"
+								>
+									<ButtonGroup className="ftb-button-group">
+										{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
+											return (
+												<Button
+													key={ value }
+													variant={
+														value === options.block_style?.table_border_collapse
+															? 'primary'
+															: 'secondary'
+													}
+													icon={ icon }
+													onClick={ () => {
+														const borderCollapse =
+															options?.block_style?.table_border_collapse === value
+																? undefined
+																: value;
+														setOptions( {
+															...options,
+															block_style: {
+																...options.block_style,
+																table_border_collapse: borderCollapse,
+															},
+														} );
+													} }
+												>
+													{ label }
+												</Button>
+											);
+										} ) }
+									</ButtonGroup>
+								</BaseControl>
+							</div>
+							<h2>{ __( 'Default Cell Style', 'flexible-table-block' ) }</h2>
+							<div className="ftb-global-setting-modal__styles">
+								<PaddingControl
+									id="flexible-table-block/global-cell-border-color"
+									label={ __( 'Padding', 'flexible-table-block' ) }
+									className="ftb-global-setting-modal__styles-item"
+									allowSides={ false }
+									values={ { top: options.block_style?.cell_padding } }
+									onChange={ ( value ) => {
+										setOptions( {
+											...options,
+											block_style: {
+												...options.block_style,
+												cell_padding: value.top,
+											},
+										} );
+									} }
+								/>
+								<BorderWidthControl
+									id="flexible-table-block/global-cell-border-width"
+									label={ __( 'Border Width', 'flexible-table-block' ) }
+									className="ftb-global-setting-modal__styles-item"
+									allowSides={ false }
+									values={ { top: options.block_style?.cell_border_width } }
+									onChange={ ( value ) => {
+										setOptions( {
+											...options,
+											block_style: {
+												...options.block_style,
+												cell_border_width: value.top,
+											},
+										} );
+									} }
+								/>
+								<BorderStyleControl
+									id="flexible-table-block/global-cell-border-style"
+									label={ __( 'Border Style', 'flexible-table-block' ) }
+									className="ftb-global-setting-modal__styles-item"
+									allowSides={ false }
+									values={ { top: options.block_style?.cell_border_style } }
+									onChange={ ( value ) => {
+										const newValue =
+											options?.block_style?.cell_border_style === value.top ? undefined : value.top;
+										setOptions( {
+											...options,
+											block_style: {
+												...options.block_style,
+												cell_border_style: newValue,
+											},
+										} );
+									} }
+								/>
+								<BorderColorControl
+									id="flexible-table-block/global-cell-border-color"
+									label={ __( 'Border Color', 'flexible-table-block' ) }
+									className="ftb-global-setting-modal__styles-item"
+									allowSides={ false }
+									values={ { top: options.block_style?.cell_border_color } }
+									onChange={ ( value ) => {
+										setOptions( {
+											...options,
+											block_style: {
+												...options.block_style,
+												cell_border_color: value.top,
+											},
+										} );
+									} }
+								/>
+								<BaseControl
+									label={ __( 'Text alignment', 'flexible-table-block' ) }
+									id="flexible-table-block/global-cell-text-align"
+									className="ftb-global-setting-modal__styles-item"
+								>
+									<ButtonGroup className="ftb-button-group">
+										{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+											return (
+												<Button
+													key={ value }
+													label={ label }
+													variant={
+														value === options.block_style?.cell_text_align ? 'primary' : 'secondary'
+													}
+													icon={ icon }
+													onClick={ () => {
+														const newValue =
+															options?.block_style?.cell_text_align === value ? undefined : value;
+														setOptions( {
+															...options,
+															block_style: {
+																...options.block_style,
+																cell_text_align: newValue,
+															},
+														} );
+													} }
+												/>
+											);
+										} ) }
+									</ButtonGroup>
+								</BaseControl>
+								<BaseControl
+									label={ __( 'Vertical alignment', 'flexible-table-block' ) }
+									id="flexible-table-block/global-cell-vertical-align"
+									className="ftb-global-setting-modal__styles-item"
+								>
+									<ButtonGroup className="ftb-button-group">
+										{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+											return (
+												<Button
+													key={ value }
+													label={ label }
+													variant={
+														value === options.block_style?.cell_vertical_align
+															? 'primary'
+															: 'secondary'
+													}
+													icon={ icon }
+													onClick={ () => {
+														const newValue =
+															options?.block_style?.cell_vertical_align === value
+																? undefined
+																: value;
+														setOptions( {
+															...options,
+															block_style: {
+																...options.block_style,
+																cell_vertical_align: newValue,
+															},
+														} );
+													} }
+												/>
+											);
+										} ) }
+									</ButtonGroup>
+								</BaseControl>
+							</div>
+							{ notice?.status && notice?.message && (
 								<Notice
 									className="ftb-global-setting-modal__notice"
 									status={ notice.status }
 									onRemove={ () => {
-										setNotice( { isShow: false } );
-										document.querySelectorAll( '.ftb-global-setting-modal' )[ 0 ].focus();
+										setNotice();
+										document.querySelector( '.ftb-global-setting-modal' ).focus();
 									} }
 								>
 									{ notice.message }
@@ -301,7 +517,7 @@ export default function GlobalSettings() {
 							) }
 							<div className="ftb-global-setting-modal__buttons">
 								<Button variant="primary" disabled={ isWaiting } onClick={ handleUpdateOptions }>
-									{ __( 'Save', 'flexible-spacer-block' ) }
+									{ __( 'Save', 'flexible-table-block' ) }
 								</Button>
 								<Button
 									variant="link"
@@ -310,7 +526,7 @@ export default function GlobalSettings() {
 										setIsResetPopup( ! isResetPopup );
 									} }
 								>
-									{ __( 'Reset Setting', 'flexible-spacer-block' ) }
+									{ __( 'Reset Setting', 'flexible-table-block' ) }
 									{ isResetPopup && (
 										<Popover
 											className="ftb-global-setting-modal__confirm-popover"
@@ -320,18 +536,18 @@ export default function GlobalSettings() {
 												setIsResetPopup( false );
 											} }
 										>
-											<p>{ __( 'Are you sure?', 'flexible-spacer-block' ) }</p>
+											<p>{ __( 'Are you sure?', 'flexible-table-block' ) }</p>
 											<div className="ftb-global-setting-modal__confirm-popover-buttons">
-												<Button variant="link" isDestructive onClick={ handleResetOptions }>
-													{ __( 'Reset', 'flexible-spacer-block' ) }
+												<Button isDestructive onClick={ handleResetOptions }>
+													{ __( 'Reset', 'flexible-table-block' ) }
 												</Button>
 												<Button
-													variant="link"
+													variant="secondary"
 													onClick={ () => {
 														setIsResetPopup( false );
 													} }
 												>
-													{ __( 'Cancel', 'flexible-spacer-block' ) }
+													{ __( 'Cancel', 'flexible-table-block' ) }
 												</Button>
 											</div>
 										</Popover>

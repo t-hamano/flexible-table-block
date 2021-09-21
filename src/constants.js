@@ -4,9 +4,120 @@
 import { __ } from '@wordpress/i18n';
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
 
-export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ];
+/**
+ * Internal components
+ */
+import {
+	alignTop,
+	alignMiddle,
+	alignBottom,
+	borderSolid,
+	borderDotted,
+	borderDashed,
+	borderDouble,
+	borderCollapse as borderCollapseIcon,
+	borderSeparate as borderSeparateIcon,
+} from './icons';
 
-export const ALIGNMENT_CONTROLS = [
+// Custom store name.
+export const STORE_NAME = 'flexible-table-block';
+
+// Rest API routes.
+export const REST_API_ROUTE = '/flexible-table-block/v1/options';
+
+// Upper and lower limits and thresholds.
+export const MIN_PREVIEW_TABLE_HEIGHT = 200;
+export const MAX_PREVIEW_TABLE_COL = 50;
+export const MAX_PREVIEW_TABLE_ROW = 50;
+export const THRESHOLD_PREVIEW_TABLE_COL = 10;
+export const THRESHOLD_PREVIEW_TABLE_ROW = 10;
+
+export const MAX_BORDER_RADIUS = {
+	px: 100,
+	em: 20,
+	rem: 20,
+};
+
+export const MAX_BORDER_WIDTH = {
+	px: 100,
+	em: 20,
+	rem: 20,
+};
+
+// Responsive breakpoint settings.
+export const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
+export const MIN_RESPONSIVE_BREAKPOINT = 200;
+export const MAX_RESPONSIVE_BREAKPOINT = 1200;
+
+export const RESPONSIVE_BREAKPOINTS = [
+	{
+		value: MIN_RESPONSIVE_BREAKPOINT,
+		label: `${ MIN_RESPONSIVE_BREAKPOINT }px`,
+	},
+	{
+		value: MAX_RESPONSIVE_BREAKPOINT,
+		label: `${ MAX_RESPONSIVE_BREAKPOINT }px`,
+	},
+];
+
+// Available units on UnitControl component.
+export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ];
+export const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
+export const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ];
+export const BORDER_RADIUS_UNITS = [ 'px', 'em', 'rem' ];
+export const BORDER_WIDTH_UNITS = [ 'px', 'em', 'rem' ];
+export const PADDING_UNITS = [ 'px', '%', 'em', 'rem', 'vw', 'vh' ];
+
+// Label & Text variations.
+export const CELL_ARIA_LABEL = {
+	head: __( 'Header cell text', 'flexible-table-block' ),
+	body: __( 'Body cell text', 'flexible-table-block' ),
+	foot: __( 'Footer cell text', 'flexible-table-block' ),
+};
+
+export const SECTION_PLACEHOLDER = {
+	head: __( 'Header label', 'flexible-table-block' ),
+	foot: __( 'Footer label', 'flexible-table-block' ),
+};
+
+// Controls variations.
+export const BORDER_COLLAPSE_CONTROLS = [
+	{
+		icon: borderCollapseIcon,
+		label: __( 'Share', 'flexible-table-block' ),
+		value: 'collapse',
+	},
+	{
+		icon: borderSeparateIcon,
+		label: __( 'Separate', 'flexible-table-block' ),
+		value: 'separate',
+	},
+];
+
+export const BORDER_STYLES = [
+	{
+		label: __( 'Solid', 'flexible-table-block' ),
+		value: 'solid',
+		icon: borderSolid,
+	},
+	{
+		label: __( 'Dotted', 'flexible-table-block' ),
+		value: 'dotted',
+		icon: borderDotted,
+	},
+	{
+		label: __( 'Dashed', 'flexible-table-block' ),
+		value: 'dashed',
+		icon: borderDashed,
+	},
+	{
+		label: __( 'Double', 'flexible-table-block' ),
+		value: 'double',
+		icon: borderDouble,
+	},
+];
+
+export const TEXT_ALIGNMENT_CONTROLS = [
 	{
 		icon: alignLeft,
 		label: __( 'Align left', 'flexible-table-block' ),
@@ -21,5 +132,38 @@ export const ALIGNMENT_CONTROLS = [
 		icon: alignRight,
 		label: __( 'Align right', 'flexible-table-block' ),
 		value: 'right',
+	},
+];
+
+export const VERTICAL_ALIGNMENT_CONTROLS = [
+	{
+		icon: alignTop,
+		label: __( 'Align top', 'flexible-table-block' ),
+		value: 'top',
+	},
+	{
+		icon: alignMiddle,
+		label: __( 'Align middle', 'flexible-table-block' ),
+		value: 'middle',
+	},
+	{
+		icon: alignBottom,
+		label: __( 'Align bottom', 'flexible-table-block' ),
+		value: 'bottom',
+	},
+];
+
+export const STICKY_CONTROLS = [
+	{
+		label: __( 'none', 'flexible-table-block' ),
+		value: 'none',
+	},
+	{
+		label: __( 'Fixed header', 'flexible-table-block' ),
+		value: 'header',
+	},
+	{
+		label: __( 'Fixed first column', 'flexible-table-block' ),
+		value: 'first-column',
 	},
 ];

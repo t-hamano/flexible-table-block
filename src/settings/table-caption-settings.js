@@ -15,7 +15,7 @@ import {
 /**
  * Internal dependencies
  */
-import { FONT_SIZE_UNITS, ALIGNMENT_CONTROLS } from '../constants';
+import { FONT_SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS } from '../constants';
 import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
 
@@ -80,7 +80,7 @@ export default function TableCaptionSettings( props ) {
 				id="flexible-table-block/caption-align"
 			>
 				<ButtonGroup className="ftb-button-group">
-					{ ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+					{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
 						return (
 							<Button
 								key={ value }

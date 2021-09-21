@@ -1,9 +1,13 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
-import { borderSolid, borderDotted, borderDashed, borderDouble } from './icons';
 import { useState } from '@wordpress/element';
 import {
 	BaseControl,
@@ -16,30 +20,8 @@ import {
 /**
  * Internal dependencies
  */
-import { SIDES, SideIndicatorControl } from '../indicator-control';
-
-const BORDER_STYLES = [
-	{
-		label: __( 'Solid', 'flexible-table-block' ),
-		value: 'solid',
-		icon: borderSolid,
-	},
-	{
-		label: __( 'Dotted', 'flexible-table-block' ),
-		value: 'dotted',
-		icon: borderDotted,
-	},
-	{
-		label: __( 'Dashed', 'flexible-table-block' ),
-		value: 'dashed',
-		icon: borderDashed,
-	},
-	{
-		label: __( 'Double', 'flexible-table-block' ),
-		value: 'double',
-		icon: borderDouble,
-	},
-];
+import { BORDER_STYLES } from '../constants';
+import { SIDES, SideIndicatorControl } from './indicator-control';
 
 const DEFAULT_VALUES = {
 	top: null,
@@ -48,31 +30,36 @@ const DEFAULT_VALUES = {
 	left: null,
 };
 
-export default function BorderStyleControl( { id, onChange, values: valuesProp } ) {
+export default function BorderStyleControl( {
+	id,
+	label = __( 'Border Style', 'flexible-table-block' ),
+	className,
+	onChange,
+	values: valuesProp,
+	allowSides = true,
+} ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
 
-	const isMixed = ! (
-		values.top === values.right &&
-		values.top === values.bottom &&
-		values.top === values.left
-	);
+	const isMixed =
+		allowSides &&
+		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const headingId = `${ id }-heading`;
 
 	const controlLabel =
-		isMixed && isLinked
-			? __( 'Border Style (Mixed)', 'flexible-table-block' )
-			: __( 'Border Style', 'flexible-table-block' );
+		isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label;
 
 	const linkedLabel = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
 	const allInputValue = isMixed ? undefined : values.top;
+
+	const classNames = classnames( 'ftb-border-width-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -89,11 +76,18 @@ export default function BorderStyleControl( { id, onChange, values: valuesProp }
 	};
 
 	const handleOnClickAll = ( value ) => {
+		const newValue =
+			value === values.top &&
+			value === values.right &&
+			value === values.bottom &&
+			value === values.left
+				? null
+				: value;
 		onChange( {
-			top: value,
-			right: value,
-			bottom: value,
-			left: value,
+			top: newValue,
+			right: newValue,
+			bottom: newValue,
+			left: newValue,
 		} );
 	};
 
@@ -106,7 +100,7 @@ export default function BorderStyleControl( { id, onChange, values: valuesProp }
 	};
 
 	return (
-		<BaseControl className="ftb-border-style-control" id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
 			<div className="ftb-border-style-control__header">
 				<Text id={ headingId }>{ controlLabel }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset } value={ ! isMixed || values.top }>
@@ -123,7 +117,7 @@ export default function BorderStyleControl( { id, onChange, values: valuesProp }
 									return (
 										<Button
 											isSmall
-											isPressed={ allInputValue === borderStyle.value }
+											variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
 											key={ borderStyle }
 											icon={ borderStyle.icon }
 											label={ borderStyle.label }
@@ -144,7 +138,9 @@ export default function BorderStyleControl( { id, onChange, values: valuesProp }
 											return (
 												<Button
 													isSmall
-													isPressed={ values[ item.value ] === borderStyle.value }
+													variant={
+														values[ item.value ] === borderStyle.value ? 'primary' : undefined
+													}
 													key={ borderStyle }
 													icon={ borderStyle.icon }
 													label={ borderStyle.label }
@@ -157,17 +153,19 @@ export default function BorderStyleControl( { id, onChange, values: valuesProp }
 							);
 						} ) }
 				</div>
-				<Tooltip text={ linkedLabel }>
-					<span>
-						<Button
-							variant={ isLinked ? 'primary' : 'secondary' }
-							isSmall
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							iconSize="16"
-						/>
-					</span>
-				</Tooltip>
+				{ allowSides && (
+					<Tooltip text={ linkedLabel }>
+						<span>
+							<Button
+								variant={ isLinked ? 'primary' : 'secondary' }
+								isSmall
+								onClick={ toggleLinked }
+								icon={ isLinked ? link : linkOff }
+								iconSize="16"
+							/>
+						</span>
+					</Tooltip>
+				) }
 			</div>
 		</BaseControl>
 	);

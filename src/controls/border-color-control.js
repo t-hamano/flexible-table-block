@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { get } from 'lodash';
+import classnames from 'classnames';
 
 /**
  * WordPress dependencies
@@ -24,7 +25,7 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import { SIDES, SideIndicatorControl } from '../indicator-control';
+import { SIDES, SideIndicatorControl } from './indicator-control';
 
 const DEFAULT_VALUES = {
 	top: null,
@@ -33,17 +34,22 @@ const DEFAULT_VALUES = {
 	left: null,
 };
 
-export default function BorderColorControl( { id, onChange, values: valuesProp } ) {
+export default function BorderColorControl( {
+	id,
+	label = __( 'Border Color', 'flexible-table-block' ),
+	className,
+	onChange,
+	values: valuesProp,
+	allowSides = true,
+} ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
 
-	const isMixed = ! (
-		values.top === values.right &&
-		values.top === values.bottom &&
-		values.top === values.left
-	);
+	const isMixed =
+		allowSides &&
+		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
 	const colors = useSelect( ( select ) => {
 		const { getSettings } = select( blockEditorStore );
@@ -61,6 +67,8 @@ export default function BorderColorControl( { id, onChange, values: valuesProp }
 		: __( 'Link Sides', 'flexible-table-block' );
 
 	const allInputValue = isMixed ? undefined : values.top;
+
+	const classNames = classnames( 'ftb-border-color-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -92,24 +100,33 @@ export default function BorderColorControl( { id, onChange, values: valuesProp }
 		} );
 	};
 
+	const handleOnPickerOpen = ( targetPickerIndex ) => {
+		setIsPickerOpen( true );
+		setPickerIndex( targetPickerIndex );
+	};
+
+	const handleOnPickerClose = () => {
+		setIsPickerOpen( false );
+		setPickerIndex();
+	};
+
 	return (
-		<BaseControl className="ftb-border-color-control" id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
 			<div className="ftb-border-color-control__header">
-				<Text id={ headingId }>{ __( 'Border Color', 'flexible-table-block' ) }</Text>
+				<Text id={ headingId }>{ label }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset } value={ ! isMixed || values.top }>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-color-control__controls">
 				<div className="ftb-border-color-control__controls-inner">
-					{ isLinked && (
+					{ ( isLinked || ! allowSides ) && (
 						<div className="ftb-border-color-control__controls-row">
 							<SideIndicatorControl />
 							<Button
 								className="ftb-border-color-control__indicator"
 								onClick={ () => {
-									setIsPickerOpen( true );
-									setPickerIndex( undefined );
+									handleOnPickerOpen();
 								} }
 								label={ __( 'All', 'flexible-table-block' ) }
 							>
@@ -123,10 +140,7 @@ export default function BorderColorControl( { id, onChange, values: valuesProp }
 								<Popover
 									className="ftb-border-color-control__popover"
 									position="top right"
-									onClose={ () => {
-										setIsPickerOpen( false );
-										setPickerIndex( undefined );
-									} }
+									onClose={ handleOnPickerClose }
 								>
 									<ColorPalette
 										colors={ colors }
@@ -138,6 +152,7 @@ export default function BorderColorControl( { id, onChange, values: valuesProp }
 						</div>
 					) }
 					{ ! isLinked &&
+						allowSides &&
 						SIDES.map( ( item, index ) => {
 							return (
 								<div className="ftb-border-color-control__controls-row" key={ item }>
@@ -145,8 +160,7 @@ export default function BorderColorControl( { id, onChange, values: valuesProp }
 									<Button
 										className="ftb-border-color-control__indicator"
 										onClick={ () => {
-											setIsPickerOpen( true );
-											setPickerIndex( index );
+											handleOnPickerOpen( index );
 										} }
 										label={ item.label }
 									>
@@ -156,10 +170,7 @@ export default function BorderColorControl( { id, onChange, values: valuesProp }
 										<Popover
 											className="ftb-border-color-control__popover"
 											position="top right"
-											onClose={ () => {
-												setIsPickerOpen( false );
-												setPickerIndex( undefined );
-											} }
+											onClose={ handleOnPickerClose }
 										>
 											<ColorPalette
 												colors={ colors }
@@ -174,17 +185,19 @@ export default function BorderColorControl( { id, onChange, values: valuesProp }
 							);
 						} ) }
 				</div>
-				<Tooltip text={ linkedLabel }>
-					<span>
-						<Button
-							variant={ isLinked ? 'primary' : 'secondary' }
-							isSmall
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							iconSize="16"
-						/>
-					</span>
-				</Tooltip>
+				{ allowSides && (
+					<Tooltip text={ linkedLabel }>
+						<span>
+							<Button
+								variant={ isLinked ? 'primary' : 'secondary' }
+								isSmall
+								onClick={ toggleLinked }
+								icon={ isLinked ? link : linkOff }
+								iconSize="16"
+							/>
+						</span>
+					</Tooltip>
+				) }
 			</div>
 		</BaseControl>
 	);

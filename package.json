@@ -32,8 +32,5 @@
 		"rimraf": "^3.0.2",
 		"stylelint-config-rational-order": "^0.1.2"
 	},
-	"dependencies": {
-		"codemirror": "^5.62.3",
-		"react-codemirror2": "^7.2.1"
-	}
+	"dependencies": {}
 }
