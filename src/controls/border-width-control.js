@@ -39,6 +39,7 @@ export default function BorderWidthControl( {
 	onChange,
 	values: valuesProp,
 	allowSides = true,
+	hasIndicator = true,
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -117,7 +118,9 @@ export default function BorderWidthControl( {
 				</Button>
 			</div>
 			<div className="ftb-border-width-control__header-control">
-				<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+				{ hasIndicator && (
+					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+				) }
 				{ ( isLinked || ! allowSides ) && (
 					<UnitControl
 						placeholder={ allInputPlaceholder }

@@ -41,6 +41,7 @@ export default function BorderColorControl( {
 	onChange,
 	values: valuesProp,
 	allowSides = true,
+	hasIndicator = true,
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -122,7 +123,7 @@ export default function BorderColorControl( {
 				<div className="ftb-border-color-control__controls-inner">
 					{ ( isLinked || ! allowSides ) && (
 						<div className="ftb-border-color-control__controls-row">
-							<SideIndicatorControl />
+							{ hasIndicator && <SideIndicatorControl /> }
 							<Button
 								className="ftb-border-color-control__indicator"
 								onClick={ () => {
@@ -156,7 +157,7 @@ export default function BorderColorControl( {
 						SIDES.map( ( item, index ) => {
 							return (
 								<div className="ftb-border-color-control__controls-row" key={ item }>
-									<SideIndicatorControl sides={ [ item.value ] } />
+									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<Button
 										className="ftb-border-color-control__indicator"
 										onClick={ () => {

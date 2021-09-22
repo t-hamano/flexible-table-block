@@ -123,3 +123,23 @@ export function getFirstRow( state ) {
 		return state.foot[ 0 ];
 	}
 }
+
+/**
+ * Determines Whether a table has merged cells.
+ *
+ * @param {Object} state Current table state.
+ * @return {boolean} True if table has merged cells, false otherwise.
+ */
+export function hasMergedCells( state ) {
+	[ 'head', 'body', 'foot' ].forEach( ( section ) => {
+		state[ section ].forEach( ( { cells } ) => {
+			cells.forEach( ( { rowSpan, colSpan } ) => {
+				if ( rowSpan || colSpan ) {
+					return true;
+				}
+			} );
+		} );
+	} );
+
+	return false;
+}

@@ -39,6 +39,7 @@ export default function PaddingControl( {
 	onChange,
 	values: valuesProp,
 	allowSides = true,
+	hasIndicator = true,
 } ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 
@@ -108,7 +109,9 @@ export default function PaddingControl( {
 				</Button>
 			</div>
 			<div className="ftb-border-width-control__header-control">
-				<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+				{ hasIndicator && (
+					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+				) }
 				{ ( isLinked || ! allowSides ) && (
 					<UnitControl
 						placeholder={ allInputPlaceholder }

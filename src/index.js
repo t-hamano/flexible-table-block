@@ -16,12 +16,14 @@ import example from './example';
 import { blockIcon as icon } from './icons';
 import edit from './edit';
 import save from './save';
+import transforms from './transforms';
 import { GlobalSettings } from './settings';
 
 // Register block.
 registerBlockType( metadata.name, {
 	icon,
 	example,
+	transforms,
 	edit,
 	save,
 	styles: [

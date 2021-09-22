@@ -37,6 +37,7 @@ export default function BorderStyleControl( {
 	onChange,
 	values: valuesProp,
 	allowSides = true,
+	hasIndicator = true,
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -111,7 +112,7 @@ export default function BorderStyleControl( {
 				<div className="ftb-border-style-control__button-controls-inner">
 					{ isLinked && (
 						<div className="ftb-border-style-control__button-controls-row">
-							<SideIndicatorControl />
+							{ hasIndicator && <SideIndicatorControl /> }
 							<ButtonGroup className="ftb-button-group">
 								{ BORDER_STYLES.map( ( borderStyle ) => {
 									return (
@@ -132,7 +133,7 @@ export default function BorderStyleControl( {
 						SIDES.map( ( item ) => {
 							return (
 								<div className="ftb-border-style-control__button-controls-row" key={ item }>
-									<SideIndicatorControl sides={ [ item.value ] } />
+									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<ButtonGroup className="ftb-button-group" aria-label={ item.label }>
 										{ BORDER_STYLES.map( ( borderStyle ) => {
 											return (

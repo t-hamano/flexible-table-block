@@ -39,6 +39,7 @@ export default function BorderRadiusControl( {
 	onChange,
 	values: valuesProp,
 	allowSides = true,
+	hasIndicator = true,
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -121,7 +122,9 @@ export default function BorderRadiusControl( {
 				</Button>
 			</div>
 			<div className="ftb-border-radius-control__header-control">
-				<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
+				{ hasIndicator && (
+					<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
+				) }
 				{ isLinked && (
 					<UnitControl
 						placeholder={ allInputPlaceholder }

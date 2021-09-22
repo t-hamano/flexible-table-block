@@ -375,6 +375,7 @@ export default function GlobalSettings() {
 									label={ __( 'Padding', 'flexible-table-block' ) }
 									className="ftb-global-setting-modal__styles-item"
 									allowSides={ false }
+									hasIndicator={ false }
 									values={ { top: options.block_style?.cell_padding } }
 									onChange={ ( value ) => {
 										setOptions( {
@@ -391,6 +392,7 @@ export default function GlobalSettings() {
 									label={ __( 'Border Width', 'flexible-table-block' ) }
 									className="ftb-global-setting-modal__styles-item"
 									allowSides={ false }
+									hasIndicator={ false }
 									values={ { top: options.block_style?.cell_border_width } }
 									onChange={ ( value ) => {
 										setOptions( {
@@ -407,6 +409,7 @@ export default function GlobalSettings() {
 									label={ __( 'Border Style', 'flexible-table-block' ) }
 									className="ftb-global-setting-modal__styles-item"
 									allowSides={ false }
+									hasIndicator={ false }
 									values={ { top: options.block_style?.cell_border_style } }
 									onChange={ ( value ) => {
 										const newValue =
@@ -425,6 +428,7 @@ export default function GlobalSettings() {
 									label={ __( 'Border Color', 'flexible-table-block' ) }
 									className="ftb-global-setting-modal__styles-item"
 									allowSides={ false }
+									hasIndicator={ false }
 									values={ { top: options.block_style?.cell_border_color } }
 									onChange={ ( value ) => {
 										setOptions( {
