@@ -84,7 +84,10 @@ export default function TablePlaceholder( { setAttributes } ) {
 			className="ftb-placeholder"
 			label={ __( 'Table', 'flexible-table-block' ) }
 			icon={ <BlockIcon icon={ icon } showColors /> }
-			instructions={ __( 'Create flexible configuration table.', 'flexible-table-block' ) }
+			instructions={ __(
+				'Hold Ctrl key to select multiple cells. Hold Shift key to select range.',
+				'flexible-table-block'
+			) }
 		>
 			<div
 				className="ftb-placeholder__table-wrap"

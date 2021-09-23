@@ -42,7 +42,7 @@ export default function TableCaptionSettings( props ) {
 	const onChangeCaptionAlign = ( value ) => {
 		const newStylesObj = {
 			...captionStylesObj,
-			textAlign: value === captionStylesObj ? undefined : value,
+			textAlign: value === captionStylesObj.textAlign ? undefined : value,
 		};
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};

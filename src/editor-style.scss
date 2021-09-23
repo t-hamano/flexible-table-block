@@ -267,12 +267,9 @@
 }
 
 .ftb-global-setting {
+	display: flex;
+	justify-content: space-between;
 	padding: 0 16px 16px 16px;
-
-	.components-button {
-		display: block;
-		margin-left: auto;
-	}
 }
 
 .ftb-global-setting-modal {
@@ -384,6 +381,10 @@
 		justify-content: center;
 		background: rgba(0, 0, 0, 0.2);
 	}
+}
+
+.ftb-global-help-modal {
+	max-width: 600px;
 }
 
 @media screen and (max-width: 782px) {
