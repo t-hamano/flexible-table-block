@@ -16,8 +16,6 @@ import {
 	Spinner,
 	Popover,
 	Notice,
-	ColorPalette,
-	ColorIndicator,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -340,48 +338,40 @@ export default function GlobalSettings() {
 								} }
 							/>
 						</BaseControl>
-						<BaseControl
-							label={ __( 'Stripe Background Color ( odd rows )', 'flexible-table-block' ) }
+						<BorderColorControl
 							id="flexible-table-block/global-row-odd-color"
+							label={ __( 'Stripe Background Color ( odd rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-						>
-							<div className="ftb-global-setting-modal__styles-color">
-								<ColorIndicator colorValue={ options.block_style?.row_odd_color } />
-								<ColorPalette
-									value={ options.block_style?.row_odd_color }
-									onChange={ ( value ) => {
-										setOptions( {
-											...options,
-											block_style: {
-												...options.block_style,
-												row_odd_color: value,
-											},
-										} );
-									} }
-								/>
-							</div>
-						</BaseControl>
-						<BaseControl
-							label={ __( 'Stripe Background Color ( even rows )', 'flexible-table-block' ) }
+							allowSides={ false }
+							hasIndicator={ false }
+							values={ { top: options.block_style?.row_odd_color } }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									block_style: {
+										...options.block_style,
+										row_odd_color: value.top,
+									},
+								} );
+							} }
+						/>
+						<BorderColorControl
 							id="flexible-table-block/global-row-even-color"
+							label={ __( 'Stripe Background Color ( even rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-						>
-							<div className="ftb-global-setting-modal__styles-color">
-								<ColorIndicator colorValue={ options.block_style?.row_even_color } />
-								<ColorPalette
-									value={ options.block_style?.row_even_color }
-									onChange={ ( value ) => {
-										setOptions( {
-											...options,
-											block_style: {
-												...options.block_style,
-												row_even_color: value,
-											},
-										} );
-									} }
-								/>
-							</div>
-						</BaseControl>
+							allowSides={ false }
+							hasIndicator={ false }
+							values={ { top: options.block_style?.row_even_color } }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									block_style: {
+										...options.block_style,
+										row_even_color: value.top,
+									},
+								} );
+							} }
+						/>
 						<BaseControl
 							label={ __( 'Cell borders', 'flexible-table-block' ) }
 							id="flexible-table-block/table-border-collapse"
@@ -419,6 +409,40 @@ export default function GlobalSettings() {
 					</div>
 					<h2>{ __( 'Default Cell Style', 'flexible-table-block' ) }</h2>
 					<div className="ftb-global-setting-modal__styles">
+						<BorderColorControl
+							id="flexible-table-block/global-cell-background-color-th"
+							label={ __( 'Background Color ( th tag )', 'flexible-table-block' ) }
+							className="ftb-global-setting-modal__styles-item"
+							allowSides={ false }
+							hasIndicator={ false }
+							values={ { top: options.block_style?.cell_background_color_th } }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									block_style: {
+										...options.block_style,
+										cell_background_color_th: value.top,
+									},
+								} );
+							} }
+						/>
+						<BorderColorControl
+							id="flexible-table-block/global-cell-background-color-td"
+							label={ __( 'Background Color ( td tag )', 'flexible-table-block' ) }
+							className="ftb-global-setting-modal__styles-item"
+							allowSides={ false }
+							hasIndicator={ false }
+							values={ { top: options.block_style?.cell_background_color_td } }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									block_style: {
+										...options.block_style,
+										cell_background_color_td: value.top,
+									},
+								} );
+							} }
+						/>
 						<PaddingControl
 							id="flexible-table-block/global-cell-border-color"
 							label={ __( 'Padding', 'flexible-table-block' ) }

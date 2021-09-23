@@ -43,6 +43,12 @@ class Helper {
 				case 'cell_vertical_align':
 					$styles[ ".${block_class} table th, .${block_class} table td" ] .= "vertical-align:${value};";
 					break;
+				case 'cell_background_color_th':
+					$styles[ ".${block_class} table th" ] .= "background-color:${value};";
+					break;
+				case 'cell_background_color_td':
+					$styles[ ".${block_class} table td" ] .= "background-color:${value};";
+					break;
 				case 'cell_padding':
 					$styles[ ".${block_class} table th, .${block_class} table td" ] .= "padding:${value};";
 					break;
