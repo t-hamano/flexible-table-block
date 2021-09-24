@@ -15,14 +15,28 @@ export const alignTop = (
 		<Path d="M9 20h6V9H9v11zM4 4v1.5h16V4H4z" />
 	</SVG>
 );
+
 export const alignMiddle = (
 	<SVG width="24" height="24">
 		<Path d="M20 11h-5V4H9v7H4v1.5h5V20h6v-7.5h5z" />
 	</SVG>
 );
+
 export const alignBottom = (
 	<SVG width="24" height="24">
 		<Path d="M15 4H9v11h6V4zM4 18.5V20h16v-1.5H4z" />
+	</SVG>
+);
+
+export const mergeCell = (
+	<SVG viewBox="0 0 24 24">
+		<Path d="M2,19.9V2h20.5v17.9H2z M8.4,3.5H3.3v3h5.1V3.5z M14.8,3.5H9.7v3h5.1C14.8,6.5,14.8,3.5,14.8,3.5z M21.2,3.5h-5.1v3h5.1V3.5 z M20.2,9.5h-16v3h16C20.2,12.5,20.2,9.5,20.2,9.5z M8.4,15.5H3.3v3h5.1V15.5z M14.8,15.5H9.7v3h5.1C14.8,18.5,14.8,15.5,14.8,15.5z M21.2,15.5h-5.1v3h5.1V15.5z" />
+	</SVG>
+);
+
+export const splitCell = (
+	<SVG viewBox="0 0 24 24">
+		<Path d="M2,19.9V2h20.5v17.9H2z M21.2,3.5H3.3v3h17.9V3.5z M21.2,15.5H3.3v3h17.9V15.5z M8.8,9.5H4.2v3h4.6V9.5z M14.5,9.5H9.9v3 h4.6C14.5,12.5,14.5,9.5,14.5,9.5z M20.2,9.5h-4.6v3h4.6V9.5z" />
 	</SVG>
 );
 
