@@ -15,6 +15,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../constants';
+import { isMultiSelected, isRangeSelected } from '../utils/helper';
 import {
 	ButtonRowBeforeInserter,
 	ButtonRowAfterInserter,
@@ -45,6 +46,10 @@ export default function Table( props ) {
 		isSelected,
 		selectedCell,
 		setSelectedCell,
+		selectedMultiCell,
+		setSelectedMultiCell,
+		selectedRangeCell,
+		setSelectedRangeCell,
 		selectedLine,
 		setSelectedLine,
 		onInsertRow,
@@ -104,12 +109,24 @@ export default function Table( props ) {
 							{ attributes[ sectionName ].map( ( { cells }, rowIndex, row ) => (
 								<tr key={ rowIndex }>
 									{ cells.map( ( { content, tag }, columnIndex ) => {
+										let isCellSelected =
+											selectedCell &&
+											selectedCell.sectionName === sectionName &&
+											selectedCell.rowIndex === rowIndex &&
+											selectedCell.columnIndex === columnIndex;
+
+										if ( isMultiSelected( selectedMultiCell ) ) {
+											isCellSelected = selectedMultiCell.find( ( cell ) => {
+												return (
+													cell.sectionName === sectionName &&
+													cell.rowIndex === rowIndex &&
+													cell.columnIndex === columnIndex
+												);
+											} );
+										}
+
 										const cellClass = classnames( {
-											'is-selected':
-												selectedCell &&
-												selectedCell.sectionName === sectionName &&
-												selectedCell.rowIndex === rowIndex &&
-												selectedCell.columnIndex === columnIndex,
+											'is-selected': isCellSelected,
 										} );
 
 										return (
@@ -118,8 +135,59 @@ export default function Table( props ) {
 												key={ columnIndex }
 												className={ cellClass }
 												onClick={ ( e ) => {
-													const { keyCode } = e;
-													console.log( e );
+													const clickedCell = { sectionName, rowIndex, columnIndex };
+
+													if ( e.shiftKey ) {
+														if ( ! selectedRangeCell?.fromCell ) return;
+
+														const { fromCell } = selectedRangeCell;
+
+														if ( sectionName !== fromCell.sectionName ) {
+															// eslint-disable-next-line no-alert, no-undef
+															alert(
+																__(
+																	'Cannot select multi cells from difference section.',
+																	'flexible-table-block'
+																)
+															);
+															return;
+														}
+
+														setSelectedRangeCell( { fromCell, toCell: clickedCell } );
+														setSelectedMultiCell();
+													} else if ( e.ctrlKey || e.metaKey ) {
+														const newMultiCell = selectedMultiCell ? selectedMultiCell : [];
+														const existCellIndex = newMultiCell.findIndex(
+															( cell ) =>
+																cell.rowIndex === rowIndex && cell.colIndex === columnIndex
+														);
+
+														if (
+															newMultiCell.length &&
+															sectionName !== newMultiCell[ 0 ].sectionName
+														) {
+															// eslint-disable-next-line no-alert, no-undef
+															alert(
+																__(
+																	'Cannot select multi cells from difference section.',
+																	'flexible-table-block'
+																)
+															);
+															return;
+														}
+
+														if ( existCellIndex === -1 ) {
+															newMultiCell.push( clickedCell );
+														} else {
+															newMultiCell.splice( existCellIndex, 1 );
+														}
+
+														setSelectedMultiCell( newMultiCell );
+														setSelectedRangeCell();
+													} else {
+														setSelectedMultiCell( [ clickedCell ] );
+														setSelectedRangeCell( { fromCell: clickedCell } );
+													}
 												} }
 											>
 												{ isSelected &&

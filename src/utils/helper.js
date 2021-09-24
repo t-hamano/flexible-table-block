@@ -100,6 +100,26 @@ export function getFirstRow( state ) {
 }
 
 /**
+ * Determines Whether multi cells is selected.
+ *
+ * @param {Object} selectedMultiCell Current table state.
+ * @return {boolean} True if multi cells is selected, false otherwise.
+ */
+export function isMultiSelected( selectedMultiCell ) {
+	return selectedMultiCell && selectedMultiCell.length > 1;
+}
+
+/**
+ * Determines Whether range cells is selected.
+ *
+ * @param {Object} selectedRangeCell Current table state.
+ * @return {boolean} True if range cells is selected, false otherwise.
+ */
+export function isRangeSelected( selectedRangeCell ) {
+	return selectedRangeCell && selectedRangeCell.fromCell && selectedRangeCell.toCell;
+}
+
+/**
  * Determines Whether a table has merged cells.
  *
  * @param {Object} state Current table state.
