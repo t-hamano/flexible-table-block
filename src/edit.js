@@ -44,6 +44,8 @@ function TableEdit( props ) {
 	const { attributes, setAttributes, isSelected, insertBlocksAfter } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCell, setSelectedCell ] = useState();
+	const [ selectedMultiCell, setSelectedMultiCell ] = useState();
+	const [ selectedRangeCell, setSelectedRangeCell ] = useState();
 	const [ selectedLine, setSelectedLine ] = useState();
 
 	const tableStylesObj = convertToObject( tableStyles );
@@ -53,73 +55,53 @@ function TableEdit( props ) {
 		return select( STORE_NAME ).getOptions();
 	} );
 
-	function onInsertRow( offset ) {
-		if ( ! selectedCell ) {
-			return;
-		}
-
-		const { sectionName, rowIndex } = selectedCell;
-		const newRowIndex = rowIndex + offset;
-
+	const onInsertRow = ( { sectionName, rowIndex, offset } ) => {
 		setAttributes(
 			insertRow( attributes, {
 				sectionName,
-				rowIndex: newRowIndex,
+				rowIndex: rowIndex + offset,
 			} )
 		);
 
-		setSelectedCell( {
-			sectionName,
-			rowIndex: newRowIndex,
-			columnIndex: 0,
-			type: 'cell',
-		} );
-	}
+		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
+		setSelectedLine();
+	};
 
-	function onDeleteRow() {
-		if ( ! selectedCell ) {
-			return;
-		}
-
-		const { sectionName, rowIndex } = selectedCell;
+	const onDeleteRow = ( { sectionName, rowIndex } ) => {
+		setAttributes( deleteRow( attributes, { sectionName, rowIndex } ) );
 
 		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
 		setSelectedLine();
-		setAttributes( deleteRow( attributes, { sectionName, rowIndex } ) );
-	}
+	};
 
-	function onInsertColumn( offset = 0 ) {
-		if ( ! selectedCell ) {
-			return;
-		}
-
-		const { columnIndex } = selectedCell;
+	const onInsertColumn = ( { sectionName, columnIndex, offset } ) => {
 		const newColumnIndex = columnIndex + offset;
 
 		setAttributes(
 			insertColumn( attributes, {
+				sectionName,
 				columnIndex: newColumnIndex,
 			} )
 		);
 
-		setSelectedCell( {
-			rowIndex: 0,
-			columnIndex: newColumnIndex,
-			type: 'cell',
-		} );
-	}
+		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
+		setSelectedLine();
+	};
 
-	function onDeleteColumn() {
-		if ( ! selectedCell ) {
-			return;
-		}
-
-		const { columnIndex } = selectedCell;
+	const onDeleteColumn = ( columnIndex ) => {
+		setAttributes( deleteColumn( attributes, { columnIndex } ) );
 
 		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
 		setSelectedLine();
-		setAttributes( deleteColumn( attributes, { columnIndex } ) );
-	}
+	};
 
 	useEffect( () => {
 		if ( ! isSelected ) {
@@ -134,7 +116,8 @@ function TableEdit( props ) {
 			title: __( 'Insert row before', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: () => {
-				onInsertRow( 0 );
+				const { sectionName, rowIndex } = selectedCell;
+				onInsertRow( { sectionName, rowIndex, offset: 0 } );
 			},
 		},
 		{
@@ -142,21 +125,26 @@ function TableEdit( props ) {
 			title: __( 'Insert row after', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: () => {
-				onInsertRow( 1 );
+				const { sectionName, rowIndex } = selectedCell;
+				onInsertRow( { sectionName, rowIndex, offset: 1 } );
 			},
 		},
 		{
 			icon: tableRowDelete,
 			title: __( 'Delete row', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onDeleteRow,
+			onClick: () => {
+				const { sectionName, rowIndex } = selectedCell;
+				onDeleteRow( { sectionName, rowIndex } );
+			},
 		},
 		{
 			icon: tableColumnBefore,
 			title: __( 'Insert column before', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: () => {
-				onInsertColumn( 0 );
+				const { columnIndex } = selectedCell;
+				onInsertColumn( { columnIndex, offset: 0 } );
 			},
 		},
 		{
@@ -164,14 +152,18 @@ function TableEdit( props ) {
 			title: __( 'Insert column after', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
 			onClick: () => {
-				onInsertColumn( 1 );
+				const { columnIndex } = selectedCell;
+				onInsertColumn( { columnIndex, offset: 1 } );
 			},
 		},
 		{
 			icon: tableColumnDelete,
 			title: __( 'Delete column', 'flexible-table-block' ),
 			isDisabled: ! selectedCell,
-			onClick: onDeleteColumn,
+			onClick: () => {
+				const { columnIndex } = selectedCell;
+				onDeleteColumn( columnIndex );
+			},
 		},
 	];
 
@@ -203,13 +195,15 @@ function TableEdit( props ) {
 		setSelectedCell,
 		selectedLine,
 		setSelectedLine,
+		onInsertRow,
+		onDeleteRow,
+		onInsertColumn,
+		onDeleteColumn,
 	};
 
 	const tableSettingProps = {
 		...props,
 		tableStylesObj,
-		selectedCell,
-		setSelectedCell,
 	};
 
 	const tableCellSettingProps = {

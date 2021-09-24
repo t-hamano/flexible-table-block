@@ -82,31 +82,6 @@ export function isEmptyTableSection( section ) {
 }
 
 /**
- * Returns whether the cell at `cellLocation` is included in the selection `selection`.
- *
- * @param {Object} cellLocation An object containing cell location properties.
- * @param {Object} selection    An object containing selection properties.
- * @return {boolean} True if the cell is selected, false otherwise.
- */
-export function isCellSelected( cellLocation, selection ) {
-	if ( ! cellLocation || ! selection ) {
-		return false;
-	}
-
-	switch ( selection.type ) {
-		case 'column':
-			return 'column' === selection.type && cellLocation.columnIndex === selection.columnIndex;
-		case 'cell':
-			return (
-				'cell' === selection.type &&
-				cellLocation.sectionName === selection.sectionName &&
-				cellLocation.columnIndex === selection.columnIndex &&
-				cellLocation.rowIndex === selection.rowIndex
-			);
-	}
-}
-
-/**
  * Returns the first row in the table.
  *
  * @param {Object} state Current table state.

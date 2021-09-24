@@ -6,7 +6,7 @@ import { times, get, mapValues, pick } from 'lodash';
 /**
  * Internal dependencies
  */
-import { isEmptyTableSection, isEmptyRow, isCellSelected, getFirstRow } from './helper';
+import { isEmptyTableSection, isEmptyRow, getFirstRow } from './helper';
 
 const INHERITED_COLUMN_ATTRIBUTES = [ 'align' ];
 
@@ -49,51 +49,6 @@ export function createTable( { rowCount, columnCount, headerSection, footerSecti
 			],
 		} ),
 	};
-}
-
-/**
- * Returns updated cell attributes after applying the `updateCell` function to the selection.
- *
- * @param {Object}   state      The block attributes.
- * @param {Object}   selection  The selection of cells to update.
- * @param {Function} updateCell A function to update the selected cell attributes.
- * @return {Object} New table state including the updated cells.
- */
-export function updateSelectedCell( state, selection, updateCell ) {
-	if ( ! selection ) {
-		return state;
-	}
-
-	const tableSections = pick( state, [ 'head', 'body', 'foot' ] );
-	const { sectionName: selectionSectionName, rowIndex: selectionRowIndex } = selection;
-
-	return mapValues( tableSections, ( section, sectionName ) => {
-		if ( selectionSectionName && selectionSectionName !== sectionName ) {
-			return section;
-		}
-
-		return section.map( ( row, rowIndex ) => {
-			if ( selectionRowIndex && selectionRowIndex !== rowIndex ) {
-				return row;
-			}
-
-			return {
-				cells: row.cells.map( ( cellAttributes, columnIndex ) => {
-					const cellLocation = {
-						sectionName,
-						columnIndex,
-						rowIndex,
-					};
-
-					if ( ! isCellSelected( cellLocation, selection ) ) {
-						return cellAttributes;
-					}
-
-					return updateCell( cellAttributes );
-				} ),
-			};
-		} );
-	} );
 }
 
 /**

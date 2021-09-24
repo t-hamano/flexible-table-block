@@ -245,6 +245,21 @@ export default function GlobalSettings() {
 							} );
 						} }
 					/>
+					{ ( options.show_label_on_section || options.show_control_button ) && (
+						<ToggleControl
+							label={ __(
+								'Prevent insert/select buttons, select row/column buttons, section label from being focused when moving with the crosshairs',
+								'flexible-table-block'
+							) }
+							checked={ !! options.prevent_focus_control_button }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									prevent_focus_control_button: value,
+								} );
+							} }
+						/>
+					) }
 					<ToggleControl
 						label={ __( 'Show dot on <th> tag in the editor', 'flexible-table-block' ) }
 						checked={ !! options.show_dot_on_th }

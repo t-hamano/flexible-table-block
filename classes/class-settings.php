@@ -13,27 +13,32 @@ class Settings {
 	const OPTIONS = array(
 
 		// Show section labels on table in the editor.
-		'show_label_on_section' => array(
+		'show_label_on_section'        => array(
 			'type'    => 'boolean',
 			'default' => true,
 		),
 		// Show insert row/column buttons.
-		'show_control_button'   => array(
+		'show_control_button'          => array(
 			'type'    => 'boolean',
 			'default' => true,
 		),
+		// Prevent insert/select buttons, select row/column buttons, section label from being focused when moving with the crosshairs.
+		'prevent_focus_control_button' => array(
+			'type'    => 'boolean',
+			'default' => false,
+		),
 		// Show dot on th tag in the editor.
-		'show_dot_on_th'        => array(
+		'show_dot_on_th'               => array(
 			'type'    => 'boolean',
 			'default' => true,
 		),
 		// Show global settings link to non-administrative users.
-		'show_global_setting'   => array(
+		'show_global_setting'          => array(
 			'type'    => 'boolean',
 			'default' => false,
 		),
 		// Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.
-		'breakpoint'            => array(
+		'breakpoint'                   => array(
 			'type'    => 'number',
 			'default' => 768,
 			'range'   => array(
@@ -42,7 +47,7 @@ class Settings {
 			),
 		),
 		// Default table style.
-		'block_style'           => array(
+		'block_style'                  => array(
 			'type'    => 'array',
 			'default' => array(
 				'table_width'              => '100%',

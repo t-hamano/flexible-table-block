@@ -11,6 +11,17 @@
 			th,
 			td {
 				position: relative;
+
+				&.is-selected::after {
+					position: absolute;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					left: 0;
+					border: 2px solid var(--wp-admin-theme-color);
+					content: "";
+					pointer-events: none;
+				}
 			}
 		}
 	}
@@ -273,6 +284,7 @@
 }
 
 .ftb-global-setting-modal {
+	max-width: 600px;
 
 	hr {
 		margin: 1em 0;
@@ -295,7 +307,6 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
-		max-width: 500px;
 	}
 
 	&__styles-item {
