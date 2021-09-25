@@ -100,13 +100,41 @@ export function getFirstRow( state ) {
 }
 
 /**
+ * Return the all range of the specified section.
+ *
+ * @param {Object} state       Current table state.
+ * @param {string} sectionName Selected section.
+ * @return {Object} Start and end cells for range selection.
+ */
+export function getSectionRange( state, sectionName ) {
+	if ( ! state[ sectionName ] ) return undefined;
+
+	const lastRowIndex = state[ sectionName ].length - 1;
+	const lastColumnIndex = state[ sectionName ][ lastRowIndex ].cells.length - 1;
+
+	const fromCell = {
+		sectionName,
+		rowIndex: 0,
+		columnIndex: 0,
+	};
+
+	const toCell = {
+		sectionName,
+		rowIndex: lastRowIndex,
+		columnIndex: lastColumnIndex,
+	};
+
+	return { fromCell, toCell };
+}
+
+/**
  * Determines Whether multi cells is selected.
  *
  * @param {Object} selectedMultiCell Current table state.
  * @return {boolean} True if multi cells is selected, false otherwise.
  */
 export function isMultiSelected( selectedMultiCell ) {
-	return selectedMultiCell && selectedMultiCell.length > 1;
+	return !! ( selectedMultiCell && selectedMultiCell.length > 1 );
 }
 
 /**
@@ -116,7 +144,7 @@ export function isMultiSelected( selectedMultiCell ) {
  * @return {boolean} True if range cells is selected, false otherwise.
  */
 export function isRangeSelected( selectedRangeCell ) {
-	return selectedRangeCell && selectedRangeCell.fromCell && selectedRangeCell.toCell;
+	return !! ( selectedRangeCell && selectedRangeCell.fromCell && selectedRangeCell.toCell );
 }
 
 /**

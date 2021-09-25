@@ -63,6 +63,7 @@ export const RESPONSIVE_BREAKPOINTS = [
 // Available units on UnitControl component.
 export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ];
 export const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
+export const CELL_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
 export const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ];
 export const BORDER_RADIUS_UNITS = [ 'px', 'em', 'rem' ];
 export const BORDER_WIDTH_UNITS = [ 'px', 'em', 'rem' ];
@@ -81,6 +82,8 @@ export const SECTION_PLACEHOLDER = {
 };
 
 // Controls variations.
+export const JUSTIFY_CONTROLS = [ 'left', 'center', 'right' ];
+
 export const BORDER_COLLAPSE_CONTROLS = [
 	{
 		icon: borderCollapseIcon,
@@ -165,5 +168,16 @@ export const STICKY_CONTROLS = [
 	{
 		label: __( 'Fixed first column', 'flexible-table-block' ),
 		value: 'first-column',
+	},
+];
+
+export const CELL_TAG_CONTROLS = [
+	{
+		label: __( 'TH', 'flexible-table-block' ),
+		value: 'th',
+	},
+	{
+		label: __( 'TD', 'flexible-table-block' ),
+		value: 'td',
 	},
 ];

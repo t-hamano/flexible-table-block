@@ -388,7 +388,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<BaseControl
-							label={ __( 'Cell borders', 'flexible-table-block' ) }
+							label={ __( 'Cell Borders', 'flexible-table-block' ) }
 							id="flexible-table-block/table-border-collapse"
 							className="ftb-global-setting-modal__styles-item"
 						>

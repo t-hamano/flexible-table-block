@@ -325,7 +325,7 @@ export default function TableSettings( props ) {
 			/>
 			<hr />
 			<BaseControl
-				label={ __( 'Cell borders', 'flexible-table-block' ) }
+				label={ __( 'Cell Borders', 'flexible-table-block' ) }
 				id="flexible-table-block/table-border-collapse"
 			>
 				<ButtonGroup className="ftb-button-group">

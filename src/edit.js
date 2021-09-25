@@ -30,16 +30,15 @@ import {
  * Internal dependencies
  */
 import { STORE_NAME } from './store';
+import { JUSTIFY_CONTROLS } from './constants';
 
 import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
 
 import { insertRow, deleteRow, insertColumn, deleteColumn } from './utils/table-state';
-import { isEmptyTableSection } from './utils/helper';
+import { isMultiSelected, isRangeSelected, isEmptyTableSection } from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
-
-const JUSTIFY_CONTROLS = [ 'left', 'center', 'right' ];
 
 function TableEdit( props ) {
 	const { attributes, setAttributes, isSelected, insertBlocksAfter } = props;
@@ -231,6 +230,10 @@ function TableEdit( props ) {
 		...props,
 		selectedCell,
 		setSelectedCell,
+		selectedMultiCell,
+		setSelectedMultiCell,
+		selectedRangeCell,
+		setSelectedRangeCell,
 	};
 
 	const tableCaptionProps = {
@@ -243,6 +246,11 @@ function TableEdit( props ) {
 		...props,
 		captionStylesObj,
 	};
+
+	const tableCellSettingsLabel =
+		isRangeSelected( selectedRangeCell ) || isMultiSelected( selectedMultiCell )
+			? __( 'Multi Cells Settings', 'flexible-table-block' )
+			: __( 'Cell Settings', 'flexible-table-block' );
 
 	return (
 		<>
@@ -277,12 +285,11 @@ function TableEdit( props ) {
 						>
 							<TableSettings { ...tableSettingProps } />
 						</PanelBody>
-						<PanelBody
-							title={ __( 'Cell Settings', 'flexible-table-block' ) }
-							initialOpen={ false }
-						>
-							<TableCellSettings { ...tableCellSettingProps } />
-						</PanelBody>
+						{ ( selectedCell || selectedMultiCell || selectedRangeCell ) && (
+							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
+								<TableCellSettings { ...tableCellSettingProps } />
+							</PanelBody>
+						) }
 						<PanelBody
 							title={ __( 'Caption Settings', 'flexible-table-block' ) }
 							initialOpen={ false }

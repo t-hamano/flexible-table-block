@@ -15,7 +15,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../constants';
-import { isMultiSelected, isRangeSelected } from '../utils/helper';
+import { isMultiSelected, isRangeSelected, getSectionRange } from '../utils/helper';
 import {
 	ButtonRowBeforeInserter,
 	ButtonRowAfterInserter,
@@ -115,7 +115,15 @@ export default function Table( props ) {
 											selectedCell.rowIndex === rowIndex &&
 											selectedCell.columnIndex === columnIndex;
 
-										if ( isMultiSelected( selectedMultiCell ) ) {
+										if ( isRangeSelected( selectedRangeCell ) ) {
+											const { fromCell, toCell } = selectedRangeCell;
+											isCellSelected =
+												rowIndex >= Math.min( fromCell.rowIndex, toCell.rowIndex ) &&
+												rowIndex <= Math.max( fromCell.rowIndex, toCell.rowIndex ) &&
+												columnIndex >= Math.min( fromCell.columnIndex, toCell.columnIndex ) &&
+												columnIndex <= Math.max( fromCell.columnIndex, toCell.columnIndex ) &&
+												sectionName === fromCell.sectionName;
+										} else if ( isMultiSelected( selectedMultiCell ) ) {
 											isCellSelected = !! selectedMultiCell.find( ( cell ) => {
 												return (
 													cell.sectionName === sectionName &&
@@ -139,20 +147,20 @@ export default function Table( props ) {
 														const clickedCell = { sectionName, rowIndex, columnIndex };
 
 														if ( e.shiftKey ) {
-															// if ( ! selectedRangeCell?.fromCell ) return;
-															// const { fromCell } = selectedRangeCell;
-															// if ( sectionName !== fromCell.sectionName ) {
-															// 	// eslint-disable-next-line no-alert, no-undef
-															// 	alert(
-															// 		__(
-															// 			'Cannot select multi cells from difference section.',
-															// 			'flexible-table-block'
-															// 		)
-															// 	);
-															// 	return;
-															// }
-															// setSelectedRangeCell( { fromCell, toCell: clickedCell } );
-															// setSelectedMultiCell();
+															if ( ! selectedRangeCell?.fromCell ) return;
+															const { fromCell } = selectedRangeCell;
+															if ( sectionName !== fromCell.sectionName ) {
+																// eslint-disable-next-line no-alert, no-undef
+																alert(
+																	__(
+																		'Cannot select multi cells from difference section.',
+																		'flexible-table-block'
+																	)
+																);
+																return;
+															}
+															setSelectedRangeCell( { fromCell, toCell: clickedCell } );
+															setSelectedMultiCell();
 														} else if ( e.ctrlKey || e.metaKey ) {
 															const newSelectedMultiCell = selectedMultiCell
 																? [ ...selectedMultiCell ]
@@ -202,8 +210,10 @@ export default function Table( props ) {
 																className="ftb-table-cell__label"
 																tabIndex={ options.prevent_focus_control_button && -1 }
 																variant="primary"
-																onClick={ () => {
-																	//ここにセクション選択の処理
+																onClick={ ( e ) => {
+																	const sectionRange = getSectionRange( attributes, sectionName );
+																	setSelectedRangeCell( sectionRange );
+																	e.stopPropagation();
 																} }
 															>
 																{ `<t${ sectionName }>` }
