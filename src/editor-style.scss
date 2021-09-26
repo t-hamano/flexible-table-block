@@ -171,6 +171,14 @@
 	}
 }
 
+.ftb-base-control-row {
+	display: flex;
+
+	> *:first-child {
+		margin-right: 16px;
+	}
+}
+
 .ftb-percent-group {
 	margin-top: 8px;
 }

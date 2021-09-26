@@ -21,7 +21,13 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 /**
  * Internal components
  */
-import { FONT_SIZE_UNITS, CELL_WIDTH_UNITS, CELL_TAG_CONTROLS } from '../constants';
+import {
+	FONT_SIZE_UNITS,
+	CELL_WIDTH_UNITS,
+	CELL_TAG_CONTROLS,
+	TEXT_ALIGNMENT_CONTROLS,
+	VERTICAL_ALIGNMENT_CONTROLS,
+} from '../constants';
 import {
 	BorderRadiusControl,
 	BorderWidthControl,
@@ -131,6 +137,22 @@ export default function TableCellSettings( props ) {
 		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
+	const onChangeTextAlign = ( value ) => {
+		// const newStylesObj = {
+		// 	...tableStylesObj,
+		// 	width: toUnitVal( value ),
+		// };
+		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+	};
+
+	const onChangeVerticalAlign = ( value ) => {
+		// const newStylesObj = {
+		// 	...tableStylesObj,
+		// 	width: toUnitVal( value ),
+		// };
+		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+	};
+
 	const onChangeTag = ( value ) => {
 		// const newStylesObj = updateBorderColor( tableStylesObj, values );
 		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
@@ -218,6 +240,44 @@ export default function TableCellSettings( props ) {
 				values={ pickBorderColor( cellStylesObj ) }
 				onChange={ onChangeBorderColor }
 			/>
+			<hr />
+			<BaseControl
+				id="flexible-table-block/cell-text-align"
+				label={ __( 'Cell Alignment', 'flexible-table-block' ) }
+			>
+				<div className="ftb-base-control-row">
+					<ButtonGroup
+						className="ftb-button-group"
+						aria-label={ __( 'Text alignment', 'flexible-table-block' ) }
+					>
+						{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+							return (
+								<Button
+									key={ value }
+									label={ label }
+									icon={ icon }
+									onClick={ () => onChangeTextAlign( value ) }
+								/>
+							);
+						} ) }
+					</ButtonGroup>
+					<ButtonGroup
+						className="ftb-button-group"
+						aria-label={ __( 'Vertical alignment', 'flexible-table-block' ) }
+					>
+						{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+							return (
+								<Button
+									key={ value }
+									label={ label }
+									icon={ icon }
+									onClick={ () => onChangeVerticalAlign( value ) }
+								/>
+							);
+						} ) }
+					</ButtonGroup>
+				</div>
+			</BaseControl>
 			<hr />
 			<BaseControl
 				id="flexible-table-block/table-border-collapse"
