@@ -68,17 +68,6 @@ export default function GlobalSettings() {
 
 	const breakpointTooltip = ( value ) => `${ value }px`;
 
-	// Fallback if the component is mounted before the store's API response is returned.
-	useEffect( () => {
-		if ( 0 !== Object.keys( options ).length ) return;
-		apiFetch( {
-			path: REST_API_ROUTE,
-			method: 'GET',
-		} ).then( ( response ) => {
-			setOptions( response );
-		} );
-	}, [] );
-
 	// Initialize notice message.
 	useEffect( () => {
 		setNotice();
@@ -149,12 +138,16 @@ export default function GlobalSettings() {
 		} );
 	};
 
+	if ( ! options ) {
+		return null;
+	}
+
 	return (
 		<>
 			<div className="ftb-global-setting">
 				<Button
-					variant="link"
 					icon={ help }
+					variant="link"
 					iconSize="20"
 					onClick={ () => {
 						setIsHelpModalOpen( true );
@@ -164,8 +157,8 @@ export default function GlobalSettings() {
 				</Button>
 				{ ( isAdministrator || options.show_global_setting ) && (
 					<Button
-						variant="link"
 						icon={ cog }
+						variant="link"
 						iconSize="20"
 						onClick={ () => {
 							setIsSettingModalOpen( true );
@@ -288,39 +281,39 @@ export default function GlobalSettings() {
 					<hr />
 					<RangeControl
 						label={ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
+						help={ __(
+							'Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.',
+							'flexible-table-block'
+						) }
 						beforeIcon={ mobile }
 						afterIcon={ desktop }
-						allowReset
-						trackColor="transparent"
 						min={ MIN_RESPONSIVE_BREAKPOINT }
 						max={ MAX_RESPONSIVE_BREAKPOINT }
-						renderTooltipContent={ breakpointTooltip }
 						marks={ RESPONSIVE_BREAKPOINTS }
 						value={ parseInt( options.breakpoint ) }
+						renderTooltipContent={ breakpointTooltip }
+						trackColor="transparent"
+						allowReset
 						onChange={ ( value ) => {
 							setOptions( {
 								...options,
 								breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
 							} );
 						} }
-						help={ __(
-							'Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.',
-							'flexible-table-block'
-						) }
 					/>
 					<hr />
 					<h2>{ __( 'Default Table Style', 'flexible-table-block' ) }</h2>
 					<div className="ftb-global-setting-modal__styles">
 						<BaseControl
-							label={ __( 'Width', 'flexible-table-block' ) }
 							id="flexible-table-block/global-table-width"
+							label={ __( 'Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<UnitControl
-								labelPosition="top"
-								min="0"
 								units={ tableWidthUnits }
 								value={ options.block_style?.table_width }
+								labelPosition="top"
+								min="0"
 								onChange={ ( value ) => {
 									setOptions( {
 										...options,
@@ -333,15 +326,15 @@ export default function GlobalSettings() {
 							/>
 						</BaseControl>
 						<BaseControl
-							label={ __( 'Max Width', 'flexible-table-block' ) }
 							id="flexible-table-block/global-table-max-width"
+							label={ __( 'Max Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<UnitControl
-								labelPosition="top"
-								min="0"
 								units={ tableWidthUnits }
 								value={ options.block_style?.table_max_width }
+								labelPosition="top"
+								min="0"
 								onChange={ ( value ) => {
 									setOptions( {
 										...options,
@@ -357,9 +350,9 @@ export default function GlobalSettings() {
 							id="flexible-table-block/global-row-odd-color"
 							label={ __( 'Stripe Background Color ( odd rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.row_odd_color } }
 							allowSides={ false }
 							hasIndicator={ false }
-							values={ { top: options.block_style?.row_odd_color } }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
@@ -374,9 +367,9 @@ export default function GlobalSettings() {
 							id="flexible-table-block/global-row-even-color"
 							label={ __( 'Stripe Background Color ( even rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.row_even_color } }
 							allowSides={ false }
 							hasIndicator={ false }
-							values={ { top: options.block_style?.row_even_color } }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
@@ -388,8 +381,8 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<BaseControl
-							label={ __( 'Cell Borders', 'flexible-table-block' ) }
 							id="flexible-table-block/table-border-collapse"
+							label={ __( 'Cell Borders', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<ButtonGroup className="ftb-button-group">
@@ -428,9 +421,9 @@ export default function GlobalSettings() {
 							id="flexible-table-block/global-cell-background-color-th"
 							label={ __( 'Background Color ( th tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.cell_background_color_th } }
 							allowSides={ false }
 							hasIndicator={ false }
-							values={ { top: options.block_style?.cell_background_color_th } }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
@@ -445,9 +438,9 @@ export default function GlobalSettings() {
 							id="flexible-table-block/global-cell-background-color-td"
 							label={ __( 'Background Color ( td tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.cell_background_color_td } }
 							allowSides={ false }
 							hasIndicator={ false }
-							values={ { top: options.block_style?.cell_background_color_td } }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
@@ -462,9 +455,9 @@ export default function GlobalSettings() {
 							id="flexible-table-block/global-cell-border-color"
 							label={ __( 'Padding', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.cell_padding } }
 							allowSides={ false }
 							hasIndicator={ false }
-							values={ { top: options.block_style?.cell_padding } }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
@@ -479,9 +472,9 @@ export default function GlobalSettings() {
 							id="flexible-table-block/global-cell-border-width"
 							label={ __( 'Border Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.cell_border_width } }
 							allowSides={ false }
 							hasIndicator={ false }
-							values={ { top: options.block_style?.cell_border_width } }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
@@ -496,9 +489,9 @@ export default function GlobalSettings() {
 							id="flexible-table-block/global-cell-border-style"
 							label={ __( 'Border Style', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.cell_border_style } }
 							allowSides={ false }
 							hasIndicator={ false }
-							values={ { top: options.block_style?.cell_border_style } }
 							onChange={ ( value ) => {
 								const newValue =
 									options?.block_style?.cell_border_style === value.top ? undefined : value.top;
@@ -515,9 +508,9 @@ export default function GlobalSettings() {
 							id="flexible-table-block/global-cell-border-color"
 							label={ __( 'Border Color', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.cell_border_color } }
 							allowSides={ false }
 							hasIndicator={ false }
-							values={ { top: options.block_style?.cell_border_color } }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
@@ -529,8 +522,8 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<BaseControl
-							label={ __( 'Text alignment', 'flexible-table-block' ) }
 							id="flexible-table-block/global-cell-text-align"
+							label={ __( 'Text alignment', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<ButtonGroup className="ftb-button-group">
@@ -560,8 +553,8 @@ export default function GlobalSettings() {
 							</ButtonGroup>
 						</BaseControl>
 						<BaseControl
-							label={ __( 'Vertical alignment', 'flexible-table-block' ) }
 							id="flexible-table-block/global-cell-vertical-align"
+							label={ __( 'Vertical alignment', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<ButtonGroup className="ftb-button-group">

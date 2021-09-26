@@ -81,8 +81,8 @@ export default function TablePlaceholder( { setAttributes } ) {
 
 	return (
 		<Placeholder
-			className="ftb-placeholder"
 			label={ __( 'Table', 'flexible-table-block' ) }
+			className="ftb-placeholder"
 			icon={ <BlockIcon icon={ icon } showColors /> }
 			instructions={ __(
 				'Hold Ctrl key to select multiple cells. Hold Shift key to select range.',
@@ -144,20 +144,20 @@ export default function TablePlaceholder( { setAttributes } ) {
 				</div>
 				<div className="ftb-placeholder__row">
 					<TextControl
-						type="number"
 						label={ __( 'Column count', 'flexible-table-block' ) }
-						value={ columnCount }
-						onChange={ onChangeColumnCount }
+						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_COL }
+						value={ columnCount }
+						onChange={ onChangeColumnCount }
 					/>
 					<TextControl
-						type="number"
 						label={ __( 'Row count', 'flexible-table-block' ) }
-						value={ rowCount }
-						onChange={ onChangeRowCount }
+						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_ROW }
+						value={ rowCount }
+						onChange={ onChangeRowCount }
 					/>
 					<Button variant="primary" type="submit">
 						{ __( 'Create Table', 'flexible-table-block' ) }

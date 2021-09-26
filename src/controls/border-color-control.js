@@ -37,6 +37,7 @@ const DEFAULT_VALUES = {
 export default function BorderColorControl( {
 	id,
 	label = __( 'Border Color', 'flexible-table-block' ),
+	help,
 	className,
 	onChange,
 	values: valuesProp,
@@ -112,7 +113,7 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
 			<div className="ftb-border-color-control__header">
 				<Text id={ headingId }>{ label }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset } value={ ! isMixed || values.top }>
@@ -125,11 +126,11 @@ export default function BorderColorControl( {
 						<div className="ftb-border-color-control__controls-row">
 							{ hasIndicator && <SideIndicatorControl /> }
 							<Button
+								label={ __( 'All', 'flexible-table-block' ) }
 								className="ftb-border-color-control__indicator"
 								onClick={ () => {
 									handleOnPickerOpen();
 								} }
-								label={ __( 'All', 'flexible-table-block' ) }
 							>
 								{ isMixed ? (
 									__( 'Mixed', 'flexible-table-block' )
@@ -159,11 +160,11 @@ export default function BorderColorControl( {
 								<div className="ftb-border-color-control__controls-row" key={ item }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<Button
+										label={ item.label }
 										className="ftb-border-color-control__indicator"
 										onClick={ () => {
 											handleOnPickerOpen( index );
 										} }
-										label={ item.label }
 									>
 										<ColorIndicator colorValue={ values[ item.value ] } />
 									</Button>

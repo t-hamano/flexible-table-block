@@ -35,6 +35,7 @@ const DEFAULT_VALUES = {
 export default function BorderRadiusControl( {
 	id,
 	label = __( 'Border Radius', 'flexible-table-block' ),
+	help,
 	className,
 	onChange,
 	values: valuesProp,
@@ -114,7 +115,7 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
 			<div className="ftb-border-radius-control__header">
 				<Text id={ headingId }>{ label }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset }>
@@ -127,8 +128,8 @@ export default function BorderRadiusControl( {
 				) }
 				{ isLinked && (
 					<UnitControl
-						placeholder={ allInputPlaceholder }
 						aria-label={ __( 'All', 'flexible-table-block' ) }
+						placeholder={ allInputPlaceholder }
 						onFocus={ handleOnFocus }
 						onChange={ handleOnChangeAll }
 						value={ allInputValue }
@@ -155,13 +156,13 @@ export default function BorderRadiusControl( {
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
+								value={ values[ item.value ] }
+								units={ borderRadiusUnits }
+								min="0"
 								onFocus={ handleOnFocus( item.value ) }
 								onChange={ ( value ) => {
 									handleOnChange( value, item.value );
 								} }
-								value={ values[ item.value ] }
-								units={ borderRadiusUnits }
-								min="0"
 							/>
 						);
 					} ) }

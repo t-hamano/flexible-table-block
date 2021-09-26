@@ -35,6 +35,7 @@ const DEFAULT_VALUES = {
 export default function BorderWidthControl( {
 	id,
 	label = __( 'Border Width', 'flexible-table-block' ),
+	help,
 	className,
 	onChange,
 	values: valuesProp,
@@ -110,7 +111,7 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
 			<div className="ftb-border-width-control__header">
 				<Text id={ headingId }>{ label }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset }>
@@ -123,12 +124,12 @@ export default function BorderWidthControl( {
 				) }
 				{ ( isLinked || ! allowSides ) && (
 					<UnitControl
-						placeholder={ allInputPlaceholder }
 						aria-label={ __( 'All', 'flexible-table-block' ) }
-						onFocus={ handleOnFocus }
-						onChange={ handleOnChangeAll }
 						value={ allInputValue }
 						units={ borderWidthUnits }
+						placeholder={ allInputPlaceholder }
+						onFocus={ handleOnFocus }
+						onChange={ handleOnChangeAll }
 					/>
 				) }
 				{ allowSides && (
@@ -137,9 +138,9 @@ export default function BorderWidthControl( {
 							<Button
 								variant={ isLinked ? 'primary' : 'secondary' }
 								isSmall
-								onClick={ toggleLinked }
 								icon={ isLinked ? link : linkOff }
 								iconSize="16"
+								onClick={ toggleLinked }
 							/>
 						</span>
 					</Tooltip>
@@ -152,12 +153,12 @@ export default function BorderWidthControl( {
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
+								value={ values[ item.value ] }
+								units={ borderWidthUnits }
 								onFocus={ handleOnFocus( item.value ) }
 								onChange={ ( value ) => {
 									handleOnChange( value, item.value );
 								} }
-								value={ values[ item.value ] }
-								units={ borderWidthUnits }
 							/>
 						);
 					} ) }

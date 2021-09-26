@@ -198,7 +198,6 @@ export default function TableSettings( props ) {
 			<SelectControl
 				label={ __( 'Fixed control', 'flexible-table-block' ) }
 				value={ sticky }
-				onChange={ onChangeSticky }
 				options={ STICKY_CONTROLS.map( ( { label, value } ) => {
 					return { label, value };
 				} ) }
@@ -210,21 +209,22 @@ export default function TableSettings( props ) {
 						'flexible-table-block'
 					)
 				}
+				onChange={ onChangeSticky }
 			/>
 			<hr />
 			<BaseControl
-				label={ __( 'Width', 'flexible-table-block' ) }
 				id="flexible-table-block/table-width"
+				label={ __( 'Table Width', 'flexible-table-block' ) }
 			>
 				<UnitControl
+					value={ tableStylesObj?.width }
+					units={ tableWidthUnits }
 					labelPosition="top"
 					min="0"
-					value={ tableStylesObj?.width }
 					onChange={ onChangeWidth }
-					units={ tableWidthUnits }
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Percentage width', 'flexible-table-block' ) }
+					aria-label={ __( 'Table Percentage width', 'flexible-table-block' ) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -232,8 +232,8 @@ export default function TableSettings( props ) {
 						return (
 							<Button
 								key={ perWidth }
-								isSmall
 								variant={ isPressed ? 'primary' : undefined }
+								isSmall
 								onClick={ () => onChangeWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
@@ -243,15 +243,15 @@ export default function TableSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Max Width', 'flexible-table-block' ) }
 				id="flexible-table-block/table-max-width"
+				label={ __( 'Table Max Width', 'flexible-table-block' ) }
 			>
 				<UnitControl
+					value={ tableStylesObj?.maxWidth }
+					units={ tableWidthUnits }
 					labelPosition="top"
 					min="0"
-					value={ tableStylesObj?.maxWidth }
 					onChange={ onChangeMaxWidth }
-					units={ tableWidthUnits }
 				/>
 				<ButtonGroup aria-label={ __( 'Percentage max width' ) } className="ftb-percent-group">
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -259,8 +259,8 @@ export default function TableSettings( props ) {
 						return (
 							<Button
 								key={ perWidth }
-								isSmall
 								variant={ isPressed ? 'primary' : undefined }
+								isSmall
 								onClick={ () => onChangeMaxWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
@@ -270,15 +270,15 @@ export default function TableSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Min Width', 'flexible-table-block' ) }
 				id="flexible-table-block/table-min-width"
+				label={ __( 'Table Min Width', 'flexible-table-block' ) }
 			>
 				<UnitControl
+					value={ tableStylesObj?.minWidth }
+					units={ tableWidthUnits }
 					labelPosition="top"
 					min="0"
-					value={ tableStylesObj?.minWidth }
 					onChange={ onChangeMinWidth }
-					units={ tableWidthUnits }
 				/>
 				<ButtonGroup aria-label={ __( 'Percentage min width' ) } className="ftb-percent-group">
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -286,8 +286,8 @@ export default function TableSettings( props ) {
 						return (
 							<Button
 								key={ perWidth }
-								isSmall
 								variant={ isPressed ? 'primary' : undefined }
+								isSmall
 								onClick={ () => onChangeMinWidth( isPressed ? undefined : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
@@ -299,34 +299,40 @@ export default function TableSettings( props ) {
 			<hr />
 			<PaddingControl
 				id="flexible-table-block/table-padding"
-				onChange={ onChangePadding }
+				label={ __( 'Table Padding', 'flexible-table-block' ) }
+				help='Table padding is only enable when "cell borders" is set to "separate".'
 				values={ pickPadding( tableStylesObj ) }
+				onChange={ onChangePadding }
 			/>
 			<hr />
 			<BorderRadiusControl
 				id="flexible-table-block/table-border-radius"
-				onChange={ onChangeBorderRadius }
+				label={ __( 'Table Border Radius', 'flexible-table-block' ) }
 				values={ pickBorderRadius( tableStylesObj ) }
+				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
 				id="flexible-table-block/table-border-width"
-				onChange={ onChangeBorderWidth }
+				label={ __( 'Table Border Width', 'flexible-table-block' ) }
 				values={ pickBorderWidth( tableStylesObj ) }
+				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
 				id="flexible-table-block/table-border-style"
-				onChange={ onChangeBorderStyle }
+				label={ __( 'Table Border Style', 'flexible-table-block' ) }
 				values={ pickBorderStyle( tableStylesObj ) }
+				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
 				id="flexible-table-block/table-border-color"
-				onChange={ onChangeBorderColor }
+				label={ __( 'Table Border Color', 'flexible-table-block' ) }
 				values={ pickBorderColor( tableStylesObj ) }
+				onChange={ onChangeBorderColor }
 			/>
 			<hr />
 			<BaseControl
-				label={ __( 'Cell Borders', 'flexible-table-block' ) }
 				id="flexible-table-block/table-border-collapse"
+				label={ __( 'Cell Borders', 'flexible-table-block' ) }
 			>
 				<ButtonGroup className="ftb-button-group">
 					{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
@@ -345,11 +351,11 @@ export default function TableSettings( props ) {
 			</BaseControl>
 			{ 'separate' === tableStylesObj?.borderCollapse && (
 				<BoxControl
-					values={ pickBorderSpacing( tableStylesObj ) }
-					onChange={ onChangeBorderSpacing }
 					label={ __( 'Border spacing', 'flexible-table-block' ) }
+					values={ pickBorderSpacing( tableStylesObj ) }
 					units={ borderSpacingUnits }
 					splitOnAxis={ true }
+					onChange={ onChangeBorderSpacing }
 				/>
 			) }
 		</>

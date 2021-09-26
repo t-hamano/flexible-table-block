@@ -140,8 +140,8 @@ export default function Table( props ) {
 										return (
 											<>
 												<Cell
-													name={ tag }
 													key={ columnIndex }
+													name={ tag }
 													className={ cellClass }
 													onClick={ ( e ) => {
 														const clickedCell = { sectionName, rowIndex, columnIndex };
@@ -224,8 +224,8 @@ export default function Table( props ) {
 															{ rowIndex === 0 && columnIndex === 0 && (
 																<ButtonRowBeforeInserter
 																	label={ __( 'Insert row before', 'flexible-table-block' ) }
-																	icon={ plus }
 																	tabIndex={ options.prevent_focus_control_button && -1 }
+																	icon={ plus }
 																	iconSize="18"
 																	hasPrevSection={ sectionIndex > 0 }
 																	onClick={ () => {
@@ -237,8 +237,8 @@ export default function Table( props ) {
 																<>
 																	<ButtonRowSelector
 																		label={ __( 'Select row', 'flexible-table-block' ) }
-																		icon={ moreVertical }
 																		tabIndex={ options.prevent_focus_control_button && -1 }
+																		icon={ moreVertical }
 																		iconSize="18"
 																		variant={
 																			selectedLine?.direction === 'row' &&
@@ -284,8 +284,8 @@ export default function Table( props ) {
 															{ sectionIndex === 0 && rowIndex === 0 && columnIndex === 0 && (
 																<ButtonColumnBeforeInserter
 																	label={ __( 'Insert column before', 'flexible-table-block' ) }
-																	icon={ plus }
 																	tabIndex={ options.prevent_focus_control_button && -1 }
+																	icon={ plus }
 																	iconSize="18"
 																	onClick={ () => {
 																		onInsertColumn( { sectionName, columnIndex, offset: 0 } );
@@ -296,8 +296,8 @@ export default function Table( props ) {
 																<>
 																	<ButtonColumnSelector
 																		label={ __( 'Select column', 'flexible-table-block' ) }
-																		icon={ moreHorizontal }
 																		tabIndex={ options.prevent_focus_control_button && -1 }
+																		icon={ moreHorizontal }
 																		iconSize="18"
 																		variant={
 																			selectedLine?.direction === 'column' &&
@@ -321,8 +321,8 @@ export default function Table( props ) {
 																				>
 																					<ButtonDeleter
 																						label={ __( 'Delete column', 'flexible-table-block' ) }
-																						icon={ trash }
 																						tabIndex={ options.prevent_focus_control_button && -1 }
+																						icon={ trash }
 																						iconSize={ 20 }
 																						onClick={ ( event ) => {
 																							onDeleteColumn( columnIndex );
@@ -337,8 +337,8 @@ export default function Table( props ) {
 															{ columnIndex === 0 && (
 																<ButtonRowAfterInserter
 																	label={ __( 'Insert row after', 'flexible-table-block' ) }
-																	icon={ plus }
 																	tabIndex={ options.prevent_focus_control_button && -1 }
+																	icon={ plus }
 																	iconSize="18"
 																	hasNextSection={
 																		sectionIndex < section.length - 1 && rowIndex === row.length - 1
@@ -370,8 +370,8 @@ export default function Table( props ) {
 															{ sectionIndex === 0 && rowIndex === 0 && (
 																<ButtonColumnAfterInserter
 																	label={ __( 'Insert column after', 'flexible-table-block' ) }
-																	icon={ plus }
 																	tabIndex={ options.prevent_focus_control_button && -1 }
+																	icon={ plus }
 																	iconSize="18"
 																	onClick={ () => {
 																		onInsertColumn( { sectionName, columnIndex, offset: 1 } );

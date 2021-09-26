@@ -33,6 +33,7 @@ const DEFAULT_VALUES = {
 export default function BorderStyleControl( {
 	id,
 	label = __( 'Border Style', 'flexible-table-block' ),
+	help,
 	className,
 	onChange,
 	values: valuesProp,
@@ -101,7 +102,7 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
 			<div className="ftb-border-style-control__header">
 				<Text id={ headingId }>{ controlLabel }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset } value={ ! isMixed || values.top }>
@@ -117,11 +118,11 @@ export default function BorderStyleControl( {
 								{ BORDER_STYLES.map( ( borderStyle ) => {
 									return (
 										<Button
-											isSmall
-											variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
 											key={ borderStyle }
-											icon={ borderStyle.icon }
 											label={ borderStyle.label }
+											icon={ borderStyle.icon }
+											variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
+											isSmall
 											onClick={ () => handleOnClickAll( borderStyle.value ) }
 										/>
 									);
@@ -138,13 +139,13 @@ export default function BorderStyleControl( {
 										{ BORDER_STYLES.map( ( borderStyle ) => {
 											return (
 												<Button
-													isSmall
+													key={ borderStyle }
+													label={ borderStyle.label }
+													icon={ borderStyle.icon }
 													variant={
 														values[ item.value ] === borderStyle.value ? 'primary' : undefined
 													}
-													key={ borderStyle }
-													icon={ borderStyle.icon }
-													label={ borderStyle.label }
+													isSmall
 													onClick={ () => handleOnClick( borderStyle.value, item.value ) }
 												/>
 											);

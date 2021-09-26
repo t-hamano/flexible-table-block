@@ -41,7 +41,7 @@ import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 
 function TableEdit( props ) {
-	const { attributes, setAttributes, isSelected, insertBlocksAfter } = props;
+	const { attributes, setAttributes, isSelected } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCell, setSelectedCell ] = useState();
 	const [ selectedMultiCell, setSelectedMultiCell ] = useState();
@@ -239,7 +239,10 @@ function TableEdit( props ) {
 	const tableCaptionProps = {
 		...props,
 		captionStylesObj,
-		insertBlocksAfter,
+		setSelectedCell,
+		setSelectedMultiCell,
+		setSelectedRangeCell,
+		setSelectedLine,
 	};
 
 	const tableCaptionSettingProps = {
@@ -272,10 +275,10 @@ function TableEdit( props ) {
 							} }
 						/>
 						<ToolbarDropdownMenu
-							hasArrowIndicator
-							icon={ table }
 							label={ __( 'Edit table', 'flexible-table-block' ) }
+							icon={ table }
 							controls={ TableToolbarControls }
+							hasArrowIndicator
 						/>
 					</BlockControls>
 					<InspectorControls>

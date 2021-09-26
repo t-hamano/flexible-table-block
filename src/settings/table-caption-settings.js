@@ -50,34 +50,34 @@ export default function TableCaptionSettings( props ) {
 	return (
 		<>
 			<BaseControl
-				label={ __( 'Font size', 'flexible-table-block' ) }
 				id="flexible-table-block/caption-font-size"
+				label={ __( 'Font size', 'flexible-table-block' ) }
 			>
 				<UnitControl
-					min="0"
 					value={ captionStylesObj?.fontSize }
-					onChange={ onChangeCaptionFontSize }
 					units={ fontSizeUnits }
+					min="0"
+					onChange={ onChangeCaptionFontSize }
 				/>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Position', 'flexible-table-block' ) }
 				id="flexible-table-block/caption-side"
+				label={ __( 'Position', 'flexible-table-block' ) }
 			>
 				<ToggleGroupControl
 					value={ captionSide }
 					onChange={ ( value ) => onChangeCaptionSide( value ) }
 				>
-					<ToggleGroupControlOption value="top" label={ __( 'Top', 'flexible-table-block' ) } />
+					<ToggleGroupControlOption label={ __( 'Top', 'flexible-table-block' ) } value="top" />
 					<ToggleGroupControlOption
-						value="bottom"
 						label={ __( 'Bottom', 'flexible-table-block' ) }
+						value="bottom"
 					/>
 				</ToggleGroupControl>
 			</BaseControl>
 			<BaseControl
-				label={ __( 'Text alignment', 'flexible-table-block' ) }
 				id="flexible-table-block/caption-align"
+				label={ __( 'Text alignment', 'flexible-table-block' ) }
 			>
 				<ButtonGroup className="ftb-button-group">
 					{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {

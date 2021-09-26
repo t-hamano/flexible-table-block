@@ -35,6 +35,7 @@ const DEFAULT_VALUES = {
 export default function PaddingControl( {
 	id,
 	label = __( 'Padding', 'flexible-table-block' ),
+	help,
 	className,
 	onChange,
 	values: valuesProp,
@@ -101,7 +102,7 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } aria-labelledby={ headingId }>
+		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
 			<div className="ftb-border-width-control__header">
 				<Text id={ headingId }>{ label }</Text>
 				<Button isSecondary isSmall onClick={ handleOnReset }>
