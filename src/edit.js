@@ -229,11 +229,8 @@ function TableEdit( props ) {
 	const tableCellSettingProps = {
 		...props,
 		selectedCell,
-		setSelectedCell,
 		selectedMultiCell,
-		setSelectedMultiCell,
 		selectedRangeCell,
-		setSelectedRangeCell,
 	};
 
 	const tableCaptionProps = {

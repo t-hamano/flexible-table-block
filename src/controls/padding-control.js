@@ -117,7 +117,6 @@ export default function PaddingControl( {
 					<UnitControl
 						placeholder={ allInputPlaceholder }
 						aria-label={ __( 'All', 'flexible-table-block' ) }
-						onFocus={ handleOnFocus }
 						onChange={ handleOnChangeAll }
 						value={ allInputValue }
 						units={ paddingUnits }
@@ -144,7 +143,9 @@ export default function PaddingControl( {
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
-								onFocus={ handleOnFocus( item.value ) }
+								onFocus={ () => {
+									handleOnFocus( item.value );
+								} }
 								onChange={ ( value ) => {
 									handleOnChange( value, item.value );
 								} }

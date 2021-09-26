@@ -6,7 +6,21 @@ import { times, get, mapValues, pick } from 'lodash';
 /**
  * Internal dependencies
  */
-import { isEmptyTableSection, isEmptyRow, getFirstRow } from './helper';
+import {
+	isEmptyTableSection,
+	isEmptyRow,
+	getFirstRow,
+	isRangeSelected,
+	isMultiSelected,
+} from './helper';
+import { convertToObject, convertToInline } from '../utils/style-converter';
+import {
+	updatePadding,
+	updateBorderWidth,
+	updateBorderRadius,
+	updateBorderStyle,
+	updateBorderColor,
+} from '../utils/style-updater';
 
 const INHERITED_COLUMN_ATTRIBUTES = [ 'align' ];
 
@@ -190,4 +204,109 @@ export function toggleSection( state, sectionName ) {
 
 	// Section doesn't exist, insert an empty row to create the section.
 	return insertRow( state, { sectionName, rowIndex: 0, columnCount } );
+}
+
+/**
+ * Update cells state( styles, tag ) of selected section.
+ *
+ * @param {Object} state                     Current table state.
+ * @param {Object} cellState                 Cell states to update.
+ * @param {Object} options
+ * @param {Object} options.selectedCell      Current selected cell.
+ * @param {Array}  options.selectedMultiCell Current selected multi cell.
+ * @param {Object} options.selectedRangeCell Current selected range cell.
+ * @return {Object} New section state.
+ */
+export function updateCellsState(
+	state,
+	cellState,
+	{ selectedCell, selectedMultiCell, selectedRangeCell }
+) {
+	if (
+		! selectedCell &&
+		! isRangeSelected( selectedRangeCell ) &&
+		! isMultiSelected( selectedMultiCell )
+	) {
+		return state;
+	}
+
+	const {
+		sectionName,
+		rowIndex: selectedRowIndex,
+		columnIndex: selectedColumnIndex,
+	} = selectedCell;
+
+	return {
+		[ sectionName ]: state[ sectionName ].map( ( row, rowIndex ) => {
+			if ( rowIndex !== selectedRowIndex ) {
+				return row;
+			}
+
+			return {
+				cells: row.cells.map( ( cell, columnIndex ) => {
+					if ( columnIndex !== selectedColumnIndex ) {
+						return cell;
+					}
+
+					let stylesObj = convertToObject( cell?.styles );
+
+					if ( cellState.styles ) {
+						const styles = cellState.styles;
+
+						if ( 'fontSize' in styles ) {
+							stylesObj.fontSize = styles.fontSize;
+						}
+
+						if ( 'width' in styles ) {
+							stylesObj.width = styles.width;
+						}
+
+						if ( 'color' in styles ) {
+							stylesObj.color = styles.color;
+						}
+
+						if ( 'backgroundColor' in styles ) {
+							stylesObj.backgroundColor = styles.backgroundColor;
+						}
+
+						if ( styles.padding ) {
+							stylesObj = updatePadding( stylesObj, styles.padding );
+						}
+
+						if ( styles.borderWidth ) {
+							stylesObj = updateBorderWidth( stylesObj, styles.borderWidth );
+						}
+
+						if ( styles.borderRadius ) {
+							stylesObj = updateBorderRadius( stylesObj, styles.borderRadius );
+						}
+
+						if ( styles.borderStyle ) {
+							stylesObj = updateBorderStyle( stylesObj, styles.borderStyle );
+						}
+
+						if ( styles.borderColor ) {
+							stylesObj = updateBorderColor( stylesObj, styles.borderColor );
+						}
+
+						if ( 'textAlign' in styles ) {
+							stylesObj.textAlign = styles.textAlign;
+						}
+
+						if ( 'verticalAlign' in styles ) {
+							stylesObj.verticalAlign = styles.verticalAlign;
+						}
+					}
+
+					const tag = cellState.tag || cell.tag;
+
+					return {
+						...cell,
+						styles: convertToInline( stylesObj ),
+						tag,
+					};
+				} ),
+			};
+		} ),
+	};
 }

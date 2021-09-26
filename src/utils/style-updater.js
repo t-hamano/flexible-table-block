@@ -69,7 +69,7 @@ export function updatePadding( styles, values ) {
  * @param {Object} values border-spacing values object.
  * @return {Object} New Styles object.
  */
-export function updateBorderSpacingStyles( styles, values ) {
+export function updateBorderSpacing( styles, values ) {
 	const newStyles = { ...styles };
 	delete newStyles.borderSpacing;
 
@@ -102,7 +102,7 @@ export function updateBorderSpacingStyles( styles, values ) {
  * @param {Object} values border-width values object.
  * @return {Object} New Styles object.
  */
-export function updateBorderWidthStyles( styles, values ) {
+export function updateBorderWidth( styles, values ) {
 	const newStyles = { ...styles };
 	delete newStyles.borderWidth;
 	delete newStyles.borderTopWidth;

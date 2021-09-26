@@ -130,7 +130,6 @@ export default function BorderRadiusControl( {
 					<UnitControl
 						aria-label={ __( 'All', 'flexible-table-block' ) }
 						placeholder={ allInputPlaceholder }
-						onFocus={ handleOnFocus }
 						onChange={ handleOnChangeAll }
 						value={ allInputValue }
 						units={ borderRadiusUnits }
@@ -159,7 +158,9 @@ export default function BorderRadiusControl( {
 								value={ values[ item.value ] }
 								units={ borderRadiusUnits }
 								min="0"
-								onFocus={ handleOnFocus( item.value ) }
+								onFocus={ () => {
+									handleOnFocus( item.value );
+								} }
 								onChange={ ( value ) => {
 									handleOnChange( value, item.value );
 								} }

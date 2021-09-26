@@ -42,11 +42,11 @@ import {
 } from '../utils/style-picker';
 import {
 	updatePadding,
-	updateBorderWidthStyles,
+	updateBorderWidth,
 	updateBorderRadius,
 	updateBorderStyle,
 	updateBorderColor,
-	updateBorderSpacingStyles,
+	updateBorderSpacing,
 } from '../utils/style-updater';
 
 export default function TableSettings( props ) {
@@ -127,7 +127,7 @@ export default function TableSettings( props ) {
 	};
 
 	const onChangeBorderWidth = ( values ) => {
-		const newStylesObj = updateBorderWidthStyles( tableStylesObj, values );
+		const newStylesObj = updateBorderWidth( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
@@ -158,7 +158,7 @@ export default function TableSettings( props ) {
 	};
 
 	const onChangeBorderSpacing = ( values ) => {
-		const newStylesObj = updateBorderSpacingStyles( tableStylesObj, values );
+		const newStylesObj = updateBorderSpacing( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
@@ -219,7 +219,6 @@ export default function TableSettings( props ) {
 				<UnitControl
 					value={ tableStylesObj?.width }
 					units={ tableWidthUnits }
-					labelPosition="top"
 					min="0"
 					onChange={ onChangeWidth }
 				/>
@@ -249,7 +248,6 @@ export default function TableSettings( props ) {
 				<UnitControl
 					value={ tableStylesObj?.maxWidth }
 					units={ tableWidthUnits }
-					labelPosition="top"
 					min="0"
 					onChange={ onChangeMaxWidth }
 				/>
@@ -276,7 +274,6 @@ export default function TableSettings( props ) {
 				<UnitControl
 					value={ tableStylesObj?.minWidth }
 					units={ tableWidthUnits }
-					labelPosition="top"
 					min="0"
 					onChange={ onChangeMinWidth }
 				/>

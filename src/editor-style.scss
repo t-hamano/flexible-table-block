@@ -1,4 +1,4 @@
-// Block Styles
+// Table Styles
 .wp-block-flexible-table-block-table {
 
 	> table {
@@ -146,23 +146,20 @@
 		}
 	}
 
-	.ftb-table-cell {
-
-		&__label {
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 1;
-			height: auto;
-			padding: 0 3px;
-			font-size: 11px;
-			line-height: 18px;
-			border-radius: 0;
-		}
+	.ftb-table-cell-label {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		height: auto;
+		padding: 0 3px;
+		font-size: 11px;
+		line-height: 18px;
+		border-radius: 0;
 	}
 }
 
-// Component & Settings Styles
+// Setting Component Styles
 .ftb-button-group {
 	display: block;
 
@@ -291,6 +288,7 @@
 	padding: 0 16px 16px 16px;
 }
 
+// Modal Component Styles
 .ftb-global-setting-modal {
 	max-width: 600px;
 

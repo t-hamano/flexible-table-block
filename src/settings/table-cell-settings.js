@@ -36,6 +36,7 @@ import {
 	PaddingControl,
 } from '../controls';
 import { toUnitVal } from '../utils/helper';
+import { updateCellsState } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
 	pickPadding,
@@ -44,16 +45,9 @@ import {
 	pickBorderStyle,
 	pickBorderColor,
 } from '../utils/style-picker';
-import {
-	updatePadding,
-	updateBorderWidthStyles,
-	updateBorderRadius,
-	updateBorderStyle,
-	updateBorderColor,
-} from '../utils/style-updater';
 
 export default function TableCellSettings( props ) {
-	const { tableStylesObj, selectedCell, attributes, setAttributes } = props;
+	const { selectedCell, selectedMultiCell, selectedRangeCell, attributes, setAttributes } = props;
 
 	const cellWidthUnits = useCustomUnits( {
 		availableUnits: CELL_WIDTH_UNITS,
@@ -78,84 +72,78 @@ export default function TableCellSettings( props ) {
 
 	const cellStylesObj = convertToObject( targetCell.styles );
 
+	const updateCellsStyle = ( styles ) => {
+		setAttributes(
+			updateCellsState(
+				attributes,
+				{ styles },
+				{
+					selectedCell,
+					selectedRangeCell,
+					selectedMultiCell,
+				}
+			)
+		);
+	};
+
 	const onChangeFontSize = ( value ) => {
-		// const newStylesObj = {
-		// 	...tableStylesObj,
-		// 	width: toUnitVal( value ),
-		// };
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { fontSize: toUnitVal( value ) } );
 	};
 
 	const onChangeColor = ( value ) => {
-		console.log( value );
-
-		// const newStylesObj = {
-		// 	...tableStylesObj,
-		// 	width: toUnitVal( value ),
-		// };
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { color: value } );
 	};
 
 	const onChangeBackgroundColor = ( value ) => {
-		// const newStylesObj = {
-		// 	...tableStylesObj,
-		// 	width: toUnitVal( value ),
-		// };
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { backgroundColor: value } );
 	};
 
 	const onChangeWidth = ( value ) => {
-		// const newStylesObj = {
-		// 	...tableStylesObj,
-		// 	width: toUnitVal( value ),
-		// };
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { width: toUnitVal( value ) } );
 	};
 
 	const onChangePadding = ( values ) => {
-		// const newStylesObj = updatePadding( tableStylesObj, values );
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { padding: values } );
 	};
 
 	const onChangeBorderWidth = ( values ) => {
-		// const newStylesObj = updateBorderWidthStyles( tableStylesObj, values );
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { borderWidth: values } );
 	};
 
 	const onChangeBorderRadius = ( values ) => {
-		// const newStylesObj = updateBorderRadius( tableStylesObj, values );
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { borderRadius: values } );
 	};
 
 	const onChangeBorderStyle = ( values ) => {
-		// const newStylesObj = updateBorderStyle( tableStylesObj, values );
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { borderStyle: values } );
 	};
 
 	const onChangeBorderColor = ( values ) => {
-		// const newStylesObj = updateBorderColor( tableStylesObj, values );
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		updateCellsStyle( { borderColor: values } );
 	};
 
 	const onChangeTextAlign = ( value ) => {
-		// const newStylesObj = {
-		// 	...tableStylesObj,
-		// 	width: toUnitVal( value ),
-		// };
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		const newValue = value === cellStylesObj.textAlign ? undefined : value;
+		updateCellsStyle( { textAlign: newValue } );
 	};
 
 	const onChangeVerticalAlign = ( value ) => {
-		// const newStylesObj = {
-		// 	...tableStylesObj,
-		// 	width: toUnitVal( value ),
-		// };
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		const newValue = value === cellStylesObj.verticalAlign ? undefined : value;
+		updateCellsStyle( { verticalAlign: newValue } );
 	};
 
 	const onChangeTag = ( value ) => {
-		// const newStylesObj = updateBorderColor( tableStylesObj, values );
-		// setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		setAttributes(
+			updateCellsState(
+				attributes,
+				{ tag: value },
+				{
+					selectedCell,
+					selectedRangeCell,
+					selectedMultiCell,
+				}
+			)
+		);
 	};
 
 	return (
@@ -164,15 +152,20 @@ export default function TableCellSettings( props ) {
 				id="flexible-table-block/cell-font-size"
 				label={ __( 'Cell Font size', 'flexible-table-block' ) }
 			>
-				<UnitControl min="0" onChange={ onChangeFontSize } units={ fontSizeUnits } />
+				<UnitControl
+					value={ cellStylesObj?.fontSize }
+					units={ fontSizeUnits }
+					min="0"
+					onChange={ onChangeFontSize }
+				/>
 			</BaseControl>
 			<BaseControl
 				id="flexible-table-block/cell-width"
 				label={ __( 'Cell Width', 'flexible-table-block' ) }
 			>
 				<UnitControl
+					value={ cellStylesObj?.width }
 					units={ cellWidthUnits }
-					labelPosition="top"
 					min="0"
 					onChange={ onChangeWidth }
 				/>
@@ -200,13 +193,17 @@ export default function TableCellSettings( props ) {
 				id="flexible-table-block/cell-text-color"
 				label={ __( 'Cell Text Color', 'flexible-table-block' ) }
 			>
-				<ColorPalette colors={ colors } onChange={ onChangeColor } />
+				<ColorPalette colors={ colors } value={ cellStylesObj.color } onChange={ onChangeColor } />
 			</BaseControl>
 			<BaseControl
 				id="flexible-table-block/cell-background-color"
 				label={ __( 'Cell Background Color', 'flexible-table-block' ) }
 			>
-				<ColorPalette colors={ colors } onChange={ onChangeBackgroundColor } />
+				<ColorPalette
+					colors={ colors }
+					value={ cellStylesObj.backgroundColor }
+					onChange={ onChangeBackgroundColor }
+				/>
 			</BaseControl>
 			<hr />
 			<PaddingControl
@@ -256,6 +253,7 @@ export default function TableCellSettings( props ) {
 									key={ value }
 									label={ label }
 									icon={ icon }
+									variant={ value === cellStylesObj?.textAlign ? 'primary' : 'secondary' }
 									onClick={ () => onChangeTextAlign( value ) }
 								/>
 							);
@@ -271,6 +269,7 @@ export default function TableCellSettings( props ) {
 									key={ value }
 									label={ label }
 									icon={ icon }
+									variant={ value === cellStylesObj?.verticalAlign ? 'primary' : 'secondary' }
 									onClick={ () => onChangeVerticalAlign( value ) }
 								/>
 							);

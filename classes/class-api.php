@@ -70,7 +70,7 @@ class Api {
 	 */
 	public function get_options() {
 		$options              = Settings::get_options();
-		$options['block_css'] = Helper::minify_css( Helper::get_block_css() );
+		$options['block_css'] = Helper::minify_css( Helper::get_block_css( 'editor-styles-wrapper ' ) );
 		return rest_ensure_response( $options );
 	}
 
@@ -127,7 +127,7 @@ class Api {
 			array(
 				'status'    => 'success',
 				'message'   => __( 'Setting saved.', 'flexible-table-block' ),
-				'block_css' => Helper::minify_css( Helper::get_block_css() ),
+				'block_css' => Helper::minify_css( Helper::get_block_css( 'editor-styles-wrapper ' ) ),
 			)
 		);
 	}
@@ -146,7 +146,7 @@ class Api {
 				'options'   => Settings::get_options(),
 				'status'    => 'success',
 				'message'   => __( 'Settings have been reset.', 'flexible-table-block' ),
-				'block_css' => Helper::minify_css( Helper::get_block_css() ),
+				'block_css' => Helper::minify_css( Helper::get_block_css( 'editor-styles-wrapper ' ) ),
 			)
 		);
 	}

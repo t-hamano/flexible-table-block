@@ -16,6 +16,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
  */
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../constants';
 import { isMultiSelected, isRangeSelected, getSectionRange } from '../utils/helper';
+import { convertToObject } from '../utils/style-converter';
 import {
 	ButtonRowBeforeInserter,
 	ButtonRowAfterInserter,
@@ -108,7 +109,9 @@ export default function Table( props ) {
 						<TSection name={ sectionName } key={ sectionName }>
 							{ attributes[ sectionName ].map( ( { cells }, rowIndex, row ) => (
 								<tr key={ rowIndex }>
-									{ cells.map( ( { content, tag }, columnIndex ) => {
+									{ cells.map( ( { content, tag, styles }, columnIndex ) => {
+										const cellStylesObj = convertToObject( styles );
+
 										let isCellSelected =
 											selectedCell &&
 											selectedCell.sectionName === sectionName &&
@@ -143,6 +146,7 @@ export default function Table( props ) {
 													key={ columnIndex }
 													name={ tag }
 													className={ cellClass }
+													style={ cellStylesObj }
 													onClick={ ( e ) => {
 														const clickedCell = { sectionName, rowIndex, columnIndex };
 
@@ -207,7 +211,7 @@ export default function Table( props ) {
 														rowIndex === 0 &&
 														columnIndex === 0 && (
 															<Button
-																className="ftb-table-cell__label"
+																className="ftb-table-cell-label"
 																tabIndex={ options.prevent_focus_control_button && -1 }
 																variant="primary"
 																onClick={ ( e ) => {

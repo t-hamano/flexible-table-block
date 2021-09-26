@@ -70,8 +70,19 @@ export default function save( { attributes } ) {
 			<Tag>
 				{ rows.map( ( { cells }, rowIndex ) => (
 					<tr key={ rowIndex }>
-						{ cells.map( ( { content, tag }, cellIndex ) => {
-							return <RichText.Content tagName={ tag } value={ content } key={ cellIndex } />;
+						{ cells.map( ( { content, tag, rowSpan, colSpan, styles }, cellIndex ) => {
+							const cellStylesObj = convertToObject( styles );
+
+							return (
+								<RichText.Content
+									key={ cellIndex }
+									tagName={ tag }
+									value={ content }
+									rowSpan={ rowSpan }
+									colSpan={ colSpan }
+									style={ cellStylesObj }
+								/>
+							);
 						} ) }
 					</tr>
 				) ) }

@@ -128,7 +128,6 @@ export default function BorderWidthControl( {
 						value={ allInputValue }
 						units={ borderWidthUnits }
 						placeholder={ allInputPlaceholder }
-						onFocus={ handleOnFocus }
 						onChange={ handleOnChangeAll }
 					/>
 				) }
@@ -155,7 +154,9 @@ export default function BorderWidthControl( {
 								aria-label={ item.label }
 								value={ values[ item.value ] }
 								units={ borderWidthUnits }
-								onFocus={ handleOnFocus( item.value ) }
+								onFocus={ () => {
+									handleOnFocus( item.value );
+								} }
 								onChange={ ( value ) => {
 									handleOnChange( value, item.value );
 								} }

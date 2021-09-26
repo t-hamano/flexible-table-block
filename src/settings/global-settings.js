@@ -312,7 +312,6 @@ export default function GlobalSettings() {
 							<UnitControl
 								units={ tableWidthUnits }
 								value={ options.block_style?.table_width }
-								labelPosition="top"
 								min="0"
 								onChange={ ( value ) => {
 									setOptions( {
@@ -333,7 +332,6 @@ export default function GlobalSettings() {
 							<UnitControl
 								units={ tableWidthUnits }
 								value={ options.block_style?.table_max_width }
-								labelPosition="top"
 								min="0"
 								onChange={ ( value ) => {
 									setOptions( {
