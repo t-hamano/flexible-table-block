@@ -44,6 +44,12 @@ export const MAX_BORDER_WIDTH = {
 	rem: 20,
 };
 
+export const MAX_BORDER_SPACING = {
+	px: 100,
+	em: 20,
+	rem: 20,
+};
+
 // Responsive breakpoint settings.
 export const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
 export const MIN_RESPONSIVE_BREAKPOINT = 200;
@@ -97,7 +103,7 @@ export const BORDER_COLLAPSE_CONTROLS = [
 	},
 ];
 
-export const BORDER_STYLES = [
+export const BORDER_STYLE_CONTROLS = [
 	{
 		label: __( 'Solid', 'flexible-table-block' ),
 		value: 'solid',

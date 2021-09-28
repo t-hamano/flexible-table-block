@@ -137,9 +137,7 @@ export function pickBorderRadius( stylesObj ) {
 export function pickBorderSpacing( stylesObj ) {
 	const borderSpacingValues = parseCssValue( stylesObj?.borderSpacing );
 	return {
-		top: borderSpacingValues[ 1 ],
-		right: borderSpacingValues[ 0 ],
-		bottom: borderSpacingValues[ 1 ],
-		left: borderSpacingValues[ 0 ],
+		horizontal: borderSpacingValues[ 0 ],
+		vertical: borderSpacingValues[ 1 ],
 	};
 }

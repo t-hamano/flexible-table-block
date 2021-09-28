@@ -79,19 +79,19 @@ export function updateBorderSpacing( styles, values ) {
 		return newStyles;
 	}
 
-	const top = toUnitVal( cleanValues.top );
-	const left = toUnitVal( cleanValues.left );
+	const horizontal = toUnitVal( cleanValues.horizontal );
+	const vertical = toUnitVal( cleanValues.vertical );
 
-	if ( top === left ) {
+	if ( horizontal === vertical ) {
 		return {
 			...newStyles,
-			borderSpacing: top,
+			borderSpacing: horizontal,
 		};
 	}
 
 	return {
 		...newStyles,
-		borderSpacing: `${ left } ${ top }`,
+		borderSpacing: `${ horizontal } ${ vertical }`,
 	};
 }
 

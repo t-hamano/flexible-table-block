@@ -56,6 +56,17 @@ export const CORNERS = [
 	},
 ];
 
+export const DIRECTIONS = [
+	{
+		label: __( 'Horizontal', 'flexible-table-block' ),
+		value: 'horizontal',
+	},
+	{
+		label: __( 'Vertical', 'flexible-table-block' ),
+		value: 'vertical',
+	},
+];
+
 export function SideIndicatorControl( { sides } ) {
 	const top = ! sides || sides.includes( 'top' );
 	const right = ! sides || sides.includes( 'right' );
@@ -84,6 +95,20 @@ export function CornerIndicatorControl( { corners } ) {
 			<TopRightStroke isFocused={ topRight } />
 			<BottomRightStroke isFocused={ bottomRight } />
 			<BottomLeftStroke isFocused={ bottomLeft } />
+		</ViewBox>
+	);
+}
+
+export function DirectionIndicatorControl( { directions } ) {
+	const horizontal = ! directions || directions.includes( 'horizontal' );
+	const vertical = ! directions || directions.includes( 'vertical' );
+
+	return (
+		<ViewBox>
+			<TopStroke isFocused={ vertical } />
+			<RightStroke isFocused={ horizontal } />
+			<BottomStroke isFocused={ vertical } />
+			<LeftStroke isFocused={ horizontal } />
 		</ViewBox>
 	);
 }

@@ -20,7 +20,7 @@ import {
 /**
  * Internal dependencies
  */
-import { BORDER_STYLES } from '../constants';
+import { BORDER_STYLE_CONTROLS } from '../constants';
 import { SIDES, SideIndicatorControl } from './indicator-control';
 
 const DEFAULT_VALUES = {
@@ -115,7 +115,7 @@ export default function BorderStyleControl( {
 						<div className="ftb-border-style-control__button-controls-row">
 							{ hasIndicator && <SideIndicatorControl /> }
 							<ButtonGroup className="ftb-button-group">
-								{ BORDER_STYLES.map( ( borderStyle ) => {
+								{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => {
 									return (
 										<Button
 											key={ borderStyle }
@@ -136,7 +136,7 @@ export default function BorderStyleControl( {
 								<div className="ftb-border-style-control__button-controls-row" key={ item }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<ButtonGroup className="ftb-button-group" aria-label={ item.label }>
-										{ BORDER_STYLES.map( ( borderStyle ) => {
+										{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => {
 											return (
 												<Button
 													key={ borderStyle }

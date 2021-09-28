@@ -8,7 +8,6 @@ import {
 	ButtonGroup,
 	SelectControl,
 	ToggleControl,
-	__experimentalBoxControl as BoxControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -16,17 +15,13 @@ import {
 /**
  * Internal components
  */
-import {
-	TABLE_WIDTH_UNITS,
-	BORDER_SPACING_UNITS,
-	BORDER_COLLAPSE_CONTROLS,
-	STICKY_CONTROLS,
-} from '../constants';
+import { TABLE_WIDTH_UNITS, BORDER_COLLAPSE_CONTROLS, STICKY_CONTROLS } from '../constants';
 import {
 	BorderRadiusControl,
 	BorderWidthControl,
 	BorderStyleControl,
 	BorderColorControl,
+	BorderSpacingControl,
 	PaddingControl,
 } from '../controls';
 import { toggleSection } from '../utils/table-state';
@@ -63,10 +58,6 @@ export default function TableSettings( props ) {
 
 	const tableWidthUnits = useCustomUnits( {
 		availableUnits: TABLE_WIDTH_UNITS,
-	} );
-
-	const borderSpacingUnits = useCustomUnits( {
-		availableUnits: BORDER_SPACING_UNITS,
 	} );
 
 	const onChangeHasFixedLayout = () => {
@@ -347,11 +338,10 @@ export default function TableSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			{ 'separate' === tableStylesObj?.borderCollapse && (
-				<BoxControl
-					label={ __( 'Border spacing', 'flexible-table-block' ) }
+				<BorderSpacingControl
+					id="flexible-table-block/table-border-color"
+					label={ __( 'Border Spacing', 'flexible-table-block' ) }
 					values={ pickBorderSpacing( tableStylesObj ) }
-					units={ borderSpacingUnits }
-					splitOnAxis={ true }
 					onChange={ onChangeBorderSpacing }
 				/>
 			) }
