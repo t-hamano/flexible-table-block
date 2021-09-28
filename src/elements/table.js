@@ -235,7 +235,7 @@ export default function Table( props ) {
 																	iconSize="18"
 																	hasPrevSection={ sectionIndex > 0 }
 																	onClick={ () => {
-																		onInsertRow( { sectionName, rowIndex, offset: 0 } );
+																		onInsertRow( 0 );
 																	} }
 																/>
 															) }
@@ -350,7 +350,7 @@ export default function Table( props ) {
 																		sectionIndex < section.length - 1 && rowIndex === row.length - 1
 																	}
 																	onClick={ () => {
-																		onInsertRow( { sectionName, rowIndex, offset: 1 } );
+																		onInsertRow( 1 );
 																	} }
 																/>
 															) }
@@ -366,6 +366,8 @@ export default function Table( props ) {
 																sectionName,
 																rowIndex,
 																columnIndex,
+																rowSpan,
+																colSpan,
 															} );
 														} }
 														aria-label={ CELL_ARIA_LABEL[ sectionName ] }

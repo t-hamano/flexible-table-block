@@ -65,15 +65,21 @@ export function createTable( { rowCount, columnCount, headerSection, footerSecti
 /**
  * Inserts a row in the table state.
  *
- * @param {Object} state               Current table state.
+ * @param {Object} state                Current table state.
  * @param {Object} options
- * @param {string} options.sectionName Section in which to insert the row.
- * @param {number} options.rowIndex
+ * @param {Object} options.selectedCell Current selected cell.
+ * @param {number} options.offset       Offset for selected row index at which to insert.
  * @return {Object} New table state.
  */
-export function insertRow( state, { sectionName, rowIndex } ) {
+export function insertRow( state, { selectedCell, offset } ) {
+	const { sectionName, rowIndex, rowSpan } = selectedCell;
+
+	// Calculate row index to be inserted considering rowspan of the cell
+	const insertRowIndex =
+		offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
+
 	// Number of columns in the row to be inserted.
-	const newRowColumnCount = state[ sectionName ][ rowIndex ].cells.reduce( function (
+	const newRowColumnCount = state[ sectionName ][ insertRowIndex ].cells.reduce( function (
 		count,
 		cell
 	) {
@@ -91,37 +97,35 @@ export function insertRow( state, { sectionName, rowIndex } ) {
 		} ),
 	};
 
-	const newSection = [
-		...state[ sectionName ].slice( 0, rowIndex ),
-		newRow,
-		...state[ sectionName ].slice( rowIndex ),
-	].map( ( row, currentRowIndex ) => ( {
-		// Expand cells with rowspan in the previous and next rows.
-		cells: row.cells.map( ( cell ) => {
-			if ( cell.rowSpan ) {
-				if (
-					currentRowIndex <= rowIndex &&
-					currentRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
-				) {
-					return {
-						...cell,
-						rowSpan: parseInt( cell.rowSpan ) + 1,
-					};
-				}
-
-				if ( currentRowIndex === rowIndex && cell.rowSpan ) {
-					return {
-						...cell,
-						rowSpan: parseInt( cell.rowSpan ) + 1,
-					};
-				}
-			}
-			return cell;
-		} ),
-	} ) );
-
 	return {
-		[ sectionName ]: newSection,
+		[ sectionName ]: [
+			...state[ sectionName ].slice( 0, insertRowIndex ),
+			newRow,
+			...state[ sectionName ].slice( insertRowIndex ),
+		].map( ( row, currentRowIndex ) => ( {
+			// Expand cells with rowspan in the previous and next rows.
+			cells: row.cells.map( ( cell ) => {
+				if ( cell.rowSpan ) {
+					if (
+						currentRowIndex <= insertRowIndex &&
+						currentRowIndex + parseInt( cell.rowSpan ) - 1 >= insertRowIndex
+					) {
+						return {
+							...cell,
+							rowSpan: parseInt( cell.rowSpan ) + 1,
+						};
+					}
+
+					if ( currentRowIndex === insertRowIndex && cell.rowSpan ) {
+						return {
+							...cell,
+							rowSpan: parseInt( cell.rowSpan ) + 1,
+						};
+					}
+				}
+				return cell;
+			} ),
+		} ) ),
 	};
 }
 
@@ -147,9 +151,29 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 		return state;
 	}
 
-	return {
-		[ sectionName ]: state[ sectionName ].filter( ( row, index ) => index !== rowIndex ),
-	};
+	const currentSection = state[ sectionName ];
+
+	const newSection = currentSection.map( ( row, cRowIdx ) => ( {
+		cells: row.cells.map( ( cell ) => {
+			if ( cell.rowSpan ) {
+				if ( cRowIdx <= rowIndex && parseInt( cell.rowSpan ) + cRowIdx > rowIndex ) {
+					cell.rowSpan = parseInt( cell.rowSpan ) - 1;
+					if ( cRowIdx === rowIndex ) {
+						const findColIdx = currentSection[ cRowIdx + 1 ].cells.findIndex(
+							( elm ) => elm.cI === cell.cI || elm.cI > cell.cI
+						);
+						currentSection[ cRowIdx + 1 ].cells.splice( findColIdx, 0, cell );
+					}
+				}
+			}
+
+			return cell;
+		} ),
+	} ) );
+
+	setAttributes( {
+		[ sectionSelected ]: newSection.filter( ( row, index ) => index !== rowIndex ),
+	} );
 }
 
 /**

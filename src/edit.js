@@ -55,11 +55,13 @@ function TableEdit( props ) {
 		return select( STORE_NAME ).getOptions();
 	} );
 
-	const onInsertRow = ( { sectionName, rowIndex, offset } ) => {
+	const onInsertRow = ( offset ) => {
+		if ( ! selectedCell ) return;
+
 		setAttributes(
 			insertRow( attributes, {
-				sectionName,
-				rowIndex: rowIndex + offset,
+				selectedCell,
+				offset,
 			} )
 		);
 
@@ -155,8 +157,7 @@ function TableEdit( props ) {
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
-				const { sectionName, rowIndex } = selectedCell;
-				onInsertRow( { sectionName, rowIndex, offset: 0 } );
+				onInsertRow( 0 );
 			},
 		},
 		{
@@ -167,8 +168,7 @@ function TableEdit( props ) {
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
-				const { sectionName, rowIndex } = selectedCell;
-				onInsertRow( { sectionName, rowIndex, offset: 1 } );
+				onInsertRow( 1 );
 			},
 		},
 		{
