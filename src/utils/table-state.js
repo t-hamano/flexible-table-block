@@ -207,6 +207,74 @@ export function toggleSection( state, sectionName ) {
 }
 
 /**
+ * Merge cells in the table state.
+ *
+ * @param {Object} state                     Current table state.
+ * @param {Object} options
+ * @param {number} options.selectedRangeCell Current selected range cell.
+ * @return {Object} New table state.
+ */
+export function mergeCells( state, { selectedRangeCell } ) {
+	const { fromCell, toCell } = selectedRangeCell;
+	const { sectionName } = fromCell;
+	const section = state[ sectionName ];
+
+	// TODO:範囲内に結合されたセルがあった場合は、一旦分割する
+
+	// Calculate range to be merged.
+	const minRowIndex = Math.min( fromCell.rowIndex, toCell.rowIndex );
+	const maxRowIndex = Math.max( fromCell.rowIndex, toCell.rowIndex );
+	const minColumnIndex = Math.min( fromCell.columnIndex, toCell.columnIndex );
+	const maxColumnIndex = Math.max( fromCell.columnIndex, toCell.columnIndex );
+
+	return {
+		[ sectionName ]: section.map( ( row, rowIndex ) => {
+			if ( rowIndex < minRowIndex || rowIndex > maxRowIndex ) {
+				// Row not to be merged.
+				return row;
+			}
+
+			return {
+				cells: row.cells
+					.map( ( cell, columnIndex ) => {
+						if ( columnIndex === minColumnIndex && rowIndex === minRowIndex ) {
+							// Cells to merge.
+							const rowSpan = Math.abs( maxRowIndex - minRowIndex ) + 1;
+							const colSpan = Math.abs( maxColumnIndex - minColumnIndex ) + 1;
+
+							return {
+								...cell,
+								rowSpan: rowSpan > 1 ? rowSpan : undefined,
+								colSpan: colSpan > 1 ? colSpan : undefined,
+							};
+						}
+
+						// Cells to be merged (Mark as deletion).
+						if (
+							rowIndex >= minRowIndex &&
+							rowIndex <= maxRowIndex &&
+							columnIndex >= minColumnIndex &&
+							columnIndex <= maxColumnIndex
+						) {
+							return {
+								...cell,
+								merged: true,
+							};
+						}
+
+						// Column not to be merged.
+						return {
+							...cell,
+						};
+					} )
+					// Delete merged cells.
+					.filter( ( cell ) => ! cell.merged ),
+			};
+		} ),
+	};
+}
+
+/**
  * Update cells state( styles, tag ) of selected section.
  *
  * @param {Object} state                     Current table state.

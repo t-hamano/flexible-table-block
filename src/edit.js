@@ -35,7 +35,7 @@ import { JUSTIFY_CONTROLS } from './constants';
 import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
 
-import { insertRow, deleteRow, insertColumn, deleteColumn } from './utils/table-state';
+import { insertRow, deleteRow, insertColumn, deleteColumn, mergeCells } from './utils/table-state';
 import { isMultiSelected, isRangeSelected, isEmptyTableSection } from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
@@ -98,6 +98,42 @@ function TableEdit( props ) {
 		setAttributes( deleteColumn( attributes, { columnIndex } ) );
 
 		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
+		setSelectedLine();
+	};
+
+	const onMergeCells = () => {
+		setAttributes( mergeCells( attributes, { selectedRangeCell } ) );
+
+		const { fromCell } = selectedRangeCell;
+		const { sectionName, rowIndex, columnIndex } = fromCell;
+
+		setSelectedCell( {
+			sectionName,
+			rowIndex,
+			columnIndex,
+		} );
+
+		setSelectedMultiCell();
+		setSelectedRangeCell();
+		setSelectedLine();
+	};
+
+	const onSplitMergedCells = () => {
+		setAttributes( mergeCells( attributes, { selectedRangeCell } ) );
+
+		// const { fromCell } = selectedRangeCell;
+		// const { sectionName, rowIndex, columnIndex } = fromCell;
+
+		// console.log( fromCell );
+
+		// setSelectedCell( {
+		// 	sectionName,
+		// 	rowIndex,
+		// 	columnIndex,
+		// } );
+
 		setSelectedMultiCell();
 		setSelectedRangeCell();
 		setSelectedLine();
@@ -168,18 +204,23 @@ function TableEdit( props ) {
 		{
 			icon: splitCell,
 			title: __( 'Split Merged Cells', 'flexible-table-block' ),
-			// isDisabled:
-			// 	! selectedCell ||
-			// 	( selectedCell && ! selectedCell.rowSpan && ! selectedCell.colSpan ) ||
-			// 	selectedRangeCell ||
-			// 	selectedMultiCell,
-			onClick: () => {},
+			isDisabled:
+				! selectedCell ||
+				! selectedCell?.rowSpan ||
+				! selectedCell?.colSpan ||
+				isRangeSelected( selectedRangeCell ) ||
+				isMultiSelected( selectedMultiCell ),
+			onClick: () => {
+				onSplitMergedCells();
+			},
 		},
 		{
 			icon: mergeCell,
 			title: __( 'Merge Cells', 'flexible-table-block' ),
-			// isDisabled: ! selectedMultiCell,
-			onClick: () => {},
+			isDisabled: ! isRangeSelected( selectedRangeCell ),
+			onClick: () => {
+				onMergeCells();
+			},
 		},
 	];
 

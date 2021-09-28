@@ -309,6 +309,10 @@
 		color: currentColor;
 	}
 
+	.components-disabled label {
+		opacity: 0.3;
+	}
+
 	&__styles {
 		display: flex;
 		flex-wrap: wrap;

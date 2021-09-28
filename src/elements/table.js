@@ -109,7 +109,7 @@ export default function Table( props ) {
 						<TSection name={ sectionName } key={ sectionName }>
 							{ attributes[ sectionName ].map( ( { cells }, rowIndex, row ) => (
 								<tr key={ rowIndex }>
-									{ cells.map( ( { content, tag, styles }, columnIndex ) => {
+									{ cells.map( ( { content, tag, styles, rowSpan, colSpan }, columnIndex ) => {
 										const cellStylesObj = convertToObject( styles );
 
 										let isCellSelected =
@@ -146,6 +146,8 @@ export default function Table( props ) {
 													key={ columnIndex }
 													name={ tag }
 													className={ cellClass }
+													rowSpan={ rowSpan }
+													colSpan={ colSpan }
 													style={ cellStylesObj }
 													onClick={ ( e ) => {
 														const clickedCell = { sectionName, rowIndex, columnIndex };
