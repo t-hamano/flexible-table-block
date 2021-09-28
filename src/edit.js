@@ -150,7 +150,10 @@ function TableEdit( props ) {
 		{
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || selectedMultiCell || selectedRangeCell,
+			isDisabled:
+				! selectedCell ||
+				isRangeSelected( selectedRangeCell ) ||
+				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
 				const { sectionName, rowIndex } = selectedCell;
 				onInsertRow( { sectionName, rowIndex, offset: 0 } );
@@ -159,7 +162,10 @@ function TableEdit( props ) {
 		{
 			icon: tableRowAfter,
 			title: __( 'Insert row after', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || selectedMultiCell || selectedRangeCell,
+			isDisabled:
+				! selectedCell ||
+				isRangeSelected( selectedRangeCell ) ||
+				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
 				const { sectionName, rowIndex } = selectedCell;
 				onInsertRow( { sectionName, rowIndex, offset: 1 } );
@@ -168,7 +174,10 @@ function TableEdit( props ) {
 		{
 			icon: tableRowDelete,
 			title: __( 'Delete row', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || selectedMultiCell || selectedRangeCell,
+			isDisabled:
+				! selectedCell ||
+				isRangeSelected( selectedRangeCell ) ||
+				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
 				const { sectionName, rowIndex } = selectedCell;
 				onDeleteRow( { sectionName, rowIndex } );
@@ -177,7 +186,10 @@ function TableEdit( props ) {
 		{
 			icon: tableColumnBefore,
 			title: __( 'Insert column before', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || selectedMultiCell || selectedRangeCell,
+			isDisabled:
+				! selectedCell ||
+				isRangeSelected( selectedRangeCell ) ||
+				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
 				const { columnIndex } = selectedCell;
 				onInsertColumn( { columnIndex, offset: 0 } );
@@ -186,7 +198,10 @@ function TableEdit( props ) {
 		{
 			icon: tableColumnAfter,
 			title: __( 'Insert column after', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || selectedMultiCell || selectedRangeCell,
+			isDisabled:
+				! selectedCell ||
+				isRangeSelected( selectedRangeCell ) ||
+				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
 				const { columnIndex } = selectedCell;
 				onInsertColumn( { columnIndex, offset: 1 } );
@@ -195,7 +210,10 @@ function TableEdit( props ) {
 		{
 			icon: tableColumnDelete,
 			title: __( 'Delete column', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || selectedMultiCell || selectedRangeCell,
+			isDisabled:
+				! selectedCell ||
+				isRangeSelected( selectedRangeCell ) ||
+				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
 				const { columnIndex } = selectedCell;
 				onDeleteColumn( columnIndex );

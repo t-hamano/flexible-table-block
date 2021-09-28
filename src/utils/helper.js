@@ -82,24 +82,6 @@ export function isEmptyTableSection( section ) {
 }
 
 /**
- * Returns the first row in the table.
- *
- * @param {Object} state Current table state.
- * @return {Object} The first table row.
- */
-export function getFirstRow( state ) {
-	if ( ! isEmptyTableSection( state.head ) ) {
-		return state.head[ 0 ];
-	}
-	if ( ! isEmptyTableSection( state.body ) ) {
-		return state.body[ 0 ];
-	}
-	if ( ! isEmptyTableSection( state.foot ) ) {
-		return state.foot[ 0 ];
-	}
-}
-
-/**
  * Return the all range of the specified section.
  *
  * @param {Object} state       Current table state.

@@ -4,15 +4,14 @@
 import { times, get, mapValues, pick } from 'lodash';
 
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Internal dependencies
  */
-import {
-	isEmptyTableSection,
-	isEmptyRow,
-	getFirstRow,
-	isRangeSelected,
-	isMultiSelected,
-} from './helper';
+import { isEmptyTableSection, isEmptyRow, isRangeSelected, isMultiSelected } from './helper';
 import { convertToObject, convertToInline } from '../utils/style-converter';
 import {
 	updatePadding,
@@ -21,8 +20,6 @@ import {
 	updateBorderStyle,
 	updateBorderColor,
 } from '../utils/style-updater';
-
-const INHERITED_COLUMN_ATTRIBUTES = [ 'align' ];
 
 /**
  * Creates a table state.
@@ -71,37 +68,60 @@ export function createTable( { rowCount, columnCount, headerSection, footerSecti
  * @param {Object} state               Current table state.
  * @param {Object} options
  * @param {string} options.sectionName Section in which to insert the row.
- * @param {number} options.rowIndex    Row index at which to insert the row.
- * @param {number} options.columnCount Column count for the table to create.
+ * @param {number} options.rowIndex
  * @return {Object} New table state.
  */
-export function insertRow( state, { sectionName, rowIndex, columnCount } ) {
-	const firstRow = getFirstRow( state );
-	const cellCount =
-		columnCount === undefined ? get( firstRow, [ 'cells', 'length' ] ) : columnCount;
+export function insertRow( state, { sectionName, rowIndex } ) {
+	// Number of columns in the row to be inserted.
+	const newRowColumnCount = state[ sectionName ][ rowIndex ].cells.reduce( function (
+		count,
+		cell
+	) {
+		return count + ( parseInt( cell.colSpan ) || 1 );
+	},
+	0 );
 
-	// Bail early if the function cannot determine how many cells to add.
-	if ( ! cellCount ) {
-		return state;
-	}
+	// Row state to be inserted.
+	const newRow = {
+		cells: times( newRowColumnCount, () => {
+			return {
+				content: '',
+				tag: 'head' === sectionName ? 'th' : 'td',
+			};
+		} ),
+	};
+
+	const newSection = [
+		...state[ sectionName ].slice( 0, rowIndex ),
+		newRow,
+		...state[ sectionName ].slice( rowIndex ),
+	].map( ( row, currentRowIndex ) => ( {
+		// Expand cells with rowspan in the previous and next rows.
+		cells: row.cells.map( ( cell ) => {
+			if ( cell.rowSpan ) {
+				if (
+					currentRowIndex <= rowIndex &&
+					currentRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+				) {
+					return {
+						...cell,
+						rowSpan: parseInt( cell.rowSpan ) + 1,
+					};
+				}
+
+				if ( currentRowIndex === rowIndex && cell.rowSpan ) {
+					return {
+						...cell,
+						rowSpan: parseInt( cell.rowSpan ) + 1,
+					};
+				}
+			}
+			return cell;
+		} ),
+	} ) );
 
 	return {
-		[ sectionName ]: [
-			...state[ sectionName ].slice( 0, rowIndex ),
-			{
-				cells: times( cellCount, ( index ) => {
-					const firstCellInColumn = get( firstRow, [ 'cells', index ], {} );
-					const inheritedAttributes = pick( firstCellInColumn, INHERITED_COLUMN_ATTRIBUTES );
-
-					return {
-						...inheritedAttributes,
-						content: '',
-						tag: 'head' === sectionName ? 'th' : 'td',
-					};
-				} ),
-			},
-			...state[ sectionName ].slice( rowIndex ),
-		],
+		[ sectionName ]: newSection,
 	};
 }
 
@@ -115,6 +135,18 @@ export function insertRow( state, { sectionName, rowIndex, columnCount } ) {
  * @return {Object} New table state.
  */
 export function deleteRow( state, { sectionName, rowIndex } ) {
+	// Do not allow tbody to be empty for table with thead /tfoot sections.
+	if (
+		sectionName === 'body' &&
+		state.body.length === 1 &&
+		state.head.length &&
+		state.foot.length
+	) {
+		// eslint-disable-next-line no-alert, no-undef
+		alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
+		return state;
+	}
+
 	return {
 		[ sectionName ]: state[ sectionName ].filter( ( row, index ) => index !== rowIndex ),
 	};
