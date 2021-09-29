@@ -16,6 +16,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
  */
 import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../constants';
 import { isMultiSelected, isRangeSelected, getSectionRange } from '../utils/helper';
+import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
 	ButtonRowBeforeInserter,
@@ -53,15 +54,34 @@ export default function Table( props ) {
 		setSelectedRangeCell,
 		selectedLine,
 		setSelectedLine,
-		onInsertRow,
-		onDeleteRow,
-		onInsertColumn,
-		onDeleteColumn,
 	} = props;
 
 	const { hasFixedLayout, isStackedOnMobile, sticky } = attributes;
 
 	const colorProps = useColorProps( attributes );
+
+	const onInsertRow = ( sectionName, rowIndex ) => {
+		setAttributes(
+			insertRow( attributes, {
+				sectionName,
+				rowIndex,
+			} )
+		);
+	};
+
+	const onDeleteRow = ( sectionName, rowIndex ) => {
+		setAttributes(
+			deleteRow( attributes, {
+				sectionName,
+				rowIndex,
+			} )
+		);
+
+		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
+		setSelectedLine();
+	};
 
 	const onChangeCellContent = ( content ) => {
 		const {
@@ -235,7 +255,7 @@ export default function Table( props ) {
 																	iconSize="18"
 																	hasPrevSection={ sectionIndex > 0 }
 																	onClick={ () => {
-																		onInsertRow( 0 );
+																		onInsertRow( sectionName, rowIndex );
 																	} }
 																/>
 															) }
@@ -278,7 +298,7 @@ export default function Table( props ) {
 																						iconSize={ 20 }
 																						isSmall
 																						onClick={ ( event ) => {
-																							onDeleteRow( { sectionName, rowIndex } );
+																							onDeleteRow( rowIndex );
 																							event.stopPropagation();
 																						} }
 																					/>
@@ -350,7 +370,7 @@ export default function Table( props ) {
 																		sectionIndex < section.length - 1 && rowIndex === row.length - 1
 																	}
 																	onClick={ () => {
-																		onInsertRow( 1 );
+																		onInsertRow( sectionName, rowIndex + 1 );
 																	} }
 																/>
 															) }

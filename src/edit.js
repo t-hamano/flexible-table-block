@@ -58,10 +58,16 @@ function TableEdit( props ) {
 	const onInsertRow = ( offset ) => {
 		if ( ! selectedCell ) return;
 
+		const { sectionName, rowIndex, rowSpan } = selectedCell;
+
+		// Calculate row index to be inserted considering rowspan of the selected cell.
+		const insertRowIndex =
+			offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
+
 		setAttributes(
 			insertRow( attributes, {
-				selectedCell,
-				offset,
+				sectionName,
+				rowIndex: insertRowIndex,
 			} )
 		);
 
@@ -71,8 +77,20 @@ function TableEdit( props ) {
 		setSelectedLine();
 	};
 
-	const onDeleteRow = ( { sectionName, rowIndex } ) => {
-		setAttributes( deleteRow( attributes, { sectionName, rowIndex } ) );
+	const onDeleteRow = () => {
+		if ( ! selectedCell ) return;
+
+		const { sectionName, rowIndex, rowSpan } = selectedCell;
+
+		// Calculate row index to be deleted considering rowspan of the selected cell.
+		const deleteRowIndex = rowSpan ? rowIndex + parseInt( rowSpan ) - 1 : rowIndex;
+
+		setAttributes(
+			deleteRow( attributes, {
+				sectionName,
+				rowIndex: deleteRowIndex,
+			} )
+		);
 
 		setSelectedCell();
 		setSelectedMultiCell();
@@ -179,8 +197,7 @@ function TableEdit( props ) {
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
-				const { sectionName, rowIndex } = selectedCell;
-				onDeleteRow( { sectionName, rowIndex } );
+				onDeleteRow();
 			},
 		},
 		{
@@ -274,10 +291,6 @@ function TableEdit( props ) {
 		setSelectedRangeCell,
 		selectedLine,
 		setSelectedLine,
-		onInsertRow,
-		onDeleteRow,
-		onInsertColumn,
-		onDeleteColumn,
 	};
 
 	const tableSettingProps = {

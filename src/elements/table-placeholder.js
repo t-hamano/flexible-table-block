@@ -159,7 +159,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 						value={ rowCount }
 						onChange={ onChangeRowCount }
 					/>
-					<Button variant="primary" type="submit">
+					<Button variant="primary" type="submit" disabled={ ! rowCount || ! columnCount }>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</div>

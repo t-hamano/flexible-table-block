@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { times, get, mapValues, pick } from 'lodash';
+import { times, mapValues, pick } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -65,21 +65,15 @@ export function createTable( { rowCount, columnCount, headerSection, footerSecti
 /**
  * Inserts a row in the table state.
  *
- * @param {Object} state                Current table state.
+ * @param {Object} state               Current table state.
  * @param {Object} options
- * @param {Object} options.selectedCell Current selected cell.
- * @param {number} options.offset       Offset for selected row index at which to insert.
+ * @param {string} options.sectionName Section in which to insert the row.
+ * @param {number} options.rowIndex    Row index at which to insert the row.
  * @return {Object} New table state.
  */
-export function insertRow( state, { selectedCell, offset } ) {
-	const { sectionName, rowIndex, rowSpan } = selectedCell;
-
-	// Calculate row index to be inserted considering rowspan of the cell
-	const insertRowIndex =
-		offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
-
+export function insertRow( state, { sectionName, rowIndex } ) {
 	// Number of columns in the row to be inserted.
-	const newRowColumnCount = state[ sectionName ][ insertRowIndex ].cells.reduce( function (
+	const newRowColumnCount = state[ sectionName ][ rowIndex ].cells.reduce( function (
 		count,
 		cell
 	) {
@@ -99,29 +93,21 @@ export function insertRow( state, { selectedCell, offset } ) {
 
 	return {
 		[ sectionName ]: [
-			...state[ sectionName ].slice( 0, insertRowIndex ),
+			...state[ sectionName ].slice( 0, rowIndex ),
 			newRow,
-			...state[ sectionName ].slice( insertRowIndex ),
+			...state[ sectionName ].slice( rowIndex ),
 		].map( ( row, currentRowIndex ) => ( {
-			// Expand cells with rowspan in the previous and next rows.
 			cells: row.cells.map( ( cell ) => {
-				if ( cell.rowSpan ) {
-					if (
-						currentRowIndex <= insertRowIndex &&
-						currentRowIndex + parseInt( cell.rowSpan ) - 1 >= insertRowIndex
-					) {
-						return {
-							...cell,
-							rowSpan: parseInt( cell.rowSpan ) + 1,
-						};
-					}
-
-					if ( currentRowIndex === insertRowIndex && cell.rowSpan ) {
-						return {
-							...cell,
-							rowSpan: parseInt( cell.rowSpan ) + 1,
-						};
-					}
+				// Expand cells with rowspan in the before and inserted rows.
+				if (
+					cell.rowSpan &&
+					currentRowIndex <= rowIndex &&
+					currentRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+				) {
+					return {
+						...cell,
+						rowSpan: parseInt( cell.rowSpan ) + 1,
+					};
 				}
 				return cell;
 			} ),
@@ -135,7 +121,7 @@ export function insertRow( state, { selectedCell, offset } ) {
  * @param {Object} state               Current table state.
  * @param {Object} options
  * @param {string} options.sectionName Section in which to delete the row.
- * @param {number} options.rowIndex    Row index to delete.
+ * @param {number} options.rowIndex    Row index at which to delete the row.
  * @return {Object} New table state.
  */
 export function deleteRow( state, { sectionName, rowIndex } ) {
@@ -151,29 +137,44 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 		return state;
 	}
 
-	const currentSection = state[ sectionName ];
+	return {
+		[ sectionName ]: state[ sectionName ]
+			.map( ( row, currentRowIndex ) => ( {
+				cells: row.cells
+					.map( ( cell ) => {
+						if ( cell.rowSpan ) {
+							// Contract cells with rowspan in the before rows.
+							if (
+								currentRowIndex < rowIndex &&
+								currentRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+							) {
+								return {
+									...cell,
+									rowSpan: parseInt( cell.rowSpan ) - 1,
+								};
+							}
 
-	const newSection = currentSection.map( ( row, cRowIdx ) => ( {
-		cells: row.cells.map( ( cell ) => {
-			if ( cell.rowSpan ) {
-				if ( cRowIdx <= rowIndex && parseInt( cell.rowSpan ) + cRowIdx > rowIndex ) {
-					cell.rowSpan = parseInt( cell.rowSpan ) - 1;
-					if ( cRowIdx === rowIndex ) {
-						const findColIdx = currentSection[ cRowIdx + 1 ].cells.findIndex(
-							( elm ) => elm.cI === cell.cI || elm.cI > cell.cI
-						);
-						currentSection[ cRowIdx + 1 ].cells.splice( findColIdx, 0, cell );
-					}
-				}
-			}
+							// Move cells with rowspan in the deleted row to next row.
+						}
 
-			return cell;
-		} ),
-	} ) );
+						// Cells to be deleted (Mark as deletion).
+						if ( currentRowIndex === rowIndex ) {
+							return {
+								...cell,
+								deleted: true,
+							};
+						}
 
-	setAttributes( {
-		[ sectionSelected ]: newSection.filter( ( row, index ) => index !== rowIndex ),
-	} );
+						return { ...cell };
+					} )
+					// Delete cells marked as deletion.
+					.filter( ( cell ) => ! cell.deleted ),
+			} ) )
+			// Delete empty rows.
+			.filter( ( { cells } ) => {
+				return cells.length;
+			} ),
+	};
 }
 
 /**
@@ -255,11 +256,22 @@ export function toggleSection( state, sectionName ) {
 		return { [ sectionName ]: [] };
 	}
 
-	// Get the length of the first row of the body to use when creating the header.
-	const columnCount = get( state, [ 'body', 0, 'cells', 'length' ], 1 );
+	// Number of columns in the row to be inserted.
+	const newRowColumnCount = state.body[ 0 ].cells.reduce( function ( count, cell ) {
+		return count + ( parseInt( cell.colSpan ) || 1 );
+	}, 0 );
 
-	// Section doesn't exist, insert an empty row to create the section.
-	return insertRow( state, { sectionName, rowIndex: 0, columnCount } );
+	// Row state to be inserted.
+	const newRow = {
+		cells: times( newRowColumnCount, () => {
+			return {
+				content: '',
+				tag: 'head' === sectionName ? 'th' : 'td',
+			};
+		} ),
+	};
+
+	return { [ sectionName ]: [ newRow ] };
 }
 
 /**
@@ -318,12 +330,10 @@ export function mergeCells( state, { selectedRangeCell } ) {
 							};
 						}
 
-						// Column not to be merged.
-						return {
-							...cell,
-						};
+						// Cells not to be merged.
+						return { ...cell };
 					} )
-					// Delete merged cells.
+					// Delete cells marked as deletion.
 					.filter( ( cell ) => ! cell.merged ),
 			};
 		} ),
