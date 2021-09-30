@@ -388,6 +388,8 @@ export default function Table( props ) {
 																columnIndex,
 																rowSpan,
 																colSpan,
+																tag,
+																styles,
 															} );
 														} }
 														aria-label={ CELL_ARIA_LABEL[ sectionName ] }

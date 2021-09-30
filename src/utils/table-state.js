@@ -11,7 +11,13 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { isEmptyTableSection, isEmptyRow, isRangeSelected, isMultiSelected } from './helper';
+import {
+	isEmptyTableSection,
+	isEmptyRow,
+	isRangeSelected,
+	isMultiSelected,
+	toVirtualSection,
+} from './helper';
 import { convertToObject, convertToInline } from '../utils/style-converter';
 import {
 	updatePadding,
@@ -137,38 +143,46 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 		return state;
 	}
 
+	// Find the number of merged cells in the row to be deleted.
+	const mergedCellsCount = 1;
+
+	// Split all merged cells in the row to be deleted.
+	let formattedSection = { ...state[ sectionName ] };
+
+	for ( let i = 0; i < mergedCellsCount; i++ ) {
+		const mergedCell = 'hoge'; // 結合されたセル
+		formattedSection = splitMergedCell( formattedSection, mergedCell );
+	}
+
 	return {
-		[ sectionName ]: state[ sectionName ]
+		[ sectionName ]: formattedSection
 			.map( ( row, currentRowIndex ) => ( {
 				cells: row.cells
 					.map( ( cell ) => {
-						if ( cell.rowSpan ) {
-							// Contract cells with rowspan in the before rows.
-							if (
-								currentRowIndex < rowIndex &&
-								currentRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
-							) {
-								return {
-									...cell,
-									rowSpan: parseInt( cell.rowSpan ) - 1,
-								};
-							}
-
-							// Move cells with rowspan in the deleted row to next row.
+						// Contract cells with rowspan in the before rows.
+						if (
+							cell.rowSpan &&
+							currentRowIndex < rowIndex &&
+							currentRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+						) {
+							return {
+								...cell,
+								rowSpan: parseInt( cell.rowSpan ) - 1,
+							};
 						}
 
 						// Cells to be deleted (Mark as deletion).
 						if ( currentRowIndex === rowIndex ) {
 							return {
 								...cell,
-								deleted: true,
+								isDelete: true,
 							};
 						}
 
 						return { ...cell };
 					} )
 					// Delete cells marked as deletion.
-					.filter( ( cell ) => ! cell.deleted ),
+					.filter( ( cell ) => ! cell.isDelete ),
 			} ) )
 			// Delete empty rows.
 			.filter( ( { cells } ) => {
@@ -331,10 +345,95 @@ export function mergeCells( state, { selectedRangeCell } ) {
 						}
 
 						// Cells not to be merged.
-						return { ...cell };
+						return cell;
 					} )
 					// Delete cells marked as deletion.
 					.filter( ( cell ) => ! cell.merged ),
+			};
+		} ),
+	};
+}
+
+/**
+ * Split cells in the table state.
+ *
+ * @param {Object} state                Current table state.
+ * @param {Object} options
+ * @param {number} options.selectedCell Current selected cell.
+ * @return {Object} New table state.
+ */
+export function splitMergedCells( state, { selectedCell } ) {
+	const { sectionName } = selectedCell;
+
+	// Create virtual section array with the cells placed in positions based on how they actually look.
+	const vSection = toVirtualSection( state, { sectionName, selectedCell } );
+
+	if ( ! vSection ) return state;
+
+	// The selected cell on the virtual section.
+	const vSelectedCell = vSection
+		.reduce( ( cells, row ) => {
+			return cells.concat( row );
+		}, [] )
+		.filter( ( cell ) => cell.isSelected )[ 0 ];
+
+	// Split the selected cells and map them on the virtual section.
+	vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ] = {
+		...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
+		rowSpan: undefined,
+		colSpan: undefined,
+	};
+
+	if ( vSelectedCell.colSpan ) {
+		for ( let i = 1; i < parseInt( vSelectedCell.colSpan ); i++ ) {
+			vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex + i ] = {
+				...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
+				rowSpan: undefined,
+				colSpan: undefined,
+				content: undefined,
+			};
+		}
+	}
+
+	if ( vSelectedCell.rowSpan ) {
+		for ( let i = 1; i < parseInt( vSelectedCell.rowSpan ); i++ ) {
+			vSection[ vSelectedCell.vRowIndex + i ][ vSelectedCell.vColumnIndex ] = {
+				...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
+				rowSpan: undefined,
+				colSpan: undefined,
+				content: undefined,
+				isSelected: undefined,
+			};
+
+			if ( vSelectedCell.colSpan ) {
+				for ( let j = 1; j < parseInt( vSelectedCell.colSpan ); j++ ) {
+					vSection[ vSelectedCell.vRowIndex + i ][ vSelectedCell.vColumnIndex + j ] = {
+						...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
+						rowSpan: undefined,
+						colSpan: undefined,
+						content: undefined,
+						isSelected: undefined,
+					};
+				}
+			}
+		}
+	}
+
+	return {
+		[ sectionName ]: vSection.map( ( row ) => {
+			return {
+				cells: row
+					.map( ( cell ) => {
+						// Remove unwanted properties.
+						delete cell.vRowIndex;
+						delete cell.vColumnIndex;
+						delete cell.isSelected;
+						delete cell.isFilled;
+
+						return cell;
+					} )
+					// Delete cells marked as deletion.
+					.filter( ( cell ) => ! cell.isDelete ),
 			};
 		} ),
 	};
@@ -364,21 +463,17 @@ export function updateCellsState(
 		return state;
 	}
 
-	const {
-		sectionName,
-		rowIndex: selectedRowIndex,
-		columnIndex: selectedColumnIndex,
-	} = selectedCell;
+	const { sectionName, rowIndex, columnIndex } = selectedCell;
 
 	return {
-		[ sectionName ]: state[ sectionName ].map( ( row, rowIndex ) => {
-			if ( rowIndex !== selectedRowIndex ) {
+		[ sectionName ]: state[ sectionName ].map( ( row, currentRowIndex ) => {
+			if ( currentRowIndex !== rowIndex ) {
 				return row;
 			}
 
 			return {
-				cells: row.cells.map( ( cell, columnIndex ) => {
-					if ( columnIndex !== selectedColumnIndex ) {
+				cells: row.cells.map( ( cell, currentColumnIndex ) => {
+					if ( currentColumnIndex !== columnIndex ) {
 						return cell;
 					}
 
