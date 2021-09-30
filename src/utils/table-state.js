@@ -388,8 +388,6 @@ export function splitMergedCells( state, { selectedCell } ) {
 		for ( let i = 1; i < parseInt( vSelectedCell.colSpan ); i++ ) {
 			vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex + i ] = {
 				...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
-				rowSpan: undefined,
-				colSpan: undefined,
 				content: undefined,
 			};
 		}
@@ -399,20 +397,14 @@ export function splitMergedCells( state, { selectedCell } ) {
 		for ( let i = 1; i < parseInt( vSelectedCell.rowSpan ); i++ ) {
 			vSection[ vSelectedCell.vRowIndex + i ][ vSelectedCell.vColumnIndex ] = {
 				...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
-				rowSpan: undefined,
-				colSpan: undefined,
 				content: undefined,
-				isSelected: undefined,
 			};
 
 			if ( vSelectedCell.colSpan ) {
 				for ( let j = 1; j < parseInt( vSelectedCell.colSpan ); j++ ) {
 					vSection[ vSelectedCell.vRowIndex + i ][ vSelectedCell.vColumnIndex + j ] = {
 						...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
-						rowSpan: undefined,
-						colSpan: undefined,
 						content: undefined,
-						isSelected: undefined,
 					};
 				}
 			}
