@@ -43,7 +43,12 @@ import {
 	mergeCells,
 	splitMergedCells,
 } from './utils/table-state';
-import { isMultiSelected, isRangeSelected, isEmptyTableSection } from './utils/helper';
+import {
+	isMultiSelected,
+	isRangeSelected,
+	isEmptyTableSection,
+	toVirtualSection,
+} from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 
@@ -105,13 +110,31 @@ function TableEdit( props ) {
 		setSelectedLine();
 	};
 
-	const onInsertColumn = ( { sectionName, columnIndex, offset } ) => {
-		const newColumnIndex = columnIndex + offset;
+	const onInsertColumn = ( offset ) => {
+		if ( ! selectedCell ) return;
+
+		const { sectionName, colSpan } = selectedCell;
+
+		const vSection = toVirtualSection( attributes, { sectionName, selectedCell } );
+
+		if ( ! vSection ) return;
+
+		// The selected cell column index on the virtual section.
+		const vSelectedCell = vSection
+			.reduce( ( cells, row ) => {
+				return cells.concat( row );
+			}, [] )
+			.filter( ( cell ) => cell.isSelected )[ 0 ];
+
+		// Calculate column index to be inserted considering colspan of the selected cell.
+		const insertVColumnIndex =
+			offset === 0
+				? vSelectedCell.vColumnIndex
+				: vSelectedCell.vColumnIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
 
 		setAttributes(
 			insertColumn( attributes, {
-				sectionName,
-				columnIndex: newColumnIndex,
+				vColumnIndex: insertVColumnIndex,
 			} )
 		);
 
@@ -194,8 +217,7 @@ function TableEdit( props ) {
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
-				const { columnIndex } = selectedCell;
-				onInsertColumn( { columnIndex, offset: 0 } );
+				onInsertColumn( 0 );
 			},
 		},
 		{
@@ -206,8 +228,7 @@ function TableEdit( props ) {
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
-				const { columnIndex } = selectedCell;
-				onInsertColumn( { columnIndex, offset: 1 } );
+				onInsertColumn( 1 );
 			},
 		},
 		{

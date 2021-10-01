@@ -71,11 +71,6 @@ export const CELL_ARIA_LABEL = {
 	foot: __( 'Footer cell text', 'flexible-table-block' ),
 };
 
-export const SECTION_PLACEHOLDER = {
-	head: __( 'Header label', 'flexible-table-block' ),
-	foot: __( 'Footer label', 'flexible-table-block' ),
-};
-
 // Controls variations.
 export const JUSTIFY_CONTROLS = [ 'left', 'center', 'right' ];
 

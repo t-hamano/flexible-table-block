@@ -195,7 +195,6 @@ export function toVirtualSection( state, { sectionName, selectedCell } ) {
 				isFilled: true,
 				rowIndex: currentRowIndex,
 				columnIndex: currentColumnIndex,
-				vRowIndex: currentRowIndex,
 				vColumnIndex,
 			};
 

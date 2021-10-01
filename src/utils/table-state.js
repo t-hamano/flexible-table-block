@@ -11,13 +11,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import {
-	isEmptyTableSection,
-	isEmptyRow,
-	isRangeSelected,
-	isMultiSelected,
-	toVirtualSection,
-} from './helper';
+import { isEmptyTableSection, isRangeSelected, isMultiSelected, toVirtualSection } from './helper';
 import { convertToObject, convertToInline } from '../utils/style-converter';
 import {
 	updatePadding,
@@ -203,36 +197,64 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 /**
  * Inserts a column in the table state.
  *
- * @param {Object} state               Current table state.
+ * @param {Object} state                Current table state.
  * @param {Object} options
- * @param {number} options.columnIndex Column index at which to insert the column.
+ * @param {number} options.vColumnIndex Virtual column index at which to insert the column.
  * @return {Object} New table state.
  */
-export function insertColumn( state, { columnIndex } ) {
-	const tableSections = pick( state, [ 'head', 'body', 'foot' ] );
+export function insertColumn( state, { vColumnIndex } ) {
+	// Create virtual table array with the cells placed in positions based on how they actually look.
+	const vTable = {
+		head: state.head.length ? toVirtualSection( state, { sectionName: 'head' } ) : [],
+		body: state.body.length ? toVirtualSection( state, { sectionName: 'body' } ) : [],
+		foot: state.foot.length ? toVirtualSection( state, { sectionName: 'foot' } ) : [],
+	};
 
-	return mapValues( tableSections, ( section, sectionName ) => {
-		// Bail early if the table section is empty.
-		if ( isEmptyTableSection( section ) ) {
-			return section;
-		}
+	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
+
+	return mapValues( vSections, ( section, sectionName ) => {
+		if ( ! section.length ) return [];
 
 		return section.map( ( row ) => {
-			// Bail early if the row is empty or it's an attempt to insert past
-			// the last possible index of the array.
-			if ( isEmptyRow( row ) || row.cells.length < columnIndex ) {
-				return row;
-			}
-
 			return {
-				cells: [
-					...row.cells.slice( 0, columnIndex ),
-					{
-						content: '',
-						tag: 'head' === sectionName ? 'th' : 'td',
-					},
-					...row.cells.slice( columnIndex ),
-				],
+				cells: row
+					.reduce( ( cells, cell, currentColumnIndex ) => {
+						// Remove unnecessary properties.
+						delete cell.rowIndex;
+						delete cell.columnIndex;
+						delete cell.vColumnIndex;
+						delete cell.isSelected;
+						delete cell.isFilled;
+
+						// Expand cells with colspan in the before columns.
+						if (
+							cell.colSpan &&
+							currentColumnIndex < vColumnIndex &&
+							currentColumnIndex + parseInt( cell.colSpan ) - 1 >= vColumnIndex
+						) {
+							cells.push( {
+								...cell,
+								colSpan: parseInt( cell.colSpan ) + 1,
+							} );
+							return cells;
+						}
+
+						// Insert cell.
+						if ( currentColumnIndex === vColumnIndex && ! cell.isDelete ) {
+							cells.push(
+								{
+									content: '',
+									tag: 'head' === sectionName ? 'th' : 'td',
+								},
+								cell
+							);
+							return cells;
+						}
+
+						cells.push( cell );
+						return cells;
+					}, [] )
+					.filter( ( cell ) => ! cell.isDelete ),
 			};
 		} );
 	} );
@@ -387,16 +409,16 @@ export function splitMergedCells( state, { selectedCell } ) {
 		.filter( ( cell ) => cell.isSelected )[ 0 ];
 
 	// Split the selected cells and map them on the virtual section.
-	vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ] = {
-		...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
+	vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ] = {
+		...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ],
 		rowSpan: undefined,
 		colSpan: undefined,
 	};
 
 	if ( vSelectedCell.colSpan ) {
 		for ( let i = 1; i < parseInt( vSelectedCell.colSpan ); i++ ) {
-			vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex + i ] = {
-				...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
+			vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex + i ] = {
+				...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ],
 				content: undefined,
 			};
 		}
@@ -404,15 +426,15 @@ export function splitMergedCells( state, { selectedCell } ) {
 
 	if ( vSelectedCell.rowSpan ) {
 		for ( let i = 1; i < parseInt( vSelectedCell.rowSpan ); i++ ) {
-			vSection[ vSelectedCell.vRowIndex + i ][ vSelectedCell.vColumnIndex ] = {
-				...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
+			vSection[ vSelectedCell.rowIndex + i ][ vSelectedCell.vColumnIndex ] = {
+				...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ],
 				content: undefined,
 			};
 
 			if ( vSelectedCell.colSpan ) {
 				for ( let j = 1; j < parseInt( vSelectedCell.colSpan ); j++ ) {
-					vSection[ vSelectedCell.vRowIndex + i ][ vSelectedCell.vColumnIndex + j ] = {
-						...vSection[ vSelectedCell.vRowIndex ][ vSelectedCell.vColumnIndex ],
+					vSection[ vSelectedCell.rowIndex + i ][ vSelectedCell.vColumnIndex + j ] = {
+						...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ],
 						content: undefined,
 					};
 				}
@@ -428,7 +450,6 @@ export function splitMergedCells( state, { selectedCell } ) {
 						// Remove unnecessary properties.
 						delete cell.rowIndex;
 						delete cell.columnIndex;
-						delete cell.vRowIndex;
 						delete cell.vColumnIndex;
 						delete cell.isSelected;
 						delete cell.isFilled;

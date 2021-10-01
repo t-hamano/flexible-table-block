@@ -14,7 +14,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import { CELL_ARIA_LABEL, SECTION_PLACEHOLDER } from '../constants';
+import { CELL_ARIA_LABEL } from '../constants';
 import {
 	isMultiSelected,
 	isRangeSelected,
@@ -145,9 +145,9 @@ export default function Table( props ) {
 										const cellStylesObj = convertToObject( styles );
 
 										// Get the corresponding cell on the virtual table.
-										const vCell = vTable[ sectionName ][ rowIndex ].find( ( cell ) => {
-											return cell.rowIndex === rowIndex && cell.columnIndex === columnIndex;
-										} );
+										// const vCell = vTable[ sectionName ][ rowIndex ].find( ( cell ) => {
+										// 	return cell.rowIndex === rowIndex && cell.columnIndex === columnIndex;
+										// } );
 
 										let isCellSelected =
 											selectedCell &&
@@ -174,7 +174,8 @@ export default function Table( props ) {
 										}
 
 										// Whether the cell is placed in the first column on the actual table.
-										const isFirstColumn = columnIndex === 0 && vCell.vColumnIndex === 0;
+										// const isFirstColumn = columnIndex === 0 && vCell.vColumnIndex === 0;
+										const isFirstColumn = false;
 
 										const cellClass = classnames( {
 											'is-selected': isCellSelected,
@@ -412,7 +413,6 @@ export default function Table( props ) {
 														} );
 													} }
 													aria-label={ CELL_ARIA_LABEL[ sectionName ] }
-													placeholder={ SECTION_PLACEHOLDER[ sectionName ] }
 												/>
 												{ isSelected && isFirstColumn && options.show_control_button && (
 													<>
