@@ -151,7 +151,7 @@ export function hasMergedCells( state ) {
 
 /**
  * Create virtual section array with the cells placed in positions based on how they actually look.
- * This function is used to map each cell to the correct position when insert / delete row / column, or merge / split cells, etc.
+ * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
  *
  * @param {Object} state                Current table state.
  * @param {Object} options
@@ -162,12 +162,12 @@ export function hasMergedCells( state ) {
 export function toVirtualSection( state, { sectionName, selectedCell } ) {
 	const section = state[ sectionName ];
 
-	// Mark the index of the selected cells.
+	// Mark the selected cells.
 	if ( selectedCell ) {
 		section[ selectedCell.rowIndex ].cells[ selectedCell.columnIndex ].isSelected = true;
 	}
 
-	// Create a virtual section array without merged cells.
+	// Create a virtual section array.
 	const vRowCount = section.length;
 	const vColumnCount = section[ 0 ].cells.reduce( ( count, cell ) => {
 		return count + ( parseInt( cell.colSpan ) || 1 );
@@ -201,7 +201,7 @@ export function toVirtualSection( state, { sectionName, selectedCell } ) {
 			if ( cell.colSpan ) {
 				for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
 					vSection[ currentRowIndex ][ vColumnIndex + i ].isFilled = true;
-					// Mark as cells that do not exist in the actual section.
+					// Mark it as a cell to be deleted because it does not exist in the actual section.
 					vSection[ currentRowIndex ][ vColumnIndex + i ].isDelete = true;
 				}
 			}
@@ -209,13 +209,13 @@ export function toVirtualSection( state, { sectionName, selectedCell } ) {
 			if ( cell.rowSpan ) {
 				for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
 					vSection[ currentRowIndex + i ][ vColumnIndex ].isFilled = true;
-					// Mark as cells that do not exist in the actual section.
+					// Mark it as a cell to be deleted because it does not exist in the actual section.
 					vSection[ currentRowIndex + i ][ vColumnIndex ].isDelete = true;
 
 					if ( cell.colSpan ) {
 						for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
 							vSection[ currentRowIndex + i ][ vColumnIndex + j ].isFilled = true;
-							// Mark as cells that do not exist in the actual section.
+							// Mark it as a cell to be deleted because it does not exist in the actual section.
 							vSection[ currentRowIndex + i ][ vColumnIndex + j ].isDelete = true;
 						}
 					}

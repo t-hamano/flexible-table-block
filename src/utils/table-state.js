@@ -143,19 +143,30 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 		return state;
 	}
 
-	// Find the number of merged cells in the row to be deleted.
-	const mergedCellsCount = 1;
+	let newState = state;
 
-	// Split all merged cells in the row to be deleted.
-	let formattedSection = { ...state[ sectionName ] };
+	// Find the number of rowspan cells in the row to be deleted.
+	const rowSpanCellsCount = newState[ sectionName ][ rowIndex ].cells.filter(
+		( cell ) => cell.rowSpan
+	).length;
 
-	for ( let i = 0; i < mergedCellsCount; i++ ) {
-		const mergedCell = 'hoge'; // 結合されたセル
-		formattedSection = splitMergedCell( formattedSection, mergedCell );
+	// Split the found rowspan cells.
+	if ( rowSpanCellsCount ) {
+		for ( let i = 0; i < rowSpanCellsCount; i++ ) {
+			const selectedCell = {
+				sectionName,
+				rowIndex,
+				columnIndex: newState[ sectionName ][ rowIndex ].cells.findIndex(
+					( cell ) => cell.rowSpan
+				),
+			};
+
+			newState = splitMergedCells( newState, { selectedCell } );
+		}
 	}
 
 	return {
-		[ sectionName ]: formattedSection
+		[ sectionName ]: newState[ sectionName ]
 			.map( ( row, currentRowIndex ) => ( {
 				cells: row.cells
 					.map( ( cell ) => {
@@ -416,7 +427,7 @@ export function splitMergedCells( state, { selectedCell } ) {
 			return {
 				cells: row
 					.map( ( cell ) => {
-						// Remove unwanted properties.
+						// Remove unnecessary properties.
 						delete cell.vRowIndex;
 						delete cell.vColumnIndex;
 						delete cell.isSelected;
