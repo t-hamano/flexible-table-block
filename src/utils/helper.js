@@ -181,7 +181,7 @@ export function toVirtualSection( state, { sectionName, selectedCell } ) {
 
 	// Mapping the actual section cells on the virtual section cell.
 	section.forEach( ( row, currentRowIndex ) => {
-		row.cells.forEach( ( cell ) => {
+		row.cells.forEach( ( cell, currentColumnIndex ) => {
 			// Colmun index on the virtual section excluding cells already marked as "filled".
 			const vColumnIndex = vSection[ currentRowIndex ].findIndex( ( { isFilled } ) => ! isFilled );
 
@@ -189,10 +189,12 @@ export function toVirtualSection( state, { sectionName, selectedCell } ) {
 				return;
 			}
 
-			// Mark the cell as "filled" and record the position on the vertual section.
+			// Mark the cell as "filled" and record the position on the virtual section.
 			vSection[ currentRowIndex ][ vColumnIndex ] = {
 				...cell,
 				isFilled: true,
+				rowIndex: currentRowIndex,
+				columnIndex: currentColumnIndex,
 				vRowIndex: currentRowIndex,
 				vColumnIndex,
 			};

@@ -79,13 +79,11 @@ export function createTable( { rowCount, columnCount, headerSection, footerSecti
  */
 export function insertRow( state, { sectionName, rowIndex } ) {
 	// Number of columns in the row to be inserted.
-	const newRowColumnCount = state[ sectionName ][ rowIndex ].cells.reduce( function (
-		count,
-		cell
-	) {
-		return count + ( parseInt( cell.colSpan ) || 1 );
-	},
-	0 );
+	const sourceRowIndex = state[ sectionName ].length <= rowIndex ? 0 : rowIndex;
+	const newRowColumnCount = state[ sectionName ][ sourceRowIndex ].cells.reduce(
+		( count, cell ) => count + ( parseInt( cell.colSpan ) || 1 ),
+		0
+	);
 
 	// Row state to be inserted.
 	const newRow = {
@@ -282,7 +280,7 @@ export function toggleSection( state, sectionName ) {
 	}
 
 	// Number of columns in the row to be inserted.
-	const newRowColumnCount = state.body[ 0 ].cells.reduce( function ( count, cell ) {
+	const newRowColumnCount = state.body[ 0 ].cells.reduce( ( count, cell ) => {
 		return count + ( parseInt( cell.colSpan ) || 1 );
 	}, 0 );
 
@@ -428,6 +426,8 @@ export function splitMergedCells( state, { selectedCell } ) {
 				cells: row
 					.map( ( cell ) => {
 						// Remove unnecessary properties.
+						delete cell.rowIndex;
+						delete cell.columnIndex;
 						delete cell.vRowIndex;
 						delete cell.vColumnIndex;
 						delete cell.isSelected;
