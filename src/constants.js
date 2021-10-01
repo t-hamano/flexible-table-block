@@ -55,17 +55,6 @@ export const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
 export const MIN_RESPONSIVE_BREAKPOINT = 200;
 export const MAX_RESPONSIVE_BREAKPOINT = 1200;
 
-export const RESPONSIVE_BREAKPOINTS = [
-	{
-		value: MIN_RESPONSIVE_BREAKPOINT,
-		label: `${ MIN_RESPONSIVE_BREAKPOINT }px`,
-	},
-	{
-		value: MAX_RESPONSIVE_BREAKPOINT,
-		label: `${ MAX_RESPONSIVE_BREAKPOINT }px`,
-	},
-];
-
 // Available units on UnitControl component.
 export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ];
 export const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];

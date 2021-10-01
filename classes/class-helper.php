@@ -43,6 +43,12 @@ class Helper {
 				case 'cell_vertical_align':
 					$styles[ ".${selector} table th, .${selector} table td" ] .= "vertical-align:${value};";
 					break;
+				case 'cell_text_color_th':
+					$styles[ ".${selector} table th" ] .= "color:${value};";
+					break;
+				case 'cell_text_color_td':
+					$styles[ ".${selector} table td" ] .= "color:${value};";
+					break;
 				case 'cell_background_color_th':
 					$styles[ ".${selector} table th" ] .= "background-color:${value};";
 					break;

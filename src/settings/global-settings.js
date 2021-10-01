@@ -32,7 +32,6 @@ import {
 	DEFAULT_RESPONSIVE_BREAKPOINT,
 	MIN_RESPONSIVE_BREAKPOINT,
 	MAX_RESPONSIVE_BREAKPOINT,
-	RESPONSIVE_BREAKPOINTS,
 	TEXT_ALIGNMENT_CONTROLS,
 	VERTICAL_ALIGNMENT_CONTROLS,
 } from '../constants';
@@ -289,7 +288,6 @@ export default function GlobalSettings() {
 						afterIcon={ desktop }
 						min={ MIN_RESPONSIVE_BREAKPOINT }
 						max={ MAX_RESPONSIVE_BREAKPOINT }
-						marks={ RESPONSIVE_BREAKPOINTS }
 						value={ parseInt( options.breakpoint ) }
 						renderTooltipContent={ breakpointTooltip }
 						trackColor="transparent"
@@ -415,6 +413,40 @@ export default function GlobalSettings() {
 					</div>
 					<h2>{ __( 'Default Cell Style', 'flexible-table-block' ) }</h2>
 					<div className="ftb-global-setting-modal__styles">
+						<BorderColorControl
+							id="flexible-table-block/global-cell-text-color-th"
+							label={ __( 'Text Color ( th tag )', 'flexible-table-block' ) }
+							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.cell_text_color_th } }
+							allowSides={ false }
+							hasIndicator={ false }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									block_style: {
+										...options.block_style,
+										cell_text_color_th: value.top,
+									},
+								} );
+							} }
+						/>
+						<BorderColorControl
+							id="flexible-table-block/global-cell-text-color-td"
+							label={ __( 'Text Color ( td tag )', 'flexible-table-block' ) }
+							className="ftb-global-setting-modal__styles-item"
+							values={ { top: options.block_style?.cell_text_color_td } }
+							allowSides={ false }
+							hasIndicator={ false }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									block_style: {
+										...options.block_style,
+										cell_text_color_td: value.top,
+									},
+								} );
+							} }
+						/>
 						<BorderColorControl
 							id="flexible-table-block/global-cell-background-color-th"
 							label={ __( 'Background Color ( th tag )', 'flexible-table-block' ) }
