@@ -143,9 +143,7 @@ export default function GlobalSettings() {
 					icon={ help }
 					variant="link"
 					iconSize="20"
-					onClick={ () => {
-						setIsHelpModalOpen( true );
-					} }
+					onClick={ () => setIsHelpModalOpen( true ) }
 				>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
@@ -154,9 +152,7 @@ export default function GlobalSettings() {
 						icon={ cog }
 						variant="link"
 						iconSize="20"
-						onClick={ () => {
-							setIsSettingModalOpen( true );
-						} }
+						onClick={ () => setIsSettingModalOpen( true ) }
 					>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
 					</Button>
@@ -614,9 +610,7 @@ export default function GlobalSettings() {
 						<Button
 							variant="link"
 							disabled={ isWaiting }
-							onClick={ () => {
-								setIsResetPopup( ! isResetPopup );
-							} }
+							onClick={ () => setIsResetPopup( ! isResetPopup ) }
 						>
 							{ __( 'Reset Setting', 'flexible-table-block' ) }
 							{ isResetPopup && (
@@ -624,21 +618,14 @@ export default function GlobalSettings() {
 									className="ftb-global-setting-modal__confirm-popover"
 									focusOnMount="container"
 									position="top right"
-									onClose={ () => {
-										setIsResetPopup( false );
-									} }
+									onClose={ () => setIsResetPopup( false ) }
 								>
 									<p>{ __( 'Are you sure?', 'flexible-table-block' ) }</p>
 									<div className="ftb-global-setting-modal__confirm-popover-buttons">
 										<Button isDestructive onClick={ handleResetOptions }>
 											{ __( 'Reset', 'flexible-table-block' ) }
 										</Button>
-										<Button
-											variant="secondary"
-											onClick={ () => {
-												setIsResetPopup( false );
-											} }
-										>
+										<Button variant="secondary" onClick={ () => setIsResetPopup( false ) }>
 											{ __( 'Cancel', 'flexible-table-block' ) }
 										</Button>
 									</div>

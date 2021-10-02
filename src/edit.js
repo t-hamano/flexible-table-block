@@ -67,6 +67,31 @@ function TableEdit( props ) {
 		return select( STORE_NAME ).getOptions();
 	} );
 
+	// Reset the selection state of matrices and cells when the focus is off the block.
+	useEffect( () => {
+		if ( ! isSelected ) {
+			setSelectedCell();
+			setSelectedMultiCell();
+			setSelectedRangeCell();
+			setSelectedLine();
+		}
+	}, [ isSelected ] );
+
+	// Reset the selection state of matrices and cells when the state of a matrix or cell changes.
+	useEffect( () => {
+		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
+		setSelectedLine();
+	}, [ attributes.head, attributes.body, attributes.foot ] );
+
+	// Reset the selection state of cells when the state of selected line changes.
+	useEffect( () => {
+		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
+	}, [ selectedLine ] );
+
 	const onInsertRow = ( offset ) => {
 		if ( ! selectedCell ) return;
 
@@ -105,6 +130,7 @@ function TableEdit( props ) {
 
 		const { sectionName, colSpan } = selectedCell;
 
+		// Create virtual section array with the cells placed in positions based on how they actually look.
 		const vSection = toVirtualSection( attributes, { sectionName, selectedCell } );
 
 		if ( ! vSection ) return;
@@ -140,20 +166,6 @@ function TableEdit( props ) {
 	const onSplitMergedCells = () => {
 		setAttributes( splitMergedCells( attributes, { selectedCell } ) );
 	};
-
-	useEffect( () => {
-		if ( ! isSelected ) {
-			setSelectedCell();
-			setSelectedLine();
-		}
-	}, [ isSelected ] );
-
-	useEffect( () => {
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
-	}, [ attributes.head, attributes.body, attributes.foot ] );
 
 	const TableToolbarControls = [
 		{

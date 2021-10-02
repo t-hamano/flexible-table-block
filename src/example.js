@@ -27,15 +27,15 @@ export default {
 			{
 				cells: [
 					{
-						content: '5.2',
+						content: '5.8',
 						tag: 'td',
 					},
 					{
-						content: 'Jaco Pastorius',
+						content: 'Art Tatum',
 						tag: 'td',
 					},
 					{
-						content: __( 'May 7, 2019' ),
+						content: __( 'July 20, 2021', 'flexible-table-block' ),
 						tag: 'td',
 					},
 				],
@@ -43,15 +43,15 @@ export default {
 			{
 				cells: [
 					{
-						content: '5.1',
+						content: '5.7',
 						tag: 'td',
 					},
 					{
-						content: 'Betty Carter',
+						content: 'Esperanza Spalding',
 						tag: 'td',
 					},
 					{
-						content: __( 'February 21, 2019' ),
+						content: __( 'March 9, 2021', 'flexible-table-block' ),
 						tag: 'td',
 					},
 				],
@@ -63,11 +63,11 @@ export default {
 						tag: 'td',
 					},
 					{
-						content: 'Bebo Valdés',
+						content: 'Nina Simone',
 						tag: 'td',
 					},
 					{
-						content: __( 'December 6, 2018' ),
+						content: __( 'December 8, 2020', 'flexible-table-block' ),
 						tag: 'td',
 					},
 				],

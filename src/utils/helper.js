@@ -186,3 +186,15 @@ export function toVirtualSection( state, { sectionName, selectedCell } ) {
 
 	return notFilledCells.length ? false : vSection;
 }
+
+/**
+ * Get the start and end cells where the selection will be a rectangle in the virtual section based on the two selected cells.
+ *
+ * @param {Object} vSection               Current virtual section.
+ * @param {Object} options
+ * @param {Object} options.vSelectedCells Two currently selected cells on virtual section.
+ * @return {Object | boolean} Start and end cells selected to be rectangular on the virtual section, false otherwise.
+ */
+export function getVirtualRange( vSection, { vSelectedCells } ) {
+	return false;
+}
