@@ -58,7 +58,7 @@ class Settings {
 				'cell_text_color_th'       => '#ffffff',
 				'cell_text_color_td'       => null,
 				'cell_background_color_th' => '#007cba',
-				'cell_background_color_td' => null,
+				'cell_background_color_td' => '#ffffff',
 				'cell_padding'             => '1em',
 				'cell_border_width'        => '1px',
 				'cell_border_style'        => 'solid',

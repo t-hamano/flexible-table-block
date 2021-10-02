@@ -184,7 +184,8 @@
 .ftb-border-width-control,
 .ftb-border-style-control,
 .ftb-border-spacing-control,
-.ftb-border-color-control {
+.ftb-border-color-control,
+.ftb-color-control {
 
 	&__header {
 		display: flex;
@@ -250,7 +251,8 @@
 	}
 }
 
-.ftb-border-color-control {
+.ftb-border-color-control,
+.ftb-color-control {
 
 	&__controls {
 		display: flex;

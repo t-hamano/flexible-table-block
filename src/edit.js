@@ -358,7 +358,7 @@ function TableEdit( props ) {
 					<InspectorControls>
 						<PanelBody
 							title={ __( 'Table Settings', 'flexible-table-block' ) }
-							initialOpen={ true }
+							initialOpen={ false }
 						>
 							<TableSettings { ...tableSettingProps } />
 						</PanelBody>

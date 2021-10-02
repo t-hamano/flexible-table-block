@@ -35,12 +35,7 @@ import {
 	TEXT_ALIGNMENT_CONTROLS,
 	VERTICAL_ALIGNMENT_CONTROLS,
 } from '../constants';
-import {
-	BorderWidthControl,
-	BorderStyleControl,
-	BorderColorControl,
-	PaddingControl,
-} from '../controls';
+import { BorderWidthControl, BorderStyleControl, ColorControl, PaddingControl } from '../controls';
 import { toUnitVal } from '../utils/helper';
 
 export default function GlobalSettings() {
@@ -342,36 +337,32 @@ export default function GlobalSettings() {
 								} }
 							/>
 						</BaseControl>
-						<BorderColorControl
+						<ColorControl
 							id="flexible-table-block/global-row-odd-color"
 							label={ __( 'Stripe Background Color ( odd rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-							values={ { top: options.block_style?.row_odd_color } }
-							allowSides={ false }
-							hasIndicator={ false }
+							value={ options.block_style?.row_odd_color }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
 									block_style: {
 										...options.block_style,
-										row_odd_color: value.top,
+										row_odd_color: value,
 									},
 								} );
 							} }
 						/>
-						<BorderColorControl
+						<ColorControl
 							id="flexible-table-block/global-row-even-color"
 							label={ __( 'Stripe Background Color ( even rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-							values={ { top: options.block_style?.row_even_color } }
-							allowSides={ false }
-							hasIndicator={ false }
+							value={ options.block_style?.row_even_color }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
 									block_style: {
 										...options.block_style,
-										row_even_color: value.top,
+										row_even_color: value,
 									},
 								} );
 							} }
@@ -413,70 +404,62 @@ export default function GlobalSettings() {
 					</div>
 					<h2>{ __( 'Default Cell Style', 'flexible-table-block' ) }</h2>
 					<div className="ftb-global-setting-modal__styles">
-						<BorderColorControl
+						<ColorControl
 							id="flexible-table-block/global-cell-text-color-th"
 							label={ __( 'Text Color ( th tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-							values={ { top: options.block_style?.cell_text_color_th } }
-							allowSides={ false }
-							hasIndicator={ false }
+							value={ options.block_style?.cell_text_color_th }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
 									block_style: {
 										...options.block_style,
-										cell_text_color_th: value.top,
+										cell_text_color_th: value,
 									},
 								} );
 							} }
 						/>
-						<BorderColorControl
+						<ColorControl
 							id="flexible-table-block/global-cell-text-color-td"
 							label={ __( 'Text Color ( td tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-							values={ { top: options.block_style?.cell_text_color_td } }
-							allowSides={ false }
-							hasIndicator={ false }
+							value={ options.block_style?.cell_text_color_td }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
 									block_style: {
 										...options.block_style,
-										cell_text_color_td: value.top,
+										cell_text_color_td: value,
 									},
 								} );
 							} }
 						/>
-						<BorderColorControl
+						<ColorControl
 							id="flexible-table-block/global-cell-background-color-th"
 							label={ __( 'Background Color ( th tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-							values={ { top: options.block_style?.cell_background_color_th } }
-							allowSides={ false }
-							hasIndicator={ false }
+							value={ options.block_style?.cell_background_color_th }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
 									block_style: {
 										...options.block_style,
-										cell_background_color_th: value.top,
+										cell_background_color_th: value,
 									},
 								} );
 							} }
 						/>
-						<BorderColorControl
+						<ColorControl
 							id="flexible-table-block/global-cell-background-color-td"
 							label={ __( 'Background Color ( td tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-							values={ { top: options.block_style?.cell_background_color_td } }
-							allowSides={ false }
-							hasIndicator={ false }
+							value={ options.block_style?.cell_background_color_td }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
 									block_style: {
 										...options.block_style,
-										cell_background_color_td: value.top,
+										cell_background_color_td: value,
 									},
 								} );
 							} }
@@ -534,19 +517,17 @@ export default function GlobalSettings() {
 								} );
 							} }
 						/>
-						<BorderColorControl
+						<ColorControl
 							id="flexible-table-block/global-cell-border-color"
 							label={ __( 'Border Color', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-							values={ { top: options.block_style?.cell_border_color } }
-							allowSides={ false }
-							hasIndicator={ false }
+							value={ options.block_style?.cell_border_color }
 							onChange={ ( value ) => {
 								setOptions( {
 									...options,
 									block_style: {
 										...options.block_style,
-										cell_border_color: value.top,
+										cell_border_color: value,
 									},
 								} );
 							} }
