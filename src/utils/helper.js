@@ -102,26 +102,6 @@ export function isRangeSelected( selectedRangeCell ) {
 }
 
 /**
- * Determines Whether a table has merged cells.
- *
- * @param {Object} state Current table state.
- * @return {boolean} True if table has merged cells, false otherwise.
- */
-export function hasMergedCells( state ) {
-	[ 'head', 'body', 'foot' ].forEach( ( section ) => {
-		state[ section ].forEach( ( { cells } ) => {
-			cells.forEach( ( { rowSpan, colSpan } ) => {
-				if ( rowSpan || colSpan ) {
-					return true;
-				}
-			} );
-		} );
-	} );
-
-	return false;
-}
-
-/**
  * Create virtual section array with the cells placed in positions based on how they actually look.
  * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
  *

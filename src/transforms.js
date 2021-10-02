@@ -1,9 +1,12 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
 import { createBlock } from '@wordpress/blocks';
-import { hasMergedCells } from './utils/helper';
+
+/**
+ * Internal dependencies
+ */
+import { splitMergedCells } from './utils/table-state';
 
 const transforms = {
 	from: [
@@ -27,21 +30,57 @@ const transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
-				const { hasFixedLayout, head, body, foot, caption } = attributes;
+				let newAttributes = attributes;
 
-				// Show alert if table has merged cells.
-				if ( ! hasMergedCells( attributes ) ) {
-					// eslint-disable-next-line no-alert, no-undef
-					alert( __( 'Split all cells before transform.', 'flexible-table-block' ) );
-					return null;
-				}
+				// Split all merged cells.
+				[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
+					if ( ! newAttributes[ sectionName ].length ) return;
+
+					// Number of merged cells in the current section.
+					const mergedCellsCount = newAttributes[ sectionName ]
+						.reduce( ( cells, row ) => {
+							return cells.concat( row.cells );
+						}, [] )
+						.filter( ( cell ) => cell.rowSpan || cell.colSpan ).length;
+
+					if ( mergedCellsCount ) {
+						for ( let i = 0; i < mergedCellsCount; i++ ) {
+							// Get the merged cells.
+							const mergedCells = newAttributes[ sectionName ]
+								.reduce( ( cells, row, rowIndex ) => {
+									return cells.concat(
+										row.cells.map( ( cell, colIndex ) => {
+											return {
+												sectionName,
+												rowIndex,
+												colIndex,
+												rowSpan: cell.rowSpan,
+												colSpan: cell.colSpan,
+											};
+										} )
+									);
+								}, [] )
+								.filter( ( cell ) => cell.rowSpan || cell.colSpan );
+
+							// Split merged cell.
+							if ( mergedCells.length ) {
+								newAttributes = {
+									...newAttributes,
+									...splitMergedCells( newAttributes, {
+										selectedCell: mergedCells[ 0 ],
+									} ),
+								};
+							}
+						}
+					}
+				} );
 
 				return createBlock( 'core/table', {
-					hasFixedLayout,
-					head,
-					body,
-					foot,
-					caption,
+					hasFixedLayout: attributes.hasFixedLayout,
+					head: newAttributes.head,
+					body: newAttributes.body,
+					foot: newAttributes.foot,
+					caption: attributes.caption,
 				} );
 			},
 		},

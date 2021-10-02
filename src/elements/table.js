@@ -83,11 +83,6 @@ export default function Table( props ) {
 				rowIndex,
 			} )
 		);
-
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
 	};
 
 	const onSelectSectionCells = ( sectionName ) => {

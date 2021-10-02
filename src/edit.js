@@ -82,11 +82,6 @@ function TableEdit( props ) {
 				rowIndex: insertRowIndex,
 			} )
 		);
-
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
 	};
 
 	const onDeleteRow = () => {
@@ -103,11 +98,6 @@ function TableEdit( props ) {
 				rowIndex: deleteRowIndex,
 			} )
 		);
-
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
 	};
 
 	const onInsertColumn = ( offset ) => {
@@ -137,35 +127,18 @@ function TableEdit( props ) {
 				vColIndex: insertVColIndex,
 			} )
 		);
-
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
 	};
 
 	const onDeleteColumn = ( colIndex ) => {
 		setAttributes( deleteColumn( attributes, { colIndex } ) );
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
 	};
 
 	const onMergeCells = () => {
 		setAttributes( mergeCells( attributes, { selectedRangeCell } ) );
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
 	};
 
 	const onSplitMergedCells = () => {
 		setAttributes( splitMergedCells( attributes, { selectedCell } ) );
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
 	};
 
 	useEffect( () => {
@@ -174,6 +147,13 @@ function TableEdit( props ) {
 			setSelectedLine();
 		}
 	}, [ isSelected ] );
+
+	useEffect( () => {
+		setSelectedCell();
+		setSelectedMultiCell();
+		setSelectedRangeCell();
+		setSelectedLine();
+	}, [ attributes.head, attributes.body, attributes.foot ] );
 
 	const TableToolbarControls = [
 		{
