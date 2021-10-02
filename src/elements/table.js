@@ -151,9 +151,9 @@ export default function Table( props ) {
 										const cellStylesObj = convertToObject( styles );
 
 										// Get the corresponding cell on the virtual table.
-										const vCell = vTable[ sectionName ][ rowIndex ].find( ( cell ) => {
-											return cell.rowIndex === rowIndex && cell.colIndex === colIndex;
-										} );
+										// const vCell = vTable[ sectionName ][ rowIndex ].find( ( cell ) => {
+										// 	return cell.rowIndex === rowIndex && cell.colIndex === colIndex;
+										// } );
 
 										let isCellSelected =
 											selectedCell &&
@@ -180,7 +180,8 @@ export default function Table( props ) {
 										}
 
 										// Whether the cell is placed in the first column on the actual table.
-										const isFirstColumn = colIndex === 0 && vCell.vColIndex === 0;
+										// const isFirstCol = colIndex === 0 && vCell.vColIndex === 0;
+										const isFirstCol = false;
 
 										const cellClass = classnames( {
 											'is-selected': isCellSelected,
@@ -271,7 +272,7 @@ export default function Table( props ) {
 													) }
 												{ isSelected && options.show_control_button && (
 													<>
-														{ isFirstColumn && rowIndex === 0 && colIndex === 0 && (
+														{ isFirstCol && rowIndex === 0 && colIndex === 0 && (
 															<ButtonRowBeforeInserter
 																label={ __( 'Insert row before', 'flexible-table-block' ) }
 																tabIndex={ options.prevent_focus_control_button && -1 }
@@ -283,7 +284,7 @@ export default function Table( props ) {
 																} }
 															/>
 														) }
-														{ isFirstColumn && colIndex === 0 && (
+														{ isFirstCol && colIndex === 0 && (
 															<>
 																<ButtonRowSelector
 																	label={ __( 'Select row', 'flexible-table-block' ) }
@@ -418,7 +419,7 @@ export default function Table( props ) {
 													} }
 													aria-label={ CELL_ARIA_LABEL[ sectionName ] }
 												/>
-												{ isSelected && isFirstColumn && options.show_control_button && (
+												{ isSelected && isFirstCol && options.show_control_button && (
 													<>
 														{ sectionIndex === 0 && rowIndex === 0 && (
 															<ButtonColumnAfterInserter

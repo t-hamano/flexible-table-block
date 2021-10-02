@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Flexible Table Block
  * Description: A block that allows you to create flexible configuration tables.
- * Version: 2.0.0
+ * Version: 1.0.0
  * Author: Tetsuaki Hamano
  * Author URI: https://github.com/t-hamano
  * License: GPL2 or later

@@ -395,6 +395,7 @@ export function splitMergedCells( state, { selectedCell } ) {
 	const { sectionName } = selectedCell;
 
 	// Create virtual section array with the cells placed in positions based on how they actually look.
+
 	const vSection = toVirtualSection( state, { sectionName, selectedCell } );
 
 	if ( ! vSection ) return state;
