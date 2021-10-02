@@ -105,19 +105,13 @@ export function isRangeSelected( selectedRangeCell ) {
  * Create virtual section array with the cells placed in positions based on how they actually look.
  * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
  *
- * @param {Object} state                Current table state.
+ * @param {Object} state               Current table state.
  * @param {Object} options
- * @param {Object} options.sectionName  Section in which to transform to virtual section.
- * @param {Object} options.selectedCell Current selected cell.
+ * @param {Object} options.sectionName Section in which to transform to virtual section.
  * @return {Object | boolean} Array of virtual section if all the cells of the virtual section are filled, false otherwise.
  */
-export function toVirtualSection( state, { sectionName, selectedCell } ) {
+export function toVirtualSection( state, { sectionName } ) {
 	const section = state[ sectionName ];
-
-	// Mark the selected cells.
-	if ( selectedCell ) {
-		section[ selectedCell.rowIndex ].cells[ selectedCell.colIndex ].isSelected = true;
-	}
 
 	// Create a virtual section array.
 	const vRowCount = section.length;

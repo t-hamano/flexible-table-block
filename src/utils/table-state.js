@@ -195,19 +195,12 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 /**
  * Inserts a column in the table state.
  *
- * @param {Object} state             Current table state.
+ * @param {Object} vTable            Virtual table in which to delete the row.
  * @param {Object} options
  * @param {number} options.vColIndex Virtual column index at which to insert the column.
  * @return {Object} New table state.
  */
-export function insertColumn( state, { vColIndex } ) {
-	// Create virtual table array with the cells placed in positions based on how they actually look.
-	const vTable = {
-		head: state.head.length ? toVirtualSection( state, { sectionName: 'head' } ) : [],
-		body: state.body.length ? toVirtualSection( state, { sectionName: 'body' } ) : [],
-		foot: state.foot.length ? toVirtualSection( state, { sectionName: 'foot' } ) : [],
-	};
-
+export function insertColumn( vTable, { vColIndex } ) {
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
 	return mapValues( vSections, ( section, sectionName ) => {
@@ -395,7 +388,6 @@ export function splitMergedCells( state, { selectedCell } ) {
 	const { sectionName } = selectedCell;
 
 	// Create virtual section array with the cells placed in positions based on how they actually look.
-
 	const vSection = toVirtualSection( state, { sectionName, selectedCell } );
 
 	if ( ! vSection ) return state;

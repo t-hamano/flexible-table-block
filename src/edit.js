@@ -67,6 +67,13 @@ function TableEdit( props ) {
 		return select( STORE_NAME ).getOptions();
 	} );
 
+	// Create virtual table array with the cells placed in positions based on how they actually look.
+	const vTable = {
+		head: attributes.head.length ? toVirtualSection( attributes, { sectionName: 'head' } ) : [],
+		body: attributes.body.length ? toVirtualSection( attributes, { sectionName: 'body' } ) : [],
+		foot: attributes.foot.length ? toVirtualSection( attributes, { sectionName: 'foot' } ) : [],
+	};
+
 	// Reset the selection state of matrices and cells when the focus is off the block.
 	useEffect( () => {
 		if ( ! isSelected ) {
@@ -128,19 +135,14 @@ function TableEdit( props ) {
 	const onInsertColumn = ( offset ) => {
 		if ( ! selectedCell ) return;
 
-		const { sectionName, colSpan } = selectedCell;
-
-		// Create virtual section array with the cells placed in positions based on how they actually look.
-		const vSection = toVirtualSection( attributes, { sectionName, selectedCell } );
-
-		if ( ! vSection ) return;
+		const { sectionName, rowIndex, colIndex, colSpan } = selectedCell;
 
 		// The selected cell column index on the virtual section.
-		const vSelectedCell = vSection
+		const vSelectedCell = vTable[ sectionName ]
 			.reduce( ( cells, row ) => {
 				return cells.concat( row );
 			}, [] )
-			.filter( ( cell ) => cell.isSelected )[ 0 ];
+			.filter( ( cell ) => cell.rowIndex === rowIndex && cell.colIndex === colIndex )[ 0 ];
 
 		// Calculate column index to be inserted considering colspan of the selected cell.
 		const insertVColIndex =
@@ -149,7 +151,7 @@ function TableEdit( props ) {
 				: vSelectedCell.vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
 
 		setAttributes(
-			insertColumn( attributes, {
+			insertColumn( vTable, {
 				vColIndex: insertVColIndex,
 			} )
 		);
@@ -278,6 +280,7 @@ function TableEdit( props ) {
 	const tableProps = {
 		...props,
 		options,
+		vTable,
 		filteredSections,
 		tableStylesObj,
 		selectedCell,

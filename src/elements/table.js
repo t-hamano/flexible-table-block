@@ -15,7 +15,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL } from '../constants';
-import { isMultiSelected, isRangeSelected, toVirtualSection } from '../utils/helper';
+import { isMultiSelected, isRangeSelected } from '../utils/helper';
 import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -42,6 +42,7 @@ export default function Table( props ) {
 	const {
 		filteredSections,
 		options,
+		vTable,
 		attributes,
 		setAttributes,
 		tableStylesObj,
@@ -60,13 +61,6 @@ export default function Table( props ) {
 
 	const colorProps = useColorProps( attributes );
 
-	// Create virtual table array with the cells placed in positions based on how they actually look.
-	const vTable = {
-		head: attributes.head.length ? toVirtualSection( attributes, { sectionName: 'head' } ) : [],
-		body: attributes.body.length ? toVirtualSection( attributes, { sectionName: 'body' } ) : [],
-		foot: attributes.foot.length ? toVirtualSection( attributes, { sectionName: 'foot' } ) : [],
-	};
-
 	const onInsertRow = ( sectionName, rowIndex ) => {
 		setAttributes(
 			insertRow( attributes, {
@@ -81,6 +75,29 @@ export default function Table( props ) {
 			deleteRow( attributes, {
 				sectionName,
 				rowIndex,
+			} )
+		);
+	};
+
+	const onInsertColumn = ( sectionName, colIndex, offset ) => {
+		// The target cell column index on the virtual section.
+		const vTargetCell = vTable[ sectionName ]
+			.reduce( ( cells, row ) => {
+				return cells.concat( row );
+			}, [] )
+			.filter( ( cell ) => cell.colIndex === colIndex )[ 0 ];
+
+		// Calculate column index to be inserted considering colspan of the target cell.
+		const insertVColIndex =
+			offset === 0
+				? vTargetCell.vColIndex
+				: vTargetCell.vColIndex +
+				  offset +
+				  ( vTargetCell.colSpan ? parseInt( vTargetCell.colSpan ) - 1 : 0 );
+
+		setAttributes(
+			insertColumn( vTable, {
+				vColIndex: insertVColIndex,
 			} )
 		);
 	};
@@ -321,9 +338,7 @@ export default function Table( props ) {
 															tabIndex={ options.prevent_focus_control_button && -1 }
 															icon={ plus }
 															iconSize="18"
-															onClick={ () =>
-																onInsertColumn( { sectionName, colIndex, offset: 0 } )
-															}
+															onClick={ () => onInsertColumn( sectionName, colIndex, 0 ) }
 														/>
 													) }
 													{ sectionIndex === 0 && rowIndex === 0 && (
@@ -402,7 +417,7 @@ export default function Table( props ) {
 														tabIndex={ options.prevent_focus_control_button && -1 }
 														icon={ plus }
 														iconSize="18"
-														onClick={ () => onInsertColumn( { sectionName, colIndex, offset: 1 } ) }
+														onClick={ () => onInsertColumn( sectionName, colIndex, 1 ) }
 													/>
 												) }
 										</Cell>
