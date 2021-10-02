@@ -75,7 +75,7 @@ class Enqueue {
 
 		$breakpoint     = get_option( FTB_OPTION_PREFIX . '_breakpoint', Settings::OPTIONS['breakpoint']['default'] );
 		$responsive_css = Helper::get_responsive_css( $breakpoint );
-		$block_css      = Helper::get_block_css( 'editor-styles-wrapper ' );
+		$block_css      = Helper::get_block_css();
 		$css            = Helper::minify_css( $responsive_css . $block_css );
 		wp_add_inline_style( FTB_NAMESPACE, $css );
 	}

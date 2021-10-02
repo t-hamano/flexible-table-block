@@ -97,9 +97,9 @@ export default function TablePlaceholder( { setAttributes } ) {
 					{ headerSection && rowCount && columnCount && (
 						<thead>
 							<tr>
-								{ times( columnCount, ( columnIndex ) => {
-									if ( columnIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-									return <th key={ columnIndex } style={ { height: cellHeight } } />;
+								{ times( columnCount, ( colIndex ) => {
+									if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
+									return <th key={ colIndex } style={ { height: cellHeight } } />;
 								} ) }
 							</tr>
 						</thead>
@@ -109,9 +109,9 @@ export default function TablePlaceholder( { setAttributes } ) {
 							if ( rowIndex > THRESHOLD_PREVIEW_TABLE_ROW ) return;
 							return (
 								<tr key={ rowIndex }>
-									{ times( Math.min( columnCount, MAX_PREVIEW_TABLE_COL ), ( columnIndex ) => {
-										if ( columnIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-										return <td key={ columnIndex } style={ { height: cellHeight } } />;
+									{ times( Math.min( columnCount, MAX_PREVIEW_TABLE_COL ), ( colIndex ) => {
+										if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
+										return <td key={ colIndex } style={ { height: cellHeight } } />;
 									} ) }
 								</tr>
 							);
@@ -120,9 +120,9 @@ export default function TablePlaceholder( { setAttributes } ) {
 					{ footerSection && rowCount && columnCount && (
 						<tfoot>
 							<tr>
-								{ times( columnCount, ( columnIndex ) => {
-									if ( columnIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-									return <td key={ columnIndex } style={ { height: cellHeight } } />;
+								{ times( columnCount, ( colIndex ) => {
+									if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
+									return <td key={ colIndex } style={ { height: cellHeight } } />;
 								} ) }
 							</tr>
 						</tfoot>

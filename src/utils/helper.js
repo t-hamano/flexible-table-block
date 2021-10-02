@@ -92,18 +92,18 @@ export function getSectionRange( state, sectionName ) {
 	if ( ! state[ sectionName ] ) return undefined;
 
 	const lastRowIndex = state[ sectionName ].length - 1;
-	const lastColumnIndex = state[ sectionName ][ lastRowIndex ].cells.length - 1;
+	const lastColIndex = state[ sectionName ][ lastRowIndex ].cells.length - 1;
 
 	const fromCell = {
 		sectionName,
 		rowIndex: 0,
-		columnIndex: 0,
+		colIndex: 0,
 	};
 
 	const toCell = {
 		sectionName,
 		rowIndex: lastRowIndex,
-		columnIndex: lastColumnIndex,
+		colIndex: lastColIndex,
 	};
 
 	return { fromCell, toCell };
@@ -164,60 +164,60 @@ export function toVirtualSection( state, { sectionName, selectedCell } ) {
 
 	// Mark the selected cells.
 	if ( selectedCell ) {
-		section[ selectedCell.rowIndex ].cells[ selectedCell.columnIndex ].isSelected = true;
+		section[ selectedCell.rowIndex ].cells[ selectedCell.colIndex ].isSelected = true;
 	}
 
 	// Create a virtual section array.
 	const vRowCount = section.length;
-	const vColumnCount = section[ 0 ].cells.reduce( ( count, cell ) => {
+	const vColCount = section[ 0 ].cells.reduce( ( count, cell ) => {
 		return count + ( parseInt( cell.colSpan ) || 1 );
 	}, 0 );
 
 	const vSection = times( vRowCount, () =>
-		times( vColumnCount, () => ( {
+		times( vColCount, () => ( {
 			isFilled: false, // Whether the actual cell is placed or not.
 		} ) )
 	);
 
 	// Mapping the actual section cells on the virtual section cell.
 	section.forEach( ( row, currentRowIndex ) => {
-		row.cells.forEach( ( cell, currentColumnIndex ) => {
+		row.cells.forEach( ( cell, currentColIndex ) => {
 			// Colmun index on the virtual section excluding cells already marked as "filled".
-			const vColumnIndex = vSection[ currentRowIndex ].findIndex( ( { isFilled } ) => ! isFilled );
+			const vColIndex = vSection[ currentRowIndex ].findIndex( ( { isFilled } ) => ! isFilled );
 
-			if ( vColumnIndex === -1 ) {
+			if ( vColIndex === -1 ) {
 				return;
 			}
 
 			// Mark the cell as "filled" and record the position on the virtual section.
-			vSection[ currentRowIndex ][ vColumnIndex ] = {
+			vSection[ currentRowIndex ][ vColIndex ] = {
 				...cell,
 				isFilled: true,
 				rowIndex: currentRowIndex,
-				columnIndex: currentColumnIndex,
-				vColumnIndex,
+				colIndex: currentColIndex,
+				vColIndex,
 			};
 
 			// For cells with rowspan/colspan, mark cells that are visually filled as "filled".
 			if ( cell.colSpan ) {
 				for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
-					vSection[ currentRowIndex ][ vColumnIndex + i ].isFilled = true;
+					vSection[ currentRowIndex ][ vColIndex + i ].isFilled = true;
 					// Mark it as a cell to be deleted because it does not exist in the actual section.
-					vSection[ currentRowIndex ][ vColumnIndex + i ].isDelete = true;
+					vSection[ currentRowIndex ][ vColIndex + i ].isDelete = true;
 				}
 			}
 
 			if ( cell.rowSpan ) {
 				for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
-					vSection[ currentRowIndex + i ][ vColumnIndex ].isFilled = true;
+					vSection[ currentRowIndex + i ][ vColIndex ].isFilled = true;
 					// Mark it as a cell to be deleted because it does not exist in the actual section.
-					vSection[ currentRowIndex + i ][ vColumnIndex ].isDelete = true;
+					vSection[ currentRowIndex + i ][ vColIndex ].isDelete = true;
 
 					if ( cell.colSpan ) {
 						for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
-							vSection[ currentRowIndex + i ][ vColumnIndex + j ].isFilled = true;
+							vSection[ currentRowIndex + i ][ vColIndex + j ].isFilled = true;
 							// Mark it as a cell to be deleted because it does not exist in the actual section.
-							vSection[ currentRowIndex + i ][ vColumnIndex + j ].isDelete = true;
+							vSection[ currentRowIndex + i ][ vColIndex + j ].isDelete = true;
 						}
 					}
 				}

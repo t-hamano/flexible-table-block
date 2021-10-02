@@ -99,7 +99,7 @@ export default function Table( props ) {
 		const {
 			sectionName: selectedSectionName,
 			rowIndex: selectedRowIndex,
-			columnIndex: selectedColumnIndex,
+			colIndex: selectedColIndex,
 		} = selectedCell;
 
 		if ( ! attributes[ selectedSectionName ] ) return;
@@ -110,8 +110,8 @@ export default function Table( props ) {
 			}
 
 			return {
-				cells: row.cells.map( ( cell, columnIndex ) => {
-					if ( columnIndex !== selectedColumnIndex ) {
+				cells: row.cells.map( ( cell, colIndex ) => {
+					if ( colIndex !== selectedColIndex ) {
 						return cell;
 					}
 
@@ -141,41 +141,40 @@ export default function Table( props ) {
 						<TSection name={ sectionName } key={ sectionName }>
 							{ attributes[ sectionName ].map( ( { cells }, rowIndex, row ) => (
 								<tr key={ rowIndex }>
-									{ cells.map( ( { content, tag, styles, rowSpan, colSpan }, columnIndex ) => {
+									{ cells.map( ( { content, tag, styles, rowSpan, colSpan }, colIndex ) => {
 										const cellStylesObj = convertToObject( styles );
 
 										// Get the corresponding cell on the virtual table.
-										// const vCell = vTable[ sectionName ][ rowIndex ].find( ( cell ) => {
-										// 	return cell.rowIndex === rowIndex && cell.columnIndex === columnIndex;
-										// } );
+										const vCell = vTable[ sectionName ][ rowIndex ].find( ( cell ) => {
+											return cell.rowIndex === rowIndex && cell.colIndex === colIndex;
+										} );
 
 										let isCellSelected =
 											selectedCell &&
 											selectedCell.sectionName === sectionName &&
 											selectedCell.rowIndex === rowIndex &&
-											selectedCell.columnIndex === columnIndex;
+											selectedCell.colIndex === colIndex;
 
 										if ( isRangeSelected( selectedRangeCell ) ) {
 											const { fromCell, toCell } = selectedRangeCell;
 											isCellSelected =
 												rowIndex >= Math.min( fromCell.rowIndex, toCell.rowIndex ) &&
 												rowIndex <= Math.max( fromCell.rowIndex, toCell.rowIndex ) &&
-												columnIndex >= Math.min( fromCell.columnIndex, toCell.columnIndex ) &&
-												columnIndex <= Math.max( fromCell.columnIndex, toCell.columnIndex ) &&
+												colIndex >= Math.min( fromCell.colIndex, toCell.colIndex ) &&
+												colIndex <= Math.max( fromCell.colIndex, toCell.colIndex ) &&
 												sectionName === fromCell.sectionName;
 										} else if ( isMultiSelected( selectedMultiCell ) ) {
 											isCellSelected = !! selectedMultiCell.find( ( cell ) => {
 												return (
 													cell.sectionName === sectionName &&
 													cell.rowIndex === rowIndex &&
-													cell.columnIndex === columnIndex
+													cell.colIndex === colIndex
 												);
 											} );
 										}
 
 										// Whether the cell is placed in the first column on the actual table.
-										// const isFirstColumn = columnIndex === 0 && vCell.vColumnIndex === 0;
-										const isFirstColumn = false;
+										const isFirstColumn = colIndex === 0 && vCell.vColIndex === 0;
 
 										const cellClass = classnames( {
 											'is-selected': isCellSelected,
@@ -183,14 +182,14 @@ export default function Table( props ) {
 
 										return (
 											<Cell
-												key={ columnIndex }
+												key={ colIndex }
 												name={ tag }
 												className={ cellClass }
 												rowSpan={ rowSpan }
 												colSpan={ colSpan }
 												style={ cellStylesObj }
 												onClick={ ( e ) => {
-													const clickedCell = { sectionName, rowIndex, columnIndex };
+													const clickedCell = { sectionName, rowIndex, colIndex };
 
 													if ( e.shiftKey ) {
 														if ( ! selectedRangeCell?.fromCell ) return;
@@ -216,7 +215,7 @@ export default function Table( props ) {
 															return (
 																cell.sectionName === sectionName &&
 																cell.rowIndex === rowIndex &&
-																cell.columnIndex === columnIndex
+																cell.colIndex === colIndex
 															);
 														} );
 
@@ -251,7 +250,7 @@ export default function Table( props ) {
 												{ isSelected &&
 													options.show_label_on_section &&
 													rowIndex === 0 &&
-													columnIndex === 0 && (
+													colIndex === 0 && (
 														<Button
 															className="ftb-table-cell-label"
 															tabIndex={ options.prevent_focus_control_button && -1 }
@@ -267,7 +266,7 @@ export default function Table( props ) {
 													) }
 												{ isSelected && options.show_control_button && (
 													<>
-														{ isFirstColumn && rowIndex === 0 && columnIndex === 0 && (
+														{ isFirstColumn && rowIndex === 0 && colIndex === 0 && (
 															<ButtonRowBeforeInserter
 																label={ __( 'Insert row before', 'flexible-table-block' ) }
 																tabIndex={ options.prevent_focus_control_button && -1 }
@@ -279,7 +278,7 @@ export default function Table( props ) {
 																} }
 															/>
 														) }
-														{ isFirstColumn && columnIndex === 0 && (
+														{ isFirstColumn && colIndex === 0 && (
 															<>
 																<ButtonRowSelector
 																	label={ __( 'Select row', 'flexible-table-block' ) }
@@ -327,14 +326,14 @@ export default function Table( props ) {
 																</ButtonRowSelector>
 															</>
 														) }
-														{ sectionIndex === 0 && rowIndex === 0 && columnIndex === 0 && (
+														{ sectionIndex === 0 && rowIndex === 0 && colIndex === 0 && (
 															<ButtonColumnBeforeInserter
 																label={ __( 'Insert column before', 'flexible-table-block' ) }
 																tabIndex={ options.prevent_focus_control_button && -1 }
 																icon={ plus }
 																iconSize="18"
 																onClick={ () => {
-																	onInsertColumn( { sectionName, columnIndex, offset: 0 } );
+																	onInsertColumn( { sectionName, colIndex, offset: 0 } );
 																} }
 															/>
 														) }
@@ -346,18 +345,18 @@ export default function Table( props ) {
 																	icon={ moreHorizontal }
 																	iconSize="18"
 																	variant={
-																		selectedLine?.direction === 'column' &&
-																		selectedLine?.columnIndex === columnIndex
+																		selectedLine?.direction === 'col' &&
+																		selectedLine?.colIndex === colIndex
 																			? 'primary'
 																			: undefined
 																	}
 																	onClick={ () => {
 																		setSelectedCell();
-																		setSelectedLine( { direction: 'column', columnIndex } );
+																		setSelectedLine( { direction: 'col', colIndex } );
 																	} }
 																>
-																	{ selectedLine?.direction === 'column' &&
-																		selectedLine?.columnIndex === columnIndex && (
+																	{ selectedLine?.direction === 'col' &&
+																		selectedLine?.colIndex === colIndex && (
 																			<Popover
 																				focusOnMount="container"
 																				position="top center"
@@ -371,7 +370,7 @@ export default function Table( props ) {
 																					icon={ trash }
 																					iconSize={ 20 }
 																					onClick={ ( event ) => {
-																						onDeleteColumn( columnIndex );
+																						onDeleteColumn( colIndex );
 																						event.stopPropagation();
 																					} }
 																				/>
@@ -380,7 +379,7 @@ export default function Table( props ) {
 																</ButtonColumnSelector>
 															</>
 														) }
-														{ columnIndex === 0 && (
+														{ colIndex === 0 && (
 															<ButtonRowAfterInserter
 																label={ __( 'Insert row after', 'flexible-table-block' ) }
 																tabIndex={ options.prevent_focus_control_button && -1 }
@@ -397,7 +396,7 @@ export default function Table( props ) {
 													</>
 												) }
 												<RichText
-													key={ columnIndex }
+													key={ colIndex }
 													value={ content }
 													onChange={ onChangeCellContent }
 													unstableOnFocus={ () => {
@@ -405,7 +404,7 @@ export default function Table( props ) {
 														setSelectedCell( {
 															sectionName,
 															rowIndex,
-															columnIndex,
+															colIndex,
 															rowSpan,
 															colSpan,
 															tag,
@@ -423,7 +422,7 @@ export default function Table( props ) {
 																icon={ plus }
 																iconSize="18"
 																onClick={ () => {
-																	onInsertColumn( { sectionName, columnIndex, offset: 1 } );
+																	onInsertColumn( { sectionName, colIndex, offset: 1 } );
 																} }
 															/>
 														) }

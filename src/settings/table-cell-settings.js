@@ -64,9 +64,9 @@ export default function TableCellSettings( props ) {
 
 	if ( ! selectedCell ) return null;
 
-	const { sectionName, rowIndex, columnIndex } = selectedCell;
+	const { sectionName, rowIndex, colIndex } = selectedCell;
 
-	const targetCell = attributes[ sectionName ][ rowIndex ].cells[ columnIndex ];
+	const targetCell = attributes[ sectionName ][ rowIndex ].cells[ colIndex ];
 
 	if ( ! targetCell ) return null;
 

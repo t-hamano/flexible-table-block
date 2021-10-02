@@ -135,7 +135,12 @@ export default function BorderColorControl( {
 								{ isMixed ? (
 									__( 'Mixed', 'flexible-table-block' )
 								) : (
-									<ColorIndicator colorValue={ allInputValue } />
+									<ColorIndicator
+										className={ classnames( {
+											'component-color-indicator--none': ! allInputValue,
+										} ) }
+										colorValue={ allInputValue }
+									/>
 								) }
 							</Button>
 							{ isPickerOpen && ! pickerIndex && (
@@ -166,7 +171,12 @@ export default function BorderColorControl( {
 											handleOnPickerOpen( index );
 										} }
 									>
-										<ColorIndicator colorValue={ values[ item.value ] } />
+										<ColorIndicator
+											className={ classnames( {
+												'component-color-indicator--none': ! values[ item.value ],
+											} ) }
+											colorValue={ values[ item.value ] }
+										/>
 									</Button>
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover

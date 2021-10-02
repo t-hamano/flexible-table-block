@@ -273,9 +273,20 @@
 		padding: 0;
 
 		.component-color-indicator {
+			position: relative;
 			flex: 1;
 			height: 100%;
 			margin: 0;
+
+			&--none::before {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				background-image: linear-gradient(to right top, transparent 45%, #cc1818 calc(45% + 1px), #cc1818 calc(55% - 1px), transparent 55%);
+				content: "";
+			}
 		}
 	}
 

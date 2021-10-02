@@ -26,17 +26,17 @@ import {
  *
  * @param {Object}  options
  * @param {number}  options.rowCount      Row count for the table to create.
- * @param {number}  options.columnCount   Column count for the table to create.
+ * @param {number}  options.colCount      Column count for the table to create.
  * @param {boolean} options.headerSection With/without header section.
  * @param {boolean} options.footerSection With/without footer section.
  * @return {Object} New table state.
  */
-export function createTable( { rowCount, columnCount, headerSection, footerSection } ) {
+export function createTable( { rowCount, colCount, headerSection, footerSection } ) {
 	return {
 		...( headerSection && {
 			head: [
 				{
-					cells: times( columnCount, () => ( {
+					cells: times( colCount, () => ( {
 						content: '',
 						tag: 'th',
 					} ) ),
@@ -44,7 +44,7 @@ export function createTable( { rowCount, columnCount, headerSection, footerSecti
 			],
 		} ),
 		body: times( rowCount, () => ( {
-			cells: times( columnCount, () => ( {
+			cells: times( colCount, () => ( {
 				content: '',
 				tag: 'td',
 			} ) ),
@@ -52,7 +52,7 @@ export function createTable( { rowCount, columnCount, headerSection, footerSecti
 		...( footerSection && {
 			foot: [
 				{
-					cells: times( columnCount, () => ( {
+					cells: times( colCount, () => ( {
 						content: '',
 						tag: 'td',
 					} ) ),
@@ -148,9 +148,7 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 			const selectedCell = {
 				sectionName,
 				rowIndex,
-				columnIndex: newState[ sectionName ][ rowIndex ].cells.findIndex(
-					( cell ) => cell.rowSpan
-				),
+				colIndex: newState[ sectionName ][ rowIndex ].cells.findIndex( ( cell ) => cell.rowSpan ),
 			};
 
 			newState = splitMergedCells( newState, { selectedCell } );
@@ -197,12 +195,12 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 /**
  * Inserts a column in the table state.
  *
- * @param {Object} state                Current table state.
+ * @param {Object} state             Current table state.
  * @param {Object} options
- * @param {number} options.vColumnIndex Virtual column index at which to insert the column.
+ * @param {number} options.vColIndex Virtual column index at which to insert the column.
  * @return {Object} New table state.
  */
-export function insertColumn( state, { vColumnIndex } ) {
+export function insertColumn( state, { vColIndex } ) {
 	// Create virtual table array with the cells placed in positions based on how they actually look.
 	const vTable = {
 		head: state.head.length ? toVirtualSection( state, { sectionName: 'head' } ) : [],
@@ -218,19 +216,19 @@ export function insertColumn( state, { vColumnIndex } ) {
 		return section.map( ( row ) => {
 			return {
 				cells: row
-					.reduce( ( cells, cell, currentColumnIndex ) => {
+					.reduce( ( cells, cell, currentColIndex ) => {
 						// Remove unnecessary properties.
 						delete cell.rowIndex;
-						delete cell.columnIndex;
-						delete cell.vColumnIndex;
+						delete cell.colIndex;
+						delete cell.vColIndex;
 						delete cell.isSelected;
 						delete cell.isFilled;
 
 						// Expand cells with colspan in the before columns.
 						if (
 							cell.colSpan &&
-							currentColumnIndex < vColumnIndex &&
-							currentColumnIndex + parseInt( cell.colSpan ) - 1 >= vColumnIndex
+							currentColIndex < vColIndex &&
+							currentColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
 						) {
 							cells.push( {
 								...cell,
@@ -240,7 +238,7 @@ export function insertColumn( state, { vColumnIndex } ) {
 						}
 
 						// Insert cell.
-						if ( currentColumnIndex === vColumnIndex && ! cell.isDelete ) {
+						if ( currentColIndex === vColIndex && ! cell.isDelete ) {
 							cells.push(
 								{
 									content: '',
@@ -263,12 +261,12 @@ export function insertColumn( state, { vColumnIndex } ) {
 /**
  * Deletes a column from the table state.
  *
- * @param {Object} state               Current table state.
+ * @param {Object} state            Current table state.
  * @param {Object} options
- * @param {number} options.columnIndex Column index to delete.
+ * @param {number} options.colIndex Column index to delete.
  * @return {Object} New table state.
  */
-export function deleteColumn( state, { columnIndex } ) {
+export function deleteColumn( state, { colIndex } ) {
 	const tableSections = pick( state, [ 'head', 'body', 'foot' ] );
 
 	return mapValues( tableSections, ( section ) => {
@@ -280,8 +278,8 @@ export function deleteColumn( state, { columnIndex } ) {
 		return section
 			.map( ( row ) => ( {
 				cells:
-					row.cells.length >= columnIndex
-						? row.cells.filter( ( cell, index ) => index !== columnIndex )
+					row.cells.length >= colIndex
+						? row.cells.filter( ( cell, index ) => index !== colIndex )
 						: row.cells,
 			} ) )
 			.filter( ( row ) => row.cells.length );
@@ -337,8 +335,8 @@ export function mergeCells( state, { selectedRangeCell } ) {
 	// Calculate range to be merged.
 	const minRowIndex = Math.min( fromCell.rowIndex, toCell.rowIndex );
 	const maxRowIndex = Math.max( fromCell.rowIndex, toCell.rowIndex );
-	const minColumnIndex = Math.min( fromCell.columnIndex, toCell.columnIndex );
-	const maxColumnIndex = Math.max( fromCell.columnIndex, toCell.columnIndex );
+	const minColumnIndex = Math.min( fromCell.colIndex, toCell.colIndex );
+	const maxColumnIndex = Math.max( fromCell.colIndex, toCell.colIndex );
 
 	return {
 		[ sectionName ]: section.map( ( row, rowIndex ) => {
@@ -349,8 +347,8 @@ export function mergeCells( state, { selectedRangeCell } ) {
 
 			return {
 				cells: row.cells
-					.map( ( cell, columnIndex ) => {
-						if ( columnIndex === minColumnIndex && rowIndex === minRowIndex ) {
+					.map( ( cell, colIndex ) => {
+						if ( colIndex === minColumnIndex && rowIndex === minRowIndex ) {
 							// Cells to merge.
 							const rowSpan = Math.abs( maxRowIndex - minRowIndex ) + 1;
 							const colSpan = Math.abs( maxColumnIndex - minColumnIndex ) + 1;
@@ -366,8 +364,8 @@ export function mergeCells( state, { selectedRangeCell } ) {
 						if (
 							rowIndex >= minRowIndex &&
 							rowIndex <= maxRowIndex &&
-							columnIndex >= minColumnIndex &&
-							columnIndex <= maxColumnIndex
+							colIndex >= minColumnIndex &&
+							colIndex <= maxColumnIndex
 						) {
 							return {
 								...cell,
@@ -409,16 +407,16 @@ export function splitMergedCells( state, { selectedCell } ) {
 		.filter( ( cell ) => cell.isSelected )[ 0 ];
 
 	// Split the selected cells and map them on the virtual section.
-	vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ] = {
-		...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ],
+	vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ] = {
+		...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ],
 		rowSpan: undefined,
 		colSpan: undefined,
 	};
 
 	if ( vSelectedCell.colSpan ) {
 		for ( let i = 1; i < parseInt( vSelectedCell.colSpan ); i++ ) {
-			vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex + i ] = {
-				...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ],
+			vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex + i ] = {
+				...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ],
 				content: undefined,
 			};
 		}
@@ -426,15 +424,15 @@ export function splitMergedCells( state, { selectedCell } ) {
 
 	if ( vSelectedCell.rowSpan ) {
 		for ( let i = 1; i < parseInt( vSelectedCell.rowSpan ); i++ ) {
-			vSection[ vSelectedCell.rowIndex + i ][ vSelectedCell.vColumnIndex ] = {
-				...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ],
+			vSection[ vSelectedCell.rowIndex + i ][ vSelectedCell.vColIndex ] = {
+				...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ],
 				content: undefined,
 			};
 
 			if ( vSelectedCell.colSpan ) {
 				for ( let j = 1; j < parseInt( vSelectedCell.colSpan ); j++ ) {
-					vSection[ vSelectedCell.rowIndex + i ][ vSelectedCell.vColumnIndex + j ] = {
-						...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColumnIndex ],
+					vSection[ vSelectedCell.rowIndex + i ][ vSelectedCell.vColIndex + j ] = {
+						...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ],
 						content: undefined,
 					};
 				}
@@ -449,8 +447,8 @@ export function splitMergedCells( state, { selectedCell } ) {
 					.map( ( cell ) => {
 						// Remove unnecessary properties.
 						delete cell.rowIndex;
-						delete cell.columnIndex;
-						delete cell.vColumnIndex;
+						delete cell.colIndex;
+						delete cell.vColIndex;
 						delete cell.isSelected;
 						delete cell.isFilled;
 
@@ -487,7 +485,7 @@ export function updateCellsState(
 		return state;
 	}
 
-	const { sectionName, rowIndex, columnIndex } = selectedCell;
+	const { sectionName, rowIndex, colIndex } = selectedCell;
 
 	return {
 		[ sectionName ]: state[ sectionName ].map( ( row, currentRowIndex ) => {
@@ -496,8 +494,8 @@ export function updateCellsState(
 			}
 
 			return {
-				cells: row.cells.map( ( cell, currentColumnIndex ) => {
-					if ( currentColumnIndex !== columnIndex ) {
+				cells: row.cells.map( ( cell, currentColIndex ) => {
+					if ( currentColIndex !== colIndex ) {
 						return cell;
 					}
 

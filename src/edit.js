@@ -127,14 +127,14 @@ function TableEdit( props ) {
 			.filter( ( cell ) => cell.isSelected )[ 0 ];
 
 		// Calculate column index to be inserted considering colspan of the selected cell.
-		const insertVColumnIndex =
+		const insertVColIndex =
 			offset === 0
-				? vSelectedCell.vColumnIndex
-				: vSelectedCell.vColumnIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
+				? vSelectedCell.vColIndex
+				: vSelectedCell.vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
 
 		setAttributes(
 			insertColumn( attributes, {
-				vColumnIndex: insertVColumnIndex,
+				vColIndex: insertVColIndex,
 			} )
 		);
 
@@ -144,8 +144,8 @@ function TableEdit( props ) {
 		setSelectedLine();
 	};
 
-	const onDeleteColumn = ( columnIndex ) => {
-		setAttributes( deleteColumn( attributes, { columnIndex } ) );
+	const onDeleteColumn = ( colIndex ) => {
+		setAttributes( deleteColumn( attributes, { colIndex } ) );
 		setSelectedCell();
 		setSelectedMultiCell();
 		setSelectedRangeCell();
@@ -239,8 +239,8 @@ function TableEdit( props ) {
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
 			onClick: () => {
-				const { columnIndex } = selectedCell;
-				onDeleteColumn( columnIndex );
+				const { colIndex } = selectedCell;
+				onDeleteColumn( colIndex );
 			},
 		},
 		{
@@ -358,7 +358,7 @@ function TableEdit( props ) {
 					<InspectorControls>
 						<PanelBody
 							title={ __( 'Table Settings', 'flexible-table-block' ) }
-							initialOpen={ false }
+							initialOpen={ true }
 						>
 							<TableSettings { ...tableSettingProps } />
 						</PanelBody>
