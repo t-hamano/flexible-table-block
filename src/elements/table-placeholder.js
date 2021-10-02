@@ -27,7 +27,7 @@ import { blockIcon as icon } from '../icons';
 
 export default function TablePlaceholder( { setAttributes } ) {
 	const [ rowCount, setRowCount ] = useState( 2 );
-	const [ columnCount, setColumnCount ] = useState( 2 );
+	const [ colCount, setColCount ] = useState( 2 );
 	const [ headerSection, setHeaderSection ] = useState( false );
 	const [ footerSection, setFooterSection ] = useState( false );
 
@@ -38,10 +38,11 @@ export default function TablePlaceholder( { setAttributes } ) {
 
 	const onCreateTable = ( event ) => {
 		event.preventDefault();
+
 		setAttributes(
 			createTable( {
 				rowCount: Math.min( rowCount, MAX_PREVIEW_TABLE_ROW ),
-				columnCount: Math.min( columnCount, MAX_PREVIEW_TABLE_COL ),
+				colCount: Math.min( colCount, MAX_PREVIEW_TABLE_COL ),
 				headerSection,
 				footerSection,
 			} )
@@ -51,9 +52,9 @@ export default function TablePlaceholder( { setAttributes } ) {
 	const onChangeColumnCount = ( value ) => {
 		const parsedValue = parseInt( value, 10 );
 		if ( isNaN( parsedValue ) ) {
-			setColumnCount( undefined );
+			setColCount( undefined );
 		} else {
-			setColumnCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_COL, parsedValue ) ) );
+			setColCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_COL, parsedValue ) ) );
 		}
 	};
 
@@ -76,7 +77,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 
 	const tableClass = classnames( 'ftb-placeholder__table', {
 		'is-overflow-row': totalRowCount > THRESHOLD_PREVIEW_TABLE_ROW,
-		'is-overflow-col': columnCount > THRESHOLD_PREVIEW_TABLE_COL,
+		'is-overflow-col': colCount > THRESHOLD_PREVIEW_TABLE_COL,
 	} );
 
 	return (
@@ -94,10 +95,10 @@ export default function TablePlaceholder( { setAttributes } ) {
 				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
 			>
 				<table className={ tableClass }>
-					{ headerSection && rowCount && columnCount && (
+					{ headerSection && rowCount && colCount && (
 						<thead>
 							<tr>
-								{ times( columnCount, ( colIndex ) => {
+								{ times( colCount, ( colIndex ) => {
 									if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
 									return <th key={ colIndex } style={ { height: cellHeight } } />;
 								} ) }
@@ -109,7 +110,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 							if ( rowIndex > THRESHOLD_PREVIEW_TABLE_ROW ) return;
 							return (
 								<tr key={ rowIndex }>
-									{ times( Math.min( columnCount, MAX_PREVIEW_TABLE_COL ), ( colIndex ) => {
+									{ times( Math.min( colCount, MAX_PREVIEW_TABLE_COL ), ( colIndex ) => {
 										if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
 										return <td key={ colIndex } style={ { height: cellHeight } } />;
 									} ) }
@@ -117,10 +118,10 @@ export default function TablePlaceholder( { setAttributes } ) {
 							);
 						} ) }
 					</tbody>
-					{ footerSection && rowCount && columnCount && (
+					{ footerSection && rowCount && colCount && (
 						<tfoot>
 							<tr>
-								{ times( columnCount, ( colIndex ) => {
+								{ times( colCount, ( colIndex ) => {
 									if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
 									return <td key={ colIndex } style={ { height: cellHeight } } />;
 								} ) }
@@ -148,7 +149,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_COL }
-						value={ columnCount }
+						value={ colCount }
 						onChange={ onChangeColumnCount }
 					/>
 					<TextControl
@@ -159,7 +160,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 						value={ rowCount }
 						onChange={ onChangeRowCount }
 					/>
-					<Button variant="primary" type="submit" disabled={ ! rowCount || ! columnCount }>
+					<Button variant="primary" type="submit" disabled={ ! rowCount || ! colCount }>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</div>

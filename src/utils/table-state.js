@@ -74,14 +74,14 @@ export function createTable( { rowCount, colCount, headerSection, footerSection 
 export function insertRow( state, { sectionName, rowIndex } ) {
 	// Number of columns in the row to be inserted.
 	const sourceRowIndex = state[ sectionName ].length <= rowIndex ? 0 : rowIndex;
-	const newRowColumnCount = state[ sectionName ][ sourceRowIndex ].cells.reduce(
+	const newRowColCount = state[ sectionName ][ sourceRowIndex ].cells.reduce(
 		( count, cell ) => count + ( parseInt( cell.colSpan ) || 1 ),
 		0
 	);
 
 	// Row state to be inserted.
 	const newRow = {
-		cells: times( newRowColumnCount, () => {
+		cells: times( newRowColCount, () => {
 			return {
 				content: '',
 				tag: 'head' === sectionName ? 'th' : 'td',
@@ -300,13 +300,13 @@ export function toggleSection( state, sectionName ) {
 	}
 
 	// Number of columns in the row to be inserted.
-	const newRowColumnCount = state.body[ 0 ].cells.reduce( ( count, cell ) => {
+	const newRowColCount = state.body[ 0 ].cells.reduce( ( count, cell ) => {
 		return count + ( parseInt( cell.colSpan ) || 1 );
 	}, 0 );
 
 	// Row state to be inserted.
 	const newRow = {
-		cells: times( newRowColumnCount, () => {
+		cells: times( newRowColCount, () => {
 			return {
 				content: '',
 				tag: 'head' === sectionName ? 'th' : 'td',

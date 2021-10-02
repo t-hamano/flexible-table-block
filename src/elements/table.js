@@ -135,6 +135,8 @@ export default function Table( props ) {
 	const onClickCell = ( event, clickedCell ) => {
 		const { sectionName, rowIndex, colIndex } = clickedCell;
 
+		// TODO バーチャルセクション上のどのセルをクリックしたかを取得する処理
+
 		if ( event.shiftKey ) {
 			// Range select.
 			if ( ! selectedRangeCell?.fromCell ) return;
@@ -148,7 +150,7 @@ export default function Table( props ) {
 			setSelectedMultiCell();
 		} else if ( event.ctrlKey || event.metaKey ) {
 			// Multple select.
-			const newSelectedMultiCell = selectedMultiCell || [];
+			const newSelectedMultiCell = selectedMultiCell ? [ ...selectedMultiCell ] : [];
 			const existCellIndex = newSelectedMultiCell.findIndex( ( cell ) => {
 				return (
 					cell.sectionName === sectionName &&
@@ -253,9 +255,9 @@ export default function Table( props ) {
 														className="ftb-table-cell-label"
 														tabIndex={ options.prevent_focus_control_button && -1 }
 														variant="primary"
-														onClick={ ( e ) => {
+														onClick={ ( event ) => {
 															onSelectSectionCells( sectionName );
-															e.stopPropagation();
+															event.stopPropagation();
 														} }
 													>
 														{ `<t${ sectionName }>` }
@@ -379,7 +381,6 @@ export default function Table( props ) {
 												value={ content }
 												onChange={ onChangeCellContent }
 												unstableOnFocus={ () => {
-													setSelectedLine();
 													setSelectedCell( {
 														sectionName,
 														rowIndex,
