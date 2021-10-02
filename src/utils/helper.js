@@ -82,34 +82,6 @@ export function isEmptyTableSection( section ) {
 }
 
 /**
- * Return the all range of the specified section.
- *
- * @param {Object} state       Current table state.
- * @param {string} sectionName Selected section.
- * @return {Object} Start and end cells for range selection.
- */
-export function getSectionRange( state, sectionName ) {
-	if ( ! state[ sectionName ] ) return undefined;
-
-	const lastRowIndex = state[ sectionName ].length - 1;
-	const lastColIndex = state[ sectionName ][ lastRowIndex ].cells.length - 1;
-
-	const fromCell = {
-		sectionName,
-		rowIndex: 0,
-		colIndex: 0,
-	};
-
-	const toCell = {
-		sectionName,
-		rowIndex: lastRowIndex,
-		colIndex: lastColIndex,
-	};
-
-	return { fromCell, toCell };
-}
-
-/**
  * Determines Whether multi cells is selected.
  *
  * @param {Object} selectedMultiCell Current table state.

@@ -15,12 +15,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL } from '../constants';
-import {
-	isMultiSelected,
-	isRangeSelected,
-	getSectionRange,
-	toVirtualSection,
-} from '../utils/helper';
+import { isMultiSelected, isRangeSelected, toVirtualSection } from '../utils/helper';
 import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -93,6 +88,22 @@ export default function Table( props ) {
 		setSelectedMultiCell();
 		setSelectedRangeCell();
 		setSelectedLine();
+	};
+
+	const onSelectSectionCells = ( sectionName ) => {
+		const selectedSectionCells = attributes[ sectionName ].reduce( ( cells, row, rowIndex ) => {
+			return cells.concat(
+				row.cells.map( ( cell, colIndex ) => {
+					return {
+						sectionName,
+						rowIndex,
+						colIndex,
+					};
+				} )
+			);
+		}, [] );
+
+		setSelectedMultiCell( selectedSectionCells );
 	};
 
 	const onChangeCellContent = ( content ) => {
@@ -256,8 +267,7 @@ export default function Table( props ) {
 															tabIndex={ options.prevent_focus_control_button && -1 }
 															variant="primary"
 															onClick={ ( e ) => {
-																const sectionRange = getSectionRange( attributes, sectionName );
-																setSelectedRangeCell( sectionRange );
+																onSelectSectionCells( sectionName );
 																e.stopPropagation();
 															} }
 														>
