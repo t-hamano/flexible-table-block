@@ -102,6 +102,8 @@ export default function Table( props ) {
 		);
 	};
 
+	const onDeleteColumn = () => {};
+
 	const onSelectSectionCells = ( sectionName ) => {
 		const selectedSectionCells = attributes[ sectionName ].reduce( ( cells, row, rowIndex ) => {
 			return cells.concat(

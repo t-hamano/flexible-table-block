@@ -204,6 +204,9 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 export function insertColumn( vTable, { vColIndex } ) {
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
+	// Whether to add a column after the last column.
+	const isLastColumnInsert = vTable.body[ 0 ].length === vColIndex;
+
 	// Some cells will not be filled if there are cells with rowspan in the column to be inserted,
 	// so record the rowindex of the additional cells to be inserted in advance.
 	const rowIndexesToFill = { head: [], body: [], foot: [] };
@@ -240,7 +243,16 @@ export function insertColumn( vTable, { vColIndex } ) {
 							return cells;
 						}
 
-						// Insert cell.
+						// Insert cell ( after the last column ).
+						if ( isLastColumnInsert && currentColIndex + 1 === vColIndex ) {
+							cells.push( cell, {
+								content: '',
+								tag: 'head' === sectionName ? 'th' : 'td',
+							} );
+							return cells;
+						}
+
+						// Insert cell ( between columns ).
 						if ( currentColIndex === vColIndex && ! cell.isDelete ) {
 							cells.push(
 								{
@@ -252,6 +264,7 @@ export function insertColumn( vTable, { vColIndex } ) {
 							return cells;
 						}
 
+						// Insert cell (additional).
 						if (
 							currentColIndex === vColIndex &&
 							rowIndexesToFill[ sectionName ].includes( currentRowIndex )
