@@ -69,9 +69,9 @@ function TableEdit( props ) {
 
 	// Create virtual table array with the cells placed in positions based on how they actually look.
 	const vTable = {
-		head: attributes.head.length ? toVirtualSection( attributes, { sectionName: 'head' } ) : [],
-		body: attributes.body.length ? toVirtualSection( attributes, { sectionName: 'body' } ) : [],
-		foot: attributes.foot.length ? toVirtualSection( attributes, { sectionName: 'foot' } ) : [],
+		head: toVirtualSection( attributes, { sectionName: 'head' } ),
+		body: toVirtualSection( attributes, { sectionName: 'body' } ),
+		foot: toVirtualSection( attributes, { sectionName: 'foot' } ),
 	};
 
 	// Reset the selection state of matrices and cells when the focus is off the block.

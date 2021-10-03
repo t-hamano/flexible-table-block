@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { isEmptyTableSection, isRangeSelected, isMultiSelected, toVirtualSection } from './helper';
+import { isEmptyTableSection, isRangeSelected, isMultiSelected } from './helper';
 import { convertToObject, convertToInline } from '../utils/style-converter';
 import {
 	updatePadding,
@@ -377,55 +377,49 @@ export function mergeCells( state, { selectedRangeCell } ) {
 }
 
 /**
- * Split cells in the table state.
+ * Split cells in the virtual table state.
  *
- * @param {Object} state                Current table state.
+ * @param {Object} vTable                Current virtual table state.
  * @param {Object} options
- * @param {number} options.selectedCell Current selected cell.
+ * @param {number} options.vSelectedCell Current selected virtual cell.
  * @return {Object} New table state.
  */
-export function splitMergedCells( state, { selectedCell } ) {
-	const { sectionName } = selectedCell;
+export function splitMergedCells( vTable, { vSelectedCell } ) {
+	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = vSelectedCell;
 
-	// Create virtual section array with the cells placed in positions based on how they actually look.
-	const vSection = toVirtualSection( state, { sectionName, selectedCell } );
-
-	if ( ! vSection ) return state;
-
-	// The selected cell on the virtual section.
-	const vSelectedCell = vSection
-		.reduce( ( cells, row ) => {
-			return cells.concat( row );
-		}, [] )
-		.filter( ( cell ) => cell.isSelected )[ 0 ];
+	const vSection = vTable[ sectionName ];
 
 	// Split the selected cells and map them on the virtual section.
-	vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ] = {
-		...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ],
+	vSection[ rowIndex ][ vColIndex ] = {
+		...vSection[ rowIndex ][ vColIndex ],
 		rowSpan: undefined,
 		colSpan: undefined,
 	};
 
-	if ( vSelectedCell.colSpan ) {
-		for ( let i = 1; i < parseInt( vSelectedCell.colSpan ); i++ ) {
-			vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex + i ] = {
-				...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ],
+	if ( colSpan ) {
+		console.log( 'colSpan' );
+
+		for ( let i = 1; i < parseInt( colSpan ); i++ ) {
+			vSection[ rowIndex ][ vColIndex + i ] = {
+				...vSection[ rowIndex ][ vColIndex ],
 				content: undefined,
 			};
 		}
 	}
 
-	if ( vSelectedCell.rowSpan ) {
-		for ( let i = 1; i < parseInt( vSelectedCell.rowSpan ); i++ ) {
-			vSection[ vSelectedCell.rowIndex + i ][ vSelectedCell.vColIndex ] = {
-				...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ],
+	if ( rowSpan ) {
+		console.log( 'rowSpan' );
+
+		for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
+			vSection[ rowIndex + i ][ vColIndex ] = {
+				...vSection[ rowIndex ][ vColIndex ],
 				content: undefined,
 			};
 
-			if ( vSelectedCell.colSpan ) {
-				for ( let j = 1; j < parseInt( vSelectedCell.colSpan ); j++ ) {
-					vSection[ vSelectedCell.rowIndex + i ][ vSelectedCell.vColIndex + j ] = {
-						...vSection[ vSelectedCell.rowIndex ][ vSelectedCell.vColIndex ],
+			if ( colSpan ) {
+				for ( let j = 1; j < parseInt( colSpan ); j++ ) {
+					vSection[ rowIndex + i ][ vColIndex + j ] = {
+						...vSection[ rowIndex ][ vColIndex ],
 						content: undefined,
 					};
 				}
@@ -434,23 +428,8 @@ export function splitMergedCells( state, { selectedCell } ) {
 	}
 
 	return {
-		[ sectionName ]: vSection.map( ( row ) => {
-			return {
-				cells: row
-					.map( ( cell ) => {
-						// Remove unnecessary properties.
-						delete cell.rowIndex;
-						delete cell.colIndex;
-						delete cell.vColIndex;
-						delete cell.isSelected;
-						delete cell.isFilled;
-
-						return cell;
-					} )
-					// Delete cells marked as deletion.
-					.filter( ( cell ) => ! cell.isDelete ),
-			};
-		} ),
+		...vTable,
+		[ sectionName ]: vSection,
 	};
 }
 

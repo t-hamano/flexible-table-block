@@ -108,10 +108,12 @@ export function isRangeSelected( selectedRangeCell ) {
  * @param {Object} state               Current table state.
  * @param {Object} options
  * @param {Object} options.sectionName Section in which to transform to virtual section.
- * @return {Object | boolean} Array of virtual section if all the cells of the virtual section are filled, false otherwise.
+ * @return {Array} Array of virtual section.
  */
 export function toVirtualSection( state, { sectionName } ) {
 	const section = state[ sectionName ];
+
+	if ( ! section.length ) return [];
 
 	// Create a virtual section array.
 	const vRowCount = section.length;
@@ -138,6 +140,7 @@ export function toVirtualSection( state, { sectionName } ) {
 			// Mark the cell as "filled" and record the position on the virtual section.
 			vSection[ currentRowIndex ][ vColIndex ] = {
 				...cell,
+				sectionName,
 				isFilled: true,
 				rowIndex: currentRowIndex,
 				colIndex: currentColIndex,
@@ -171,14 +174,23 @@ export function toVirtualSection( state, { sectionName } ) {
 		} );
 	} );
 
-	// Check if there are any virtual section cells that are not filled.
-	const notFilledCells = vSection
-		.reduce( ( cells, row ) => {
-			return cells.concat( row );
-		}, [] )
-		.filter( ( cell ) => ! cell.isFilled );
+	// Fallback: Fill with empty cells if any cells are not filled correctly.
+	vSection.forEach( ( row, currentRowIndex ) => {
+		row.forEach( ( cell, currentVColIndex ) => {
+			if ( ! cell.isFilled ) {
+				vSection[ currentRowIndex ][ currentVColIndex ] = {
+					content: '',
+					tag: 'head' === sectionName ? 'th' : 'td',
+					isFilled: true,
+					rowIndex: null,
+					colIdex: null,
+					vColIndex: currentVColIndex,
+				};
+			}
+		} );
+	} );
 
-	return notFilledCells.length ? false : vSection;
+	return vSection;
 }
 
 /**

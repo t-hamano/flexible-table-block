@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { mapValues, pick } from 'lodash';
+
+/**
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
@@ -7,6 +12,7 @@ import { createBlock } from '@wordpress/blocks';
  * Internal dependencies
  */
 import { splitMergedCells } from './utils/table-state';
+import { toVirtualSection } from './utils/helper';
 
 const transforms = {
 	from: [
@@ -30,56 +36,71 @@ const transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
-				let newAttributes = attributes;
+				// Create virtual table array with the cells placed in positions based on how they actually look.
+				let vTable = {
+					head: toVirtualSection( attributes, { sectionName: 'head' } ),
+					body: toVirtualSection( attributes, { sectionName: 'body' } ),
+					foot: toVirtualSection( attributes, { sectionName: 'foot' } ),
+				};
 
 				// Split all merged cells.
 				[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
-					if ( ! newAttributes[ sectionName ].length ) return;
+					if ( ! vTable[ sectionName ].length ) return;
 
-					// Number of merged cells in the current section.
-					const mergedCellsCount = newAttributes[ sectionName ]
+					// Number of merged cells in the current virtual section.
+					const vMergedCellsCount = vTable[ sectionName ]
 						.reduce( ( cells, row ) => {
-							return cells.concat( row.cells );
+							return cells.concat( row );
 						}, [] )
 						.filter( ( cell ) => cell.rowSpan || cell.colSpan ).length;
 
-					if ( mergedCellsCount ) {
-						for ( let i = 0; i < mergedCellsCount; i++ ) {
-							// Get the merged cells.
-							const mergedCells = newAttributes[ sectionName ]
-								.reduce( ( cells, row, rowIndex ) => {
-									return cells.concat(
-										row.cells.map( ( cell, colIndex ) => {
-											return {
-												sectionName,
-												rowIndex,
-												colIndex,
-												rowSpan: cell.rowSpan,
-												colSpan: cell.colSpan,
-											};
-										} )
-									);
+					if ( vMergedCellsCount ) {
+						for ( let i = 0; i < vMergedCellsCount; i++ ) {
+							// Get the merged virtual cells.
+							const vMergedCells = vTable[ sectionName ]
+								.reduce( ( cells, row ) => {
+									return cells.concat( row );
 								}, [] )
 								.filter( ( cell ) => cell.rowSpan || cell.colSpan );
 
-							// Split merged cell.
-							if ( mergedCells.length ) {
-								newAttributes = {
-									...newAttributes,
-									...splitMergedCells( newAttributes, {
-										selectedCell: mergedCells[ 0 ],
-									} ),
-								};
+							// Split merged virtual cell.
+							if ( vMergedCells.length ) {
+								vTable = splitMergedCells( vTable, {
+									vSelectedCell: vMergedCells[ 0 ],
+								} );
 							}
 						}
 					}
 				} );
 
+				// Convert to core table block attributes.
+				const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
+
+				const tableAttributes = mapValues( vSections, ( section ) => {
+					if ( ! section.length ) return [];
+
+					return section.map( ( row ) => {
+						return {
+							cells: row.map( ( cell ) => {
+								// Remove unnecessary properties.
+								delete cell.sectionName;
+								delete cell.rowIndex;
+								delete cell.colIndex;
+								delete cell.vColIndex;
+								delete cell.isFilled;
+								delete cell.styles;
+								delete cell.rowSpan;
+								delete cell.colSpan;
+
+								return cell;
+							} ),
+						};
+					} );
+				} );
+
 				return createBlock( 'core/table', {
+					...tableAttributes,
 					hasFixedLayout: attributes.hasFixedLayout,
-					head: newAttributes.head,
-					body: newAttributes.body,
-					foot: newAttributes.foot,
 					caption: attributes.caption,
 				} );
 			},
