@@ -116,49 +116,50 @@ export function insertRow( state, { sectionName, rowIndex } ) {
 /**
  * Deletes a row from the table state.
  *
- * @param {Object} state               Current table state.
+ * @param {Object} vTable              Virtual table in which to delete the row.
  * @param {Object} options
  * @param {string} options.sectionName Section in which to delete the row.
  * @param {number} options.rowIndex    Row index at which to delete the row.
  * @return {Object} New table state.
  */
-export function deleteRow( state, { sectionName, rowIndex } ) {
+export function deleteRow( vTable, { sectionName, rowIndex } ) {
 	// Do not allow tbody to be empty for table with thead /tfoot sections.
 	if (
 		sectionName === 'body' &&
-		state.body.length === 1 &&
-		state.head.length &&
-		state.foot.length
+		vTable.body.length === 1 &&
+		vTable.head.length &&
+		vTable.foot.length
 	) {
 		// eslint-disable-next-line no-alert, no-undef
 		alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
-		return state;
+		return vTable;
 	}
 
-	let newState = state;
-
 	// Find the number of rowspan cells in the row to be deleted.
-	const rowSpanCellsCount = newState[ sectionName ][ rowIndex ].cells.filter(
-		( cell ) => cell.rowSpan
-	).length;
+	const rowSpanCellsCount = vTable[ sectionName ][ rowIndex ].filter( ( cell ) => cell.rowSpan )
+		.length;
 
 	// Split the found rowspan cells.
 	if ( rowSpanCellsCount ) {
 		for ( let i = 0; i < rowSpanCellsCount; i++ ) {
-			const selectedCell = {
-				sectionName,
-				rowIndex,
-				colIndex: newState[ sectionName ][ rowIndex ].cells.findIndex( ( cell ) => cell.rowSpan ),
-			};
+			const vMergedCells = vTable[ sectionName ]
+				.reduce( ( cells, row ) => {
+					return cells.concat( row );
+				}, [] )
+				.filter( ( cell ) => cell.rowSpan && cell.rowIndex == rowIndex );
 
-			newState = splitMergedCells( newState, { selectedCell } );
+			if ( vMergedCells.length ) {
+				vTable = splitMergedCells( vTable, {
+					vSelectedCell: vMergedCells[ 0 ],
+				} );
+			}
 		}
 	}
 
 	return {
-		[ sectionName ]: newState[ sectionName ]
+		[ sectionName ]: vTable[ sectionName ]
 			.map( ( row, currentRowIndex ) => ( {
-				cells: row.cells
+				cells: row
 					.map( ( cell ) => {
 						// Contract cells with rowspan in the before rows.
 						if (
@@ -180,7 +181,7 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 							};
 						}
 
-						return { ...cell };
+						return cell;
 					} )
 					// Delete cells marked as deletion.
 					.filter( ( cell ) => ! cell.isDelete ),
@@ -195,7 +196,7 @@ export function deleteRow( state, { sectionName, rowIndex } ) {
 /**
  * Inserts a column in the table state.
  *
- * @param {Object} vTable            Virtual table in which to delete the row.
+ * @param {Object} vTable            Virtual table in which to delete the column.
  * @param {Object} options
  * @param {number} options.vColIndex Virtual column index at which to insert the column.
  * @return {Object} New table state.
@@ -387,6 +388,8 @@ export function mergeCells( state, { selectedRangeCell } ) {
 export function splitMergedCells( vTable, { vSelectedCell } ) {
 	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = vSelectedCell;
 
+	console.log( vSelectedCell );
+
 	const vSection = vTable[ sectionName ];
 
 	// Split the selected cells and map them on the virtual section.
@@ -397,8 +400,6 @@ export function splitMergedCells( vTable, { vSelectedCell } ) {
 	};
 
 	if ( colSpan ) {
-		console.log( 'colSpan' );
-
 		for ( let i = 1; i < parseInt( colSpan ); i++ ) {
 			vSection[ rowIndex ][ vColIndex + i ] = {
 				...vSection[ rowIndex ][ vColIndex ],
@@ -408,9 +409,9 @@ export function splitMergedCells( vTable, { vSelectedCell } ) {
 	}
 
 	if ( rowSpan ) {
-		console.log( 'rowSpan' );
-
 		for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
+			console.log( vSection[ rowIndex ][ vColIndex ] );
+
 			vSection[ rowIndex + i ][ vColIndex ] = {
 				...vSection[ rowIndex ][ vColIndex ],
 				content: undefined,

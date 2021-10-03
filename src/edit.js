@@ -119,15 +119,12 @@ function TableEdit( props ) {
 	const onDeleteRow = () => {
 		if ( ! selectedCell ) return;
 
-		const { sectionName, rowIndex, rowSpan } = selectedCell;
-
-		// Calculate row index to be deleted considering rowspan of the selected cell.
-		const deleteRowIndex = rowSpan ? rowIndex + parseInt( rowSpan ) - 1 : rowIndex;
+		const { sectionName, rowIndex } = selectedCell;
 
 		setAttributes(
-			deleteRow( attributes, {
+			deleteRow( vTable, {
 				sectionName,
-				rowIndex: deleteRowIndex,
+				rowIndex,
 			} )
 		);
 	};
