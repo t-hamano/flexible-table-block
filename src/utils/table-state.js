@@ -196,14 +196,12 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 /**
  * Inserts a column in the table state.
  *
- * @param {Object} vTable            Virtual table in which to delete the column.
+ * @param {Object} vTable            Virtual table in which to insert column.
  * @param {Object} options
- * @param {number} options.vColIndex Virtual column index at which to insert the column.
+ * @param {number} options.vColIndex Virtual column index at which to insert column.
  * @return {Object} New table state.
  */
 export function insertColumn( vTable, { vColIndex } ) {
-	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
-
 	// Whether to add a column after the last column.
 	const isLastColumnInsert = vTable.body[ 0 ].length === vColIndex;
 
@@ -222,6 +220,8 @@ export function insertColumn( vTable, { vColIndex } ) {
 			} );
 		} );
 	} );
+
+	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
 	return mapValues( vSections, ( section, sectionName ) => {
 		if ( ! section.length ) return [];
@@ -292,28 +292,63 @@ export function insertColumn( vTable, { vColIndex } ) {
 /**
  * Deletes a column from the table state.
  *
- * @param {Object} state            Current table state.
+ * @param {Object} vTable            Virtual table in which to delete column.
  * @param {Object} options
- * @param {number} options.colIndex Column index to delete.
+ * @param {number} options.vColIndex Virtual column index at which to delete column.
  * @return {Object} New table state.
  */
-export function deleteColumn( state, { colIndex } ) {
-	const tableSections = pick( state, [ 'head', 'body', 'foot' ] );
+export function deleteColumn( vTable, { vColIndex } ) {
+	// Find the colspan cells in the column to be deleted.
+	const colSpanCells = [ ...vTable.head, ...vTable.body, ...vTable.foot ]
+		.reduce( ( cells, row ) => {
+			return cells.concat( row );
+		}, [] )
+		.filter( ( cell ) => cell.colSpan && cell.vColIndex === vColIndex );
 
-	return mapValues( tableSections, ( section ) => {
-		// Bail early if the table section is empty.
-		if ( isEmptyTableSection( section ) ) {
-			return section;
-		}
+	// Split the found colspan cells.
+	if ( colSpanCells.length ) {
+		colSpanCells.forEach( ( colSpanCell ) => {
+			vTable = splitMergedCells( vTable, {
+				vSelectedCell: colSpanCell,
+			} );
+		} );
+	}
 
-		return section
-			.map( ( row ) => ( {
-				cells:
-					row.cells.length >= colIndex
-						? row.cells.filter( ( cell, index ) => index !== colIndex )
-						: row.cells,
-			} ) )
-			.filter( ( row ) => row.cells.length );
+	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
+
+	return mapValues( vSections, ( section ) => {
+		if ( ! section.length ) return [];
+
+		return section.map( ( row ) => {
+			return {
+				cells: row
+					.map( ( cell, currentColIndex ) => {
+						// Contract cells with colspan in the before columns.
+						if (
+							cell.colSpan &&
+							currentColIndex < vColIndex &&
+							currentColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
+						) {
+							return {
+								...cell,
+								colSpan: parseInt( cell.colSpan ) - 1,
+							};
+						}
+
+						// Cells to be deleted (Mark as deletion).
+						if ( currentColIndex === vColIndex ) {
+							return {
+								...cell,
+								isDelete: true,
+							};
+						}
+
+						return cell;
+					}, [] )
+					// Delete cells marked as deletion.
+					.filter( ( cell ) => ! cell.isDelete ),
+			};
+		} );
 	} );
 }
 

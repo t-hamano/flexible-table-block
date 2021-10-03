@@ -134,7 +134,7 @@ function TableEdit( props ) {
 
 		const { sectionName, rowIndex, colIndex, colSpan } = selectedCell;
 
-		// The selected cell column index on the virtual section.
+		// The selected cell on the virtual section.
 		const vSelectedCell = vTable[ sectionName ]
 			.reduce( ( cells, row ) => {
 				return cells.concat( row );
@@ -154,8 +154,23 @@ function TableEdit( props ) {
 		);
 	};
 
-	const onDeleteColumn = ( colIndex ) => {
-		setAttributes( deleteColumn( attributes, { colIndex } ) );
+	const onDeleteColumn = () => {
+		if ( ! selectedCell ) return;
+
+		const { sectionName, rowIndex, colIndex } = selectedCell;
+
+		// The selected cell on the virtual section.
+		const vSelectedCell = vTable[ sectionName ]
+			.reduce( ( cells, row ) => {
+				return cells.concat( row );
+			}, [] )
+			.filter( ( cell ) => cell.rowIndex === rowIndex && cell.colIndex === colIndex )[ 0 ];
+
+		setAttributes(
+			deleteColumn( vTable, {
+				vColIndex: vSelectedCell.vColIndex,
+			} )
+		);
 	};
 
 	const onMergeCells = () => {
@@ -174,9 +189,7 @@ function TableEdit( props ) {
 				! selectedCell ||
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
-			onClick: () => {
-				onInsertRow( 0 );
-			},
+			onClick: () => onInsertRow( 0 ),
 		},
 		{
 			icon: tableRowAfter,
@@ -185,9 +198,7 @@ function TableEdit( props ) {
 				! selectedCell ||
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
-			onClick: () => {
-				onInsertRow( 1 );
-			},
+			onClick: () => onInsertRow( 1 ),
 		},
 		{
 			icon: tableRowDelete,
@@ -196,9 +207,7 @@ function TableEdit( props ) {
 				! selectedCell ||
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
-			onClick: () => {
-				onDeleteRow();
-			},
+			onClick: () => onDeleteRow(),
 		},
 		{
 			icon: tableColumnBefore,
@@ -207,9 +216,7 @@ function TableEdit( props ) {
 				! selectedCell ||
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
-			onClick: () => {
-				onInsertColumn( 0 );
-			},
+			onClick: () => onInsertColumn( 0 ),
 		},
 		{
 			icon: tableColumnAfter,
@@ -218,9 +225,7 @@ function TableEdit( props ) {
 				! selectedCell ||
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
-			onClick: () => {
-				onInsertColumn( 1 );
-			},
+			onClick: () => onInsertColumn( 1 ),
 		},
 		{
 			icon: tableColumnDelete,
@@ -229,10 +234,7 @@ function TableEdit( props ) {
 				! selectedCell ||
 				isRangeSelected( selectedRangeCell ) ||
 				isMultiSelected( selectedMultiCell ),
-			onClick: () => {
-				const { colIndex } = selectedCell;
-				onDeleteColumn( colIndex );
-			},
+			onClick: () => onDeleteColumn(),
 		},
 		{
 			icon: splitCell,
@@ -241,17 +243,13 @@ function TableEdit( props ) {
 				// ! selectedCell?.rowSpan ||
 				// ! selectedCell?.colSpan ||
 				isRangeSelected( selectedRangeCell ) || isMultiSelected( selectedMultiCell ),
-			onClick: () => {
-				onSplitMergedCells();
-			},
+			onClick: () => onSplitMergedCells(),
 		},
 		{
 			icon: mergeCell,
 			title: __( 'Merge Cells', 'flexible-table-block' ),
 			isDisabled: ! isRangeSelected( selectedRangeCell ),
-			onClick: () => {
-				onMergeCells();
-			},
+			onClick: () => onMergeCells(),
 		},
 	];
 

@@ -80,7 +80,7 @@ export default function Table( props ) {
 	};
 
 	const onInsertColumn = ( sectionName, colIndex, offset ) => {
-		// The target cell column index on the virtual section.
+		// The target cell on the virtual section.
 		const vTargetCell = vTable[ sectionName ]
 			.reduce( ( cells, row ) => {
 				return cells.concat( row );
@@ -102,7 +102,20 @@ export default function Table( props ) {
 		);
 	};
 
-	const onDeleteColumn = () => {};
+	const onDeleteColumn = ( sectionName, colIndex ) => {
+		// The target cell on the virtual section.
+		const vTargetCell = vTable[ sectionName ]
+			.reduce( ( cells, row ) => {
+				return cells.concat( row );
+			}, [] )
+			.filter( ( cell ) => cell.colIndex === colIndex )[ 0 ];
+
+		setAttributes(
+			deleteColumn( vTable, {
+				vColIndex: vTargetCell.vColIndex,
+			} )
+		);
+	};
 
 	const onSelectSectionCells = ( sectionName ) => {
 		const selectedSectionCells = attributes[ sectionName ].reduce( ( cells, row, rowIndex ) => {
@@ -371,7 +384,7 @@ export default function Table( props ) {
 																		icon={ trash }
 																		iconSize={ 20 }
 																		onClick={ ( event ) => {
-																			onDeleteColumn( colIndex );
+																			onDeleteColumn( sectionName, colIndex );
 																			event.stopPropagation();
 																		} }
 																	/>
