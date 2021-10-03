@@ -82,16 +82,6 @@ const transforms = {
 					return section.map( ( row ) => {
 						return {
 							cells: row.map( ( cell ) => {
-								// Remove unnecessary properties.
-								delete cell.sectionName;
-								delete cell.rowIndex;
-								delete cell.colIndex;
-								delete cell.vColIndex;
-								delete cell.isFilled;
-								delete cell.styles;
-								delete cell.rowSpan;
-								delete cell.colSpan;
-
 								return cell;
 							} ),
 						};

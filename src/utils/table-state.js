@@ -146,7 +146,7 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 				.reduce( ( cells, row ) => {
 					return cells.concat( row );
 				}, [] )
-				.filter( ( cell ) => cell.rowSpan && cell.rowIndex == rowIndex );
+				.filter( ( cell ) => cell.rowSpan && cell.rowIndex === rowIndex );
 
 			if ( vMergedCells.length ) {
 				vTable = splitMergedCells( vTable, {
@@ -204,20 +204,29 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 export function insertColumn( vTable, { vColIndex } ) {
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
+	// Some cells will not be filled if there are cells with rowspan in the column to be inserted,
+	// so record the rowindex of the additional cells to be inserted in advance.
+	const rowIndexesToFill = { head: [], body: [], foot: [] };
+
+	[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
+		vTable[ sectionName ].forEach( ( row, currentRowIndex ) => {
+			row.forEach( ( cell, currentColIndex ) => {
+				if ( currentColIndex === vColIndex && cell.rowSpan ) {
+					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
+						rowIndexesToFill[ sectionName ].push( currentRowIndex + i );
+					}
+				}
+			} );
+		} );
+	} );
+
 	return mapValues( vSections, ( section, sectionName ) => {
 		if ( ! section.length ) return [];
 
-		return section.map( ( row ) => {
+		return section.map( ( row, currentRowIndex ) => {
 			return {
 				cells: row
 					.reduce( ( cells, cell, currentColIndex ) => {
-						// Remove unnecessary properties.
-						delete cell.rowIndex;
-						delete cell.colIndex;
-						delete cell.vColIndex;
-						delete cell.isSelected;
-						delete cell.isFilled;
-
 						// Expand cells with colspan in the before columns.
 						if (
 							cell.colSpan &&
@@ -243,9 +252,24 @@ export function insertColumn( vTable, { vColIndex } ) {
 							return cells;
 						}
 
+						if (
+							currentColIndex === vColIndex &&
+							rowIndexesToFill[ sectionName ].includes( currentRowIndex )
+						) {
+							cells.push(
+								{
+									content: '',
+									tag: 'head' === sectionName ? 'th' : 'td',
+								},
+								cell
+							);
+							return cells;
+						}
+
 						cells.push( cell );
 						return cells;
 					}, [] )
+					// Delete cells marked as deletion.
 					.filter( ( cell ) => ! cell.isDelete ),
 			};
 		} );
@@ -388,8 +412,6 @@ export function mergeCells( state, { selectedRangeCell } ) {
 export function splitMergedCells( vTable, { vSelectedCell } ) {
 	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = vSelectedCell;
 
-	console.log( vSelectedCell );
-
 	const vSection = vTable[ sectionName ];
 
 	// Split the selected cells and map them on the virtual section.
@@ -410,8 +432,6 @@ export function splitMergedCells( vTable, { vSelectedCell } ) {
 
 	if ( rowSpan ) {
 		for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
-			console.log( vSection[ rowIndex ][ vColIndex ] );
-
 			vSection[ rowIndex + i ][ vColIndex ] = {
 				...vSection[ rowIndex ][ vColIndex ],
 				content: undefined,

@@ -72,7 +72,7 @@ export default function Table( props ) {
 
 	const onDeleteRow = ( sectionName, rowIndex ) => {
 		setAttributes(
-			deleteRow( attributes, {
+			deleteRow( vTable, {
 				sectionName,
 				rowIndex,
 			} )
