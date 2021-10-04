@@ -165,3 +165,69 @@ export function toVirtualSection( state, { sectionName } ) {
 
 	return vSection;
 }
+
+/**
+ * Determines whether the selected cells is rectangle shape in the virtual table.
+ *
+ * @param {Array} selectedCells Current selected multi cell.
+ * @return {boolean} True if the selected cells is rectangle shape, false otherwise.
+ */
+export function isRectangleSelected( selectedCells ) {
+	if ( ! selectedCells ) return false;
+
+	const rowIndexes = [ ...selectedCells.map( ( cell ) => cell.rowIndex ) ];
+	const vColIndexes = [ ...selectedCells.map( ( cell ) => cell.vColIndex ) ];
+
+	// Get the position of the rectangle's vertices based on the minimum and maximum matrix values of the selected cells.
+	const topLeft = { x: Math.min( vColIndexes ), y: Math.min( rowIndexes ) };
+	const topRight = { x: Math.max( vColIndexes ), y: Math.min( rowIndexes ) };
+	const bottomRight = { x: Math.max( vColIndexes ), y: Math.max( rowIndexes ) };
+	const bottomLeft = { x: Math.min( vColIndexes ), y: Math.max( rowIndexes ) };
+
+	// Check if it represents a rectangle from four points.
+	const isRectangle =
+		topLeft.x === bottomLeft.x &&
+		topLeft.y === topRight.y &&
+		topRight.x === bottomRight.x &&
+		bottomRight.y === bottomLeft.y;
+
+	if ( ! isRectangle ) return false;
+
+	// Generate indexed matrix from the four points.
+	const vRange = [];
+
+	for ( let i = topLeft.y; i < bottomLeft.y; i++ ) {
+		vRange[ i ] = [];
+		for ( let j = topLeft.x; j < topRight.x; j++ ) {
+			vRange[ i ][ j ] = false;
+		}
+	}
+
+	// Map the selected cells to the matrix.
+	selectedCells.forEach( ( { rowIndex, vColIndex, rowSpan, colSpan } ) => {
+		if ( vRange[ rowIndex ][ vColIndex ] ) {
+			vRange[ rowIndex ][ vColIndex ] = true;
+
+			if ( rowSpan ) {
+				for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
+					vRange[ rowIndex + i ][ vColIndex ] = true;
+				}
+			}
+
+			if ( colSpan ) {
+				for ( let i = 1; i < parseInt( colSpan ); i++ ) {
+					vRange[ rowIndex ][ vColIndex + i ] = true;
+				}
+			}
+		}
+	} );
+
+	// Whether all cells are filled.
+	const isFullFilled = vRange
+		.reduce( ( cells, row ) => {
+			return cells.concat( row );
+		}, [] )
+		.every( ( cell ) => cell === true );
+
+	return isFullFilled;
+}

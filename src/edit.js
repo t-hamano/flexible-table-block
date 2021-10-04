@@ -43,7 +43,7 @@ import {
 	mergeCells,
 	splitMergedCells,
 } from './utils/table-state';
-import { toVirtualSection, isEmptySection } from './utils/helper';
+import { toVirtualSection, isEmptySection, isRectangleSelected } from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 
@@ -198,7 +198,7 @@ function TableEdit( props ) {
 		{
 			icon: mergeCell,
 			title: __( 'Merge Cells', 'flexible-table-block' ),
-			isDisabled: ! selectedCells,
+			isDisabled: ! selectedCells || ! isRectangleSelected( selectedCells ),
 			onClick: () => onMergeCells(),
 		},
 	];
@@ -250,6 +250,7 @@ function TableEdit( props ) {
 		...props,
 		captionStylesObj,
 		setSelectedLine,
+		setSelectedCell,
 		setSelectedCells,
 	};
 

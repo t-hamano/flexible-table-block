@@ -369,26 +369,51 @@ export function toggleSection( vTable, sectionName ) {
 /**
  * Merge cells in the table state.
  *
- * @param {Object} state                     Current table state.
+ * @param {Object} vTable                Current virtual table state.
  * @param {Object} options
- * @param {number} options.selectedRangeCell Current selected range cell.
+ * @param {number} options.selectedCells Current selected virtual cell.
  * @return {Object} New table state.
  */
-export function mergeCells( state, { selectedRangeCell } ) {
-	const { fromCell, toCell } = selectedRangeCell;
-	const { sectionName } = fromCell;
-	const section = state[ sectionName ];
+export function mergeCells( vTable, { selectedCells } ) {
+	const sectionName = selectedCells[ 0 ].sectionName;
 
-	// TODO:範囲内に結合されたセルがあった場合は、一旦分割する
+	const rowIndexes = [ ...selectedCells.map( ( cell ) => cell.rowIndex ) ];
+	const vColIndexes = [ ...selectedCells.map( ( cell ) => cell.vColIndex ) ];
 
-	// Calculate range to be merged.
-	const minRowIndex = Math.min( fromCell.rowIndex, toCell.rowIndex );
-	const maxRowIndex = Math.max( fromCell.rowIndex, toCell.rowIndex );
-	const minColumnIndex = Math.min( fromCell.colIndex, toCell.colIndex );
-	const maxColumnIndex = Math.max( fromCell.colIndex, toCell.colIndex );
+	const minRowIndex = Math.min( rowIndexes );
+	const maxRowIndex = Math.max( rowIndexes );
+	const minVColIndex = Math.min( vColIndexes );
+	const maxVColIndex = Math.max( vColIndexes );
+
+	// Find the colspan cells in the column to be deleted.
+	const rowColSpanCellsCount = selectedCells.filter( ( cell ) => cell.rowSpan || cell.colSpan );
+
+	// Split the found rowspan & colspan cells.
+	if ( rowColSpanCellsCount ) {
+		for ( let i = 0; i < rowColSpanCellsCount; i++ ) {
+			const vMergedCells = vTable[ sectionName ]
+				.reduce( ( cells, row ) => {
+					return cells.concat( row );
+				}, [] )
+				.filter(
+					( cell ) =>
+						( cell.rowSpan || cell.colSpan ) &&
+						minRowIndex <= cell.rowIndex &&
+						maxRowIndex >= cell.rowIndex &&
+						minVColIndex <= cell.vColIndex &&
+						maxVColIndex >= cell.vColIndex
+				);
+
+			if ( vMergedCells.length ) {
+				vTable = splitMergedCells( vTable, {
+					selectedCell: vMergedCells[ 0 ],
+				} );
+			}
+		}
+	}
 
 	return {
-		[ sectionName ]: section.map( ( row, rowIndex ) => {
+		[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
 			if ( rowIndex < minRowIndex || rowIndex > maxRowIndex ) {
 				// Row not to be merged.
 				return row;
@@ -397,10 +422,10 @@ export function mergeCells( state, { selectedRangeCell } ) {
 			return {
 				cells: row.cells
 					.map( ( cell, colIndex ) => {
-						if ( colIndex === minColumnIndex && rowIndex === minRowIndex ) {
+						if ( colIndex === minVColIndex && rowIndex === minRowIndex ) {
 							// Cells to merge.
 							const rowSpan = Math.abs( maxRowIndex - minRowIndex ) + 1;
-							const colSpan = Math.abs( maxColumnIndex - minColumnIndex ) + 1;
+							const colSpan = Math.abs( maxVColIndex - minVColIndex ) + 1;
 
 							return {
 								...cell,
@@ -413,8 +438,8 @@ export function mergeCells( state, { selectedRangeCell } ) {
 						if (
 							rowIndex >= minRowIndex &&
 							rowIndex <= maxRowIndex &&
-							colIndex >= minColumnIndex &&
-							colIndex <= maxColumnIndex
+							colIndex >= minVColIndex &&
+							colIndex <= maxVColIndex
 						) {
 							return {
 								...cell,
