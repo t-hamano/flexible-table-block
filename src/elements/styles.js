@@ -122,5 +122,5 @@ export const ButtonRowDeleter = styled( ButtonDeleter )`
 export const ButtonColumnDeleter = styled( ButtonDeleter )`
 	left: 50%;
 	margin-left: -15px;
-	top: -35px;
+	top: -55px;
 `;

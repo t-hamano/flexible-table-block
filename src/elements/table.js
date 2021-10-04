@@ -348,19 +348,20 @@ export default function Table( props ) {
 														/>
 													) }
 													{ sectionIndex === 0 && rowIndex === 0 && (
-														<ButtonColumnSelector
-															label={ __( 'Select column', 'flexible-table-block' ) }
-															tabIndex={ ! options.focus_control_button && -1 }
-															icon={ moreHorizontal }
-															iconSize="18"
-															variant={
-																selectedLine?.vColIndex === vColIndex ? 'primary' : undefined
-															}
-															onClick={ ( event ) => {
-																onSelectColumn( vColIndex );
-																event.stopPropagation();
-															} }
-														>
+														<>
+															<ButtonColumnSelector
+																label={ __( 'Select column', 'flexible-table-block' ) }
+																tabIndex={ ! options.focus_control_button && -1 }
+																icon={ moreHorizontal }
+																iconSize="18"
+																variant={
+																	selectedLine?.vColIndex === vColIndex ? 'primary' : undefined
+																}
+																onClick={ ( event ) => {
+																	onSelectColumn( vColIndex );
+																	event.stopPropagation();
+																} }
+															></ButtonColumnSelector>
 															{ selectedLine?.vColIndex === vColIndex && (
 																<ButtonColumnDeleter
 																	label={ __( 'Delete column', 'flexible-table-block' ) }
@@ -373,7 +374,7 @@ export default function Table( props ) {
 																	} }
 																/>
 															) }
-														</ButtonColumnSelector>
+														</>
 													) }
 													{ vColIndex === 0 && (
 														<ButtonRowAfterInserter
