@@ -43,12 +43,7 @@ import {
 	mergeCells,
 	splitMergedCells,
 } from './utils/table-state';
-import {
-	isMultiSelected,
-	isRangeSelected,
-	isEmptyTableSection,
-	toVirtualSection,
-} from './utils/helper';
+import { isMultiSelected, isRangeSelected, toVirtualSection } from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 
@@ -59,6 +54,7 @@ function TableEdit( props ) {
 	const [ selectedMultiCell, setSelectedMultiCell ] = useState();
 	const [ selectedRangeCell, setSelectedRangeCell ] = useState();
 	const [ selectedLine, setSelectedLine ] = useState();
+	const [ vSelectedCells, setVSelectedCells ] = useState( [] );
 
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
@@ -77,26 +73,29 @@ function TableEdit( props ) {
 	// Reset the selection state of matrices and cells when the focus is off the block.
 	useEffect( () => {
 		if ( ! isSelected ) {
-			setSelectedCell();
-			setSelectedMultiCell();
-			setSelectedRangeCell();
-			setSelectedLine();
+			// setSelectedCell();
+			// setSelectedMultiCell();
+			// setSelectedRangeCell();
+			// setSelectedLine();
+			// setVSelectedCells();
 		}
 	}, [ isSelected ] );
 
 	// Reset the selection state of matrices and cells when the state of a matrix or cell changes.
 	useEffect( () => {
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
-		setSelectedLine();
+		// setSelectedCell();
+		// setSelectedMultiCell();
+		// setSelectedRangeCell();
+		// setSelectedLine();
+		// setVSelectedCells();
 	}, [ attributes.head, attributes.body, attributes.foot ] );
 
 	// Reset the selection state of cells when the state of selected line changes.
 	useEffect( () => {
-		setSelectedCell();
-		setSelectedMultiCell();
-		setSelectedRangeCell();
+		// setSelectedCell();
+		// setSelectedMultiCell();
+		// setSelectedRangeCell();
+		// setVSelectedCells();
 	}, [ selectedLine ] );
 
 	const onInsertRow = ( offset ) => {
@@ -239,10 +238,7 @@ function TableEdit( props ) {
 		{
 			icon: splitCell,
 			title: __( 'Split Merged Cells', 'flexible-table-block' ),
-			isDisabled:
-				// ! selectedCell?.rowSpan ||
-				// ! selectedCell?.colSpan ||
-				isRangeSelected( selectedRangeCell ) || isMultiSelected( selectedMultiCell ),
+			isDisabled: isRangeSelected( selectedRangeCell ) || isMultiSelected( selectedMultiCell ),
 			onClick: () => onSplitMergedCells(),
 		},
 		{
@@ -253,11 +249,9 @@ function TableEdit( props ) {
 		},
 	];
 
-	const filteredSections = [ 'head', 'body', 'foot' ].filter(
-		( name ) => ! isEmptyTableSection( attributes[ name ] )
-	);
-
-	const isEmpty = ! filteredSections.length;
+	const isEmpty = ! [ 'head', 'body', 'foot' ].filter(
+		( sectionName ) => vTable[ sectionName ].length
+	).length;
 
 	const tablePlaceholderProps = useBlockProps();
 
@@ -276,7 +270,6 @@ function TableEdit( props ) {
 		...props,
 		options,
 		vTable,
-		filteredSections,
 		tableStylesObj,
 		selectedCell,
 		setSelectedCell,
@@ -286,6 +279,8 @@ function TableEdit( props ) {
 		setSelectedRangeCell,
 		selectedLine,
 		setSelectedLine,
+		vSelectedCells,
+		setVSelectedCells,
 	};
 
 	const tableSettingProps = {
@@ -298,15 +293,13 @@ function TableEdit( props ) {
 		selectedCell,
 		selectedMultiCell,
 		selectedRangeCell,
+		vSelectedCells,
 	};
 
 	const tableCaptionProps = {
 		...props,
 		captionStylesObj,
-		setSelectedCell,
-		setSelectedMultiCell,
-		setSelectedRangeCell,
-		setSelectedLine,
+		setVSelectedCells,
 	};
 
 	const tableCaptionSettingProps = {

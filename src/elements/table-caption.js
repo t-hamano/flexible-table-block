@@ -8,10 +8,7 @@ import { createBlock } from '@wordpress/blocks';
 export default function TableCaption( props ) {
 	const {
 		captionStylesObj,
-		setSelectedCell,
-		setSelectedMultiCell,
-		setSelectedRangeCell,
-		setSelectedLine,
+		setVSelectedCells,
 		insertBlocksAfter,
 		attributes,
 		setAttributes,
@@ -32,10 +29,7 @@ export default function TableCaption( props ) {
 			value={ caption }
 			onChange={ onChange }
 			unstableOnFocus={ () => {
-				setSelectedCell();
-				setSelectedMultiCell();
-				setSelectedRangeCell();
-				setSelectedLine();
+				setVSelectedCells( [] );
 			} }
 			__unstableOnSplitAtEnd={ () => insertBlocksAfter( createBlock( 'core/paragraph' ) ) }
 		/>
