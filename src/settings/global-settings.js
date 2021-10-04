@@ -39,17 +39,13 @@ import { BorderWidthControl, BorderStyleControl, ColorControl, PaddingControl } 
 import { toUnitVal } from '../utils/helper';
 
 export default function GlobalSettings() {
-	const storeOptions = useSelect( ( select ) => {
-		return select( STORE_NAME ).getOptions();
-	} );
+	const storeOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
 
-	const isAdministrator = useSelect( ( select ) => {
-		return select( coreStore ).canUser( 'create', 'users' );
-	} );
+	const isAdministrator = useSelect( ( select ) =>
+		select( coreStore ).canUser( 'create', 'users' )
+	);
 
-	const tableWidthUnits = useCustomUnits( {
-		availableUnits: TABLE_WIDTH_UNITS,
-	} );
+	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
 	const [ isSettingModalOpen, setIsSettingModalOpen ] = useState( false );
 	const [ isHelpModalOpen, setIsHelpModalOpen ] = useState( false );
@@ -132,9 +128,7 @@ export default function GlobalSettings() {
 		} );
 	};
 
-	if ( ! options ) {
-		return null;
-	}
+	if ( ! options ) return null;
 
 	return (
 		<>

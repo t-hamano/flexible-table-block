@@ -21,7 +21,6 @@ import {
 /**
  * Internal dependencies
  */
-
 import { PADDING_UNITS } from '../constants';
 import { SIDES, SideIndicatorControl } from './indicator-control';
 
@@ -48,9 +47,7 @@ export default function PaddingControl( {
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
-	const paddingUnits = useCustomUnits( {
-		availableUnits: PADDING_UNITS,
-	} );
+	const paddingUnits = useCustomUnits( { availableUnits: PADDING_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ side, setSide ] = useState( undefined );
@@ -81,9 +78,7 @@ export default function PaddingControl( {
 		} );
 	};
 
-	const handleOnFocus = ( focusSide ) => {
-		setSide( focusSide );
-	};
+	const handleOnFocus = ( focusSide ) => setSide( focusSide );
 
 	const handleOnChangeAll = ( inputValue ) => {
 		onChange( {
@@ -143,12 +138,8 @@ export default function PaddingControl( {
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
-								onFocus={ () => {
-									handleOnFocus( item.value );
-								} }
-								onChange={ ( value ) => {
-									handleOnChange( value, item.value );
-								} }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
 								value={ values[ item.value ] }
 								units={ paddingUnits }
 							/>

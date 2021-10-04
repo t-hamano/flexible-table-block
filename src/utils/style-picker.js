@@ -12,6 +12,7 @@ import { parseCssValue } from './helper';
 export function pickPadding( stylesObj ) {
 	if ( stylesObj.padding ) {
 		const paddingValues = parseCssValue( stylesObj.padding );
+
 		return {
 			top: paddingValues[ 0 ],
 			right: paddingValues[ 1 ],
@@ -37,6 +38,7 @@ export function pickPadding( stylesObj ) {
 export function pickBorderWidth( stylesObj ) {
 	if ( stylesObj.borderWidth ) {
 		const borderWidthValues = parseCssValue( stylesObj.borderWidth );
+
 		return {
 			top: borderWidthValues[ 0 ],
 			right: borderWidthValues[ 1 ],
@@ -62,6 +64,7 @@ export function pickBorderWidth( stylesObj ) {
 export function pickBorderColor( stylesObj ) {
 	if ( stylesObj.borderColor ) {
 		const borderColorValues = parseCssValue( stylesObj.borderColor );
+
 		return {
 			top: borderColorValues[ 0 ],
 			right: borderColorValues[ 1 ],
@@ -87,6 +90,7 @@ export function pickBorderColor( stylesObj ) {
 export function pickBorderStyle( stylesObj ) {
 	if ( stylesObj.borderStyle ) {
 		const borderStyleValues = parseCssValue( stylesObj.borderStyle );
+
 		return {
 			top: borderStyleValues[ 0 ],
 			right: borderStyleValues[ 1 ],
@@ -112,6 +116,7 @@ export function pickBorderStyle( stylesObj ) {
 export function pickBorderRadius( stylesObj ) {
 	if ( stylesObj.borderRadius ) {
 		const borderRadiusValues = parseCssValue( stylesObj.borderRadius );
+
 		return {
 			topLeft: borderRadiusValues[ 0 ],
 			topRight: borderRadiusValues[ 1 ],
@@ -136,6 +141,7 @@ export function pickBorderRadius( stylesObj ) {
  */
 export function pickBorderSpacing( stylesObj ) {
 	const borderSpacingValues = parseCssValue( stylesObj?.borderSpacing );
+
 	return {
 		horizontal: borderSpacingValues[ 0 ],
 		vertical: borderSpacingValues[ 1 ],

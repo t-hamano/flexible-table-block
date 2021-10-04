@@ -51,9 +51,7 @@ export default function BorderWidthControl( {
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
-	const borderWidthUnits = useCustomUnits( {
-		availableUnits: BORDER_WIDTH_UNITS,
-	} );
+	const borderWidthUnits = useCustomUnits( { availableUnits: BORDER_WIDTH_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ side, setSide ] = useState( undefined );
@@ -154,12 +152,8 @@ export default function BorderWidthControl( {
 								aria-label={ item.label }
 								value={ values[ item.value ] }
 								units={ borderWidthUnits }
-								onFocus={ () => {
-									handleOnFocus( item.value );
-								} }
-								onChange={ ( value ) => {
-									handleOnChange( value, item.value );
-								} }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
 							/>
 						);
 					} ) }

@@ -8,7 +8,7 @@ import { createBlock } from '@wordpress/blocks';
 export default function TableCaption( props ) {
 	const {
 		captionStylesObj,
-		setVSelectedCells,
+		setSelectedCells,
 		insertBlocksAfter,
 		attributes,
 		setAttributes,
@@ -16,9 +16,7 @@ export default function TableCaption( props ) {
 
 	const { caption } = attributes;
 
-	const onChange = ( value ) => {
-		setAttributes( { caption: value } );
-	};
+	const onChange = ( value ) => setAttributes( { caption: value } );
 
 	return (
 		<RichText
@@ -28,9 +26,7 @@ export default function TableCaption( props ) {
 			style={ captionStylesObj }
 			value={ caption }
 			onChange={ onChange }
-			unstableOnFocus={ () => {
-				setVSelectedCells( [] );
-			} }
+			unstableOnFocus={ () => setSelectedCells() }
 			__unstableOnSplitAtEnd={ () => insertBlocksAfter( createBlock( 'core/paragraph' ) ) }
 		/>
 	);

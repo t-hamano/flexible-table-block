@@ -36,9 +36,7 @@ export default function save( { attributes } ) {
 
 	const isEmpty = ! head.length && ! body.length && ! foot.length;
 
-	if ( isEmpty ) {
-		return null;
-	}
+	if ( isEmpty ) return null;
 
 	const tableStylesObj = convertToObject( tableStyles );
 
@@ -60,9 +58,7 @@ export default function save( { attributes } ) {
 	const hasCaption = ! RichText.isEmpty( caption );
 
 	const Section = ( { type, rows } ) => {
-		if ( ! rows.length ) {
-			return null;
-		}
+		if ( ! rows.length ) return null;
 
 		const Tag = `t${ type }`;
 

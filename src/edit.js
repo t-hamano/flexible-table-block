@@ -7,7 +7,7 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import {
 	InspectorControls,
@@ -43,7 +43,7 @@ import {
 	mergeCells,
 	splitMergedCells,
 } from './utils/table-state';
-import { isMultiSelected, isRangeSelected, toVirtualSection } from './utils/helper';
+import { toVirtualSection, isEmptySection } from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 
@@ -51,10 +51,8 @@ function TableEdit( props ) {
 	const { attributes, setAttributes, isSelected } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCell, setSelectedCell ] = useState();
-	const [ selectedMultiCell, setSelectedMultiCell ] = useState();
-	const [ selectedRangeCell, setSelectedRangeCell ] = useState();
+	const [ selectedCells, setSelectedCells ] = useState();
 	const [ selectedLine, setSelectedLine ] = useState();
-	const [ vSelectedCells, setVSelectedCells ] = useState( [] );
 
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
@@ -70,34 +68,6 @@ function TableEdit( props ) {
 		foot: toVirtualSection( attributes, { sectionName: 'foot' } ),
 	};
 
-	// Reset the selection state of matrices and cells when the focus is off the block.
-	useEffect( () => {
-		if ( ! isSelected ) {
-			// setSelectedCell();
-			// setSelectedMultiCell();
-			// setSelectedRangeCell();
-			// setSelectedLine();
-			// setVSelectedCells();
-		}
-	}, [ isSelected ] );
-
-	// Reset the selection state of matrices and cells when the state of a matrix or cell changes.
-	useEffect( () => {
-		// setSelectedCell();
-		// setSelectedMultiCell();
-		// setSelectedRangeCell();
-		// setSelectedLine();
-		// setVSelectedCells();
-	}, [ attributes.head, attributes.body, attributes.foot ] );
-
-	// Reset the selection state of cells when the state of selected line changes.
-	useEffect( () => {
-		// setSelectedCell();
-		// setSelectedMultiCell();
-		// setSelectedRangeCell();
-		// setVSelectedCells();
-	}, [ selectedLine ] );
-
 	const onInsertRow = ( offset ) => {
 		if ( ! selectedCell ) return;
 
@@ -107,12 +77,11 @@ function TableEdit( props ) {
 		const insertRowIndex =
 			offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
 
-		setAttributes(
-			insertRow( attributes, {
-				sectionName,
-				rowIndex: insertRowIndex,
-			} )
-		);
+		setAttributes( insertRow( attributes, { sectionName, rowIndex: insertRowIndex } ) );
+
+		setSelectedCell();
+		setSelectedCells();
+		setSelectedLine();
 	};
 
 	const onDeleteRow = () => {
@@ -120,137 +89,122 @@ function TableEdit( props ) {
 
 		const { sectionName, rowIndex } = selectedCell;
 
-		setAttributes(
-			deleteRow( vTable, {
-				sectionName,
-				rowIndex,
-			} )
-		);
+		// Do not allow tbody to be empty for table with thead /tfoot sections.
+		if (
+			sectionName === 'body' &&
+			vTable.body.length === 1 &&
+			vTable.head.length &&
+			vTable.foot.length
+		) {
+			// eslint-disable-next-line no-alert, no-undef
+			alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
+			return;
+		}
+
+		setAttributes( deleteRow( vTable, { sectionName, rowIndex } ) );
+
+		setSelectedCell();
+		setSelectedCells();
+		setSelectedLine();
 	};
 
 	const onInsertColumn = ( offset ) => {
 		if ( ! selectedCell ) return;
 
-		const { sectionName, rowIndex, colIndex, colSpan } = selectedCell;
-
-		// The selected cell on the virtual section.
-		const vSelectedCell = vTable[ sectionName ]
-			.reduce( ( cells, row ) => {
-				return cells.concat( row );
-			}, [] )
-			.filter( ( cell ) => cell.rowIndex === rowIndex && cell.colIndex === colIndex )[ 0 ];
+		const { vColIndex, colSpan } = selectedCell;
 
 		// Calculate column index to be inserted considering colspan of the selected cell.
 		const insertVColIndex =
-			offset === 0
-				? vSelectedCell.vColIndex
-				: vSelectedCell.vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
+			offset === 0 ? vColIndex : vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
 
-		setAttributes(
-			insertColumn( vTable, {
-				vColIndex: insertVColIndex,
-			} )
-		);
+		setAttributes( insertColumn( vTable, { vColIndex: insertVColIndex } ) );
+
+		setSelectedCell();
+		setSelectedCells();
+		setSelectedLine();
 	};
 
 	const onDeleteColumn = () => {
 		if ( ! selectedCell ) return;
 
-		const { sectionName, rowIndex, colIndex } = selectedCell;
+		const { vColIndex } = selectedCell;
 
-		// The selected cell on the virtual section.
-		const vSelectedCell = vTable[ sectionName ]
-			.reduce( ( cells, row ) => {
-				return cells.concat( row );
-			}, [] )
-			.filter( ( cell ) => cell.rowIndex === rowIndex && cell.colIndex === colIndex )[ 0 ];
+		setAttributes( deleteColumn( vTable, { vColIndex } ) );
 
-		setAttributes(
-			deleteColumn( vTable, {
-				vColIndex: vSelectedCell.vColIndex,
-			} )
-		);
+		setSelectedCell();
+		setSelectedCells();
+		setSelectedLine();
 	};
 
 	const onMergeCells = () => {
-		setAttributes( mergeCells( attributes, { selectedRangeCell } ) );
+		// setAttributes( mergeCells( attributes, { selectedRangeCell } ) );
+
+		setSelectedCell();
+		setSelectedCells();
+		setSelectedLine();
 	};
 
 	const onSplitMergedCells = () => {
 		setAttributes( splitMergedCells( attributes, { selectedCell } ) );
+
+		setSelectedCell();
+		setSelectedCells();
+		setSelectedLine();
 	};
 
 	const TableToolbarControls = [
 		{
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
-			isDisabled:
-				! selectedCell ||
-				isRangeSelected( selectedRangeCell ) ||
-				isMultiSelected( selectedMultiCell ),
+			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
 			onClick: () => onInsertRow( 0 ),
 		},
 		{
 			icon: tableRowAfter,
 			title: __( 'Insert row after', 'flexible-table-block' ),
-			isDisabled:
-				! selectedCell ||
-				isRangeSelected( selectedRangeCell ) ||
-				isMultiSelected( selectedMultiCell ),
+			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
 			onClick: () => onInsertRow( 1 ),
 		},
 		{
 			icon: tableRowDelete,
 			title: __( 'Delete row', 'flexible-table-block' ),
-			isDisabled:
-				! selectedCell ||
-				isRangeSelected( selectedRangeCell ) ||
-				isMultiSelected( selectedMultiCell ),
+			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
 			onClick: () => onDeleteRow(),
 		},
 		{
 			icon: tableColumnBefore,
 			title: __( 'Insert column before', 'flexible-table-block' ),
-			isDisabled:
-				! selectedCell ||
-				isRangeSelected( selectedRangeCell ) ||
-				isMultiSelected( selectedMultiCell ),
+			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
 			onClick: () => onInsertColumn( 0 ),
 		},
 		{
 			icon: tableColumnAfter,
 			title: __( 'Insert column after', 'flexible-table-block' ),
-			isDisabled:
-				! selectedCell ||
-				isRangeSelected( selectedRangeCell ) ||
-				isMultiSelected( selectedMultiCell ),
+			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
 			onClick: () => onInsertColumn( 1 ),
 		},
 		{
 			icon: tableColumnDelete,
 			title: __( 'Delete column', 'flexible-table-block' ),
-			isDisabled:
-				! selectedCell ||
-				isRangeSelected( selectedRangeCell ) ||
-				isMultiSelected( selectedMultiCell ),
+			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
 			onClick: () => onDeleteColumn(),
 		},
 		{
 			icon: splitCell,
 			title: __( 'Split Merged Cells', 'flexible-table-block' ),
-			isDisabled: isRangeSelected( selectedRangeCell ) || isMultiSelected( selectedMultiCell ),
+			isDisabled: ! selectedCells || ! selectedCells?.rowSpan || ! selectedCells?.colSpan,
 			onClick: () => onSplitMergedCells(),
 		},
 		{
 			icon: mergeCell,
 			title: __( 'Merge Cells', 'flexible-table-block' ),
-			isDisabled: ! isRangeSelected( selectedRangeCell ),
+			isDisabled: ! selectedCells,
 			onClick: () => onMergeCells(),
 		},
 	];
 
 	const isEmpty = ! [ 'head', 'body', 'foot' ].filter(
-		( sectionName ) => vTable[ sectionName ].length
+		( sectionName ) => ! isEmptySection( vTable[ sectionName ] )
 	).length;
 
 	const tablePlaceholderProps = useBlockProps();
@@ -273,33 +227,30 @@ function TableEdit( props ) {
 		tableStylesObj,
 		selectedCell,
 		setSelectedCell,
-		selectedMultiCell,
-		setSelectedMultiCell,
-		selectedRangeCell,
-		setSelectedRangeCell,
 		selectedLine,
 		setSelectedLine,
-		vSelectedCells,
-		setVSelectedCells,
+		selectedCells,
+		setSelectedCells,
 	};
 
-	const tableSettingProps = {
+	const tableSettingsProps = {
 		...props,
+		vTable,
 		tableStylesObj,
 	};
 
-	const tableCellSettingProps = {
+	const tableCellSettingsProps = {
 		...props,
+		vTable,
 		selectedCell,
-		selectedMultiCell,
-		selectedRangeCell,
-		vSelectedCells,
+		selectedCells,
 	};
 
 	const tableCaptionProps = {
 		...props,
 		captionStylesObj,
-		setVSelectedCells,
+		setSelectedLine,
+		setSelectedCells,
 	};
 
 	const tableCaptionSettingProps = {
@@ -308,9 +259,9 @@ function TableEdit( props ) {
 	};
 
 	const tableCellSettingsLabel =
-		isRangeSelected( selectedRangeCell ) || isMultiSelected( selectedMultiCell )
-			? __( 'Multi Cells Settings', 'flexible-table-block' )
-			: __( 'Cell Settings', 'flexible-table-block' );
+		( selectedCells || [] ).length === 1
+			? __( 'Cell Settings', 'flexible-table-block' )
+			: __( 'Multi Cells Settings', 'flexible-table-block' );
 
 	return (
 		<>
@@ -343,11 +294,11 @@ function TableEdit( props ) {
 							title={ __( 'Table Settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
-							<TableSettings { ...tableSettingProps } />
+							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
-						{ ( selectedCell || selectedMultiCell || selectedRangeCell ) && (
+						{ selectedCell && (
 							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
-								<TableCellSettings { ...tableCellSettingProps } />
+								<TableCellSettings { ...tableCellSettingsProps } />
 							</PanelBody>
 						) }
 						<PanelBody

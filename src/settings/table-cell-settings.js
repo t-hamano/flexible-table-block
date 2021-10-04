@@ -47,15 +47,10 @@ import {
 } from '../utils/style-picker';
 
 export default function TableCellSettings( props ) {
-	const { selectedCell, selectedMultiCell, selectedRangeCell, attributes, setAttributes } = props;
+	const { vTable, selectedCell, selectedCells, attributes, setAttributes } = props;
 
-	const cellWidthUnits = useCustomUnits( {
-		availableUnits: CELL_WIDTH_UNITS,
-	} );
-
-	const fontSizeUnits = useCustomUnits( {
-		availableUnits: FONT_SIZE_UNITS,
-	} );
+	const cellWidthUnits = useCustomUnits( { availableUnits: CELL_WIDTH_UNITS } );
+	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
 
 	const colors = useSelect( ( select ) => {
 		const { getSettings } = select( blockEditorStore );
@@ -73,17 +68,7 @@ export default function TableCellSettings( props ) {
 	const cellStylesObj = convertToObject( targetCell.styles );
 
 	const updateCellsStyle = ( styles ) => {
-		setAttributes(
-			updateCellsState(
-				attributes,
-				{ styles },
-				{
-					selectedCell,
-					selectedRangeCell,
-					selectedMultiCell,
-				}
-			)
-		);
+		setAttributes( updateCellsState( vTable, { styles }, { selectedCells } ) );
 	};
 
 	const onChangeFontSize = ( value ) => {
@@ -133,24 +118,43 @@ export default function TableCellSettings( props ) {
 	};
 
 	const onChangeTag = ( value ) => {
-		setAttributes(
-			updateCellsState(
-				attributes,
-				{ tag: value },
-				{
-					selectedCell,
-					selectedRangeCell,
-					selectedMultiCell,
-				}
-			)
-		);
+		setAttributes( updateCellsState( vTable, { tag: value }, { selectedCells } ) );
+	};
+
+	const onResetCellSettings = () => {
+		updateCellsStyle( {
+			fontSize: undefined,
+			color: undefined,
+			backgroundColor: undefined,
+			width: undefined,
+			padding: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+			borderWidth: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+			borderRadius: {
+				topLeft: undefined,
+				topRight: undefined,
+				bottomRight: undefined,
+				bottomLeft: undefined,
+			},
+			borderStyle: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+			borderColor: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+			textAlign: undefined,
+			verticalAlign: undefined,
+		} );
 	};
 
 	return (
 		<>
 			<BaseControl
+				id="flexible-table-block/clear-cell-settings"
+				className="ftb-reset-settings-control"
+			>
+				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
+					{ __( 'Clear Cell Settings', 'flexible-table-block' ) }
+				</Button>
+			</BaseControl>
+			<BaseControl
 				id="flexible-table-block/cell-font-size"
-				label={ __( 'Cell Font size', 'flexible-table-block' ) }
+				label={ __( 'Cell Font Size', 'flexible-table-block' ) }
 			>
 				<UnitControl
 					value={ cellStylesObj?.fontSize }

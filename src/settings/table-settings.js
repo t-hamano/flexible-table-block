@@ -45,7 +45,7 @@ import {
 } from '../utils/style-updater';
 
 export default function TableSettings( props ) {
-	const { tableStylesObj, attributes, setAttributes } = props;
+	const { vTable, tableStylesObj, attributes, setAttributes } = props;
 	const {
 		hasFixedLayout,
 		isStackedOnMobile,
@@ -56,9 +56,7 @@ export default function TableSettings( props ) {
 		foot,
 	} = attributes;
 
-	const tableWidthUnits = useCustomUnits( {
-		availableUnits: TABLE_WIDTH_UNITS,
-	} );
+	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
 	const onChangeHasFixedLayout = () => {
 		setAttributes( { hasFixedLayout: ! hasFixedLayout } );
@@ -81,11 +79,11 @@ export default function TableSettings( props ) {
 	};
 
 	const onToggleHeaderSection = () => {
-		setAttributes( toggleSection( attributes, 'head' ) );
+		setAttributes( toggleSection( vTable, 'head' ) );
 	};
 
 	const onToggleFooterSection = () => {
-		setAttributes( toggleSection( attributes, 'foot' ) );
+		setAttributes( toggleSection( vTable, 'foot' ) );
 	};
 
 	const onChangeWidth = ( value ) => {
@@ -153,8 +151,27 @@ export default function TableSettings( props ) {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
+	const onResetTableSettings = () => {
+		setAttributes( {
+			hasFixedLayout: undefined,
+			isScrollOnPc: undefined,
+			isScrollOnMobile: undefined,
+			isStackedOnMobile: undefined,
+			sticky: undefined,
+			tableStyles: undefined,
+		} );
+	};
+
 	return (
 		<>
+			<BaseControl
+				id="flexible-table-block/clear-table-settings"
+				className="ftb-reset-settings-control"
+			>
+				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
+					{ __( 'Clear Table Settings', 'flexible-table-block' ) }
+				</Button>
+			</BaseControl>
 			<ToggleControl
 				label={ __( 'Header section', 'flexible-table-block' ) }
 				checked={ !! ( head && head.length ) }

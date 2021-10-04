@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { every, times, pickBy, isEmpty, isObject, identity, mapValues } from 'lodash';
+import { times, pickBy, isEmpty, isObject, identity, mapValues } from 'lodash';
 
 /**
  * Sanitize the value of UnitControl.
@@ -17,6 +17,7 @@ export function toUnitVal( value ) {
 	} else if ( parsedValue === 0 ) {
 		return 0;
 	}
+
 	return value;
 }
 
@@ -30,7 +31,9 @@ export const cleanEmptyObject = ( object ) => {
 	if ( ! isObject( object ) || Array.isArray( object ) ) {
 		return object;
 	}
+
 	const cleanedNestedObjects = pickBy( mapValues( object, cleanEmptyObject ), identity );
+
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
 };
 
@@ -62,43 +65,13 @@ export function parseCssValue( value ) {
 }
 
 /**
- * Determines whether a table row is empty.
+ * Determines whether a virtual section is empty.
  *
- * @param {Object} row Table row state.
- * @return {boolean} True if the table section is empty, false otherwise.
+ * @param {Object} vSection Virtual section state.
+ * @return {boolean} True if the virtual section is empty, false otherwise.
  */
-export function isEmptyRow( row ) {
-	return ! ( row.cells && row.cells.length );
-}
-
-/**
- * Determines whether a table section is empty.
- *
- * @param {Object} section Table section state.
- * @return {boolean} True if the table section is empty, false otherwise.
- */
-export function isEmptyTableSection( section ) {
-	return ! section || ! section.length || every( section, isEmptyRow );
-}
-
-/**
- * Determines Whether multi cells is selected.
- *
- * @param {Object} selectedMultiCell Current table state.
- * @return {boolean} True if multi cells is selected, false otherwise.
- */
-export function isMultiSelected( selectedMultiCell ) {
-	return !! ( selectedMultiCell && selectedMultiCell.length > 1 );
-}
-
-/**
- * Determines Whether range cells is selected.
- *
- * @param {Object} selectedRangeCell Current table state.
- * @return {boolean} True if range cells is selected, false otherwise.
- */
-export function isRangeSelected( selectedRangeCell ) {
-	return !! ( selectedRangeCell && selectedRangeCell.fromCell && selectedRangeCell.toCell );
+export function isEmptySection( vSection ) {
+	return ! vSection || ! vSection.length || vSection.every( ( row ) => ! ( row && row.length ) );
 }
 
 /**
@@ -191,16 +164,4 @@ export function toVirtualSection( state, { sectionName } ) {
 	} );
 
 	return vSection;
-}
-
-/**
- * Get the start and end cells where the selection will be a rectangle in the virtual section based on the two selected cells.
- *
- * @param {Object} vSection               Current virtual section.
- * @param {Object} options
- * @param {Object} options.vSelectedCells Two currently selected cells on virtual section.
- * @return {Object | boolean} Start and end cells selected to be rectangular on the virtual section, false otherwise.
- */
-export function getVirtualRange( vSection, { vSelectedCells } ) {
-	return false;
 }

@@ -55,9 +55,7 @@ export default function BorderRadiusControl( {
 			values.topLeft === values.bottomLeft
 		);
 
-	const borderRadiusUnits = useCustomUnits( {
-		availableUnits: BORDER_RADIUS_UNITS,
-	} );
+	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ corner, setCorner ] = useState( undefined );
@@ -158,12 +156,8 @@ export default function BorderRadiusControl( {
 								value={ values[ item.value ] }
 								units={ borderRadiusUnits }
 								min="0"
-								onFocus={ () => {
-									handleOnFocus( item.value );
-								} }
-								onChange={ ( value ) => {
-									handleOnChange( value, item.value );
-								} }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
 							/>
 						);
 					} ) }

@@ -23,9 +23,7 @@ export default function TableCaptionSettings( props ) {
 	const { captionStylesObj, attributes, setAttributes } = props;
 	const { captionSide } = attributes;
 
-	const fontSizeUnits = useCustomUnits( {
-		availableUnits: FONT_SIZE_UNITS,
-	} );
+	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
 
 	const onChangeCaptionFontSize = ( value ) => {
 		const newStylesObj = {
@@ -51,7 +49,7 @@ export default function TableCaptionSettings( props ) {
 		<>
 			<BaseControl
 				id="flexible-table-block/caption-font-size"
-				label={ __( 'Font size', 'flexible-table-block' ) }
+				label={ __( 'Font Size', 'flexible-table-block' ) }
 			>
 				<UnitControl
 					value={ captionStylesObj?.fontSize }

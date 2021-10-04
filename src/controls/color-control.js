@@ -40,13 +40,9 @@ export default function ColorControl( {
 
 	const classNames = classnames( 'ftb-color-control', className );
 
-	const handleOnReset = () => {
-		onChange( null );
-	};
+	const handleOnReset = () => onChange( null );
 
-	const handleOnChange = ( inputValue ) => {
-		onChange( inputValue );
-	};
+	const handleOnChange = ( inputValue ) => onChange( inputValue );
 
 	const handleOnPickerOpen = ( targetPickerIndex ) => {
 		setIsPickerOpen( true );
@@ -72,9 +68,7 @@ export default function ColorControl( {
 						<Button
 							label={ __( 'All', 'flexible-table-block' ) }
 							className="ftb-color-control__indicator"
-							onClick={ () => {
-								handleOnPickerOpen();
-							} }
+							onClick={ () => handleOnPickerOpen() }
 						>
 							<ColorIndicator
 								className={ classnames( {

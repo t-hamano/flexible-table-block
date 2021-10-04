@@ -67,13 +67,9 @@ export default function TablePlaceholder( { setAttributes } ) {
 		}
 	};
 
-	const onToggleHeaderSection = ( section ) => {
-		setHeaderSection( !! section );
-	};
+	const onToggleHeaderSection = ( section ) => setHeaderSection( !! section );
 
-	const onToggleFooterSection = ( section ) => {
-		setFooterSection( !! section );
-	};
+	const onToggleFooterSection = ( section ) => setFooterSection( !! section );
 
 	const tableClass = classnames( 'ftb-placeholder__table', {
 		'is-overflow-row': totalRowCount > THRESHOLD_PREVIEW_TABLE_ROW,

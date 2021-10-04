@@ -65,9 +65,9 @@ export const ButtonColumnAfterInserter = styled( ButtonInserter )`
 
 const ButtonSelector = styled( Button )`
 	background: #eaeaea;
+	position: absolute;
 
 	&.components-button.has-icon {
-		position: absolute;
 		min-width: 0;
 		padding: 0;
 		justify-content: center;
@@ -98,17 +98,29 @@ export const ButtonColumnSelector = styled( ButtonSelector )`
 	top: -20px;
 `;
 
-export const ButtonDeleter = styled( Button )`
-	&.components-button {
-		height: 36px;
-		padding: 0;
-		justify-content: center;
+const ButtonDeleter = styled( Button )`
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	box-shadow: 0 2px 6px rgba( 0, 0, 0, 0.05 );
+	position: absolute;
+	z-index: 1;
 
-		&.has-text {
-			justify-content: center;
-		}
-		svg {
-			margin-right: 0;
-		}
+	&.components-button.has-icon {
+		min-width: 0;
+		padding: 0;
+		width: 30px;
+		height: 30px;
 	}
+`;
+
+export const ButtonRowDeleter = styled( ButtonDeleter )`
+	left: -55px;
+	top: -15px;
+`;
+
+export const ButtonColumnDeleter = styled( ButtonDeleter )`
+	left: 50%;
+	margin-left: -15px;
+	top: -35px;
 `;

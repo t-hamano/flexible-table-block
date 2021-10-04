@@ -12,6 +12,7 @@ import { cleanEmptyObject, toUnitVal } from './helper';
  */
 export function updatePadding( styles, values ) {
 	const newStyles = { ...styles };
+
 	delete newStyles.padding;
 	delete newStyles.paddingTop;
 	delete newStyles.paddingRight;
@@ -71,6 +72,7 @@ export function updatePadding( styles, values ) {
  */
 export function updateBorderSpacing( styles, values ) {
 	const newStyles = { ...styles };
+
 	delete newStyles.borderSpacing;
 
 	const cleanValues = cleanEmptyObject( values );

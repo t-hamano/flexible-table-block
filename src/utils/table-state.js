@@ -4,14 +4,9 @@
 import { times, mapValues, pick } from 'lodash';
 
 /**
- * WordPress dependencies
- */
-import { __ } from '@wordpress/i18n';
-
-/**
  * Internal dependencies
  */
-import { isEmptyTableSection, isRangeSelected, isMultiSelected } from './helper';
+import { isEmptySection } from './helper';
 import { convertToObject, convertToInline } from '../utils/style-converter';
 import {
 	updatePadding,
@@ -123,18 +118,6 @@ export function insertRow( state, { sectionName, rowIndex } ) {
  * @return {Object} New table state.
  */
 export function deleteRow( vTable, { sectionName, rowIndex } ) {
-	// Do not allow tbody to be empty for table with thead /tfoot sections.
-	if (
-		sectionName === 'body' &&
-		vTable.body.length === 1 &&
-		vTable.head.length &&
-		vTable.foot.length
-	) {
-		// eslint-disable-next-line no-alert, no-undef
-		alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
-		return vTable;
-	}
-
 	// Find the number of rowspan cells in the row to be deleted.
 	const rowSpanCellsCount = vTable[ sectionName ][ rowIndex ].filter( ( cell ) => cell.rowSpan )
 		.length;
@@ -150,7 +133,7 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 
 			if ( vMergedCells.length ) {
 				vTable = splitMergedCells( vTable, {
-					vSelectedCell: vMergedCells[ 0 ],
+					selectedCell: vMergedCells[ 0 ],
 				} );
 			}
 		}
@@ -211,8 +194,8 @@ export function insertColumn( vTable, { vColIndex } ) {
 
 	[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
 		vTable[ sectionName ].forEach( ( row, currentRowIndex ) => {
-			row.forEach( ( cell, currentColIndex ) => {
-				if ( currentColIndex === vColIndex && cell.rowSpan ) {
+			row.forEach( ( cell, currentVColIndex ) => {
+				if ( currentVColIndex === vColIndex && cell.rowSpan ) {
 					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
 						rowIndexesToFill[ sectionName ].push( currentRowIndex + i );
 					}
@@ -229,12 +212,12 @@ export function insertColumn( vTable, { vColIndex } ) {
 		return section.map( ( row, currentRowIndex ) => {
 			return {
 				cells: row
-					.reduce( ( cells, cell, currentColIndex ) => {
+					.reduce( ( cells, cell, currentVColIndex ) => {
 						// Expand cells with colspan in the before columns.
 						if (
 							cell.colSpan &&
-							currentColIndex < vColIndex &&
-							currentColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
+							currentVColIndex < vColIndex &&
+							currentVColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
 						) {
 							cells.push( {
 								...cell,
@@ -244,7 +227,7 @@ export function insertColumn( vTable, { vColIndex } ) {
 						}
 
 						// Insert cell ( after the last column ).
-						if ( isLastColumnInsert && currentColIndex + 1 === vColIndex ) {
+						if ( isLastColumnInsert && currentVColIndex + 1 === vColIndex ) {
 							cells.push( cell, {
 								content: '',
 								tag: 'head' === sectionName ? 'th' : 'td',
@@ -253,7 +236,7 @@ export function insertColumn( vTable, { vColIndex } ) {
 						}
 
 						// Insert cell ( between columns ).
-						if ( currentColIndex === vColIndex && ! cell.isDelete ) {
+						if ( currentVColIndex === vColIndex && ! cell.isDelete ) {
 							cells.push(
 								{
 									content: '',
@@ -266,7 +249,7 @@ export function insertColumn( vTable, { vColIndex } ) {
 
 						// Insert cell (additional).
 						if (
-							currentColIndex === vColIndex &&
+							currentVColIndex === vColIndex &&
 							rowIndexesToFill[ sectionName ].includes( currentRowIndex )
 						) {
 							cells.push(
@@ -309,7 +292,7 @@ export function deleteColumn( vTable, { vColIndex } ) {
 	if ( colSpanCells.length ) {
 		colSpanCells.forEach( ( colSpanCell ) => {
 			vTable = splitMergedCells( vTable, {
-				vSelectedCell: colSpanCell,
+				selectedCell: colSpanCell,
 			} );
 		} );
 	}
@@ -317,17 +300,17 @@ export function deleteColumn( vTable, { vColIndex } ) {
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
 	return mapValues( vSections, ( section ) => {
-		if ( ! section.length ) return [];
+		if ( ! section.length ) return null;
 
 		return section.map( ( row ) => {
 			return {
 				cells: row
-					.map( ( cell, currentColIndex ) => {
+					.map( ( cell, currentVColIndex ) => {
 						// Contract cells with colspan in the before columns.
 						if (
 							cell.colSpan &&
-							currentColIndex < vColIndex &&
-							currentColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
+							currentVColIndex < vColIndex &&
+							currentVColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
 						) {
 							return {
 								...cell,
@@ -336,7 +319,7 @@ export function deleteColumn( vTable, { vColIndex } ) {
 						}
 
 						// Cells to be deleted (Mark as deletion).
-						if ( currentColIndex === vColIndex ) {
+						if ( currentVColIndex === vColIndex ) {
 							return {
 								...cell,
 								isDelete: true,
@@ -355,18 +338,18 @@ export function deleteColumn( vTable, { vColIndex } ) {
 /**
  * Toggles the existance of a section.
  *
- * @param {Object} state       Current table state.
+ * @param {Object} vTable      Current virtual table state.
  * @param {string} sectionName Name of the section to toggle.
  * @return {Object} New table state.
  */
-export function toggleSection( state, sectionName ) {
+export function toggleSection( vTable, sectionName ) {
 	// Section exists, replace it with an empty row to remove it.
-	if ( ! isEmptyTableSection( state[ sectionName ] ) ) {
+	if ( ! isEmptySection( vTable[ sectionName ] ) ) {
 		return { [ sectionName ]: [] };
 	}
 
 	// Number of columns in the row to be inserted.
-	const newRowColCount = state.body[ 0 ].cells.reduce( ( count, cell ) => {
+	const newRowColCount = vTable.body[ 0 ].reduce( ( count, cell ) => {
 		return count + ( parseInt( cell.colSpan ) || 1 );
 	}, 0 );
 
@@ -452,13 +435,13 @@ export function mergeCells( state, { selectedRangeCell } ) {
 /**
  * Split cells in the virtual table state.
  *
- * @param {Object} vTable                Current virtual table state.
+ * @param {Object} vTable               Current virtual table state.
  * @param {Object} options
- * @param {number} options.vSelectedCell Current selected virtual cell.
+ * @param {number} options.selectedCell Current selected virtual cell.
  * @return {Object} New table state.
  */
-export function splitMergedCells( vTable, { vSelectedCell } ) {
-	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = vSelectedCell;
+export function splitMergedCells( vTable, { selectedCell } ) {
+	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = selectedCell;
 
 	const vSection = vTable[ sectionName ];
 
@@ -505,100 +488,96 @@ export function splitMergedCells( vTable, { vSelectedCell } ) {
 /**
  * Update cells state( styles, tag ) of selected section.
  *
- * @param {Object} state                     Current table state.
- * @param {Object} cellState                 Cell states to update.
+ * @param {Object} vTable                Current virtual table state.
+ * @param {Object} cellState             Cell states to update.
  * @param {Object} options
- * @param {Object} options.selectedCell      Current selected cell.
- * @param {Array}  options.selectedMultiCell Current selected multi cell.
- * @param {Object} options.selectedRangeCell Current selected range cell.
+ * @param {Array}  options.selectedCells Current selected multi cell.
  * @return {Object} New section state.
  */
-export function updateCellsState(
-	state,
-	cellState,
-	{ selectedCell, selectedMultiCell, selectedRangeCell }
-) {
-	if (
-		! selectedCell &&
-		! isRangeSelected( selectedRangeCell ) &&
-		! isMultiSelected( selectedMultiCell )
-	) {
-		return state;
-	}
+export function updateCellsState( vTable, cellState, { selectedCells } ) {
+	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
-	const { sectionName, rowIndex, colIndex } = selectedCell;
+	return mapValues( vSections, ( section, currentSectionName ) => {
+		if ( ! section.length ) return null;
 
-	return {
-		[ sectionName ]: state[ sectionName ].map( ( row, currentRowIndex ) => {
-			if ( currentRowIndex !== rowIndex ) {
-				return row;
-			}
-
+		return section.map( ( row, currentRowIndex ) => {
 			return {
-				cells: row.cells.map( ( cell, currentColIndex ) => {
-					if ( currentColIndex !== colIndex ) {
-						return cell;
-					}
+				cells: row
+					.map( ( cell, currentVColIndex ) => {
+						// Refer to the selected cell to determine if it is the target cell to update.
+						const isTargetCell = !! selectedCells.some( ( targetCell ) => {
+							return (
+								targetCell.sectionName === currentSectionName &&
+								targetCell.rowIndex === currentRowIndex &&
+								targetCell.vColIndex === currentVColIndex
+							);
+						} );
 
-					let stylesObj = convertToObject( cell?.styles );
-
-					if ( cellState.styles ) {
-						const styles = cellState.styles;
-
-						if ( 'fontSize' in styles ) {
-							stylesObj.fontSize = styles.fontSize;
+						if ( ! isTargetCell ) {
+							return cell;
 						}
 
-						if ( 'width' in styles ) {
-							stylesObj.width = styles.width;
+						let stylesObj = convertToObject( cell?.styles );
+
+						if ( cellState.styles ) {
+							const styles = cellState.styles;
+
+							if ( 'fontSize' in styles ) {
+								stylesObj.fontSize = styles.fontSize;
+							}
+
+							if ( 'width' in styles ) {
+								stylesObj.width = styles.width;
+							}
+
+							if ( 'color' in styles ) {
+								stylesObj.color = styles.color;
+							}
+
+							if ( 'backgroundColor' in styles ) {
+								stylesObj.backgroundColor = styles.backgroundColor;
+							}
+
+							if ( styles.padding ) {
+								stylesObj = updatePadding( stylesObj, styles.padding );
+							}
+
+							if ( styles.borderWidth ) {
+								stylesObj = updateBorderWidth( stylesObj, styles.borderWidth );
+							}
+
+							if ( styles.borderRadius ) {
+								stylesObj = updateBorderRadius( stylesObj, styles.borderRadius );
+							}
+
+							if ( styles.borderStyle ) {
+								stylesObj = updateBorderStyle( stylesObj, styles.borderStyle );
+							}
+
+							if ( styles.borderColor ) {
+								stylesObj = updateBorderColor( stylesObj, styles.borderColor );
+							}
+
+							if ( 'textAlign' in styles ) {
+								stylesObj.textAlign = styles.textAlign;
+							}
+
+							if ( 'verticalAlign' in styles ) {
+								stylesObj.verticalAlign = styles.verticalAlign;
+							}
 						}
 
-						if ( 'color' in styles ) {
-							stylesObj.color = styles.color;
-						}
+						const tag = cellState.tag || cell.tag;
 
-						if ( 'backgroundColor' in styles ) {
-							stylesObj.backgroundColor = styles.backgroundColor;
-						}
-
-						if ( styles.padding ) {
-							stylesObj = updatePadding( stylesObj, styles.padding );
-						}
-
-						if ( styles.borderWidth ) {
-							stylesObj = updateBorderWidth( stylesObj, styles.borderWidth );
-						}
-
-						if ( styles.borderRadius ) {
-							stylesObj = updateBorderRadius( stylesObj, styles.borderRadius );
-						}
-
-						if ( styles.borderStyle ) {
-							stylesObj = updateBorderStyle( stylesObj, styles.borderStyle );
-						}
-
-						if ( styles.borderColor ) {
-							stylesObj = updateBorderColor( stylesObj, styles.borderColor );
-						}
-
-						if ( 'textAlign' in styles ) {
-							stylesObj.textAlign = styles.textAlign;
-						}
-
-						if ( 'verticalAlign' in styles ) {
-							stylesObj.verticalAlign = styles.verticalAlign;
-						}
-					}
-
-					const tag = cellState.tag || cell.tag;
-
-					return {
-						...cell,
-						styles: convertToInline( stylesObj ),
-						tag,
-					};
-				} ),
+						return {
+							...cell,
+							styles: convertToInline( stylesObj ),
+							tag,
+						};
+					}, [] )
+					// Delete cells marked as deletion.
+					.filter( ( cell ) => ! cell.isDelete ),
 			};
-		} ),
-	};
+		} );
+	} );
 }

@@ -7,7 +7,7 @@ module.exports = {
 		"build/**/*.css",
 		"node_modules/**/*.css",
 		"vendor/**/*.css",
-		"**/*.js"
+		"**/*.js",
   ],
 	rules: {
 		"no-descending-specificity": null,

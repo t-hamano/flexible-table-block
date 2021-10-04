@@ -72,9 +72,7 @@ export default function BorderColorControl( {
 
 	const classNames = classnames( 'ftb-border-color-control', className );
 
-	const toggleLinked = () => {
-		setIsLinked( ! isLinked );
-	};
+	const toggleLinked = () => setIsLinked( ! isLinked );
 
 	const handleOnReset = () => {
 		setIsLinked( true );
@@ -128,9 +126,7 @@ export default function BorderColorControl( {
 							<Button
 								label={ __( 'All', 'flexible-table-block' ) }
 								className="ftb-border-color-control__indicator"
-								onClick={ () => {
-									handleOnPickerOpen();
-								} }
+								onClick={ handleOnPickerOpen }
 							>
 								{ isMixed ? (
 									__( 'Mixed', 'flexible-table-block' )
@@ -167,9 +163,7 @@ export default function BorderColorControl( {
 									<Button
 										label={ item.label }
 										className="ftb-border-color-control__indicator"
-										onClick={ () => {
-											handleOnPickerOpen( index );
-										} }
+										onClick={ () => handleOnPickerOpen( index ) }
 									>
 										<ColorIndicator
 											className={ classnames( {
@@ -187,9 +181,7 @@ export default function BorderColorControl( {
 											<ColorPalette
 												colors={ colors }
 												value={ values[ item.value ] }
-												onChange={ ( value ) => {
-													handleOnChange( value, item.value );
-												} }
+												onChange={ ( value ) => handleOnChange( value, item.value ) }
 											/>
 										</Popover>
 									) }

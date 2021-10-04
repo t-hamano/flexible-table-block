@@ -66,7 +66,7 @@ const transforms = {
 							// Split merged virtual cell.
 							if ( vMergedCells.length ) {
 								vTable = splitMergedCells( vTable, {
-									vSelectedCell: vMergedCells[ 0 ],
+									selectedCell: vMergedCells[ 0 ],
 								} );
 							}
 						}

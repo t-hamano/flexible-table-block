@@ -47,9 +47,7 @@ export default function BorderSpacingControl( {
 
 	const isMixed = allowSides && ! ( values.horizontal === values.vertical );
 
-	const borderSpacingUnits = useCustomUnits( {
-		availableUnits: BORDER_SPACING_UNITS,
-	} );
+	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ direction, setDirection ] = useState( undefined );
@@ -148,12 +146,8 @@ export default function BorderSpacingControl( {
 								aria-label={ item.label }
 								value={ values[ item.value ] }
 								units={ borderSpacingUnits }
-								onFocus={ () => {
-									handleOnFocus( item.value );
-								} }
-								onChange={ ( value ) => {
-									handleOnChange( value, item.value );
-								} }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
 							/>
 						);
 					} ) }
