@@ -41,18 +41,18 @@ function Cell( { name, ...props } ) {
 
 export default function Table( props ) {
 	const {
-		options,
-		vTable,
 		attributes,
 		setAttributes,
-		tableStylesObj,
 		isSelected,
+		options,
+		vTable,
+		tableStylesObj,
+		selectedCell,
+		setSelectedCell,
+		selectedCells,
+		setSelectedCells,
 		selectedLine,
 		setSelectedLine,
-		selectedCell,
-		selectedCells,
-		setSelectedCell,
-		setSelectedCells,
 	} = props;
 
 	const { hasFixedLayout, isStackedOnMobile, sticky } = attributes;
@@ -60,12 +60,7 @@ export default function Table( props ) {
 	const colorProps = useColorProps( attributes );
 
 	const onInsertRow = ( sectionName, rowIndex ) => {
-		setAttributes(
-			insertRow( attributes, {
-				sectionName,
-				rowIndex,
-			} )
-		);
+		setAttributes( insertRow( attributes, { sectionName, rowIndex } ) );
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
@@ -165,16 +160,13 @@ export default function Table( props ) {
 
 		setAttributes( {
 			[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
-				if ( rowIndex !== selectedRowIndex ) {
-					return { cells: row };
-				}
+				if ( rowIndex !== selectedRowIndex ) return { cells: row };
 
 				return {
 					cells: row.map( ( cell, vColIndex ) => {
 						if ( rowIndex !== selectedRowIndex || vColIndex !== selectedVColIndex ) {
 							return cell;
 						}
-
 						return {
 							...cell,
 							content,
@@ -237,195 +229,192 @@ export default function Table( props ) {
 		>
 			{ filteredSections.map( ( sectionName, sectionIndex ) => (
 				<TSection name={ sectionName } key={ sectionName }>
-					{ vTable[ sectionName ].map( ( row, rowIndex ) => {
-						return (
-							<tr key={ rowIndex }>
-								{ row.map( ( cell ) => {
-									const { content, tag, styles, rowSpan, colSpan, vColIndex } = cell;
+					{ vTable[ sectionName ].map( ( row, rowIndex ) => (
+						<tr key={ rowIndex }>
+							{ row.map( ( cell ) => {
+								const { content, tag, styles, rowSpan, colSpan, vColIndex } = cell;
 
-									// Whether or not the current cell is included in the selected cells.
-									let isCellSelected =
-										selectedCell?.sectionName === sectionName &&
-										selectedCell?.rowIndex === rowIndex &&
-										selectedCell?.vColIndex === vColIndex;
+								// Whether or not the current cell is included in the selected cells.
+								let isCellSelected =
+									selectedCell?.sectionName === sectionName &&
+									selectedCell?.rowIndex === rowIndex &&
+									selectedCell?.vColIndex === vColIndex;
 
-									if ( selectedCells && selectedCells.length ) {
-										isCellSelected = !! selectedCells.some( ( targetCell ) => {
-											return (
-												targetCell.sectionName === sectionName &&
-												targetCell.rowIndex === rowIndex &&
-												targetCell.vColIndex === vColIndex
-											);
-										} );
-									}
+								if ( selectedCells && selectedCells.length ) {
+									isCellSelected = !! selectedCells.some(
+										( targetCell ) =>
+											targetCell.sectionName === sectionName &&
+											targetCell.rowIndex === rowIndex &&
+											targetCell.vColIndex === vColIndex
+									);
+								}
 
-									const cellStylesObj = convertToObject( styles );
+								const cellStylesObj = convertToObject( styles );
 
-									return (
-										<Cell
-											key={ vColIndex }
-											name={ tag }
-											className={ classnames( { 'is-selected': isCellSelected } ) }
-											rowSpan={ rowSpan }
-											colSpan={ colSpan }
-											style={ cellStylesObj }
-											onClick={ ( event ) => onClickCell( event, cell ) }
-										>
-											{ isSelected &&
-												options.show_label_on_section &&
-												rowIndex === 0 &&
-												vColIndex === 0 && (
-													<Button
-														className="ftb-table-cell-label"
-														tabIndex={ ! options.focus_control_button && -1 }
-														variant="primary"
-														onClick={ ( event ) => {
-															onSelectSectionCells( sectionName );
-															event.stopPropagation();
-														} }
-													>
-														{ `<t${ sectionName }>` }
-													</Button>
-												) }
-											{ isSelected && options.show_control_button && (
-												<>
-													{ rowIndex === 0 && vColIndex === 0 && (
-														<ButtonRowBeforeInserter
-															label={ __( 'Insert row before', 'flexible-table-block' ) }
-															tabIndex={ ! options.focus_control_button && -1 }
-															icon={ plus }
-															iconSize="18"
-															hasPrevSection={ sectionIndex > 0 }
-															onClick={ ( event ) => {
-																onInsertRow( sectionName, rowIndex );
-																event.stopPropagation();
-															} }
-														/>
-													) }
-													{ vColIndex === 0 && (
-														<>
-															<ButtonRowSelector
-																label={ __( 'Select row', 'flexible-table-block' ) }
-																tabIndex={ ! options.focus_control_button && -1 }
-																icon={ moreVertical }
-																iconSize="18"
-																variant={
-																	selectedLine?.sectionName === sectionName &&
-																	selectedLine?.rowIndex === rowIndex
-																		? 'primary'
-																		: undefined
-																}
-																onClick={ ( event ) => {
-																	onSelectRow( sectionName, rowIndex );
-																	event.stopPropagation();
-																} }
-															/>
-															{ selectedLine?.sectionName === sectionName &&
-																selectedLine?.rowIndex === rowIndex && (
-																	<ButtonRowDeleter
-																		label={ __( 'Delete row', 'flexible-table-block' ) }
-																		tabIndex={ ! options.focus_control_button && -1 }
-																		icon={ trash }
-																		iconSize={ 20 }
-																		onClick={ ( event ) => {
-																			onDeleteRow( sectionName, rowIndex );
-																			event.stopPropagation();
-																		} }
-																	/>
-																) }
-														</>
-													) }
-													{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
-														<ButtonColumnBeforeInserter
-															label={ __( 'Insert column before', 'flexible-table-block' ) }
-															tabIndex={ ! options.focus_control_button && -1 }
-															icon={ plus }
-															iconSize="18"
-															onClick={ ( event ) => {
-																onInsertColumn( cell, 0 );
-																event.stopPropagation();
-															} }
-														/>
-													) }
-													{ sectionIndex === 0 && rowIndex === 0 && (
-														<>
-															<ButtonColumnSelector
-																label={ __( 'Select column', 'flexible-table-block' ) }
-																tabIndex={ ! options.focus_control_button && -1 }
-																icon={ moreHorizontal }
-																iconSize="18"
-																variant={
-																	selectedLine?.vColIndex === vColIndex ? 'primary' : undefined
-																}
-																onClick={ ( event ) => {
-																	onSelectColumn( vColIndex );
-																	event.stopPropagation();
-																} }
-															></ButtonColumnSelector>
-															{ selectedLine?.vColIndex === vColIndex && (
-																<ButtonColumnDeleter
-																	label={ __( 'Delete column', 'flexible-table-block' ) }
-																	tabIndex={ ! options.focus_control_button && -1 }
-																	icon={ trash }
-																	iconSize={ 20 }
-																	onClick={ ( event ) => {
-																		onDeleteColumn( vColIndex );
-																		event.stopPropagation();
-																	} }
-																/>
-															) }
-														</>
-													) }
-													{ vColIndex === 0 && (
-														<ButtonRowAfterInserter
-															label={ __( 'Insert row after', 'flexible-table-block' ) }
-															tabIndex={ ! options.focus_control_button && -1 }
-															icon={ plus }
-															iconSize="18"
-															hasNextSection={
-																sectionIndex < filteredSections.length - 1 &&
-																rowIndex === vTable[ sectionName ].length - 1
-															}
-															onClick={ ( event ) => {
-																onInsertRow( sectionName, rowIndex + 1 );
-																event.stopPropagation();
-															} }
-														/>
-													) }
-												</>
+								return (
+									<Cell
+										key={ vColIndex }
+										name={ tag }
+										className={ classnames( { 'is-selected': isCellSelected } ) }
+										rowSpan={ rowSpan }
+										colSpan={ colSpan }
+										style={ cellStylesObj }
+										onClick={ ( event ) => onClickCell( event, cell ) }
+									>
+										{ isSelected &&
+											options.show_label_on_section &&
+											rowIndex === 0 &&
+											vColIndex === 0 && (
+												<Button
+													className="ftb-table-cell-label"
+													tabIndex={ ! options.focus_control_button && -1 }
+													variant="primary"
+													onClick={ ( event ) => {
+														onSelectSectionCells( sectionName );
+														event.stopPropagation();
+													} }
+												>
+													{ `<t${ sectionName }>` }
+												</Button>
 											) }
-											<RichText
-												key={ vColIndex }
-												value={ content }
-												onChange={ onChangeCellContent }
-												unstableOnFocus={ () => {
-													setSelectedCell( cell );
-													setSelectedLine();
-													// setSelectedCells( [ cell ] );
-												} }
-												aria-label={ CELL_ARIA_LABEL[ sectionName ] }
-											/>
-											{ isSelected &&
-												options.show_control_button &&
-												sectionIndex === 0 &&
-												rowIndex === 0 && (
-													<ButtonColumnAfterInserter
-														label={ __( 'Insert column after', 'flexible-table-block' ) }
+										{ isSelected && options.show_control_button && (
+											<>
+												{ rowIndex === 0 && vColIndex === 0 && (
+													<ButtonRowBeforeInserter
+														label={ __( 'Insert row before', 'flexible-table-block' ) }
 														tabIndex={ ! options.focus_control_button && -1 }
 														icon={ plus }
 														iconSize="18"
+														hasPrevSection={ sectionIndex > 0 }
 														onClick={ ( event ) => {
-															onInsertColumn( cell, 1 );
+															onInsertRow( sectionName, rowIndex );
 															event.stopPropagation();
 														} }
 													/>
 												) }
-										</Cell>
-									);
-								} ) }
-							</tr>
-						);
-					} ) }
+												{ vColIndex === 0 && (
+													<>
+														<ButtonRowSelector
+															label={ __( 'Select row', 'flexible-table-block' ) }
+															tabIndex={ ! options.focus_control_button && -1 }
+															icon={ moreVertical }
+															iconSize="18"
+															variant={
+																selectedLine?.sectionName === sectionName &&
+																selectedLine?.rowIndex === rowIndex
+																	? 'primary'
+																	: undefined
+															}
+															onClick={ ( event ) => {
+																onSelectRow( sectionName, rowIndex );
+																event.stopPropagation();
+															} }
+														/>
+														{ selectedLine?.sectionName === sectionName &&
+															selectedLine?.rowIndex === rowIndex && (
+																<ButtonRowDeleter
+																	label={ __( 'Delete row', 'flexible-table-block' ) }
+																	tabIndex={ ! options.focus_control_button && -1 }
+																	icon={ trash }
+																	iconSize={ 20 }
+																	onClick={ ( event ) => {
+																		onDeleteRow( sectionName, rowIndex );
+																		event.stopPropagation();
+																	} }
+																/>
+															) }
+													</>
+												) }
+												{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
+													<ButtonColumnBeforeInserter
+														label={ __( 'Insert column before', 'flexible-table-block' ) }
+														tabIndex={ ! options.focus_control_button && -1 }
+														icon={ plus }
+														iconSize="18"
+														onClick={ ( event ) => {
+															onInsertColumn( cell, 0 );
+															event.stopPropagation();
+														} }
+													/>
+												) }
+												{ sectionIndex === 0 && rowIndex === 0 && (
+													<>
+														<ButtonColumnSelector
+															label={ __( 'Select column', 'flexible-table-block' ) }
+															tabIndex={ ! options.focus_control_button && -1 }
+															icon={ moreHorizontal }
+															iconSize="18"
+															variant={
+																selectedLine?.vColIndex === vColIndex ? 'primary' : undefined
+															}
+															onClick={ ( event ) => {
+																onSelectColumn( vColIndex );
+																event.stopPropagation();
+															} }
+														></ButtonColumnSelector>
+														{ selectedLine?.vColIndex === vColIndex && (
+															<ButtonColumnDeleter
+																label={ __( 'Delete column', 'flexible-table-block' ) }
+																tabIndex={ ! options.focus_control_button && -1 }
+																icon={ trash }
+																iconSize={ 20 }
+																onClick={ ( event ) => {
+																	onDeleteColumn( vColIndex );
+																	event.stopPropagation();
+																} }
+															/>
+														) }
+													</>
+												) }
+												{ vColIndex === 0 && (
+													<ButtonRowAfterInserter
+														label={ __( 'Insert row after', 'flexible-table-block' ) }
+														tabIndex={ ! options.focus_control_button && -1 }
+														icon={ plus }
+														iconSize="18"
+														hasNextSection={
+															sectionIndex < filteredSections.length - 1 &&
+															rowIndex === vTable[ sectionName ].length - 1
+														}
+														onClick={ ( event ) => {
+															onInsertRow( sectionName, rowIndex + 1 );
+															event.stopPropagation();
+														} }
+													/>
+												) }
+											</>
+										) }
+										<RichText
+											key={ vColIndex }
+											value={ content }
+											onChange={ onChangeCellContent }
+											unstableOnFocus={ () => {
+												setSelectedCell( cell );
+												setSelectedLine();
+												// setSelectedCells( [ cell ] );
+											} }
+											aria-label={ CELL_ARIA_LABEL[ sectionName ] }
+										/>
+										{ isSelected &&
+											options.show_control_button &&
+											sectionIndex === 0 &&
+											rowIndex === 0 && (
+												<ButtonColumnAfterInserter
+													label={ __( 'Insert column after', 'flexible-table-block' ) }
+													tabIndex={ ! options.focus_control_button && -1 }
+													icon={ plus }
+													iconSize="18"
+													onClick={ ( event ) => {
+														onInsertColumn( cell, 1 );
+														event.stopPropagation();
+													} }
+												/>
+											) }
+									</Cell>
+								);
+							} ) }
+						</tr>
+					) ) }
 				</TSection>
 			) ) }
 		</table>

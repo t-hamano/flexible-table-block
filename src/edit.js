@@ -57,9 +57,7 @@ function TableEdit( props ) {
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
 
-	const options = useSelect( ( select ) => {
-		return select( STORE_NAME ).getOptions();
-	} );
+	const options = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
 
 	// Create virtual table array with the cells placed in positions based on how they actually look.
 	const vTable = {
@@ -78,7 +76,6 @@ function TableEdit( props ) {
 			offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
 
 		setAttributes( insertRow( attributes, { sectionName, rowIndex: insertRowIndex } ) );
-
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
@@ -102,7 +99,6 @@ function TableEdit( props ) {
 		}
 
 		setAttributes( deleteRow( vTable, { sectionName, rowIndex } ) );
-
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
@@ -118,7 +114,6 @@ function TableEdit( props ) {
 			offset === 0 ? vColIndex : vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
 
 		setAttributes( insertColumn( vTable, { vColIndex: insertVColIndex } ) );
-
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
@@ -130,7 +125,6 @@ function TableEdit( props ) {
 		const { vColIndex } = selectedCell;
 
 		setAttributes( deleteColumn( vTable, { vColIndex } ) );
-
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
@@ -138,7 +132,6 @@ function TableEdit( props ) {
 
 	const onMergeCells = () => {
 		// setAttributes( mergeCells( attributes, { selectedRangeCell } ) );
-
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
@@ -146,7 +139,6 @@ function TableEdit( props ) {
 
 	const onSplitMergedCells = () => {
 		setAttributes( splitMergedCells( attributes, { selectedCell } ) );
-
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
@@ -192,7 +184,7 @@ function TableEdit( props ) {
 		{
 			icon: splitCell,
 			title: __( 'Split Merged Cells', 'flexible-table-block' ),
-			isDisabled: ! selectedCells || ! selectedCells?.rowSpan || ! selectedCells?.colSpan,
+			isDisabled: ! selectedCells,
 			onClick: () => onSplitMergedCells(),
 		},
 		{
@@ -227,10 +219,10 @@ function TableEdit( props ) {
 		tableStylesObj,
 		selectedCell,
 		setSelectedCell,
-		selectedLine,
-		setSelectedLine,
 		selectedCells,
 		setSelectedCells,
+		selectedLine,
+		setSelectedLine,
 	};
 
 	const tableSettingsProps = {

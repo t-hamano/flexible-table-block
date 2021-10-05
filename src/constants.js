@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
 
 /**
- * Internal components
+ * Internal dependencies
  */
 import {
 	alignTop,

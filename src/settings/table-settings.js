@@ -13,7 +13,7 @@ import {
 } from '@wordpress/components';
 
 /**
- * Internal components
+ * Internal dependencies
  */
 import { TABLE_WIDTH_UNITS, BORDER_COLLAPSE_CONTROLS, STICKY_CONTROLS } from '../constants';
 import {

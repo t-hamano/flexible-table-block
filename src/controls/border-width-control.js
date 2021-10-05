@@ -145,18 +145,16 @@ export default function BorderWidthControl( {
 			</div>
 			{ ! isLinked && allowSides && (
 				<div className="ftb-border-width-control__input-controls">
-					{ SIDES.map( ( item ) => {
-						return (
-							<UnitControl
-								key={ item.value }
-								aria-label={ item.label }
-								value={ values[ item.value ] }
-								units={ borderWidthUnits }
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-							/>
-						);
-					} ) }
+					{ SIDES.map( ( item ) => (
+						<UnitControl
+							key={ item.value }
+							aria-label={ item.label }
+							value={ values[ item.value ] }
+							units={ borderWidthUnits }
+							onFocus={ () => handleOnFocus( item.value ) }
+							onChange={ ( value ) => handleOnChange( value, item.value ) }
+						/>
+					) ) }
 				</div>
 			) }
 		</BaseControl>

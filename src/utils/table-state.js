@@ -76,12 +76,10 @@ export function insertRow( state, { sectionName, rowIndex } ) {
 
 	// Row state to be inserted.
 	const newRow = {
-		cells: times( newRowColCount, () => {
-			return {
-				content: '',
-				tag: 'head' === sectionName ? 'th' : 'td',
-			};
-		} ),
+		cells: times( newRowColCount, () => ( {
+			content: '',
+			tag: 'head' === sectionName ? 'th' : 'td',
+		} ) ),
 	};
 
 	return {
@@ -89,13 +87,13 @@ export function insertRow( state, { sectionName, rowIndex } ) {
 			...state[ sectionName ].slice( 0, rowIndex ),
 			newRow,
 			...state[ sectionName ].slice( rowIndex ),
-		].map( ( row, currentRowIndex ) => ( {
+		].map( ( row, cRowIndex ) => ( {
 			cells: row.cells.map( ( cell ) => {
 				// Expand cells with rowspan in the before and inserted rows.
 				if (
 					cell.rowSpan &&
-					currentRowIndex <= rowIndex &&
-					currentRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+					cRowIndex <= rowIndex &&
+					cRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
 				) {
 					return {
 						...cell,
@@ -126,9 +124,7 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 	if ( rowSpanCellsCount ) {
 		for ( let i = 0; i < rowSpanCellsCount; i++ ) {
 			const vMergedCells = vTable[ sectionName ]
-				.reduce( ( cells, row ) => {
-					return cells.concat( row );
-				}, [] )
+				.reduce( ( cells, row ) => cells.concat( row ), [] )
 				.filter( ( cell ) => cell.rowSpan && cell.rowIndex === rowIndex );
 
 			if ( vMergedCells.length ) {
@@ -141,14 +137,14 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 
 	return {
 		[ sectionName ]: vTable[ sectionName ]
-			.map( ( row, currentRowIndex ) => ( {
+			.map( ( row, cRowIndex ) => ( {
 				cells: row
 					.map( ( cell ) => {
 						// Contract cells with rowspan in the before rows.
 						if (
 							cell.rowSpan &&
-							currentRowIndex < rowIndex &&
-							currentRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+							cRowIndex < rowIndex &&
+							cRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
 						) {
 							return {
 								...cell,
@@ -157,7 +153,7 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 						}
 
 						// Cells to be deleted (Mark as deletion).
-						if ( currentRowIndex === rowIndex ) {
+						if ( cRowIndex === rowIndex ) {
 							return {
 								...cell,
 								isDelete: true,
@@ -170,9 +166,7 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 					.filter( ( cell ) => ! cell.isDelete ),
 			} ) )
 			// Delete empty rows.
-			.filter( ( { cells } ) => {
-				return cells.length;
-			} ),
+			.filter( ( { cells } ) => cells.length ),
 	};
 }
 
@@ -193,11 +187,11 @@ export function insertColumn( vTable, { vColIndex } ) {
 	const rowIndexesToFill = { head: [], body: [], foot: [] };
 
 	[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
-		vTable[ sectionName ].forEach( ( row, currentRowIndex ) => {
-			row.forEach( ( cell, currentVColIndex ) => {
-				if ( currentVColIndex === vColIndex && cell.rowSpan ) {
+		vTable[ sectionName ].forEach( ( row, cRowIndex ) => {
+			row.forEach( ( cell, cVColIndex ) => {
+				if ( cVColIndex === vColIndex && cell.rowSpan ) {
 					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
-						rowIndexesToFill[ sectionName ].push( currentRowIndex + i );
+						rowIndexesToFill[ sectionName ].push( cRowIndex + i );
 					}
 				}
 			} );
@@ -209,66 +203,61 @@ export function insertColumn( vTable, { vColIndex } ) {
 	return mapValues( vSections, ( section, sectionName ) => {
 		if ( ! section.length ) return [];
 
-		return section.map( ( row, currentRowIndex ) => {
-			return {
-				cells: row
-					.reduce( ( cells, cell, currentVColIndex ) => {
-						// Expand cells with colspan in the before columns.
-						if (
-							cell.colSpan &&
-							currentVColIndex < vColIndex &&
-							currentVColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
-						) {
-							cells.push( {
-								...cell,
-								colSpan: parseInt( cell.colSpan ) + 1,
-							} );
-							return cells;
-						}
+		return section.map( ( row, cRowIndex ) => ( {
+			cells: row
+				.reduce( ( cells, cell, cVColIndex ) => {
+					// Expand cells with colspan in the before columns.
+					if (
+						cell.colSpan &&
+						cVColIndex < vColIndex &&
+						cVColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
+					) {
+						cells.push( {
+							...cell,
+							colSpan: parseInt( cell.colSpan ) + 1,
+						} );
+						return cells;
+					}
 
-						// Insert cell ( after the last column ).
-						if ( isLastColumnInsert && currentVColIndex + 1 === vColIndex ) {
-							cells.push( cell, {
+					// Insert cell ( after the last column ).
+					if ( isLastColumnInsert && cVColIndex + 1 === vColIndex ) {
+						cells.push( cell, {
+							content: '',
+							tag: 'head' === sectionName ? 'th' : 'td',
+						} );
+						return cells;
+					}
+
+					// Insert cell ( between columns ).
+					if ( cVColIndex === vColIndex && ! cell.isDelete ) {
+						cells.push(
+							{
 								content: '',
 								tag: 'head' === sectionName ? 'th' : 'td',
-							} );
-							return cells;
-						}
-
-						// Insert cell ( between columns ).
-						if ( currentVColIndex === vColIndex && ! cell.isDelete ) {
-							cells.push(
-								{
-									content: '',
-									tag: 'head' === sectionName ? 'th' : 'td',
-								},
-								cell
-							);
-							return cells;
-						}
-
-						// Insert cell (additional).
-						if (
-							currentVColIndex === vColIndex &&
-							rowIndexesToFill[ sectionName ].includes( currentRowIndex )
-						) {
-							cells.push(
-								{
-									content: '',
-									tag: 'head' === sectionName ? 'th' : 'td',
-								},
-								cell
-							);
-							return cells;
-						}
-
-						cells.push( cell );
+							},
+							cell
+						);
 						return cells;
-					}, [] )
-					// Delete cells marked as deletion.
-					.filter( ( cell ) => ! cell.isDelete ),
-			};
-		} );
+					}
+
+					// Insert cell (additional).
+					if ( cVColIndex === vColIndex && rowIndexesToFill[ sectionName ].includes( cRowIndex ) ) {
+						cells.push(
+							{
+								content: '',
+								tag: 'head' === sectionName ? 'th' : 'td',
+							},
+							cell
+						);
+						return cells;
+					}
+
+					cells.push( cell );
+					return cells;
+				}, [] )
+				// Delete cells marked as deletion.
+				.filter( ( cell ) => ! cell.isDelete ),
+		} ) );
 	} );
 }
 
@@ -283,18 +272,14 @@ export function insertColumn( vTable, { vColIndex } ) {
 export function deleteColumn( vTable, { vColIndex } ) {
 	// Find the colspan cells in the column to be deleted.
 	const colSpanCells = [ ...vTable.head, ...vTable.body, ...vTable.foot ]
-		.reduce( ( cells, row ) => {
-			return cells.concat( row );
-		}, [] )
+		.reduce( ( cells, row ) => cells.concat( row ), [] )
 		.filter( ( cell ) => cell.colSpan && cell.vColIndex === vColIndex );
 
 	// Split the found colspan cells.
 	if ( colSpanCells.length ) {
-		colSpanCells.forEach( ( colSpanCell ) => {
-			vTable = splitMergedCells( vTable, {
-				selectedCell: colSpanCell,
-			} );
-		} );
+		colSpanCells.forEach(
+			( colSpanCell ) => ( vTable = splitMergedCells( vTable, { selectedCell: colSpanCell } ) )
+		);
 	}
 
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
@@ -302,36 +287,34 @@ export function deleteColumn( vTable, { vColIndex } ) {
 	return mapValues( vSections, ( section ) => {
 		if ( ! section.length ) return null;
 
-		return section.map( ( row ) => {
-			return {
-				cells: row
-					.map( ( cell, currentVColIndex ) => {
-						// Contract cells with colspan in the before columns.
-						if (
-							cell.colSpan &&
-							currentVColIndex < vColIndex &&
-							currentVColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
-						) {
-							return {
-								...cell,
-								colSpan: parseInt( cell.colSpan ) - 1,
-							};
-						}
+		return section.map( ( row ) => ( {
+			cells: row
+				.map( ( cell, cVColIndex ) => {
+					// Contract cells with colspan in the before columns.
+					if (
+						cell.colSpan &&
+						cVColIndex < vColIndex &&
+						cVColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
+					) {
+						return {
+							...cell,
+							colSpan: parseInt( cell.colSpan ) - 1,
+						};
+					}
 
-						// Cells to be deleted (Mark as deletion).
-						if ( currentVColIndex === vColIndex ) {
-							return {
-								...cell,
-								isDelete: true,
-							};
-						}
+					// Cells to be deleted (Mark as deletion).
+					if ( cVColIndex === vColIndex ) {
+						return {
+							...cell,
+							isDelete: true,
+						};
+					}
 
-						return cell;
-					}, [] )
-					// Delete cells marked as deletion.
-					.filter( ( cell ) => ! cell.isDelete ),
-			};
-		} );
+					return cell;
+				}, [] )
+				// Delete cells marked as deletion.
+				.filter( ( cell ) => ! cell.isDelete ),
+		} ) );
 	} );
 }
 
@@ -349,18 +332,17 @@ export function toggleSection( vTable, sectionName ) {
 	}
 
 	// Number of columns in the row to be inserted.
-	const newRowColCount = vTable.body[ 0 ].reduce( ( count, cell ) => {
-		return count + ( parseInt( cell.colSpan ) || 1 );
-	}, 0 );
+	const newRowColCount = vTable.body[ 0 ].reduce(
+		( count, cell ) => count + ( parseInt( cell.colSpan ) || 1 ),
+		0
+	);
 
 	// Row state to be inserted.
 	const newRow = {
-		cells: times( newRowColCount, () => {
-			return {
-				content: '',
-				tag: 'head' === sectionName ? 'th' : 'td',
-			};
-		} ),
+		cells: times( newRowColCount, () => ( {
+			content: '',
+			tag: 'head' === sectionName ? 'th' : 'td',
+		} ) ),
 	};
 
 	return { [ sectionName ]: [ newRow ] };
@@ -392,9 +374,7 @@ export function mergeCells( vTable, { selectedCells } ) {
 	if ( rowColSpanCellsCount ) {
 		for ( let i = 0; i < rowColSpanCellsCount; i++ ) {
 			const vMergedCells = vTable[ sectionName ]
-				.reduce( ( cells, row ) => {
-					return cells.concat( row );
-				}, [] )
+				.reduce( ( cells, row ) => cells.concat( row ), [] )
 				.filter(
 					( cell ) =>
 						( cell.rowSpan || cell.colSpan ) &&
@@ -405,9 +385,7 @@ export function mergeCells( vTable, { selectedCells } ) {
 				);
 
 			if ( vMergedCells.length ) {
-				vTable = splitMergedCells( vTable, {
-					selectedCell: vMergedCells[ 0 ],
-				} );
+				vTable = splitMergedCells( vTable, { selectedCell: vMergedCells[ 0 ] } );
 			}
 		}
 	}
@@ -522,87 +500,82 @@ export function splitMergedCells( vTable, { selectedCell } ) {
 export function updateCellsState( vTable, cellState, { selectedCells } ) {
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
-	return mapValues( vSections, ( section, currentSectionName ) => {
+	return mapValues( vSections, ( section, cSectionName ) => {
 		if ( ! section.length ) return null;
 
-		return section.map( ( row, currentRowIndex ) => {
-			return {
-				cells: row
-					.map( ( cell, currentVColIndex ) => {
-						// Refer to the selected cell to determine if it is the target cell to update.
-						const isTargetCell = !! selectedCells.some( ( targetCell ) => {
-							return (
-								targetCell.sectionName === currentSectionName &&
-								targetCell.rowIndex === currentRowIndex &&
-								targetCell.vColIndex === currentVColIndex
-							);
-						} );
+		return section.map( ( row, cRowIndex ) => ( {
+			cells: row
+				.map( ( cell, cVColIndex ) => {
+					// Refer to the selected cell to determine if it is the target cell to update.
+					const isTargetCell = !! selectedCells.some(
+						( targetCell ) =>
+							targetCell.sectionName === cSectionName &&
+							targetCell.rowIndex === cRowIndex &&
+							targetCell.vColIndex === cVColIndex
+					);
 
-						if ( ! isTargetCell ) {
-							return cell;
+					if ( ! isTargetCell ) return cell;
+
+					let stylesObj = convertToObject( cell?.styles );
+
+					if ( cellState.styles ) {
+						const styles = cellState.styles;
+
+						if ( 'fontSize' in styles ) {
+							stylesObj.fontSize = styles.fontSize;
 						}
 
-						let stylesObj = convertToObject( cell?.styles );
-
-						if ( cellState.styles ) {
-							const styles = cellState.styles;
-
-							if ( 'fontSize' in styles ) {
-								stylesObj.fontSize = styles.fontSize;
-							}
-
-							if ( 'width' in styles ) {
-								stylesObj.width = styles.width;
-							}
-
-							if ( 'color' in styles ) {
-								stylesObj.color = styles.color;
-							}
-
-							if ( 'backgroundColor' in styles ) {
-								stylesObj.backgroundColor = styles.backgroundColor;
-							}
-
-							if ( styles.padding ) {
-								stylesObj = updatePadding( stylesObj, styles.padding );
-							}
-
-							if ( styles.borderWidth ) {
-								stylesObj = updateBorderWidth( stylesObj, styles.borderWidth );
-							}
-
-							if ( styles.borderRadius ) {
-								stylesObj = updateBorderRadius( stylesObj, styles.borderRadius );
-							}
-
-							if ( styles.borderStyle ) {
-								stylesObj = updateBorderStyle( stylesObj, styles.borderStyle );
-							}
-
-							if ( styles.borderColor ) {
-								stylesObj = updateBorderColor( stylesObj, styles.borderColor );
-							}
-
-							if ( 'textAlign' in styles ) {
-								stylesObj.textAlign = styles.textAlign;
-							}
-
-							if ( 'verticalAlign' in styles ) {
-								stylesObj.verticalAlign = styles.verticalAlign;
-							}
+						if ( 'width' in styles ) {
+							stylesObj.width = styles.width;
 						}
 
-						const tag = cellState.tag || cell.tag;
+						if ( 'color' in styles ) {
+							stylesObj.color = styles.color;
+						}
 
-						return {
-							...cell,
-							styles: convertToInline( stylesObj ),
-							tag,
-						};
-					}, [] )
-					// Delete cells marked as deletion.
-					.filter( ( cell ) => ! cell.isDelete ),
-			};
-		} );
+						if ( 'backgroundColor' in styles ) {
+							stylesObj.backgroundColor = styles.backgroundColor;
+						}
+
+						if ( styles.padding ) {
+							stylesObj = updatePadding( stylesObj, styles.padding );
+						}
+
+						if ( styles.borderWidth ) {
+							stylesObj = updateBorderWidth( stylesObj, styles.borderWidth );
+						}
+
+						if ( styles.borderRadius ) {
+							stylesObj = updateBorderRadius( stylesObj, styles.borderRadius );
+						}
+
+						if ( styles.borderStyle ) {
+							stylesObj = updateBorderStyle( stylesObj, styles.borderStyle );
+						}
+
+						if ( styles.borderColor ) {
+							stylesObj = updateBorderColor( stylesObj, styles.borderColor );
+						}
+
+						if ( 'textAlign' in styles ) {
+							stylesObj.textAlign = styles.textAlign;
+						}
+
+						if ( 'verticalAlign' in styles ) {
+							stylesObj.verticalAlign = styles.verticalAlign;
+						}
+					}
+
+					const tag = cellState.tag || cell.tag;
+
+					return {
+						...cell,
+						styles: convertToInline( stylesObj ),
+						tag,
+					};
+				}, [] )
+				// Delete cells marked as deletion.
+				.filter( ( cell ) => ! cell.isDelete ),
+		} ) );
 	} );
 }

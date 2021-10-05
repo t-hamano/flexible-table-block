@@ -139,18 +139,16 @@ export default function BorderSpacingControl( {
 			</div>
 			{ ! isLinked && allowSides && (
 				<div className="ftb-border-spacing-control__input-controls">
-					{ DIRECTIONS.map( ( item ) => {
-						return (
-							<UnitControl
-								key={ item.value }
-								aria-label={ item.label }
-								value={ values[ item.value ] }
-								units={ borderSpacingUnits }
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-							/>
-						);
-					} ) }
+					{ DIRECTIONS.map( ( item ) => (
+						<UnitControl
+							key={ item.value }
+							aria-label={ item.label }
+							value={ values[ item.value ] }
+							units={ borderSpacingUnits }
+							onFocus={ () => handleOnFocus( item.value ) }
+							onChange={ ( value ) => handleOnChange( value, item.value ) }
+						/>
+					) ) }
 				</div>
 			) }
 		</BaseControl>

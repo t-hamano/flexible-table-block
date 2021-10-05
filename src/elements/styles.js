@@ -2,6 +2,10 @@
  * External dependencies
  */
 import styled from '@emotion/styled';
+
+/**
+ * WordPress dependencies
+ */
 import { Button } from '@wordpress/components';
 
 const ButtonInserter = styled( Button )`

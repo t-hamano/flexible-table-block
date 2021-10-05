@@ -126,7 +126,7 @@ export default function BorderColorControl( {
 							<Button
 								label={ __( 'All', 'flexible-table-block' ) }
 								className="ftb-border-color-control__indicator"
-								onClick={ handleOnPickerOpen }
+								onClick={ () => handleOnPickerOpen() }
 							>
 								{ isMixed ? (
 									__( 'Mixed', 'flexible-table-block' )
@@ -156,38 +156,36 @@ export default function BorderColorControl( {
 					) }
 					{ ! isLinked &&
 						allowSides &&
-						SIDES.map( ( item, index ) => {
-							return (
-								<div className="ftb-border-color-control__controls-row" key={ item }>
-									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
-									<Button
-										label={ item.label }
-										className="ftb-border-color-control__indicator"
-										onClick={ () => handleOnPickerOpen( index ) }
+						SIDES.map( ( item, index ) => (
+							<div className="ftb-border-color-control__controls-row" key={ item }>
+								{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
+								<Button
+									label={ item.label }
+									className="ftb-border-color-control__indicator"
+									onClick={ () => handleOnPickerOpen( index ) }
+								>
+									<ColorIndicator
+										className={ classnames( {
+											'component-color-indicator--none': ! values[ item.value ],
+										} ) }
+										colorValue={ values[ item.value ] }
+									/>
+								</Button>
+								{ isPickerOpen && pickerIndex === index && (
+									<Popover
+										className="ftb-border-color-control__popover"
+										position="top right"
+										onClose={ handleOnPickerClose }
 									>
-										<ColorIndicator
-											className={ classnames( {
-												'component-color-indicator--none': ! values[ item.value ],
-											} ) }
-											colorValue={ values[ item.value ] }
+										<ColorPalette
+											colors={ colors }
+											value={ values[ item.value ] }
+											onChange={ ( value ) => handleOnChange( value, item.value ) }
 										/>
-									</Button>
-									{ isPickerOpen && pickerIndex === index && (
-										<Popover
-											className="ftb-border-color-control__popover"
-											position="top right"
-											onClose={ handleOnPickerClose }
-										>
-											<ColorPalette
-												colors={ colors }
-												value={ values[ item.value ] }
-												onChange={ ( value ) => handleOnChange( value, item.value ) }
-											/>
-										</Popover>
-									) }
-								</div>
-							);
-						} ) }
+									</Popover>
+								) }
+							</div>
+						) ) }
 				</div>
 				{ allowSides && (
 					<Tooltip text={ linkedLabel }>

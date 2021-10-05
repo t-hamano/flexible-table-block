@@ -199,6 +199,12 @@ export default function GlobalSettings() {
 							<Spinner />
 						</div>
 					) }
+					<p>
+						{ __(
+							'Note: These settings will be applied to all Flexible Table Blocks.',
+							'flexible-table-block'
+						) }
+					</p>
 					<ToggleControl
 						label={ __( 'Show section labels in the editor', 'flexible-table-block' ) }
 						checked={ !! options.show_label_on_section }
@@ -286,12 +292,6 @@ export default function GlobalSettings() {
 					/>
 					<hr />
 					<h2>{ __( 'Default Table Style', 'flexible-table-block' ) }</h2>
-					<p className="ftb-global-setting-modal__help">
-						{ __(
-							'This settings will be applied to all Flexible Table Blocks.',
-							'flexible-table-block'
-						) }
-					</p>
 					<div className="ftb-global-setting-modal__styles">
 						<BaseControl
 							id="flexible-table-block/global-table-width"
@@ -399,12 +399,6 @@ export default function GlobalSettings() {
 						</BaseControl>
 					</div>
 					<h2>{ __( 'Default Cell Style', 'flexible-table-block' ) }</h2>
-					<p className="ftb-global-setting-modal__help">
-						{ __(
-							'This settings will be applied to all Flexible Table Blocks.',
-							'flexible-table-block'
-						) }
-					</p>
 					<div className="ftb-global-setting-modal__styles">
 						<ColorControl
 							id="flexible-table-block/global-cell-text-color-th"

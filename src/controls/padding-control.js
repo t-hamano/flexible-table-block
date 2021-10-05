@@ -133,18 +133,16 @@ export default function PaddingControl( {
 			</div>
 			{ ! isLinked && allowSides && (
 				<div className="ftb-border-width-control__input-controls">
-					{ SIDES.map( ( item ) => {
-						return (
-							<UnitControl
-								key={ item.value }
-								aria-label={ item.label }
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-								value={ values[ item.value ] }
-								units={ paddingUnits }
-							/>
-						);
-					} ) }
+					{ SIDES.map( ( item ) => (
+						<UnitControl
+							key={ item.value }
+							aria-label={ item.label }
+							onFocus={ () => handleOnFocus( item.value ) }
+							onChange={ ( value ) => handleOnChange( value, item.value ) }
+							value={ values[ item.value ] }
+							units={ paddingUnits }
+						/>
+					) ) }
 				</div>
 			) }
 		</BaseControl>

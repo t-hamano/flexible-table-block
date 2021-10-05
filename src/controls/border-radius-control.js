@@ -148,19 +148,17 @@ export default function BorderRadiusControl( {
 			</div>
 			{ ! isLinked && (
 				<div className="ftb-border-radius-control__input-controls">
-					{ CORNERS.map( ( item ) => {
-						return (
-							<UnitControl
-								key={ item.value }
-								aria-label={ item.label }
-								value={ values[ item.value ] }
-								units={ borderRadiusUnits }
-								min="0"
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-							/>
-						);
-					} ) }
+					{ CORNERS.map( ( item ) => (
+						<UnitControl
+							key={ item.value }
+							aria-label={ item.label }
+							value={ values[ item.value ] }
+							units={ borderRadiusUnits }
+							min="0"
+							onFocus={ () => handleOnFocus( item.value ) }
+							onChange={ ( value ) => handleOnChange( value, item.value ) }
+						/>
+					) ) }
 				</div>
 			) }
 		</BaseControl>

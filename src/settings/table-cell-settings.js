@@ -19,7 +19,7 @@ import { useSelect } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
- * Internal components
+ * Internal dependencies
  */
 import {
 	FONT_SIZE_UNITS,
