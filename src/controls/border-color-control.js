@@ -157,7 +157,7 @@ export default function BorderColorControl( {
 					{ ! isLinked &&
 						allowSides &&
 						SIDES.map( ( item, index ) => (
-							<div className="ftb-border-color-control__controls-row" key={ item }>
+							<div className="ftb-border-color-control__controls-row" key={ index }>
 								{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 								<Button
 									label={ item.label }

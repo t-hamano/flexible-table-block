@@ -18,14 +18,30 @@
 
 				&.is-selected::after {
 					position: absolute;
-					top: 0;
-					right: 0;
-					bottom: 0;
-					left: 0;
+					top: 2px;
+					right: 2px;
+					bottom: 2px;
+					left: 2px;
 					border: 2px solid var(--wp-admin-theme-color);
 					content: "";
 					pointer-events: none;
 				}
+			}
+		}
+
+		figcaption {
+			position: relative;
+			z-index: 1;
+		}
+	}
+
+	&.is-selected > table {
+
+		th,
+		td {
+
+			.block-editor-rich-text__editable {
+				border: 1px dotted #eaeaea;
 			}
 		}
 	}
@@ -311,6 +327,10 @@
 // Modal Component Styles
 .ftb-global-setting-modal {
 	max-width: 600px;
+
+	h2 {
+		font-size: 1.2em;
+	}
 
 	hr {
 		margin: 1em 0;

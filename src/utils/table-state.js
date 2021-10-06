@@ -6,7 +6,7 @@ import { times, mapValues, pick } from 'lodash';
 /**
  * Internal dependencies
  */
-import { isEmptySection } from './helper';
+import { isEmptySection, getVirtualRange, toVirtualRows } from './helper';
 import { convertToObject, convertToInline } from '../utils/style-converter';
 import {
 	updatePadding,
@@ -128,7 +128,7 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 				.filter( ( cell ) => cell.rowSpan && cell.rowIndex === rowIndex );
 
 			if ( vMergedCells.length ) {
-				vTable = splitMergedCells( vTable, {
+				vTable = splitMergedCell( vTable, {
 					selectedCell: vMergedCells[ 0 ],
 				} );
 			}
@@ -219,7 +219,7 @@ export function insertColumn( vTable, { vColIndex } ) {
 						return cells;
 					}
 
-					// Insert cell ( after the last column ).
+					// Insert cell (after the last column).
 					if ( isLastColumnInsert && cVColIndex + 1 === vColIndex ) {
 						cells.push( cell, {
 							content: '',
@@ -228,7 +228,7 @@ export function insertColumn( vTable, { vColIndex } ) {
 						return cells;
 					}
 
-					// Insert cell ( between columns ).
+					// Insert cell (between columns).
 					if ( cVColIndex === vColIndex && ! cell.isDelete ) {
 						cells.push(
 							{
@@ -271,21 +271,22 @@ export function insertColumn( vTable, { vColIndex } ) {
  */
 export function deleteColumn( vTable, { vColIndex } ) {
 	// Find the colspan cells in the column to be deleted.
-	const colSpanCells = [ ...vTable.head, ...vTable.body, ...vTable.foot ]
+	const vRows = toVirtualRows( vTable );
+	const colSpanCells = vRows
 		.reduce( ( cells, row ) => cells.concat( row ), [] )
 		.filter( ( cell ) => cell.colSpan && cell.vColIndex === vColIndex );
 
 	// Split the found colspan cells.
 	if ( colSpanCells.length ) {
 		colSpanCells.forEach(
-			( colSpanCell ) => ( vTable = splitMergedCells( vTable, { selectedCell: colSpanCell } ) )
+			( colSpanCell ) => ( vTable = splitMergedCell( vTable, { selectedCell: colSpanCell } ) )
 		);
 	}
 
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
 	return mapValues( vSections, ( section ) => {
-		if ( ! section.length ) return null;
+		if ( ! section.length ) return [];
 
 		return section.map( ( row ) => ( {
 			cells: row
@@ -332,10 +333,10 @@ export function toggleSection( vTable, sectionName ) {
 	}
 
 	// Number of columns in the row to be inserted.
-	const newRowColCount = vTable.body[ 0 ].reduce(
-		( count, cell ) => count + ( parseInt( cell.colSpan ) || 1 ),
-		0
-	);
+	const newRowColCount = vTable.body[ 0 ].reduce( ( count, cell ) => {
+		if ( cell.isDelete ) return count;
+		return count + ( parseInt( cell.colSpan ) || 1 );
+	}, 0 );
 
 	// Row state to be inserted.
 	const newRow = {
@@ -353,21 +354,18 @@ export function toggleSection( vTable, sectionName ) {
  *
  * @param {Object} vTable                Current virtual table state.
  * @param {Object} options
- * @param {number} options.selectedCells Current selected virtual cell.
+ * @param {number} options.selectedCells Current selected multi cell.
  * @return {Object} New table state.
  */
 export function mergeCells( vTable, { selectedCells } ) {
-	const sectionName = selectedCells[ 0 ].sectionName;
+	const { sectionName } = selectedCells[ 0 ];
 
-	const rowIndexes = [ ...selectedCells.map( ( cell ) => cell.rowIndex ) ];
-	const vColIndexes = [ ...selectedCells.map( ( cell ) => cell.vColIndex ) ];
+	// Get the minimum / maximum virtual indexes of the matrix from the selected cells.
+	const vRangeIndexes = getVirtualRange( selectedCells );
 
-	const minRowIndex = Math.min( rowIndexes );
-	const maxRowIndex = Math.max( rowIndexes );
-	const minVColIndex = Math.min( vColIndexes );
-	const maxVColIndex = Math.max( vColIndexes );
+	const { minRowIndex, maxRowIndex, minColIndex, maxColIndex } = vRangeIndexes;
 
-	// Find the colspan cells in the column to be deleted.
+	// Find the rowspan & colspan cells.
 	const rowColSpanCellsCount = selectedCells.filter( ( cell ) => cell.rowSpan || cell.colSpan );
 
 	// Split the found rowspan & colspan cells.
@@ -380,12 +378,12 @@ export function mergeCells( vTable, { selectedCells } ) {
 						( cell.rowSpan || cell.colSpan ) &&
 						minRowIndex <= cell.rowIndex &&
 						maxRowIndex >= cell.rowIndex &&
-						minVColIndex <= cell.vColIndex &&
-						maxVColIndex >= cell.vColIndex
+						minColIndex <= cell.vColIndex &&
+						maxColIndex >= cell.vColIndex
 				);
 
 			if ( vMergedCells.length ) {
-				vTable = splitMergedCells( vTable, { selectedCell: vMergedCells[ 0 ] } );
+				vTable = splitMergedCell( vTable, { selectedCell: vMergedCells[ 0 ] } );
 			}
 		}
 	}
@@ -394,16 +392,16 @@ export function mergeCells( vTable, { selectedCells } ) {
 		[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
 			if ( rowIndex < minRowIndex || rowIndex > maxRowIndex ) {
 				// Row not to be merged.
-				return row;
+				return { cells: row };
 			}
 
 			return {
-				cells: row.cells
+				cells: row
 					.map( ( cell, colIndex ) => {
-						if ( colIndex === minVColIndex && rowIndex === minRowIndex ) {
+						if ( colIndex === minColIndex && rowIndex === minRowIndex ) {
 							// Cells to merge.
 							const rowSpan = Math.abs( maxRowIndex - minRowIndex ) + 1;
-							const colSpan = Math.abs( maxVColIndex - minVColIndex ) + 1;
+							const colSpan = Math.abs( maxColIndex - minColIndex ) + 1;
 
 							return {
 								...cell,
@@ -416,8 +414,8 @@ export function mergeCells( vTable, { selectedCells } ) {
 						if (
 							rowIndex >= minRowIndex &&
 							rowIndex <= maxRowIndex &&
-							colIndex >= minVColIndex &&
-							colIndex <= maxVColIndex
+							colIndex >= minColIndex &&
+							colIndex <= maxColIndex
 						) {
 							return {
 								...cell,
@@ -429,21 +427,60 @@ export function mergeCells( vTable, { selectedCells } ) {
 						return cell;
 					} )
 					// Delete cells marked as deletion.
-					.filter( ( cell ) => ! cell.merged ),
+					.filter( ( cell ) => ! cell.merged && ! cell.isDelete ),
 			};
 		} ),
 	};
 }
 
 /**
- * Split cells in the virtual table state.
+ * Split selected cells in the virtual table state.
+ *
+ * @param {Object} vTable                Current virtual table state.
+ * @param {Object} options
+ * @param {number} options.selectedCells Current selected multi cell.
+ * @return {Object} New table state.
+ */
+export function splitMergedCells( vTable, { selectedCells } ) {
+	const { sectionName } = selectedCells[ 0 ];
+
+	// Find the rowspan & colspan.
+	const rowColSpanCellsCount = selectedCells.filter( ( cell ) => cell.rowSpan || cell.colSpan )
+		.length;
+
+	// Split the found rowspan & colspan cells.
+	if ( rowColSpanCellsCount ) {
+		for ( let i = 0; i < rowColSpanCellsCount; i++ ) {
+			const vMergedCells = vTable[ sectionName ]
+				.reduce( ( cells, row ) => cells.concat( row ), [] )
+				.filter( ( cell ) => cell.rowSpan || cell.colSpan );
+
+			if ( vMergedCells.length ) {
+				vTable = splitMergedCell( vTable, { selectedCell: vMergedCells[ 0 ] } );
+			}
+		}
+	}
+
+	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
+
+	return mapValues( vSections, ( section ) => {
+		if ( ! section.length ) return [];
+
+		return section.map( ( row ) => ( {
+			cells: row.map( ( cell ) => cell, [] ).filter( ( cell ) => ! cell.isDelete ),
+		} ) );
+	} );
+}
+
+/**
+ * Split single cell in the virtual table state.
  *
  * @param {Object} vTable               Current virtual table state.
  * @param {Object} options
  * @param {number} options.selectedCell Current selected virtual cell.
  * @return {Object} New table state.
  */
-export function splitMergedCells( vTable, { selectedCell } ) {
+export function splitMergedCell( vTable, { selectedCell } ) {
 	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = selectedCell;
 
 	const vSection = vTable[ sectionName ];
@@ -501,7 +538,7 @@ export function updateCellsState( vTable, cellState, { selectedCells } ) {
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
 
 	return mapValues( vSections, ( section, cSectionName ) => {
-		if ( ! section.length ) return null;
+		if ( ! section.length ) return [];
 
 		return section.map( ( row, cRowIndex ) => ( {
 			cells: row
@@ -521,57 +558,18 @@ export function updateCellsState( vTable, cellState, { selectedCells } ) {
 					if ( cellState.styles ) {
 						const styles = cellState.styles;
 
-						if ( 'fontSize' in styles ) {
-							stylesObj.fontSize = styles.fontSize;
-						}
-
-						if ( 'width' in styles ) {
-							stylesObj.width = styles.width;
-						}
-
-						if ( 'color' in styles ) {
-							stylesObj.color = styles.color;
-						}
-
-						if ( 'backgroundColor' in styles ) {
-							stylesObj.backgroundColor = styles.backgroundColor;
-						}
-
-						if ( styles.padding ) {
-							stylesObj = updatePadding( stylesObj, styles.padding );
-						}
-
-						if ( styles.borderWidth ) {
-							stylesObj = updateBorderWidth( stylesObj, styles.borderWidth );
-						}
-
-						if ( styles.borderRadius ) {
-							stylesObj = updateBorderRadius( stylesObj, styles.borderRadius );
-						}
-
-						if ( styles.borderStyle ) {
-							stylesObj = updateBorderStyle( stylesObj, styles.borderStyle );
-						}
-
-						if ( styles.borderColor ) {
-							stylesObj = updateBorderColor( stylesObj, styles.borderColor );
-						}
-
-						if ( 'textAlign' in styles ) {
-							stylesObj.textAlign = styles.textAlign;
-						}
-
-						if ( 'verticalAlign' in styles ) {
-							stylesObj.verticalAlign = styles.verticalAlign;
-						}
+						stylesObj = { ...stylesObj, ...styles };
+						stylesObj = updatePadding( stylesObj, styles?.padding );
+						stylesObj = updateBorderWidth( stylesObj, styles?.borderWidth );
+						stylesObj = updateBorderRadius( stylesObj, styles?.borderRadius );
+						stylesObj = updateBorderStyle( stylesObj, styles?.borderStyle );
+						stylesObj = updateBorderColor( stylesObj, styles?.borderColor );
 					}
-
-					const tag = cellState.tag || cell.tag;
 
 					return {
 						...cell,
 						styles: convertToInline( stylesObj ),
-						tag,
+						tag: cellState.tag || cell.tag,
 					};
 				}, [] )
 				// Delete cells marked as deletion.

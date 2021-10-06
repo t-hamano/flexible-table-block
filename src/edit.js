@@ -40,9 +40,15 @@ import {
 	deleteRow,
 	insertColumn,
 	deleteColumn,
+	mergeCells,
 	splitMergedCells,
 } from './utils/table-state';
-import { toVirtualSection, isEmptySection, isRectangleSelected } from './utils/helper';
+import {
+	toVirtualTable,
+	isEmptySection,
+	isRectangleSelected,
+	hasMergedCells,
+} from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 
@@ -58,12 +64,8 @@ function TableEdit( props ) {
 
 	const options = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
 
-	// Create virtual table array with the cells placed in positions based on how they actually look.
-	const vTable = {
-		head: toVirtualSection( attributes, { sectionName: 'head' } ),
-		body: toVirtualSection( attributes, { sectionName: 'body' } ),
-		foot: toVirtualSection( attributes, { sectionName: 'foot' } ),
-	};
+	// Create virtual table object with the cells placed in positions based on how they actually look.
+	const vTable = toVirtualTable( attributes );
 
 	const onInsertRow = ( offset ) => {
 		if ( ! selectedCell ) return;
@@ -130,14 +132,14 @@ function TableEdit( props ) {
 	};
 
 	const onMergeCells = () => {
-		// setAttributes( mergeCells( attributes, { selectedRangeCell } ) );
+		setAttributes( mergeCells( vTable, { selectedCells } ) );
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onSplitMergedCells = () => {
-		setAttributes( splitMergedCells( attributes, { selectedCell } ) );
+		setAttributes( splitMergedCells( vTable, { selectedCells } ) );
 		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
@@ -183,7 +185,7 @@ function TableEdit( props ) {
 		{
 			icon: splitCell,
 			title: __( 'Split Merged Cells', 'flexible-table-block' ),
-			isDisabled: ! selectedCells,
+			isDisabled: ! selectedCells || ! hasMergedCells( selectedCells ),
 			onClick: () => onSplitMergedCells(),
 		},
 		{
@@ -250,11 +252,6 @@ function TableEdit( props ) {
 		captionStylesObj,
 	};
 
-	const tableCellSettingsLabel =
-		( selectedCells || [] ).length === 1
-			? __( 'Cell Settings', 'flexible-table-block' )
-			: __( 'Multi Cells Settings', 'flexible-table-block' );
-
 	return (
 		<>
 			{ isEmpty && (
@@ -289,7 +286,10 @@ function TableEdit( props ) {
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
 						{ selectedCell && (
-							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
+							<PanelBody
+								title={ __( 'Cell Settings', 'flexible-table-block' ) }
+								initialOpen={ false }
+							>
 								<TableCellSettings { ...tableCellSettingsProps } />
 							</PanelBody>
 						) }

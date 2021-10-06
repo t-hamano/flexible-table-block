@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { times, pickBy, isEmpty, isObject, identity, mapValues } from 'lodash';
+import { pick, times, pickBy, isEmpty, isObject, identity, mapValues } from 'lodash';
 
 /**
  * Sanitize the value of UnitControl.
@@ -75,109 +75,117 @@ export function isEmptySection( vSection ) {
 }
 
 /**
- * Create virtual section array with the cells placed in positions based on how they actually look.
+ * Create virtual table object with the cells placed in positions based on how they actually look.
  * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
  *
- * @param {Object} state               Current table state.
- * @param {Object} options
- * @param {Object} options.sectionName Section in which to transform to virtual section.
- * @return {Array} Array of virtual section.
+ * @param {Object} state Current table state.
+ * @return {Object} Object of virtual table.
  */
-export function toVirtualSection( state, { sectionName } ) {
-	const section = state[ sectionName ];
+export function toVirtualTable( state ) {
+	const vSections = pick( state, [ 'head', 'body', 'foot' ] );
 
-	if ( ! section.length ) return [];
+	return mapValues( vSections, ( section, sectionName ) => {
+		if ( ! section.length ) return [];
 
-	// Create a virtual section array.
-	const vRowCount = section.length;
-	const vColCount = section[ 0 ].cells.reduce( ( count, cell ) => {
-		return count + ( parseInt( cell.colSpan ) || 1 );
-	}, 0 );
+		// Create a virtual section array.
+		const vRowCount = section.length;
+		const vColCount = section[ 0 ].cells.reduce( ( count, cell ) => {
+			return count + ( parseInt( cell.colSpan ) || 1 );
+		}, 0 );
 
-	const vSection = times( vRowCount, () =>
-		times( vColCount, () => ( {
-			isFilled: false, // Whether the actual cell is placed or not.
-		} ) )
-	);
+		const vSection = times( vRowCount, () =>
+			times( vColCount, () => ( {
+				isFilled: false, // Whether the actual cell is placed or not.
+			} ) )
+		);
 
-	// Mapping the actual section cells on the virtual section cell.
-	section.forEach( ( row, cRowIndex ) => {
-		row.cells.forEach( ( cell, cColIndex ) => {
-			// Colmun index on the virtual section excluding cells already marked as "filled".
-			const vColIndex = vSection[ cRowIndex ].findIndex( ( { isFilled } ) => ! isFilled );
+		// Mapping the actual section cells on the virtual section cell.
+		section.forEach( ( row, cRowIndex ) => {
+			row.cells.forEach( ( cell, cColIndex ) => {
+				// Colmun index on the virtual section excluding cells already marked as "filled".
+				const vColIndex = vSection[ cRowIndex ].findIndex( ( { isFilled } ) => ! isFilled );
 
-			if ( vColIndex === -1 ) {
-				return;
-			}
-
-			// Mark the cell as "filled" and record the position on the virtual section.
-			vSection[ cRowIndex ][ vColIndex ] = {
-				...cell,
-				sectionName,
-				isFilled: true,
-				rowIndex: cRowIndex,
-				colIndex: cColIndex,
-				vColIndex,
-			};
-
-			// For cells with rowspan/colspan, mark cells that are visually filled as "filled".
-			// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
-			if ( cell.colSpan ) {
-				for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
-					vSection[ cRowIndex ][ vColIndex + i ].isFilled = true;
-					vSection[ cRowIndex ][ vColIndex + i ].isDelete = true;
+				if ( vColIndex === -1 ) {
+					return;
 				}
-			}
 
-			if ( cell.rowSpan ) {
-				for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
-					vSection[ cRowIndex + i ][ vColIndex ].isFilled = true;
-					vSection[ cRowIndex + i ][ vColIndex ].isDelete = true;
+				// Mark the cell as "filled" and record the position on the virtual section.
+				vSection[ cRowIndex ][ vColIndex ] = {
+					...cell,
+					sectionName,
+					isFilled: true,
+					rowIndex: cRowIndex,
+					colIndex: cColIndex,
+					vColIndex,
+				};
 
-					if ( cell.colSpan ) {
-						for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
-							vSection[ cRowIndex + i ][ vColIndex + j ].isFilled = true;
-							vSection[ cRowIndex + i ][ vColIndex + j ].isDelete = true;
+				// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
+				// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
+				if ( cell.colSpan ) {
+					for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
+						vSection[ cRowIndex ][ vColIndex + i ].isFilled = true;
+						vSection[ cRowIndex ][ vColIndex + i ].isDelete = true;
+					}
+				}
+
+				if ( cell.rowSpan ) {
+					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
+						vSection[ cRowIndex + i ][ vColIndex ].isFilled = true;
+						vSection[ cRowIndex + i ][ vColIndex ].isDelete = true;
+
+						if ( cell.colSpan ) {
+							for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
+								vSection[ cRowIndex + i ][ vColIndex + j ].isFilled = true;
+								vSection[ cRowIndex + i ][ vColIndex + j ].isDelete = true;
+							}
 						}
 					}
 				}
-			}
+			} );
 		} );
-	} );
 
-	// Fallback: Fill with empty cells if any cells are not filled correctly.
-	vSection.forEach( ( row, cRowIndex ) => {
-		row.forEach( ( cell, cVColIndex ) => {
-			if ( ! cell.isFilled ) {
-				vSection[ cRowIndex ][ cVColIndex ] = {
-					content: '',
-					tag: 'head' === sectionName ? 'th' : 'td',
-					isFilled: true,
-					rowIndex: null,
-					colIdex: null,
-					vColIndex: cVColIndex,
-				};
-			}
+		// Fallback: Fill with empty cells if any cells are not filled correctly.
+		vSection.forEach( ( row, cRowIndex ) => {
+			row.forEach( ( cell, cVColIndex ) => {
+				if ( ! cell.isFilled ) {
+					vSection[ cRowIndex ][ cVColIndex ] = {
+						content: '',
+						tag: 'head' === sectionName ? 'th' : 'td',
+						isFilled: true,
+						rowIndex: null,
+						colIdex: null,
+						vColIndex: cVColIndex,
+					};
+				}
+			} );
 		} );
-	} );
 
-	return vSection;
+		return vSection;
+	} );
 }
 
 /**
- * Determines whether a rectangle will be formed from the selected cells in the virtual table.
- * This function is used to determines whether to allow cell merging from the selected cells.
+ * Create an array of rows from a virtual table by removing empty sections.
+ *
+ * @param {Object} vTable Current virtual table state.
+ * @return {Object} Object of virtual table.
+ */
+export function toVirtualRows( vTable ) {
+	return Object.keys( vTable ).reduce( ( result, sectionName ) => {
+		if ( isEmptySection( vTable[ sectionName ] ) ) return result;
+		result.push( ...vTable[ sectionName ] );
+		return result;
+	}, [] );
+}
+
+/**
+ * Get the minimum / maximum row / column virtual indexes on virtual table from selected cells.
  *
  * @param {Array} selectedCells Current selected multi cell.
- * @return {boolean} True if a rectangle will be formed from the selected cells, false otherwise.
+ * @return {Object} Minimum / maximum virtual indexes.
  */
-export function isRectangleSelected( selectedCells ) {
-	if ( ! selectedCells ) return false;
-
-	if ( selectedCells.length === 1 ) return false;
-
-	// Get the minimum / maximum virtual indexes of the matrix from the selected cells.
-	const vRangeIndexes = selectedCells.reduce(
+export function getVirtualRange( selectedCells ) {
+	return selectedCells.reduce(
 		( { minRowIndex, maxRowIndex, minColIndex, maxColIndex }, cell ) => {
 			const vRowIndex = cell.rowSpan ? cell.rowIndex + parseInt( cell.rowSpan ) - 1 : cell.rowIndex;
 			const vColIndex = cell.colSpan
@@ -198,6 +206,32 @@ export function isRectangleSelected( selectedCells ) {
 			maxColIndex: selectedCells[ 0 ].vColIndex,
 		}
 	);
+
+/**
+ * Determines whether a rectangle will be formed from the selected cells in the virtual table.
+ * This function is used to determines whether to allow cell merging from the selected cells.
+ *
+ * @param {Array} selectedCells Current selected multi cell.
+ * @return {boolean} True if a rectangle will be formed from the selected cells, false otherwise.
+ */
+export function isRectangleSelected( selectedCells ) {
+	if ( ! selectedCells ) return false;
+
+	// No need to merge If only one or no cell is selected.
+	if ( selectedCells.length <= 1 ) return false;
+
+	// Check if multiple sections are selected.
+	const selectedSections = selectedCells.reduce( ( result, selectedCell ) => {
+		if ( ! result.includes( selectedCell.sectionName ) ) {
+			result.push( selectedCell.sectionName );
+		}
+		return result;
+	}, [] );
+
+	if ( selectedSections.length > 1 ) return false;
+
+	// Get the minimum / maximum virtual indexes of the matrix from the selected cells.
+	const vRangeIndexes = getVirtualRange( selectedCells );
 
 	// Generate indexed matrix from the indexes.
 	const vRange = [];
@@ -228,10 +262,31 @@ export function isRectangleSelected( selectedCells ) {
 		}
 	} );
 
-	// Whether all cells in the matrix are filled (whether cell merging is possible or not).
+	// Whether all cells in the matrix are filled (whether cell merging is possible).
 	const isFullFilled = vRange
 		.reduce( ( cells, row ) => cells.concat( row ), [] )
 		.every( ( cell ) => cell === true );
 
 	return isFullFilled;
+}
+
+/**
+ * Converts the selected cells to new selected cells that represent a rectangle considering merged cells.
+ *
+ * @param {Array} selectedCells Current selected multi cell.
+ * @return {Array} Selected cells that represent a rectangle.
+ */
+export function toRectangledSelectedCells( selectedCells ) {
+	return [ selectedCells ];
+}
+
+/**
+ * Determines whether the selected cells in the virtual table contain merged cells.
+ *
+ * @param {Array} selectedCells Current selected multi cell.
+ * @return {boolean} True if the selected cells in the virtual table contain merged cells, false otherwise.
+ */
+export function hasMergedCells( selectedCells ) {
+	if ( ! selectedCells ) return false;
+	return selectedCells.some( ( cell ) => cell.rowSpan || cell.colSpan );
 }

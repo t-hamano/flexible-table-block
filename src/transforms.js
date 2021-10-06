@@ -11,8 +11,8 @@ import { createBlock } from '@wordpress/blocks';
 /**
  * Internal dependencies
  */
-import { splitMergedCells } from './utils/table-state';
-import { toVirtualSection } from './utils/helper';
+import { splitMergedCell } from './utils/table-state';
+import { toVirtualTable } from './utils/helper';
 
 const transforms = {
 	from: [
@@ -36,12 +36,8 @@ const transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
-				// Create virtual table array with the cells placed in positions based on how they actually look.
-				let vTable = {
-					head: toVirtualSection( attributes, { sectionName: 'head' } ),
-					body: toVirtualSection( attributes, { sectionName: 'body' } ),
-					foot: toVirtualSection( attributes, { sectionName: 'foot' } ),
-				};
+				// Create virtual object array with the cells placed in positions based on how they actually look.
+				let vTable = toVirtualTable( attributes );
 
 				// Split all merged cells.
 				[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
@@ -65,8 +61,8 @@ const transforms = {
 
 							// Split merged virtual cell.
 							if ( vMergedCells.length ) {
-								vTable = splitMergedCells( vTable, {
-									selectedCell: vMergedCells[ 0 ],
+								vTable = splitMergedCell( vTable, {
+									selectedCell: vMergedCells,
 								} );
 							}
 						}

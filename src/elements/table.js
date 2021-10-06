@@ -15,7 +15,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL } from '../constants';
-import { isEmptySection } from '../utils/helper';
+import { isEmptySection, toVirtualRows } from '../utils/helper';
 import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -141,15 +141,20 @@ export default function Table( props ) {
 			setSelectedCells();
 		} else {
 			const firstCell = vTable.body[ 0 ][ vColIndex ];
+			const vRows = toVirtualRows( vTable );
+
+			setSelectedCells(
+				vRows.reduce(
+					( cells, row ) =>
+						cells.concat(
+							row.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isDelete )
+						),
+					[]
+				)
+			);
+
 			setSelectedCell( firstCell );
 			setSelectedLine( { vColIndex } );
-			setSelectedCells(
-				[ ...vTable.head, ...vTable.body, ...vTable.foot ].reduce( ( cells, row ) => {
-					return cells.concat(
-						row.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isDelete )
-					);
-				}, [] )
-			);
 		}
 	};
 
@@ -163,15 +168,18 @@ export default function Table( props ) {
 				if ( rowIndex !== selectedRowIndex ) return { cells: row };
 
 				return {
-					cells: row.map( ( cell, vColIndex ) => {
-						if ( rowIndex !== selectedRowIndex || vColIndex !== selectedVColIndex ) {
-							return cell;
-						}
-						return {
-							...cell,
-							content,
-						};
-					} ),
+					cells: row
+						.map( ( cell, vColIndex ) => {
+							if ( rowIndex !== selectedRowIndex || vColIndex !== selectedVColIndex ) {
+								return cell;
+							}
+							return {
+								...cell,
+								content,
+							};
+						} )
+						// Delete cells marked as deletion.
+						.filter( ( cell ) => ! cell.isDelete ),
 				};
 			} ),
 		} );
@@ -211,12 +219,22 @@ export default function Table( props ) {
 		} else {
 			// Select cell for the first time.
 			setSelectedCells( [ clickedCell ] );
+			setSelectedCell( clickedCell );
 		}
 	};
 
-	const filteredSections = [ 'head', 'body', 'foot' ].filter(
-		( sectionName ) => ! isEmptySection( vTable[ sectionName ] )
-	);
+	// Remove cells from the virtual table that are not needed for dom rendering.
+	const filteredVTable = Object.keys( vTable ).reduce( ( result, sectionName ) => {
+		if ( isEmptySection( vTable[ sectionName ] ) ) return result;
+		return {
+			...result,
+			[ sectionName ]: vTable[ sectionName ]
+				.map( ( row ) => row.filter( ( cell ) => ! cell.isDelete ) )
+				.filter( ( cells ) => cells.length ),
+		};
+	}, {} );
+
+	const filteredSections = Object.keys( filteredVTable );
 
 	return (
 		<table
@@ -229,7 +247,7 @@ export default function Table( props ) {
 		>
 			{ filteredSections.map( ( sectionName, sectionIndex ) => (
 				<TSection name={ sectionName } key={ sectionName }>
-					{ vTable[ sectionName ].map( ( row, rowIndex ) => (
+					{ filteredVTable[ sectionName ].map( ( row, rowIndex ) => (
 						<tr key={ rowIndex }>
 							{ row.map( ( cell ) => {
 								const { content, tag, styles, rowSpan, colSpan, vColIndex } = cell;
@@ -374,10 +392,14 @@ export default function Table( props ) {
 														iconSize="18"
 														hasNextSection={
 															sectionIndex < filteredSections.length - 1 &&
-															rowIndex === vTable[ sectionName ].length - 1
+															rowIndex + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 ) ===
+																filteredVTable[ sectionName ].length - 1
 														}
 														onClick={ ( event ) => {
-															onInsertRow( sectionName, rowIndex + 1 );
+															onInsertRow(
+																sectionName,
+																rowIndex + ( rowSpan ? parseInt( rowSpan ) : 1 )
+															);
 															event.stopPropagation();
 														} }
 													/>

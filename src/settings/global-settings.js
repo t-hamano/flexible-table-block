@@ -200,10 +200,12 @@ export default function GlobalSettings() {
 						</div>
 					) }
 					<p>
-						{ __(
-							'Note: These settings will be applied to all Flexible Table Blocks.',
-							'flexible-table-block'
-						) }
+						<strong>
+							{ __(
+								'Note: These settings will be applied to all Flexible Table Blocks.',
+								'flexible-table-block'
+							) }
+						</strong>
 					</p>
 					<ToggleControl
 						label={ __( 'Show section labels in the editor', 'flexible-table-block' ) }

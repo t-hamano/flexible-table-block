@@ -117,7 +117,7 @@ export default function BorderStyleControl( {
 							<ButtonGroup className="ftb-button-group">
 								{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => (
 									<Button
-										key={ borderStyle }
+										key={ borderStyle.value }
 										label={ borderStyle.label }
 										icon={ borderStyle.icon }
 										variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
@@ -130,13 +130,13 @@ export default function BorderStyleControl( {
 					) }
 					{ ! isLinked &&
 						SIDES.map( ( item ) => (
-							<div className="ftb-border-style-control__button-controls-row" key={ item }>
+							<div className="ftb-border-style-control__button-controls-row" key={ item.value }>
 								{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 								<ButtonGroup className="ftb-button-group" aria-label={ item.label }>
 									{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => {
 										return (
 											<Button
-												key={ borderStyle }
+												key={ borderStyle.value }
 												label={ borderStyle.label }
 												icon={ borderStyle.icon }
 												variant={
