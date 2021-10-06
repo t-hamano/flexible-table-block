@@ -40,7 +40,6 @@ import {
 	deleteRow,
 	insertColumn,
 	deleteColumn,
-	mergeCells,
 	splitMergedCells,
 } from './utils/table-state';
 import { toVirtualSection, isEmptySection, isRectangleSelected } from './utils/helper';
