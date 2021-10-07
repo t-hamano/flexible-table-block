@@ -29,6 +29,7 @@ import {
 /**
  * Internal dependencies
  */
+import './editor.scss';
 import { STORE_NAME } from './store';
 import { JUSTIFY_CONTROLS } from './constants';
 

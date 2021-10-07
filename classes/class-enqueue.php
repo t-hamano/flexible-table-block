@@ -42,9 +42,9 @@ class Enqueue {
 	public function enqueue_scripts() {
 		wp_enqueue_style(
 			FTB_NAMESPACE,
-			FTB_URL . '/build/style.css',
+			FTB_URL . '/build/style-index.css',
 			array(),
-			filemtime( FTB_PATH . '/build/style.css' ),
+			filemtime( FTB_PATH . '/build/style-index.css' ),
 		);
 
 		$responsive_css = Helper::get_responsive_css();
@@ -61,9 +61,9 @@ class Enqueue {
 
 		wp_enqueue_style(
 			FTB_NAMESPACE,
-			FTB_URL . '/build/editor-style.css',
+			FTB_URL . '/build/index.css',
 			array(),
-			filemtime( FTB_PATH . '/build/editor-style.css' ),
+			filemtime( FTB_PATH . '/build/index.css' ),
 		);
 
 		wp_enqueue_script(

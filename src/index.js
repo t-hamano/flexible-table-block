@@ -11,6 +11,7 @@ import { createHigherOrderComponent } from '@wordpress/compose';
  * Internal dependencies
  */
 import './store';
+import './style.scss';
 import metadata from './block.json';
 import example from './example';
 import { blockIcon as icon } from './icons';

@@ -1,7 +1,5 @@
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
-defaultConfig.plugins.shift();
-
 module.exports = {
 	...defaultConfig,
 	performance: {
