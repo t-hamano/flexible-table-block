@@ -442,23 +442,14 @@ export function mergeCells( vTable, { selectedCells } ) {
  * @return {Object} New table state.
  */
 export function splitMergedCells( vTable, { selectedCells } ) {
-	const { sectionName } = selectedCells[ 0 ];
-
-	// Find the rowspan & colspan.
-	const rowColSpanCellsCount = selectedCells.filter( ( cell ) => cell.rowSpan || cell.colSpan )
-		.length;
+	// Find the rowspan & colspan cells.
+	const rowColSpanCells = selectedCells.filter( ( cell ) => cell.rowSpan || cell.colSpan );
 
 	// Split the found rowspan & colspan cells.
-	if ( rowColSpanCellsCount ) {
-		for ( let i = 0; i < rowColSpanCellsCount; i++ ) {
-			const vMergedCells = vTable[ sectionName ]
-				.reduce( ( cells, row ) => cells.concat( row ), [] )
-				.filter( ( cell ) => cell.rowSpan || cell.colSpan );
-
-			if ( vMergedCells.length ) {
-				vTable = splitMergedCell( vTable, { selectedCell: vMergedCells[ 0 ] } );
-			}
-		}
+	if ( rowColSpanCells.length ) {
+		rowColSpanCells.forEach( ( selectedCell ) => {
+			vTable = splitMergedCell( vTable, { selectedCell } );
+		} );
 	}
 
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
