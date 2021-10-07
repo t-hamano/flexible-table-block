@@ -107,7 +107,7 @@ export function toVirtualTable( state ) {
 		// Create a virtual section array.
 		const vRowCount = section.length;
 		const vColCount = section[ 0 ].cells.reduce( ( count, cell ) => {
-			return count + ( parseInt( cell.colSpan ) || 1 );
+			return cell.isDelete ? count : count + ( parseInt( cell.colSpan ) || 1 );
 		}, 0 );
 
 		const vSection = times( vRowCount, () =>

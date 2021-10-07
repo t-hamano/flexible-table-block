@@ -165,7 +165,9 @@ export default function Table( props ) {
 
 		setAttributes( {
 			[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
-				if ( rowIndex !== selectedRowIndex ) return { cells: row };
+				if ( rowIndex !== selectedRowIndex ) {
+					return { cells: row.filter( ( cell ) => ! cell.isDelete ) };
+				}
 
 				return {
 					cells: row

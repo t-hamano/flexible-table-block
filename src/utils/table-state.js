@@ -392,7 +392,7 @@ export function mergeCells( vTable, { selectedCells } ) {
 		[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
 			if ( rowIndex < minRowIndex || rowIndex > maxRowIndex ) {
 				// Row not to be merged.
-				return { cells: row };
+				return { cells: row.filter( ( cell ) => ! cell.isDelete ) };
 			}
 
 			return {
