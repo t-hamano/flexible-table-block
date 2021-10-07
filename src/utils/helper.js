@@ -75,6 +75,23 @@ export function isEmptySection( vSection ) {
 }
 
 /**
+ * Determines whether multiple sections are selected on the virtual table.
+ *
+ * @param {Array} selectedCells Current selected multi cell.
+ * @return {boolean} True if multiple sections are selected, false otherwise.
+ */
+export function isMultiSectionSelected( selectedCells ) {
+	const selectedSections = selectedCells.reduce( ( result, selectedCell ) => {
+		if ( ! result.includes( selectedCell.sectionName ) ) {
+			result.push( selectedCell.sectionName );
+		}
+		return result;
+	}, [] );
+
+	return selectedSections.length > 1 ? true : false;
+}
+
+/**
  * Create virtual table object with the cells placed in positions based on how they actually look.
  * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
  *
@@ -222,14 +239,7 @@ export function isRectangleSelected( selectedCells ) {
 	if ( selectedCells.length <= 1 ) return false;
 
 	// Check if multiple sections are selected.
-	const selectedSections = selectedCells.reduce( ( result, selectedCell ) => {
-		if ( ! result.includes( selectedCell.sectionName ) ) {
-			result.push( selectedCell.sectionName );
-		}
-		return result;
-	}, [] );
-
-	if ( selectedSections.length > 1 ) return false;
+	if ( isMultiSectionSelected( selectedCells ) ) return false;
 
 	// Get the minimum / maximum virtual indexes of the matrix from the selected cells.
 	const vRangeIndexes = getVirtualRange( selectedCells );
@@ -274,11 +284,108 @@ export function isRectangleSelected( selectedCells ) {
 /**
  * Converts the selected cells to new selected cells that represent a rectangle considering merged cells.
  *
- * @param {Array} selectedCells Current selected multi cell.
+ * @param {Object} vTable        Current virtual table state.
+ * @param {Array}  selectedCells Current selected multi cell.
  * @return {Array} Selected cells that represent a rectangle.
  */
-export function toRectangledSelectedCells( selectedCells ) {
-	return [ selectedCells ];
+export function toRectangledSelectedCells( vTable, selectedCells ) {
+	if ( ! selectedCells ) return [];
+
+	// No need to merge If only one or no cell is selected.
+	if ( selectedCells.length <= 1 ) return [];
+
+	// Check if multiple sections are selected.
+	if ( isMultiSectionSelected( selectedCells ) ) return [];
+
+	// Get the minimum / maximum virtual indexes of the matrix from the selected cells.
+	const vRangeIndexes = getVirtualRange( selectedCells );
+
+	let isRectangled = false;
+
+	let { minRowIndex, maxRowIndex, minColIndex, maxColIndex } = vRangeIndexes;
+
+	const { sectionName } = selectedCells[ 0 ];
+	const vSection = vTable[ sectionName ];
+
+	const vRowCount = vSection.length;
+	const vColCount = vSection[ 0 ].length;
+
+	const vCells = vSection
+		.reduce( ( cells, row ) => cells.concat( row ), [] )
+		.filter( ( cell ) => ! cell.isDelete );
+
+	// Expand the rectangle if there is a combined cell that passes through each edge.
+	while ( ! isRectangled ) {
+		// Top side.
+		const topCells = vCells.filter( ( result, cell ) => {
+			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
+			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
+
+			return (
+				cell.rowIndex < minRowIndex &&
+				cell.vColIndex + colSpan >= minColIndex &&
+				cell.vColIndex + colSpan <= maxColIndex &&
+				cell.rowIndex + rowSpan >= minRowIndex
+			);
+		} );
+
+		const isTopFixed = minRowIndex === 0 || ! topCells.length;
+		if ( ! isTopFixed ) minRowIndex--;
+
+		// Right side.
+		const rightCells = vCells.filter( ( result, cell ) => {
+			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
+
+			return (
+				cell.rowIndex <= minRowIndex &&
+				cell.vColIndex >= minColIndex &&
+				cell.vColIndex <= maxColIndex &&
+				cell.rowIndex + rowSpan >= minRowIndex
+			);
+		} );
+
+		const isRightFixed = maxColIndex === vColCount - 1 || ! rightCells.length;
+		if ( ! isRightFixed ) maxColIndex++;
+
+		// Bottom side.
+		const bottomCells = vCells.filter( ( cell ) => {
+			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
+			return (
+				cell.rowndex < maxRowIndex &&
+				cell.vColIndex >= minColIndex &&
+				cell.vColIndex <= maxColIndex &&
+				cell.rowIndex + rowSpan >= maxRowIndex
+			);
+		} );
+
+		const isBottomFixed = maxRowIndex === vRowCount - 1 || ! bottomCells.length;
+		if ( ! isBottomFixed ) maxRowIndex++;
+
+		// Left side.
+		const leftCells = vCells.filter( ( result, cell ) => {
+			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
+			return (
+				cell.vColIndex < minColIndex &&
+				cell.rowIndex >= minRowIndex &&
+				cell.rowIndex <= maxRowIndex &&
+				cell.vColIndex + colSpan >= minColIndex
+			);
+		} );
+
+		const isleftFixed = minColIndex === 0 || ! leftCells.length;
+		if ( ! isleftFixed ) minColIndex--;
+
+		isRectangled = isTopFixed && isRightFixed && isBottomFixed && isleftFixed;
+	}
+
+	// Cells in the newly computed rectangle.
+	return vCells.filter(
+		( cell ) =>
+			cell.rowIndex >= minRowIndex &&
+			cell.rowIndex <= maxColIndex &&
+			cell.vColIndex >= minRowIndex &&
+			cell.vColIndex <= maxColIndex
+	);
 }
 
 /**

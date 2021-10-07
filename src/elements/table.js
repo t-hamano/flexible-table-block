@@ -15,7 +15,7 @@ import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL } from '../constants';
-import { isEmptySection, toVirtualRows } from '../utils/helper';
+import { isEmptySection, toVirtualRows, toRectangledSelectedCells } from '../utils/helper';
 import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -189,7 +189,8 @@ export default function Table( props ) {
 		const { sectionName, rowIndex, vColIndex } = clickedCell;
 
 		if ( event.shiftKey ) {
-			// TODO: Range select.
+			setSelectedCells( toRectangledSelectedCells( vTable, [ selectedCell, clickedCell ] ) );
+			setSelectedCell( clickedCell );
 		} else if ( event.ctrlKey || event.metaKey ) {
 			// Multple select.
 			const newSelectedCells = selectedCells ? [ ...selectedCells ] : [];
@@ -411,8 +412,8 @@ export default function Table( props ) {
 											value={ content }
 											onChange={ onChangeCellContent }
 											unstableOnFocus={ () => {
-												setSelectedCell( cell );
-												setSelectedLine();
+												// setSelectedCell( cell );
+												// setSelectedLine();
 												// setSelectedCells( [ cell ] );
 											} }
 											aria-label={ CELL_ARIA_LABEL[ sectionName ] }
