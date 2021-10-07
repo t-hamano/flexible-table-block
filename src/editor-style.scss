@@ -28,11 +28,11 @@
 				}
 			}
 		}
+	}
 
-		figcaption {
-			position: relative;
-			z-index: 1;
-		}
+	> figcaption {
+		position: relative;
+		z-index: 1;
 	}
 
 	&.is-selected > table {

@@ -16,8 +16,11 @@ import {
  * Internal dependencies
  */
 import { FONT_SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS } from '../constants';
+import { PaddingControl } from '../controls';
 import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
+import { pickPadding } from '../utils/style-picker';
+import { updatePadding } from '../utils/style-updater';
 
 export default function TableCaptionSettings( props ) {
 	const { captionStylesObj, attributes, setAttributes } = props;
@@ -30,6 +33,11 @@ export default function TableCaptionSettings( props ) {
 			...captionStylesObj,
 			fontSize: toUnitVal( value ),
 		};
+		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
+	};
+
+	const onChangeCaptionPadding = ( values ) => {
+		const newStylesObj = updatePadding( captionStylesObj, values );
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
@@ -58,6 +66,12 @@ export default function TableCaptionSettings( props ) {
 					onChange={ onChangeCaptionFontSize }
 				/>
 			</BaseControl>
+			<PaddingControl
+				id="flexible-table-block/caption-padding"
+				label={ __( 'Padding', 'flexible-table-block' ) }
+				values={ pickPadding( captionStylesObj ) }
+				onChange={ onChangeCaptionPadding }
+			/>
 			<BaseControl
 				id="flexible-table-block/caption-side"
 				label={ __( 'Position', 'flexible-table-block' ) }
