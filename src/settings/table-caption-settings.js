@@ -53,8 +53,23 @@ export default function TableCaptionSettings( props ) {
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
+	const onResetCaptionSettings = () => {
+		setAttributes( {
+			captionSide: 'bottom',
+			captionStyles: undefined,
+		} );
+	};
+
 	return (
 		<>
+			<BaseControl
+				id="flexible-table-block/clear-caption-settings"
+				className="ftb-reset-settings-control"
+			>
+				<Button variant="link" isDestructive onClick={ onResetCaptionSettings }>
+					{ __( 'Clear Caption Settings', 'flexible-table-block' ) }
+				</Button>
+			</BaseControl>
 			<BaseControl
 				id="flexible-table-block/caption-font-size"
 				label={ __( 'Font Size', 'flexible-table-block' ) }
