@@ -73,7 +73,7 @@ class Enqueue {
 			filemtime( FTB_PATH . '/build/index.js' ),
 		);
 
-		$block_css = Helper::get_block_css();
+		$block_css = Helper::get_block_css( '.editor-styles-wrapper ' );
 		$css       = Helper::minify_css( $block_css );
 		wp_add_inline_style( FTB_NAMESPACE, $css );
 	}
