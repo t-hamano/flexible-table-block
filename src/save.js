@@ -30,8 +30,7 @@ export default function save( { attributes } ) {
 		foot,
 		caption,
 		captionSide,
-		captionFontSize,
-		captionAlign,
+		captionStyles,
 	} = attributes;
 
 	const isEmpty = ! head.length && ! body.length && ! foot.length;
@@ -39,6 +38,7 @@ export default function save( { attributes } ) {
 	if ( isEmpty ) return null;
 
 	const tableStylesObj = convertToObject( tableStyles );
+	const captionStylesObj = convertToObject( captionStyles );
 
 	const colorProps = getColorClassesAndStyles( attributes );
 
@@ -87,14 +87,7 @@ export default function save( { attributes } ) {
 	};
 
 	const Caption = () => {
-		return (
-			<RichText.Content
-				data-align={ captionAlign }
-				tagName="figcaption"
-				value={ caption }
-				style={ { fontSize: captionFontSize } }
-			/>
-		);
+		return <RichText.Content tagName="figcaption" value={ caption } style={ captionStylesObj } />;
 	};
 
 	return (
