@@ -16,6 +16,8 @@ import { cleanEmptyObject, toUnitVal } from './helper';
  * @return {StylesObject} New Styles object.
  */
 export function updatePadding( styles, values ) {
+	if ( ! values ) return styles;
+
 	const newStyles = { ...styles };
 
 	delete newStyles.padding;
@@ -75,6 +77,8 @@ export function updatePadding( styles, values ) {
  * @return {StylesObject} New Styles object.
  */
 export function updateBorderSpacing( styles, values ) {
+	if ( ! values ) return styles;
+
 	const newStyles = { ...styles };
 
 	delete newStyles.borderSpacing;
@@ -109,7 +113,10 @@ export function updateBorderSpacing( styles, values ) {
  * @return {StylesObject} New Styles object.
  */
 export function updateBorderWidth( styles, values ) {
+	if ( ! values ) return styles;
+
 	const newStyles = { ...styles };
+
 	delete newStyles.borderWidth;
 	delete newStyles.borderTopWidth;
 	delete newStyles.borderRightWidth;
@@ -168,7 +175,10 @@ export function updateBorderWidth( styles, values ) {
  * @return {StylesObject} New Styles object.
  */
 export function updateBorderRadius( styles, values ) {
+	if ( ! values ) return styles;
+
 	const newStyles = { ...styles };
+
 	delete newStyles.borderRadius;
 	delete newStyles.borderTopLeftRadius;
 	delete newStyles.borderTopRightRadius;
@@ -238,7 +248,10 @@ export function updateBorderRadius( styles, values ) {
  * @return {StylesObject} New Styles object.
  */
 export function updateBorderStyle( styles, values ) {
+	if ( ! values ) return styles;
+
 	const newStyles = { ...styles };
+
 	delete newStyles.borderStyle;
 	delete newStyles.borderTopStyle;
 	delete newStyles.borderRightStyle;
@@ -297,7 +310,10 @@ export function updateBorderStyle( styles, values ) {
  * @return {StylesObject} New Styles object.
  */
 export function updateBorderColor( styles, values ) {
+	if ( ! values ) return styles;
+
 	const newStyles = { ...styles };
+
 	delete newStyles.borderColor;
 	delete newStyles.borderTopColor;
 	delete newStyles.borderRightColor;
