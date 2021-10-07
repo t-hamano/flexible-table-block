@@ -16,17 +16,19 @@ class Helper {
 	public static function get_block_css( $prefix = '' ) {
 		$selector = "${prefix}." . FTB_BLOCK_CLASS;
 
-		$styles   = array(
-			"${selector} table" => '',
-			"${selector}.is-style-stripes tbody tr:nth-child(odd)" => '',
-			"${selector}.is-style-stripes tbody tr:nth-child(even)" => '',
-			"${selector} table th, ${selector} table td" => "",
-			"${selector} table th" => "",
-			"${selector} table td" => "",
-			"${selector} table th, ${selector} table td" => "",
+		$styles = array(
+			"${selector} table"                          => '',
+			"${selector}.is-style-stripes tbody tr:nth-child(odd) th" => '',
+			"${selector}.is-style-stripes tbody tr:nth-child(odd) td" => '',
+			"${selector}.is-style-stripes tbody tr:nth-child(even) th" => '',
+			"${selector}.is-style-stripes tbody tr:nth-child(even) td" => '',
+			"${selector} table th, ${selector} table td" => '',
+			"${selector} table th"                       => '',
+			"${selector} table td"                       => '',
+			"${selector} table th, ${selector} table td" => '',
 		);
 
-		$option   = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
+		$option = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
 
 		foreach ( $option as $key => $value ) {
 
@@ -47,10 +49,12 @@ class Helper {
 					$styles[ "${selector} table" ] .= "border-collapse:${value};";
 					break;
 				case 'row_odd_color':
-					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(odd)" ] .= "background-color:${value};";
+					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(odd) th" ] .= "background-color:${value};";
+					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(odd) td" ] .= "background-color:${value};";
 					break;
 				case 'row_even_color':
-					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(even)" ] .= "background-color:${value};";
+					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(even) th" ] .= "background-color:${value};";
+					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(even) td" ] .= "background-color:${value};";
 					break;
 				case 'cell_text_align':
 					$styles[ "${selector} table th, ${selector} table td" ] .= "text-align:${value};";
@@ -120,7 +124,6 @@ class Helper {
 	 * @return string
 	 */
 	public static function minify_css( $css ) {
-		// Minify CSS.
 		$replaces = array();
 
     // phpcs:disable Generic.Formatting.MultipleStatementAlignment
