@@ -52,7 +52,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 	const onChangeColumnCount = ( value ) => {
 		const parsedValue = parseInt( value, 10 );
 		if ( isNaN( parsedValue ) ) {
-			setColCount( undefined );
+			setColCount( '' );
 		} else {
 			setColCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_COL, parsedValue ) ) );
 		}
@@ -61,7 +61,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 	const onChangeRowCount = ( value ) => {
 		const parsedValue = parseInt( value, 10 );
 		if ( isNaN( parsedValue ) ) {
-			setRowCount( undefined );
+			setRowCount( '' );
 		} else {
 			setRowCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_ROW, parsedValue ) ) );
 		}
