@@ -137,7 +137,8 @@ export default function GlobalSettings() {
 				<Button
 					icon={ help }
 					variant="link"
-					iconSize="20"
+					isSmall
+					iconSize="16"
 					onClick={ () => setIsHelpModalOpen( true ) }
 				>
 					{ __( 'Help', 'flexible-table-block' ) }
@@ -145,8 +146,9 @@ export default function GlobalSettings() {
 				{ ( isAdministrator || options?.show_global_setting ) && (
 					<Button
 						icon={ cog }
-						variant="link"
-						iconSize="20"
+						variant="primary"
+						isSmall
+						iconSize="16"
 						onClick={ () => setIsSettingModalOpen( true ) }
 					>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
