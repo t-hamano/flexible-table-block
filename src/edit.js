@@ -53,7 +53,7 @@ import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 
 function TableEdit( props ) {
-	const { attributes, setAttributes, isSelected } = props;
+	const { attributes, setAttributes } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCell, setSelectedCell ] = useState();
 	const [ selectedCells, setSelectedCells ] = useState();
