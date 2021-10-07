@@ -15,7 +15,17 @@ class Helper {
 	 */
 	public static function get_block_css( $prefix = '' ) {
 		$selector = "${prefix}." . FTB_BLOCK_CLASS;
-		$styles   = array();
+
+		$styles   = array(
+			"${selector} table" => '',
+			"${selector}.is-style-stripes tbody tr:nth-child(odd)" => '',
+			"${selector}.is-style-stripes tbody tr:nth-child(even)" => '',
+			"${selector} table th, ${selector} table td" => "",
+			"${selector} table th" => "",
+			"${selector} table td" => "",
+			"${selector} table th, ${selector} table td" => "",
+		);
+
 		$option   = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
 
 		foreach ( $option as $key => $value ) {
@@ -96,14 +106,12 @@ class Helper {
 		$max_width  = $breakpoint;
 		$min_width  = $max_width + 1;
 
-		$css .= <<<EOM
+		return <<<EOM
 		@media screen and (min-width:{$min_width}px) {
 		}
 		@media screen and (max-width:{$max_width}px) {
 		}
 		EOM;
-
-		return $css;
 	}
 
 	/**
