@@ -207,7 +207,7 @@ export function getVirtualRange( selectedCells ) {
 		}
 	);
 }
-	
+
 /**
  * Determines whether a rectangle will be formed from the selected cells in the virtual table.
  * This function is used to determines whether to allow cell merging from the selected cells.
