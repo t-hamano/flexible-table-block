@@ -210,91 +210,6 @@ export default function GlobalSettings() {
 							) }
 						</strong>
 					</p>
-					<ToggleControl
-						label={ __( 'Show section labels in the editor', 'flexible-table-block' ) }
-						checked={ !! options.show_label_on_section }
-						onChange={ ( value ) => {
-							setOptions( {
-								...options,
-								show_label_on_section: value,
-							} );
-						} }
-					/>
-					<ToggleControl
-						label={ __(
-							'Show insert row/column and select row/column buttons in the editor',
-							'flexible-table-block'
-						) }
-						checked={ !! options.show_control_button }
-						onChange={ ( value ) => {
-							setOptions( {
-								...options,
-								show_control_button: value,
-							} );
-						} }
-					/>
-					{ ( options.show_label_on_section || options.show_control_button ) && (
-						<ToggleControl
-							label={ __(
-								'Focus insert/select buttons, select row/column buttons, section label from being focused when moving with the crosshairs',
-								'flexible-table-block'
-							) }
-							checked={ !! options.focus_control_button }
-							onChange={ ( value ) => {
-								setOptions( {
-									...options,
-									focus_control_button: value,
-								} );
-							} }
-						/>
-					) }
-					<ToggleControl
-						label={ __( 'Show dot on <th> tag in the editor', 'flexible-table-block' ) }
-						checked={ !! options.show_dot_on_th }
-						onChange={ ( value ) => {
-							setOptions( {
-								...options,
-								show_dot_on_th: value,
-							} );
-						} }
-					/>
-					{ isAdministrator && (
-						<ToggleControl
-							label={ __(
-								'Show global settings link to non-administrative users',
-								'flexible-table-block'
-							) }
-							checked={ !! options.show_global_setting }
-							onChange={ ( value ) => {
-								setOptions( {
-									...options,
-									show_global_setting: value,
-								} );
-							} }
-						/>
-					) }
-					<hr />
-					<RangeControl
-						label={ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
-						help={ __(
-							'Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.',
-							'flexible-table-block'
-						) }
-						beforeIcon={ mobile }
-						afterIcon={ desktop }
-						min={ MIN_RESPONSIVE_BREAKPOINT }
-						max={ MAX_RESPONSIVE_BREAKPOINT }
-						value={ parseInt( options.breakpoint ) || undefined }
-						renderTooltipContent={ ( value ) => `${ value }px` }
-						trackColor="transparent"
-						allowReset
-						onChange={ ( value ) => {
-							setOptions( {
-								...options,
-								breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
-							} );
-						} }
-					/>
 					<hr />
 					<h2>{ __( 'Default Table Style', 'flexible-table-block' ) }</h2>
 					<div className="ftb-global-setting-modal__styles">
@@ -596,6 +511,92 @@ export default function GlobalSettings() {
 							</ButtonGroup>
 						</BaseControl>
 					</div>
+					<hr />
+					<RangeControl
+						label={ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
+						help={ __(
+							'Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.',
+							'flexible-table-block'
+						) }
+						beforeIcon={ mobile }
+						afterIcon={ desktop }
+						min={ MIN_RESPONSIVE_BREAKPOINT }
+						max={ MAX_RESPONSIVE_BREAKPOINT }
+						value={ parseInt( options.breakpoint ) || undefined }
+						renderTooltipContent={ ( value ) => `${ value }px` }
+						trackColor="transparent"
+						allowReset
+						onChange={ ( value ) => {
+							setOptions( {
+								...options,
+								breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
+							} );
+						} }
+					/>
+					<hr />
+					<ToggleControl
+						label={ __( 'Show section labels in the editor', 'flexible-table-block' ) }
+						checked={ !! options.show_label_on_section }
+						onChange={ ( value ) => {
+							setOptions( {
+								...options,
+								show_label_on_section: value,
+							} );
+						} }
+					/>
+					<ToggleControl
+						label={ __(
+							'Show insert row/column and select row/column buttons in the editor',
+							'flexible-table-block'
+						) }
+						checked={ !! options.show_control_button }
+						onChange={ ( value ) => {
+							setOptions( {
+								...options,
+								show_control_button: value,
+							} );
+						} }
+					/>
+					{ ( options.show_label_on_section || options.show_control_button ) && (
+						<ToggleControl
+							label={ __(
+								'Focus insert/select buttons, select row/column buttons, section label from being focused when moving with the crosshairs',
+								'flexible-table-block'
+							) }
+							checked={ !! options.focus_control_button }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									focus_control_button: value,
+								} );
+							} }
+						/>
+					) }
+					<ToggleControl
+						label={ __( 'Show dot on <th> tag in the editor', 'flexible-table-block' ) }
+						checked={ !! options.show_dot_on_th }
+						onChange={ ( value ) => {
+							setOptions( {
+								...options,
+								show_dot_on_th: value,
+							} );
+						} }
+					/>
+					{ isAdministrator && (
+						<ToggleControl
+							label={ __(
+								'Show global settings link to non-administrative users',
+								'flexible-table-block'
+							) }
+							checked={ !! options.show_global_setting }
+							onChange={ ( value ) => {
+								setOptions( {
+									...options,
+									show_global_setting: value,
+								} );
+							} }
+						/>
+					) }
 					{ notice?.status && notice?.message && (
 						<Notice
 							className="ftb-global-setting-modal__notice"
