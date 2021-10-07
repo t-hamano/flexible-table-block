@@ -1,7 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
+import { useSelect } from '@wordpress/data';
 import {
 	BaseControl,
 	Button,
@@ -15,7 +16,12 @@ import {
 /**
  * Internal dependencies
  */
-import { TABLE_WIDTH_UNITS, BORDER_COLLAPSE_CONTROLS, STICKY_CONTROLS } from '../constants';
+import {
+	STORE_NAME,
+	TABLE_WIDTH_UNITS,
+	BORDER_COLLAPSE_CONTROLS,
+	STICKY_CONTROLS,
+} from '../constants';
 import {
 	BorderRadiusControl,
 	BorderWidthControl,
@@ -55,6 +61,8 @@ export default function TableSettings( props ) {
 		head,
 		foot,
 	} = attributes;
+
+	const options = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
@@ -190,17 +198,44 @@ export default function TableSettings( props ) {
 			/>
 			<ToggleControl
 				label={ __( 'Scroll on PC view', 'flexible-table-block' ) }
+				className="ftb-toggle-control"
 				checked={ !! isScrollOnPc }
+				help={
+					options.breakpoint &&
+					sprintf(
+						/* translators: %d is replaced with the number of breakpoint. */
+						__( 'When the screen width is %dpx or more.', 'flexible-table-block' ),
+						parseInt( options.breakpoint ) + 1
+					)
+				}
 				onChange={ onChangeIsScrollOnPc }
 			/>
 			<ToggleControl
 				label={ __( 'Scroll on Mobile view', 'flexible-table-block' ) }
+				className="ftb-toggle-control"
 				checked={ !! isScrollOnMobile }
+				help={
+					options.breakpoint &&
+					sprintf(
+						/* translators: %d is replaced with the number of breakpoint. */
+						__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
+						options.breakpoint
+					)
+				}
 				onChange={ onChangeIsScrollOnMobile }
 			/>
 			<ToggleControl
 				label={ __( 'Stack on mobile', 'flexible-table-block' ) }
+				className="ftb-toggle-control"
 				checked={ !! isStackedOnMobile }
+				help={
+					options.breakpoint &&
+					sprintf(
+						/* translators: %d is replaced with the number of breakpoint. */
+						__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
+						options.breakpoint
+					)
+				}
 				onChange={ onChangeIsStackedOnMobile }
 			/>
 			<SelectControl

@@ -1,5 +1,33 @@
 .wp-block-flexible-table-block-table {
 
+	margin-top: 0;
+	margin-right: 0;
+	margin-left: 0;
+
+	> table {
+
+		&.has-fixed-layout {
+			table-layout: fixed;
+		}
+
+		&.is-sticky-header thead th {
+			position: sticky;
+			top: 0;
+			z-index: 1;
+		}
+
+		&.is-sticky-first-column tr > *:first-child {
+			position: sticky;
+			left: 0;
+			z-index: 1;
+		}
+
+		th,
+		td {
+			box-sizing: border-box;
+		}
+	}
+
 	&.is-content-justification-left,
 	&.is-content-justification-center,
 	&.is-content-justification-right {
@@ -21,11 +49,5 @@
 
 	&.is-content-justification-right {
 		align-items: flex-end;
-	}
-
-	&.is-sticky-header thead th {
-		position: sticky;
-		top: 0;
-		z-index: 1;
 	}
 }

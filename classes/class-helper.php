@@ -105,15 +105,33 @@ class Helper {
 	 *
 	 * @return string
 	 */
-	public static function get_responsive_css() {
+	public static function get_responsive_css( $prefix = '' ) {
+		$selector   = "${prefix}." . FTB_BLOCK_CLASS;
 		$breakpoint = get_option( FTB_OPTION_PREFIX . '_breakpoint', Settings::OPTIONS['breakpoint']['default'] );
 		$max_width  = $breakpoint;
 		$min_width  = $max_width + 1;
 
 		return <<<EOM
 		@media screen and (min-width:{$min_width}px) {
+			${selector}.is-scroll-on-pc {
+				overflow-x: scroll;
+			}
+			${selector}.is-scroll-on-pc table {
+				max-width: none;
+			}
 		}
 		@media screen and (max-width:{$max_width}px) {
+			${selector}.is-scroll-on-mobile {
+				overflow-x: scroll;
+			}
+			${selector}.is-scroll-on-mobile table {
+				max-width: none;
+			}
+			${selector} table.is-stacked-on-mobile th,
+			${selector} table.is-stacked-on-mobile td {
+				width: 100%;
+				display: block;
+			}
 		}
 		EOM;
 	}
