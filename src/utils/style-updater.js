@@ -2,13 +2,18 @@
  * Internal dependencies
  */
 import { cleanEmptyObject, toUnitVal } from './helper';
+// eslint-disable-next-line jsdoc/valid-types
+/**
+ * @typedef {import('csstype').StandardLonghandProperties} StylesObject
+ * @typedef {{ top?: string, right?: string, bottom?: string, left?: string }} BoxValues
+ */
 
 /**
  * Update padding style of styles object.
  *
- * @param {Object} styles Styles object.
- * @param {Object} values padding values object.
- * @return {Object} New Styles object.
+ * @param {StylesObject} styles Styles object.
+ * @param {BoxValues}    values padding values object.
+ * @return {StylesObject} New Styles object.
  */
 export function updatePadding( styles, values ) {
 	const newStyles = { ...styles };
@@ -18,7 +23,6 @@ export function updatePadding( styles, values ) {
 	delete newStyles.paddingRight;
 	delete newStyles.paddingBottom;
 	delete newStyles.paddingLeft;
-
 	const cleanValues = cleanEmptyObject( values );
 
 	if ( ! cleanValues || typeof cleanValues !== 'object' ) {
@@ -66,9 +70,9 @@ export function updatePadding( styles, values ) {
 /**
  * Update border-spacing style of styles object.
  *
- * @param {Object} styles Styles object.
- * @param {Object} values border-spacing values object.
- * @return {Object} New Styles object.
+ * @param {StylesObject}                             styles Styles object.
+ * @param {{horizontal?: string, vertical?: string}} values border-spacing values object.
+ * @return {StylesObject} New Styles object.
  */
 export function updateBorderSpacing( styles, values ) {
 	const newStyles = { ...styles };
@@ -100,9 +104,9 @@ export function updateBorderSpacing( styles, values ) {
 /**
  * Update border-width style of styles object.
  *
- * @param {Object} styles Styles object.
- * @param {Object} values border-width values object.
- * @return {Object} New Styles object.
+ * @param {StylesObject} styles Styles object.
+ * @param {BoxValues}    values border-width values object.
+ * @return {StylesObject} New Styles object.
  */
 export function updateBorderWidth( styles, values ) {
 	const newStyles = { ...styles };
@@ -159,9 +163,9 @@ export function updateBorderWidth( styles, values ) {
 /**
  * Update border-radius style of styles object.
  *
- * @param {Object} styles Styles object.
- * @param {Object} values border-radius values object.
- * @return {Object} New Styles object.
+ * @param {StylesObject}                                                               styles Styles object.
+ * @param {{topLeft?:string,topRight?:string,bottomRight?:string, bottomLeft?:string}} values border-radius values object.
+ * @return {StylesObject} New Styles object.
  */
 export function updateBorderRadius( styles, values ) {
 	const newStyles = { ...styles };
@@ -229,9 +233,9 @@ export function updateBorderRadius( styles, values ) {
 /**
  * Update border-style style of styles object.
  *
- * @param {Object} styles Styles object.
- * @param {Object} values border-style values object.
- * @return {Object} New Styles object.
+ * @param {StylesObject} styles Styles object.
+ * @param {BoxValues}    values border-style values object.
+ * @return {StylesObject} New Styles object.
  */
 export function updateBorderStyle( styles, values ) {
 	const newStyles = { ...styles };
@@ -288,9 +292,9 @@ export function updateBorderStyle( styles, values ) {
 /**
  * Update border-scoloryle style of styles object.
  *
- * @param {Object} styles Styles object.
- * @param {Object} values border-color values object.
- * @return {Object} New Styles object.
+ * @param {StylesObject} styles Styles object.
+ * @param {BoxValues}    values border-color values object.
+ * @return {StylesObject} New Styles object.
  */
 export function updateBorderColor( styles, values ) {
 	const newStyles = { ...styles };
