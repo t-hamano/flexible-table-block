@@ -203,14 +203,11 @@ function TableEdit( props ) {
 	const tablePlaceholderProps = useBlockProps();
 
 	const tableFigureProps = useBlockProps( {
-		className: classnames( {
+		className: classnames( `is-caption-side-${ captionSide }`, {
 			[ `is-content-justification-${ contentJustification }` ]: contentJustification,
-			'show-dot-on-th': options.show_dot_on_th && isSelected,
+			'show-dot-on-th': options.show_dot_on_th,
+			'show-control-button': options.show_control_button,
 		} ),
-		style: {
-			paddingTop: isSelected && options.show_control_button ? '40px' : undefined,
-			paddingLeft: isSelected && options.show_control_button ? '40px' : undefined,
-		},
 	} );
 
 	const tableProps = {
