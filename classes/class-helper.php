@@ -18,10 +18,10 @@ class Helper {
 
 		$styles = array(
 			"${selector} table"                          => '',
-			"${selector}.is-style-stripes tbody tr:nth-child(odd) th" => '',
-			"${selector}.is-style-stripes tbody tr:nth-child(odd) td" => '',
-			"${selector}.is-style-stripes tbody tr:nth-child(even) th" => '',
-			"${selector}.is-style-stripes tbody tr:nth-child(even) td" => '',
+			"${selector}.is-style-stripes tr:nth-child(odd) th" => '',
+			"${selector}.is-style-stripes tr:nth-child(odd) td" => '',
+			"${selector}.is-style-stripes tr:nth-child(even) th" => '',
+			"${selector}.is-style-stripes tr:nth-child(even) td" => '',
 			"${selector} table th, ${selector} table td" => '',
 			"${selector} table th"                       => '',
 			"${selector} table td"                       => '',
@@ -49,12 +49,12 @@ class Helper {
 					$styles[ "${selector} table" ] .= "border-collapse:${value};";
 					break;
 				case 'row_odd_color':
-					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(odd) th" ] .= "background-color:${value};";
-					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(odd) td" ] .= "background-color:${value};";
+					$styles[ "${selector}.is-style-stripes tr:nth-child(odd) th" ] .= "background-color:${value};";
+					$styles[ "${selector}.is-style-stripes tr:nth-child(odd) td" ] .= "background-color:${value};";
 					break;
 				case 'row_even_color':
-					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(even) th" ] .= "background-color:${value};";
-					$styles[ "${selector}.is-style-stripes tbody tr:nth-child(even) td" ] .= "background-color:${value};";
+					$styles[ "${selector}.is-style-stripes tr:nth-child(even) th" ] .= "background-color:${value};";
+					$styles[ "${selector}.is-style-stripes tr:nth-child(even) td" ] .= "background-color:${value};";
 					break;
 				case 'cell_text_align':
 					$styles[ "${selector} table th, ${selector} table td" ] .= "text-align:${value};";
