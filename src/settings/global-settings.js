@@ -52,11 +52,14 @@ export default function GlobalSettings() {
 	const [ notice, setNotice ] = useState();
 	const [ isResetPopup, setIsResetPopup ] = useState( false );
 	const [ isWaiting, setIsWaiting ] = useState( false );
-	const [ options, setOptions ] = useState( storeOptions );
+	const [ options, setOptions ] = useState();
 
 	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
 
-	const breakpointTooltip = ( value ) => `${ value }px`;
+	// Set options to state.
+	useEffect( () => {
+		setOptions( storeOptions );
+	}, [ storeOptions ] );
 
 	// Initialize notice message.
 	useEffect( () => {
@@ -128,8 +131,6 @@ export default function GlobalSettings() {
 		} );
 	};
 
-	if ( ! options ) return null;
-
 	return (
 		<>
 			<div className="ftb-global-setting">
@@ -141,7 +142,7 @@ export default function GlobalSettings() {
 				>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
-				{ ( isAdministrator || options.show_global_setting ) && (
+				{ ( isAdministrator || options?.show_global_setting ) && (
 					<Button
 						icon={ cog }
 						variant="link"
@@ -188,7 +189,7 @@ export default function GlobalSettings() {
 					</p>
 				</Modal>
 			) }
-			{ isSettingModalOpen && ( isAdministrator || options.show_global_setting ) && (
+			{ options && isSettingModalOpen && ( isAdministrator || options?.show_global_setting ) && (
 				<Modal
 					title={ __( 'Flexible Table Block Global Setting', 'flexible-table-block' ) }
 					className="ftb-global-setting-modal"
@@ -281,8 +282,8 @@ export default function GlobalSettings() {
 						afterIcon={ desktop }
 						min={ MIN_RESPONSIVE_BREAKPOINT }
 						max={ MAX_RESPONSIVE_BREAKPOINT }
-						value={ parseInt( options.breakpoint ) }
-						renderTooltipContent={ breakpointTooltip }
+						value={ parseInt( options.breakpoint ) || undefined }
+						renderTooltipContent={ ( value ) => `${ value }px` }
 						trackColor="transparent"
 						allowReset
 						onChange={ ( value ) => {
