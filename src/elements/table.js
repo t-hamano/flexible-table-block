@@ -289,7 +289,7 @@ export default function Table( props ) {
 											vColIndex === 0 && (
 												<Button
 													className="ftb-table-cell-label"
-													tabIndex={ ! options.focus_control_button && -1 }
+													tabIndex={ options.focus_control_button ? 0 : -1 }
 													variant="primary"
 													onClick={ ( event ) => {
 														onSelectSectionCells( sectionName );
@@ -304,7 +304,7 @@ export default function Table( props ) {
 												{ rowIndex === 0 && vColIndex === 0 && (
 													<ButtonRowBeforeInserter
 														label={ __( 'Insert row before', 'flexible-table-block' ) }
-														tabIndex={ ! options.focus_control_button && -1 }
+														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
 														iconSize="18"
 														hasPrevSection={ sectionIndex > 0 }
@@ -318,7 +318,7 @@ export default function Table( props ) {
 													<>
 														<ButtonRowSelector
 															label={ __( 'Select row', 'flexible-table-block' ) }
-															tabIndex={ ! options.focus_control_button && -1 }
+															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ moreVertical }
 															iconSize="18"
 															variant={
@@ -336,7 +336,7 @@ export default function Table( props ) {
 															selectedLine?.rowIndex === rowIndex && (
 																<ButtonRowDeleter
 																	label={ __( 'Delete row', 'flexible-table-block' ) }
-																	tabIndex={ ! options.focus_control_button && -1 }
+																	tabIndex={ options.focus_control_button ? 0 : -1 }
 																	icon={ trash }
 																	iconSize={ 20 }
 																	onClick={ ( event ) => {
@@ -350,7 +350,7 @@ export default function Table( props ) {
 												{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
 													<ButtonColumnBeforeInserter
 														label={ __( 'Insert column before', 'flexible-table-block' ) }
-														tabIndex={ ! options.focus_control_button && -1 }
+														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
 														iconSize="18"
 														onClick={ ( event ) => {
@@ -363,7 +363,7 @@ export default function Table( props ) {
 													<>
 														<ButtonColumnSelector
 															label={ __( 'Select column', 'flexible-table-block' ) }
-															tabIndex={ ! options.focus_control_button && -1 }
+															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ moreHorizontal }
 															iconSize="18"
 															variant={
@@ -377,7 +377,7 @@ export default function Table( props ) {
 														{ selectedLine?.vColIndex === vColIndex && (
 															<ButtonColumnDeleter
 																label={ __( 'Delete column', 'flexible-table-block' ) }
-																tabIndex={ ! options.focus_control_button && -1 }
+																tabIndex={ options.focus_control_button ? 0 : -1 }
 																icon={ trash }
 																iconSize={ 20 }
 																onClick={ ( event ) => {
@@ -391,7 +391,7 @@ export default function Table( props ) {
 												{ vColIndex === 0 && (
 													<ButtonRowAfterInserter
 														label={ __( 'Insert row after', 'flexible-table-block' ) }
-														tabIndex={ ! options.focus_control_button && -1 }
+														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
 														iconSize="18"
 														hasNextSection={
@@ -429,7 +429,7 @@ export default function Table( props ) {
 											rowIndex === 0 && (
 												<ButtonColumnAfterInserter
 													label={ __( 'Insert column after', 'flexible-table-block' ) }
-													tabIndex={ ! options.focus_control_button && -1 }
+													tabIndex={ options.focus_control_button ? 0 : -1 }
 													icon={ plus }
 													iconSize="18"
 													onClick={ ( event ) => {
