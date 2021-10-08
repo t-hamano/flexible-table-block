@@ -318,6 +318,7 @@ export default function GlobalSettings() {
 							</ButtonGroup>
 						</BaseControl>
 					</div>
+					<hr />
 					<h2>{ __( 'Default Cell Style', 'flexible-table-block' ) }</h2>
 					<div className="ftb-global-setting-modal__styles">
 						<ColorControl
@@ -512,8 +513,8 @@ export default function GlobalSettings() {
 						</BaseControl>
 					</div>
 					<hr />
+					<h2>{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }</h2>
 					<RangeControl
-						label={ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
 						help={ __(
 							'Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.',
 							'flexible-table-block'
@@ -534,6 +535,7 @@ export default function GlobalSettings() {
 						} }
 					/>
 					<hr />
+					<h2>{ __( 'Options', 'flexible-table-block' ) }</h2>
 					<ToggleControl
 						label={ __( 'Show section labels in the editor', 'flexible-table-block' ) }
 						checked={ !! options.show_label_on_section }
