@@ -48,8 +48,6 @@ export default function Table( props ) {
 		vTable,
 		tableStylesObj,
 		selectMode,
-		selectedCell,
-		setSelectedCell,
 		selectedCells,
 		setSelectedCells,
 		selectedLine,
@@ -62,7 +60,6 @@ export default function Table( props ) {
 
 	const onInsertRow = ( sectionName, rowIndex ) => {
 		setAttributes( insertRow( attributes, { sectionName, rowIndex } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -81,7 +78,6 @@ export default function Table( props ) {
 		}
 
 		setAttributes( deleteRow( vTable, { sectionName, rowIndex } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -96,14 +92,12 @@ export default function Table( props ) {
 				  ( vTargetCell.colSpan ? parseInt( vTargetCell.colSpan ) - 1 : 0 );
 
 		setAttributes( insertColumn( vTable, { vColIndex } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onDeleteColumn = ( vColIndex ) => {
 		setAttributes( deleteColumn( vTable, { vColIndex } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -120,11 +114,8 @@ export default function Table( props ) {
 	const onSelectRow = ( sectionName, rowIndex ) => {
 		if ( selectedLine?.sectionName === sectionName && selectedLine?.rowIndex === rowIndex ) {
 			setSelectedLine();
-			setSelectedCell();
 			setSelectedCells();
 		} else {
-			const firstCell = vTable[ sectionName ][ rowIndex ][ 0 ];
-			setSelectedCell( firstCell );
 			setSelectedLine( { sectionName, rowIndex } );
 			setSelectedCells(
 				vTable[ sectionName ].reduce( ( cells, row ) => {
@@ -139,10 +130,8 @@ export default function Table( props ) {
 	const onSelectColumn = ( vColIndex ) => {
 		if ( selectedLine?.vColIndex === vColIndex ) {
 			setSelectedLine();
-			setSelectedCell();
 			setSelectedCells();
 		} else {
-			const firstCell = vTable.body[ 0 ][ vColIndex ];
 			const vRows = toVirtualRows( vTable );
 
 			setSelectedCells(
@@ -155,15 +144,18 @@ export default function Table( props ) {
 				)
 			);
 
-			setSelectedCell( firstCell );
 			setSelectedLine( { vColIndex } );
 		}
 	};
 
 	const onChangeCellContent = ( content ) => {
-		if ( ! selectedCell ) return;
+		if ( ( selectedCells || [] ).length !== 1 ) return;
 
-		const { sectionName, rowIndex: selectedRowIndex, vColIndex: selectedVColIndex } = selectedCell;
+		const {
+			sectionName,
+			rowIndex: selectedRowIndex,
+			vColIndex: selectedVColIndex,
+		} = selectedCells[ 0 ];
 
 		setAttributes( {
 			[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
@@ -193,8 +185,7 @@ export default function Table( props ) {
 		const { sectionName, rowIndex, vColIndex } = clickedCell;
 
 		if ( event.shiftKey ) {
-			setSelectedCells( toRectangledSelectedCells( vTable, [ selectedCell, clickedCell ] ) );
-			setSelectedCell( clickedCell );
+			setSelectedCells( toRectangledSelectedCells( vTable, [ selectedCells, clickedCell ] ) );
 		} else if ( event.ctrlKey || event.metaKey ) {
 			// Multple select.
 			const newSelectedCells = selectedCells ? [ ...selectedCells ] : [];
@@ -214,17 +205,14 @@ export default function Table( props ) {
 
 			if ( existCellIndex === -1 ) {
 				newSelectedCells.push( clickedCell );
-				setSelectedCell( clickedCell );
 			} else {
 				newSelectedCells.splice( existCellIndex, 1 );
-				setSelectedCell();
 			}
 
 			setSelectedCells( newSelectedCells );
 		} else {
 			// Select cell for the first time.
 			setSelectedCells( [ clickedCell ] );
-			setSelectedCell( clickedCell );
 		}
 	};
 
@@ -258,19 +246,12 @@ export default function Table( props ) {
 								const { content, tag, styles, rowSpan, colSpan, vColIndex } = cell;
 
 								// Whether or not the current cell is included in the selected cells.
-								let isCellSelected =
-									selectedCell?.sectionName === sectionName &&
-									selectedCell?.rowIndex === rowIndex &&
-									selectedCell?.vColIndex === vColIndex;
-
-								if ( selectedCells && selectedCells.length ) {
-									isCellSelected = !! selectedCells.some(
-										( targetCell ) =>
-											targetCell.sectionName === sectionName &&
-											targetCell.rowIndex === rowIndex &&
-											targetCell.vColIndex === vColIndex
-									);
-								}
+								const isCellSelected = ( selectedCells || [] ).some(
+									( targetCell ) =>
+										targetCell.sectionName === sectionName &&
+										targetCell.rowIndex === rowIndex &&
+										targetCell.vColIndex === vColIndex
+								);
 
 								const cellStylesObj = convertToObject( styles );
 
@@ -423,7 +404,6 @@ export default function Table( props ) {
 											onChange={ onChangeCellContent }
 											unstableOnFocus={ () => {
 												if ( ! selectMode ) {
-													setSelectedCell( cell );
 													setSelectedLine();
 													setSelectedCells( [ cell ] );
 												}

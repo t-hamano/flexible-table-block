@@ -9,7 +9,6 @@ export default function TableCaption( props ) {
 	const {
 		captionStylesObj,
 		setSelectedLine,
-		setSelectedCell,
 		setSelectedCells,
 		insertBlocksAfter,
 		attributes,
@@ -30,7 +29,6 @@ export default function TableCaption( props ) {
 			onChange={ onChange }
 			unstableOnFocus={ () => {
 				setSelectedLine();
-				setSelectedCell();
 				setSelectedCells();
 			} }
 			__unstableOnSplitAtEnd={ () => insertBlocksAfter( createBlock( 'core/paragraph' ) ) }

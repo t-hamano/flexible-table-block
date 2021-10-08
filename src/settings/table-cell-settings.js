@@ -47,7 +47,7 @@ import {
 } from '../utils/style-picker';
 
 export default function TableCellSettings( props ) {
-	const { vTable, selectedCell, selectedCells, attributes, setAttributes } = props;
+	const { vTable, selectedCells, attributes, setAttributes } = props;
 
 	const cellWidthUnits = useCustomUnits( { availableUnits: CELL_WIDTH_UNITS } );
 	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
@@ -57,9 +57,9 @@ export default function TableCellSettings( props ) {
 		return get( getSettings(), [ 'colors' ], [] );
 	} );
 
-	if ( ! selectedCell ) return null;
+	if ( ! ( selectedCells || [] ).length ) return null;
 
-	const { sectionName, rowIndex, colIndex } = selectedCell;
+	const { sectionName, rowIndex, colIndex } = selectedCells[ 0 ];
 
 	const targetCell = attributes[ sectionName ][ rowIndex ].cells[ colIndex ];
 

@@ -56,7 +56,6 @@ import { mergeCell, splitCell } from './icons';
 function TableEdit( props ) {
 	const { attributes, setAttributes } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
-	const [ selectedCell, setSelectedCell ] = useState();
 	const [ selectedCells, setSelectedCells ] = useState();
 	const [ selectedLine, setSelectedLine ] = useState();
 	const [ selectMode, setSelectMode ] = useState();
@@ -83,24 +82,23 @@ function TableEdit( props ) {
 	};
 
 	const onInsertRow = ( offset ) => {
-		if ( ! selectedCell ) return;
+		if ( ( selectedCells || [] ).length !== 1 ) return;
 
-		const { sectionName, rowIndex, rowSpan } = selectedCell;
+		const { sectionName, rowIndex, rowSpan } = selectedCells[ 0 ];
 
 		// Calculate row index to be inserted considering rowspan of the selected cell.
 		const insertRowIndex =
 			offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
 
 		setAttributes( insertRow( attributes, { sectionName, rowIndex: insertRowIndex } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onDeleteRow = () => {
-		if ( ! selectedCell ) return;
+		if ( ( selectedCells || [] ).length !== 1 ) return;
 
-		const { sectionName, rowIndex } = selectedCell;
+		const { sectionName, rowIndex } = selectedCells[ 0 ];
 
 		// Do not allow tbody to be empty for table with thead /tfoot sections.
 		if (
@@ -115,47 +113,42 @@ function TableEdit( props ) {
 		}
 
 		setAttributes( deleteRow( vTable, { sectionName, rowIndex } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onInsertColumn = ( offset ) => {
-		if ( ! selectedCell ) return;
+		if ( ( selectedCells || [] ).length !== 1 ) return;
 
-		const { vColIndex, colSpan } = selectedCell;
+		const { vColIndex, colSpan } = selectedCells[ 0 ];
 
 		// Calculate column index to be inserted considering colspan of the selected cell.
 		const insertVColIndex =
 			offset === 0 ? vColIndex : vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
 
 		setAttributes( insertColumn( vTable, { vColIndex: insertVColIndex } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onDeleteColumn = () => {
-		if ( ! selectedCell ) return;
+		if ( ( selectedCells || [] ).length !== 1 ) return;
 
-		const { vColIndex } = selectedCell;
+		const { vColIndex } = selectedCells[ 0 ];
 
 		setAttributes( deleteColumn( vTable, { vColIndex } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onMergeCells = () => {
 		setAttributes( mergeCells( vTable, { selectedCells } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onSplitMergedCells = () => {
 		setAttributes( splitMergedCells( vTable, { selectedCells } ) );
-		setSelectedCell();
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -164,37 +157,37 @@ function TableEdit( props ) {
 		{
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onInsertRow( 0 ),
 		},
 		{
 			icon: tableRowAfter,
 			title: __( 'Insert row after', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onInsertRow( 1 ),
 		},
 		{
 			icon: tableRowDelete,
 			title: __( 'Delete row', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onDeleteRow(),
 		},
 		{
 			icon: tableColumnBefore,
 			title: __( 'Insert column before', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onInsertColumn( 0 ),
 		},
 		{
 			icon: tableColumnAfter,
 			title: __( 'Insert column after', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onInsertColumn( 1 ),
 		},
 		{
 			icon: tableColumnDelete,
 			title: __( 'Delete column', 'flexible-table-block' ),
-			isDisabled: ! selectedCell || ( selectedCells && selectedCells.length > 1 ),
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onDeleteColumn(),
 		},
 		{
@@ -231,8 +224,6 @@ function TableEdit( props ) {
 		vTable,
 		tableStylesObj,
 		selectMode,
-		selectedCell,
-		setSelectedCell,
 		selectedCells,
 		setSelectedCells,
 		selectedLine,
@@ -248,7 +239,6 @@ function TableEdit( props ) {
 	const tableCellSettingsProps = {
 		...props,
 		vTable,
-		selectedCell,
 		selectedCells,
 	};
 
@@ -256,7 +246,6 @@ function TableEdit( props ) {
 		...props,
 		captionStylesObj,
 		setSelectedLine,
-		setSelectedCell,
 		setSelectedCells,
 	};
 
@@ -299,7 +288,7 @@ function TableEdit( props ) {
 						>
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
-						{ selectedCell && (
+						{ !! ( selectedCells || [] ).length && (
 							<PanelBody
 								title={ __( 'Cell Settings', 'flexible-table-block' ) }
 								initialOpen={ false }
