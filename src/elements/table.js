@@ -114,6 +114,7 @@ export default function Table( props ) {
 				return cells.concat( row.filter( ( cell ) => ! cell.isDelete ) );
 			}, [] )
 		);
+		setSelectedLine();
 	};
 
 	const onSelectRow = ( sectionName, rowIndex ) => {
