@@ -631,6 +631,7 @@ export default function GlobalSettings() {
 						<Button
 							isLink
 							variant="link"
+							isDestructive
 							disabled={ isWaiting }
 							onClick={ () => setIsResetPopup( ! isResetPopup ) }
 						>

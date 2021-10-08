@@ -8,14 +8,12 @@ import {
 	ButtonGroup,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
-	__experimentalToggleGroupControl as ToggleGroupControl,
-	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
-import { FONT_SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS } from '../constants';
+import { FONT_SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS, CAPTION_SIDE_CONTROLS } from '../constants';
 import { PaddingControl } from '../controls';
 import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
@@ -72,7 +70,7 @@ export default function TableCaptionSettings( props ) {
 			</BaseControl>
 			<BaseControl
 				id="flexible-table-block/caption-font-size"
-				label={ __( 'Font Size', 'flexible-table-block' ) }
+				label={ __( 'Caption Font Size', 'flexible-table-block' ) }
 			>
 				<UnitControl
 					value={ captionStylesObj?.fontSize }
@@ -83,28 +81,31 @@ export default function TableCaptionSettings( props ) {
 			</BaseControl>
 			<PaddingControl
 				id="flexible-table-block/caption-padding"
-				label={ __( 'Padding', 'flexible-table-block' ) }
+				label={ __( 'Caption Padding', 'flexible-table-block' ) }
 				values={ pickPadding( captionStylesObj ) }
 				onChange={ onChangeCaptionPadding }
 			/>
 			<BaseControl
 				id="flexible-table-block/caption-side"
-				label={ __( 'Position', 'flexible-table-block' ) }
+				label={ __( 'Caption Position', 'flexible-table-block' ) }
 			>
-				<ToggleGroupControl
-					value={ captionSide }
-					onChange={ ( value ) => onChangeCaptionSide( value ) }
-				>
-					<ToggleGroupControlOption label={ __( 'Top', 'flexible-table-block' ) } value="top" />
-					<ToggleGroupControlOption
-						label={ __( 'Bottom', 'flexible-table-block' ) }
-						value="bottom"
-					/>
-				</ToggleGroupControl>
+				<ButtonGroup className="ftb-button-group">
+					{ CAPTION_SIDE_CONTROLS.map( ( { label, value } ) => (
+						<Button
+							key={ value }
+							label={ label }
+							isPrimary={ captionSide === value }
+							variant={ captionSide === value ? 'primary' : undefined }
+							onClick={ () => onChangeCaptionSide( value ) }
+						>
+							{ label }
+						</Button>
+					) ) }
+				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
 				id="flexible-table-block/caption-align"
-				label={ __( 'Text alignment', 'flexible-table-block' ) }
+				label={ __( 'Caption Text alignment', 'flexible-table-block' ) }
 			>
 				<ButtonGroup className="ftb-button-group">
 					{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {

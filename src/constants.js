@@ -171,3 +171,14 @@ export const CELL_TAG_CONTROLS = [
 		value: 'td',
 	},
 ];
+
+export const CAPTION_SIDE_CONTROLS = [
+	{
+		label: __( 'Top', 'flexible-table-block' ),
+		value: 'top',
+	},
+	{
+		label: __( 'Bottom', 'flexible-table-block' ),
+		value: 'bottom',
+	},
+];
