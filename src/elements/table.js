@@ -47,6 +47,7 @@ export default function Table( props ) {
 		options,
 		vTable,
 		tableStylesObj,
+		selectMode,
 		selectedCell,
 		setSelectedCell,
 		selectedCells,
@@ -414,9 +415,11 @@ export default function Table( props ) {
 											value={ content }
 											onChange={ onChangeCellContent }
 											unstableOnFocus={ () => {
-												// setSelectedCell( cell );
-												// setSelectedLine();
-												// setSelectedCells( [ cell ] );
+												if ( ! selectMode ) {
+													setSelectedCell( cell );
+													setSelectedLine();
+													setSelectedCells( [ cell ] );
+												}
 											} }
 											aria-label={ CELL_ARIA_LABEL[ sectionName ] }
 										/>

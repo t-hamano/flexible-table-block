@@ -59,6 +59,7 @@ function TableEdit( props ) {
 	const [ selectedCell, setSelectedCell ] = useState();
 	const [ selectedCells, setSelectedCells ] = useState();
 	const [ selectedLine, setSelectedLine ] = useState();
+	const [ selectMode, setSelectMode ] = useState();
 
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
@@ -67,6 +68,19 @@ function TableEdit( props ) {
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable = toVirtualTable( attributes );
+
+	// Monitor pressed key to determine whether multi-select mode or range select mode.
+	const onKeyDown = ( event ) => {
+		if ( event.shiftKey ) {
+			setSelectMode( 'range' );
+		} else if ( event.ctrlKey || event.metakey ) {
+			setSelectMode( 'multi' );
+		}
+	};
+
+	const onKeyUp = () => {
+		setSelectMode();
+	};
 
 	const onInsertRow = ( offset ) => {
 		if ( ! selectedCell ) return;
@@ -216,6 +230,7 @@ function TableEdit( props ) {
 		options,
 		vTable,
 		tableStylesObj,
+		selectMode,
 		selectedCell,
 		setSelectedCell,
 		selectedCells,
@@ -258,7 +273,8 @@ function TableEdit( props ) {
 				</div>
 			) }
 			{ ! isEmpty && (
-				<figure { ...tableFigureProps }>
+				// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+				<figure { ...tableFigureProps } tabIndex="-1" onKeyDown={ onKeyDown } onKeyUp={ onKeyUp }>
 					<BlockControls group="block">
 						<JustifyContentControl
 							allowedControls={ JUSTIFY_CONTROLS }
