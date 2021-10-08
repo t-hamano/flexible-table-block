@@ -340,7 +340,12 @@
 
 // Modal Component Styles
 .ftb-global-setting-modal {
+	display: flex;
 	max-width: 600px;
+
+	@media (min-width: 960px) {
+		max-height: 70%;
+	}
 
 	h2 {
 		font-size: 1.2em;
@@ -351,8 +356,10 @@
 	}
 
 	.components-modal__content {
+		height: auto;
 		margin-bottom: 60px;
 		padding-bottom: 40px;
+		overflow: auto;
 	}
 
 	.components-range-control__mark {
