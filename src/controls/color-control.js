@@ -22,10 +22,11 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 
 export default function ColorControl( {
 	id,
-	label = __( 'Border Color', 'flexible-table-block' ),
+	label = __( 'Color', 'flexible-table-block' ),
 	help,
 	className,
 	onChange,
+	colors: colorsProp = [],
 	value,
 } ) {
 	const colors = useSelect( ( select ) => {
@@ -83,7 +84,11 @@ export default function ColorControl( {
 								position="top right"
 								onClose={ handleOnPickerClose }
 							>
-								<ColorPalette colors={ colors } value={ value } onChange={ handleOnChange } />
+								<ColorPalette
+									colors={ [ ...colors, ...colorsProp ] }
+									value={ value }
+									onChange={ handleOnChange }
+								/>
 							</Popover>
 						) }
 					</div>

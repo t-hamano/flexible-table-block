@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import { get } from 'lodash';
-
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -11,12 +6,9 @@ import {
 	BaseControl,
 	Button,
 	ButtonGroup,
-	ColorPalette,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
-import { store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -34,6 +26,7 @@ import {
 	BorderStyleControl,
 	BorderColorControl,
 	PaddingControl,
+	ColorControl,
 } from '../controls';
 import { toUnitVal } from '../utils/helper';
 import { updateCellsState } from '../utils/table-state';
@@ -51,11 +44,6 @@ export default function TableCellSettings( props ) {
 
 	const cellWidthUnits = useCustomUnits( { availableUnits: CELL_WIDTH_UNITS } );
 	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
-
-	const colors = useSelect( ( select ) => {
-		const { getSettings } = select( blockEditorStore );
-		return get( getSettings(), [ 'colors' ], [] );
-	} );
 
 	if ( ! ( selectedCells || [] ).length ) return null;
 
@@ -194,29 +182,25 @@ export default function TableCellSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			<hr />
-			<BaseControl
+			<ColorControl
 				id="flexible-table-block/cell-text-color"
 				label={ __( 'Cell Text Color', 'flexible-table-block' ) }
-			>
-				<ColorPalette colors={ colors } value={ cellStylesObj.color } onChange={ onChangeColor } />
-			</BaseControl>
-			<BaseControl
+				value={ cellStylesObj.color }
+				onChange={ onChangeColor }
+			/>
+			<ColorControl
 				id="flexible-table-block/cell-background-color"
 				label={ __( 'Cell Background Color', 'flexible-table-block' ) }
-			>
-				<ColorPalette
-					colors={ [
-						...colors,
-						{
-							name: __( 'Transparent', 'flexible-table-block' ),
-							slug: 'transparent',
-							color: 'transparent',
-						},
-					] }
-					value={ cellStylesObj.backgroundColor }
-					onChange={ onChangeBackgroundColor }
-				/>
-			</BaseControl>
+				value={ cellStylesObj.backgroundColor }
+				colors={ [
+					{
+						name: __( 'Transparent', 'flexible-table-block' ),
+						slug: 'transparent',
+						color: 'transparent',
+					},
+				] }
+				onChange={ onChangeBackgroundColor }
+			/>
 			<hr />
 			<PaddingControl
 				id="flexible-table-block/cell-padding"
