@@ -197,14 +197,32 @@ export default function TableCellSettings( props ) {
 				id="flexible-table-block/cell-text-color"
 				label={ __( 'Cell Text Color', 'flexible-table-block' ) }
 			>
-				<ColorPalette colors={ colors } value={ cellStylesObj.color } onChange={ onChangeColor } />
+				<ColorPalette
+					colors={ [
+						...colors,
+						{
+							name: __( 'Transparent', 'flexible-table-block' ),
+							slug: 'transparent',
+							color: 'transparent',
+						},
+					] }
+					value={ cellStylesObj.color }
+					onChange={ onChangeColor }
+				/>
 			</BaseControl>
 			<BaseControl
 				id="flexible-table-block/cell-background-color"
 				label={ __( 'Cell Background Color', 'flexible-table-block' ) }
 			>
 				<ColorPalette
-					colors={ colors }
+					colors={ [
+						...colors,
+						{
+							name: __( 'Transparent', 'flexible-table-block' ),
+							slug: 'transparent',
+							color: 'transparent',
+						},
+					] }
 					value={ cellStylesObj.backgroundColor }
 					onChange={ onChangeBackgroundColor }
 				/>
