@@ -16,6 +16,7 @@ import {
 	Spinner,
 	Popover,
 	Notice,
+	ExternalLink,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -159,38 +160,42 @@ export default function GlobalSettings() {
 			</div>
 			{ isHelpModalOpen && (
 				<Modal
-					title={ __( 'Help', 'flexible-table-block' ) }
+					title={ __( 'Flexible Table Block Help', 'flexible-table-block' ) }
 					className="ftb-global-help-modal"
 					onRequestClose={ () => setIsHelpModalOpen( false ) }
 				>
 					<h2>{ __( 'About Default Table Style', 'flexible-table-block' ) }</h2>
 					<p>
 						{ __(
-							'The default style of the table can be changed at "Default Table Style" and "Default Cell Style" in global settings. Alternatively, you can add styles by specifying the block class ( .wp-flexible-table-block-table ) in Theme Customize Additional CSS.',
+							'Flexible Table Block is a block that allows you to create tables in various styles.',
+							'flexible-table-block'
+						) }
+						<br />
+						{ __(
+							'First of all, it is recommended to set the default style of the table from "Global Settings".',
 							'flexible-table-block'
 						) }
 					</p>
 					<h2>{ __( 'Select Multiple Cells', 'flexible-table-block' ) }</h2>
 					<p>
 						{ __(
-							'Hold Ctrl key to select multiple cells or hold Shift key to select range. This is useful when you want to change styles of multiple cells.',
+							'Hold Ctrl key to select multiple cells or hold Shift key to select range.',
 							'flexible-table-block'
 						) }
-					</p>
-					<h2>{ __( 'Merge Cells', 'flexible-table-block' ) }</h2>
-					<p>
+						<br />
 						{ __(
-							'Press and hold Shift to select the needed cells, and select "Merge Cells" from toolbar.',
+							'Select multiple cells is used to merge cells or to change styles of multiple cells.',
 							'flexible-table-block'
 						) }
 					</p>
-					<h2>{ __( 'Split Cells', 'flexible-table-block' ) }</h2>
-					<p>
-						{ __(
-							'Select the merged cell and select "Split Cells" from toolbar.',
+					<ExternalLink
+						href={ __(
+							'https://github.com/t-hamano/flexible-table-block/wiki/English-Manual',
 							'flexible-table-block'
 						) }
-					</p>
+					>
+						{ __( 'Read more in the manual', 'flexible-table-block' ) }
+					</ExternalLink>
 				</Modal>
 			) }
 			{ options && isSettingModalOpen && ( isAdministrator || options?.show_global_setting ) && (
