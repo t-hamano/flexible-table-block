@@ -6,6 +6,7 @@ import {
 	BaseControl,
 	Button,
 	ButtonGroup,
+	TextControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -107,6 +108,11 @@ export default function TableCellSettings( props ) {
 
 	const onChangeTag = ( value ) => {
 		setAttributes( updateCellsState( vTable, { tag: value }, { selectedCells } ) );
+	};
+
+	const onChangeClass = ( value ) => {
+		const newValue = value !== '' ? value : undefined;
+		setAttributes( updateCellsState( vTable, { className: newValue }, { selectedCells } ) );
 	};
 
 	const onResetCellSettings = () => {
@@ -279,7 +285,7 @@ export default function TableCellSettings( props ) {
 			</BaseControl>
 			<hr />
 			<BaseControl
-				id="flexible-table-block/table-border-collapse"
+				id="flexible-table-block/cell-tag"
 				label={ __( 'Cell Tag', 'flexible-table-block' ) }
 			>
 				<ButtonGroup className="ftb-button-group">
@@ -297,6 +303,17 @@ export default function TableCellSettings( props ) {
 						);
 					} ) }
 				</ButtonGroup>
+			</BaseControl>
+			<BaseControl
+				id="flexible-table-block/cell-css"
+				label={ __( 'Cell CSS class(es)', 'flexible-table-block' ) }
+			>
+				<TextControl
+					autoComplete="off"
+					value={ targetCell.className || '' }
+					onChange={ onChangeClass }
+					help={ __( 'Separate multiple classes with spaces.' ) }
+				/>
 			</BaseControl>
 		</>
 	);

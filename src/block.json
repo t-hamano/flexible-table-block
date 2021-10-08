@@ -85,6 +85,11 @@
 							"type": "string",
 							"default": "td",
 							"source": "tag"
+						},
+						"className": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "class"
 						}
 					}
 				}
@@ -125,6 +130,11 @@
 							"type": "string",
 							"default": "td",
 							"source": "tag"
+						},
+						"className": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "class"
 						}
 					}
 				}
@@ -165,6 +175,11 @@
 							"type": "string",
 							"default": "td",
 							"source": "tag"
+						},
+						"className": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "class"
 						}
 					}
 				}

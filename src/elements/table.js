@@ -243,7 +243,7 @@ export default function Table( props ) {
 					{ filteredVTable[ sectionName ].map( ( row, rowIndex ) => (
 						<tr key={ rowIndex }>
 							{ row.map( ( cell ) => {
-								const { content, tag, styles, rowSpan, colSpan, vColIndex } = cell;
+								const { content, tag, className, styles, rowSpan, colSpan, vColIndex } = cell;
 
 								// Whether or not the current cell is included in the selected cells.
 								const isCellSelected = ( selectedCells || [] ).some(
@@ -259,7 +259,7 @@ export default function Table( props ) {
 									<Cell
 										key={ vColIndex }
 										name={ tag }
-										className={ classnames( { 'is-selected': isCellSelected } ) }
+										className={ classnames( className, { 'is-selected': isCellSelected } ) }
 										rowSpan={ rowSpan }
 										colSpan={ colSpan }
 										style={ cellStylesObj }

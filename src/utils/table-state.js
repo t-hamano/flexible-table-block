@@ -561,6 +561,7 @@ export function updateCellsState( vTable, cellState, { selectedCells } ) {
 						...cell,
 						styles: convertToInline( stylesObj ),
 						tag: cellState.tag || cell.tag,
+						className: cellState.className || undefined,
 					};
 				}, [] )
 				// Delete cells marked as deletion.
