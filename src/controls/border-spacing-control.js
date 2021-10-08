@@ -127,8 +127,8 @@ export default function BorderSpacingControl( {
 					<Tooltip text={ linkedLabel }>
 						<span>
 							<Button
-								variant={ isLinked ? 'primary' : 'secondary' }
 								isSmall
+								variant={ isLinked ? 'primary' : 'secondary' }
 								icon={ isLinked ? link : linkOff }
 								iconSize="16"
 								onClick={ toggleLinked }

@@ -176,7 +176,7 @@ export default function TableSettings( props ) {
 				id="flexible-table-block/clear-table-settings"
 				className="ftb-reset-settings-control"
 			>
-				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
+				<Button isLink variant="link" isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear Table Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -274,6 +274,7 @@ export default function TableSettings( props ) {
 						return (
 							<Button
 								key={ perWidth }
+								isPrimary={ isPressed }
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () => onChangeWidth( isPressed ? undefined : `${ perWidth }%` ) }
@@ -300,6 +301,7 @@ export default function TableSettings( props ) {
 						return (
 							<Button
 								key={ perWidth }
+								isPrimary={ isPressed }
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () => onChangeMaxWidth( isPressed ? undefined : `${ perWidth }%` ) }
@@ -326,6 +328,7 @@ export default function TableSettings( props ) {
 						return (
 							<Button
 								key={ perWidth }
+								isPrimary={ isPressed }
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () => onChangeMinWidth( isPressed ? undefined : `${ perWidth }%` ) }
@@ -379,6 +382,8 @@ export default function TableSettings( props ) {
 						return (
 							<Button
 								key={ value }
+								isPrimary={ value === tableStylesObj?.borderCollapse }
+								isSecondary={ value !== tableStylesObj?.borderCollapse }
 								variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
 								icon={ icon }
 								onClick={ () => onChangeBorderCollapse( value ) }

@@ -66,7 +66,7 @@ export default function TableCaptionSettings( props ) {
 				id="flexible-table-block/clear-caption-settings"
 				className="ftb-reset-settings-control"
 			>
-				<Button variant="link" isDestructive onClick={ onResetCaptionSettings }>
+				<Button isLink variant="link" isDestructive onClick={ onResetCaptionSettings }>
 					{ __( 'Clear Caption Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -112,6 +112,8 @@ export default function TableCaptionSettings( props ) {
 							<Button
 								key={ value }
 								label={ label }
+								isPrimary={ value === captionStylesObj?.textAlign }
+								isSecondary={ value !== captionStylesObj?.textAlign }
 								variant={ value === captionStylesObj?.textAlign ? 'primary' : 'secondary' }
 								icon={ icon }
 								onClick={ () => onChangeCaptionAlign( value ) }

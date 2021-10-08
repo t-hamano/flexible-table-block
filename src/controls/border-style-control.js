@@ -120,8 +120,9 @@ export default function BorderStyleControl( {
 										key={ borderStyle.value }
 										label={ borderStyle.label }
 										icon={ borderStyle.icon }
-										variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
 										isSmall
+										isPrimary={ allInputValue === borderStyle.value }
+										variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
 										onClick={ () => handleOnClickAll( borderStyle.value ) }
 									/>
 								) ) }
@@ -139,6 +140,7 @@ export default function BorderStyleControl( {
 												key={ borderStyle.value }
 												label={ borderStyle.label }
 												icon={ borderStyle.icon }
+												isPrimary={ values[ item.value ] === borderStyle.value }
 												variant={
 													values[ item.value ] === borderStyle.value ? 'primary' : undefined
 												}
@@ -155,8 +157,10 @@ export default function BorderStyleControl( {
 					<Tooltip text={ linkedLabel }>
 						<span>
 							<Button
-								variant={ isLinked ? 'primary' : 'secondary' }
 								isSmall
+								isPrimary={ isLinked }
+								isSecondary={ ! isLinked }
+								variant={ isLinked ? 'primary' : 'secondary' }
 								onClick={ toggleLinked }
 								icon={ isLinked ? link : linkOff }
 								iconSize="16"

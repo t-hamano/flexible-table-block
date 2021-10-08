@@ -133,8 +133,10 @@ export default function BorderWidthControl( {
 					<Tooltip text={ linkedLabel }>
 						<span>
 							<Button
-								variant={ isLinked ? 'primary' : 'secondary' }
 								isSmall
+								isPrimary={ isLinked }
+								isSecondary={ ! isLinked }
+								variant={ isLinked ? 'primary' : 'secondary' }
 								icon={ isLinked ? link : linkOff }
 								iconSize="16"
 								onClick={ toggleLinked }

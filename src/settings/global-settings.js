@@ -136,8 +136,9 @@ export default function GlobalSettings() {
 			<div className="ftb-global-setting">
 				<Button
 					icon={ help }
-					variant="link"
 					isSmall
+					isLink
+					variant="link"
 					iconSize="16"
 					onClick={ () => setIsHelpModalOpen( true ) }
 				>
@@ -146,8 +147,9 @@ export default function GlobalSettings() {
 				{ ( isAdministrator || options?.show_global_setting ) && (
 					<Button
 						icon={ cog }
-						variant="primary"
 						isSmall
+						isPrimary
+						variant="primary"
 						iconSize="16"
 						onClick={ () => setIsSettingModalOpen( true ) }
 					>
@@ -293,6 +295,8 @@ export default function GlobalSettings() {
 									return (
 										<Button
 											key={ value }
+											isPrimary={ value === options.block_style?.table_border_collapse }
+											isSecondary={ value !== options.block_style?.table_border_collapse }
 											variant={
 												value === options.block_style?.table_border_collapse
 													? 'primary'
@@ -460,6 +464,8 @@ export default function GlobalSettings() {
 										<Button
 											key={ value }
 											label={ label }
+											isPrimary={ value === options.block_style?.cell_text_align }
+											isSecondary={ value !== options.block_style?.cell_text_align }
 											variant={
 												value === options.block_style?.cell_text_align ? 'primary' : 'secondary'
 											}
@@ -491,6 +497,8 @@ export default function GlobalSettings() {
 										<Button
 											key={ value }
 											label={ label }
+											isPrimary={ value === options.block_style?.cell_vertical_align }
+											isSecondary={ value !== options.block_style?.cell_vertical_align }
 											variant={
 												value === options.block_style?.cell_vertical_align ? 'primary' : 'secondary'
 											}
@@ -612,10 +620,16 @@ export default function GlobalSettings() {
 						</Notice>
 					) }
 					<div className="ftb-global-setting-modal__buttons">
-						<Button variant="primary" disabled={ isWaiting } onClick={ handleUpdateOptions }>
+						<Button
+							isPrimary
+							variant="primary"
+							disabled={ isWaiting }
+							onClick={ handleUpdateOptions }
+						>
 							{ __( 'Save', 'flexible-table-block' ) }
 						</Button>
 						<Button
+							isLink
 							variant="link"
 							disabled={ isWaiting }
 							onClick={ () => setIsResetPopup( ! isResetPopup ) }
@@ -633,7 +647,11 @@ export default function GlobalSettings() {
 										<Button isDestructive onClick={ handleResetOptions }>
 											{ __( 'Reset', 'flexible-table-block' ) }
 										</Button>
-										<Button variant="secondary" onClick={ () => setIsResetPopup( false ) }>
+										<Button
+											isSecondary
+											variant="secondary"
+											onClick={ () => setIsResetPopup( false ) }
+										>
 											{ __( 'Cancel', 'flexible-table-block' ) }
 										</Button>
 									</div>

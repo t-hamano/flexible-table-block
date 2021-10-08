@@ -290,6 +290,7 @@ export default function Table( props ) {
 												<Button
 													className="ftb-table-cell-label"
 													tabIndex={ options.focus_control_button ? 0 : -1 }
+													isPrimary
 													variant="primary"
 													onClick={ ( event ) => {
 														onSelectSectionCells( sectionName );
@@ -321,6 +322,10 @@ export default function Table( props ) {
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ moreVertical }
 															iconSize="18"
+															isPrimary={
+																selectedLine?.sectionName === sectionName &&
+																selectedLine?.rowIndex === rowIndex
+															}
 															variant={
 																selectedLine?.sectionName === sectionName &&
 																selectedLine?.rowIndex === rowIndex
@@ -366,6 +371,7 @@ export default function Table( props ) {
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ moreHorizontal }
 															iconSize="18"
+															isPrimary={ selectedLine?.vColIndex === vColIndex }
 															variant={
 																selectedLine?.vColIndex === vColIndex ? 'primary' : undefined
 															}
