@@ -2,7 +2,7 @@
 
 ここにメイン画像
 
-ここに説明文ここに説明文ここに説明文ここに説明文ここに説明文ここに説明文ここに説明文ここに説明文ここに説明文ここに説明文
+"Flexible Table Block" is a custom block plugin for the WordPress block editor that allows you to create tables in any configuration.
 
-- [English Manual](docs/README_EN.md)
-- [日本語マニュアル](docs/README_JP.md)
+- [English Manual](https://github.com/t-hamano/flexible-table-block/wiki/English-Manual)
+- [日本語マニュアル](https://github.com/t-hamano/flexible-table-block/wiki/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB)
