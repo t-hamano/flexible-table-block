@@ -16,13 +16,13 @@ import {
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
-	__experimentalParseUnit as parseUnit,
 } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH } from '../constants';
+import { parseUnit } from '../utils/helper';
 import { SIDES, SideIndicatorControl } from './indicator-control';
 
 const DEFAULT_VALUES = {

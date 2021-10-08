@@ -16,13 +16,13 @@ import {
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
-	__experimentalParseUnit as parseUnit,
 } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING } from '../constants';
+import { parseUnit } from '../utils/helper';
 import { DIRECTIONS, DirectionIndicatorControl } from './indicator-control';
 
 const DEFAULT_VALUES = {
@@ -128,6 +128,8 @@ export default function BorderSpacingControl( {
 						<span>
 							<Button
 								isSmall
+								isPrimary={ isLinked }
+								isSecondary={ ! isLinked }
 								variant={ isLinked ? 'primary' : 'secondary' }
 								icon={ isLinked ? link : linkOff }
 								iconSize="16"
