@@ -48,7 +48,7 @@ class Enqueue {
 		);
 
 		$responsive_css = Helper::get_responsive_css();
-		$block_css      = Helper::get_block_css();
+		$block_css      = Helper::get_block_css( '.' . FTB_BLOCK_CLASS );
 		$css            = Helper::minify_css( $block_css . $responsive_css );
 		wp_add_inline_style( FTB_NAMESPACE, $css );
 	}

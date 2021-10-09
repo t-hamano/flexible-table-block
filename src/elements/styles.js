@@ -74,13 +74,13 @@ export const ButtonColumnAfterInserter = styled( ButtonInserter )`
 `;
 
 const ButtonSelector = styled( Button )`
-	background: #eaeaea;
-	position: absolute;
-
 	&.components-button.has-icon {
 		min-width: 0;
 		padding: 0;
 		justify-content: center;
+		background: #eaeaea;
+		position: absolute;
+		color: #1e1e1e;
 
 		&.has-text {
 			justify-content: center;
@@ -93,30 +93,33 @@ const ButtonSelector = styled( Button )`
 `;
 
 export const ButtonRowSelector = styled( ButtonSelector )`
-	left: -20px;
-	border-radius: 2px 0 0 2px;
-	width: 18px;
-	height: calc( 100% - 2px );
-	top: 1px;
+	&.components-button.has-icon {
+		left: -20px;
+		border-radius: 2px 0 0 2px;
+		width: 18px;
+		height: calc( 100% - 2px );
+		top: 1px;
+	}
 `;
 
 export const ButtonColumnSelector = styled( ButtonSelector )`
-	left: 1px;
-	border-radius: 2px 2px 0 0;
-	height: 18px;
-	width: calc( 100% - 2px );
-	top: -20px;
+	&.components-button.has-icon {
+		left: 1px;
+		border-radius: 2px 2px 0 0;
+		height: 18px;
+		width: calc( 100% - 2px );
+		top: -20px;
+	}
 `;
 
 const ButtonDeleter = styled( Button )`
-	background: #fff;
-	border: 1px solid #ccc;
-	border-radius: 2px;
-	box-shadow: 0 2px 6px rgba( 0, 0, 0, 0.05 );
-	position: absolute;
-	z-index: 1;
-
 	&.components-button.has-icon {
+		background: #fff;
+		border: 1px solid #ccc;
+		border-radius: 2px;
+		box-shadow: 0 2px 6px rgba( 0, 0, 0, 0.05 );
+		position: absolute;
+		z-index: 1;
 		min-width: 0;
 		padding: 0;
 		width: 30px;
@@ -125,12 +128,16 @@ const ButtonDeleter = styled( Button )`
 `;
 
 export const ButtonRowDeleter = styled( ButtonDeleter )`
-	left: -55px;
-	top: -15px;
+	&.components-button.has-icon {
+		left: -55px;
+		top: -15px;
+	}
 `;
 
 export const ButtonColumnDeleter = styled( ButtonDeleter )`
-	left: 50%;
-	margin-left: -15px;
-	top: -55px;
+	&.components-button.has-icon {
+		left: 50%;
+		margin-left: -15px;
+		top: -55px;
+	}
 `;

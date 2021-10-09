@@ -17,15 +17,15 @@ class Helper {
 		$selector = "${prefix}." . FTB_BLOCK_CLASS;
 
 		$styles = array(
-			"${selector} table"                          => '',
+			"${selector} > table"       => '',
 			"${selector}.is-style-stripes tr:nth-child(odd) th" => '',
 			"${selector}.is-style-stripes tr:nth-child(odd) td" => '',
 			"${selector}.is-style-stripes tr:nth-child(even) th" => '',
 			"${selector}.is-style-stripes tr:nth-child(even) td" => '',
-			"${selector} table th, ${selector} table td" => '',
-			"${selector} table th"                       => '',
-			"${selector} table td"                       => '',
-			"${selector} table th, ${selector} table td" => '',
+			"${selector} > table tr th, ${selector} > table tr td" => '',
+			"${selector} > table tr th" => '',
+			"${selector} > table tr td" => '',
+			"${selector} > table tr th, ${selector} table > tr td" => '',
 		);
 
 		$option = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
@@ -40,13 +40,13 @@ class Helper {
 
 			switch ( $key ) {
 				case 'table_width':
-					$styles[ "${selector} table" ] .= "width:${value};";
+					$styles[ "${selector} > table" ] .= "width:${value};";
 					break;
 				case 'table_max_width':
-					$styles[ "${selector} table" ] .= "max-width:${value};";
+					$styles[ "${selector} > table" ] .= "max-width:${value};";
 					break;
 				case 'table_border_collapse':
-					$styles[ "${selector} table" ] .= "border-collapse:${value};";
+					$styles[ "${selector} > table" ] .= "border-collapse:${value};";
 					break;
 				case 'row_odd_color':
 					$styles[ "${selector}.is-style-stripes tr:nth-child(odd) th" ] .= "background-color:${value};";
@@ -57,34 +57,34 @@ class Helper {
 					$styles[ "${selector}.is-style-stripes tr:nth-child(even) td" ] .= "background-color:${value};";
 					break;
 				case 'cell_text_align':
-					$styles[ "${selector} table th, ${selector} table td" ] .= "text-align:${value};";
+					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "text-align:${value};";
 					break;
 				case 'cell_vertical_align':
-					$styles[ "${selector} table th, ${selector} table td" ] .= "vertical-align:${value};";
+					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "vertical-align:${value};";
 					break;
 				case 'cell_text_color_th':
-					$styles[ "${selector} table th" ] .= "color:${value};";
+					$styles[ "${selector} > table tr th" ] .= "color:${value};";
 					break;
 				case 'cell_text_color_td':
-					$styles[ "${selector} table td" ] .= "color:${value};";
+					$styles[ "${selector} > table tr td" ] .= "color:${value};";
 					break;
 				case 'cell_background_color_th':
-					$styles[ "${selector} table th" ] .= "background-color:${value};";
+					$styles[ "${selector} > table tr th" ] .= "background-color:${value};";
 					break;
 				case 'cell_background_color_td':
-					$styles[ "${selector} table td" ] .= "background-color:${value};";
+					$styles[ "${selector} > table tr td" ] .= "background-color:${value};";
 					break;
 				case 'cell_padding':
-					$styles[ "${selector} table th, ${selector} table td" ] .= "padding:${value};";
+					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "padding:${value};";
 					break;
 				case 'cell_border_width':
-					$styles[ "${selector} table th, ${selector} table td" ] .= "border-width:${value};";
+					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "border-width:${value};";
 					break;
 				case 'cell_border_style':
-					$styles[ "${selector} table th, ${selector} table td" ] .= "border-style:${value};";
+					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "border-style:${value};";
 					break;
 				case 'cell_border_color':
-					$styles[ "${selector} table th, ${selector} table td" ] .= "border-color:${value};";
+					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "border-color:${value};";
 					break;
 			}
 		}
