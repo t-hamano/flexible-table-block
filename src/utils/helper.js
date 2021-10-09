@@ -279,15 +279,21 @@ export function isRectangleSelected( selectedCells ) {
 		if ( rowIndex in vRange && vColIndex in vRange[ rowIndex ] ) {
 			vRange[ rowIndex ][ vColIndex ] = true;
 
-			if ( rowSpan ) {
-				for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
-					vRange[ rowIndex + i ][ vColIndex ] = true;
-				}
-			}
-
 			if ( colSpan ) {
 				for ( let i = 1; i < parseInt( colSpan ); i++ ) {
 					vRange[ rowIndex ][ vColIndex + i ] = true;
+				}
+			}
+
+			if ( rowSpan ) {
+				for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
+					vRange[ rowIndex + i ][ vColIndex ] = true;
+
+					if ( colSpan ) {
+						for ( let j = 1; j < parseInt( colSpan ); j++ ) {
+							vRange[ rowIndex + i ][ vColIndex + j ] = true;
+						}
+					}
 				}
 			}
 		}
