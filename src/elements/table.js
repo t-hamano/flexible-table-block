@@ -185,7 +185,12 @@ export default function Table( props ) {
 		const { sectionName, rowIndex, vColIndex } = clickedCell;
 
 		if ( event.shiftKey ) {
-			setSelectedCells( toRectangledSelectedCells( vTable, [ selectedCells, clickedCell ] ) );
+			// Range select.
+			const fromCell = selectedCells.find( ( { isFirstSelected } ) => isFirstSelected );
+
+			if ( ! fromCell ) return;
+
+			setSelectedCells( toRectangledSelectedCells( vTable, { fromCell, toCell: clickedCell } ) );
 		} else if ( event.ctrlKey || event.metaKey ) {
 			// Multple select.
 			const newSelectedCells = selectedCells ? [ ...selectedCells ] : [];
@@ -212,7 +217,7 @@ export default function Table( props ) {
 			setSelectedCells( newSelectedCells );
 		} else {
 			// Select cell for the first time.
-			setSelectedCells( [ clickedCell ] );
+			setSelectedCells( [ { ...clickedCell, isFirstSelected: true } ] );
 		}
 	};
 
@@ -405,7 +410,7 @@ export default function Table( props ) {
 											unstableOnFocus={ () => {
 												if ( ! selectMode ) {
 													setSelectedLine();
-													setSelectedCells( [ cell ] );
+													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
 												}
 											} }
 											aria-label={ CELL_ARIA_LABEL[ sectionName ] }

@@ -302,108 +302,120 @@ export function isRectangleSelected( selectedCells ) {
 }
 
 /**
- * Converts the selected cells to new selected cells that represent a rectangle considering merged cells.
+ * Return a set of cells from the start cell and the end cell that will form a rectangle, taking into account the join cells.
  *
- * @param {Object} vTable        Current virtual table state.
- * @param {Array}  selectedCells Current selected multi cell.
+ * @param {Object} vTable           Current virtual table state.
+ * @param {Object} options
+ * @param {Object} options.fromCell Start cell of the selected range.
+ * @param {Object} options.toCell   End cell of the selected range.
  * @return {Array} Selected cells that represent a rectangle.
  */
-export function toRectangledSelectedCells( vTable, selectedCells ) {
-	if ( ! selectedCells ) return [];
-
-	// No need to merge If only one or no cell is selected.
-	if ( selectedCells.length <= 1 ) return [];
+export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
+	if ( ! fromCell || ! toCell ) return [];
 
 	// Check if multiple sections are selected.
-	if ( isMultiSectionSelected( selectedCells ) ) return [];
+	if ( fromCell.sectionName !== toCell.sectionName ) return [];
 
 	// Get the minimum / maximum virtual indexes of the matrix from the selected cells.
-	const vRangeIndexes = getVirtualRange( selectedCells );
+	const vRangeIndexes = getVirtualRange( [ fromCell, toCell ] );
 
 	let isRectangled = false;
 
 	let { minRowIndex, maxRowIndex, minColIndex, maxColIndex } = vRangeIndexes;
 
-	const { sectionName } = selectedCells[ 0 ];
-	const vSection = vTable[ sectionName ];
-
+	const vSection = vTable[ fromCell.sectionName ];
 	const vRowCount = vSection.length;
 	const vColCount = vSection[ 0 ].length;
 
 	const vCells = vSection
 		.reduce( ( cells, row ) => cells.concat( row ), [] )
+		.map( ( cell ) => {
+			if ( cell.rowIndex === fromCell.rowIndex && cell.vColIndex === fromCell.vColIndex ) {
+				cell.isFirstSelected = true;
+			}
+			return cell;
+		} )
 		.filter( ( cell ) => ! cell.isDelete );
 
 	// Expand the rectangle if there is a combined cell that passes through each edge.
 	while ( ! isRectangled ) {
-		// Top side.
-		const topCells = vCells.filter( ( result, cell ) => {
+		// Extend the virtual range to top if there are cells that overlap to top.
+		const topCells = vCells.filter( ( cell ) => {
 			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
 			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
 
 			return (
+				( ( cell.vColIndex + colSpan >= minColIndex && cell.vColIndex + colSpan <= maxColIndex ) ||
+					( cell.vColIndex >= minColIndex && cell.vColIndex <= maxColIndex ) ) &&
 				cell.rowIndex < minRowIndex &&
-				cell.vColIndex + colSpan >= minColIndex &&
-				cell.vColIndex + colSpan <= maxColIndex &&
-				cell.rowIndex + rowSpan >= minRowIndex
+				cell.rowIndex + rowSpan >= minRowIndex &&
+				cell.rowSpan
 			);
 		} );
 
 		const isTopFixed = minRowIndex === 0 || ! topCells.length;
 		if ( ! isTopFixed ) minRowIndex--;
 
-		// Right side.
-		const rightCells = vCells.filter( ( result, cell ) => {
+		// Extend the virtual range to right if there are cells that overlap to right.
+		const rightCells = vCells.filter( ( cell ) => {
 			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
+			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
 
 			return (
-				cell.rowIndex <= minRowIndex &&
-				cell.vColIndex >= minColIndex &&
+				( ( cell.rowIndex + rowSpan >= minRowIndex && cell.rowIndex + rowSpan <= maxRowIndex ) ||
+					( cell.rowIndex >= minRowIndex && cell.rowIndex <= maxRowIndex ) ) &&
 				cell.vColIndex <= maxColIndex &&
-				cell.rowIndex + rowSpan >= minRowIndex
+				cell.vColIndex + colSpan > maxColIndex &&
+				cell.colSpan
 			);
 		} );
 
 		const isRightFixed = maxColIndex === vColCount - 1 || ! rightCells.length;
 		if ( ! isRightFixed ) maxColIndex++;
 
-		// Bottom side.
+		// Extend the virtual range to bottom if there are cells that overlap to bottom.
 		const bottomCells = vCells.filter( ( cell ) => {
 			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
+			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
+
 			return (
-				cell.rowndex < maxRowIndex &&
-				cell.vColIndex >= minColIndex &&
-				cell.vColIndex <= maxColIndex &&
-				cell.rowIndex + rowSpan >= maxRowIndex
+				( ( cell.vColIndex + colSpan >= minColIndex && cell.vColIndex + colSpan <= maxColIndex ) ||
+					( cell.vColIndex >= minColIndex && cell.vColIndex <= maxColIndex ) ) &&
+				cell.rowIndex <= maxRowIndex &&
+				cell.rowIndex + rowSpan > maxRowIndex &&
+				cell.rowSpan
 			);
 		} );
 
 		const isBottomFixed = maxRowIndex === vRowCount - 1 || ! bottomCells.length;
 		if ( ! isBottomFixed ) maxRowIndex++;
 
-		// Left side.
-		const leftCells = vCells.filter( ( result, cell ) => {
+		// Extend the virtual range to left if there are cells that overlap to left.
+		const leftCells = vCells.filter( ( cell ) => {
+			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
 			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
+
 			return (
+				( ( cell.rowIndex + rowSpan >= minRowIndex && cell.rowIndex + rowSpan <= maxRowIndex ) ||
+					( cell.rowIndex >= minRowIndex && cell.rowIndex <= maxRowIndex ) ) &&
 				cell.vColIndex < minColIndex &&
-				cell.rowIndex >= minRowIndex &&
-				cell.rowIndex <= maxRowIndex &&
-				cell.vColIndex + colSpan >= minColIndex
+				cell.vColIndex + colSpan >= minColIndex &&
+				cell.colSpan
 			);
 		} );
 
-		const isleftFixed = minColIndex === 0 || ! leftCells.length;
-		if ( ! isleftFixed ) minColIndex--;
+		const isLeftFixed = maxColIndex === vColCount - 1 || ! leftCells.length;
+		if ( ! isLeftFixed ) minColIndex--;
 
-		isRectangled = isTopFixed && isRightFixed && isBottomFixed && isleftFixed;
+		isRectangled = isTopFixed && isRightFixed && isBottomFixed && isLeftFixed;
 	}
 
 	// Cells in the newly computed rectangle.
 	return vCells.filter(
 		( cell ) =>
 			cell.rowIndex >= minRowIndex &&
-			cell.rowIndex <= maxColIndex &&
-			cell.vColIndex >= minRowIndex &&
+			cell.rowIndex <= maxRowIndex &&
+			cell.vColIndex >= minColIndex &&
 			cell.vColIndex <= maxColIndex
 	);
 }
