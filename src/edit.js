@@ -242,6 +242,11 @@ function TableEdit( props ) {
 		selectedCells,
 	};
 
+	const tableCellSettingsLabel =
+		( selectedCells || [] ).length > 1
+			? __( 'Multi Cells Settings', 'flexible-table-block' )
+			: __( 'Cell Settings', 'flexible-table-block' );
+
 	const tableCaptionProps = {
 		...props,
 		captionStylesObj,
@@ -289,10 +294,7 @@ function TableEdit( props ) {
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
 						{ !! ( selectedCells || [] ).length && (
-							<PanelBody
-								title={ __( 'Cell Settings', 'flexible-table-block' ) }
-								initialOpen={ false }
-							>
+							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
 								<TableCellSettings { ...tableCellSettingsProps } />
 							</PanelBody>
 						) }
