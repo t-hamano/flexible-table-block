@@ -357,6 +357,7 @@ export default function TableSettings( props ) {
 			<BorderWidthControl
 				id="flexible-table-block/table-border-width"
 				label={ __( 'Table Border Width', 'flexible-table-block' ) }
+				help='Table border width is only enable when "cell borders" is set to "separate".'
 				values={ pickBorderWidth( tableStylesObj ) }
 				onChange={ onChangeBorderWidth }
 			/>
