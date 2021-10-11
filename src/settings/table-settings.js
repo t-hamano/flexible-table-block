@@ -97,7 +97,7 @@ export default function TableSettings( props ) {
 	const onChangeWidth = ( value ) => {
 		const newStylesObj = {
 			...tableStylesObj,
-			width: toUnitVal( value ),
+			width: value,
 		};
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
@@ -105,7 +105,7 @@ export default function TableSettings( props ) {
 	const onChangeMaxWidth = ( value ) => {
 		const newStylesObj = {
 			...tableStylesObj,
-			maxWidth: toUnitVal( value ),
+			maxWidth: value,
 		};
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
@@ -113,7 +113,7 @@ export default function TableSettings( props ) {
 	const onChangeMinWidth = ( value ) => {
 		const newStylesObj = {
 			...tableStylesObj,
-			minWidth: toUnitVal( value ),
+			minWidth: value,
 		};
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
@@ -262,11 +262,12 @@ export default function TableSettings( props ) {
 				<UnitControl
 					value={ tableStylesObj?.width }
 					units={ tableWidthUnits }
+					disabled={ tableStylesObj?.width === 'auto' }
 					min="0"
 					onChange={ onChangeWidth }
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Table Percentage width', 'flexible-table-block' ) }
+					aria-label={ __( 'Table Percentage Width', 'flexible-table-block' ) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -277,12 +278,22 @@ export default function TableSettings( props ) {
 								isPrimary={ isPressed }
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
-								onClick={ () => onChangeWidth( isPressed ? undefined : `${ perWidth }%` ) }
+								onClick={ () =>
+									onChangeWidth( isPressed ? undefined : toUnitVal( `${ perWidth }%` ) )
+								}
 							>
 								{ `${ perWidth }%` }
 							</Button>
 						);
 					} ) }
+					<Button
+						isPrimary={ tableStylesObj?.width === 'auto' }
+						variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
+						isSmall
+						onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? undefined : 'auto' ) }
+					>
+						{ __( 'auto', 'flexible-table-block' ) }
+					</Button>
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
@@ -292,10 +303,14 @@ export default function TableSettings( props ) {
 				<UnitControl
 					value={ tableStylesObj?.maxWidth }
 					units={ tableWidthUnits }
+					disabled={ tableStylesObj?.maxWidth === 'none' }
 					min="0"
 					onChange={ onChangeMaxWidth }
 				/>
-				<ButtonGroup aria-label={ __( 'Percentage max width' ) } className="ftb-percent-group">
+				<ButtonGroup
+					aria-label={ __( 'Table Percentage Max Width' ) }
+					className="ftb-percent-group"
+				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
 						const isPressed = tableStylesObj?.maxWidth === `${ perWidth }%`;
 						return (
@@ -304,12 +319,24 @@ export default function TableSettings( props ) {
 								isPrimary={ isPressed }
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
-								onClick={ () => onChangeMaxWidth( isPressed ? undefined : `${ perWidth }%` ) }
+								onClick={ () =>
+									onChangeMaxWidth( isPressed ? undefined : toUnitVal( `${ perWidth }%` ) )
+								}
 							>
 								{ `${ perWidth }%` }
 							</Button>
 						);
 					} ) }
+					<Button
+						isPrimary={ tableStylesObj?.maxWidth === 'none' }
+						variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
+						isSmall
+						onClick={ () =>
+							onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? undefined : 'none' )
+						}
+					>
+						{ __( 'none', 'flexible-table-block' ) }
+					</Button>
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
@@ -322,7 +349,10 @@ export default function TableSettings( props ) {
 					min="0"
 					onChange={ onChangeMinWidth }
 				/>
-				<ButtonGroup aria-label={ __( 'Percentage min width' ) } className="ftb-percent-group">
+				<ButtonGroup
+					aria-label={ __( 'Table Percentage Min Width' ) }
+					className="ftb-percent-group"
+				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
 						const isPressed = tableStylesObj?.minWidth === `${ perWidth }%`;
 						return (
