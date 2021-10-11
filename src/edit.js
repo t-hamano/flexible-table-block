@@ -17,13 +17,13 @@ import {
 } from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import {
+	blockTable,
 	tableColumnAfter,
 	tableColumnBefore,
 	tableColumnDelete,
 	tableRowAfter,
 	tableRowBefore,
 	tableRowDelete,
-	table,
 } from '@wordpress/icons';
 
 /**
@@ -281,7 +281,7 @@ function TableEdit( props ) {
 						/>
 						<ToolbarDropdownMenu
 							label={ __( 'Edit table', 'flexible-table-block' ) }
-							icon={ table }
+							icon={ blockTable }
 							controls={ TableToolbarControls }
 							hasArrowIndicator
 						/>
