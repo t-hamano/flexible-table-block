@@ -26,8 +26,8 @@ import { createTable } from '../utils/table-state';
 import { blockIcon as icon } from '../icons';
 
 export default function TablePlaceholder( { setAttributes } ) {
-	const [ rowCount, setRowCount ] = useState( 2 );
-	const [ colCount, setColCount ] = useState( 2 );
+	const [ rowCount, setRowCount ] = useState( 3 );
+	const [ colCount, setColCount ] = useState( 3 );
 	const [ headerSection, setHeaderSection ] = useState( false );
 	const [ footerSection, setFooterSection ] = useState( false );
 
@@ -78,7 +78,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 
 	return (
 		<Placeholder
-			label={ __( 'Table', 'flexible-table-block' ) }
+			label={ __( 'Flexible Table', 'flexible-table-block' ) }
 			className="ftb-placeholder"
 			icon={ <BlockIcon icon={ icon } showColors /> }
 			instructions={ __(
@@ -90,6 +90,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 				className="ftb-placeholder__table-wrap"
 				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
 			>
+				<div className="ftb-placeholder__tbl-ttl">{ __( 'Pleview', 'flexible-table-block' ) }</div>
 				<table className={ tableClass }>
 					{ headerSection && rowCount && colCount && (
 						<thead>

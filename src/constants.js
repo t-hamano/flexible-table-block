@@ -26,7 +26,7 @@ export const STORE_NAME = 'flexible-table-block';
 export const REST_API_ROUTE = '/flexible-table-block/v1/options';
 
 // Upper and lower limits and thresholds.
-export const MIN_PREVIEW_TABLE_HEIGHT = 200;
+export const MIN_PREVIEW_TABLE_HEIGHT = 150;
 export const MAX_PREVIEW_TABLE_COL = 50;
 export const MAX_PREVIEW_TABLE_ROW = 50;
 export const THRESHOLD_PREVIEW_TABLE_COL = 10;
