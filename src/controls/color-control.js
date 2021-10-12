@@ -41,7 +41,7 @@ export default function ColorControl( {
 
 	const classNames = classnames( 'ftb-color-control', className );
 
-	const handleOnReset = () => onChange( null );
+	const handleOnReset = () => onChange( undefined );
 
 	const handleOnChange = ( inputValue ) => onChange( inputValue );
 
