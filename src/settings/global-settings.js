@@ -640,7 +640,7 @@ export default function GlobalSettings() {
 							disabled={ isWaiting }
 							onClick={ () => setIsResetPopup( ! isResetPopup ) }
 						>
-							{ __( 'Reset Setting', 'flexible-table-block' ) }
+							{ __( 'Restore default settings', 'flexible-table-block' ) }
 							{ isResetPopup && (
 								<Popover
 									className="ftb-global-setting-modal__confirm-popover"
@@ -651,7 +651,7 @@ export default function GlobalSettings() {
 									<p>{ __( 'Are you sure?', 'flexible-table-block' ) }</p>
 									<div className="ftb-global-setting-modal__confirm-popover-buttons">
 										<Button isDestructive onClick={ handleResetOptions }>
-											{ __( 'Reset', 'flexible-table-block' ) }
+											{ __( 'Restore', 'flexible-table-block' ) }
 										</Button>
 										<Button
 											isSecondary
