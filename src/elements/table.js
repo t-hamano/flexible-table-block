@@ -190,6 +190,12 @@ export default function Table( props ) {
 
 			if ( ! fromCell ) return;
 
+			if ( fromCell.sectionName !== sectionName ) {
+				// eslint-disable-next-line no-alert, no-undef
+				alert( __( 'Cannot select range cells from difference section.', 'flexible-table-block' ) );
+				return;
+			}
+
 			setSelectedCells( toRectangledSelectedCells( vTable, { fromCell, toCell: clickedCell } ) );
 		} else if ( event.ctrlKey || event.metaKey ) {
 			// Multple select.
