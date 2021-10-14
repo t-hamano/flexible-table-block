@@ -284,7 +284,7 @@ export default function Table( props ) {
 														event.stopPropagation();
 													} }
 												>
-													{ `<t${ sectionName }>` }
+													{ `t${ sectionName }` }
 												</Button>
 											) }
 										{ isSelected && options.show_control_button && (
