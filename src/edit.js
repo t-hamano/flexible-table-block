@@ -9,15 +9,13 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-import {
-	InspectorControls,
-	BlockControls,
-	JustifyContentControl,
-	useBlockProps,
-} from '@wordpress/block-editor';
+import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import {
 	blockTable,
+	justifyLeft,
+	justifyCenter,
+	justifyRight,
 	tableColumnAfter,
 	tableColumnBefore,
 	tableColumnDelete,
@@ -31,8 +29,6 @@ import {
  */
 import './editor.scss';
 import { STORE_NAME } from './store';
-import { JUSTIFY_CONTROLS } from './constants';
-
 import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
 
@@ -52,6 +48,12 @@ import {
 } from './utils/helper';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
+
+const justifyIcons = {
+	left: justifyLeft,
+	center: justifyCenter,
+	right: justifyRight,
+};
 
 function TableEdit( props ) {
 	const { attributes, setAttributes } = props;
@@ -79,6 +81,11 @@ function TableEdit( props ) {
 
 	const onKeyUp = () => {
 		setSelectMode();
+	};
+
+	const onChangeContentJustification = ( value ) => {
+		const newValue = contentJustification === value ? undefined : value;
+		setAttributes( { contentJustification: newValue } );
 	};
 
 	const onInsertRow = ( offset ) => {
@@ -153,7 +160,28 @@ function TableEdit( props ) {
 		setSelectedLine();
 	};
 
-	const TableToolbarControls = [
+	const TableJustifyControls = [
+		{
+			icon: justifyLeft,
+			title: __( 'Justify table left', 'flexible-table-block' ),
+			isActive: contentJustification === 'left',
+			onClick: () => onChangeContentJustification( 'left' ),
+		},
+		{
+			icon: justifyCenter,
+			title: __( 'Justify table center', 'flexible-table-block' ),
+			isActive: contentJustification === 'center',
+			onClick: () => onChangeContentJustification( 'center' ),
+		},
+		{
+			icon: justifyRight,
+			title: __( 'Justify table right', 'flexible-table-block' ),
+			isActive: contentJustification === 'right',
+			onClick: () => onChangeContentJustification( 'right' ),
+		},
+	];
+
+	const TableEditControls = [
 		{
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
@@ -270,19 +298,18 @@ function TableEdit( props ) {
 				// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
 				<figure { ...tableFigureProps } tabIndex="-1" onKeyDown={ onKeyDown } onKeyUp={ onKeyUp }>
 					<BlockControls group="block">
-						<JustifyContentControl
-							allowedControls={ JUSTIFY_CONTROLS }
-							value={ contentJustification }
-							onChange={ ( value ) => setAttributes( { contentJustification: value } ) }
-							popoverProps={ {
-								position: 'bottom right',
-								isAlternate: true,
-							} }
+						<ToolbarDropdownMenu
+							label={ __( 'Change table justification', 'flexible-table-block' ) }
+							icon={
+								contentJustification ? justifyIcons[ contentJustification ] : justifyIcons.left
+							}
+							controls={ TableJustifyControls }
+							hasArrowIndicator
 						/>
 						<ToolbarDropdownMenu
 							label={ __( 'Edit table', 'flexible-table-block' ) }
 							icon={ blockTable }
-							controls={ TableToolbarControls }
+							controls={ TableEditControls }
 							hasArrowIndicator
 						/>
 					</BlockControls>

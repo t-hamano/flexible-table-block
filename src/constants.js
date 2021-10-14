@@ -72,8 +72,6 @@ export const CELL_ARIA_LABEL = {
 };
 
 // Controls variations.
-export const JUSTIFY_CONTROLS = [ 'left', 'center', 'right' ];
-
 export const BORDER_COLLAPSE_CONTROLS = [
 	{
 		icon: borderCollapseIcon,

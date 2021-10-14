@@ -19,6 +19,7 @@ import { convertToObject } from './utils/style-converter';
 
 export default function save( { attributes } ) {
 	const {
+		contentJustification,
 		tableStyles,
 		hasFixedLayout,
 		isStackedOnMobile,
@@ -44,6 +45,7 @@ export default function save( { attributes } ) {
 
 	const blockProps = useBlockProps.save( {
 		className: classnames( {
+			[ `is-content-justification-${ contentJustification }` ]: contentJustification,
 			'is-scroll-on-pc': isScrollOnPc,
 			'is-scroll-on-mobile': isScrollOnMobile,
 		} ),
