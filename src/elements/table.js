@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
-import { plus, trash, moreVertical, moreHorizontal } from '@wordpress/icons';
+import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -307,8 +307,8 @@ export default function Table( props ) {
 														<ButtonRowSelector
 															label={ __( 'Select row', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
-															icon={ moreVertical }
-															iconSize="18"
+															icon={ chevronRight }
+															iconSize="16"
 															isPrimary={
 																selectedLine?.sectionName === sectionName &&
 																selectedLine?.rowIndex === rowIndex
@@ -356,7 +356,7 @@ export default function Table( props ) {
 														<ButtonColumnSelector
 															label={ __( 'Select column', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
-															icon={ moreHorizontal }
+															icon={ chevronDown }
 															iconSize="18"
 															isPrimary={ selectedLine?.vColIndex === vColIndex }
 															variant={
