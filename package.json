@@ -1,6 +1,6 @@
 {
 	"name": "flexible-table-block",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"author": "Tetsuaki Hamano",
 	"license": "GPL-2.0+",
 	"scripts": {
@@ -17,8 +17,8 @@
 	},
 	"devDependencies": {
 		"@types/jest": "^27.0.2",
-		"@wordpress/env": "^4.1.0",
-		"@wordpress/scripts": "^17.1.0",
+		"@wordpress/env": "^4.1.2",
+		"@wordpress/scripts": "^18.1.0",
 		"opener": "^1.5.2",
 		"prettier": "npm:wp-prettier@2.2.1-beta-1",
 		"stylelint-config-rational-order": "^0.1.2"
@@ -26,6 +26,6 @@
 	"dependencies": {
 		"@emotion/react": "^11.4.1",
 		"@emotion/styled": "^11.3.0",
-		"@wordpress/icons": "^5.0.0"
+		"@wordpress/icons": "^6.0.0"
 	}
 }

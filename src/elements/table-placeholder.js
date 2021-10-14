@@ -82,7 +82,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 			className="ftb-placeholder"
 			icon={ <BlockIcon icon={ icon } showColors /> }
 			instructions={ __(
-				'Hold Ctrl key to select multiple cells. Hold Shift key to select range.',
+				'Hint: Hold Ctrl key to select multiple cells. Hold Shift key to select range.',
 				'flexible-table-block'
 			) }
 		>

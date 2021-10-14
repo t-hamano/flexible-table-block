@@ -46,7 +46,7 @@ class Settings {
 				'max' => 1200,
 			),
 		),
-		// Default table style.
+		// Default table styles.
 		'block_style'           => array(
 			'type'    => 'array',
 			'default' => array(
@@ -76,15 +76,17 @@ class Settings {
 	}
 
 	/**
-	 * Get options.
+	 * Get options
 	 *
 	 * @return array
 	 */
 	public static function get_options() {
 		$options = array();
+
 		foreach ( self::OPTIONS as $key => $value ) {
 			$options[ $key ] = get_option( FTB_OPTION_PREFIX . '_' . $key, self::OPTIONS[ $key ]['default'] );
 		}
+
 		return $options;
 	}
 }

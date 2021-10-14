@@ -105,7 +105,7 @@ export default function BorderStyleControl( {
 		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
 			<div className="ftb-border-style-control__header">
 				<Text id={ headingId }>{ controlLabel }</Text>
-				<Button isSecondary isSmall onClick={ handleOnReset } value={ ! isMixed || values.top }>
+				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>

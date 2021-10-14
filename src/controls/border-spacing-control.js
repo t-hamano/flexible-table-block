@@ -104,7 +104,7 @@ export default function BorderSpacingControl( {
 		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
 			<div className="ftb-border-spacing-control__header">
 				<Text id={ headingId }>{ label }</Text>
-				<Button isSecondary isSmall onClick={ handleOnReset }>
+				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>

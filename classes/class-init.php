@@ -13,13 +13,13 @@ class Init {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Load translated strings
-		load_plugin_textdomain( FTB_NAMESPACE, false, dirname( FTB_NAMESPACE ) . '/languages' );
+		// Load translated strings.
+		load_plugin_textdomain( FTB_NAMESPACE );
 
-		// Uninstallation process
+		// Uninstallation process.
 		register_uninstall_hook( FTB_NAMESPACE, 'flexible_table_block\Init::plugin_uninstall' );
 
-		// Load classes
+		// Load classes.
 		$this->load_classes();
 	}
 

@@ -59,7 +59,7 @@ export default {
 			{
 				cells: [
 					{
-						content: '5.0',
+						content: '5.6',
 						tag: 'td',
 					},
 					{

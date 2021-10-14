@@ -9,13 +9,14 @@ namespace flexible_table_block;
 
 class Helper {
 	/**
-	 * Get block default style.
+	 * Get default block style
 	 *
 	 * @return string
 	 */
 	public static function get_block_css( $prefix = '' ) {
 		$selector = "${prefix}." . FTB_BLOCK_CLASS;
 
+		// CSS selectors.
 		$styles = array(
 			"${selector} > table"       => '',
 			"${selector}.is-style-stripes tr:nth-child(odd) th" => '',
@@ -30,6 +31,7 @@ class Helper {
 
 		$option = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
 
+		// Genelate styles based on global settings.
 		foreach ( $option as $key => $value ) {
 
 			if ( ! $value ) {
@@ -101,7 +103,7 @@ class Helper {
 	}
 
 	/**
-	 * Get responsive style with variable breakpoints.
+	 * Get responsive style with dynamic breakpoints
 	 *
 	 * @return string
 	 */
@@ -137,7 +139,7 @@ class Helper {
 	}
 
 	/**
-	 * Minify CSS.
+	 * Minify CSS
 	 *
 	 * @return string
 	 */

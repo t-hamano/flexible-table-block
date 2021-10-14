@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Flexible Table Block
- * Description: A block that allows you to create flexible configuration tables.
- * Requires at least: 5.7
+ * Description: Easily create flexible configuration tables.
+ * Requires at least: 5.8
  * Requires PHP: 7.3
  * Version: 2.0.0
  * Author: Tetsuaki Hamano

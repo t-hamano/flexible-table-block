@@ -13,7 +13,7 @@ class Api {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Register REST API route
+		// Register REST API route.
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 	}
 
@@ -64,7 +64,7 @@ class Api {
 	}
 
 	/**
-	 * Get options.
+	 * Get options
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
@@ -75,13 +75,14 @@ class Api {
 	}
 
 	/**
-	 * Update options.
+	 * Update options
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function update_options( $request ) {
 		$params = $request->get_json_params();
 
+		// Sanitize option values.
 		foreach ( $params as $key => $value ) {
 
 			if ( ! array_key_exists( $key, Settings::OPTIONS ) ) {
@@ -133,7 +134,7 @@ class Api {
 	}
 
 	/**
-	 * Delete options.
+	 * Delete options
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
@@ -141,6 +142,7 @@ class Api {
 		foreach ( Settings::OPTIONS as $key => $value ) {
 			delete_option( FTB_OPTION_PREFIX . '_' . $key );
 		}
+
 		return rest_ensure_response(
 			array(
 				'options'   => Settings::get_options(),
