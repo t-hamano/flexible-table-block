@@ -135,23 +135,14 @@ export default function GlobalSettings() {
 	return (
 		<>
 			<div className="ftb-global-setting">
-				<Button
-					icon={ help }
-					isSmall
-					isLink
-					variant="link"
-					iconSize="16"
-					onClick={ () => setIsHelpModalOpen( true ) }
-				>
+				<Button icon={ help } isLink variant="link" onClick={ () => setIsHelpModalOpen( true ) }>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
 				{ ( isAdministrator || options?.show_global_setting ) && (
 					<Button
 						icon={ cog }
-						isSmall
 						isPrimary
 						variant="primary"
-						iconSize="16"
 						onClick={ () => setIsSettingModalOpen( true ) }
 					>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
