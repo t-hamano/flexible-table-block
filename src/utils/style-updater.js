@@ -1,8 +1,11 @@
+/* eslint-disable jsdoc/no-undefined-types */
+
 /**
  * Internal dependencies
  */
 import { cleanEmptyObject, toUnitVal } from './helper';
-// eslint-disable-next-line jsdoc/valid-types
+
+/* eslint-disable-next-line jsdoc/valid-types */
 /**
  * @typedef {import('csstype').StandardLonghandProperties} StylesObject
  * @typedef {{ top?: string, right?: string, bottom?: string, left?: string }} BoxValues
