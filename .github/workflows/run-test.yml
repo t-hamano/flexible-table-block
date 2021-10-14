@@ -3,14 +3,14 @@ name: Unit Tests for JS
 on:
   push:
   pull_request:
-    branches: [ main, v2 ]
+    branches: [ main, develop ]
 
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@develop
+      - uses: actions/setup-node@develop
         with:
           node-version: 14.x
       - run: npm ci
