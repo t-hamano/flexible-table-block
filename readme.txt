@@ -1,5 +1,5 @@
 === Flexible Table Block ===
-Contributors: wildworks
+Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.8
