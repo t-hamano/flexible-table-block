@@ -17,6 +17,9 @@
 	},
 	"devDependencies": {
 		"@types/jest": "^27.0.2",
+		"@types/wordpress__block-editor": "^6.0.4",
+		"@types/wordpress__blocks": "^9.1.1",
+		"@types/wordpress__data": "^4.6.10",
 		"@wordpress/env": "^4.1.2",
 		"@wordpress/scripts": "^18.1.0",
 		"opener": "^1.5.2",
@@ -26,6 +29,15 @@
 	"dependencies": {
 		"@emotion/react": "^11.4.1",
 		"@emotion/styled": "^11.3.0",
-		"@wordpress/icons": "^6.0.0"
+		"@wordpress/api-fetch": "^5.1.2",
+		"@wordpress/block-editor": "^6.1.14",
+		"@wordpress/blocks": "^9.1.8",
+		"@wordpress/components": "^14.1.11",
+		"@wordpress/compose": "^4.1.6",
+		"@wordpress/core-data": "^3.1.12",
+		"@wordpress/data": "^5.1.6",
+		"@wordpress/hooks": "^3.2.1",
+		"@wordpress/i18n": "^4.1.2",
+		"@wordpress/icons": "^4.0.3"
 	}
 }
