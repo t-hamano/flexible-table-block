@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { pick, times, pickBy, isEmpty, isObject, identity, mapValues } from 'lodash';
+import { identity, isEmpty, isObject, mapValues, pick, pickBy, times } from 'lodash';
 
 /**
  * Sanitize the value of UnitControl.
@@ -33,7 +33,7 @@ export function parseUnit( initialValue ) {
 	let num = parseFloat( value );
 	num = isNaN( num ) ? '' : num;
 
-	const unitMatch = value.match( /[\d.\-\+]*\s*(.*)/ )[ 1 ];
+	const unitMatch = value.match( /[\d.\-+]*\s*(.*)/ )[ 1 ];
 
 	let unit = unitMatch !== undefined ? unitMatch : '';
 	unit = unit.toLowerCase();
@@ -61,11 +61,11 @@ export const cleanEmptyObject = ( object ) => {
  * Convert shorthand / longhand CSS values to array.
  *
  * @param {string} value CSS value.
- * @return {Array} CSS values.
+ * @return {string[]} CSS values.
  */
 export function parseCssValue( value ) {
 	if ( typeof value !== 'string' ) {
-		return [ null, null, null, null ];
+		return [ '', '', '', '' ];
 	}
 
 	const values = value.split( ' ' );
@@ -80,7 +80,7 @@ export function parseCssValue( value ) {
 		case 4:
 			return [ values[ 0 ], values[ 1 ], values[ 2 ], values[ 3 ] ];
 		default:
-			return [ null, null, null, null ];
+			return [ '', '', '', '' ];
 	}
 }
 
@@ -108,7 +108,7 @@ export function isMultiSectionSelected( selectedCells ) {
 		return result;
 	}, [] );
 
-	return selectedSections.length > 1 ? true : false;
+	return selectedSections.length > 1;
 }
 
 /**
@@ -300,11 +300,9 @@ export function isRectangleSelected( selectedCells ) {
 	} );
 
 	// Whether all cells in the matrix are filled (whether cell merging is possible).
-	const isFullFilled = vRange
+	return vRange
 		.reduce( ( cells, row ) => cells.concat( row ), [] )
 		.every( ( cell ) => cell === true );
-
-	return isFullFilled;
 }
 
 /**

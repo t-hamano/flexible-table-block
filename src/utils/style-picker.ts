@@ -2,6 +2,21 @@
  * Internal dependencies
  */
 import { parseCssValue } from './helper';
+import type { Properties } from 'csstype';
+
+interface Direction {
+	top: string;
+	right: string;
+	bottom: string;
+	left: string;
+}
+
+interface Corners {
+	topLeft: string;
+	topRight: string;
+	bottomRight: string;
+	bottomLeft: string;
+}
 
 /**
  * Pick padding style as object from style object.
@@ -9,7 +24,7 @@ import { parseCssValue } from './helper';
  * @param {Object} stylesObj styles object.
  * @return {Object} padding styles object.
  */
-export function pickPadding( stylesObj ) {
+export function pickPadding( stylesObj: Properties ): Direction {
 	if ( stylesObj.padding ) {
 		const paddingValues = parseCssValue( stylesObj.padding );
 
@@ -22,10 +37,10 @@ export function pickPadding( stylesObj ) {
 	}
 
 	return {
-		top: stylesObj?.paddingTop,
-		right: stylesObj?.paddingRight,
-		bottom: stylesObj?.paddingBottom,
-		left: stylesObj?.paddingLeft,
+		top: stylesObj?.paddingTop || '',
+		right: stylesObj?.paddingRight || '',
+		bottom: stylesObj?.paddingBottom || '',
+		left: stylesObj?.paddingLeft || '',
 	};
 }
 
@@ -35,7 +50,7 @@ export function pickPadding( stylesObj ) {
  * @param {Object} stylesObj styles object.
  * @return {Object} border-width styles object.
  */
-export function pickBorderWidth( stylesObj ) {
+export function pickBorderWidth( stylesObj: Properties ): Direction {
 	if ( stylesObj.borderWidth ) {
 		const borderWidthValues = parseCssValue( stylesObj.borderWidth );
 
@@ -48,10 +63,10 @@ export function pickBorderWidth( stylesObj ) {
 	}
 
 	return {
-		top: stylesObj?.borderTopWidth,
-		right: stylesObj?.borderRightWidth,
-		bottom: stylesObj?.borderBottomWidth,
-		left: stylesObj?.borderLeftWidth,
+		top: stylesObj?.borderTopWidth || '',
+		right: stylesObj?.borderRightWidth || '',
+		bottom: stylesObj?.borderBottomWidth || '',
+		left: stylesObj?.borderLeftWidth || '',
 	};
 }
 
@@ -61,7 +76,7 @@ export function pickBorderWidth( stylesObj ) {
  * @param {Object} stylesObj styles object.
  * @return {Object} border-color styles object.
  */
-export function pickBorderColor( stylesObj ) {
+export function pickBorderColor( stylesObj: Properties ): Direction {
 	if ( stylesObj.borderColor ) {
 		const borderColorValues = parseCssValue( stylesObj.borderColor );
 
@@ -74,10 +89,10 @@ export function pickBorderColor( stylesObj ) {
 	}
 
 	return {
-		top: stylesObj?.borderTopColor,
-		right: stylesObj?.borderRightColor,
-		bottom: stylesObj?.borderBottomColor,
-		left: stylesObj?.borderLeftColor,
+		top: stylesObj?.borderTopColor || '',
+		right: stylesObj?.borderRightColor || '',
+		bottom: stylesObj?.borderBottomColor || '',
+		left: stylesObj?.borderLeftColor || '',
 	};
 }
 
@@ -87,7 +102,7 @@ export function pickBorderColor( stylesObj ) {
  * @param {Object} stylesObj styles object.
  * @return {Object} border-style styles object.
  */
-export function pickBorderStyle( stylesObj ) {
+export function pickBorderStyle( stylesObj: Properties ): Direction {
 	if ( stylesObj.borderStyle ) {
 		const borderStyleValues = parseCssValue( stylesObj.borderStyle );
 
@@ -100,23 +115,27 @@ export function pickBorderStyle( stylesObj ) {
 	}
 
 	return {
-		top: stylesObj?.borderTopStyle,
-		right: stylesObj?.borderRightStyle,
-		bottom: stylesObj?.borderBottomStyle,
-		left: stylesObj?.borderLeftStyle,
+		top: stylesObj?.borderTopStyle || '',
+		right: stylesObj?.borderRightStyle || '',
+		bottom: stylesObj?.borderBottomStyle || '',
+		left: stylesObj?.borderLeftStyle || '',
 	};
 }
 
 /**
  * Pick border-radius style as object from style object.
  *
- * @param {Object} stylesObj styles object.
+ * @param {Object} stylesObj                         styles object.
+ * @param          stylesObj.borderRadius
+ * @param          stylesObj.borderTopLeftRadius
+ * @param          stylesObj.borderTopRightRadius
+ * @param          stylesObj.borderBottomRightRadius
+ * @param          stylesObj.borderBottomLeftRadius
  * @return {Object} border-radius styles object.
  */
-export function pickBorderRadius( stylesObj ) {
+export function pickBorderRadius( stylesObj: Properties ): Corners {
 	if ( stylesObj.borderRadius ) {
 		const borderRadiusValues = parseCssValue( stylesObj.borderRadius );
-
 		return {
 			topLeft: borderRadiusValues[ 0 ],
 			topRight: borderRadiusValues[ 1 ],
@@ -126,10 +145,10 @@ export function pickBorderRadius( stylesObj ) {
 	}
 
 	return {
-		topLeft: stylesObj?.borderTopLeftRadius,
-		topRight: stylesObj?.borderTopRightRadius,
-		bottomRight: stylesObj?.borderBottomRightRadius,
-		bottomLeft: stylesObj?.borderBottomLeftRadius,
+		topLeft: stylesObj?.borderTopLeftRadius || '',
+		topRight: stylesObj?.borderTopRightRadius || '',
+		bottomRight: stylesObj?.borderBottomRightRadius || '',
+		bottomLeft: stylesObj?.borderBottomLeftRadius || '',
 	};
 }
 
@@ -139,8 +158,8 @@ export function pickBorderRadius( stylesObj ) {
  * @param {Object} stylesObj styles object.
  * @return {Object} border-spacing styles object.
  */
-export function pickBorderSpacing( stylesObj ) {
-	const borderSpacingValues = parseCssValue( stylesObj?.borderSpacing );
+export function pickBorderSpacing( stylesObj: Properties ) {
+	const borderSpacingValues = parseCssValue( stylesObj.borderSpacing || '' );
 
 	return {
 		horizontal: borderSpacingValues[ 0 ],
