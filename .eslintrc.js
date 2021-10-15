@@ -33,6 +33,11 @@ module.exports = {
 				'**/*.spec.js',
 			],
 			extends: [ 'plugin:@wordpress/eslint-plugin/test-unit' ],
+			settings: {
+				jest: {
+					version: 26,
+				},
+			},
 		},
 	],
 };
