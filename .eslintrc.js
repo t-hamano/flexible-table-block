@@ -16,4 +16,22 @@ module.exports = {
 			},
 		],
 	},
+	overrides: [
+		{
+			files: [
+				'**/test/**/*.ts',
+				'**/test/**/*.js',
+				'**/__tests__/**/*.ts',
+				'**/__tests__/**/*.js',
+				'**/*.spec.ts',
+				'**/*.spec.js',
+			],
+			extends: [ 'plugin:@wordpress/eslint-plugin/test-unit' ],
+			settings: {
+				jest: {
+					version: 26,
+				},
+			},
+		},
+	],
 };
