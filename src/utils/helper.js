@@ -91,7 +91,11 @@ export function parseCssValue( value ) {
  * @return {boolean} True if the virtual section is empty, false otherwise.
  */
 export function isEmptySection( vSection ) {
-	return ! vSection || ! vSection.length || vSection.every( ( row ) => ! ( row && row.length ) );
+	return (
+		! vSection ||
+		! vSection.length ||
+		vSection.every( ( row ) => ! ( row.cells && row.cells.length ) )
+	);
 }
 
 /**
@@ -130,24 +134,24 @@ export function toVirtualTable( state ) {
 			return cell.isDelete ? count : count + ( parseInt( cell.colSpan ) || 1 );
 		}, 0 );
 
-		const vSection = times( vRowCount, () =>
-			times( vColCount, () => ( {
+		const vSection = times( vRowCount, () => ( {
+			cells: times( vColCount, () => ( {
 				isFilled: false, // Whether the actual cell is placed or not.
-			} ) )
-		);
+			} ) ),
+		} ) );
 
 		// Mapping the actual section cells on the virtual section cell.
 		section.forEach( ( row, cRowIndex ) => {
 			row.cells.forEach( ( cell, cColIndex ) => {
 				// Colmun index on the virtual section excluding cells already marked as "filled".
-				const vColIndex = vSection[ cRowIndex ].findIndex( ( { isFilled } ) => ! isFilled );
+				const vColIndex = vSection[ cRowIndex ].cells.findIndex( ( { isFilled } ) => ! isFilled );
 
 				if ( vColIndex === -1 ) {
 					return;
 				}
 
 				// Mark the cell as "filled" and record the position on the virtual section.
-				vSection[ cRowIndex ][ vColIndex ] = {
+				vSection[ cRowIndex ].cells[ vColIndex ] = {
 					...cell,
 					sectionName,
 					isFilled: true,
@@ -160,20 +164,20 @@ export function toVirtualTable( state ) {
 				// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
 				if ( cell.colSpan ) {
 					for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
-						vSection[ cRowIndex ][ vColIndex + i ].isFilled = true;
-						vSection[ cRowIndex ][ vColIndex + i ].isDelete = true;
+						vSection[ cRowIndex ].cells[ vColIndex + i ].isFilled = true;
+						vSection[ cRowIndex ].cells[ vColIndex + i ].isDelete = true;
 					}
 				}
 
 				if ( cell.rowSpan ) {
 					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
-						vSection[ cRowIndex + i ][ vColIndex ].isFilled = true;
-						vSection[ cRowIndex + i ][ vColIndex ].isDelete = true;
+						vSection[ cRowIndex + i ].cells[ vColIndex ].isFilled = true;
+						vSection[ cRowIndex + i ].cells[ vColIndex ].isDelete = true;
 
 						if ( cell.colSpan ) {
 							for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
-								vSection[ cRowIndex + i ][ vColIndex + j ].isFilled = true;
-								vSection[ cRowIndex + i ][ vColIndex + j ].isDelete = true;
+								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isFilled = true;
+								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isDelete = true;
 							}
 						}
 					}
@@ -183,9 +187,9 @@ export function toVirtualTable( state ) {
 
 		// Fallback: Fill with empty cells if any cells are not filled correctly.
 		vSection.forEach( ( row, cRowIndex ) => {
-			row.forEach( ( cell, cVColIndex ) => {
+			row.cells.forEach( ( cell, cVColIndex ) => {
 				if ( ! cell.isFilled ) {
-					vSection[ cRowIndex ][ cVColIndex ] = {
+					vSection[ cRowIndex ].cells[ cVColIndex ] = {
 						content: '',
 						tag: 'head' === sectionName ? 'th' : 'td',
 						isFilled: true,
@@ -332,7 +336,7 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 	const vColCount = vSection[ 0 ].length;
 
 	const vCells = vSection
-		.reduce( ( cells, row ) => cells.concat( row ), [] )
+		.reduce( ( cells, row ) => cells.concat( row.cells ), [] )
 		.map( ( cell ) => {
 			if ( cell.rowIndex === fromCell.rowIndex && cell.vColIndex === fromCell.vColIndex ) {
 				cell.isFirstSelected = true;

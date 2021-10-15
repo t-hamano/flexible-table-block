@@ -77,7 +77,7 @@ const transforms = {
 
 					return section.map( ( row ) => {
 						return {
-							cells: row.map( ( cell ) => {
+							cells: row.cells.map( ( cell ) => {
 								return cell;
 							} ),
 						};

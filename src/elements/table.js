@@ -105,7 +105,7 @@ export default function Table( props ) {
 	const onSelectSectionCells = ( sectionName ) => {
 		setSelectedCells(
 			vTable[ sectionName ].reduce( ( cells, row ) => {
-				return cells.concat( row.filter( ( cell ) => ! cell.isDelete ) );
+				return cells.concat( row.cells.filter( ( cell ) => ! cell.isDelete ) );
 			}, [] )
 		);
 		setSelectedLine();
@@ -120,7 +120,7 @@ export default function Table( props ) {
 			setSelectedCells(
 				vTable[ sectionName ].reduce( ( cells, row ) => {
 					return cells.concat(
-						row.filter( ( cell ) => cell.rowIndex === rowIndex && ! cell.isDelete )
+						row.cells.filter( ( cell ) => cell.rowIndex === rowIndex && ! cell.isDelete )
 					);
 				}, [] )
 			);
@@ -138,7 +138,7 @@ export default function Table( props ) {
 				vRows.reduce(
 					( cells, row ) =>
 						cells.concat(
-							row.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isDelete )
+							row.cells.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isDelete )
 						),
 					[]
 				)
@@ -160,11 +160,11 @@ export default function Table( props ) {
 		setAttributes( {
 			[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
 				if ( rowIndex !== selectedRowIndex ) {
-					return { cells: row.filter( ( cell ) => ! cell.isDelete ) };
+					return { cells: row.cells.filter( ( cell ) => ! cell.isDelete ) };
 				}
 
 				return {
-					cells: row
+					cells: row.cells
 						.map( ( cell, vColIndex ) => {
 							if ( rowIndex !== selectedRowIndex || vColIndex !== selectedVColIndex ) {
 								return cell;
@@ -233,8 +233,8 @@ export default function Table( props ) {
 		return {
 			...result,
 			[ sectionName ]: vTable[ sectionName ]
-				.map( ( row ) => row.filter( ( cell ) => ! cell.isDelete ) )
-				.filter( ( cells ) => cells.length ),
+				.map( ( row ) => ( { cells: row.cells.filter( ( cell ) => ! cell.isDelete ) } ) )
+				.filter( ( row ) => row.cells.length ),
 		};
 	}, {} );
 
@@ -253,7 +253,7 @@ export default function Table( props ) {
 				<TSection name={ sectionName } key={ sectionName }>
 					{ filteredVTable[ sectionName ].map( ( row, rowIndex ) => (
 						<tr key={ rowIndex }>
-							{ row.map( ( cell ) => {
+							{ row.cells.map( ( cell ) => {
 								const { content, tag, className, styles, rowSpan, colSpan, vColIndex } = cell;
 
 								// Whether or not the current cell is included in the selected cells.

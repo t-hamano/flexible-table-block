@@ -107,24 +107,25 @@ export function insertRow( state, { sectionName, rowIndex } ) {
 }
 
 /**
- * Deletes a row from the table state.
+ * Deletes a row from the virtual table.
  *
  * @param {Object} vTable              Virtual table in which to delete the row.
  * @param {Object} options
  * @param {string} options.sectionName Section in which to delete the row.
  * @param {number} options.rowIndex    Row index at which to delete the row.
- * @return {Object} New table state.
+ * @return {Object} New virtual table state.
  */
 export function deleteRow( vTable, { sectionName, rowIndex } ) {
 	// Find the number of rowspan cells in the row to be deleted.
-	const rowSpanCellsCount = vTable[ sectionName ][ rowIndex ].filter( ( cell ) => cell.rowSpan )
-		.length;
+	const rowSpanCellsCount = vTable[ sectionName ][ rowIndex ].cells.filter(
+		( cell ) => cell.rowSpan
+	).length;
 
 	// Split the found rowspan cells.
 	if ( rowSpanCellsCount ) {
 		for ( let i = 0; i < rowSpanCellsCount; i++ ) {
 			const vMergedCells = vTable[ sectionName ]
-				.reduce( ( cells, row ) => cells.concat( row ), [] )
+				.reduce( ( cells, row ) => cells.concat( row.cells ), [] )
 				.filter( ( cell ) => cell.rowSpan && cell.rowIndex === rowIndex );
 
 			if ( vMergedCells.length ) {
@@ -138,7 +139,7 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 	return {
 		[ sectionName ]: vTable[ sectionName ]
 			.map( ( row, cRowIndex ) => ( {
-				cells: row
+				cells: row.cells
 					.map( ( cell ) => {
 						// Contract cells with rowspan in the before rows.
 						if (
@@ -171,16 +172,16 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 }
 
 /**
- * Inserts a column in the table state.
+ * Inserts a column in the virtual table.
  *
  * @param {Object} vTable            Virtual table in which to insert column.
  * @param {Object} options
  * @param {number} options.vColIndex Virtual column index at which to insert column.
- * @return {Object} New table state.
+ * @return {Object} New virtual table state.
  */
 export function insertColumn( vTable, { vColIndex } ) {
 	// Whether to add a column after the last column.
-	const isLastColumnInsert = vTable.body[ 0 ].length === vColIndex;
+	const isLastColumnInsert = vTable.body[ 0 ].cells.length === vColIndex;
 
 	// Some cells will not be filled if there are cells with rowspan in the column to be inserted,
 	// so record the rowindex of the additional cells to be inserted in advance.
@@ -188,7 +189,7 @@ export function insertColumn( vTable, { vColIndex } ) {
 
 	[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
 		vTable[ sectionName ].forEach( ( row, cRowIndex ) => {
-			row.forEach( ( cell, cVColIndex ) => {
+			row.cells.forEach( ( cell, cVColIndex ) => {
 				if ( cVColIndex === vColIndex && cell.rowSpan ) {
 					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
 						rowIndexesToFill[ sectionName ].push( cRowIndex + i );
@@ -204,7 +205,7 @@ export function insertColumn( vTable, { vColIndex } ) {
 		if ( ! section.length ) return [];
 
 		return section.map( ( row, cRowIndex ) => ( {
-			cells: row
+			cells: row.cells
 				.reduce( ( cells, cell, cVColIndex ) => {
 					// Expand cells with colspan in the before columns.
 					if (
@@ -262,12 +263,12 @@ export function insertColumn( vTable, { vColIndex } ) {
 }
 
 /**
- * Deletes a column from the table state.
+ * Deletes a column from the virtual table.
  *
  * @param {Object} vTable            Virtual table in which to delete column.
  * @param {Object} options
  * @param {number} options.vColIndex Virtual column index at which to delete column.
- * @return {Object} New table state.
+ * @return {Object} New virtual table state.
  */
 export function deleteColumn( vTable, { vColIndex } ) {
 	// Find the colspan cells in the column to be deleted.
@@ -289,7 +290,7 @@ export function deleteColumn( vTable, { vColIndex } ) {
 		if ( ! section.length ) return [];
 
 		return section.map( ( row ) => ( {
-			cells: row
+			cells: row.cells
 				.map( ( cell, cVColIndex ) => {
 					// Contract cells with colspan in the before columns.
 					if (
@@ -333,7 +334,7 @@ export function toggleSection( vTable, sectionName ) {
 	}
 
 	// Number of columns in the row to be inserted.
-	const newRowColCount = vTable.body[ 0 ].reduce( ( count, cell ) => {
+	const newRowColCount = vTable.body[ 0 ].cells.reduce( ( count, cell ) => {
 		if ( cell.isDelete ) return count;
 		return count + ( parseInt( cell.colSpan ) || 1 );
 	}, 0 );
@@ -350,12 +351,12 @@ export function toggleSection( vTable, sectionName ) {
 }
 
 /**
- * Merge cells in the table state.
+ * Merge cells in the virtual table.
  *
  * @param {Object} vTable                Current virtual table state.
  * @param {Object} options
  * @param {number} options.selectedCells Current selected multi cell.
- * @return {Object} New table state.
+ * @return {Object} New virtual table state.
  */
 export function mergeCells( vTable, { selectedCells } ) {
 	const { sectionName } = selectedCells[ 0 ];
@@ -392,11 +393,11 @@ export function mergeCells( vTable, { selectedCells } ) {
 		[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
 			if ( rowIndex < minRowIndex || rowIndex > maxRowIndex ) {
 				// Row not to be merged.
-				return { cells: row.filter( ( cell ) => ! cell.isDelete ) };
+				return { cells: row.cells.filter( ( cell ) => ! cell.isDelete ) };
 			}
 
 			return {
-				cells: row
+				cells: row.cells
 					.map( ( cell, colIndex ) => {
 						if ( colIndex === minColIndex && rowIndex === minRowIndex ) {
 							// Cells to merge.
@@ -439,7 +440,7 @@ export function mergeCells( vTable, { selectedCells } ) {
  * @param {Object} vTable                Current virtual table state.
  * @param {Object} options
  * @param {number} options.selectedCells Current selected multi cell.
- * @return {Object} New table state.
+ * @return {Object} New virtual table state.
  */
 export function splitMergedCells( vTable, { selectedCells } ) {
 	// Find the rowspan & colspan cells.
@@ -458,7 +459,7 @@ export function splitMergedCells( vTable, { selectedCells } ) {
 		if ( ! section.length ) return [];
 
 		return section.map( ( row ) => ( {
-			cells: row.map( ( cell ) => cell, [] ).filter( ( cell ) => ! cell.isDelete ),
+			cells: row.cells.map( ( cell ) => cell, [] ).filter( ( cell ) => ! cell.isDelete ),
 		} ) );
 	} );
 }
@@ -469,7 +470,7 @@ export function splitMergedCells( vTable, { selectedCells } ) {
  * @param {Object} vTable               Current virtual table state.
  * @param {Object} options
  * @param {number} options.selectedCell Current selected virtual cell.
- * @return {Object} New table state.
+ * @return {Object} New virtual table state.
  */
 export function splitMergedCell( vTable, { selectedCell } ) {
 	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = selectedCell;
@@ -477,16 +478,16 @@ export function splitMergedCell( vTable, { selectedCell } ) {
 	const vSection = vTable[ sectionName ];
 
 	// Split the selected cells and map them on the virtual section.
-	vSection[ rowIndex ][ vColIndex ] = {
-		...vSection[ rowIndex ][ vColIndex ],
+	vSection[ rowIndex ].cells[ vColIndex ] = {
+		...vSection[ rowIndex ].cells[ vColIndex ],
 		rowSpan: undefined,
 		colSpan: undefined,
 	};
 
 	if ( colSpan ) {
 		for ( let i = 1; i < parseInt( colSpan ); i++ ) {
-			vSection[ rowIndex ][ vColIndex + i ] = {
-				...vSection[ rowIndex ][ vColIndex ],
+			vSection[ rowIndex ].cells[ vColIndex + i ] = {
+				...vSection[ rowIndex ].cells[ vColIndex ],
 				content: undefined,
 			};
 		}
@@ -494,15 +495,15 @@ export function splitMergedCell( vTable, { selectedCell } ) {
 
 	if ( rowSpan ) {
 		for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
-			vSection[ rowIndex + i ][ vColIndex ] = {
-				...vSection[ rowIndex ][ vColIndex ],
+			vSection[ rowIndex + i ].cells[ vColIndex ] = {
+				...vSection[ rowIndex ].cells[ vColIndex ],
 				content: undefined,
 			};
 
 			if ( colSpan ) {
 				for ( let j = 1; j < parseInt( colSpan ); j++ ) {
-					vSection[ rowIndex + i ][ vColIndex + j ] = {
-						...vSection[ rowIndex ][ vColIndex ],
+					vSection[ rowIndex + i ].cells[ vColIndex + j ] = {
+						...vSection[ rowIndex ].cells[ vColIndex ],
 						content: undefined,
 					};
 				}
@@ -523,7 +524,7 @@ export function splitMergedCell( vTable, { selectedCell } ) {
  * @param {Object} cellState             Cell states to update.
  * @param {Object} options
  * @param {Array}  options.selectedCells Current selected multi cell.
- * @return {Object} New section state.
+ * @return {Object} New table state.
  */
 export function updateCellsState( vTable, cellState, { selectedCells } ) {
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
@@ -532,7 +533,7 @@ export function updateCellsState( vTable, cellState, { selectedCells } ) {
 		if ( ! section.length ) return [];
 
 		return section.map( ( row, cRowIndex ) => ( {
-			cells: row
+			cells: row.cells
 				.map( ( cell, cVColIndex ) => {
 					// Refer to the selected cell to determine if it is the target cell to update.
 					const isTargetCell = !! selectedCells.some(
