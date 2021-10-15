@@ -30,7 +30,9 @@
 		"resolveJsonModule": true,
 
 		"typeRoots": [ "./node_modules/@types" ],
-		"types": []
+		"types": [
+			"@types/jest"
+		]
 	},
 	"include": [
 		"**/*.ts", "**/*.tsx","**/*.js", "**/*.jsx","**/*.ts", "**/*.json"
