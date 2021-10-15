@@ -60,16 +60,16 @@ export function createTable( { rowCount, colCount, headerSection, footerSection 
 /**
  * Inserts a row in the table state.
  *
- * @param {Object} state               Current table state.
+ * @param {Object} vTable              Virtual table in which to insert the row.
  * @param {Object} options
  * @param {string} options.sectionName Section in which to insert the row.
  * @param {number} options.rowIndex    Row index at which to insert the row.
  * @return {Object} New table state.
  */
-export function insertRow( state, { sectionName, rowIndex } ) {
+export function insertRow( vTable, { sectionName, rowIndex } ) {
 	// Number of columns in the row to be inserted.
-	const sourceRowIndex = state[ sectionName ].length <= rowIndex ? 0 : rowIndex;
-	const newRowColCount = state[ sectionName ][ sourceRowIndex ].cells.reduce(
+	const sourceRowIndex = vTable[ sectionName ].length <= rowIndex ? 0 : rowIndex;
+	const newRowColCount = vTable[ sectionName ][ sourceRowIndex ].cells.reduce(
 		( count, cell ) => count + ( parseInt( cell.colSpan ) || 1 ),
 		0
 	);
@@ -84,24 +84,27 @@ export function insertRow( state, { sectionName, rowIndex } ) {
 
 	return {
 		[ sectionName ]: [
-			...state[ sectionName ].slice( 0, rowIndex ),
+			...vTable[ sectionName ].slice( 0, rowIndex ),
 			newRow,
-			...state[ sectionName ].slice( rowIndex ),
+			...vTable[ sectionName ].slice( rowIndex ),
 		].map( ( row, cRowIndex ) => ( {
-			cells: row.cells.map( ( cell ) => {
-				// Expand cells with rowspan in the before and inserted rows.
-				if (
-					cell.rowSpan &&
-					cRowIndex <= rowIndex &&
-					cRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
-				) {
-					return {
-						...cell,
-						rowSpan: parseInt( cell.rowSpan ) + 1,
-					};
-				}
-				return cell;
-			} ),
+			cells: row.cells
+				.map( ( cell ) => {
+					// Expand cells with rowspan in the before and inserted rows.
+					if (
+						cell.rowSpan &&
+						cRowIndex <= rowIndex &&
+						cRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+					) {
+						return {
+							...cell,
+							rowSpan: parseInt( cell.rowSpan ) + 1,
+						};
+					}
+					return cell;
+				} )
+				// Delete cells marked as deletion.
+				.filter( ( cell ) => ! cell.isDelete ),
 		} ) ),
 	};
 }

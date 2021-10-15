@@ -97,7 +97,7 @@ function TableEdit( props ) {
 		const insertRowIndex =
 			offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
 
-		setAttributes( insertRow( attributes, { sectionName, rowIndex: insertRowIndex } ) );
+		setAttributes( insertRow( vTable, { sectionName, rowIndex: insertRowIndex } ) );
 		setSelectedCells();
 		setSelectedLine();
 	};

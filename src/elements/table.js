@@ -59,7 +59,7 @@ export default function Table( props ) {
 	const colorProps = useColorProps( attributes );
 
 	const onInsertRow = ( sectionName, rowIndex ) => {
-		setAttributes( insertRow( attributes, { sectionName, rowIndex } ) );
+		setAttributes( insertRow( vTable, { sectionName, rowIndex } ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
