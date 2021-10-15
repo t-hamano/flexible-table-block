@@ -94,7 +94,7 @@ export function isEmptySection( vSection ) {
 	return (
 		! vSection ||
 		! vSection.length ||
-		vSection.every( ( row ) => ! ( row.cells && row.cells.length ) )
+		vSection.every( ( { cells } ) => ! ( cells && cells.length ) )
 	);
 }
 
@@ -141,8 +141,8 @@ export function toVirtualTable( state ) {
 		} ) );
 
 		// Mapping the actual section cells on the virtual section cell.
-		section.forEach( ( row, cRowIndex ) => {
-			row.cells.forEach( ( cell, cColIndex ) => {
+		section.forEach( ( { cells }, cRowIndex ) => {
+			cells.forEach( ( cell, cColIndex ) => {
 				// Colmun index on the virtual section excluding cells already marked as "filled".
 				const vColIndex = vSection[ cRowIndex ].cells.findIndex( ( { isFilled } ) => ! isFilled );
 
@@ -186,8 +186,8 @@ export function toVirtualTable( state ) {
 		} );
 
 		// Fallback: Fill with empty cells if any cells are not filled correctly.
-		vSection.forEach( ( row, cRowIndex ) => {
-			row.cells.forEach( ( cell, cVColIndex ) => {
+		vSection.forEach( ( { cells }, cRowIndex ) => {
+			cells.forEach( ( cell, cVColIndex ) => {
 				if ( ! cell.isFilled ) {
 					vSection[ cRowIndex ].cells[ cVColIndex ] = {
 						content: '',
@@ -202,6 +202,27 @@ export function toVirtualTable( state ) {
 		} );
 
 		return vSection;
+	} );
+}
+
+/**
+ * Remove cells from the virtual table that are not actually needed and convert them to table attributes.
+ *
+ * @param {Object} vTable Current table state.
+ * @return {Object} Table attributes.
+ */
+export function toTableAttributes( vTable ) {
+	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
+
+	return mapValues( vSections, ( section ) => {
+		if ( ! section.length ) return [];
+
+		return section
+			.map( ( { cells } ) => ( {
+				// Delete cells marked as deletion.
+				cells: cells.filter( ( cell ) => ! cell.isDelete && ! cell.isMerged ),
+			} ) )
+			.filter( ( { cells } ) => cells.length );
 	} );
 }
 

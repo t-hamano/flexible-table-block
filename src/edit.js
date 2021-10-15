@@ -42,6 +42,7 @@ import {
 } from './utils/table-state';
 import {
 	toVirtualTable,
+	toTableAttributes,
 	isEmptySection,
 	isRectangleSelected,
 	hasMergedCells,
@@ -97,7 +98,8 @@ function TableEdit( props ) {
 		const insertRowIndex =
 			offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
 
-		setAttributes( insertRow( vTable, { sectionName, rowIndex: insertRowIndex } ) );
+		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -119,7 +121,8 @@ function TableEdit( props ) {
 			return;
 		}
 
-		setAttributes( deleteRow( vTable, { sectionName, rowIndex } ) );
+		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -133,7 +136,9 @@ function TableEdit( props ) {
 		const insertVColIndex =
 			offset === 0 ? vColIndex : vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
 
-		setAttributes( insertColumn( vTable, { vColIndex: insertVColIndex } ) );
+		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
+
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -143,19 +148,22 @@ function TableEdit( props ) {
 
 		const { vColIndex } = selectedCells[ 0 ];
 
-		setAttributes( deleteColumn( vTable, { vColIndex } ) );
+		const newVTable = deleteColumn( vTable, { vColIndex } );
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onMergeCells = () => {
-		setAttributes( mergeCells( vTable, { selectedCells } ) );
+		const newVTable = mergeCells( vTable, { selectedCells } );
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onSplitMergedCells = () => {
-		setAttributes( splitMergedCells( vTable, { selectedCells } ) );
+		const newVTable = splitMergedCells( vTable, { selectedCells } );
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};

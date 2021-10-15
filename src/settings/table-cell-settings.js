@@ -29,7 +29,7 @@ import {
 	PaddingControl,
 	ColorControl,
 } from '../controls';
-import { toUnitVal } from '../utils/helper';
+import { toTableAttributes, toUnitVal } from '../utils/helper';
 import { updateCellsState } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -57,7 +57,8 @@ export default function TableCellSettings( props ) {
 	const cellStylesObj = convertToObject( targetCell.styles );
 
 	const updateCellsStyle = ( styles ) => {
-		setAttributes( updateCellsState( vTable, { styles }, { selectedCells } ) );
+		const newVTable = updateCellsState( vTable, { styles }, { selectedCells } );
+		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onChangeFontSize = ( value ) => {
@@ -107,12 +108,14 @@ export default function TableCellSettings( props ) {
 	};
 
 	const onChangeTag = ( value ) => {
-		setAttributes( updateCellsState( vTable, { tag: value }, { selectedCells } ) );
+		const newVTable = updateCellsState( vTable, { tag: value }, { selectedCells } );
+		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onChangeClass = ( value ) => {
 		const newValue = value !== '' ? value : undefined;
-		setAttributes( updateCellsState( vTable, { className: newValue }, { selectedCells } ) );
+		const newVTable = updateCellsState( vTable, { className: newValue }, { selectedCells } );
+		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onResetCellSettings = () => {

@@ -31,7 +31,7 @@ import {
 	PaddingControl,
 } from '../controls';
 import { toggleSection } from '../utils/table-state';
-import { toUnitVal } from '../utils/helper';
+import { toUnitVal, toTableAttributes } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
 import {
 	pickPadding,
@@ -87,11 +87,13 @@ export default function TableSettings( props ) {
 	};
 
 	const onToggleHeaderSection = () => {
-		setAttributes( toggleSection( vTable, 'head' ) );
+		const newVTable = toggleSection( vTable, 'head' );
+		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onToggleFooterSection = () => {
-		setAttributes( toggleSection( vTable, 'foot' ) );
+		const newVTable = toggleSection( vTable, 'foot' );
+		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onChangeWidth = ( value ) => {

@@ -15,7 +15,12 @@ import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL } from '../constants';
-import { isEmptySection, toVirtualRows, toRectangledSelectedCells } from '../utils/helper';
+import {
+	isEmptySection,
+	toTableAttributes,
+	toVirtualRows,
+	toRectangledSelectedCells,
+} from '../utils/helper';
 import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -59,7 +64,8 @@ export default function Table( props ) {
 	const colorProps = useColorProps( attributes );
 
 	const onInsertRow = ( sectionName, rowIndex ) => {
-		setAttributes( insertRow( vTable, { sectionName, rowIndex } ) );
+		const newVTable = insertRow( vTable, { sectionName, rowIndex } );
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -77,7 +83,9 @@ export default function Table( props ) {
 			return;
 		}
 
-		setAttributes( deleteRow( vTable, { sectionName, rowIndex } ) );
+		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
+
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
@@ -91,13 +99,15 @@ export default function Table( props ) {
 				  offset +
 				  ( vTargetCell.colSpan ? parseInt( vTargetCell.colSpan ) - 1 : 0 );
 
-		setAttributes( insertColumn( vTable, { vColIndex } ) );
+		const newVTable = insertColumn( vTable, { vColIndex } );
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onDeleteColumn = ( vColIndex ) => {
-		setAttributes( deleteColumn( vTable, { vColIndex } ) );
+		const newVTable = deleteColumn( vTable, { vColIndex } );
+		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
