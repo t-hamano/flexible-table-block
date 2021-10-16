@@ -39,14 +39,12 @@ import {
 	deleteColumn,
 	mergeCells,
 	splitMergedCells,
-} from './utils/table-state';
-import {
-	toVirtualTable,
-	toTableAttributes,
-	isEmptySection,
-	isRectangleSelected,
 	hasMergedCells,
-} from './utils/helper';
+	isRectangleSelected,
+	toTableAttributes,
+	toVirtualTable,
+	isEmptySection,
+} from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 

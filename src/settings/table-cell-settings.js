@@ -29,8 +29,8 @@ import {
 	PaddingControl,
 	ColorControl,
 } from '../controls';
-import { toTableAttributes, toUnitVal } from '../utils/helper';
-import { updateCellsState } from '../utils/table-state';
+import { toUnitVal } from '../utils/helper';
+import { toTableAttributes, updateCellsState } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
 	pickPadding,

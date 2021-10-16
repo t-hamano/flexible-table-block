@@ -16,12 +16,15 @@ import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
  */
 import { CELL_ARIA_LABEL } from '../constants';
 import {
-	isEmptySection,
-	toTableAttributes,
-	toVirtualRows,
+	insertRow,
+	deleteRow,
+	insertColumn,
+	deleteColumn,
 	toRectangledSelectedCells,
-} from '../utils/helper';
-import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
+	toVirtualRows,
+	toTableAttributes,
+	isEmptySection,
+} from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
 	ButtonRowBeforeInserter,
