@@ -1,10 +1,10 @@
 /**
  * Internal dependencies
  */
-import { toUnitVal } from './helper';
 import type { Properties } from 'csstype';
 import type { Corners, Direction } from './style-picker';
 import { pickBy, omit, mapValues } from 'lodash';
+import { toUnitVal } from './unit-helpers';
 
 function getCssPropertyWithFourDirection(
 	property: keyof Properties,
