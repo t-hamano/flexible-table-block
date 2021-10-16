@@ -1,13 +1,11 @@
-import { toNumber } from 'lodash';
-
 /**
  * Sanitize the value of UnitControl.
  *
- * @param {string} value UnitControl value.
- * @return {string} Sanitized UnitControl value.
+ * @param  value UnitControl value.
+ * @return Sanitized UnitControl value.
  */
 export function toUnitVal( value: string ): string {
-	const parsedValue = toNumber( value );
+	const parsedValue = parseFloat( value );
 
 	if ( isNaN( parsedValue ) || 0 > parsedValue ) {
 		return '';
@@ -21,13 +19,16 @@ export function toUnitVal( value: string ): string {
 /**
  * Parses a number and unit from a value.
  *
- * @param {string} initialValue Value to parse
- * @return {Array} The extracted number and unit.
+ * @param  initialValue Value to parse
+ * @return The extracted number and unit.
  */
 export function parseUnit( initialValue: string ): [ number, string ] {
 	const value = String( initialValue ).trim();
-	let num = parseFloat( value );
-	num = isNaN( num ) ? 0 : num;
+	const num = parseFloat( value );
+
+	if ( isNaN( num ) ) {
+		return [ 0, '' ];
+	}
 
 	const unit = value.match( /[\d.\-+]*\s*(.*)/ )?.[ 1 ] ?? '';
 
