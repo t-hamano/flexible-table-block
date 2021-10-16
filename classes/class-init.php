@@ -1,11 +1,11 @@
 <?php
 /**
- * @package flexible-table-block
+ * @package Flexible_Table_Block;
  * @author Tetsuaki Hamano
  * @license GPL-2.0+
  */
 
-namespace flexible_table_block;
+namespace Flexible_Table_Block;
 
 class Init {
 
@@ -17,7 +17,7 @@ class Init {
 		load_plugin_textdomain( FTB_NAMESPACE );
 
 		// Uninstallation process.
-		register_uninstall_hook( FTB_NAMESPACE, 'flexible_table_block\Init::plugin_uninstall' );
+		register_uninstall_hook( FTB_NAMESPACE, __NAMESPACE__.'\Init::plugin_uninstall' );
 
 		// Load classes.
 		$this->load_classes();

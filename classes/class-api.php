@@ -1,11 +1,14 @@
 <?php
 /**
- * @package flexible-table-block
+ * @package Flexible_Table_Block
  * @author Tetsuaki Hamano
  * @license GPL-2.0+
  */
 
-namespace flexible_table_block;
+namespace Flexible_Table_Block;
+
+use WP_Error;
+use WP_REST_Response;
 
 class Api {
 
