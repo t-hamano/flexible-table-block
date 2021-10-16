@@ -15,10 +15,10 @@ import {
  */
 import { FONT_SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS, CAPTION_SIDE_CONTROLS } from '../constants';
 import { PaddingControl } from '../controls';
-import { toUnitVal } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
 import { pickPadding } from '../utils/style-picker';
 import { updatePadding } from '../utils/style-updater';
+import { toUnitVal } from '../utils/unit-helpers';
 
 export default function TableCaptionSettings( props ) {
 	const { captionStylesObj, attributes, setAttributes } = props;

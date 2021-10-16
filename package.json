@@ -9,7 +9,6 @@
 		"stop": "wp-env stop",
 		"start": "wp-scripts start",
 		"build": "wp-scripts build",
-		"format": "wp-scripts format ./src",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"lint:php": "composer lint",
@@ -18,16 +17,14 @@
 	},
 	"devDependencies": {
 		"@types/jest": "^26.0.0",
-		"@types/lodash": "^4.14.175",
 		"@types/wordpress__block-editor": "^6.0.4",
 		"@types/wordpress__blocks": "^9.1.1",
 		"@types/wordpress__data": "^4.6.10",
 		"@typescript-eslint/eslint-plugin": "^5.0.0",
 		"@typescript-eslint/parser": "^5.0.0",
 		"@wordpress/env": "^4.1.2",
-		"@wordpress/prettier-config": "^1.1.1",
+		"@wordpress/jest-preset-default": "^7.1.1",
 		"@wordpress/scripts": "^18.1.0",
-		"jest": "^26.0.0",
 		"opener": "^1.5.2",
 		"prettier": "npm:wp-prettier@2.2.1-beta-1",
 		"stylelint-config-rational-order": "^0.1.2",
@@ -43,11 +40,9 @@
 		"@wordpress/compose": "^4.1.6",
 		"@wordpress/core-data": "^3.1.12",
 		"@wordpress/data": "^5.1.6",
-		"@wordpress/element": "^3.1.2",
 		"@wordpress/hooks": "^3.2.1",
 		"@wordpress/i18n": "^4.1.2",
 		"@wordpress/icons": "^4.0.3",
-		"classnames": "^2.3.1",
-		"lodash": "^4.17.21"
+		"jest": "^26.0.0"
 	}
 }
