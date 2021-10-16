@@ -3,7 +3,8 @@
 /**
  * Internal dependencies
  */
-import { cleanEmptyObject, toUnitVal } from './helper';
+import { cleanEmptyObject } from './helper';
+import { toUnitVal } from './unit-helpers';
 
 /* eslint-disable-next-line jsdoc/valid-types */
 /**
