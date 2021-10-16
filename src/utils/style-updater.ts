@@ -31,7 +31,7 @@ function getCssPropertyWithFourDirection(
 	}
 
 	return {
-		[ property ]: `${ top } ${ right } ${ bottom } ${ left } `,
+		[ property ]: `${ top } ${ right } ${ bottom } ${ left }`,
 	};
 }
 
