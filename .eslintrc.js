@@ -39,5 +39,12 @@ module.exports = {
 				},
 			},
 		},
+		{
+			files: [ 'test/e2e/**/*.js', 'test/e2e/**/*.ts' ],
+			extends: [ 'plugin:@wordpress/eslint-plugin/test-e2e' ],
+			rules: {
+				'jest/expect-expect': 'off',
+			},
+		},
 	],
 };
