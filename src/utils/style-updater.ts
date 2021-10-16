@@ -46,9 +46,7 @@ export function updatePadding(
 	styles: Properties,
 	values: Partial< Direction > | undefined
 ): Properties {
-	if ( ! values ) {
-		return styles;
-	}
+	if ( ! values ) return styles;
 
 	const shortHandPropName = 'padding';
 	const { top, right, bottom, left } = mapValues( pickBy( values ), toUnitVal );
@@ -85,9 +83,7 @@ export function updateBorderWidth(
 	styles: Properties,
 	values: Partial< Direction > | undefined
 ): Properties {
-	if ( ! values ) {
-		return styles;
-	}
+	if ( ! values ) return styles;
 
 	const shortHandPropName = 'borderWidth';
 	const { top, right, bottom, left } = mapValues( pickBy( values ), toUnitVal );
@@ -124,9 +120,7 @@ export function updateBorderStyle(
 	styles: Properties,
 	values: Partial< Direction > | undefined
 ): Properties {
-	if ( ! values ) {
-		return styles;
-	}
+	if ( ! values ) return styles;
 
 	const shortHandPropName = 'borderStyle';
 	const { top, right, bottom, left } = pickBy( values );
@@ -163,9 +157,7 @@ export function updateBorderColor(
 	styles: Properties,
 	values: Partial< Direction > | undefined
 ): Properties {
-	if ( ! values ) {
-		return styles;
-	}
+	if ( ! values ) return styles;
 
 	const shortHandPropName = 'borderColor';
 	const { top, right, bottom, left } = pickBy( values );
@@ -204,9 +196,7 @@ export function updateBorderSpacing(
 	styles: Properties,
 	values: { horizontal?: string; vertical?: string } | undefined
 ): Properties {
-	if ( ! values ) {
-		return styles;
-	}
+	if ( ! values ) return styles;
 
 	const newStyles = omit( styles, [ 'borderSpacing' ] );
 	const { horizontal, vertical } = mapValues( pickBy( values ), toUnitVal );
@@ -237,9 +227,7 @@ export function updateBorderRadius(
 	styles: Properties,
 	values: Partial< Corners > | undefined
 ): Properties {
-	if ( ! values ) {
-		return styles;
-	}
+	if ( ! values ) return styles;
 
 	const shortHandPropName = 'borderRadius';
 	const { topLeft, topRight, bottomRight, bottomLeft } = mapValues( pickBy( values ), toUnitVal );
