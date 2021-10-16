@@ -1,4 +1,4 @@
-name: Unit Tests for JS
+name: Tests
 
 on:
   push:
@@ -6,13 +6,56 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  tests:
+
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Running the tests
+        run: npm lint
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Running the tests
+        run: npm test:unit
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install WordPress
+        run: |
+          npm run wp-env start
+
+      - name: Running the tests
+        run: |
+          npm run test:e2e
