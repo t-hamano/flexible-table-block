@@ -1,18 +1,25 @@
-import { createTable, insertRow } from '../table-state';
+import { createTable, deleteRow, insertRow } from '../table-state';
 import type { Cell, Row, VirtualTable } from '../VirtualTable';
 import { times } from 'lodash';
 
-const getCell = ( tag: 'th' | 'td', content = '' ): Cell => {
+const getCell = ( tag: 'th' | 'td', content = '', options = {} ): Cell => {
 	return {
 		content,
 		tag,
+		...options,
 	};
 };
 
-const getRow = ( cells: number, tag: 'th' | 'td', content = '' ): Row => {
+const getRow = ( cells: number, tag: 'th' | 'td', content = '', options = {} ): Row => {
 	return {
-		cells: times( cells, () => getCell( tag, content ) ),
+		cells: times( cells, () => getCell( tag, content, options ) ),
 	};
+};
+
+const table: VirtualTable = {
+	head: [ getRow( 2, 'th', 'head' ) ],
+	body: [ getRow( 2, 'td', 'body-0' ), getRow( 2, 'td', 'body-1' ) ],
+	foot: [ getRow( 2, 'td', 'foot' ) ],
 };
 
 describe( 'table-state', () => {
@@ -39,15 +46,20 @@ describe( 'table-state', () => {
 	} );
 
 	describe( 'insertRow', () => {
-		const table: VirtualTable = {
-			head: [ getRow( 2, 'th', 'head' ) ],
-			body: [ getRow( 2, 'td', 'body' ), getRow( 2, 'td', 'body' ) ],
-			foot: [ getRow( 2, 'td', 'foot' ) ],
-		};
 		it( 'should return the table with the correct number of rows', () => {
-			expect( insertRow( table, { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
+			expect( insertRow( { ...table }, { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
 				// head: [ getRow( 2, 'th', 'head' ) ],
-				body: [ getRow( 2, 'td', 'body' ), getRow( 2, 'td', '' ), getRow( 2, 'td', 'body' ) ],
+				body: [ getRow( 2, 'td', 'body-0' ), getRow( 2, 'td', '' ), getRow( 2, 'td', 'body-1' ) ],
+				// foot: [ getRow( 2, 'td', 'foot' ) ],
+			} );
+		} );
+	} );
+
+	describe( 'deleteRow', () => {
+		it( 'should return the table with the correct number of rows', () => {
+			expect( deleteRow( { ...table }, { sectionName: 'body', rowIndex: 0 } ) ).toStrictEqual( {
+				// head: [ getRow( 2, 'th', 'head' ) ],
+				body: [ getRow( 2, 'td', 'body-0', { isDelete: true } ), getRow( 2, 'td', 'body-1' ) ],
 				// foot: [ getRow( 2, 'td', 'foot' ) ],
 			} );
 		} );
