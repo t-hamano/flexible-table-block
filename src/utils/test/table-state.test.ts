@@ -1,5 +1,5 @@
-import { createTable } from '../table-state';
-import type { Cell, Row } from '../VirtualTable';
+import { createTable, insertRow } from '../table-state';
+import type { Cell, Row, VirtualTable } from '../VirtualTable';
 import { times } from 'lodash';
 
 const getCell = ( tag: 'th' | 'td', content = '' ): Cell => {
@@ -34,6 +34,21 @@ describe( 'table-state', () => {
 				head: [ getRow( 2, 'th' ) ],
 				body: [ getRow( 2, 'td' ), getRow( 2, 'td' ) ],
 				foot: [ getRow( 2, 'td' ) ],
+			} );
+		} );
+	} );
+
+	describe( 'insertRow', () => {
+		const table: VirtualTable = {
+			head: [ getRow( 2, 'th', 'head' ) ],
+			body: [ getRow( 2, 'td', 'body' ), getRow( 2, 'td', 'body' ) ],
+			foot: [ getRow( 2, 'td', 'foot' ) ],
+		};
+		it( 'should return the table with the correct number of rows', () => {
+			expect( insertRow( table, { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
+				// head: [ getRow( 2, 'th', 'head' ) ],
+				body: [ getRow( 2, 'td', 'body' ), getRow( 2, 'td', '' ), getRow( 2, 'td', 'body' ) ],
+				// foot: [ getRow( 2, 'td', 'foot' ) ],
 			} );
 		} );
 	} );
