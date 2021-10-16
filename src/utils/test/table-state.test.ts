@@ -9,19 +9,15 @@ describe( 'table-state', () => {
 				tag,
 			};
 		};
+		const row = {
+			cells: [ getCell( 'td' ), getCell( 'td' ) ],
+		};
 		it( 'should create the right virtual table', () => {
 			expect(
 				createTable( { rowCount: 2, colCount: 2, headerSection: false, footerSection: false } )
 			).toStrictEqual( {
 				head: [],
-				body: [
-					{
-						cells: [ getCell( 'td' ), getCell( 'td' ) ],
-					},
-					{
-						cells: [ getCell( 'td' ), getCell( 'td' ) ],
-					},
-				],
+				body: [ row, row ],
 				foot: [],
 			} );
 		} );
@@ -35,19 +31,8 @@ describe( 'table-state', () => {
 						cells: [ getCell( 'th' ), getCell( 'th' ) ],
 					},
 				],
-				body: [
-					{
-						cells: [ getCell( 'td' ), getCell( 'td' ) ],
-					},
-					{
-						cells: [ getCell( 'td' ), getCell( 'td' ) ],
-					},
-				],
-				foot: [
-					{
-						cells: [ getCell( 'td' ), getCell( 'td' ) ],
-					},
-				],
+				body: [ row, row ],
+				foot: [ row ],
 			} );
 		} );
 	} );
