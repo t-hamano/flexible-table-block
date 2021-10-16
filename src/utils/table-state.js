@@ -42,6 +42,8 @@ export function insertRow( vTable, { sectionName, rowIndex } ) {
 			colIndex,
 			vColIndex: colIndex,
 			tag: 'head' === sectionName ? 'th' : 'td',
+			// rowSpan: 1,
+			// colSpan: 1
 		} ) ),
 	};
 	return {

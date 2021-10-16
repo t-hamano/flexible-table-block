@@ -65,6 +65,8 @@ export function createTable( {
 					colIndex,
 					rowIndex,
 					sectionName,
+					// rowSpan: 1,
+					// colSpan: 1
 				} )
 			),
 		} ) );
