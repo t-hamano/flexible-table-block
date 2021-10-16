@@ -1,25 +1,40 @@
 import { createTable, deleteRow, insertRow } from '../table-state';
-import type { Cell, Row, VirtualTable } from '../VirtualTable';
+import type { Cell, Row, SectionName, VirtualTable } from '../VirtualTable';
 import { times } from 'lodash';
 
-const getCell = ( tag: 'th' | 'td', content = '', options = {} ): Cell => {
+const getRow = (
+	cells: number,
+	sectionName: SectionName,
+	rowIndex: number,
+	tag: 'th' | 'td',
+	content = '',
+	options = {}
+): Row => {
 	return {
-		content,
-		tag,
-		...options,
-	};
-};
-
-const getRow = ( cells: number, tag: 'th' | 'td', content = '', options = {} ): Row => {
-	return {
-		cells: times( cells, () => getCell( tag, content, options ) ),
+		cells: times(
+			cells,
+			( colIndex ): Cell => {
+				return {
+					content,
+					tag,
+					vColIndex: colIndex,
+					rowIndex,
+					colIndex,
+					sectionName,
+					...options,
+				};
+			}
+		),
 	};
 };
 
 const table: VirtualTable = {
-	head: [ getRow( 2, 'th', 'head' ) ],
-	body: [ getRow( 2, 'td', 'body-0' ), getRow( 2, 'td', 'body-1' ) ],
-	foot: [ getRow( 2, 'td', 'foot' ) ],
+	head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
+	body: [
+		getRow( 2, 'body', 0, 'td', 'body-0' ),
+		getRow( 2, 'body', 1, 'td', 'body-1' )
+	],
+	foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
 };
 
 describe( 'table-state', () => {
@@ -29,7 +44,7 @@ describe( 'table-state', () => {
 				createTable( { rowCount: 2, colCount: 2, headerSection: false, footerSection: false } )
 			).toStrictEqual( {
 				head: [],
-				body: [ getRow( 2, 'td' ), getRow( 2, 'td' ) ],
+				body: [ getRow( 2, 'body', 0, 'td' ), getRow( 2, 'body', 1, 'td' ) ],
 				foot: [],
 			} );
 		} );
@@ -38,9 +53,9 @@ describe( 'table-state', () => {
 			expect(
 				createTable( { rowCount: 2, colCount: 2, headerSection: true, footerSection: true } )
 			).toStrictEqual( {
-				head: [ getRow( 2, 'th' ) ],
-				body: [ getRow( 2, 'td' ), getRow( 2, 'td' ) ],
-				foot: [ getRow( 2, 'td' ) ],
+				head: [ getRow( 2, 'head', 0, 'th' ) ],
+				body: [ getRow( 2, 'body', 0, 'td' ), getRow( 2, 'body', 1, 'td' ) ],
+				foot: [ getRow( 2, 'foot', 0, 'td' ) ],
 			} );
 		} );
 	} );
@@ -48,9 +63,13 @@ describe( 'table-state', () => {
 	describe( 'insertRow', () => {
 		it( 'should return the table with the correct number of rows', () => {
 			expect( insertRow( { ...table }, { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
-				// head: [ getRow( 2, 'th', 'head' ) ],
-				body: [ getRow( 2, 'td', 'body-0' ), getRow( 2, 'td', '' ), getRow( 2, 'td', 'body-1' ) ],
-				// foot: [ getRow( 2, 'td', 'foot' ) ],
+				head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
+				body: [
+					getRow( 2, 'body', 0, 'td', 'body-0' ),
+					getRow( 2, 'body', 1, 'td', '' ),
+					getRow( 2, 'body', 2, 'td', 'body-1' ),
+				],
+				foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
 			} );
 		} );
 	} );
@@ -58,9 +77,12 @@ describe( 'table-state', () => {
 	describe( 'deleteRow', () => {
 		it( 'should return the table with the correct number of rows', () => {
 			expect( deleteRow( { ...table }, { sectionName: 'body', rowIndex: 0 } ) ).toStrictEqual( {
-				// head: [ getRow( 2, 'th', 'head' ) ],
-				body: [ getRow( 2, 'td', 'body-0', { isDelete: true } ), getRow( 2, 'td', 'body-1' ) ],
-				// foot: [ getRow( 2, 'td', 'foot' ) ],
+				head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
+				body: [
+					getRow( 2, 'body', 0, 'td', 'body-0', { isDelete: true } ),
+					getRow( 2, 'body', 1, 'td', 'body-1' ),
+				],
+				foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
 			} );
 		} );
 	} );
