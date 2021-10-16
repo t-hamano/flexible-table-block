@@ -51,7 +51,11 @@ export default function BorderColorControl( {
 
 	const isMixed =
 		allowSides &&
-		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
+		! (
+			values.top === values.right &&
+			values.top === values.bottom &&
+			values.top === values.left
+		);
 
 	const colors = useSelect( ( select ) => {
 		const { getSettings } = select( blockEditorStore );
@@ -111,10 +115,20 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
+		<BaseControl
+			className={ classNames }
+			id={ id }
+			help={ help }
+			aria-labelledby={ headingId }
+		>
 			<div className="ftb-border-color-control__header">
 				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+				<Button
+					isSmall
+					isSecondary
+					variant="secondary"
+					onClick={ handleOnReset }
+				>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
@@ -157,16 +171,27 @@ export default function BorderColorControl( {
 					{ ! isLinked &&
 						allowSides &&
 						SIDES.map( ( item, index ) => (
-							<div className="ftb-border-color-control__controls-row" key={ index }>
-								{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
+							<div
+								className="ftb-border-color-control__controls-row"
+								key={ index }
+							>
+								{ hasIndicator && (
+									<SideIndicatorControl
+										sides={ [ item.value ] }
+									/>
+								) }
 								<Button
 									label={ item.label }
 									className="ftb-border-color-control__indicator"
-									onClick={ () => handleOnPickerOpen( index ) }
+									onClick={ () =>
+										handleOnPickerOpen( index )
+									}
 								>
 									<ColorIndicator
 										className={ classnames( {
-											'component-color-indicator--none': ! values[ item.value ],
+											'component-color-indicator--none': ! values[
+												item.value
+											],
 										} ) }
 										colorValue={ values[ item.value ] }
 									/>
@@ -180,7 +205,12 @@ export default function BorderColorControl( {
 										<ColorPalette
 											colors={ colors }
 											value={ values[ item.value ] }
-											onChange={ ( value ) => handleOnChange( value, item.value ) }
+											onChange={ ( value ) =>
+												handleOnChange(
+													value,
+													item.value
+												)
+											}
 										/>
 									</Popover>
 								) }

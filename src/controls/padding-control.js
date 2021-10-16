@@ -45,7 +45,11 @@ export default function PaddingControl( {
 
 	const isMixed =
 		allowSides &&
-		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
+		! (
+			values.top === values.right &&
+			values.top === values.bottom &&
+			values.top === values.left
+		);
 
 	const paddingUnits = useCustomUnits( { availableUnits: PADDING_UNITS } );
 
@@ -58,7 +62,9 @@ export default function PaddingControl( {
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
+	const allInputPlaceholder = isMixed
+		? __( 'Mixed', 'flexible-table-block' )
+		: undefined;
 	const allInputValue = isMixed ? undefined : values.top;
 
 	const classNames = classnames( 'ftb-border-width-control', className );
@@ -97,16 +103,28 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
+		<BaseControl
+			className={ classNames }
+			id={ id }
+			help={ help }
+			aria-labelledby={ headingId }
+		>
 			<div className="ftb-border-width-control__header">
 				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+				<Button
+					isSmall
+					isSecondary
+					variant="secondary"
+					onClick={ handleOnReset }
+				>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-width-control__header-control">
 				{ hasIndicator && (
-					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+					<SideIndicatorControl
+						sides={ side === undefined ? undefined : [ side ] }
+					/>
 				) }
 				{ ( isLinked || ! allowSides ) && (
 					<UnitControl
@@ -140,7 +158,9 @@ export default function PaddingControl( {
 							key={ item.value }
 							aria-label={ item.label }
 							onFocus={ () => handleOnFocus( item.value ) }
-							onChange={ ( value ) => handleOnChange( value, item.value ) }
+							onChange={ ( value ) =>
+								handleOnChange( value, item.value )
+							}
 							value={ values[ item.value ] }
 							units={ paddingUnits }
 						/>

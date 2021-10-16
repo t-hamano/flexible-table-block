@@ -220,7 +220,11 @@ export function updateBorderRadius( styles, values ) {
 		};
 	}
 
-	if ( topLeft === topRight && topLeft === bottomRight && topLeft === bottomLeft ) {
+	if (
+		topLeft === topRight &&
+		topLeft === bottomRight &&
+		topLeft === bottomLeft
+	) {
 		return {
 			...newStyles,
 			borderRadius: topLeft,

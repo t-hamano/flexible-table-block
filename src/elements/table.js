@@ -7,7 +7,10 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
+import {
+	RichText,
+	__experimentalUseColorProps as useColorProps,
+} from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
 
@@ -21,7 +24,12 @@ import {
 	toVirtualRows,
 	toRectangledSelectedCells,
 } from '../utils/helper';
-import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
+import {
+	insertRow,
+	deleteRow,
+	insertColumn,
+	deleteColumn,
+} from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
 	ButtonRowBeforeInserter,
@@ -79,7 +87,12 @@ export default function Table( props ) {
 			vTable.foot.length
 		) {
 			// eslint-disable-next-line no-alert, no-undef
-			alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
+			alert(
+				__(
+					'The table body must have one or more rows.',
+					'flexible-table-block'
+				)
+			);
 			return;
 		}
 
@@ -97,7 +110,9 @@ export default function Table( props ) {
 				? vTargetCell.vColIndex
 				: vTargetCell.vColIndex +
 				  offset +
-				  ( vTargetCell.colSpan ? parseInt( vTargetCell.colSpan ) - 1 : 0 );
+				  ( vTargetCell.colSpan
+						? parseInt( vTargetCell.colSpan ) - 1
+						: 0 );
 
 		const newVTable = insertColumn( vTable, { vColIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
@@ -115,14 +130,19 @@ export default function Table( props ) {
 	const onSelectSectionCells = ( sectionName ) => {
 		setSelectedCells(
 			vTable[ sectionName ].reduce( ( cells, row ) => {
-				return cells.concat( row.cells.filter( ( cell ) => ! cell.isDelete ) );
+				return cells.concat(
+					row.cells.filter( ( cell ) => ! cell.isDelete )
+				);
 			}, [] )
 		);
 		setSelectedLine();
 	};
 
 	const onSelectRow = ( sectionName, rowIndex ) => {
-		if ( selectedLine?.sectionName === sectionName && selectedLine?.rowIndex === rowIndex ) {
+		if (
+			selectedLine?.sectionName === sectionName &&
+			selectedLine?.rowIndex === rowIndex
+		) {
 			setSelectedLine();
 			setSelectedCells();
 		} else {
@@ -130,7 +150,10 @@ export default function Table( props ) {
 			setSelectedCells(
 				vTable[ sectionName ].reduce( ( cells, row ) => {
 					return cells.concat(
-						row.cells.filter( ( cell ) => cell.rowIndex === rowIndex && ! cell.isDelete )
+						row.cells.filter(
+							( cell ) =>
+								cell.rowIndex === rowIndex && ! cell.isDelete
+						)
 					);
 				}, [] )
 			);
@@ -148,7 +171,11 @@ export default function Table( props ) {
 				vRows.reduce(
 					( cells, row ) =>
 						cells.concat(
-							row.cells.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isDelete )
+							row.cells.filter(
+								( cell ) =>
+									cell.vColIndex === vColIndex &&
+									! cell.isDelete
+							)
 						),
 					[]
 				)
@@ -170,13 +197,18 @@ export default function Table( props ) {
 		setAttributes( {
 			[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
 				if ( rowIndex !== selectedRowIndex ) {
-					return { cells: row.cells.filter( ( cell ) => ! cell.isDelete ) };
+					return {
+						cells: row.cells.filter( ( cell ) => ! cell.isDelete ),
+					};
 				}
 
 				return {
 					cells: row.cells
 						.map( ( cell, vColIndex ) => {
-							if ( rowIndex !== selectedRowIndex || vColIndex !== selectedVColIndex ) {
+							if (
+								rowIndex !== selectedRowIndex ||
+								vColIndex !== selectedVColIndex
+							) {
 								return cell;
 							}
 							return {
@@ -196,17 +228,29 @@ export default function Table( props ) {
 
 		if ( event.shiftKey ) {
 			// Range select.
-			const fromCell = selectedCells.find( ( { isFirstSelected } ) => isFirstSelected );
+			const fromCell = selectedCells.find(
+				( { isFirstSelected } ) => isFirstSelected
+			);
 
 			if ( ! fromCell ) return;
 
 			if ( fromCell.sectionName !== sectionName ) {
 				// eslint-disable-next-line no-alert, no-undef
-				alert( __( 'Cannot select range cells from difference section.', 'flexible-table-block' ) );
+				alert(
+					__(
+						'Cannot select range cells from difference section.',
+						'flexible-table-block'
+					)
+				);
 				return;
 			}
 
-			setSelectedCells( toRectangledSelectedCells( vTable, { fromCell, toCell: clickedCell } ) );
+			setSelectedCells(
+				toRectangledSelectedCells( vTable, {
+					fromCell,
+					toCell: clickedCell,
+				} )
+			);
 		} else if ( event.ctrlKey || event.metaKey ) {
 			// Multple select.
 			const newSelectedCells = selectedCells ? [ ...selectedCells ] : [];
@@ -218,9 +262,17 @@ export default function Table( props ) {
 				);
 			} );
 
-			if ( newSelectedCells.length && sectionName !== newSelectedCells[ 0 ].sectionName ) {
+			if (
+				newSelectedCells.length &&
+				sectionName !== newSelectedCells[ 0 ].sectionName
+			) {
 				// eslint-disable-next-line no-alert, no-undef
-				alert( __( 'Cannot select multi cells from difference section.', 'flexible-table-block' ) );
+				alert(
+					__(
+						'Cannot select multi cells from difference section.',
+						'flexible-table-block'
+					)
+				);
 				return;
 			}
 
@@ -238,15 +290,20 @@ export default function Table( props ) {
 	};
 
 	// Remove cells from the virtual table that are not needed for dom rendering.
-	const filteredVTable = Object.keys( vTable ).reduce( ( result, sectionName ) => {
-		if ( isEmptySection( vTable[ sectionName ] ) ) return result;
-		return {
-			...result,
-			[ sectionName ]: vTable[ sectionName ]
-				.map( ( row ) => ( { cells: row.cells.filter( ( cell ) => ! cell.isDelete ) } ) )
-				.filter( ( row ) => row.cells.length ),
-		};
-	}, {} );
+	const filteredVTable = Object.keys( vTable ).reduce(
+		( result, sectionName ) => {
+			if ( isEmptySection( vTable[ sectionName ] ) ) return result;
+			return {
+				...result,
+				[ sectionName ]: vTable[ sectionName ]
+					.map( ( row ) => ( {
+						cells: row.cells.filter( ( cell ) => ! cell.isDelete ),
+					} ) )
+					.filter( ( row ) => row.cells.length ),
+			};
+		},
+		{}
+	);
 
 	const filteredSections = Object.keys( filteredVTable );
 
@@ -264,12 +321,23 @@ export default function Table( props ) {
 					{ filteredVTable[ sectionName ].map( ( row, rowIndex ) => (
 						<tr key={ rowIndex }>
 							{ row.cells.map( ( cell ) => {
-								const { content, tag, className, styles, rowSpan, colSpan, vColIndex } = cell;
+								const {
+									content,
+									tag,
+									className,
+									styles,
+									rowSpan,
+									colSpan,
+									vColIndex,
+								} = cell;
 
 								// Whether or not the current cell is included in the selected cells.
-								const isCellSelected = ( selectedCells || [] ).some(
+								const isCellSelected = (
+									selectedCells || []
+								).some(
 									( targetCell ) =>
-										targetCell.sectionName === sectionName &&
+										targetCell.sectionName ===
+											sectionName &&
 										targetCell.rowIndex === rowIndex &&
 										targetCell.vColIndex === vColIndex
 								);
@@ -280,11 +348,15 @@ export default function Table( props ) {
 									<Cell
 										key={ vColIndex }
 										name={ tag }
-										className={ classnames( className, { 'is-selected': isCellSelected } ) }
+										className={ classnames( className, {
+											'is-selected': isCellSelected,
+										} ) }
 										rowSpan={ rowSpan }
 										colSpan={ colSpan }
 										style={ cellStylesObj }
-										onClick={ ( event ) => onClickCell( event, cell ) }
+										onClick={ ( event ) =>
+											onClickCell( event, cell )
+										}
 									>
 										{ isSelected &&
 											options.show_label_on_section &&
@@ -292,133 +364,266 @@ export default function Table( props ) {
 											vColIndex === 0 && (
 												<Button
 													className="ftb-table-cell-label"
-													tabIndex={ options.focus_control_button ? 0 : -1 }
+													tabIndex={
+														options.focus_control_button
+															? 0
+															: -1
+													}
 													isPrimary
 													variant="primary"
 													onClick={ ( event ) => {
-														onSelectSectionCells( sectionName );
+														onSelectSectionCells(
+															sectionName
+														);
 														event.stopPropagation();
 													} }
 												>
 													{ `t${ sectionName }` }
 												</Button>
 											) }
-										{ isSelected && options.show_control_button && (
-											<>
-												{ rowIndex === 0 && vColIndex === 0 && (
-													<ButtonRowBeforeInserter
-														label={ __( 'Insert row before', 'flexible-table-block' ) }
-														tabIndex={ options.focus_control_button ? 0 : -1 }
-														icon={ plus }
-														iconSize="18"
-														hasPrevSection={ sectionIndex > 0 }
-														onClick={ ( event ) => {
-															onInsertRow( sectionName, rowIndex );
-															event.stopPropagation();
-														} }
-													/>
-												) }
-												{ vColIndex === 0 && (
-													<>
-														<ButtonRowSelector
-															label={ __( 'Select row', 'flexible-table-block' ) }
-															tabIndex={ options.focus_control_button ? 0 : -1 }
-															icon={ chevronRight }
-															iconSize="16"
-															isPrimary={
-																selectedLine?.sectionName === sectionName &&
-																selectedLine?.rowIndex === rowIndex
-															}
-															variant={
-																selectedLine?.sectionName === sectionName &&
-																selectedLine?.rowIndex === rowIndex
-																	? 'primary'
-																	: undefined
-															}
-															onClick={ ( event ) => {
-																onSelectRow( sectionName, rowIndex );
-																event.stopPropagation();
-															} }
-														/>
-														{ selectedLine?.sectionName === sectionName &&
-															selectedLine?.rowIndex === rowIndex && (
-																<ButtonRowDeleter
-																	label={ __( 'Delete row', 'flexible-table-block' ) }
-																	tabIndex={ options.focus_control_button ? 0 : -1 }
-																	icon={ trash }
-																	iconSize={ 20 }
-																	onClick={ ( event ) => {
-																		onDeleteRow( sectionName, rowIndex );
-																		event.stopPropagation();
-																	} }
-																/>
-															) }
-													</>
-												) }
-												{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
-													<ButtonColumnBeforeInserter
-														label={ __( 'Insert column before', 'flexible-table-block' ) }
-														tabIndex={ options.focus_control_button ? 0 : -1 }
-														icon={ plus }
-														iconSize="18"
-														onClick={ ( event ) => {
-															onInsertColumn( cell, 0 );
-															event.stopPropagation();
-														} }
-													/>
-												) }
-												{ sectionIndex === 0 && rowIndex === 0 && (
-													<>
-														<ButtonColumnSelector
-															label={ __( 'Select column', 'flexible-table-block' ) }
-															tabIndex={ options.focus_control_button ? 0 : -1 }
-															icon={ chevronDown }
-															iconSize="18"
-															isPrimary={ selectedLine?.vColIndex === vColIndex }
-															variant={
-																selectedLine?.vColIndex === vColIndex ? 'primary' : undefined
-															}
-															onClick={ ( event ) => {
-																onSelectColumn( vColIndex );
-																event.stopPropagation();
-															} }
-														></ButtonColumnSelector>
-														{ selectedLine?.vColIndex === vColIndex && (
-															<ButtonColumnDeleter
-																label={ __( 'Delete column', 'flexible-table-block' ) }
-																tabIndex={ options.focus_control_button ? 0 : -1 }
-																icon={ trash }
-																iconSize={ 20 }
-																onClick={ ( event ) => {
-																	onDeleteColumn( vColIndex );
+										{ isSelected &&
+											options.show_control_button && (
+												<>
+													{ rowIndex === 0 &&
+														vColIndex === 0 && (
+															<ButtonRowBeforeInserter
+																label={ __(
+																	'Insert row before',
+																	'flexible-table-block'
+																) }
+																tabIndex={
+																	options.focus_control_button
+																		? 0
+																		: -1
+																}
+																icon={ plus }
+																iconSize="18"
+																hasPrevSection={
+																	sectionIndex >
+																	0
+																}
+																onClick={ (
+																	event
+																) => {
+																	onInsertRow(
+																		sectionName,
+																		rowIndex
+																	);
 																	event.stopPropagation();
 																} }
 															/>
 														) }
-													</>
-												) }
-												{ vColIndex === 0 && (
-													<ButtonRowAfterInserter
-														label={ __( 'Insert row after', 'flexible-table-block' ) }
-														tabIndex={ options.focus_control_button ? 0 : -1 }
-														icon={ plus }
-														iconSize="18"
-														hasNextSection={
-															sectionIndex < filteredSections.length - 1 &&
-															rowIndex + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 ) ===
-																filteredVTable[ sectionName ].length - 1
-														}
-														onClick={ ( event ) => {
-															onInsertRow(
-																sectionName,
-																rowIndex + ( rowSpan ? parseInt( rowSpan ) : 1 )
-															);
-															event.stopPropagation();
-														} }
-													/>
-												) }
-											</>
-										) }
+													{ vColIndex === 0 && (
+														<>
+															<ButtonRowSelector
+																label={ __(
+																	'Select row',
+																	'flexible-table-block'
+																) }
+																tabIndex={
+																	options.focus_control_button
+																		? 0
+																		: -1
+																}
+																icon={
+																	chevronRight
+																}
+																iconSize="16"
+																isPrimary={
+																	selectedLine?.sectionName ===
+																		sectionName &&
+																	selectedLine?.rowIndex ===
+																		rowIndex
+																}
+																variant={
+																	selectedLine?.sectionName ===
+																		sectionName &&
+																	selectedLine?.rowIndex ===
+																		rowIndex
+																		? 'primary'
+																		: undefined
+																}
+																onClick={ (
+																	event
+																) => {
+																	onSelectRow(
+																		sectionName,
+																		rowIndex
+																	);
+																	event.stopPropagation();
+																} }
+															/>
+															{ selectedLine?.sectionName ===
+																sectionName &&
+																selectedLine?.rowIndex ===
+																	rowIndex && (
+																	<ButtonRowDeleter
+																		label={ __(
+																			'Delete row',
+																			'flexible-table-block'
+																		) }
+																		tabIndex={
+																			options.focus_control_button
+																				? 0
+																				: -1
+																		}
+																		icon={
+																			trash
+																		}
+																		iconSize={
+																			20
+																		}
+																		onClick={ (
+																			event
+																		) => {
+																			onDeleteRow(
+																				sectionName,
+																				rowIndex
+																			);
+																			event.stopPropagation();
+																		} }
+																	/>
+																) }
+														</>
+													) }
+													{ sectionIndex === 0 &&
+														rowIndex === 0 &&
+														vColIndex === 0 && (
+															<ButtonColumnBeforeInserter
+																label={ __(
+																	'Insert column before',
+																	'flexible-table-block'
+																) }
+																tabIndex={
+																	options.focus_control_button
+																		? 0
+																		: -1
+																}
+																icon={ plus }
+																iconSize="18"
+																onClick={ (
+																	event
+																) => {
+																	onInsertColumn(
+																		cell,
+																		0
+																	);
+																	event.stopPropagation();
+																} }
+															/>
+														) }
+													{ sectionIndex === 0 &&
+														rowIndex === 0 && (
+															<>
+																<ButtonColumnSelector
+																	label={ __(
+																		'Select column',
+																		'flexible-table-block'
+																	) }
+																	tabIndex={
+																		options.focus_control_button
+																			? 0
+																			: -1
+																	}
+																	icon={
+																		chevronDown
+																	}
+																	iconSize="18"
+																	isPrimary={
+																		selectedLine?.vColIndex ===
+																		vColIndex
+																	}
+																	variant={
+																		selectedLine?.vColIndex ===
+																		vColIndex
+																			? 'primary'
+																			: undefined
+																	}
+																	onClick={ (
+																		event
+																	) => {
+																		onSelectColumn(
+																			vColIndex
+																		);
+																		event.stopPropagation();
+																	} }
+																></ButtonColumnSelector>
+																{ selectedLine?.vColIndex ===
+																	vColIndex && (
+																	<ButtonColumnDeleter
+																		label={ __(
+																			'Delete column',
+																			'flexible-table-block'
+																		) }
+																		tabIndex={
+																			options.focus_control_button
+																				? 0
+																				: -1
+																		}
+																		icon={
+																			trash
+																		}
+																		iconSize={
+																			20
+																		}
+																		onClick={ (
+																			event
+																		) => {
+																			onDeleteColumn(
+																				vColIndex
+																			);
+																			event.stopPropagation();
+																		} }
+																	/>
+																) }
+															</>
+														) }
+													{ vColIndex === 0 && (
+														<ButtonRowAfterInserter
+															label={ __(
+																'Insert row after',
+																'flexible-table-block'
+															) }
+															tabIndex={
+																options.focus_control_button
+																	? 0
+																	: -1
+															}
+															icon={ plus }
+															iconSize="18"
+															hasNextSection={
+																sectionIndex <
+																	filteredSections.length -
+																		1 &&
+																rowIndex +
+																	( rowSpan
+																		? parseInt(
+																				rowSpan
+																		  ) - 1
+																		: 0 ) ===
+																	filteredVTable[
+																		sectionName
+																	].length -
+																		1
+															}
+															onClick={ (
+																event
+															) => {
+																onInsertRow(
+																	sectionName,
+																	rowIndex +
+																		( rowSpan
+																			? parseInt(
+																					rowSpan
+																			  )
+																			: 1 )
+																);
+																event.stopPropagation();
+															} }
+														/>
+													) }
+												</>
+											) }
 										<RichText
 											key={ vColIndex }
 											value={ content }
@@ -426,22 +631,39 @@ export default function Table( props ) {
 											unstableOnFocus={ () => {
 												if ( ! selectMode ) {
 													setSelectedLine();
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+													setSelectedCells( [
+														{
+															...cell,
+															isFirstSelected: true,
+														},
+													] );
 												}
 											} }
-											aria-label={ CELL_ARIA_LABEL[ sectionName ] }
+											aria-label={
+												CELL_ARIA_LABEL[ sectionName ]
+											}
 										/>
 										{ isSelected &&
 											options.show_control_button &&
 											sectionIndex === 0 &&
 											rowIndex === 0 && (
 												<ButtonColumnAfterInserter
-													label={ __( 'Insert column after', 'flexible-table-block' ) }
-													tabIndex={ options.focus_control_button ? 0 : -1 }
+													label={ __(
+														'Insert column after',
+														'flexible-table-block'
+													) }
+													tabIndex={
+														options.focus_control_button
+															? 0
+															: -1
+													}
 													icon={ plus }
 													iconSize="18"
 													onClick={ ( event ) => {
-														onInsertColumn( cell, 1 );
+														onInsertColumn(
+															cell,
+															1
+														);
 														event.stopPropagation();
 													} }
 												/>

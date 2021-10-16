@@ -47,7 +47,9 @@ export default function BorderSpacingControl( {
 
 	const isMixed = allowSides && ! ( values.horizontal === values.vertical );
 
-	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
+	const borderSpacingUnits = useCustomUnits( {
+		availableUnits: BORDER_SPACING_UNITS,
+	} );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ direction, setDirection ] = useState( undefined );
@@ -58,7 +60,9 @@ export default function BorderSpacingControl( {
 		? __( 'Unlink Directions', 'flexible-table-block' )
 		: __( 'Link Directions', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
+	const allInputPlaceholder = isMixed
+		? __( 'Mixed', 'flexible-table-block' )
+		: undefined;
 	const allInputValue = isMixed ? undefined : values.horizontal;
 
 	const classNames = classnames( 'ftb-border-spacing-control', className );
@@ -82,7 +86,10 @@ export default function BorderSpacingControl( {
 
 	const handleOnChangeAll = ( inputValue ) => {
 		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_SPACING[ unit ], value ) }${ unit }`;
+		const parsedValue = `${ Math.min(
+			MAX_BORDER_SPACING[ unit ],
+			value
+		) }${ unit }`;
 
 		onChange( {
 			horizontal: parsedValue,
@@ -92,7 +99,10 @@ export default function BorderSpacingControl( {
 
 	const handleOnChange = ( inputValue, targetDirection ) => {
 		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_SPACING[ unit ], value ) }${ unit }`;
+		const parsedValue = `${ Math.min(
+			MAX_BORDER_SPACING[ unit ],
+			value
+		) }${ unit }`;
 
 		onChange( {
 			...values,
@@ -101,17 +111,29 @@ export default function BorderSpacingControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
+		<BaseControl
+			className={ classNames }
+			id={ id }
+			help={ help }
+			aria-labelledby={ headingId }
+		>
 			<div className="ftb-border-spacing-control__header">
 				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+				<Button
+					isSmall
+					isSecondary
+					variant="secondary"
+					onClick={ handleOnReset }
+				>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-spacing-control__header-control">
 				{ hasIndicator && (
 					<DirectionIndicatorControl
-						directions={ direction === undefined ? undefined : [ direction ] }
+						directions={
+							direction === undefined ? undefined : [ direction ]
+						}
 					/>
 				) }
 				{ ( isLinked || ! allowSides ) && (
@@ -148,7 +170,9 @@ export default function BorderSpacingControl( {
 							value={ values[ item.value ] }
 							units={ borderSpacingUnits }
 							onFocus={ () => handleOnFocus( item.value ) }
-							onChange={ ( value ) => handleOnChange( value, item.value ) }
+							onChange={ ( value ) =>
+								handleOnChange( value, item.value )
+							}
 						/>
 					) ) }
 				</div>

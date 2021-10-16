@@ -20,7 +20,13 @@ const transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
-				const { hasFixedLayout, head, body, foot, caption } = attributes;
+				const {
+					hasFixedLayout,
+					head,
+					body,
+					foot,
+					caption,
+				} = attributes;
 				return createBlock( 'flexible-table-block/table', {
 					hasFixedLayout,
 					head,
@@ -48,7 +54,8 @@ const transforms = {
 						.reduce( ( cells, row ) => {
 							return cells.concat( row );
 						}, [] )
-						.filter( ( cell ) => cell.rowSpan || cell.colSpan ).length;
+						.filter( ( cell ) => cell.rowSpan || cell.colSpan )
+						.length;
 
 					if ( vMergedCellsCount ) {
 						for ( let i = 0; i < vMergedCellsCount; i++ ) {
@@ -57,7 +64,9 @@ const transforms = {
 								.reduce( ( cells, row ) => {
 									return cells.concat( row );
 								}, [] )
-								.filter( ( cell ) => cell.rowSpan || cell.colSpan );
+								.filter(
+									( cell ) => cell.rowSpan || cell.colSpan
+								);
 
 							// Split merged virtual cell.
 							if ( vMergedCells.length ) {

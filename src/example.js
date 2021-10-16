@@ -67,7 +67,10 @@ export default {
 						tag: 'td',
 					},
 					{
-						content: __( 'December 8, 2020', 'flexible-table-block' ),
+						content: __(
+							'December 8, 2020',
+							'flexible-table-block'
+						),
 						tag: 'td',
 					},
 				],

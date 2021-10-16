@@ -9,7 +9,11 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
+import {
+	InspectorControls,
+	BlockControls,
+	useBlockProps,
+} from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import {
 	blockTable,
@@ -29,7 +33,11 @@ import {
  */
 import './editor.scss';
 import { STORE_NAME } from './store';
-import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
+import {
+	TableSettings,
+	TableCaptionSettings,
+	TableCellSettings,
+} from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
 
 import {
@@ -58,7 +66,12 @@ const justifyIcons = {
 
 function TableEdit( props ) {
 	const { attributes, setAttributes } = props;
-	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
+	const {
+		contentJustification,
+		tableStyles,
+		captionStyles,
+		captionSide,
+	} = attributes;
 	const [ selectedCells, setSelectedCells ] = useState();
 	const [ selectedLine, setSelectedLine ] = useState();
 	const [ selectMode, setSelectMode ] = useState();
@@ -66,7 +79,9 @@ function TableEdit( props ) {
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
 
-	const options = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
+	const options = useSelect( ( select ) =>
+		select( STORE_NAME ).getOptions()
+	);
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable = toVirtualTable( attributes );
@@ -96,9 +111,14 @@ function TableEdit( props ) {
 
 		// Calculate row index to be inserted considering rowspan of the selected cell.
 		const insertRowIndex =
-			offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
+			offset === 0
+				? rowIndex
+				: rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
 
-		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
+		const newVTable = insertRow( vTable, {
+			sectionName,
+			rowIndex: insertRowIndex,
+		} );
 		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
@@ -117,7 +137,12 @@ function TableEdit( props ) {
 			vTable.foot.length
 		) {
 			// eslint-disable-next-line no-alert, no-undef
-			alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
+			alert(
+				__(
+					'The table body must have one or more rows.',
+					'flexible-table-block'
+				)
+			);
 			return;
 		}
 
@@ -134,9 +159,15 @@ function TableEdit( props ) {
 
 		// Calculate column index to be inserted considering colspan of the selected cell.
 		const insertVColIndex =
-			offset === 0 ? vColIndex : vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
+			offset === 0
+				? vColIndex
+				: vColIndex +
+				  offset +
+				  ( colSpan ? parseInt( colSpan ) - 1 : 0 );
 
-		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
+		const newVTable = insertColumn( vTable, {
+			vColIndex: insertVColIndex,
+		} );
 
 		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
@@ -235,7 +266,8 @@ function TableEdit( props ) {
 		{
 			icon: mergeCell,
 			title: __( 'Merge Cells', 'flexible-table-block' ),
-			isDisabled: ! selectedCells || ! isRectangleSelected( selectedCells ),
+			isDisabled:
+				! selectedCells || ! isRectangleSelected( selectedCells ),
 			onClick: () => onMergeCells(),
 		},
 	];
@@ -304,12 +336,22 @@ function TableEdit( props ) {
 			) }
 			{ ! isEmpty && (
 				// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-				<figure { ...tableFigureProps } tabIndex="-1" onKeyDown={ onKeyDown } onKeyUp={ onKeyUp }>
+				<figure
+					{ ...tableFigureProps }
+					tabIndex="-1"
+					onKeyDown={ onKeyDown }
+					onKeyUp={ onKeyUp }
+				>
 					<BlockControls group="block">
 						<ToolbarDropdownMenu
-							label={ __( 'Change table justification', 'flexible-table-block' ) }
+							label={ __(
+								'Change table justification',
+								'flexible-table-block'
+							) }
 							icon={
-								contentJustification ? justifyIcons[ contentJustification ] : justifyIcons.left
+								contentJustification
+									? justifyIcons[ contentJustification ]
+									: justifyIcons.left
 							}
 							controls={ TableJustifyControls }
 							hasArrowIndicator
@@ -323,26 +365,43 @@ function TableEdit( props ) {
 					</BlockControls>
 					<InspectorControls>
 						<PanelBody
-							title={ __( 'Table Settings', 'flexible-table-block' ) }
+							title={ __(
+								'Table Settings',
+								'flexible-table-block'
+							) }
 							initialOpen={ false }
 						>
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
 						{ !! ( selectedCells || [] ).length && (
-							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
-								<TableCellSettings { ...tableCellSettingsProps } />
+							<PanelBody
+								title={ tableCellSettingsLabel }
+								initialOpen={ false }
+							>
+								<TableCellSettings
+									{ ...tableCellSettingsProps }
+								/>
 							</PanelBody>
 						) }
 						<PanelBody
-							title={ __( 'Caption Settings', 'flexible-table-block' ) }
+							title={ __(
+								'Caption Settings',
+								'flexible-table-block'
+							) }
 							initialOpen={ false }
 						>
-							<TableCaptionSettings { ...tableCaptionSettingProps } />
+							<TableCaptionSettings
+								{ ...tableCaptionSettingProps }
+							/>
 						</PanelBody>
 					</InspectorControls>
-					{ 'top' === captionSide && <TableCaption { ...tableCaptionProps } /> }
+					{ 'top' === captionSide && (
+						<TableCaption { ...tableCaptionProps } />
+					) }
 					<Table { ...tableProps } />
-					{ 'bottom' === captionSide && <TableCaption { ...tableCaptionProps } /> }
+					{ 'bottom' === captionSide && (
+						<TableCaption { ...tableCaptionProps } />
+					) }
 				</figure>
 			) }
 		</>

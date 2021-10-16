@@ -10,17 +10,6 @@ module.exports = {
 		'import/no-unresolved': 'off',
 		'@wordpress/no-unsafe-wp-apis': 'off',
 		'jsdoc/require-param-type': 0,
-		'prettier/prettier': [
-			'error',
-			{
-				useTabs: true,
-				tabWidth: 2,
-				singleQuote: true,
-				printWidth: 100,
-				bracketSpacing: true,
-				parenSpacing: true,
-			},
-		],
 	},
 	overrides: [
 		{

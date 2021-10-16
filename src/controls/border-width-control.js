@@ -49,9 +49,15 @@ export default function BorderWidthControl( {
 
 	const isMixed =
 		allowSides &&
-		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
+		! (
+			values.top === values.right &&
+			values.top === values.bottom &&
+			values.top === values.left
+		);
 
-	const borderWidthUnits = useCustomUnits( { availableUnits: BORDER_WIDTH_UNITS } );
+	const borderWidthUnits = useCustomUnits( {
+		availableUnits: BORDER_WIDTH_UNITS,
+	} );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ side, setSide ] = useState( undefined );
@@ -62,7 +68,9 @@ export default function BorderWidthControl( {
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
+	const allInputPlaceholder = isMixed
+		? __( 'Mixed', 'flexible-table-block' )
+		: undefined;
 	const allInputValue = isMixed ? undefined : values.top;
 
 	const classNames = classnames( 'ftb-border-width-control', className );
@@ -88,7 +96,10 @@ export default function BorderWidthControl( {
 
 	const handleOnChangeAll = ( inputValue ) => {
 		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_WIDTH[ unit ], value ) }${ unit }`;
+		const parsedValue = `${ Math.min(
+			MAX_BORDER_WIDTH[ unit ],
+			value
+		) }${ unit }`;
 
 		onChange( {
 			top: parsedValue,
@@ -100,7 +111,10 @@ export default function BorderWidthControl( {
 
 	const handleOnChange = ( inputValue, targetSide ) => {
 		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_WIDTH[ unit ], value ) }${ unit }`;
+		const parsedValue = `${ Math.min(
+			MAX_BORDER_WIDTH[ unit ],
+			value
+		) }${ unit }`;
 
 		onChange( {
 			...values,
@@ -109,16 +123,28 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
+		<BaseControl
+			className={ classNames }
+			id={ id }
+			help={ help }
+			aria-labelledby={ headingId }
+		>
 			<div className="ftb-border-width-control__header">
 				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+				<Button
+					isSmall
+					isSecondary
+					variant="secondary"
+					onClick={ handleOnReset }
+				>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-width-control__header-control">
 				{ hasIndicator && (
-					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+					<SideIndicatorControl
+						sides={ side === undefined ? undefined : [ side ] }
+					/>
 				) }
 				{ ( isLinked || ! allowSides ) && (
 					<UnitControl
@@ -154,7 +180,9 @@ export default function BorderWidthControl( {
 							value={ values[ item.value ] }
 							units={ borderWidthUnits }
 							onFocus={ () => handleOnFocus( item.value ) }
-							onChange={ ( value ) => handleOnChange( value, item.value ) }
+							onChange={ ( value ) =>
+								handleOnChange( value, item.value )
+							}
 						/>
 					) ) }
 				</div>

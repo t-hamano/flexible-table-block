@@ -11,7 +11,9 @@ export function convertToObject( inlineStyles ) {
 
 	return inlineStyles
 		.split( ';' )
-		.filter( ( style ) => style.split( ':' )[ 0 ] && style.split( ':' )[ 1 ] )
+		.filter(
+			( style ) => style.split( ':' )[ 0 ] && style.split( ':' )[ 1 ]
+		)
 		.map( ( style ) => [
 			style
 				.split( ':' )[ 0 ]
@@ -40,10 +42,15 @@ export function convertToInline( stylesObj ) {
 	}
 
 	const lines = Object.keys( stylesObj ).reduce( function ( result, key ) {
-		const property = key.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
+		const property = key
+			.replace( /([a-z])([A-Z])/g, '$1-$2' )
+			.toLowerCase();
 		const value = stylesObj[ key ];
 
-		if ( value !== undefined && ( typeof value === 'string' || value === 0 ) ) {
+		if (
+			value !== undefined &&
+			( typeof value === 'string' || value === 0 )
+		) {
 			result.push( `${ property }:${ value };` );
 		}
 		return result;

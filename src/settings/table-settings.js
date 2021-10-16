@@ -62,9 +62,13 @@ export default function TableSettings( props ) {
 		foot,
 	} = attributes;
 
-	const options = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
+	const options = useSelect( ( select ) =>
+		select( STORE_NAME ).getOptions()
+	);
 
-	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
+	const tableWidthUnits = useCustomUnits( {
+		availableUnits: TABLE_WIDTH_UNITS,
+	} );
 
 	const onChangeHasFixedLayout = () => {
 		setAttributes( { hasFixedLayout: ! hasFixedLayout } );
@@ -146,8 +150,12 @@ export default function TableSettings( props ) {
 	};
 
 	const onChangeBorderCollapse = ( value ) => {
-		const borderCollapse = tableStylesObj?.borderCollapse === value ? undefined : value;
-		const borderSpacing = 'separate' === borderCollapse ? tableStylesObj?.borderSpacing : undefined;
+		const borderCollapse =
+			tableStylesObj?.borderCollapse === value ? undefined : value;
+		const borderSpacing =
+			'separate' === borderCollapse
+				? tableStylesObj?.borderSpacing
+				: undefined;
 		const newStylesObj = {
 			...tableStylesObj,
 			borderCollapse,
@@ -178,7 +186,12 @@ export default function TableSettings( props ) {
 				id="flexible-table-block/clear-table-settings"
 				className="ftb-reset-settings-control"
 			>
-				<Button isLink variant="link" isDestructive onClick={ onResetTableSettings }>
+				<Button
+					isLink
+					variant="link"
+					isDestructive
+					onClick={ onResetTableSettings }
+				>
 					{ __( 'Clear Table Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -194,7 +207,10 @@ export default function TableSettings( props ) {
 			/>
 			<hr />
 			<ToggleControl
-				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
+				label={ __(
+					'Fixed width table cells',
+					'flexible-table-block'
+				) }
 				checked={ !! hasFixedLayout }
 				onChange={ onChangeHasFixedLayout }
 			/>
@@ -206,7 +222,10 @@ export default function TableSettings( props ) {
 					options.breakpoint &&
 					sprintf(
 						/* translators: %d is replaced with the number of breakpoint. */
-						__( 'When the screen width is %dpx or more.', 'flexible-table-block' ),
+						__(
+							'When the screen width is %dpx or more.',
+							'flexible-table-block'
+						),
 						parseInt( options.breakpoint ) + 1
 					)
 				}
@@ -220,7 +239,10 @@ export default function TableSettings( props ) {
 					options.breakpoint &&
 					sprintf(
 						/* translators: %d is replaced with the number of breakpoint. */
-						__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
+						__(
+							'When the screen width is %dpx or less.',
+							'flexible-table-block'
+						),
 						options.breakpoint
 					)
 				}
@@ -234,7 +256,10 @@ export default function TableSettings( props ) {
 					options.breakpoint &&
 					sprintf(
 						/* translators: %d is replaced with the number of breakpoint. */
-						__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
+						__(
+							'When the screen width is %dpx or less.',
+							'flexible-table-block'
+						),
 						options.breakpoint
 					)
 				}
@@ -269,11 +294,15 @@ export default function TableSettings( props ) {
 					onChange={ onChangeWidth }
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Table Percentage Width', 'flexible-table-block' ) }
+					aria-label={ __(
+						'Table Percentage Width',
+						'flexible-table-block'
+					) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = tableStylesObj?.width === `${ perWidth }%`;
+						const isPressed =
+							tableStylesObj?.width === `${ perWidth }%`;
 						return (
 							<Button
 								key={ perWidth }
@@ -281,7 +310,11 @@ export default function TableSettings( props ) {
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () =>
-									onChangeWidth( isPressed ? undefined : toUnitVal( `${ perWidth }%` ) )
+									onChangeWidth(
+										isPressed
+											? undefined
+											: toUnitVal( `${ perWidth }%` )
+									)
 								}
 							>
 								{ `${ perWidth }%` }
@@ -290,9 +323,19 @@ export default function TableSettings( props ) {
 					} ) }
 					<Button
 						isPrimary={ tableStylesObj?.width === 'auto' }
-						variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
+						variant={
+							tableStylesObj?.width === 'auto'
+								? 'primary'
+								: undefined
+						}
 						isSmall
-						onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? undefined : 'auto' ) }
+						onClick={ () =>
+							onChangeWidth(
+								tableStylesObj?.width === 'auto'
+									? undefined
+									: 'auto'
+							)
+						}
 					>
 						{ __( 'auto', 'flexible-table-block' ) }
 					</Button>
@@ -314,7 +357,8 @@ export default function TableSettings( props ) {
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = tableStylesObj?.maxWidth === `${ perWidth }%`;
+						const isPressed =
+							tableStylesObj?.maxWidth === `${ perWidth }%`;
 						return (
 							<Button
 								key={ perWidth }
@@ -322,7 +366,11 @@ export default function TableSettings( props ) {
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () =>
-									onChangeMaxWidth( isPressed ? undefined : toUnitVal( `${ perWidth }%` ) )
+									onChangeMaxWidth(
+										isPressed
+											? undefined
+											: toUnitVal( `${ perWidth }%` )
+									)
 								}
 							>
 								{ `${ perWidth }%` }
@@ -331,10 +379,18 @@ export default function TableSettings( props ) {
 					} ) }
 					<Button
 						isPrimary={ tableStylesObj?.maxWidth === 'none' }
-						variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
+						variant={
+							tableStylesObj?.maxWidth === 'none'
+								? 'primary'
+								: undefined
+						}
 						isSmall
 						onClick={ () =>
-							onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? undefined : 'none' )
+							onChangeMaxWidth(
+								tableStylesObj?.maxWidth === 'none'
+									? undefined
+									: 'none'
+							)
 						}
 					>
 						{ __( 'none', 'flexible-table-block' ) }
@@ -356,14 +412,19 @@ export default function TableSettings( props ) {
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = tableStylesObj?.minWidth === `${ perWidth }%`;
+						const isPressed =
+							tableStylesObj?.minWidth === `${ perWidth }%`;
 						return (
 							<Button
 								key={ perWidth }
 								isPrimary={ isPressed }
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
-								onClick={ () => onChangeMinWidth( isPressed ? undefined : `${ perWidth }%` ) }
+								onClick={ () =>
+									onChangeMinWidth(
+										isPressed ? undefined : `${ perWidth }%`
+									)
+								}
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -411,20 +472,32 @@ export default function TableSettings( props ) {
 				label={ __( 'Cell Borders', 'flexible-table-block' ) }
 			>
 				<ButtonGroup className="ftb-button-group">
-					{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
-						return (
-							<Button
-								key={ value }
-								isPrimary={ value === tableStylesObj?.borderCollapse }
-								isSecondary={ value !== tableStylesObj?.borderCollapse }
-								variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
-								icon={ icon }
-								onClick={ () => onChangeBorderCollapse( value ) }
-							>
-								{ label }
-							</Button>
-						);
-					} ) }
+					{ BORDER_COLLAPSE_CONTROLS.map(
+						( { icon, label, value } ) => {
+							return (
+								<Button
+									key={ value }
+									isPrimary={
+										value === tableStylesObj?.borderCollapse
+									}
+									isSecondary={
+										value !== tableStylesObj?.borderCollapse
+									}
+									variant={
+										value === tableStylesObj?.borderCollapse
+											? 'primary'
+											: 'secondary'
+									}
+									icon={ icon }
+									onClick={ () =>
+										onChangeBorderCollapse( value )
+									}
+								>
+									{ label }
+								</Button>
+							);
+						}
+					) }
 				</ButtonGroup>
 			</BaseControl>
 			{ 'separate' === tableStylesObj?.borderCollapse && (

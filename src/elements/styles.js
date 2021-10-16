@@ -48,17 +48,19 @@ const ButtonInserter = styled( Button )`
 `;
 
 // eslint-disable-next-line no-unused-vars
-export const ButtonRowBeforeInserter = styled( ( { hasPrevSection, ...props } ) => (
-	<ButtonInserter { ...props } />
-) )`
+export const ButtonRowBeforeInserter = styled(
+	// eslint-disable-next-line no-unused-vars
+	( { hasPrevSection, ...props } ) => <ButtonInserter { ...props } />
+)`
 	left: -44px;
 	top: ${ ( props ) => ( props.hasPrevSection ? '3px' : '-9px' ) };
 `;
 
 // eslint-disable-next-line no-unused-vars
-export const ButtonRowAfterInserter = styled( ( { hasNextSection, ...props } ) => (
-	<ButtonInserter { ...props } />
-) )`
+export const ButtonRowAfterInserter = styled(
+	// eslint-disable-next-line no-unused-vars
+	( { hasNextSection, ...props } ) => <ButtonInserter { ...props } />
+)`
 	left: -44px;
 	bottom: ${ ( props ) => ( props.hasNextSection ? '3px' : '-9px' ) };
 `;

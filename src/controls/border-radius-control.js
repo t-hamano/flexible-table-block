@@ -55,7 +55,9 @@ export default function BorderRadiusControl( {
 			values.topLeft === values.bottomLeft
 		);
 
-	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
+	const borderRadiusUnits = useCustomUnits( {
+		availableUnits: BORDER_RADIUS_UNITS,
+	} );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ corner, setCorner ] = useState( undefined );
@@ -66,7 +68,9 @@ export default function BorderRadiusControl( {
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
+	const allInputPlaceholder = isMixed
+		? __( 'Mixed', 'flexible-table-block' )
+		: undefined;
 	const allInputValue = isMixed ? undefined : values.topLeft;
 
 	const classNames = classnames( 'ftb-border-radius-control', className );
@@ -92,7 +96,10 @@ export default function BorderRadiusControl( {
 
 	const handleOnChangeAll = ( inputValue ) => {
 		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_RADIUS[ unit ], value ) }${ unit }`;
+		const parsedValue = `${ Math.min(
+			MAX_BORDER_RADIUS[ unit ],
+			value
+		) }${ unit }`;
 
 		onChange( {
 			topLeft: parsedValue,
@@ -104,7 +111,10 @@ export default function BorderRadiusControl( {
 
 	const handleOnChange = ( inputValue, targetCorner ) => {
 		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_RADIUS[ unit ], value ) }${ unit }`;
+		const parsedValue = `${ Math.min(
+			MAX_BORDER_RADIUS[ unit ],
+			value
+		) }${ unit }`;
 
 		onChange( {
 			...values,
@@ -113,16 +123,30 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
+		<BaseControl
+			className={ classNames }
+			id={ id }
+			help={ help }
+			aria-labelledby={ headingId }
+		>
 			<div className="ftb-border-radius-control__header">
 				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+				<Button
+					isSmall
+					isSecondary
+					variant="secondary"
+					onClick={ handleOnReset }
+				>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-radius-control__header-control">
 				{ hasIndicator && (
-					<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
+					<CornerIndicatorControl
+						corners={
+							corner === undefined ? undefined : [ corner ]
+						}
+					/>
 				) }
 				{ isLinked && (
 					<UnitControl
@@ -158,7 +182,9 @@ export default function BorderRadiusControl( {
 							units={ borderRadiusUnits }
 							min="0"
 							onFocus={ () => handleOnFocus( item.value ) }
-							onChange={ ( value ) => handleOnChange( value, item.value ) }
+							onChange={ ( value ) =>
+								handleOnChange( value, item.value )
+							}
 						/>
 					) ) }
 				</div>

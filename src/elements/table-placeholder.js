@@ -10,7 +10,12 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
-import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/components';
+import {
+	Button,
+	Placeholder,
+	TextControl,
+	ToggleControl,
+} from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -31,9 +36,11 @@ export default function TablePlaceholder( { setAttributes } ) {
 	const [ headerSection, setHeaderSection ] = useState( false );
 	const [ footerSection, setFooterSection ] = useState( false );
 
-	const totalRowCount = rowCount + Number( headerSection ) + Number( footerSection );
+	const totalRowCount =
+		rowCount + Number( headerSection ) + Number( footerSection );
 	const cellHeight = parseInt(
-		MIN_PREVIEW_TABLE_HEIGHT / Math.min( THRESHOLD_PREVIEW_TABLE_ROW, totalRowCount )
+		MIN_PREVIEW_TABLE_HEIGHT /
+			Math.min( THRESHOLD_PREVIEW_TABLE_ROW, totalRowCount )
 	);
 
 	const onCreateTable = ( event ) => {
@@ -54,7 +61,9 @@ export default function TablePlaceholder( { setAttributes } ) {
 		if ( isNaN( parsedValue ) ) {
 			setColCount( '' );
 		} else {
-			setColCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_COL, parsedValue ) ) );
+			setColCount(
+				Math.max( 1, Math.min( MAX_PREVIEW_TABLE_COL, parsedValue ) )
+			);
 		}
 	};
 
@@ -63,7 +72,9 @@ export default function TablePlaceholder( { setAttributes } ) {
 		if ( isNaN( parsedValue ) ) {
 			setRowCount( '' );
 		} else {
-			setRowCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_ROW, parsedValue ) ) );
+			setRowCount(
+				Math.max( 1, Math.min( MAX_PREVIEW_TABLE_ROW, parsedValue ) )
+			);
 		}
 	};
 
@@ -90,27 +101,55 @@ export default function TablePlaceholder( { setAttributes } ) {
 				className="ftb-placeholder__table-wrap"
 				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
 			>
-				<div className="ftb-placeholder__tbl-ttl">{ __( 'Pleview', 'flexible-table-block' ) }</div>
+				<div className="ftb-placeholder__tbl-ttl">
+					{ __( 'Pleview', 'flexible-table-block' ) }
+				</div>
 				<table className={ tableClass }>
 					{ headerSection && rowCount && colCount && (
 						<thead>
 							<tr>
 								{ times( colCount, ( colIndex ) => {
-									if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-									return <th key={ colIndex } style={ { height: cellHeight } } />;
+									if (
+										colIndex > THRESHOLD_PREVIEW_TABLE_COL
+									)
+										return;
+									return (
+										<th
+											key={ colIndex }
+											style={ { height: cellHeight } }
+										/>
+									);
 								} ) }
 							</tr>
 						</thead>
 					) }
 					<tbody>
 						{ times( rowCount, ( rowIndex ) => {
-							if ( rowIndex > THRESHOLD_PREVIEW_TABLE_ROW ) return;
+							if ( rowIndex > THRESHOLD_PREVIEW_TABLE_ROW )
+								return;
 							return (
 								<tr key={ rowIndex }>
-									{ times( Math.min( colCount, MAX_PREVIEW_TABLE_COL ), ( colIndex ) => {
-										if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-										return <td key={ colIndex } style={ { height: cellHeight } } />;
-									} ) }
+									{ times(
+										Math.min(
+											colCount,
+											MAX_PREVIEW_TABLE_COL
+										),
+										( colIndex ) => {
+											if (
+												colIndex >
+												THRESHOLD_PREVIEW_TABLE_COL
+											)
+												return;
+											return (
+												<td
+													key={ colIndex }
+													style={ {
+														height: cellHeight,
+													} }
+												/>
+											);
+										}
+									) }
 								</tr>
 							);
 						} ) }
@@ -119,8 +158,16 @@ export default function TablePlaceholder( { setAttributes } ) {
 						<tfoot>
 							<tr>
 								{ times( colCount, ( colIndex ) => {
-									if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-									return <td key={ colIndex } style={ { height: cellHeight } } />;
+									if (
+										colIndex > THRESHOLD_PREVIEW_TABLE_COL
+									)
+										return;
+									return (
+										<td
+											key={ colIndex }
+											style={ { height: cellHeight } }
+										/>
+									);
 								} ) }
 							</tr>
 						</tfoot>
@@ -157,7 +204,12 @@ export default function TablePlaceholder( { setAttributes } ) {
 						value={ rowCount }
 						onChange={ onChangeRowCount }
 					/>
-					<Button isPrimary variant="primary" type="submit" disabled={ ! rowCount || ! colCount }>
+					<Button
+						isPrimary
+						variant="primary"
+						type="submit"
+						disabled={ ! rowCount || ! colCount }
+					>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</div>

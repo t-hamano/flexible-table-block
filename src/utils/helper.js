@@ -1,7 +1,15 @@
 /**
  * External dependencies
  */
-import { identity, isEmpty, isObject, mapValues, pick, pickBy, times } from 'lodash';
+import {
+	identity,
+	isEmpty,
+	isObject,
+	mapValues,
+	pick,
+	pickBy,
+	times,
+} from 'lodash';
 
 /**
  * Sanitize the value of UnitControl.
@@ -52,7 +60,10 @@ export const cleanEmptyObject = ( object ) => {
 		return object;
 	}
 
-	const cleanedNestedObjects = pickBy( mapValues( object, cleanEmptyObject ), identity );
+	const cleanedNestedObjects = pickBy(
+		mapValues( object, cleanEmptyObject ),
+		identity
+	);
 
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
 };
@@ -131,7 +142,9 @@ export function toVirtualTable( state ) {
 		// Create a virtual section array.
 		const vRowCount = section.length;
 		const vColCount = section[ 0 ].cells.reduce( ( count, cell ) => {
-			return cell.isDelete ? count : count + ( parseInt( cell.colSpan ) || 1 );
+			return cell.isDelete
+				? count
+				: count + ( parseInt( cell.colSpan ) || 1 );
 		}, 0 );
 
 		const vSection = times( vRowCount, () => ( {
@@ -144,7 +157,9 @@ export function toVirtualTable( state ) {
 		section.forEach( ( { cells }, cRowIndex ) => {
 			cells.forEach( ( cell, cColIndex ) => {
 				// Colmun index on the virtual section excluding cells already marked as "filled".
-				const vColIndex = vSection[ cRowIndex ].cells.findIndex( ( { isFilled } ) => ! isFilled );
+				const vColIndex = vSection[ cRowIndex ].cells.findIndex(
+					( { isFilled } ) => ! isFilled
+				);
 
 				if ( vColIndex === -1 ) {
 					return;
@@ -164,20 +179,36 @@ export function toVirtualTable( state ) {
 				// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
 				if ( cell.colSpan ) {
 					for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
-						vSection[ cRowIndex ].cells[ vColIndex + i ].isFilled = true;
-						vSection[ cRowIndex ].cells[ vColIndex + i ].isDelete = true;
+						vSection[ cRowIndex ].cells[
+							vColIndex + i
+						].isFilled = true;
+						vSection[ cRowIndex ].cells[
+							vColIndex + i
+						].isDelete = true;
 					}
 				}
 
 				if ( cell.rowSpan ) {
 					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
-						vSection[ cRowIndex + i ].cells[ vColIndex ].isFilled = true;
-						vSection[ cRowIndex + i ].cells[ vColIndex ].isDelete = true;
+						vSection[ cRowIndex + i ].cells[
+							vColIndex
+						].isFilled = true;
+						vSection[ cRowIndex + i ].cells[
+							vColIndex
+						].isDelete = true;
 
 						if ( cell.colSpan ) {
-							for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
-								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isFilled = true;
-								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isDelete = true;
+							for (
+								let j = 1;
+								j < parseInt( cell.colSpan );
+								j++
+							) {
+								vSection[ cRowIndex + i ].cells[
+									vColIndex + j
+								].isFilled = true;
+								vSection[ cRowIndex + i ].cells[
+									vColIndex + j
+								].isDelete = true;
 							}
 						}
 					}
@@ -220,7 +251,9 @@ export function toTableAttributes( vTable ) {
 		return section
 			.map( ( { cells } ) => ( {
 				// Delete cells marked as deletion.
-				cells: cells.filter( ( cell ) => ! cell.isDelete && ! cell.isMerged ),
+				cells: cells.filter(
+					( cell ) => ! cell.isDelete && ! cell.isMerged
+				),
 			} ) )
 			.filter( ( { cells } ) => cells.length );
 	} );
@@ -249,15 +282,19 @@ export function toVirtualRows( vTable ) {
 export function getVirtualRange( selectedCells ) {
 	return selectedCells.reduce(
 		( { minRowIndex, maxRowIndex, minColIndex, maxColIndex }, cell ) => {
-			const vRowIndex = cell.rowSpan ? cell.rowIndex + parseInt( cell.rowSpan ) - 1 : cell.rowIndex;
+			const vRowIndex = cell.rowSpan
+				? cell.rowIndex + parseInt( cell.rowSpan ) - 1
+				: cell.rowIndex;
 			const vColIndex = cell.colSpan
 				? cell.vColIndex + parseInt( cell.colSpan ) - 1
 				: cell.vColIndex;
 
 			return {
-				minRowIndex: minRowIndex < cell.rowIndex ? minRowIndex : cell.rowIndex,
+				minRowIndex:
+					minRowIndex < cell.rowIndex ? minRowIndex : cell.rowIndex,
 				maxRowIndex: maxRowIndex > vRowIndex ? maxRowIndex : vRowIndex,
-				minColIndex: minColIndex < cell.vColIndex ? minColIndex : cell.vColIndex,
+				minColIndex:
+					minColIndex < cell.vColIndex ? minColIndex : cell.vColIndex,
 				maxColIndex: maxColIndex > vColIndex ? maxColIndex : vColIndex,
 			};
 		},
@@ -292,9 +329,17 @@ export function isRectangleSelected( selectedCells ) {
 	// Generate indexed matrix from the indexes.
 	const vRange = [];
 
-	for ( let i = vRangeIndexes.minRowIndex; i <= vRangeIndexes.maxRowIndex; i++ ) {
+	for (
+		let i = vRangeIndexes.minRowIndex;
+		i <= vRangeIndexes.maxRowIndex;
+		i++
+	) {
 		vRange[ i ] = [];
-		for ( let j = vRangeIndexes.minColIndex; j <= vRangeIndexes.maxColIndex; j++ ) {
+		for (
+			let j = vRangeIndexes.minColIndex;
+			j <= vRangeIndexes.maxColIndex;
+			j++
+		) {
 			vRange[ i ][ j ] = false;
 		}
 	}
@@ -359,7 +404,10 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 	const vCells = vSection
 		.reduce( ( cells, row ) => cells.concat( row.cells ), [] )
 		.map( ( cell ) => {
-			if ( cell.rowIndex === fromCell.rowIndex && cell.vColIndex === fromCell.vColIndex ) {
+			if (
+				cell.rowIndex === fromCell.rowIndex &&
+				cell.vColIndex === fromCell.vColIndex
+			) {
 				cell.isFirstSelected = true;
 			}
 			return cell;
@@ -374,8 +422,10 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
 
 			return (
-				( ( cell.vColIndex + colSpan >= minColIndex && cell.vColIndex + colSpan <= maxColIndex ) ||
-					( cell.vColIndex >= minColIndex && cell.vColIndex <= maxColIndex ) ) &&
+				( ( cell.vColIndex + colSpan >= minColIndex &&
+					cell.vColIndex + colSpan <= maxColIndex ) ||
+					( cell.vColIndex >= minColIndex &&
+						cell.vColIndex <= maxColIndex ) ) &&
 				cell.rowIndex < minRowIndex &&
 				cell.rowIndex + rowSpan >= minRowIndex &&
 				cell.rowSpan
@@ -391,15 +441,18 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
 
 			return (
-				( ( cell.rowIndex + rowSpan >= minRowIndex && cell.rowIndex + rowSpan <= maxRowIndex ) ||
-					( cell.rowIndex >= minRowIndex && cell.rowIndex <= maxRowIndex ) ) &&
+				( ( cell.rowIndex + rowSpan >= minRowIndex &&
+					cell.rowIndex + rowSpan <= maxRowIndex ) ||
+					( cell.rowIndex >= minRowIndex &&
+						cell.rowIndex <= maxRowIndex ) ) &&
 				cell.vColIndex <= maxColIndex &&
 				cell.vColIndex + colSpan > maxColIndex &&
 				cell.colSpan
 			);
 		} );
 
-		const isRightFixed = maxColIndex === vColCount - 1 || ! rightCells.length;
+		const isRightFixed =
+			maxColIndex === vColCount - 1 || ! rightCells.length;
 		if ( ! isRightFixed ) maxColIndex++;
 
 		// Extend the virtual range to bottom if there are cells that overlap to bottom.
@@ -408,15 +461,18 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
 
 			return (
-				( ( cell.vColIndex + colSpan >= minColIndex && cell.vColIndex + colSpan <= maxColIndex ) ||
-					( cell.vColIndex >= minColIndex && cell.vColIndex <= maxColIndex ) ) &&
+				( ( cell.vColIndex + colSpan >= minColIndex &&
+					cell.vColIndex + colSpan <= maxColIndex ) ||
+					( cell.vColIndex >= minColIndex &&
+						cell.vColIndex <= maxColIndex ) ) &&
 				cell.rowIndex <= maxRowIndex &&
 				cell.rowIndex + rowSpan > maxRowIndex &&
 				cell.rowSpan
 			);
 		} );
 
-		const isBottomFixed = maxRowIndex === vRowCount - 1 || ! bottomCells.length;
+		const isBottomFixed =
+			maxRowIndex === vRowCount - 1 || ! bottomCells.length;
 		if ( ! isBottomFixed ) maxRowIndex++;
 
 		// Extend the virtual range to left if there are cells that overlap to left.
@@ -425,8 +481,10 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
 
 			return (
-				( ( cell.rowIndex + rowSpan >= minRowIndex && cell.rowIndex + rowSpan <= maxRowIndex ) ||
-					( cell.rowIndex >= minRowIndex && cell.rowIndex <= maxRowIndex ) ) &&
+				( ( cell.rowIndex + rowSpan >= minRowIndex &&
+					cell.rowIndex + rowSpan <= maxRowIndex ) ||
+					( cell.rowIndex >= minRowIndex &&
+						cell.rowIndex <= maxRowIndex ) ) &&
 				cell.vColIndex < minColIndex &&
 				cell.vColIndex + colSpan >= minColIndex &&
 				cell.colSpan
@@ -436,7 +494,8 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 		const isLeftFixed = maxColIndex === vColCount - 1 || ! leftCells.length;
 		if ( ! isLeftFixed ) minColIndex--;
 
-		isRectangled = isTopFixed && isRightFixed && isBottomFixed && isLeftFixed;
+		isRectangled =
+			isTopFixed && isRightFixed && isBottomFixed && isLeftFixed;
 	}
 
 	// Cells in the newly computed rectangle.

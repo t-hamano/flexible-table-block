@@ -68,21 +68,33 @@ export default function save( { attributes } ) {
 			<Tag>
 				{ rows.map( ( { cells }, rowIndex ) => (
 					<tr key={ rowIndex }>
-						{ cells.map( ( { content, tag, className, rowSpan, colSpan, styles }, cellIndex ) => {
-							const cellStylesObj = convertToObject( styles );
+						{ cells.map(
+							(
+								{
+									content,
+									tag,
+									className,
+									rowSpan,
+									colSpan,
+									styles,
+								},
+								cellIndex
+							) => {
+								const cellStylesObj = convertToObject( styles );
 
-							return (
-								<RichText.Content
-									key={ cellIndex }
-									tagName={ tag }
-									className={ className }
-									value={ content }
-									rowSpan={ rowSpan }
-									colSpan={ colSpan }
-									style={ cellStylesObj }
-								/>
-							);
-						} ) }
+								return (
+									<RichText.Content
+										key={ cellIndex }
+										tagName={ tag }
+										className={ className }
+										value={ content }
+										rowSpan={ rowSpan }
+										colSpan={ colSpan }
+										style={ cellStylesObj }
+									/>
+								);
+							}
+						) }
 					</tr>
 				) ) }
 			</Tag>
@@ -90,7 +102,13 @@ export default function save( { attributes } ) {
 	};
 
 	const Caption = () => {
-		return <RichText.Content tagName="figcaption" value={ caption } style={ captionStylesObj } />;
+		return (
+			<RichText.Content
+				tagName="figcaption"
+				value={ caption }
+				style={ captionStylesObj }
+			/>
+		);
 	};
 
 	return (

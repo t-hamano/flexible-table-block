@@ -43,7 +43,9 @@ import {
 export default function TableCellSettings( props ) {
 	const { vTable, selectedCells, attributes, setAttributes } = props;
 
-	const cellWidthUnits = useCustomUnits( { availableUnits: CELL_WIDTH_UNITS } );
+	const cellWidthUnits = useCustomUnits( {
+		availableUnits: CELL_WIDTH_UNITS,
+	} );
 	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
 
 	if ( ! ( selectedCells || [] ).length ) return null;
@@ -57,7 +59,11 @@ export default function TableCellSettings( props ) {
 	const cellStylesObj = convertToObject( targetCell.styles );
 
 	const updateCellsStyle = ( styles ) => {
-		const newVTable = updateCellsState( vTable, { styles }, { selectedCells } );
+		const newVTable = updateCellsState(
+			vTable,
+			{ styles },
+			{ selectedCells }
+		);
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
@@ -103,18 +109,27 @@ export default function TableCellSettings( props ) {
 	};
 
 	const onChangeVerticalAlign = ( value ) => {
-		const newValue = value === cellStylesObj.verticalAlign ? undefined : value;
+		const newValue =
+			value === cellStylesObj.verticalAlign ? undefined : value;
 		updateCellsStyle( { verticalAlign: newValue } );
 	};
 
 	const onChangeTag = ( value ) => {
-		const newVTable = updateCellsState( vTable, { tag: value }, { selectedCells } );
+		const newVTable = updateCellsState(
+			vTable,
+			{ tag: value },
+			{ selectedCells }
+		);
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onChangeClass = ( value ) => {
 		const newValue = value !== '' ? value : undefined;
-		const newVTable = updateCellsState( vTable, { className: newValue }, { selectedCells } );
+		const newVTable = updateCellsState(
+			vTable,
+			{ className: newValue },
+			{ selectedCells }
+		);
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
@@ -124,16 +139,36 @@ export default function TableCellSettings( props ) {
 			color: undefined,
 			backgroundColor: undefined,
 			width: undefined,
-			padding: { top: undefined, right: undefined, bottom: undefined, left: undefined },
-			borderWidth: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+			padding: {
+				top: undefined,
+				right: undefined,
+				bottom: undefined,
+				left: undefined,
+			},
+			borderWidth: {
+				top: undefined,
+				right: undefined,
+				bottom: undefined,
+				left: undefined,
+			},
 			borderRadius: {
 				topLeft: undefined,
 				topRight: undefined,
 				bottomRight: undefined,
 				bottomLeft: undefined,
 			},
-			borderStyle: { top: undefined, right: undefined, bottom: undefined, left: undefined },
-			borderColor: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+			borderStyle: {
+				top: undefined,
+				right: undefined,
+				bottom: undefined,
+				left: undefined,
+			},
+			borderColor: {
+				top: undefined,
+				right: undefined,
+				bottom: undefined,
+				left: undefined,
+			},
 			textAlign: undefined,
 			verticalAlign: undefined,
 		} );
@@ -145,7 +180,12 @@ export default function TableCellSettings( props ) {
 				id="flexible-table-block/clear-cell-settings"
 				className="ftb-reset-settings-control"
 			>
-				<Button isLink variant="link" isDestructive onClick={ onResetCellSettings }>
+				<Button
+					isLink
+					variant="link"
+					isDestructive
+					onClick={ onResetCellSettings }
+				>
 					{ __( 'Clear Cell Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -171,18 +211,26 @@ export default function TableCellSettings( props ) {
 					onChange={ onChangeWidth }
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Cell Percentage width', 'flexible-table-block' ) }
+					aria-label={ __(
+						'Cell Percentage width',
+						'flexible-table-block'
+					) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = cellStylesObj?.width === `${ perWidth }%`;
+						const isPressed =
+							cellStylesObj?.width === `${ perWidth }%`;
 						return (
 							<Button
 								key={ perWidth }
 								isPrimary={ isPressed }
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
-								onClick={ () => onChangeWidth( isPressed ? undefined : `${ perWidth }%` ) }
+								onClick={ () =>
+									onChangeWidth(
+										isPressed ? undefined : `${ perWidth }%`
+									)
+								}
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -250,39 +298,72 @@ export default function TableCellSettings( props ) {
 				<div className="ftb-base-control-row">
 					<ButtonGroup
 						className="ftb-button-group"
-						aria-label={ __( 'Text alignment', 'flexible-table-block' ) }
+						aria-label={ __(
+							'Text alignment',
+							'flexible-table-block'
+						) }
 					>
-						{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
-							return (
-								<Button
-									key={ value }
-									label={ label }
-									icon={ icon }
-									isPrimary={ value === cellStylesObj?.textAlign }
-									isSecondary={ value !== cellStylesObj?.textAlign }
-									variant={ value === cellStylesObj?.textAlign ? 'primary' : 'secondary' }
-									onClick={ () => onChangeTextAlign( value ) }
-								/>
-							);
-						} ) }
+						{ TEXT_ALIGNMENT_CONTROLS.map(
+							( { icon, label, value } ) => {
+								return (
+									<Button
+										key={ value }
+										label={ label }
+										icon={ icon }
+										isPrimary={
+											value === cellStylesObj?.textAlign
+										}
+										isSecondary={
+											value !== cellStylesObj?.textAlign
+										}
+										variant={
+											value === cellStylesObj?.textAlign
+												? 'primary'
+												: 'secondary'
+										}
+										onClick={ () =>
+											onChangeTextAlign( value )
+										}
+									/>
+								);
+							}
+						) }
 					</ButtonGroup>
 					<ButtonGroup
 						className="ftb-button-group"
-						aria-label={ __( 'Vertical alignment', 'flexible-table-block' ) }
+						aria-label={ __(
+							'Vertical alignment',
+							'flexible-table-block'
+						) }
 					>
-						{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
-							return (
-								<Button
-									key={ value }
-									label={ label }
-									icon={ icon }
-									isPrimary={ value === cellStylesObj?.verticalAlign }
-									isSecondary={ value !== cellStylesObj?.verticalAlign }
-									variant={ value === cellStylesObj?.verticalAlign ? 'primary' : 'secondary' }
-									onClick={ () => onChangeVerticalAlign( value ) }
-								/>
-							);
-						} ) }
+						{ VERTICAL_ALIGNMENT_CONTROLS.map(
+							( { icon, label, value } ) => {
+								return (
+									<Button
+										key={ value }
+										label={ label }
+										icon={ icon }
+										isPrimary={
+											value ===
+											cellStylesObj?.verticalAlign
+										}
+										isSecondary={
+											value !==
+											cellStylesObj?.verticalAlign
+										}
+										variant={
+											value ===
+											cellStylesObj?.verticalAlign
+												? 'primary'
+												: 'secondary'
+										}
+										onClick={ () =>
+											onChangeVerticalAlign( value )
+										}
+									/>
+								);
+							}
+						) }
 					</ButtonGroup>
 				</div>
 			</BaseControl>
@@ -298,7 +379,11 @@ export default function TableCellSettings( props ) {
 								key={ value }
 								isPrimary={ value === targetCell.tag }
 								isSecondary={ value !== targetCell.tag }
-								variant={ value === targetCell.tag ? 'primary' : 'secondary' }
+								variant={
+									value === targetCell.tag
+										? 'primary'
+										: 'secondary'
+								}
 								onClick={ () => onChangeTag( value ) }
 							>
 								{ label }

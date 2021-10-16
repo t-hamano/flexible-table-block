@@ -47,13 +47,19 @@ export default function BorderStyleControl( {
 
 	const isMixed =
 		allowSides &&
-		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
+		! (
+			values.top === values.right &&
+			values.top === values.bottom &&
+			values.top === values.left
+		);
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const headingId = `${ id }-heading`;
 
 	const controlLabel =
-		isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label;
+		isMixed && isLinked
+			? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
+			: label;
 
 	const linkedLabel = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
@@ -94,7 +100,10 @@ export default function BorderStyleControl( {
 	};
 
 	const handleOnClick = ( value, targetSide ) => {
-		const newValue = values[ targetSide ] && value === values[ targetSide ] ? null : value;
+		const newValue =
+			values[ targetSide ] && value === values[ targetSide ]
+				? null
+				: value;
 		onChange( {
 			...values,
 			[ targetSide ]: newValue,
@@ -102,10 +111,20 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
+		<BaseControl
+			className={ classNames }
+			id={ id }
+			help={ help }
+			aria-labelledby={ headingId }
+		>
 			<div className="ftb-border-style-control__header">
 				<Text id={ headingId }>{ controlLabel }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+				<Button
+					isSmall
+					isSecondary
+					variant="secondary"
+					onClick={ handleOnReset }
+				>
 					{ __( 'Reset' ) }
 				</Button>
 			</div>
@@ -115,40 +134,77 @@ export default function BorderStyleControl( {
 						<div className="ftb-border-style-control__button-controls-row">
 							{ hasIndicator && <SideIndicatorControl /> }
 							<ButtonGroup className="ftb-button-group">
-								{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => (
-									<Button
-										key={ borderStyle.value }
-										label={ borderStyle.label }
-										icon={ borderStyle.icon }
-										isSmall
-										isPrimary={ allInputValue === borderStyle.value }
-										variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
-										onClick={ () => handleOnClickAll( borderStyle.value ) }
-									/>
-								) ) }
+								{ BORDER_STYLE_CONTROLS.map(
+									( borderStyle ) => (
+										<Button
+											key={ borderStyle.value }
+											label={ borderStyle.label }
+											icon={ borderStyle.icon }
+											isSmall
+											isPrimary={
+												allInputValue ===
+												borderStyle.value
+											}
+											variant={
+												allInputValue ===
+												borderStyle.value
+													? 'primary'
+													: undefined
+											}
+											onClick={ () =>
+												handleOnClickAll(
+													borderStyle.value
+												)
+											}
+										/>
+									)
+								) }
 							</ButtonGroup>
 						</div>
 					) }
 					{ ! isLinked &&
 						SIDES.map( ( item ) => (
-							<div className="ftb-border-style-control__button-controls-row" key={ item.value }>
-								{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
-								<ButtonGroup className="ftb-button-group" aria-label={ item.label }>
-									{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => {
-										return (
-											<Button
-												key={ borderStyle.value }
-												label={ borderStyle.label }
-												icon={ borderStyle.icon }
-												isPrimary={ values[ item.value ] === borderStyle.value }
-												variant={
-													values[ item.value ] === borderStyle.value ? 'primary' : undefined
-												}
-												isSmall
-												onClick={ () => handleOnClick( borderStyle.value, item.value ) }
-											/>
-										);
-									} ) }
+							<div
+								className="ftb-border-style-control__button-controls-row"
+								key={ item.value }
+							>
+								{ hasIndicator && (
+									<SideIndicatorControl
+										sides={ [ item.value ] }
+									/>
+								) }
+								<ButtonGroup
+									className="ftb-button-group"
+									aria-label={ item.label }
+								>
+									{ BORDER_STYLE_CONTROLS.map(
+										( borderStyle ) => {
+											return (
+												<Button
+													key={ borderStyle.value }
+													label={ borderStyle.label }
+													icon={ borderStyle.icon }
+													isPrimary={
+														values[ item.value ] ===
+														borderStyle.value
+													}
+													variant={
+														values[ item.value ] ===
+														borderStyle.value
+															? 'primary'
+															: undefined
+													}
+													isSmall
+													onClick={ () =>
+														handleOnClick(
+															borderStyle.value,
+															item.value
+														)
+													}
+												/>
+											);
+										}
+									) }
 								</ButtonGroup>
 							</div>
 						) ) }

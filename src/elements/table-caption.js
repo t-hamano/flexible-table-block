@@ -31,7 +31,9 @@ export default function TableCaption( props ) {
 				setSelectedLine();
 				setSelectedCells();
 			} }
-			__unstableOnSplitAtEnd={ () => insertBlocksAfter( createBlock( 'core/paragraph' ) ) }
+			__unstableOnSplitAtEnd={ () =>
+				insertBlocksAfter( createBlock( 'core/paragraph' ) )
+			}
 		/>
 	);
 }
