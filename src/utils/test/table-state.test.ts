@@ -1,6 +1,7 @@
-import { createTable, deleteRow, insertRow } from '../table-state';
-import type { Cell, Row, SectionName, VirtualTable } from '../VirtualTable';
+import { deleteRow, insertRow } from '../table-state';
+import type { Cell, Row, SectionName, VirtualTable } from '../virtual-table';
 import { times } from 'lodash';
+import { createTable } from '../virtual-table';
 
 const getRow = (
 	cells: number,
@@ -30,10 +31,7 @@ const getRow = (
 
 const table: VirtualTable = {
 	head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
-	body: [
-		getRow( 2, 'body', 0, 'td', 'body-0' ),
-		getRow( 2, 'body', 1, 'td', 'body-1' )
-	],
+	body: [ getRow( 2, 'body', 0, 'td', 'body-0' ), getRow( 2, 'body', 1, 'td', 'body-1' ) ],
 	foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
 };
 

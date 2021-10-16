@@ -16,63 +16,13 @@ import {
 } from './style-updater';
 
 /**
- * Creates a table state.
- *
- * @param {Object}  options
- * @param {number}  options.rowCount      Row count for the table to create.
- * @param {number}  options.colCount      Column count for the table to create.
- * @param {boolean} options.headerSection With/without header section.
- * @param {boolean} options.footerSection With/without footer section.
- * @return {import('./VirtualTable').VirtualTable} New table state.
- */
-export function createTable( { rowCount, colCount, headerSection, footerSection } ) {
-	/**
-	 *
-	 * @param {number}                               rows
-	 * @param {number}                               cols
-	 * @param {'th'|'td'}                            tag
-	 * @param {import('./VirtualTable').SectionName} sectionName
-	 * @return {import('./VirtualTable').Section}   section
-	 */
-	const createRows = ( rows, cols, tag, sectionName ) => {
-		return times(
-			rows,
-			/**
-			 * @param {number} rowIndex rowIndex
-			 */ ( rowIndex ) => ( {
-				cells: times(
-					cols,
-					/**
-					 * @param {number} colIndex colIndex
-					 * @return {import('./VirtualTable').Cell} Cell.
-					 */ ( colIndex ) => ( {
-						content: '',
-						tag,
-						vColIndex: colIndex,
-						colIndex,
-						rowIndex,
-						sectionName,
-					} )
-				),
-			} )
-		);
-	};
-
-	return {
-		head: createRows( Number( headerSection ), colCount, 'th', 'head' ),
-		body: createRows( rowCount, colCount, 'td', 'body' ),
-		foot: createRows( Number( footerSection ), colCount, 'td', 'foot' ),
-	};
-}
-
-/**
  * Inserts a row in the virtual table state.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable              Virtual table in which to insert the row.
- * @param {Object}                                options
- * @param {import('./VirtualTable').SectionName}  options.sectionName Section in which to insert the row.
- * @param {number}                                options.rowIndex    Row index at which to insert the row.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable              Virtual table in which to insert the row.
+ * @param {Object}                                 options
+ * @param {import('./virtual-table').SectionName}  options.sectionName Section in which to insert the row.
+ * @param {number}                                 options.rowIndex    Row index at which to insert the row.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 
 export function insertRow( vTable, { sectionName, rowIndex } ) {
@@ -115,7 +65,7 @@ export function insertRow( vTable, { sectionName, rowIndex } ) {
 						rowSpan: parseInt( cell.rowSpan ) + 1,
 					};
 				}
-				return { ...cell, rowIndex: cRowIndex, };
+				return { ...cell, rowIndex: cRowIndex };
 			} ),
 		} ) ),
 	};
@@ -124,11 +74,11 @@ export function insertRow( vTable, { sectionName, rowIndex } ) {
 /**
  * Deletes a row from the virtual table.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable              Virtual table in which to delete the row.
- * @param {Object}                                options
- * @param {import('./VirtualTable').SectionName}  options.sectionName Section in which to delete the row.
- * @param {number}                                options.rowIndex    Row index at which to delete the row.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable              Virtual table in which to delete the row.
+ * @param {Object}                                 options
+ * @param {import('./virtual-table').SectionName}  options.sectionName Section in which to delete the row.
+ * @param {number}                                 options.rowIndex    Row index at which to delete the row.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 export function deleteRow( vTable, { sectionName, rowIndex } ) {
 	// Find the number of rowspan cells in the row to be deleted.
@@ -184,10 +134,10 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 /**
  * Inserts a column in the virtual table.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable            Virtual table in which to insert column.
- * @param {Object}                                options
- * @param {number}                                options.vColIndex Virtual column index at which to insert column.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable            Virtual table in which to insert column.
+ * @param {Object}                                 options
+ * @param {number}                                 options.vColIndex Virtual column index at which to insert column.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 export function insertColumn( vTable, { vColIndex } ) {
 	// Whether to add a column after the last column.
@@ -272,10 +222,10 @@ export function insertColumn( vTable, { vColIndex } ) {
 /**
  * Deletes a column from the virtual table.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable            Virtual table in which to delete column.
- * @param {Object}                                options
- * @param {number}                                options.vColIndex Virtual column index at which to delete column.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable            Virtual table in which to delete column.
+ * @param {Object}                                 options
+ * @param {number}                                 options.vColIndex Virtual column index at which to delete column.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 export function deleteColumn( vTable, { vColIndex } ) {
 	// Find the colspan cells in the column to be deleted.
@@ -327,10 +277,10 @@ export function deleteColumn( vTable, { vColIndex } ) {
 /**
  * Merge cells in the virtual table.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable                Current virtual table state.
- * @param {Object}                                options
- * @param {number}                                options.selectedCells Current selected multi cell.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable                Current virtual table state.
+ * @param {Object}                                 options
+ * @param {number}                                 options.selectedCells Current selected multi cell.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 export function mergeCells( vTable, { selectedCells } ) {
 	const { sectionName } = selectedCells[ 0 ];
@@ -409,10 +359,10 @@ export function mergeCells( vTable, { selectedCells } ) {
 /**
  * Split selected cells in the virtual table state.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable                Current virtual table state.
- * @param {Object}                                options
- * @param {number}                                options.selectedCells Current selected multi cell.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable                Current virtual table state.
+ * @param {Object}                                 options
+ * @param {number}                                 options.selectedCells Current selected multi cell.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 export function splitMergedCells( vTable, { selectedCells } ) {
 	// Find the rowspan & colspan cells.
@@ -439,10 +389,10 @@ export function splitMergedCells( vTable, { selectedCells } ) {
 /**
  * Split single cell in the virtual table state.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable               Current virtual table state.
- * @param {Object}                                options
- * @param {number}                                options.selectedCell Current selected virtual cell.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable               Current virtual table state.
+ * @param {Object}                                 options
+ * @param {number}                                 options.selectedCell Current selected virtual cell.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 export function splitMergedCell( vTable, { selectedCell } ) {
 	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = selectedCell;
@@ -492,11 +442,11 @@ export function splitMergedCell( vTable, { selectedCell } ) {
 /**
  * Update cells state( styles, tag ) of selected section.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable                Current virtual table state.
- * @param {Object}                                cellState             Cell states to update.
- * @param {Object}                                options
- * @param {Array}                                 options.selectedCells Current selected multi cell.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable                Current virtual table state.
+ * @param {Object}                                 cellState             Cell states to update.
+ * @param {Object}                                 options
+ * @param {Array}                                  options.selectedCells Current selected multi cell.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 export function updateCells( vTable, cellState, { selectedCells } ) {
 	const vSections = pick( vTable, [ 'head', 'body', 'foot' ] );
@@ -576,7 +526,7 @@ export function isMultiSectionSelected( selectedCells ) {
  * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
  *
  * @param {Object} state Current table state.
- * @return {import('./VirtualTable').VirtualTable} Object of virtual table.
+ * @return {import('./virtual-table').VirtualTable} Object of virtual table.
  */
 export function toVirtualTable( state ) {
 	const vSections = pick( state, [ 'head', 'body', 'foot' ] );
@@ -664,7 +614,7 @@ export function toVirtualTable( state ) {
 /**
  * Remove cells from the virtual table that are not actually needed and convert them to table attributes.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable Current table state.
+ * @param {import('./virtual-table').VirtualTable} vTable Current table state.
  * @return {Object} Table attributes.
  */
 export function toTableAttributes( vTable ) {
@@ -685,7 +635,7 @@ export function toTableAttributes( vTable ) {
 /**
  * Create an array of rows from a virtual table by removing empty sections.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable Current virtual table state.
+ * @param {import('./virtual-table').VirtualTable} vTable Current virtual table state.
  * @return {Object} Object of virtual table.
  */
 export function toVirtualRows( vTable ) {
@@ -789,10 +739,10 @@ export function isRectangleSelected( selectedCells ) {
 /**
  * Return a set of cells from the start cell and the end cell that will form a rectangle, taking into account the join cells.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable           Current virtual table state.
- * @param {Object}                                options
- * @param {Object}                                options.fromCell Start cell of the selected range.
- * @param {Object}                                options.toCell   End cell of the selected range.
+ * @param {import('./virtual-table').VirtualTable} vTable           Current virtual table state.
+ * @param {Object}                                 options
+ * @param {Object}                                 options.fromCell Start cell of the selected range.
+ * @param {Object}                                 options.toCell   End cell of the selected range.
  * @return {Array} Selected cells that represent a rectangle.
  */
 export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
@@ -919,9 +869,9 @@ export function hasMergedCells( selectedCells ) {
 /**
  * Toggles the existance of a section.
  *
- * @param {import('./VirtualTable').VirtualTable} vTable      Current virtual table state.
- * @param {string}                                sectionName Name of the section to toggle.
- * @return {import('./VirtualTable').VirtualTable} New table state.
+ * @param {import('./virtual-table').VirtualTable} vTable      Current virtual table state.
+ * @param {string}                                 sectionName Name of the section to toggle.
+ * @return {import('./virtual-table').VirtualTable} New table state.
  */
 export function toggleSection( vTable, sectionName ) {
 	// Section exists, replace it with an empty row to remove it.

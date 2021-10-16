@@ -22,7 +22,7 @@ import {
 	THRESHOLD_PREVIEW_TABLE_COL,
 	THRESHOLD_PREVIEW_TABLE_ROW,
 } from '../constants';
-import { createTable } from '../utils/table-state';
+import { createTable } from '../utils/virtual-table';
 import { blockIcon as icon } from '../icons';
 
 export default function TablePlaceholder( { setAttributes } ) {
