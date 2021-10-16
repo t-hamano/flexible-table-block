@@ -22,8 +22,8 @@ import {
  * Internal dependencies
  */
 import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH } from '../constants';
-import { parseUnit } from '../utils/helper';
 import { SIDES, SideIndicatorControl } from './indicator-control';
+import { parseUnit } from '../utils/unit-helpers';
 
 const DEFAULT_VALUES = {
 	top: null,
