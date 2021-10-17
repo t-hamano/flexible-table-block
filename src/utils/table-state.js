@@ -566,6 +566,8 @@ export function toVirtualTable( state ) {
 					rowIndex: cRowIndex,
 					colIndex: cColIndex,
 					vColIndex,
+					rowSpan: cell.rowSpan ? parseInt( cell.rowSpan ) : 1,
+					colSpan: cell.colSpan ? parseInt( cell.colSpan ) : 1,
 				};
 
 				// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
@@ -625,12 +627,22 @@ export function toTableAttributes( vTable ) {
 	return mapValues( vSections, ( section ) => {
 		if ( ! section.length ) return [];
 
-		return section
-			.map( ( { cells } ) => ( {
-				// Delete cells marked as deletion.
-				cells: cells.filter( ( cell ) => ! cell.isDelete && ! cell.isMerged ),
-			} ) )
-			.filter( ( { cells } ) => cells.length );
+		return (
+			section
+				.map( ( { cells } ) => ( {
+					cells: cells
+						// Remove default rowspan / colspan value.
+						.map( ( cell ) => ( {
+							...cell,
+							rowSpan: cell.rowSpan > 1 ? cell.rowSpan : undefined,
+							colSpan: cell.colSpan > 1 ? cell.colSpan : undefined,
+						} ) )
+						// Delete cells marked as deletion.
+						.filter( ( cell ) => ! cell.isDelete && ! cell.isMerged ),
+				} ) )
+				// Delete empty row.
+				.filter( ( { cells } ) => cells.length )
+		);
 	} );
 }
 

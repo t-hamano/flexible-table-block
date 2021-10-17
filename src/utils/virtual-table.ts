@@ -17,8 +17,8 @@ export type Section = Row[];
 
 export interface Cell {
 	content: string;
-	colSpan?: string; //TODO It should be a numeric type.
-	rowSpan?: string; //TODO It should be a numeric type.
+	colSpan: number;
+	rowSpan: number;
 	styles?: Properties;
 	sectionName: string;
 	vColIndex: number;
@@ -65,8 +65,8 @@ export function createTable( {
 					colIndex,
 					rowIndex,
 					sectionName,
-					// rowSpan: 1,
-					// colSpan: 1
+					rowSpan: 1,
+					colSpan: 1,
 				} )
 			),
 		} ) );
