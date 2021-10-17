@@ -15,6 +15,7 @@ import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/comp
 /**
  * Internal dependencies
  */
+import { toTableAttributes } from '../utils/table-state';
 import {
 	MIN_PREVIEW_TABLE_HEIGHT,
 	MAX_PREVIEW_TABLE_COL,
@@ -39,14 +40,14 @@ export default function TablePlaceholder( { setAttributes } ) {
 	const onCreateTable = ( event ) => {
 		event.preventDefault();
 
-		setAttributes(
-			createTable( {
-				rowCount: Math.min( rowCount, MAX_PREVIEW_TABLE_ROW ),
-				colCount: Math.min( colCount, MAX_PREVIEW_TABLE_COL ),
-				headerSection,
-				footerSection,
-			} )
-		);
+		const vTable = createTable( {
+			rowCount: Math.min( rowCount, MAX_PREVIEW_TABLE_ROW ),
+			colCount: Math.min( colCount, MAX_PREVIEW_TABLE_COL ),
+			headerSection,
+			footerSection,
+		} );
+
+		setAttributes( toTableAttributes( vTable ) );
 	};
 
 	const onChangeColumnCount = ( value ) => {

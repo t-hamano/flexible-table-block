@@ -29,7 +29,7 @@ export function insertRow( vTable, { sectionName, rowIndex } ) {
 	// Number of columns in the row to be inserted.
 	const sourceRowIndex = vTable[ sectionName ].length <= rowIndex ? 0 : rowIndex;
 	const newRowColCount = vTable[ sectionName ][ sourceRowIndex ].cells.reduce(
-		( count, cell ) => count + ( parseInt( cell.colSpan ?? '' ) || 1 ),
+		( count, cell ) => count + cell.colSpan,
 		0
 	);
 
@@ -42,8 +42,8 @@ export function insertRow( vTable, { sectionName, rowIndex } ) {
 			colIndex,
 			vColIndex: colIndex,
 			tag: 'head' === sectionName ? 'th' : 'td',
-			// rowSpan: 1,
-			// colSpan: 1
+			rowSpan: 1,
+			colSpan: 1,
 		} ) ),
 	};
 	return {
@@ -56,15 +56,15 @@ export function insertRow( vTable, { sectionName, rowIndex } ) {
 			cells: cells.map( ( cell ) => {
 				// Expand cells with rowspan in the before and inserted rows.
 				if (
-					cell.rowSpan &&
+					cell.rowSpan > 1 &&
 					cRowIndex <= rowIndex &&
-					cRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+					cRowIndex + cell.rowSpan - 1 >= rowIndex
 				) {
 					return {
 						...cell,
 						sectionName,
 						rowIndex: cRowIndex,
-						rowSpan: parseInt( cell.rowSpan ) + 1,
+						rowSpan: cell.rowSpan + 1,
 					};
 				}
 				return { ...cell, rowIndex: cRowIndex };
@@ -85,7 +85,7 @@ export function insertRow( vTable, { sectionName, rowIndex } ) {
 export function deleteRow( vTable, { sectionName, rowIndex } ) {
 	// Find the number of rowspan cells in the row to be deleted.
 	const rowSpanCellsCount = vTable[ sectionName ][ rowIndex ].cells.filter(
-		( cell ) => cell.rowSpan
+		( cell ) => cell.rowSpan > 1
 	).length;
 
 	// Split the found rowspan cells.
@@ -93,7 +93,7 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 		for ( let i = 0; i < rowSpanCellsCount; i++ ) {
 			const vMergedCells = vTable[ sectionName ]
 				.reduce( ( cells, row ) => cells.concat( row.cells ), [] )
-				.filter( ( cell ) => cell.rowSpan && cell.rowIndex === rowIndex );
+				.filter( ( cell ) => cell.rowSpan > 1 && cell.rowIndex === rowIndex );
 
 			if ( vMergedCells.length ) {
 				vTable = splitMergedCell( vTable, {
@@ -109,13 +109,13 @@ export function deleteRow( vTable, { sectionName, rowIndex } ) {
 			cells: cells.map( ( cell ) => {
 				// Contract cells with rowspan in the before rows.
 				if (
-					cell.rowSpan &&
+					cell.rowSpan > 1 &&
 					cRowIndex < rowIndex &&
-					cRowIndex + parseInt( cell.rowSpan ) - 1 >= rowIndex
+					cRowIndex + cell.rowSpan - 1 >= rowIndex
 				) {
 					return {
 						...cell,
-						rowSpan: parseInt( cell.rowSpan ) - 1,
+						rowSpan: cell.rowSpan - 1,
 					};
 				}
 
@@ -152,8 +152,8 @@ export function insertColumn( vTable, { vColIndex } ) {
 	[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
 		vTable[ sectionName ].forEach( ( { cells }, cRowIndex ) => {
 			cells.forEach( ( cell, cVColIndex ) => {
-				if ( cVColIndex === vColIndex && cell.rowSpan ) {
-					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
+				if ( cVColIndex === vColIndex && cell.rowSpan > 1 ) {
+					for ( let i = 1; i < cell.rowSpan; i++ ) {
 						rowIndexesToFill[ sectionName ].push( cRowIndex + i );
 					}
 				}
@@ -170,13 +170,13 @@ export function insertColumn( vTable, { vColIndex } ) {
 			cells: cells.reduce( ( newCells, cell, cVColIndex ) => {
 				// Expand cells with colspan in the before columns.
 				if (
-					cell.colSpan &&
+					cell.colSpan > 1 &&
 					cVColIndex < vColIndex &&
-					cVColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
+					cVColIndex + cell.colSpan - 1 >= vColIndex
 				) {
 					newCells.push( {
 						...cell,
-						colSpan: parseInt( cell.colSpan ) + 1,
+						colSpan: cell.colSpan + 1,
 					} );
 					return newCells;
 				}
@@ -254,11 +254,11 @@ export function deleteColumn( vTable, { vColIndex } ) {
 				if (
 					cell.colSpan &&
 					cVColIndex < vColIndex &&
-					cVColIndex + parseInt( cell.colSpan ) - 1 >= vColIndex
+					cVColIndex + cell.colSpan - 1 >= vColIndex
 				) {
 					return {
 						...cell,
-						colSpan: parseInt( cell.colSpan ) - 1,
+						colSpan: cell.colSpan - 1,
 					};
 				}
 
@@ -293,7 +293,9 @@ export function mergeCells( vTable, { selectedCells } ) {
 	const { minRowIndex, maxRowIndex, minColIndex, maxColIndex } = vRangeIndexes;
 
 	// Find the rowspan & colspan cells.
-	const rowColSpanCellsCount = selectedCells.filter( ( cell ) => cell.rowSpan || cell.colSpan );
+	const rowColSpanCellsCount = selectedCells.filter(
+		( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1
+	);
 
 	// Split the found rowspan & colspan cells.
 	if ( rowColSpanCellsCount ) {
@@ -301,12 +303,12 @@ export function mergeCells( vTable, { selectedCells } ) {
 			const vMergedCells = vTable[ sectionName ]
 				.reduce( ( cells, row ) => cells.concat( row ), [] )
 				.filter(
-					( cell ) =>
-						( cell.rowSpan || cell.colSpan ) &&
-						minRowIndex <= cell.rowIndex &&
-						maxRowIndex >= cell.rowIndex &&
-						minColIndex <= cell.vColIndex &&
-						maxColIndex >= cell.vColIndex
+					( { rowIndex, vColIndex, rowSpan, colSpan } ) =>
+						( rowSpan > 1 || colSpan > 1 ) &&
+						minRowIndex <= rowIndex &&
+						maxRowIndex >= rowIndex &&
+						minColIndex <= vColIndex &&
+						maxColIndex >= vColIndex
 				);
 
 			if ( vMergedCells.length ) {
@@ -332,8 +334,8 @@ export function mergeCells( vTable, { selectedCells } ) {
 
 						return {
 							...cell,
-							rowSpan: rowSpan > 1 ? rowSpan : undefined,
-							colSpan: colSpan > 1 ? colSpan : undefined,
+							rowSpan,
+							colSpan,
 						};
 					}
 
@@ -368,7 +370,9 @@ export function mergeCells( vTable, { selectedCells } ) {
  */
 export function splitMergedCells( vTable, { selectedCells } ) {
 	// Find the rowspan & colspan cells.
-	const rowColSpanCells = selectedCells.filter( ( cell ) => cell.rowSpan || cell.colSpan );
+	const rowColSpanCells = selectedCells.filter(
+		( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1
+	);
 
 	// Split the found rowspan & colspan cells.
 	if ( rowColSpanCells.length ) {
@@ -404,12 +408,12 @@ export function splitMergedCell( vTable, { selectedCell } ) {
 	// Split the selected cells and map them on the virtual section.
 	vSection[ rowIndex ].cells[ vColIndex ] = {
 		...vSection[ rowIndex ].cells[ vColIndex ],
-		rowSpan: undefined,
-		colSpan: undefined,
+		rowSpan: 1,
+		colSpan: 1,
 	};
 
-	if ( colSpan ) {
-		for ( let i = 1; i < parseInt( colSpan ); i++ ) {
+	if ( colSpan > 1 ) {
+		for ( let i = 1; i < colSpan; i++ ) {
 			vSection[ rowIndex ].cells[ vColIndex + i ] = {
 				...vSection[ rowIndex ].cells[ vColIndex ],
 				content: undefined,
@@ -417,15 +421,15 @@ export function splitMergedCell( vTable, { selectedCell } ) {
 		}
 	}
 
-	if ( rowSpan ) {
-		for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
+	if ( rowSpan > 1 ) {
+		for ( let i = 1; i < rowSpan; i++ ) {
 			vSection[ rowIndex + i ].cells[ vColIndex ] = {
 				...vSection[ rowIndex ].cells[ vColIndex ],
 				content: undefined,
 			};
 
-			if ( colSpan ) {
-				for ( let j = 1; j < parseInt( colSpan ); j++ ) {
+			if ( colSpan > 1 ) {
+				for ( let j = 1; j < colSpan; j++ ) {
 					vSection[ rowIndex + i ].cells[ vColIndex + j ] = {
 						...vSection[ rowIndex ].cells[ vColIndex ],
 						content: undefined,
@@ -566,26 +570,26 @@ export function toVirtualTable( state ) {
 					rowIndex: cRowIndex,
 					colIndex: cColIndex,
 					vColIndex,
-					rowSpan: cell.rowSpan ? parseInt( cell.rowSpan ) : 1,
-					colSpan: cell.colSpan ? parseInt( cell.colSpan ) : 1,
+					rowSpan: cell.rowSpan || 1,
+					colSpan: cell.colSpan || 1,
 				};
 
 				// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
 				// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
-				if ( cell.colSpan ) {
-					for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
+				if ( cell.colSpan > 1 ) {
+					for ( let i = 1; i < cell.colSpan; i++ ) {
 						vSection[ cRowIndex ].cells[ vColIndex + i ].isFilled = true;
 						vSection[ cRowIndex ].cells[ vColIndex + i ].isDelete = true;
 					}
 				}
 
-				if ( cell.rowSpan ) {
-					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
+				if ( cell.rowSpan > 1 ) {
+					for ( let i = 1; i < cell.rowSpan; i++ ) {
 						vSection[ cRowIndex + i ].cells[ vColIndex ].isFilled = true;
 						vSection[ cRowIndex + i ].cells[ vColIndex ].isDelete = true;
 
-						if ( cell.colSpan ) {
-							for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
+						if ( cell.colSpan > 1 ) {
+							for ( let j = 1; j < cell.colSpan; j++ ) {
 								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isFilled = true;
 								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isDelete = true;
 							}
@@ -606,6 +610,8 @@ export function toVirtualTable( state ) {
 						rowIndex: null,
 						colIdex: null,
 						vColIndex: cVColIndex,
+						rowSpan: 1,
+						colSpan: 1,
 					};
 				}
 			} );
@@ -634,8 +640,8 @@ export function toTableAttributes( vTable ) {
 						// Remove default rowspan / colspan value.
 						.map( ( cell ) => ( {
 							...cell,
-							rowSpan: cell.rowSpan > 1 ? cell.rowSpan : undefined,
-							colSpan: cell.colSpan > 1 ? cell.colSpan : undefined,
+							rowSpan: cell.rowSpan,
+							colSpan: cell.colSpan,
 						} ) )
 						// Delete cells marked as deletion.
 						.filter( ( cell ) => ! cell.isDelete && ! cell.isMerged ),
@@ -669,10 +675,8 @@ export function toVirtualRows( vTable ) {
 export function getVirtualRange( selectedCells ) {
 	return selectedCells.reduce(
 		( { minRowIndex, maxRowIndex, minColIndex, maxColIndex }, cell ) => {
-			const vRowIndex = cell.rowSpan ? cell.rowIndex + parseInt( cell.rowSpan ) - 1 : cell.rowIndex;
-			const vColIndex = cell.colSpan
-				? cell.vColIndex + parseInt( cell.colSpan ) - 1
-				: cell.vColIndex;
+			const vRowIndex = cell.rowSpan > 1 ? cell.rowIndex + cell.rowSpan - 1 : cell.rowIndex;
+			const vColIndex = cell.colSpan > 1 ? cell.vColIndex + cell.colSpan - 1 : cell.vColIndex;
 
 			return {
 				minRowIndex: minRowIndex < cell.rowIndex ? minRowIndex : cell.rowIndex,
@@ -724,18 +728,18 @@ export function isRectangleSelected( selectedCells ) {
 		if ( rowIndex in vRange && vColIndex in vRange[ rowIndex ] ) {
 			vRange[ rowIndex ][ vColIndex ] = true;
 
-			if ( colSpan ) {
-				for ( let i = 1; i < parseInt( colSpan ); i++ ) {
+			if ( colSpan > 1 ) {
+				for ( let i = 1; i < colSpan; i++ ) {
 					vRange[ rowIndex ][ vColIndex + i ] = true;
 				}
 			}
 
-			if ( rowSpan ) {
-				for ( let i = 1; i < parseInt( rowSpan ); i++ ) {
+			if ( rowSpan > 1 ) {
+				for ( let i = 1; i < rowSpan; i++ ) {
 					vRange[ rowIndex + i ][ vColIndex ] = true;
 
-					if ( colSpan ) {
-						for ( let j = 1; j < parseInt( colSpan ); j++ ) {
+					if ( colSpan > 1 ) {
+						for ( let j = 1; j < colSpan; j++ ) {
 							vRange[ rowIndex + i ][ vColIndex + j ] = true;
 						}
 					}
@@ -789,16 +793,13 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 	// Expand the rectangle if there is a combined cell that passes through each edge.
 	while ( ! isRectangled ) {
 		// Extend the virtual range to top if there are cells that overlap to top.
-		const topCells = vCells.filter( ( cell ) => {
-			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
-			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
-
+		const topCells = vCells.filter( ( { rowIndex, vColIndex, rowSpan, colSpan } ) => {
 			return (
-				( ( cell.vColIndex + colSpan >= minColIndex && cell.vColIndex + colSpan <= maxColIndex ) ||
-					( cell.vColIndex >= minColIndex && cell.vColIndex <= maxColIndex ) ) &&
-				cell.rowIndex < minRowIndex &&
-				cell.rowIndex + rowSpan >= minRowIndex &&
-				cell.rowSpan
+				( ( vColIndex + colSpan - 1 >= minColIndex && vColIndex + colSpan - 1 <= maxColIndex ) ||
+					( vColIndex >= minColIndex && vColIndex <= maxColIndex ) ) &&
+				rowIndex < minRowIndex &&
+				rowIndex + rowSpan - 1 >= minRowIndex &&
+				rowSpan > 1
 			);
 		} );
 
@@ -806,16 +807,13 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 		if ( ! isTopFixed ) minRowIndex--;
 
 		// Extend the virtual range to right if there are cells that overlap to right.
-		const rightCells = vCells.filter( ( cell ) => {
-			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
-			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
-
+		const rightCells = vCells.filter( ( { rowIndex, vColIndex, rowSpan, colSpan } ) => {
 			return (
-				( ( cell.rowIndex + rowSpan >= minRowIndex && cell.rowIndex + rowSpan <= maxRowIndex ) ||
-					( cell.rowIndex >= minRowIndex && cell.rowIndex <= maxRowIndex ) ) &&
-				cell.vColIndex <= maxColIndex &&
-				cell.vColIndex + colSpan > maxColIndex &&
-				cell.colSpan
+				( ( rowIndex + rowSpan - 1 >= minRowIndex && rowIndex + rowSpan - 1 <= maxRowIndex ) ||
+					( rowIndex >= minRowIndex && rowIndex <= maxRowIndex ) ) &&
+				vColIndex <= maxColIndex &&
+				vColIndex + colSpan - 1 > maxColIndex &&
+				colSpan > 1
 			);
 		} );
 
@@ -823,16 +821,13 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 		if ( ! isRightFixed ) maxColIndex++;
 
 		// Extend the virtual range to bottom if there are cells that overlap to bottom.
-		const bottomCells = vCells.filter( ( cell ) => {
-			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
-			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
-
+		const bottomCells = vCells.filter( ( { rowIndex, vColIndex, rowSpan, colSpan } ) => {
 			return (
-				( ( cell.vColIndex + colSpan >= minColIndex && cell.vColIndex + colSpan <= maxColIndex ) ||
-					( cell.vColIndex >= minColIndex && cell.vColIndex <= maxColIndex ) ) &&
-				cell.rowIndex <= maxRowIndex &&
-				cell.rowIndex + rowSpan > maxRowIndex &&
-				cell.rowSpan
+				( ( vColIndex + colSpan - 1 >= minColIndex && vColIndex + colSpan - 1 <= maxColIndex ) ||
+					( vColIndex >= minColIndex && vColIndex <= maxColIndex ) ) &&
+				rowIndex <= maxRowIndex &&
+				rowIndex + rowSpan - 1 > maxRowIndex &&
+				rowSpan - 1
 			);
 		} );
 
@@ -840,16 +835,13 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 		if ( ! isBottomFixed ) maxRowIndex++;
 
 		// Extend the virtual range to left if there are cells that overlap to left.
-		const leftCells = vCells.filter( ( cell ) => {
-			const rowSpan = cell.rowSpan ? parseInt( cell.rowSpan ) - 1 : 0;
-			const colSpan = cell.colSpan ? parseInt( cell.colSpan ) - 1 : 0;
-
+		const leftCells = vCells.filter( ( { rowIndex, vColIndex, rowSpan, colSpan } ) => {
 			return (
-				( ( cell.rowIndex + rowSpan >= minRowIndex && cell.rowIndex + rowSpan <= maxRowIndex ) ||
-					( cell.rowIndex >= minRowIndex && cell.rowIndex <= maxRowIndex ) ) &&
-				cell.vColIndex < minColIndex &&
-				cell.vColIndex + colSpan >= minColIndex &&
-				cell.colSpan
+				( ( rowIndex + rowSpan - 1 >= minRowIndex && rowIndex + rowSpan - 1 <= maxRowIndex ) ||
+					( rowIndex >= minRowIndex && rowIndex <= maxRowIndex ) ) &&
+				vColIndex < minColIndex &&
+				vColIndex + colSpan - 1 >= minColIndex &&
+				colSpan > 1
 			);
 		} );
 
@@ -861,11 +853,11 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
 
 	// Cells in the newly computed rectangle.
 	return vCells.filter(
-		( cell ) =>
-			cell.rowIndex >= minRowIndex &&
-			cell.rowIndex <= maxRowIndex &&
-			cell.vColIndex >= minColIndex &&
-			cell.vColIndex <= maxColIndex
+		( { rowIndex, vColIndex } ) =>
+			rowIndex >= minRowIndex &&
+			rowIndex <= maxRowIndex &&
+			vColIndex >= minColIndex &&
+			vColIndex <= maxColIndex
 	);
 }
 
@@ -877,7 +869,7 @@ export function toRectangledSelectedCells( vTable, { fromCell, toCell } ) {
  */
 export function hasMergedCells( selectedCells ) {
 	if ( ! selectedCells ) return false;
-	return selectedCells.some( ( cell ) => cell.rowSpan || cell.colSpan );
+	return selectedCells.some( ( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1 );
 }
 
 /**
@@ -896,7 +888,7 @@ export function toggleSection( vTable, sectionName ) {
 	// Number of columns in the row to be inserted.
 	const newRowColCount = vTable.body[ 0 ].cells.reduce( ( count, cell ) => {
 		if ( cell.isDelete ) return count;
-		return count + ( parseInt( cell.colSpan ) || 1 );
+		return count + cell.colSpan;
 	}, 0 );
 
 	// Row state to be inserted.

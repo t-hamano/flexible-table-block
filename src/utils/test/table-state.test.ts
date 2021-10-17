@@ -22,6 +22,8 @@ const getRow = (
 					rowIndex,
 					colIndex,
 					sectionName,
+					rowSpan: 1,
+					colSpan: 1,
 					...options,
 				};
 			}
