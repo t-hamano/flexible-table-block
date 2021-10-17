@@ -25,4 +25,4 @@ define( 'FTB_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 
 require_once __DIR__ . '/classes/class-init.php';
 
-new flexible_table_block\Init();
+new Flexible_Table_Block\Init();
