@@ -13,7 +13,13 @@ import {
 /** @type {import('puppeteer').Page} */
 const page = global.page;
 
-const cellSelector = '[data-type="flexible-table-block/table"] td';
+const blockSelector = '[data-type="flexible-table-block/table"]';
+const cellSelector = `${ blockSelector } td`;
+
+const clickButtonWithLabel = async ( label, index = 0 ) => {
+	const button = await page.$$( `${ blockSelector } [aria-label="${ label }"]` );
+	await button[ index ].click();
+};
 
 const createNewTableBlock = async ( { col, row, header = false, footer = false } = {} ) => {
 	await insertBlock( 'Flexible' );
@@ -93,10 +99,22 @@ describe( 'Table', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
+	it( 'allows cells to be marge', async () => {
+		await createNewTableBlock( { col: 5, row: 5 } );
+		const cells = await page.$$( cellSelector );
+		await cells[ 0 ].click();
+		await page.keyboard.down( 'Shift' );
+		await cells[ 8 ].click();
+		await page.keyboard.up( 'Shift' );
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
 	it( 'allows all cells side by side to be marge', async () => {
 		await createNewTableBlock( { col: 5, row: 5 } );
-		const selectRow = await page.$( '[aria-label="Select row"]' );
-		await selectRow.click();
+		await clickButtonWithLabel( 'Select row' );
 		await clickBlockToolbarButton( 'Edit table' );
 		await clickButton( 'Merge Cells' );
 
@@ -105,10 +123,43 @@ describe( 'Table', () => {
 
 	it( 'allows all cells in a vertical line to be marge', async () => {
 		await createNewTableBlock( { col: 5, row: 5 } );
-		const selectColumn = await page.$( '[aria-label="Select column"]' );
-		await selectColumn.click();
+		await clickButtonWithLabel( 'Select column' );
 		await clickBlockToolbarButton( 'Edit table' );
 		await clickButton( 'Merge Cells' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'allows to delete rows even if they contain merged cells.', async () => {
+		await createNewTableBlock( { col: 10, row: 10 } );
+		const cells = await page.$$( cellSelector );
+		await cells[ 11 ].click();
+		await page.keyboard.down( 'Shift' );
+		await cells[ 44 ].click();
+		await page.keyboard.up( 'Shift' );
+
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
+
+		await clickButtonWithLabel( 'Select row', 2 );
+		await clickButtonWithLabel( 'Delete row' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'allows to delete column even if they contain merged cells.', async () => {
+		await createNewTableBlock( { col: 10, row: 10 } );
+		const cells = await page.$$( cellSelector );
+		await cells[ 11 ].click();
+		await page.keyboard.down( 'Shift' );
+		await cells[ 44 ].click();
+		await page.keyboard.up( 'Shift' );
+
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
+
+		await clickButtonWithLabel( 'Select column', 2 );
+		await clickButtonWithLabel( 'Delete column' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
