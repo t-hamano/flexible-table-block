@@ -12,7 +12,7 @@
 		},
 		"hasFixedLayout": {
 			"type": "boolean",
-			"default": false
+			"default": true
 		},
 		"isScrollOnPc": {
 			"type": "boolean",
