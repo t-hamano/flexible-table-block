@@ -712,6 +712,7 @@ export function toVirtualTable( state: TableAttributes ) {
 				rowIndex: 0,
 				colIndex: 0,
 				vColIndex: 0,
+				tag: 'head' === sectionName ? 'th' : 'td',
 				isDelete: false,
 				isMerged: false,
 				isFirstSelected: false,
@@ -741,43 +742,47 @@ export function toVirtualTable( state: TableAttributes ) {
 					isFirstSelected: false,
 				};
 
-				// 			// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
-				// 			// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
-				// 			if ( cell.colSpan ) {
-				// 				for ( let i = 1; i < cell.colSpan; i++ ) {
-				// 					vSection[ cRowIndex ].cells[ vColIndex + i ].isFilled = true;
-				// 					vSection[ cRowIndex ].cells[ vColIndex + i ].isDelete = true;
-				// 				}
-				// 			}
-				// 			if ( cell.rowSpan ) {
-				// 				for ( let i = 1; i < cell.rowSpan; i++ ) {
-				// 					vSection[ cRowIndex + i ].cells[ vColIndex ].isFilled = true;
-				// 					vSection[ cRowIndex + i ].cells[ vColIndex ].isDelete = true;
-				// 					if ( cell.colSpan ) {
-				// 						for ( let j = 1; j < cell.colSpan; j++ ) {
-				// 							vSection[ cRowIndex + i ].cells[ vColIndex + j ].isFilled = true;
-				// 							vSection[ cRowIndex + i ].cells[ vColIndex + j ].isDelete = true;
-				// 						}
-				// 					}
-				// 				}
-				// 			}
-				// 		} );
-				// 	} );
-				// 	// // Fallback: Fill with empty cells if any cells are not filled correctly.
-				// 	// vSection.forEach( ( { cells }, cRowIndex ) => {
-				// 	// 	cells.forEach( ( cell, cVColIndex ) => {
-				// 	// 		if ( ! cell.isFilled ) {
-				// 	// 			vSection[ cRowIndex ].cells[ cVColIndex ] = {
-				// 	// 				content: '',
-				// 	// 				tag: 'head' === sectionName ? 'th' : 'td',
-				// 	// 				isFilled: true,
-				// 	// 				rowIndex: null,
-				// 	// 				colIdex: null,
-				// 	// 				vColIndex: cVColIndex,
-				// 	// 				rowSpan: 1,
-				// 	// 				colSpan: 1,
-				// 	// 			};
-				// 	// 		}
+				// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
+				// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
+				if ( cell.colSpan ) {
+					for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
+						vSection[ cRowIndex ].cells[ vColIndex + i ].isFilled = true;
+						vSection[ cRowIndex ].cells[ vColIndex + i ].isDelete = true;
+					}
+				}
+				if ( cell.rowSpan ) {
+					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
+						vSection[ cRowIndex + i ].cells[ vColIndex ].isFilled = true;
+						vSection[ cRowIndex + i ].cells[ vColIndex ].isDelete = true;
+						if ( cell.colSpan ) {
+							for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
+								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isFilled = true;
+								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isDelete = true;
+							}
+						}
+					}
+				}
+			} );
+		} );
+
+		// Fallback: Fill with empty cells if any cells are not filled correctly.
+		vSection.forEach( ( { cells }, cRowIndex ) => {
+			cells.forEach( ( cell, cVColIndex ) => {
+				if ( ! cell.isFilled ) {
+					vSection[ cRowIndex ].cells[ cVColIndex ] = {
+						tag: 'head' === sectionName ? 'th' : 'td',
+						isFilled: true,
+						sectionName,
+						rowIndex: 1,
+						colIndex: 1,
+						vColIndex: cVColIndex,
+						rowSpan: 1,
+						colSpan: 1,
+						isDelete: false,
+						isMerged: false,
+						isFirstSelected: false,
+					};
+				}
 			} );
 		} );
 		return vSection;
