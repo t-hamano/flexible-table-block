@@ -22,8 +22,8 @@ import {
  * Internal dependencies
  */
 import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING } from '../constants';
-import { parseUnit } from '../utils/helper';
 import { DIRECTIONS, DirectionIndicatorControl } from './indicator-control';
+import { parseUnit } from '../utils/unit-helpers';
 
 const DEFAULT_VALUES = {
 	horizontal: null,

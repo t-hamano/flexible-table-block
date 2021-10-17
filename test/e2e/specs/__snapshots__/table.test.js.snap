@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table should be inserted 1`] = `
+"<!-- wp:flexible-table-block/table -->
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;
+
+exports[`Table should create block 1`] = `
+"<!-- wp:flexible-table-block/table -->
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;

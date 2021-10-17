@@ -30,8 +30,8 @@ import {
 	BorderSpacingControl,
 	PaddingControl,
 } from '../controls';
-import { toggleSection, toTableAttributes } from '../utils/table-state';
-import { toUnitVal } from '../utils/helper';
+import { toggleSection } from '../utils/table-state';
+import { toTableAttributes } from '../utils/helper';
 import { convertToInline } from '../utils/style-converter';
 import {
 	pickPadding,
@@ -49,6 +49,7 @@ import {
 	updateBorderColor,
 	updateBorderSpacing,
 } from '../utils/style-updater';
+import { toUnitVal } from '../utils/unit-helpers';
 
 export default function TableSettings( props ) {
 	const { vTable, tableStylesObj, attributes, setAttributes } = props;
