@@ -2,66 +2,66 @@
 
 exports[`Table allows all cells in a vertical line to be marge 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td rowspan=\\"5\\"></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td rowspan=\\"5\\"></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table allows all cells side by side to be marge 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td colspan=\\"5\\"></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td colspan=\\"5\\"></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table allows cells in a vertical line to be marge 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td rowspan=\\"2\\"></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td rowspan=\\"2\\"></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table allows cells side by side to be marge 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td colspan=\\"2\\"></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td colspan=\\"2\\"></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table allows cells to be marge 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td rowspan=\\"2\\" colspan=\\"4\\"></td><td></td></tr><tr><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td rowspan=\\"2\\" colspan=\\"4\\"></td><td></td></tr><tr><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table allows merged cells to be split 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table allows to delete column even if they contain merged cells. 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=\\"4\\" colspan=\\"3\\"></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=\\"4\\" colspan=\\"3\\"></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table allows to delete rows even if they contain merged cells. 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=\\"3\\" colspan=\\"4\\"></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=\\"3\\" colspan=\\"4\\"></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table should be inserted 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table should create block 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
 
 exports[`Table should create block with option 1`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td><td></td></tr></tfoot></table></figure>
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td><td></td></tr></tfoot></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
