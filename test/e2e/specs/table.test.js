@@ -6,10 +6,14 @@ import {
 	getEditedPostContent,
 	createNewPost,
 	pressKeyWithModifier,
+	clickBlockToolbarButton,
+	clickButton,
 } from '@wordpress/e2e-test-utils';
 
 /** @type {import('puppeteer').Page} */
 const page = global.page;
+
+const cellSelector = '[data-type="flexible-table-block/table"] td';
 
 const createNewTableBlock = async ( { col, row, header = false, footer = false } = {} ) => {
 	await insertBlock( 'Flexible' );
@@ -56,11 +60,55 @@ describe( 'Table', () => {
 	it( 'should be inserted', async () => {
 		await createNewTableBlock();
 
-		const cellSelector =
-			'[data-type="flexible-table-block/table"] .block-editor-rich-text__editable';
-		await page.waitForSelector( cellSelector );
-		await page.click( cellSelector );
+		const cells = await page.$$( cellSelector );
+		await cells[ 0 ].click();
 		await page.keyboard.type( 'Flexible Table Block' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'allows cells side by side to be marge', async () => {
+		await createNewTableBlock( { col: 5, row: 5 } );
+		const cells = await page.$$( cellSelector );
+		await cells[ 0 ].click();
+		await page.keyboard.down( 'Shift' );
+		await cells[ 1 ].click();
+		await page.keyboard.up( 'Shift' );
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'allows cells in a vertical line to be marge', async () => {
+		await createNewTableBlock( { col: 5, row: 5 } );
+		const cells = await page.$$( cellSelector );
+		await cells[ 0 ].click();
+		await page.keyboard.down( 'Shift' );
+		await cells[ 5 ].click();
+		await page.keyboard.up( 'Shift' );
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'allows all cells side by side to be marge', async () => {
+		await createNewTableBlock( { col: 5, row: 5 } );
+		const selectRow = await page.$( '[aria-label="Select row"]' );
+		await selectRow.click();
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'allows all cells in a vertical line to be marge', async () => {
+		await createNewTableBlock( { col: 5, row: 5 } );
+		const selectColumn = await page.$( '[aria-label="Select column"]' );
+		await selectColumn.click();
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );

@@ -10,7 +10,6 @@ const jestE2EConfig = {
 		'expect-puppeteer',
 		'puppeteer-testing-library/extend-expect',
 	],
-	testPathIgnorePatterns: [ '/node_modules/' ],
 };
 
 module.exports = jestE2EConfig;
