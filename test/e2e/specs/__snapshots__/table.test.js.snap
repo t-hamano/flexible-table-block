@@ -30,6 +30,12 @@ exports[`Table allows cells to be marge 1`] = `
 <!-- /wp:flexible-table-block/table -->"
 `;
 
+exports[`Table allows merged cells to be split 1`] = `
+"<!-- wp:flexible-table-block/table -->
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;
+
 exports[`Table allows to delete column even if they contain merged cells. 1`] = `
 "<!-- wp:flexible-table-block/table -->
 <figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=\\"4\\" colspan=\\"3\\"></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>

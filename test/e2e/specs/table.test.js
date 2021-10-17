@@ -17,6 +17,7 @@ const blockSelector = '[data-type="flexible-table-block/table"]';
 const cellSelector = `${ blockSelector } td`;
 
 const clickButtonWithLabel = async ( label, index = 0 ) => {
+	await page.waitForSelector( `${ blockSelector } [aria-label="${ label }"]` );
 	const button = await page.$$( `${ blockSelector } [aria-label="${ label }"]` );
 	await button[ index ].click();
 };
@@ -110,6 +111,31 @@ describe( 'Table', () => {
 		await clickButton( 'Merge Cells' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'allows merged cells to be split', async () => {
+		await createNewTableBlock( { col: 5, row: 5 } );
+		const cells = await page.$$( cellSelector );
+		await cells[ 0 ].click();
+		await page.keyboard.down( 'Shift' );
+		await cells[ 8 ].click();
+		await page.keyboard.up( 'Shift' );
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
+		const mergedCell = await page.$( cellSelector );
+		await mergedCell.click();
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Split Merged Cells' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'disallows merging across sections', async () => {
+		await createNewTableBlock( { header: true, footer: true } );
+		await clickButtonWithLabel( 'Select column' );
+		await clickBlockToolbarButton( 'Edit table' );
+		const [ button ] = await page.$x( `//button[contains(text(), 'Merge Cells')]` );
+		const disabled = await page.evaluate( ( element ) => element.disabled, button );
+		expect( disabled ).toBe( true );
 	} );
 
 	it( 'allows all cells side by side to be marge', async () => {
