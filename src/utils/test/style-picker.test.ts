@@ -10,37 +10,37 @@ describe( 'style-picker', () => {
 	describe( 'pickPadding', () => {
 		it( 'should separate shorthand prop', () => {
 			expect( pickPadding( { padding: '10px' } ) ).toStrictEqual( {
+				top: '10px',
+				right: '10px',
 				bottom: '10px',
 				left: '10px',
-				right: '10px',
-				top: '10px',
 			} );
 		} );
 
 		it( 'should separate vertical and horizontal', () => {
 			expect( pickPadding( { padding: '30px 10px' } ) ).toStrictEqual( {
+				top: '30px',
+				right: '10px',
 				bottom: '30px',
 				left: '10px',
-				right: '10px',
-				top: '30px',
 			} );
 		} );
 
 		it( 'should split vertical and horizontal and side', () => {
 			expect( pickPadding( { padding: '30px 10px 20px' } ) ).toStrictEqual( {
+				top: '30px',
+				right: '10px',
 				bottom: '20px',
 				left: '10px',
-				right: '10px',
-				top: '30px',
 			} );
 		} );
 
 		it( 'should split four direction', () => {
 			expect( pickPadding( { padding: '30px 10px 20px 40px' } ) ).toStrictEqual( {
+				top: '30px',
+				right: '10px',
 				bottom: '20px',
 				left: '40px',
-				right: '10px',
-				top: '30px',
 			} );
 		} );
 	} );
@@ -57,28 +57,28 @@ describe( 'style-picker', () => {
 
 		it( 'should separate vertical and horizontal', () => {
 			expect( pickBorderWidth( { borderWidth: '30px 10px' } ) ).toStrictEqual( {
+				top: '30px',
+				right: '10px',
 				bottom: '30px',
 				left: '10px',
-				right: '10px',
-				top: '30px',
 			} );
 		} );
 
 		it( 'should split vertical and horizontal and side', () => {
 			expect( pickBorderWidth( { borderWidth: '30px 10px 20px' } ) ).toStrictEqual( {
+				top: '30px',
+				right: '10px',
 				bottom: '20px',
 				left: '10px',
-				right: '10px',
-				top: '30px',
 			} );
 		} );
 
 		it( 'should split four direction', () => {
 			expect( pickBorderWidth( { borderWidth: '30px 10px 20px 40px' } ) ).toStrictEqual( {
+				top: '30px',
+				right: '10px',
 				bottom: '20px',
 				left: '40px',
-				right: '10px',
-				top: '30px',
 			} );
 		} );
 	} );
@@ -86,19 +86,19 @@ describe( 'style-picker', () => {
 	describe( 'pickBorderColor', () => {
 		it( 'should separate shorthand prop', () => {
 			expect( pickBorderColor( { borderColor: 'red' } ) ).toStrictEqual( {
+				top: 'red',
+				right: 'red',
 				bottom: 'red',
 				left: 'red',
-				right: 'red',
-				top: 'red',
 			} );
 		} );
 
 		it( 'should separate vertical and horizontal', () => {
 			expect( pickBorderColor( { borderColor: 'red #f015ca' } ) ).toStrictEqual( {
+				top: 'red',
+				right: '#f015ca',
 				bottom: 'red',
 				left: '#f015ca',
-				right: '#f015ca',
-				top: 'red',
 			} );
 		} );
 
@@ -108,19 +108,19 @@ describe( 'style-picker', () => {
 					borderColor: 'red rgb(240,30,50,.7) green',
 				} )
 			).toStrictEqual( {
+				top: 'red',
+				right: 'rgb(240,30,50,.7)',
 				bottom: 'green',
 				left: 'rgb(240,30,50,.7)',
-				right: 'rgb(240,30,50,.7)',
-				top: 'red',
 			} );
 		} );
 
 		it( 'should split four direction', () => {
 			expect( pickBorderColor( { borderColor: 'red yellow green blue' } ) ).toStrictEqual( {
+				top: 'red',
+				right: 'yellow',
 				bottom: 'green',
 				left: 'blue',
-				right: 'yellow',
-				top: 'red',
 			} );
 		} );
 	} );
@@ -172,9 +172,9 @@ describe( 'style-picker', () => {
 		} );
 
 		it( 'should parsed correctly', () => {
-			expect( pickBorderSpacing( { borderSpacing: '1cm 2em' } ) ).toStrictEqual( {
+			expect( pickBorderSpacing( { borderSpacing: '1rem 2em' } ) ).toStrictEqual( {
 				vertical: '2em',
-				horizontal: '1cm',
+				horizontal: '1rem',
 			} );
 		} );
 	} );
