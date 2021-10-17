@@ -29,8 +29,7 @@ import {
 	PaddingControl,
 	ColorControl,
 } from '../controls';
-import { toTableAttributes } from '../utils/helper';
-import { updateCellsState } from '../utils/table-state';
+import { toTableAttributes, updateCells } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
 	pickPadding,
@@ -58,7 +57,7 @@ export default function TableCellSettings( props ) {
 	const cellStylesObj = convertToObject( targetCell.styles );
 
 	const updateCellsStyle = ( styles ) => {
-		const newVTable = updateCellsState( vTable, { styles }, { selectedCells } );
+		const newVTable = updateCells( vTable, { styles }, { selectedCells } );
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
@@ -109,13 +108,13 @@ export default function TableCellSettings( props ) {
 	};
 
 	const onChangeTag = ( value ) => {
-		const newVTable = updateCellsState( vTable, { tag: value }, { selectedCells } );
+		const newVTable = updateCells( vTable, { tag: value }, { selectedCells } );
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onChangeClass = ( value ) => {
 		const newValue = value !== '' ? value : undefined;
-		const newVTable = updateCellsState( vTable, { className: newValue }, { selectedCells } );
+		const newVTable = updateCells( vTable, { className: newValue }, { selectedCells } );
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 

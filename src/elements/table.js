@@ -16,12 +16,15 @@ import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
  */
 import { CELL_ARIA_LABEL } from '../constants';
 import {
-	isEmptySection,
-	toTableAttributes,
-	toVirtualRows,
+	insertRow,
+	deleteRow,
+	insertColumn,
+	deleteColumn,
 	toRectangledSelectedCells,
-} from '../utils/helper';
-import { insertRow, deleteRow, insertColumn, deleteColumn } from '../utils/table-state';
+	toVirtualRows,
+	toTableAttributes,
+	isEmptySection,
+} from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
 	ButtonRowBeforeInserter,
@@ -95,9 +98,7 @@ export default function Table( props ) {
 		const vColIndex =
 			offset === 0
 				? vTargetCell.vColIndex
-				: vTargetCell.vColIndex +
-				  offset +
-				  ( vTargetCell.colSpan ? parseInt( vTargetCell.colSpan ) - 1 : 0 );
+				: vTargetCell.vColIndex + offset + vTargetCell.colSpan - 1;
 
 		const newVTable = insertColumn( vTable, { vColIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
@@ -281,8 +282,8 @@ export default function Table( props ) {
 										key={ vColIndex }
 										name={ tag }
 										className={ classnames( className, { 'is-selected': isCellSelected } ) }
-										rowSpan={ rowSpan }
-										colSpan={ colSpan }
+										rowSpan={ rowSpan > 1 ? rowSpan : undefined }
+										colSpan={ colSpan > 1 ? colSpan : undefined }
 										style={ cellStylesObj }
 										onClick={ ( event ) => onClickCell( event, cell ) }
 									>
@@ -405,14 +406,10 @@ export default function Table( props ) {
 														iconSize="18"
 														hasNextSection={
 															sectionIndex < filteredSections.length - 1 &&
-															rowIndex + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 ) ===
-																filteredVTable[ sectionName ].length - 1
+															rowIndex + rowSpan - 1 === filteredVTable[ sectionName ].length - 1
 														}
 														onClick={ ( event ) => {
-															onInsertRow(
-																sectionName,
-																rowIndex + ( rowSpan ? parseInt( rowSpan ) : 1 )
-															);
+															onInsertRow( sectionName, rowIndex + rowSpan );
 															event.stopPropagation();
 														} }
 													/>

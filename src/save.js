@@ -77,8 +77,8 @@ export default function save( { attributes } ) {
 									tagName={ tag }
 									className={ className }
 									value={ content }
-									rowSpan={ rowSpan }
-									colSpan={ colSpan }
+									rowSpan={ rowSpan > 1 ? rowSpan : undefined }
+									colSpan={ colSpan > 1 ? colSpan : undefined }
 									style={ cellStylesObj }
 								/>
 							);

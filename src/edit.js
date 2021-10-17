@@ -39,14 +39,12 @@ import {
 	deleteColumn,
 	mergeCells,
 	splitMergedCells,
-} from './utils/table-state';
-import {
-	toVirtualTable,
-	toTableAttributes,
-	isEmptySection,
-	isRectangleSelected,
 	hasMergedCells,
-} from './utils/helper';
+	isRectangleSelected,
+	toTableAttributes,
+	toVirtualTable,
+	isEmptySection,
+} from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 
@@ -95,8 +93,7 @@ function TableEdit( props ) {
 		const { sectionName, rowIndex, rowSpan } = selectedCells[ 0 ];
 
 		// Calculate row index to be inserted considering rowspan of the selected cell.
-		const insertRowIndex =
-			offset === 0 ? rowIndex : rowIndex + offset + ( rowSpan ? parseInt( rowSpan ) - 1 : 0 );
+		const insertRowIndex = offset === 0 ? rowIndex : rowIndex + offset + rowSpan - 1;
 
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
@@ -133,8 +130,7 @@ function TableEdit( props ) {
 		const { vColIndex, colSpan } = selectedCells[ 0 ];
 
 		// Calculate column index to be inserted considering colspan of the selected cell.
-		const insertVColIndex =
-			offset === 0 ? vColIndex : vColIndex + offset + ( colSpan ? parseInt( colSpan ) - 1 : 0 );
+		const insertVColIndex = offset === 0 ? vColIndex : vColIndex + offset + colSpan - 1;
 
 		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
 

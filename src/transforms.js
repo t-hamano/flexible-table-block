@@ -11,8 +11,7 @@ import { createBlock } from '@wordpress/blocks';
 /**
  * Internal dependencies
  */
-import { splitMergedCell } from './utils/table-state';
-import { toVirtualTable } from './utils/helper';
+import { splitMergedCell, toVirtualTable } from './utils/table-state';
 
 const transforms = {
 	from: [

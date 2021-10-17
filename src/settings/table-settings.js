@@ -30,8 +30,7 @@ import {
 	BorderSpacingControl,
 	PaddingControl,
 } from '../controls';
-import { toggleSection } from '../utils/table-state';
-import { toTableAttributes } from '../utils/helper';
+import { toggleSection, toTableAttributes } from '../utils/table-state';
 import { convertToInline } from '../utils/style-converter';
 import {
 	pickPadding,
