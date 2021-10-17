@@ -130,11 +130,13 @@ export default function TablePlaceholder( { setAttributes } ) {
 			<form className="ftb-placeholder__form" onSubmit={ onCreateTable }>
 				<div className="ftb-placeholder__row">
 					<ToggleControl
+						className="ftb-placeholder__toggle-header"
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
 						onChange={ onToggleHeaderSection }
 					/>
 					<ToggleControl
+						className="ftb-placeholder__toggle-footer"
 						label={ __( 'Footer section', 'flexible-table-block' ) }
 						checked={ !! footerSection }
 						onChange={ onToggleFooterSection }
@@ -142,6 +144,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 				</div>
 				<div className="ftb-placeholder__row">
 					<TextControl
+						className="ftb-placeholder__column-count"
 						label={ __( 'Column count', 'flexible-table-block' ) }
 						type="number"
 						min="1"
@@ -150,6 +153,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 						onChange={ onChangeColumnCount }
 					/>
 					<TextControl
+						className="ftb-placeholder__row-count"
 						label={ __( 'Row count', 'flexible-table-block' ) }
 						type="number"
 						min="1"
