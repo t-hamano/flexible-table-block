@@ -259,7 +259,10 @@ describe( 'style-updater', () => {
 		it( 'should pass through if 2nd arg is undefined', () => {
 			expect(
 				updateBorderRadius( { borderRadius: '15px', color: 'red' }, undefined )
-			).toStrictEqual( { borderRadius: '15px', color: 'red' } );
+			).toStrictEqual( {
+				borderRadius: '15px',
+				color: 'red',
+			} );
 		} );
 
 		it( 'should remove borderRadius props', () => {
