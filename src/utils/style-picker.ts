@@ -4,14 +4,14 @@
 import { parseCssValue } from './helper';
 import type { Properties } from 'csstype';
 
-interface Direction {
+export interface Direction {
 	top: string;
 	right: string;
 	bottom: string;
 	left: string;
 }
 
-interface Corners {
+export interface Corners {
 	topLeft: string;
 	topRight: string;
 	bottomRight: string;
