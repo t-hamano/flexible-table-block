@@ -172,9 +172,9 @@ describe( 'style-picker', () => {
 		} );
 
 		it( 'should parsed correctly', () => {
-			expect( pickBorderSpacing( { borderSpacing: '1cm 2em' } ) ).toStrictEqual( {
+			expect( pickBorderSpacing( { borderSpacing: '1rem 2em' } ) ).toStrictEqual( {
 				vertical: '2em',
-				horizontal: '1cm',
+				horizontal: '1rem',
 			} );
 		} );
 	} );
