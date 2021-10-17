@@ -22,8 +22,8 @@ import {
  * Internal dependencies
  */
 import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS } from '../constants';
-import { parseUnit } from '../utils/helper';
 import { CORNERS, CornerIndicatorControl } from './indicator-control';
+import { parseUnit } from '../utils/unit-helpers';
 
 const DEFAULT_VALUES = {
 	topLeft: null,

@@ -29,7 +29,7 @@ import {
 	PaddingControl,
 	ColorControl,
 } from '../controls';
-import { toTableAttributes, toUnitVal } from '../utils/helper';
+import { toTableAttributes } from '../utils/helper';
 import { updateCellsState } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -39,6 +39,7 @@ import {
 	pickBorderStyle,
 	pickBorderColor,
 } from '../utils/style-picker';
+import { toUnitVal } from '../utils/unit-helpers';
 
 export default function TableCellSettings( props ) {
 	const { vTable, selectedCells, attributes, setAttributes } = props;

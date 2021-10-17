@@ -37,7 +37,7 @@ import {
 	VERTICAL_ALIGNMENT_CONTROLS,
 } from '../constants';
 import { BorderWidthControl, BorderStyleControl, ColorControl, PaddingControl } from '../controls';
-import { toUnitVal } from '../utils/helper';
+import { toUnitVal } from '../utils/unit-helpers';
 
 export default function GlobalSettings() {
 	const storeOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
