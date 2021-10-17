@@ -17,7 +17,7 @@ class Init {
 		load_plugin_textdomain( FTB_NAMESPACE );
 
 		// Uninstallation process.
-		register_uninstall_hook( FTB_NAMESPACE, __NAMESPACE__.'\Init::plugin_uninstall' );
+		register_uninstall_hook( FTB_NAMESPACE, __NAMESPACE__ . '\Init::plugin_uninstall' );
 
 		// Load classes.
 		$this->load_classes();
