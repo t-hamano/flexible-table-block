@@ -56,7 +56,7 @@ export interface VCell {
 	rowIndex: number;
 	colIndex: number;
 	vColIndex: number;
-	isDelete: boolean;
+	isHidden: boolean;
 	isFirstSelected?: boolean;
 	isFilled?: boolean;
 }
@@ -108,7 +108,7 @@ export function createTable( {
 						isFirstSelected: false,
 						colIndex,
 						vColIndex: colIndex,
-						isDelete: false,
+						isHidden: false,
 					} )
 				),
 			} )
@@ -153,7 +153,7 @@ export function insertRow(
 				colIndex,
 				isFirstSelected: false,
 				vColIndex: colIndex,
-				isDelete: false,
+				isHidden: false,
 			} )
 		),
 	};
@@ -236,7 +236,7 @@ export function deleteRow(
 				if ( cRowIndex === rowIndex ) {
 					return {
 						...cell,
-						isDelete: true,
+						isHidden: true,
 					};
 				}
 
@@ -307,13 +307,13 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 						rowIndex: cell.rowIndex,
 						colIndex: cell.colIndex + 1,
 						vColIndex: cell.vColIndex + 1,
-						isDelete: false,
+						isHidden: false,
 					} );
 					return newCells;
 				}
 
 				// Insert cell (between columns).
-				if ( cVColIndex === vColIndex && ! cell.isDelete ) {
+				if ( cVColIndex === vColIndex && ! cell.isHidden ) {
 					newCells.push(
 						{
 							content: '',
@@ -324,7 +324,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 							rowIndex: cell.rowIndex,
 							colIndex: cell.colIndex - 1,
 							vColIndex: cell.vColIndex - 1,
-							isDelete: false,
+							isHidden: false,
 						},
 						cell
 					);
@@ -346,7 +346,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 							rowIndex: cRowIndex,
 							colIndex: cell.colIndex - 1,
 							vColIndex: cell.vColIndex - 1,
-							isDelete: false,
+							isHidden: false,
 						},
 						cell
 					);
@@ -402,7 +402,7 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 				if ( cVColIndex === vColIndex ) {
 					return {
 						...cell,
-						isDelete: true,
+						isHidden: true,
 					};
 				}
 
@@ -482,7 +482,7 @@ export function mergeCells( vTable: VTable, selectedCells: VCell[] ): VTable {
 					) {
 						return {
 							...cell,
-							isDelete: true,
+							isHidden: true,
 						};
 					}
 
@@ -705,7 +705,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 						rowSpan: 1,
 						colSpan: 1,
 						sectionName,
-						isDelete: false,
+						isHidden: false,
 						// Whether the actual cell is placed or not.
 						isFilled: false,
 						// Dummy indexes.
@@ -737,7 +737,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 					rowIndex: cRowIndex,
 					colIndex: cColIndex,
 					vColIndex,
-					isDelete: false,
+					isHidden: false,
 				};
 
 				// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
@@ -745,17 +745,17 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 				if ( cell.colSpan ) {
 					for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
 						vSection[ cRowIndex ].cells[ vColIndex + i ].isFilled = true;
-						vSection[ cRowIndex ].cells[ vColIndex + i ].isDelete = true;
+						vSection[ cRowIndex ].cells[ vColIndex + i ].isHidden = true;
 					}
 				}
 				if ( cell.rowSpan ) {
 					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
 						vSection[ cRowIndex + i ].cells[ vColIndex ].isFilled = true;
-						vSection[ cRowIndex + i ].cells[ vColIndex ].isDelete = true;
+						vSection[ cRowIndex + i ].cells[ vColIndex ].isHidden = true;
 						if ( cell.colSpan ) {
 							for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
 								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isFilled = true;
-								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isDelete = true;
+								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isHidden = true;
 							}
 						}
 					}
@@ -776,7 +776,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 		// 				vColIndex: cVColIndex,
 		// 				rowSpan: 1,
 		// 				colSpan: 1,
-		// 				isDelete: false,
+		// 				isHidden: false,
 		// 				isFirstSelected: false,
 		// 			};
 		// 		}
@@ -801,7 +801,7 @@ export function toTableAttributes( vTable: VTable ): TableAttributes {
 				.map( ( { cells } ) => ( {
 					cells: cells
 						// Delete cells marked as deletion.
-						.filter( ( cell ) => ! cell.isDelete )
+						.filter( ( cell ) => ! cell.isHidden )
 						// Keep only the properties needed.
 						.map( ( cell ) => ( {
 							content: cell.content,
@@ -956,7 +956,7 @@ export function toRectangledSelectedCells(
 			}
 			return cell;
 		} )
-		.filter( ( cell: VCell ) => ! cell.isDelete );
+		.filter( ( cell: VCell ) => ! cell.isHidden );
 
 	// Expand the rectangle if there is a combined cell that passes through each edge.
 	while ( ! isRectangled ) {
@@ -1076,7 +1076,7 @@ export function toggleSection( vTable: VTable, sectionName: SectionName ): VTabl
 			rowIndex: 0,
 			colIndex,
 			vColIndex: colIndex,
-			isDelete: false,
+			isHidden: false,
 			isFirstSelected: false,
 		} ) ),
 	};

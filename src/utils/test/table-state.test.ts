@@ -30,7 +30,7 @@ const getRow = (
 					sectionName,
 					rowSpan: 1,
 					colSpan: 1,
-					isDelete: false,
+					isHidden: false,
 					isFirstSelected: false,
 					...options,
 				};
@@ -87,7 +87,7 @@ describe( 'table-state', () => {
 			expect( deleteRow( { ...table }, { sectionName: 'body', rowIndex: 0 } ) ).toStrictEqual( {
 				head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
 				body: [
-					getRow( 2, 'body', 0, 'td', 'body-0', { isDelete: true } ),
+					getRow( 2, 'body', 0, 'td', 'body-0', { isHidden: true } ),
 					getRow( 2, 'body', 1, 'td', 'body-1' ),
 				],
 				foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],

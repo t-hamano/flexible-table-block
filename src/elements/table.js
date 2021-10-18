@@ -116,7 +116,7 @@ export default function Table( props ) {
 	const onSelectSectionCells = ( sectionName ) => {
 		setSelectedCells(
 			vTable[ sectionName ].reduce( ( cells, row ) => {
-				return cells.concat( row.cells.filter( ( cell ) => ! cell.isDelete ) );
+				return cells.concat( row.cells.filter( ( cell ) => ! cell.isHidden ) );
 			}, [] )
 		);
 		setSelectedLine();
@@ -131,7 +131,7 @@ export default function Table( props ) {
 			setSelectedCells(
 				vTable[ sectionName ].reduce( ( cells, row ) => {
 					return cells.concat(
-						row.cells.filter( ( cell ) => cell.rowIndex === rowIndex && ! cell.isDelete )
+						row.cells.filter( ( cell ) => cell.rowIndex === rowIndex && ! cell.isHidden )
 					);
 				}, [] )
 			);
@@ -149,7 +149,7 @@ export default function Table( props ) {
 				vRows.reduce(
 					( cells, row ) =>
 						cells.concat(
-							row.cells.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isDelete )
+							row.cells.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isHidden )
 						),
 					[]
 				)
@@ -171,7 +171,7 @@ export default function Table( props ) {
 		setAttributes( {
 			[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
 				if ( rowIndex !== selectedRowIndex ) {
-					return { cells: row.cells.filter( ( cell ) => ! cell.isDelete ) };
+					return { cells: row.cells.filter( ( cell ) => ! cell.isHidden ) };
 				}
 
 				return {
@@ -186,7 +186,7 @@ export default function Table( props ) {
 							};
 						} )
 						// Delete cells marked as deletion.
-						.filter( ( cell ) => ! cell.isDelete ),
+						.filter( ( cell ) => ! cell.isHidden ),
 				};
 			} ),
 		} );
@@ -244,7 +244,7 @@ export default function Table( props ) {
 		return {
 			...result,
 			[ sectionName ]: vTable[ sectionName ]
-				.map( ( row ) => ( { cells: row.cells.filter( ( cell ) => ! cell.isDelete ) } ) )
+				.map( ( row ) => ( { cells: row.cells.filter( ( cell ) => ! cell.isHidden ) } ) )
 				.filter( ( row ) => row.cells.length ),
 		};
 	}, {} );
