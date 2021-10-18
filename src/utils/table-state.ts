@@ -278,9 +278,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 		} );
 	} );
 
-	const vSections: VTable = pick( vTable, [ 'head', 'body', 'foot' ] );
-
-	return mapValues( vSections, ( section, sectionName ) => {
+	return mapValues( vTable, ( section, sectionName ) => {
 		if ( ! section.length ) return [];
 
 		return section.map( ( { cells }, cRowIndex ) => ( {
@@ -383,9 +381,7 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 		colSpanCells.forEach( ( cell ) => ( vTable = splitMergedCell( vTable, cell ) ) );
 	}
 
-	const vSections: VTable = pick( vTable, [ 'head', 'body', 'foot' ] );
-
-	return mapValues( vSections, ( section ) => {
+	return mapValues( vTable, ( section ) => {
 		if ( ! section.length ) return [];
 
 		return section.map( ( { cells } ) => ( {
@@ -518,9 +514,7 @@ export function splitMergedCells( vTable: VTable, selectedCells: VCell[] ): VTab
 		} );
 	}
 
-	const vSections: VTable = pick( vTable, [ 'head', 'body', 'foot' ] );
-
-	return mapValues( vSections, ( section ) => {
+	return mapValues( vTable, ( section ) => {
 		if ( ! section.length ) return [];
 
 		return section.map( ( { cells } ) => ( {
@@ -612,9 +606,7 @@ export function updateCells(
 	},
 	selectedCells: VCell[]
 ): VTable {
-	const vSections: VTable = pick( vTable, [ 'head', 'body', 'foot' ] );
-
-	return mapValues( vSections, ( section, cSectionName ) => {
+	return mapValues( vTable, ( section, cSectionName ) => {
 		if ( ! section.length ) return [];
 
 		return section.map( ( { cells }, cRowIndex ) => ( {
@@ -801,9 +793,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
  * @return {Object} Table attributes.
  */
 export function toTableAttributes( vTable: VTable ): TableAttributes {
-	const vSections: VTable = pick( vTable, [ 'head', 'body', 'foot' ] );
-
-	return mapValues( vSections, ( vSection ) => {
+	return mapValues( vTable, ( vSection ) => {
 		if ( ! vSection.length ) return [];
 
 		return (
