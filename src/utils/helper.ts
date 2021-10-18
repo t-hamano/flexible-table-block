@@ -33,7 +33,7 @@ export function parseCssValue( cssValue: string ): FourCssValues {
 		return [ '', '', '', '' ];
 	}
 
-	const cssValues: string[] = cssValue.split( ' ' );
+	const cssValues: string[] = cssValue.split( ' ' ).map( ( value: string ) => value.toLowerCase() );
 
 	switch ( cssValues.length ) {
 		case 1:
