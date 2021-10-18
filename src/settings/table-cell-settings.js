@@ -121,17 +121,17 @@ export default function TableCellSettings( props ) {
 	const onResetCellSettings = () => {
 		updateCellsStyle( {
 			fontSize: undefined,
+			width: undefined,
 			color: undefined,
 			backgroundColor: undefined,
-			width: undefined,
 			padding: { top: undefined, right: undefined, bottom: undefined, left: undefined },
-			borderWidth: { top: undefined, right: undefined, bottom: undefined, left: undefined },
 			borderRadius: {
 				topLeft: undefined,
 				topRight: undefined,
 				bottomRight: undefined,
 				bottomLeft: undefined,
 			},
+			borderWidth: { top: undefined, right: undefined, bottom: undefined, left: undefined },
 			borderStyle: { top: undefined, right: undefined, bottom: undefined, left: undefined },
 			borderColor: { top: undefined, right: undefined, bottom: undefined, left: undefined },
 			textAlign: undefined,

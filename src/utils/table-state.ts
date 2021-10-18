@@ -8,7 +8,6 @@ import { mapValues, pick, times } from 'lodash';
  * Internal dependencies
  */
 import { convertToInline, convertToObject } from './style-converter';
-import type { Corners, Direction } from './style-picker';
 import {
 	updateBorderColor,
 	updateBorderRadius,
@@ -579,29 +578,18 @@ export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 /**
  * Update cells state( styles, tag ) of selected section.
  *
- * @param  vTable                        Current virtual table state.
- * @param  cellState                     Cell states to update.
- * @param  cellState.styles              Cell styles.
- * @param  cellState.tag                 Cell tag.
- * @param  cellState.className           Cell classes.
- * @param  cellState.styles.padding      Cell padding values.
- * @param  cellState.styles.borderWidth  Cell border-width values.
- * @param  cellState.styles.borderRadius Cell border-radius values.
- * @param  cellState.styles.borderStyle  Cell border-style values.
- * @param  cellState.styles.borderColor  Cell border-color values.
- * @param  selectedCells                 Current selected cells.
+ * @param  vTable              Current virtual table state.
+ * @param  cellState           Cell states to update.
+ * @param  cellState.styles    Cell styles.
+ * @param  cellState.tag       Cell tag.
+ * @param  cellState.className Cell classes.
+ * @param  selectedCells       Current selected cells.
  * @return  New virtual table state.
  */
 export function updateCells(
 	vTable: VTable,
 	cellState: {
-		styles?: {
-			padding: Partial< Direction > | undefined;
-			borderWidth: Partial< Direction > | undefined;
-			borderRadius: Partial< Corners > | undefined;
-			borderStyle: Partial< Direction > | undefined;
-			borderColor: Partial< Direction > | undefined;
-		};
+		styles?: any;
 		tag: 'th' | 'td';
 		className?: string;
 	},
@@ -625,6 +613,11 @@ export function updateCells(
 				let stylesObj: Properties = convertToObject( cell?.styles );
 
 				if ( cellState.styles ) {
+					stylesObj = {
+						...stylesObj,
+						...cellState.styles,
+					};
+
 					stylesObj = updatePadding( stylesObj, cellState.styles?.padding );
 					stylesObj = updateBorderWidth( stylesObj, cellState.styles?.borderWidth );
 					stylesObj = updateBorderRadius( stylesObj, cellState.styles?.borderRadius );
