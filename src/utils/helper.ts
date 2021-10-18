@@ -3,9 +3,8 @@
  */
 import { identity, isEmpty, isObject, mapValues, pickBy } from 'lodash';
 
-type fourCssValues = [ string, string, string, string ];
-
-type nestedObject = {};
+// Array with four values for CSS
+export type FourCssValues = [ string, string, string, string ];
 
 /**
  * Removed falsy values from nested object.
@@ -13,12 +12,12 @@ type nestedObject = {};
  * @param  object Nested object.
  * @return Object cleaned from falsy values.
  */
-export const cleanEmptyObject = ( object: nestedObject ): nestedObject | undefined => {
+export const cleanEmptyObject = ( object: {} ): {} | undefined => {
 	if ( ! isObject( object ) || Array.isArray( object ) ) {
 		return object;
 	}
 
-	const cleanedNestedObjects = pickBy( mapValues( object, cleanEmptyObject ), identity );
+	const cleanedNestedObjects: {} = pickBy( mapValues( object, cleanEmptyObject ), identity );
 
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
 };
@@ -29,12 +28,12 @@ export const cleanEmptyObject = ( object: nestedObject ): nestedObject | undefin
  * @param  cssValue CSS value.
  * @return Array with four values.
  */
-export function parseCssValue( cssValue: string ): fourCssValues {
+export function parseCssValue( cssValue: string ): FourCssValues {
 	if ( typeof cssValue !== 'string' ) {
 		return [ '', '', '', '' ];
 	}
 
-	const cssValues = cssValue.split( ' ' );
+	const cssValues: string[] = cssValue.split( ' ' );
 
 	switch ( cssValues.length ) {
 		case 1:
