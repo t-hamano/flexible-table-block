@@ -56,86 +56,88 @@ export default function TableCellSettings( props ) {
 
 	const cellStylesObj = convertToObject( targetCell.styles );
 
-	const updateCellsStyle = ( styles ) => {
-		const newVTable = updateCells( vTable, { styles }, selectedCells );
+	const updateCellsState = ( state ) => {
+		const newVTable = updateCells( vTable, state, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onChangeFontSize = ( value ) => {
-		updateCellsStyle( { fontSize: sanitizeUnitValue( value ) } );
+		updateCellsState( { styles: { fontSize: sanitizeUnitValue( value ) } } );
 	};
 
 	const onChangeColor = ( value ) => {
-		updateCellsStyle( { color: value } );
+		updateCellsState( { styles: { color: value } } );
 	};
 
 	const onChangeBackgroundColor = ( value ) => {
-		updateCellsStyle( { backgroundColor: value } );
+		updateCellsState( { styles: { backgroundColor: value } } );
 	};
 
 	const onChangeWidth = ( value ) => {
-		updateCellsStyle( { width: sanitizeUnitValue( value ) } );
+		updateCellsState( { styles: { width: sanitizeUnitValue( value ) } } );
 	};
 
 	const onChangePadding = ( values ) => {
-		updateCellsStyle( { padding: values } );
+		updateCellsState( { styles: { padding: values } } );
 	};
 
 	const onChangeBorderWidth = ( values ) => {
-		updateCellsStyle( { borderWidth: values } );
+		updateCellsState( { styles: { borderWidth: values } } );
 	};
 
 	const onChangeBorderRadius = ( values ) => {
-		updateCellsStyle( { borderRadius: values } );
+		updateCellsState( { styles: { borderRadius: values } } );
 	};
 
 	const onChangeBorderStyle = ( values ) => {
-		updateCellsStyle( { borderStyle: values } );
+		updateCellsState( { styles: { borderStyle: values } } );
 	};
 
 	const onChangeBorderColor = ( values ) => {
-		updateCellsStyle( { borderColor: values } );
+		updateCellsState( { styles: { borderColor: values } } );
 	};
 
 	const onChangeTextAlign = ( value ) => {
-		const newValue = value === cellStylesObj.textAlign ? undefined : value;
-		updateCellsStyle( { textAlign: newValue } );
+		updateCellsState( {
+			styles: { textAlign: value === cellStylesObj.textAlign ? undefined : value },
+		} );
 	};
 
 	const onChangeVerticalAlign = ( value ) => {
-		const newValue = value === cellStylesObj.verticalAlign ? undefined : value;
-		updateCellsStyle( { verticalAlign: newValue } );
+		updateCellsState( {
+			styles: { verticalAlign: value === cellStylesObj.verticalAlign ? undefined : value },
+		} );
 	};
 
 	const onChangeTag = ( value ) => {
-		const newVTable = updateCells( vTable, { tag: value }, selectedCells );
-		setAttributes( toTableAttributes( newVTable ) );
+		updateCellsState( { tag: value } );
 	};
 
 	const onChangeClass = ( value ) => {
-		const newValue = value !== '' ? value : undefined;
-		const newVTable = updateCells( vTable, { className: newValue }, selectedCells );
-		setAttributes( toTableAttributes( newVTable ) );
+		updateCellsState( { className: value !== '' ? value : undefined } );
 	};
 
 	const onResetCellSettings = () => {
-		updateCellsStyle( {
-			fontSize: undefined,
-			width: undefined,
-			color: undefined,
-			backgroundColor: undefined,
-			padding: { top: undefined, right: undefined, bottom: undefined, left: undefined },
-			borderRadius: {
-				topLeft: undefined,
-				topRight: undefined,
-				bottomRight: undefined,
-				bottomLeft: undefined,
+		updateCellsState( {
+			tag: sectionName === 'body' ? 'td' : 'th',
+			styles: {
+				fontSize: undefined,
+				width: undefined,
+				color: undefined,
+				backgroundColor: undefined,
+				padding: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+				borderRadius: {
+					topLeft: undefined,
+					topRight: undefined,
+					bottomRight: undefined,
+					bottomLeft: undefined,
+				},
+				borderWidth: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+				borderStyle: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+				borderColor: { top: undefined, right: undefined, bottom: undefined, left: undefined },
+				textAlign: undefined,
+				verticalAlign: undefined,
 			},
-			borderWidth: { top: undefined, right: undefined, bottom: undefined, left: undefined },
-			borderStyle: { top: undefined, right: undefined, bottom: undefined, left: undefined },
-			borderColor: { top: undefined, right: undefined, bottom: undefined, left: undefined },
-			textAlign: undefined,
-			verticalAlign: undefined,
 		} );
 	};
 
