@@ -5,7 +5,7 @@ import {
 	VCell,
 	VRow,
 	SectionName,
-	VirtualTable,
+	VTable,
 } from '../table-state';
 import { times } from 'lodash';
 
@@ -39,7 +39,7 @@ const getRow = (
 	};
 };
 
-const table: VirtualTable = {
+const table: VTable = {
 	head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
 	body: [ getRow( 2, 'body', 0, 'td', 'body-0' ), getRow( 2, 'body', 1, 'td', 'body-1' ) ],
 	foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
