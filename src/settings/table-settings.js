@@ -48,7 +48,7 @@ import {
 	updateBorderColor,
 	updateBorderSpacing,
 } from '../utils/style-updater';
-import { toUnitVal } from '../utils/unit-helpers';
+import { sanitizeUnitValue } from '../utils/unit-helpers';
 
 export default function TableSettings( props ) {
 	const { vTable, tableStylesObj, attributes, setAttributes } = props;
@@ -281,7 +281,7 @@ export default function TableSettings( props ) {
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () =>
-									onChangeWidth( isPressed ? undefined : toUnitVal( `${ perWidth }%` ) )
+									onChangeWidth( isPressed ? undefined : sanitizeUnitValue( `${ perWidth }%` ) )
 								}
 							>
 								{ `${ perWidth }%` }
@@ -322,7 +322,7 @@ export default function TableSettings( props ) {
 								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () =>
-									onChangeMaxWidth( isPressed ? undefined : toUnitVal( `${ perWidth }%` ) )
+									onChangeMaxWidth( isPressed ? undefined : sanitizeUnitValue( `${ perWidth }%` ) )
 								}
 							>
 								{ `${ perWidth }%` }

@@ -4,7 +4,7 @@
 import type { Properties } from 'csstype';
 import type { Corners, Direction } from './style-picker';
 import { pickBy, omit, mapValues } from 'lodash';
-import { toUnitVal } from './unit-helpers';
+import { sanitizeUnitValue } from './unit-helpers';
 
 function getCssPropertyWithFourDirection(
 	property: keyof Properties,
@@ -18,6 +18,7 @@ function getCssPropertyWithFourDirection(
 			[ property ]: top,
 		};
 	}
+
 	if ( top === bottom && left === right ) {
 		return {
 			[ property ]: `${ top } ${ left }`,
@@ -49,7 +50,9 @@ export function updatePadding(
 	if ( ! values ) return styles;
 
 	const shortHandPropName = 'padding';
-	const { top, right, bottom, left } = mapValues( pickBy( values ), toUnitVal );
+	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
+		sanitizeUnitValue( value )
+	);
 	const newValues = {
 		paddingTop: top,
 		paddingRight: right,
@@ -86,7 +89,10 @@ export function updateBorderWidth(
 	if ( ! values ) return styles;
 
 	const shortHandPropName = 'borderWidth';
-	const { top, right, bottom, left } = mapValues( pickBy( values ), toUnitVal );
+	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
+		sanitizeUnitValue( value )
+	);
+
 	const newValues = {
 		borderTopWidth: top,
 		borderRightWidth: right,
@@ -199,7 +205,10 @@ export function updateBorderSpacing(
 	if ( ! values ) return styles;
 
 	const newStyles = omit( styles, [ 'borderSpacing' ] );
-	const { horizontal, vertical } = mapValues( pickBy( values ), toUnitVal );
+	const { horizontal, vertical } = mapValues( pickBy( values ), ( value ) =>
+		sanitizeUnitValue( value )
+	);
+
 	if ( horizontal === undefined && vertical === undefined ) {
 		return newStyles;
 	}
@@ -230,7 +239,10 @@ export function updateBorderRadius(
 	if ( ! values ) return styles;
 
 	const shortHandPropName = 'borderRadius';
-	const { topLeft, topRight, bottomRight, bottomLeft } = mapValues( pickBy( values ), toUnitVal );
+	const { topLeft, topRight, bottomRight, bottomLeft } = mapValues( pickBy( values ), ( value ) =>
+		sanitizeUnitValue( value )
+	);
+
 	const newValues = {
 		borderTopLeftRadius: topLeft,
 		borderTopRightRadius: topRight,

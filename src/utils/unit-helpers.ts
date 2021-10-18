@@ -1,19 +1,49 @@
 /**
+ * External dependencies
+ */
+import _ from 'lodash';
+
+interface SanitizeOptions {
+	minNum?: number;
+	maxNum?: number;
+	precision?: number;
+}
+
+const DEFAULT_PRECISION: number = 4;
+
+/**
  * Sanitize the value of UnitControl.
  *
- * @param  value UnitControl value.
+ * @param  initialValue UnitControl value.
+ * @param  options      Sanitize options.
  * @return Sanitized UnitControl value.
  */
-export function toUnitVal( value: string ): string {
-	const parsedValue: number = parseFloat( value );
+export function sanitizeUnitValue( initialValue: string, options?: SanitizeOptions ): string {
+	const value: string = String( initialValue ).trim();
+	let num: number = parseFloat( value );
 
-	if ( isNaN( parsedValue ) || 0 > parsedValue ) {
+	if ( isNaN( num ) ) {
 		return '';
-	} else if ( parsedValue === 0 ) {
+	} else if ( num < 0 ) {
+		return '';
+	} else if ( num === 0 ) {
 		return '0';
 	}
 
-	return value;
+	// Sanitize value.
+	if ( options?.minNum ) {
+		num = Math.max( options.minNum, num );
+	}
+
+	if ( options?.maxNum ) {
+		num = Math.min( options.maxNum, num );
+	}
+
+	num = _.floor( num, options?.precision || DEFAULT_PRECISION );
+
+	const unit: string = value.match( /[\d.\-+]*\s*(.*)/ )?.[ 1 ] ?? '';
+
+	return `${ num }${ unit.toLowerCase() }`;
 }
 
 /**

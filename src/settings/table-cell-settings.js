@@ -38,7 +38,7 @@ import {
 	pickBorderStyle,
 	pickBorderColor,
 } from '../utils/style-picker';
-import { toUnitVal } from '../utils/unit-helpers';
+import { sanitizeUnitValue } from '../utils/unit-helpers';
 
 export default function TableCellSettings( props ) {
 	const { vTable, selectedCells, attributes, setAttributes } = props;
@@ -62,7 +62,7 @@ export default function TableCellSettings( props ) {
 	};
 
 	const onChangeFontSize = ( value ) => {
-		updateCellsStyle( { fontSize: toUnitVal( value ) } );
+		updateCellsStyle( { fontSize: sanitizeUnitValue( value ) } );
 	};
 
 	const onChangeColor = ( value ) => {
@@ -74,7 +74,7 @@ export default function TableCellSettings( props ) {
 	};
 
 	const onChangeWidth = ( value ) => {
-		updateCellsStyle( { width: toUnitVal( value ) } );
+		updateCellsStyle( { width: sanitizeUnitValue( value ) } );
 	};
 
 	const onChangePadding = ( values ) => {

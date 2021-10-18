@@ -37,7 +37,7 @@ import {
 	VERTICAL_ALIGNMENT_CONTROLS,
 } from '../constants';
 import { BorderWidthControl, BorderStyleControl, ColorControl, PaddingControl } from '../controls';
-import { toUnitVal } from '../utils/unit-helpers';
+import { sanitizeUnitValue } from '../utils/unit-helpers';
 
 export default function GlobalSettings() {
 	const storeOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
@@ -225,7 +225,7 @@ export default function GlobalSettings() {
 										...options,
 										block_style: {
 											...options.block_style,
-											table_width: toUnitVal( value ),
+											table_width: sanitizeUnitValue( value ),
 										},
 									} );
 								} }
@@ -245,7 +245,7 @@ export default function GlobalSettings() {
 										...options,
 										block_style: {
 											...options.block_style,
-											table_max_width: toUnitVal( value ),
+											table_max_width: sanitizeUnitValue( value ),
 										},
 									} );
 								} }
