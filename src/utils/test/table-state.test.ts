@@ -1,7 +1,13 @@
-import { deleteRow, insertRow } from '../table-state';
-import type { Cell, Row, SectionName, VirtualTable } from '../virtual-table';
+import {
+	createTable,
+	deleteRow,
+	insertRow,
+	VCell,
+	VRow,
+	SectionName,
+	VirtualTable,
+} from '../table-state';
 import { times } from 'lodash';
-import { createTable } from '../virtual-table';
 
 const getRow = (
 	cells: number,
@@ -10,11 +16,11 @@ const getRow = (
 	tag: 'th' | 'td',
 	content = '',
 	options = {}
-): Row => {
+): VRow => {
 	return {
 		cells: times(
 			cells,
-			( colIndex ): Cell => {
+			( colIndex ): VCell => {
 				return {
 					content,
 					tag,
@@ -24,6 +30,8 @@ const getRow = (
 					sectionName,
 					rowSpan: 1,
 					colSpan: 1,
+					isDelete: false,
+					isFirstSelected: false,
 					...options,
 				};
 			}

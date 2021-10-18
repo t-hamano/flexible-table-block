@@ -15,7 +15,6 @@ import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/comp
 /**
  * Internal dependencies
  */
-import { toTableAttributes } from '../utils/table-state';
 import {
 	MIN_PREVIEW_TABLE_HEIGHT,
 	MAX_PREVIEW_TABLE_COL,
@@ -23,7 +22,7 @@ import {
 	THRESHOLD_PREVIEW_TABLE_COL,
 	THRESHOLD_PREVIEW_TABLE_ROW,
 } from '../constants';
-import { createTable } from '../utils/virtual-table';
+import { createTable, toTableAttributes } from '../utils/table-state';
 import { blockIcon as icon } from '../icons';
 
 export default function TablePlaceholder( { setAttributes } ) {

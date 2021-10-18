@@ -151,14 +151,14 @@ function TableEdit( props ) {
 	};
 
 	const onMergeCells = () => {
-		const newVTable = mergeCells( vTable, { selectedCells } );
+		const newVTable = mergeCells( vTable, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
 	};
 
 	const onSplitMergedCells = () => {
-		const newVTable = splitMergedCells( vTable, { selectedCells } );
+		const newVTable = splitMergedCells( vTable, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
