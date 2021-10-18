@@ -1,4 +1,4 @@
-import { sanitizeUnitValue } from '../unit-helpers';
+import { parseUnit, sanitizeUnitValue } from '../unit-helpers';
 
 describe( 'helper', () => {
 	describe( 'sanitizeUnitValue', () => {
@@ -43,6 +43,22 @@ describe( 'helper', () => {
 
 		it( 'should return sanitized value if multiple option is set', () => {
 			expect( sanitizeUnitValue( '10.11111111CM', { maxNum: 10 } ) ).toBe( '10cm' );
+		} );
+	} );
+
+	describe( 'parseUnit', () => {
+		it( 'should return taple', () => {
+			expect( parseUnit( '10px' ) ).toStrictEqual( [ 10, 'px' ] );
+			expect( parseUnit( '10%' ) ).toStrictEqual( [ 10, '%' ] );
+		} );
+
+		it( 'should return lowercase unit', () => {
+			expect( parseUnit( '10PX' ) ).toStrictEqual( [ 10, 'px' ] );
+			expect( parseUnit( '10CM' ) ).toStrictEqual( [ 10, 'cm' ] );
+		} );
+
+		it( 'should return zero if it is not a number.', () => {
+			expect( parseUnit( 'red' ) ).toStrictEqual( [ 0, '' ] );
 		} );
 	} );
 } );
