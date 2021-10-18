@@ -23,7 +23,7 @@ import {
  */
 import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH } from '../constants';
 import { SIDES, SideIndicatorControl } from './indicator-control';
-import { parseUnit } from '../utils/unit-helpers';
+import { parseUnit, sanitizeUnitValue } from '../utils/unit-helpers';
 
 const DEFAULT_VALUES = {
 	top: null,
@@ -87,24 +87,24 @@ export default function BorderWidthControl( {
 	};
 
 	const handleOnChangeAll = ( inputValue ) => {
-		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_WIDTH[ unit ], value ) }${ unit }`;
+		const [ , unit ] = parseUnit( inputValue );
+		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_WIDTH[ unit ] } );
 
 		onChange( {
-			top: parsedValue,
-			right: parsedValue,
-			bottom: parsedValue,
-			left: parsedValue,
+			top: sanitizedValue,
+			right: sanitizedValue,
+			bottom: sanitizedValue,
+			left: sanitizedValue,
 		} );
 	};
 
 	const handleOnChange = ( inputValue, targetSide ) => {
-		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_WIDTH[ unit ], value ) }${ unit }`;
+		const [ , unit ] = parseUnit( inputValue );
+		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_WIDTH[ unit ] } );
 
 		onChange( {
 			...values,
-			[ targetSide ]: parsedValue,
+			[ targetSide ]: sanitizedValue,
 		} );
 	};
 

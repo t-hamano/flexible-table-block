@@ -33,21 +33,21 @@ export const THRESHOLD_PREVIEW_TABLE_COL = 10;
 export const THRESHOLD_PREVIEW_TABLE_ROW = 10;
 
 export const MAX_BORDER_RADIUS = {
-	px: 100,
+	px: 200,
 	em: 20,
 	rem: 20,
 };
 
 export const MAX_BORDER_WIDTH = {
-	px: 100,
-	em: 20,
-	rem: 20,
+	px: 50,
+	em: 5,
+	rem: 5,
 };
 
 export const MAX_BORDER_SPACING = {
-	px: 100,
-	em: 20,
-	rem: 20,
+	px: 50,
+	em: 5,
+	rem: 5,
 };
 
 // Responsive breakpoint settings.

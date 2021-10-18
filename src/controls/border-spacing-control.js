@@ -23,7 +23,7 @@ import {
  */
 import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING } from '../constants';
 import { DIRECTIONS, DirectionIndicatorControl } from './indicator-control';
-import { parseUnit } from '../utils/unit-helpers';
+import { parseUnit, sanitizeUnitValue } from '../utils/unit-helpers';
 
 const DEFAULT_VALUES = {
 	horizontal: null,
@@ -81,22 +81,22 @@ export default function BorderSpacingControl( {
 	};
 
 	const handleOnChangeAll = ( inputValue ) => {
-		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_SPACING[ unit ], value ) }${ unit }`;
+		const [ , unit ] = parseUnit( inputValue );
+		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_SPACING[ unit ] } );
 
 		onChange( {
-			horizontal: parsedValue,
-			vertical: parsedValue,
+			horizontal: sanitizedValue,
+			vertical: sanitizedValue,
 		} );
 	};
 
 	const handleOnChange = ( inputValue, targetDirection ) => {
-		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_SPACING[ unit ], value ) }${ unit }`;
+		const [ , unit ] = parseUnit( inputValue );
+		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_SPACING[ unit ] } );
 
 		onChange( {
 			...values,
-			[ targetDirection ]: parsedValue,
+			[ targetDirection ]: sanitizedValue,
 		} );
 	};
 

@@ -23,7 +23,7 @@ import {
  */
 import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS } from '../constants';
 import { CORNERS, CornerIndicatorControl } from './indicator-control';
-import { parseUnit } from '../utils/unit-helpers';
+import { parseUnit, sanitizeUnitValue } from '../utils/unit-helpers';
 
 const DEFAULT_VALUES = {
 	topLeft: null,
@@ -91,24 +91,24 @@ export default function BorderRadiusControl( {
 	};
 
 	const handleOnChangeAll = ( inputValue ) => {
-		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_RADIUS[ unit ], value ) }${ unit }`;
+		const [ , unit ] = parseUnit( inputValue );
+		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_RADIUS[ unit ] } );
 
 		onChange( {
-			topLeft: parsedValue,
-			topRight: parsedValue,
-			bottomRight: parsedValue,
-			bottomLeft: parsedValue,
+			topLeft: sanitizedValue,
+			topRight: sanitizedValue,
+			bottomRight: sanitizedValue,
+			bottomLeft: sanitizedValue,
 		} );
 	};
 
 	const handleOnChange = ( inputValue, targetCorner ) => {
-		const [ value, unit ] = parseUnit( inputValue );
-		const parsedValue = `${ Math.min( MAX_BORDER_RADIUS[ unit ], value ) }${ unit }`;
+		const [ , unit ] = parseUnit( inputValue );
+		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_RADIUS[ unit ] } );
 
 		onChange( {
 			...values,
-			[ targetCorner ]: parsedValue,
+			[ targetCorner ]: sanitizedValue,
 		} );
 	};
 
