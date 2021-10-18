@@ -6,6 +6,7 @@ import {
 	BaseControl,
 	Button,
 	ButtonGroup,
+	TextControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -26,7 +27,7 @@ export default function TableCaptionSettings( props ) {
 
 	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
 
-	const onChangeCaptionFontSize = ( value ) => {
+	const onChangeFontSize = ( value ) => {
 		const newStylesObj = {
 			...captionStylesObj,
 			fontSize: sanitizeUnitValue( value ),
@@ -34,16 +35,24 @@ export default function TableCaptionSettings( props ) {
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeCaptionPadding = ( values ) => {
+	const onChangeLineHeight = ( value ) => {
+		const newStylesObj = {
+			...captionStylesObj,
+			lineHeight: value,
+		};
+		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
+	};
+
+	const onChangePadding = ( values ) => {
 		const newStylesObj = updatePadding( captionStylesObj, values );
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeCaptionSide = ( value ) => {
+	const onChangeSide = ( value ) => {
 		setAttributes( { captionSide: value } );
 	};
 
-	const onChangeCaptionAlign = ( value ) => {
+	const onChangeAlign = ( value ) => {
 		const newStylesObj = {
 			...captionStylesObj,
 			textAlign: value === captionStylesObj.textAlign ? undefined : value,
@@ -51,7 +60,7 @@ export default function TableCaptionSettings( props ) {
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onResetCaptionSettings = () => {
+	const onResetSettings = () => {
 		setAttributes( {
 			captionSide: 'bottom',
 			captionStyles: undefined,
@@ -64,7 +73,7 @@ export default function TableCaptionSettings( props ) {
 				id="flexible-table-block/clear-caption-settings"
 				className="ftb-reset-settings-control"
 			>
-				<Button isLink variant="link" isDestructive onClick={ onResetCaptionSettings }>
+				<Button isLink variant="link" isDestructive onClick={ onResetSettings }>
 					{ __( 'Clear Caption Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -76,14 +85,30 @@ export default function TableCaptionSettings( props ) {
 					value={ captionStylesObj?.fontSize }
 					units={ fontSizeUnits }
 					min="0"
-					onChange={ onChangeCaptionFontSize }
+					onChange={ onChangeFontSize }
 				/>
+			</BaseControl>
+			<BaseControl
+				id="flexible-table-block/caption-line-height"
+				label={ __( 'Caption Line Height', 'flexible-table-block' ) }
+			>
+				<div className="block-editor-line-height-control">
+					<TextControl
+						autoComplete="off"
+						onChange={ onChangeLineHeight }
+						placeholder={ 1.5 }
+						step={ 0.1 }
+						type="number"
+						value={ captionStylesObj?.lineHeight }
+						min={ 0 }
+					/>
+				</div>
 			</BaseControl>
 			<PaddingControl
 				id="flexible-table-block/caption-padding"
 				label={ __( 'Caption Padding', 'flexible-table-block' ) }
 				values={ pickPadding( captionStylesObj ) }
-				onChange={ onChangeCaptionPadding }
+				onChange={ onChangePadding }
 			/>
 			<BaseControl
 				id="flexible-table-block/caption-side"
@@ -96,7 +121,7 @@ export default function TableCaptionSettings( props ) {
 							label={ label }
 							isPrimary={ captionSide === value }
 							variant={ captionSide === value ? 'primary' : undefined }
-							onClick={ () => onChangeCaptionSide( value ) }
+							onClick={ () => onChangeSide( value ) }
 						>
 							{ label }
 						</Button>
@@ -117,7 +142,7 @@ export default function TableCaptionSettings( props ) {
 								isSecondary={ value !== captionStylesObj?.textAlign }
 								variant={ value === captionStylesObj?.textAlign ? 'primary' : 'secondary' }
 								icon={ icon }
-								onClick={ () => onChangeCaptionAlign( value ) }
+								onClick={ () => onChangeAlign( value ) }
 							/>
 						);
 					} ) }
