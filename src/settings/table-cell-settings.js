@@ -108,13 +108,13 @@ export default function TableCellSettings( props ) {
 	};
 
 	const onChangeTag = ( value ) => {
-		const newVTable = updateCells( vTable, { tag: value }, { selectedCells } );
+		const newVTable = updateCells( vTable, { tag: value }, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onChangeClass = ( value ) => {
 		const newValue = value !== '' ? value : undefined;
-		const newVTable = updateCells( vTable, { className: newValue }, { selectedCells } );
+		const newVTable = updateCells( vTable, { className: newValue }, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
