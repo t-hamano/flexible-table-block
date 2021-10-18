@@ -57,7 +57,7 @@ export default function TableCellSettings( props ) {
 	const cellStylesObj = convertToObject( targetCell.styles );
 
 	const updateCellsStyle = ( styles ) => {
-		const newVTable = updateCells( vTable, { styles }, { selectedCells } );
+		const newVTable = updateCells( vTable, { styles }, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 

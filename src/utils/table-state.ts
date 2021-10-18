@@ -76,6 +76,7 @@ interface createTableParams {
 	headerSection: boolean;
 	footerSection: boolean;
 }
+
 /**
  * Creates a table state.
  *
