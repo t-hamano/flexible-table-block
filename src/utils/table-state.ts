@@ -635,7 +635,7 @@ export function updateCells(
 		return section.map( ( { cells }, cRowIndex ) => ( {
 			cells: cells.map( ( cell, cVColIndex ) => {
 				// Refer to the selected cell to determine if it is the target cell to update.
-				const isTargetCell: boolean = !! selectedCells.some(
+				const isTargetCell: boolean = selectedCells.some(
 					( targetCell ) =>
 						targetCell.sectionName === cSectionName &&
 						targetCell.rowIndex === cRowIndex &&
@@ -941,9 +941,7 @@ export function isRectangleSelected( selectedCells: VCell[] ): boolean {
 	} );
 
 	// Whether all cells in the matrix are filled (whether cell merging is possible).
-	return vRange
-		.reduce( ( cells, row ) => cells.concat( row ), [] )
-		.every( ( cell ) => cell === true );
+	return vRange.reduce( ( cells, row ) => cells.concat( row ), [] ).every( ( cell ) => cell );
 }
 
 /**
