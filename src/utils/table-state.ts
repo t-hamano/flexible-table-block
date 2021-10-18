@@ -114,6 +114,7 @@ export function createTable( {
 						colSpan: 1,
 						sectionName,
 						rowIndex,
+						isFirstSelected: false,
 						colIndex,
 						vColIndex: colIndex,
 						isDelete: false,
@@ -159,6 +160,7 @@ export function insertRow(
 				sectionName,
 				rowIndex,
 				colIndex,
+				isFirstSelected: false,
 				vColIndex: colIndex,
 				isDelete: false,
 			} )
