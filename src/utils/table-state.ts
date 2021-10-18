@@ -691,7 +691,7 @@ export function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
  * @param  state Current table state.
  * @return Object of virtual table.
  */
-export function toVTable( state: TableAttributes ): VTable {
+export function toVirtualTable( state: TableAttributes ): VTable {
 	const vSections = pick( state, [ 'head', 'body', 'foot' ] );
 
 	return mapValues( vSections, ( section, sectionName ) => {
