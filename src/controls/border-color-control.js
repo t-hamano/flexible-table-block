@@ -115,7 +115,7 @@ export default function BorderColorControl( {
 			<div className="ftb-border-color-control__header">
 				<Text id={ headingId }>{ label }</Text>
 				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
-					{ __( 'Reset' ) }
+					{ __( 'Reset', 'flexible-table-block' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-color-control__controls">

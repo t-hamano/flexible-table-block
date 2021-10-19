@@ -101,7 +101,7 @@ export default function PaddingControl( {
 			<div className="ftb-border-width-control__header">
 				<Text id={ headingId }>{ label }</Text>
 				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
-					{ __( 'Reset' ) }
+					{ __( 'Reset', 'flexible-table-block' ) }
 				</Button>
 			</div>
 			<div className="ftb-border-width-control__header-control">

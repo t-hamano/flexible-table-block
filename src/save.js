@@ -51,7 +51,7 @@ export default function save( { attributes } ) {
 		} ),
 	} );
 
-	const tableClass = classnames( colorProps.className, {
+	const tableClasses = classnames( colorProps.className, {
 		'has-fixed-layout': hasFixedLayout,
 		'is-stacked-on-mobile': isStackedOnMobile,
 		[ `is-sticky-${ sticky }` ]: sticky,
@@ -68,36 +68,32 @@ export default function save( { attributes } ) {
 			<Tag>
 				{ rows.map( ( { cells }, rowIndex ) => (
 					<tr key={ rowIndex }>
-						{ cells.map( ( { content, tag, className, rowSpan, colSpan, styles }, cellIndex ) => {
-							const cellStylesObj = convertToObject( styles );
-
-							return (
-								<RichText.Content
-									key={ cellIndex }
-									tagName={ tag }
-									className={ className }
-									value={ content }
-									rowSpan={ rowSpan > 1 ? rowSpan : undefined }
-									colSpan={ colSpan > 1 ? colSpan : undefined }
-									style={ cellStylesObj }
-								/>
-							);
-						} ) }
+						{ cells.map( ( { content, tag, className, rowSpan, colSpan, styles }, cellIndex ) => (
+							<RichText.Content
+								key={ cellIndex }
+								tagName={ tag }
+								className={ className }
+								value={ content }
+								rowSpan={ rowSpan > 1 ? rowSpan : undefined }
+								colSpan={ colSpan > 1 ? colSpan : undefined }
+								style={ convertToObject( styles ) }
+							/>
+						) ) }
 					</tr>
 				) ) }
 			</Tag>
 		);
 	};
 
-	const Caption = () => {
-		return <RichText.Content tagName="figcaption" value={ caption } style={ captionStylesObj } />;
-	};
+	const Caption = () => (
+		<RichText.Content tagName="figcaption" value={ caption } style={ captionStylesObj } />
+	);
 
 	return (
 		<figure { ...blockProps }>
 			{ hasCaption && 'top' === captionSide && <Caption /> }
 			<table
-				className={ tableClass ?? undefined }
+				className={ tableClasses ?? undefined }
 				style={ { ...tableStylesObj, ...colorProps.style } }
 			>
 				<Section type="head" rows={ head } />

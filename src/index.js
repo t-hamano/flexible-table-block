@@ -30,7 +30,7 @@ registerBlockType( metadata.name, {
 	styles: [
 		{
 			name: 'stripes',
-			label: __( 'Stripes' ),
+			label: __( 'Stripes', 'flexible-table-block' ),
 		},
 	],
 } );

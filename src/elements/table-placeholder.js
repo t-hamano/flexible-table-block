@@ -73,7 +73,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 
 	const onToggleFooterSection = ( section ) => setFooterSection( !! section );
 
-	const tableClass = classnames( 'ftb-placeholder__table', {
+	const tableClasses = classnames( 'ftb-placeholder__table', {
 		'is-overflow-row': totalRowCount > THRESHOLD_PREVIEW_TABLE_ROW,
 		'is-overflow-col': colCount > THRESHOLD_PREVIEW_TABLE_COL,
 	} );
@@ -93,7 +93,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
 			>
 				<div className="ftb-placeholder__tbl-ttl">{ __( 'Pleview', 'flexible-table-block' ) }</div>
-				<table className={ tableClass }>
+				<table className={ tableClasses }>
 					{ headerSection && rowCount && colCount && (
 						<thead>
 							<tr>
