@@ -8,6 +8,7 @@
 namespace Flexible_Table_Block;
 
 class Helper {
+
 	/**
 	 * Get default block style
 	 *
