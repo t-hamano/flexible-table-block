@@ -119,7 +119,7 @@ export default function TableCellSettings( props ) {
 
 	const onResetCellSettings = () => {
 		updateCellsState( {
-			tag: sectionName === 'body' ? 'td' : 'th',
+			tag: sectionName === 'head' ? 'th' : 'td',
 			styles: {
 				fontSize: undefined,
 				width: undefined,
