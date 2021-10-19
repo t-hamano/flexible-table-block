@@ -213,7 +213,7 @@ export default function GlobalSettings() {
 					<div className="ftb-global-setting-modal__styles">
 						<BaseControl
 							id="flexible-table-block/global-table-width"
-							label={ __( 'Width', 'flexible-table-block' ) }
+							label={ __( 'Table Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<UnitControl
@@ -233,7 +233,7 @@ export default function GlobalSettings() {
 						</BaseControl>
 						<BaseControl
 							id="flexible-table-block/global-table-max-width"
-							label={ __( 'Max Width', 'flexible-table-block' ) }
+							label={ __( 'Table Max Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<UnitControl
@@ -253,7 +253,7 @@ export default function GlobalSettings() {
 						</BaseControl>
 						<ColorControl
 							id="flexible-table-block/global-row-odd-color"
-							label={ __( 'Stripe Background Color ( odd rows )', 'flexible-table-block' ) }
+							label={ __( 'Stripe Style Background Color ( odd rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.row_odd_color }
 							onChange={ ( value ) => {
@@ -268,7 +268,7 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block/global-row-even-color"
-							label={ __( 'Stripe Background Color ( even rows )', 'flexible-table-block' ) }
+							label={ __( 'Stripe Style Background Color ( even rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.row_even_color }
 							onChange={ ( value ) => {
@@ -323,7 +323,7 @@ export default function GlobalSettings() {
 					<div className="ftb-global-setting-modal__styles">
 						<ColorControl
 							id="flexible-table-block/global-cell-text-color-th"
-							label={ __( 'Text Color ( th tag )', 'flexible-table-block' ) }
+							label={ __( 'Cell Text Color ( th tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_text_color_th }
 							onChange={ ( value ) => {
@@ -338,7 +338,7 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block/global-cell-text-color-td"
-							label={ __( 'Text Color ( td tag )', 'flexible-table-block' ) }
+							label={ __( 'Cell Text Color ( td tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_text_color_td }
 							onChange={ ( value ) => {
@@ -353,7 +353,7 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block/global-cell-background-color-th"
-							label={ __( 'Background Color ( th tag )', 'flexible-table-block' ) }
+							label={ __( 'Cell Background Color ( th tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_background_color_th }
 							onChange={ ( value ) => {
@@ -368,7 +368,7 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block/global-cell-background-color-td"
-							label={ __( 'Background Color ( td tag )', 'flexible-table-block' ) }
+							label={ __( 'Cell Background Color ( td tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_background_color_td }
 							onChange={ ( value ) => {
@@ -383,7 +383,7 @@ export default function GlobalSettings() {
 						/>
 						<PaddingControl
 							id="flexible-table-block/global-cell-border-color"
-							label={ __( 'Padding', 'flexible-table-block' ) }
+							label={ __( 'Cell Padding', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							values={ { top: options.block_style?.cell_padding } }
 							allowSides={ false }
@@ -393,14 +393,14 @@ export default function GlobalSettings() {
 									...options,
 									block_style: {
 										...options.block_style,
-										cell_padding: value.top,
+										cell_padding: sanitizeUnitValue( value.top ),
 									},
 								} );
 							} }
 						/>
 						<BorderWidthControl
 							id="flexible-table-block/global-cell-border-width"
-							label={ __( 'Border Width', 'flexible-table-block' ) }
+							label={ __( 'Cell Border Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							values={ { top: options.block_style?.cell_border_width } }
 							allowSides={ false }
@@ -410,14 +410,14 @@ export default function GlobalSettings() {
 									...options,
 									block_style: {
 										...options.block_style,
-										cell_border_width: value.top,
+										cell_border_width: sanitizeUnitValue( value.top ),
 									},
 								} );
 							} }
 						/>
 						<BorderStyleControl
 							id="flexible-table-block/global-cell-border-style"
-							label={ __( 'Border Style', 'flexible-table-block' ) }
+							label={ __( 'Cell Border Style', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							values={ { top: options.block_style?.cell_border_style } }
 							allowSides={ false }
@@ -436,7 +436,7 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block/global-cell-border-color"
-							label={ __( 'Border Color', 'flexible-table-block' ) }
+							label={ __( 'Cell Border Color', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_border_color }
 							onChange={ ( value ) => {
@@ -451,7 +451,7 @@ export default function GlobalSettings() {
 						/>
 						<BaseControl
 							id="flexible-table-block/global-cell-text-align"
-							label={ __( 'Text alignment', 'flexible-table-block' ) }
+							label={ __( 'Cell Text alignment', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<ButtonGroup className="ftb-button-group">
@@ -484,7 +484,7 @@ export default function GlobalSettings() {
 						</BaseControl>
 						<BaseControl
 							id="flexible-table-block/global-cell-vertical-align"
-							label={ __( 'Vertical alignment', 'flexible-table-block' ) }
+							label={ __( 'Cell Vertical alignment', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 						>
 							<ButtonGroup className="ftb-button-group">

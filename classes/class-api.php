@@ -150,7 +150,7 @@ class Api {
 			array(
 				'options'   => Settings::get_options(),
 				'status'    => 'success',
-				'message'   => __( 'Settings have been reset.', 'flexible-table-block' ),
+				'message'   => __( 'Settings have been restored.', 'flexible-table-block' ),
 				'block_css' => Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) ),
 			)
 		);
