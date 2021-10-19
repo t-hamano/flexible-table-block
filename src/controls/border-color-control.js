@@ -134,6 +134,7 @@ export default function BorderColorControl( {
 									<ColorIndicator
 										className={ classnames( {
 											'component-color-indicator--none': ! allInputValue,
+											'component-color-indicator--transparent': allInputValue === 'transparent',
 										} ) }
 										colorValue={ allInputValue }
 									/>
@@ -167,6 +168,8 @@ export default function BorderColorControl( {
 									<ColorIndicator
 										className={ classnames( {
 											'component-color-indicator--none': ! values[ item.value ],
+											'component-color-indicator--transparent':
+												values[ item.value ] === 'transparent',
 										} ) }
 										colorValue={ values[ item.value ] }
 									/>

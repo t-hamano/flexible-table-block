@@ -74,6 +74,7 @@ export default function ColorControl( {
 							<ColorIndicator
 								className={ classnames( {
 									'component-color-indicator--none': ! value,
+									'component-color-indicator--transparent': value === 'transparent',
 								} ) }
 								colorValue={ value }
 							/>
