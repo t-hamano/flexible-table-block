@@ -10,7 +10,8 @@
  * License: GPL2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: flexible-table-block
- * @package flexible-table-block
+ *
+ * @package Flexible_Table_Block
  * @author Tetsuaki Hamano
  * @license GPL-2.0+
  */
