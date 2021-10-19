@@ -23,7 +23,7 @@ import {
  */
 import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH } from '../constants';
 import { SIDES, SideIndicatorControl } from './indicator-control';
-import { parseUnit, sanitizeUnitValue } from '../utils/unit-helpers';
+import { parseUnit, sanitizeUnitValue } from '../utils/helper';
 
 const DEFAULT_VALUES = {
 	top: null,

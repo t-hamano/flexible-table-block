@@ -23,7 +23,7 @@ import {
  */
 import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING } from '../constants';
 import { DIRECTIONS, DirectionIndicatorControl } from './indicator-control';
-import { parseUnit, sanitizeUnitValue } from '../utils/unit-helpers';
+import { parseUnit, sanitizeUnitValue } from '../utils/helper';
 
 const DEFAULT_VALUES = {
 	horizontal: null,

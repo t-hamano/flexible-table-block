@@ -38,7 +38,7 @@ import {
 	pickBorderStyle,
 	pickBorderColor,
 } from '../utils/style-picker';
-import { sanitizeUnitValue } from '../utils/unit-helpers';
+import { sanitizeUnitValue } from '../utils/helper';
 
 export default function TableCellSettings( props ) {
 	const { vTable, selectedCells, attributes, setAttributes } = props;

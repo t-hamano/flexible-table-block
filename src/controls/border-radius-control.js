@@ -23,7 +23,7 @@ import {
  */
 import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS } from '../constants';
 import { CORNERS, CornerIndicatorControl } from './indicator-control';
-import { parseUnit, sanitizeUnitValue } from '../utils/unit-helpers';
+import { parseUnit, sanitizeUnitValue } from '../utils/helper';
 
 const DEFAULT_VALUES = {
 	topLeft: null,

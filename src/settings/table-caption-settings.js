@@ -19,7 +19,7 @@ import { PaddingControl } from '../controls';
 import { convertToInline } from '../utils/style-converter';
 import { pickPadding } from '../utils/style-picker';
 import { updatePadding } from '../utils/style-updater';
-import { sanitizeUnitValue } from '../utils/unit-helpers';
+import { sanitizeUnitValue } from '../utils/helper';
 
 export default function TableCaptionSettings( props ) {
 	const { captionStylesObj, attributes, setAttributes } = props;

@@ -48,7 +48,7 @@ import {
 	updateBorderColor,
 	updateBorderSpacing,
 } from '../utils/style-updater';
-import { sanitizeUnitValue } from '../utils/unit-helpers';
+import { sanitizeUnitValue } from '../utils/helper';
 
 export default function TableSettings( props ) {
 	const { vTable, tableStylesObj, attributes, setAttributes } = props;

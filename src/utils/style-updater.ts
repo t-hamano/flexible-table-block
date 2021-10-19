@@ -4,7 +4,7 @@
 import type { Properties } from 'csstype';
 import type { Corners, Direction } from './style-picker';
 import { pickBy, omit, mapValues } from 'lodash';
-import { sanitizeUnitValue } from './unit-helpers';
+import { sanitizeUnitValue } from './helper';
 
 function getCssPropertyWithFourDirection(
 	property: keyof Properties,
