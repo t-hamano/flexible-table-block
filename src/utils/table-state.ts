@@ -23,7 +23,7 @@ export type SectionName = 'head' | 'body' | 'foot';
 type TableAttributes = Record< SectionName, { cells: Cell[] }[] >;
 
 // Table cell attributes
-interface Cell {
+export interface Cell {
 	content: string;
 	styles?: string;
 	tag: 'td' | 'th';
