@@ -96,10 +96,9 @@ export default function TableCaptionSettings( props ) {
 					<TextControl
 						autoComplete="off"
 						onChange={ onChangeLineHeight }
-						placeholder={ 1.5 }
 						step={ 0.1 }
 						type="number"
-						value={ captionStylesObj?.lineHeight }
+						value={ captionStylesObj?.lineHeight || '' }
 						min={ 0 }
 					/>
 				</div>
