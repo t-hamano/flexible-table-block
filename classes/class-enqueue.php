@@ -13,35 +13,58 @@ class Enqueue {
 	 * Constructor
 	 */
 	function __construct() {
-		// Register block.
+		// Register block & scripts.
 		add_action( 'init', array( $this, 'register_block' ) );
 
-		// Enqueue front-end scripts.
+		// Enqueue front-end inline style.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		// Enqueue block-editor scripts.
+		// Enqueue block-editor inline style.
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 	}
 
 	/**
-	 * Register block
+	 * Register block & scripts
 	 */
 	public function register_block() {
-		register_block_type( FTB_PATH . '/src' );
+		register_block_type(
+			FTB_PATH . '/src',
+			array(
+				'style'         => FTB_NAMESPACE,
+				'editor_script' => FTB_NAMESPACE,
+			)
+		);
+
+		if ( is_admin() ) {
+			wp_register_style(
+				FTB_NAMESPACE,
+				FTB_URL . '/build/index.css',
+				array( 'wp-components' ),
+				filemtime( FTB_PATH . '/build/index.css' ),
+			);
+		} else {
+			wp_register_style(
+				FTB_NAMESPACE,
+				FTB_URL . '/build/style-index.css',
+				array(),
+				filemtime( FTB_PATH . '/build/style-index.css' ),
+			);
+		}
+
+		$asset_file = include( FTB_PATH . '/build/index.asset.php' );
+
+		wp_register_script(
+			FTB_NAMESPACE,
+			FTB_URL . '/build/index.js',
+			$asset_file['dependencies'],
+			filemtime( FTB_PATH . '/build/index.js' ),
+		);
 	}
 
 	/**
-	 * Enqueue front-end scripts
+	 * Enqueue front-end inline style
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_style(
-			FTB_NAMESPACE,
-			FTB_URL . '/build/style-index.css',
-			array(),
-			filemtime( FTB_PATH . '/build/style-index.css' ),
-		);
-
-		// Output dynamic styles based on global settings.
 		$responsive_css = Helper::get_responsive_css();
 		$block_css      = Helper::get_block_css( '.' . FTB_BLOCK_CLASS );
 		$css            = Helper::minify_css( $block_css . $responsive_css );
@@ -49,26 +72,9 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue block-editor scripts
+	 * Enqueue block-editor inline style
 	 */
 	public function enqueue_block_editor_assets() {
-		$asset_file = include( FTB_PATH . '/build/index.asset.php' );
-
-		wp_enqueue_style(
-			FTB_NAMESPACE,
-			FTB_URL . '/build/index.css',
-			array(),
-			filemtime( FTB_PATH . '/build/index.css' ),
-		);
-
-		wp_enqueue_script(
-			FTB_NAMESPACE,
-			FTB_URL . '/build/index.js',
-			$asset_file['dependencies'],
-			filemtime( FTB_PATH . '/build/index.js' ),
-		);
-
-		// Output dynamic styles based on global settings.
 		$block_css = Helper::get_block_css( '.editor-styles-wrapper ' );
 		$css       = Helper::minify_css( $block_css );
 		wp_add_inline_style( FTB_NAMESPACE, $css );
