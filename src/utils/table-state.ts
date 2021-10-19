@@ -53,7 +53,6 @@ export interface VCell {
 	colSpan: number;
 	sectionName: string;
 	rowIndex: number;
-	colIndex: number;
 	vColIndex: number;
 	isHidden: boolean;
 	isFirstSelected?: boolean;
@@ -98,16 +97,15 @@ export function createTable( {
 			( rowIndex ): VRow => ( {
 				cells: times(
 					cols,
-					( colIndex ): VCell => ( {
+					( vColIndex ): VCell => ( {
 						content: '',
 						tag: sectionName === 'head' ? 'th' : 'td',
 						rowSpan: 1,
 						colSpan: 1,
 						sectionName,
 						rowIndex,
+						vColIndex,
 						isFirstSelected: false,
-						colIndex,
-						vColIndex: colIndex,
 						isHidden: false,
 					} )
 				),
@@ -143,16 +141,15 @@ export function insertRow(
 	const newRow: VRow = {
 		cells: times(
 			newRowColCount,
-			( colIndex ): VCell => ( {
+			( vColIndex ): VCell => ( {
 				content: '',
 				tag: 'head' === sectionName ? 'th' : 'td',
 				rowSpan: 1,
 				colSpan: 1,
 				sectionName,
 				rowIndex,
-				colIndex,
+				vColIndex,
 				isFirstSelected: false,
-				vColIndex: colIndex,
 				isHidden: false,
 			} )
 		),
@@ -305,7 +302,6 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 						colSpan: 1,
 						sectionName: cell.sectionName,
 						rowIndex: cell.rowIndex,
-						colIndex: cell.colIndex + 1,
 						vColIndex: cell.vColIndex + 1,
 						isHidden: false,
 					} );
@@ -322,7 +318,6 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 							colSpan: 1,
 							sectionName: cell.sectionName,
 							rowIndex: cell.rowIndex,
-							colIndex: cell.colIndex - 1,
 							vColIndex: cell.vColIndex - 1,
 							isHidden: false,
 						},
@@ -344,7 +339,6 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 							colSpan: 1,
 							sectionName: cell.sectionName,
 							rowIndex: cRowIndex,
-							colIndex: cell.colIndex - 1,
 							vColIndex: cell.vColIndex - 1,
 							isHidden: false,
 						},
@@ -690,10 +684,10 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 
 		const vSection: VSection = times(
 			rowCount,
-			(): VRow => ( {
+			( rowIndex ): VRow => ( {
 				cells: times(
 					colCount,
-					(): VCell => ( {
+					( vColIndex ): VCell => ( {
 						content: '',
 						tag: 'head' === sectionName ? 'th' : 'td',
 						rowSpan: 1,
@@ -703,9 +697,8 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 						// Whether the actual cell is placed or not.
 						isFilled: false,
 						// Dummy indexes.
-						rowIndex: -1,
-						colIndex: -1,
-						vColIndex: -1,
+						rowIndex,
+						vColIndex,
 					} )
 				),
 			} )
@@ -713,13 +706,11 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 
 		// Mapping the actual section cells on the virtual section cell.
 		section.forEach( ( row, cRowIndex: number ) => {
-			row.cells.forEach( ( cell, cColIndex: number ) => {
+			row.cells.forEach( ( cell ) => {
 				// Colmun index on the virtual section excluding cells already marked as "filled".
 				const vColIndex: number = vSection[ cRowIndex ].cells.findIndex(
 					( { isFilled } ) => ! isFilled
 				);
-				if ( vColIndex === -1 ) {
-				}
 
 				// Mark the cell as "filled" and record the position on the virtual section.
 				vSection[ cRowIndex ].cells[ vColIndex ] = {
@@ -729,24 +720,24 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 					rowSpan: cell.rowSpan ? parseInt( cell.rowSpan ) : 1,
 					colSpan: cell.colSpan ? parseInt( cell.colSpan ) : 1,
 					rowIndex: cRowIndex,
-					colIndex: cColIndex,
 					vColIndex,
 					isHidden: false,
 				};
 
 				// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
 				// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
-				if ( cell.colSpan ) {
+				if ( cell.colSpan && parseInt( cell.colSpan ) > 1 ) {
 					for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
 						vSection[ cRowIndex ].cells[ vColIndex + i ].isFilled = true;
 						vSection[ cRowIndex ].cells[ vColIndex + i ].isHidden = true;
 					}
 				}
-				if ( cell.rowSpan ) {
+				if ( cell.rowSpan && parseInt( cell.rowSpan ) > 1 ) {
 					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
 						vSection[ cRowIndex + i ].cells[ vColIndex ].isFilled = true;
 						vSection[ cRowIndex + i ].cells[ vColIndex ].isHidden = true;
-						if ( cell.colSpan ) {
+
+						if ( cell.colSpan && parseInt( cell.colSpan ) > 1 ) {
 							for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
 								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isFilled = true;
 								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isHidden = true;
@@ -757,25 +748,6 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 			} );
 		} );
 
-		// // Fallback: Fill with empty cells if any cells are not filled correctly.
-		// vSection.forEach( ( { cells }, cRowIndex ) => {
-		// 	cells.forEach( ( cell, cVColIndex ) => {
-		// 		if ( ! cell.isFilled ) {
-		// 			vSection[ cRowIndex ].cells[ cVColIndex ] = {
-		// 				tag: 'head' === sectionName ? 'th' : 'td',
-		// 				isFilled: true,
-		// 				sectionName,
-		// 				rowIndex: 1,
-		// 				colIndex: 1,
-		// 				vColIndex: cVColIndex,
-		// 				rowSpan: 1,
-		// 				colSpan: 1,
-		// 				isHidden: false,
-		// 				isFirstSelected: false,
-		// 			};
-		// 		}
-		// 	} );
-		// } );
 		return vSection;
 	} );
 }
@@ -1061,15 +1033,14 @@ export function toggleSection( vTable: VTable, sectionName: SectionName ): VTabl
 
 	// Row state to be inserted.
 	const newRow: VRow = {
-		cells: times( newRowColCount, ( colIndex ) => ( {
+		cells: times( newRowColCount, ( vColIndex ) => ( {
 			content: '',
 			tag: 'head' === sectionName ? 'th' : 'td',
 			rowSpan: 1,
 			colSpan: 1,
 			sectionName,
 			rowIndex: 0,
-			colIndex,
-			vColIndex: colIndex,
+			vColIndex,
 			isHidden: false,
 			isFirstSelected: false,
 		} ) ),

@@ -41,16 +41,16 @@ import {
 import { sanitizeUnitValue } from '../utils/helper';
 
 export default function TableCellSettings( props ) {
-	const { vTable, selectedCells, attributes, setAttributes } = props;
+	const { vTable, selectedCells, setAttributes } = props;
 
 	const cellWidthUnits = useCustomUnits( { availableUnits: CELL_WIDTH_UNITS } );
 	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
 
 	if ( ! ( selectedCells || [] ).length ) return null;
 
-	const { sectionName, rowIndex, colIndex } = selectedCells[ 0 ];
+	const { sectionName, rowIndex, vColIndex } = selectedCells[ 0 ];
 
-	const targetCell = attributes[ sectionName ][ rowIndex ].cells[ colIndex ];
+	const targetCell = vTable[ sectionName ][ rowIndex ].cells[ vColIndex ];
 
 	if ( ! targetCell ) return null;
 

@@ -20,13 +20,12 @@ const getRow = (
 	return {
 		cells: times(
 			cells,
-			( colIndex ): VCell => {
+			( vColIndex ): VCell => {
 				return {
 					content,
 					tag,
-					vColIndex: colIndex,
 					rowIndex,
-					colIndex,
+					vColIndex,
 					sectionName,
 					rowSpan: 1,
 					colSpan: 1,

@@ -108,6 +108,7 @@ export default function Table( props ) {
 
 	const onDeleteColumn = ( vColIndex ) => {
 		const newVTable = deleteColumn( vTable, { vColIndex } );
+
 		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();
