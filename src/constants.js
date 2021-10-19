@@ -25,13 +25,16 @@ export const STORE_NAME = 'flexible-table-block';
 // Rest API routes.
 export const REST_API_ROUTE = '/flexible-table-block/v1/options';
 
-// Upper and lower limits and thresholds.
+// Table placeholder default settings.
+export const DEFAULT_PREVIEW_ROWS = 3;
+export const DEFAULT_PREVIEW_COLUMNS = 3;
 export const MIN_PREVIEW_TABLE_HEIGHT = 150;
 export const MAX_PREVIEW_TABLE_COL = 50;
 export const MAX_PREVIEW_TABLE_ROW = 50;
 export const THRESHOLD_PREVIEW_TABLE_COL = 10;
 export const THRESHOLD_PREVIEW_TABLE_ROW = 10;
 
+// Upper and lower limits.
 export const MAX_BORDER_RADIUS = {
 	px: 200,
 	em: 20,

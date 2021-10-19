@@ -16,6 +16,8 @@ import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/comp
  * Internal dependencies
  */
 import {
+	DEFAULT_PREVIEW_ROWS,
+	DEFAULT_PREVIEW_COLUMNS,
 	MIN_PREVIEW_TABLE_HEIGHT,
 	MAX_PREVIEW_TABLE_COL,
 	MAX_PREVIEW_TABLE_ROW,
@@ -26,8 +28,8 @@ import { createTable, toTableAttributes } from '../utils/table-state';
 import { blockIcon as icon } from '../icons';
 
 export default function TablePlaceholder( { setAttributes } ) {
-	const [ rowCount, setRowCount ] = useState( 3 );
-	const [ colCount, setColCount ] = useState( 3 );
+	const [ rowCount, setRowCount ] = useState( DEFAULT_PREVIEW_ROWS );
+	const [ colCount, setColCount ] = useState( DEFAULT_PREVIEW_COLUMNS );
 	const [ headerSection, setHeaderSection ] = useState( false );
 	const [ footerSection, setFooterSection ] = useState( false );
 
