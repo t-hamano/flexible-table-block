@@ -31,11 +31,6 @@ export type FourCssValues = [ string, string, string, string ];
  * @return Array with four values.
  */
 export function parseCssValue( cssValue: string ): FourCssValues {
-	//todo isNeed ?
-	if ( typeof cssValue !== 'string' ) {
-		return [ '', '', '', '' ];
-	}
-
 	const cssValues: string[] = cssValue.split( ' ' ).map( ( value: string ) => value.toLowerCase() );
 
 	switch ( cssValues.length ) {
