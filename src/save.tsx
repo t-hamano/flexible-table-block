@@ -68,7 +68,7 @@ export default function save( { attributes }: BlockSaveProps< BlockAttributes > 
 	const Section = ( { type, rows }: { type: SectionName; rows: Row[] } ) => {
 		if ( ! rows.length ) return null;
 
-		const Tag: 'thead' | 'tbody' | 'tfoot' = `t${ type }`;
+		const Tag = `t${ type }` as const;
 
 		return (
 			<Tag>
