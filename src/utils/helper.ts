@@ -118,16 +118,16 @@ export function parseUnit( initialValue: string ): [ number, string ] {
  * @param  value        Value to converted.
  * @param  defaultValue Value to be used when the value is falsy.
  */
-export function toNumber( value: number | string | undefined, defaultValue = 0 ) {
+export function toInteger( value: number | string | undefined, defaultValue = 0 ) {
 	if ( ! value ) {
 		return defaultValue;
 	}
 
 	if ( typeof value === 'number' ) {
-		return value;
+		return Math.floor( value );
 	}
 
-	const converted = parseFloat( value );
+	const converted = parseInt( value, 10 );
 
 	if ( isNaN( converted ) ) {
 		return defaultValue;

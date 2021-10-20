@@ -15,7 +15,7 @@ import {
 	updateBorderWidth,
 	updatePadding,
 } from './style-updater';
-import { toNumber } from './helper';
+import { toInteger } from './helper';
 
 // Section name types
 export type SectionName = 'head' | 'body' | 'foot';
@@ -680,7 +680,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 		// Create a virtual section array.
 		const rowCount: number = section.length;
 		const colCount: number = section[ 0 ].cells.reduce( ( count: number, cell: Cell ) => {
-			return count + toNumber( cell.colSpan, 1 );
+			return count + toInteger( cell.colSpan, 1 );
 		}, 0 );
 
 		const vSection: VSection = times(
@@ -712,8 +712,8 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 				const vColIndex: number = vSection[ cRowIndex ].cells.findIndex(
 					( { isFilled } ) => ! isFilled
 				);
-				const rowSpan = Math.floor( toNumber( cell.rowSpan, 1 ) );
-				const colSpan = Math.floor( toNumber( cell.colSpan, 1 ) );
+				const rowSpan = toInteger( cell.rowSpan, 1 );
+				const colSpan = toInteger( cell.colSpan, 1 );
 
 				// Mark the cell as "filled" and record the position on the virtual section.
 				vSection[ cRowIndex ].cells[ vColIndex ] = {

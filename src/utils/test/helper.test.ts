@@ -1,4 +1,4 @@
-import { parseCssValue, parseUnit, sanitizeUnitValue, toNumber } from '../helper';
+import { parseCssValue, parseUnit, sanitizeUnitValue, toInteger } from '../helper';
 
 describe( 'helper', () => {
 	describe( 'parseCssValue', () => {
@@ -82,21 +82,21 @@ describe( 'helper', () => {
 		} );
 	} );
 
-	describe( 'toNumber', () => {
+	describe( 'toInteger', () => {
 		it( 'should return numbers as numbers', () => {
-			expect( toNumber( 10 ) ).toStrictEqual( 10 );
-			expect( toNumber( 2.71828 ) ).toStrictEqual( 2.71828 );
+			expect( toInteger( 10 ) ).toStrictEqual( 10 );
+			expect( toInteger( 2.71828 ) ).toStrictEqual( 2 );
 		} );
 
 		it( 'should convert string to number', () => {
-			expect( toNumber( '20' ) ).toStrictEqual( 20 );
-			expect( toNumber( '3.1415' ) ).toStrictEqual( 3.1415 );
+			expect( toInteger( '20' ) ).toStrictEqual( 20 );
+			expect( toInteger( '3.1415' ) ).toStrictEqual( 3 );
 		} );
 
 		it( 'should return the default value, if falsy is passed.', () => {
-			expect( toNumber( '', 1 ) ).toStrictEqual( 1 );
-			expect( toNumber( undefined, 5 ) ).toStrictEqual( 5 );
-			expect( toNumber( 0, 5 ) ).toStrictEqual( 5 );
+			expect( toInteger( '', 1 ) ).toStrictEqual( 1 );
+			expect( toInteger( undefined, 5 ) ).toStrictEqual( 5 );
+			expect( toInteger( 0, 5 ) ).toStrictEqual( 5 );
 		} );
 	} );
 } );
