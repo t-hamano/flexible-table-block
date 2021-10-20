@@ -5,16 +5,6 @@ import _, { identity, isEmpty, isObject, mapValues, pickBy } from 'lodash';
 
 const DEFAULT_PRECISION: number = 4;
 
-// sanitizeUnitValue function option
-interface SanitizeOptions {
-	minNum?: number;
-	maxNum?: number;
-	precision?: number;
-}
-
-// Array with four values for CSS
-export type FourCssValues = [ string, string, string, string ];
-
 /**
  * Removed falsy values from nested object.
  *
@@ -31,6 +21,9 @@ export const cleanEmptyObject = ( object: {} ): {} | undefined => {
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
 };
 
+// Array with four values for CSS
+export type FourCssValues = [ string, string, string, string ];
+
 /**
  * Convert short-hand/long-hand CSS values into an array with four values.
  *
@@ -38,6 +31,7 @@ export const cleanEmptyObject = ( object: {} ): {} | undefined => {
  * @return Array with four values.
  */
 export function parseCssValue( cssValue: string ): FourCssValues {
+	//todo isNeed ?
 	if ( typeof cssValue !== 'string' ) {
 		return [ '', '', '', '' ];
 	}
@@ -56,6 +50,13 @@ export function parseCssValue( cssValue: string ): FourCssValues {
 		default:
 			return [ '', '', '', '' ];
 	}
+}
+
+// sanitizeUnitValue function option
+interface SanitizeOptions {
+	minNum?: number;
+	maxNum?: number;
+	precision?: number;
 }
 
 /**
