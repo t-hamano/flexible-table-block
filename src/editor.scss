@@ -1,34 +1,531 @@
-.wp-block-flexible-table-block-table {
+// Table Styles
+.editor-styles-wrapper .wp-block-flexible-table-block-table {
 
-	table {
+	> table {
 
-		th,
-		td {
+		&.has-fixed-layout {
+			table-layout: fixed;
+		}
 
-			&.cell-selected {
+		thead,
+		tbody,
+		tfoot {
+
+			th,
+			td {
 				position: relative;
+				min-width: auto;
 
-				::before {
+				&.is-selected::after {
 					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					border: 2px #2196f3 solid;
+					top: 2px;
+					right: 2px;
+					bottom: 2px;
+					left: 2px;
+					border: 2px solid var(--wp-admin-theme-color);
 					content: "";
 					pointer-events: none;
 				}
 			}
+		}
+	}
 
-			.block-editor-rich-text__editable {
-				min-width: 50px;
-				border: 1px dotted #999;
+	> figcaption {
+		position: relative;
+		z-index: 1;
+	}
+
+	&.is-selected {
+
+		> table {
+
+			th,
+			td {
+
+				.block-editor-rich-text__editable {
+					border: 1px dotted #ccc;
+				}
+			}
+		}
+
+		&.show-dot-on-th th::before {
+			position: absolute;
+			top: 6px;
+			right: 6px;
+			z-index: 1;
+			width: 6px;
+			height: 6px;
+			background: var(--wp-admin-theme-color);
+			border-radius: 50%;
+			content: "";
+		}
+
+		&.show-control-button {
+			padding-left: 40px;
+
+			&.is-caption-side-bottom {
+				padding-top: 40px;
+			}
+
+			&.is-caption-side-top > table {
+				margin-top: 40px;
+			}
+		}
+	}
+
+	&.is-content-justification-left,
+	&.is-content-justification-center,
+	&.is-content-justification-right {
+		display: flex;
+		flex-flow: column;
+
+		figcaption {
+			align-self: stretch;
+		}
+	}
+
+	&.is-content-justification-left {
+		align-items: flex-start;
+	}
+
+	&.is-content-justification-center {
+		align-items: center;
+	}
+
+	&.is-content-justification-right {
+		align-items: flex-end;
+	}
+
+	.ftb-placeholder {
+
+		&__table-wrap {
+			width: 100%;
+			padding: 12px 24px 16px;
+			background-color: #eaeaea;
+		}
+
+		&__tbl-ttl {
+			margin-bottom: 8px;
+			font-weight: bold;
+			font-size: 16px;
+			text-align: center;
+		}
+
+		&__table {
+			width: 100%;
+			max-width: 330px;
+			margin: 0 auto;
+			vertical-align: middle;
+			table-layout: fixed;
+			border-collapse: separate;
+			border-spacing: 3px;
+
+			th,
+			td {
+				padding: 0 !important;
+			}
+
+			thead th {
+				background-color: var(--wp-admin-theme-color);
+				border: 1px #1e1e1e solid;
+			}
+
+			tbody td,
+			tfoot td {
+				background-color: #fff;
+				border: 1px #1e1e1e solid;
+			}
+
+			&.is-overflow-col tr *:nth-last-child(2) {
+				position: relative;
+				text-align: center;
+				background-color: transparent;
+				border: none;
+
+				&::before {
+					display: block;
+					font-weight: normal;
+					line-height: 0;
+					content: "...";
+				}
+			}
+
+			&.is-overflow-row {
+
+				tbody tr:nth-last-child(2) td {
+					position: relative;
+					text-align: center;
+					background-color: transparent;
+					border: none;
+
+					&::before {
+						display: block;
+						line-height: 0;
+						content: "...";
+					}
+				}
+			}
+		}
+
+		&__form {
+			display: block !important;
+			flex-wrap: nowrap;
+
+			.components-base-control {
+				width: 100px;
+
+				&.components-toggle-control {
+					width: auto;
+				}
+			}
+
+			.components-base-control__field {
+				margin-right: 8px;
+				margin-bottom: 0;
+
+				.components-text-control__input {
+					height: 36px;
+					margin: 0;
+				}
+			}
+		}
+
+		&__row {
+			display: flex;
+			align-items: flex-end;
+			margin-top: 16px;
+		}
+	}
+
+	.ftb-table-cell-label {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		height: auto;
+		padding: 0 4px;
+		font-size: 10px;
+		line-height: 16px;
+		border-radius: 0;
+	}
+}
+
+// Setting Component Styles
+.ftb-button-group {
+	display: block;
+
+	.components-button {
+		vertical-align: top;
+	}
+}
+
+.ftb-reset-settings-control .components-base-control__field {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.ftb-toggle-control .components-base-control__help {
+	margin-top: -8px;
+}
+
+.ftb-base-control-row {
+	display: flex;
+
+	> *:first-child {
+		margin-right: 16px;
+	}
+}
+
+.ftb-percent-group {
+	margin-top: 8px;
+}
+
+.ftb-font-size-control,
+.ftb-width-control {
+
+	.components-input-control {
+		max-width: 100px;
+	}
+}
+
+.ftb-line-height-control {
+
+	.components-base-control {
+		max-width: 60px;
+	}
+}
+
+.ftb-border-radius-control,
+.ftb-border-width-control,
+.ftb-border-style-control,
+.ftb-border-spacing-control,
+.ftb-border-color-control,
+.ftb-color-control {
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 12px;
+	}
+}
+
+.ftb-border-radius-control,
+.ftb-border-width-control,
+.ftb-border-spacing-control {
+
+	&__header-control {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 30px;
+
+		.components-unit-control-wrapper {
+			max-width: 80px;
+			margin-right: auto;
+		}
+	}
+
+	&__input-controls {
+		display: flex;
+		padding-top: 8px;
+
+		.components-unit-control-wrapper {
+			max-width: 60px;
+			margin-left: -1px;
+
+			.components-input-control {
+				border-radius: 0;
+			}
+
+			&:first-child .components-input-control {
+				border-radius: 2px 0 0 2px;
+			}
+
+			&:last-child .components-input-control {
+				border-radius: 0 2px 2px 0;
 			}
 		}
 	}
 }
 
-[data-type="flexible-table/flexible-table"][data-align="center"] table {
-	margin-right: auto;
-	margin-left: auto;
+.ftb-border-style-control {
+
+	&__button-controls {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+	}
+
+	&__button-controls-row {
+		display: flex;
+
+		&:not(:first-child) {
+			padding-top: 8px;
+		}
+	}
+}
+
+.ftb-border-color-control,
+.ftb-color-control {
+
+	&__controls {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+	}
+
+	&__controls-row {
+		display: flex;
+		align-items: center;
+
+		&:not(:first-child) {
+			padding-top: 8px;
+		}
+	}
+
+	&__indicator {
+		position: relative;
+		width: 40px;
+		height: 20px;
+		padding: 0;
+
+		.component-color-indicator {
+			position: relative;
+			flex: 1;
+			height: 100%;
+			margin: 0;
+
+			&--none::before {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				background-color: #fff;
+				background-image: linear-gradient(to right top, transparent 46%, #cc1818 calc(46% + 1px), #cc1818 calc(54% - 1px), transparent 54%);
+				content: "";
+			}
+
+			&--transparent::before {
+				position: absolute;
+				top: 1px;
+				right: 1px;
+				bottom: 1px;
+				left: 1px;
+				z-index: -1;
+				/* stylelint-disable-next-line function-url-quotes */
+				background: url("data:image/svg+xml;charset=utf-8,%3Csvg width='28' height='28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8V6H4v2h2zm2 0V6h2v2H8zm2 8H8v-2h2v2zm2 0v-2h2v2h-2zm0 2v-2h-2v2H8v2h2v-2h2zm2 0v2h-2v-2h2zm2 0h-2v-2h2v2z' fill='%23555D65'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M18 18h2v-2h-2v-2h2v-2h-2v-2h2V8h-2v2h-2V8h-2v2h2v2h-2v2h2v2h2v2zm-2-4v-2h2v2h-2z' fill='%23555D65'/%3E%3Cpath d='M18 18v2h-2v-2h2z' fill='%23555D65'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 10V8H6v2H4v2h2v2H4v2h2v2H4v2h2v2H4v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2V8h-2V6h2V4h-2v2h-2V4h-2v2h-2V4h-2v2h-2V4h-2v2h2v2h-2v2H8zm0 2v-2H6v2h2zm2 0v-2h2v2h-2zm0 2v-2H8v2H6v2h2v2H6v2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2V8h-2V6h-2v2h-2V6h-2v2h-2v2h2v2h-2v2h-2z' fill='%23555D65'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 0H2v2H0v2h2v2H0v2h2v2H0v2h2v2H0v2h2v2H0v2h2v2H0v2h2v2H0v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2V8h-2V6h2V4h-2V2h2V0h-2v2h-2V0h-2v2h-2V0h-2v2h-2V0h-2v2h-2V0h-2v2H8V0H6v2H4V0zm0 4V2H2v2h2zm2 0V2h2v2H6zm0 2V4H4v2H2v2h2v2H2v2h2v2H2v2h2v2H2v2h2v2H2v2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2V8h-2V6h2V4h-2V2h-2v2h-2V2h-2v2h-2V2h-2v2h-2V2h-2v2H8v2H6z' fill='%23555D65'/%3E%3C/svg%3E");
+				content: "";
+			}
+		}
+	}
+
+	&__popover .components-popover__content {
+		padding: 16px;
+	}
+}
+
+.ftb-global-setting {
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 16px;
+}
+
+// Modal Component Styles
+.ftb-global-setting-modal {
+	display: flex;
+	max-width: 600px;
+
+	@media (min-width: 960px) {
+		max-height: 70%;
+	}
+
+	h2 {
+		font-size: 1.2em;
+	}
+
+	hr {
+		margin: 1em 0;
+	}
+
+	.components-modal__content {
+		height: auto;
+		margin-bottom: 60px;
+		padding-bottom: 40px;
+		overflow: auto;
+	}
+
+	.components-range-control__mark {
+		background-color: #d7dade;
+	}
+
+	.components-range-control__mark-label {
+		color: currentColor;
+	}
+
+	.components-disabled label {
+		opacity: 0.3;
+	}
+
+	&__styles {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	&__styles-item {
+		width: calc(50% - 4px);
+		margin-bottom: 8px;
+		padding: 8px;
+		border: 1px var(--wp-admin-theme-color) solid;
+	}
+
+	&__styles-color {
+		position: relative;
+		padding-left: 28px;
+
+		.component-color-indicator {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			margin-top: -8px;
+			margin-left: 0;
+		}
+	}
+
+	&__buttons {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		height: 60px;
+		padding: 0 24px;
+		background: #fff;
+	}
+
+	&__confirm-popover .components-popover__content {
+		min-width: 150px;
+		padding: 8px;
+
+		p {
+			margin: 0 0 1em;
+		}
+	}
+
+	&__confirm-popover-buttons {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__notice {
+		position: absolute !important;
+		right: 24px;
+		bottom: 60px;
+		left: 24px;
+		z-index: 6;
+		margin: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+
+		&.is-dismissible {
+			padding-right: 8px;
+
+			svg {
+				width: 16px;
+				height: 16px;
+			}
+		}
+
+		.components-button {
+			align-self: center;
+		}
+	}
+
+	&__loading {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 5;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0.2);
+	}
+}
+
+.ftb-global-help-modal {
+	max-width: 600px;
+}
+
+@media screen and (max-width: 782px) {
+
+	.ftb-global-setting-modal__styles-item {
+		width: 100%;
+	}
 }

@@ -1,76 +1,106 @@
+/**
+ * External dependencies
+ */
 import classnames from 'classnames';
-import { RichText } from '@wordpress/block-editor';
 
-export default function({ attributes, className }) {
+/**
+ * WordPress dependencies
+ */
+import {
+	RichText,
+	useBlockProps,
+	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,
+} from '@wordpress/block-editor';
 
+/**
+ * Internal dependencies
+ */
+import { convertToObject } from './utils/style-converter';
+
+export default function save( { attributes } ) {
 	const {
-		head,
-		foot,
+		contentJustification,
+		tableStyles,
 		hasFixedLayout,
 		isStackedOnMobile,
+		isScrollOnPc,
 		isScrollOnMobile,
-		tableWidth,
-		fontSize,
-		lineHeight,
-		borderColor
+		sticky,
+		head,
+		body,
+		foot,
+		caption,
+		captionSide,
+		captionStyles,
 	} = attributes;
 
-	const tableWidthVal = !! tableWidth ? tableWidth : undefined;
-	const fontSizeVal = !! fontSize ? fontSize + 'em' : undefined;
-	const lineHeightVal = !! lineHeight ? lineHeight : undefined;
-	const borderColorVal = !! borderColor ? borderColor : undefined;
+	const isEmpty = ! head.length && ! body.length && ! foot.length;
 
-	const classNames = classnames(
-		'hoge',
-		className,
-		{
-			'has-fixed-layout': hasFixedLayout,
-			'is-stacked-on-mobile': isStackedOnMobile,
-			'is-scroll-on-mobile': isScrollOnMobile
-		}
+	if ( isEmpty ) return null;
+
+	const tableStylesObj = convertToObject( tableStyles );
+	const captionStylesObj = convertToObject( captionStyles );
+
+	const colorProps = getColorClassesAndStyles( attributes );
+
+	const blockProps = useBlockProps.save( {
+		className: classnames( {
+			[ `is-content-justification-${ contentJustification }` ]: contentJustification,
+			'is-scroll-on-pc': isScrollOnPc,
+			'is-scroll-on-mobile': isScrollOnMobile,
+		} ),
+	} );
+
+	const tableClasses = classnames( colorProps.className, {
+		'has-fixed-layout': hasFixedLayout,
+		'is-stacked-on-mobile': isStackedOnMobile,
+		[ `is-sticky-${ sticky }` ]: sticky,
+	} );
+
+	const hasCaption = ! RichText.isEmpty( caption );
+
+	const Section = ( { type, rows } ) => {
+		if ( ! rows.length ) return null;
+
+		const Tag = `t${ type }`;
+
+		return (
+			<Tag>
+				{ rows.map( ( { cells }, rowIndex ) => (
+					<tr key={ rowIndex }>
+						{ cells.map( ( { content, tag, className, rowSpan, colSpan, styles }, cellIndex ) => (
+							<RichText.Content
+								key={ cellIndex }
+								tagName={ tag }
+								className={ className }
+								value={ content }
+								rowSpan={ rowSpan > 1 ? rowSpan : undefined }
+								colSpan={ colSpan > 1 ? colSpan : undefined }
+								style={ convertToObject( styles ) }
+							/>
+						) ) }
+					</tr>
+				) ) }
+			</Tag>
+		);
+	};
+
+	const Caption = () => (
+		<RichText.Content tagName="figcaption" value={ caption } style={ captionStylesObj } />
 	);
 
-	function renderSection( section ) {
-		let sectionTagName = 'head' === section ? 'th' : 'td';
-		return attributes[section].map( ({cells}, rowIndex ) => (
-			<tr key={rowIndex}>
-				{cells.map( ({content, styles, colSpan, rowSpan}, colIndex ) => (
-					<RichText.Content
-						tagName={sectionTagName}
-						value={content}
-						key={colIndex}
-						style={styles}
-						colSpan={colSpan}
-						rowSpan={rowSpan}
-					/>
-				) )}
-			</tr>
-		) );
-	}
 	return (
-		<div className={ classNames  } >
-			<div
-				className="wp-block-flexible-table-block-table__wrap"
-				style={{
-					width: tableWidthVal
-				}}
+		<figure { ...blockProps }>
+			{ hasCaption && 'top' === captionSide && <Caption /> }
+			<table
+				className={ tableClasses ?? undefined }
+				style={ { ...tableStylesObj, ...colorProps.style } }
 			>
-				<table
-					style={{
-						borderColor: borderColorVal,
-						fontSize: fontSizeVal,
-						lineHeight: lineHeightVal
-					}}
-				>
-					{!! head.length && (
-					<thead>{renderSection( 'head' )}</thead>
-					)}
-					<tbody>{renderSection( 'body' )}</tbody>
-					{!! foot.length && (
-						<tfoot>{renderSection( 'foot' )}</tfoot>
-					)}
-				</table>
-			</div>
-		</div>
+				<Section type="head" rows={ head } />
+				<Section type="body" rows={ body } />
+				<Section type="foot" rows={ foot } />
+			</table>
+			{ hasCaption && 'bottom' === captionSide && <Caption /> }
+		</figure>
 	);
 }

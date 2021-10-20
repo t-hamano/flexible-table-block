@@ -1,18 +1,17 @@
 module.exports = {
 	extends: [
-		'stylelint-config-rational-order',
-		'stylelint-config-wordpress/scss',
+		"@wordpress/stylelint-config/scss",
+		"stylelint-config-rational-order"
 	],
   ignoreFiles: [
-		'node_modules/**/*.css',
-		'build/**/*.css',
-		'src/**/*.js'
+		"build/**/*.css",
+		"node_modules/**/*.css",
+		"vendor/**/*.css",
+		"**/*.js",
   ],
 	rules: {
-		'no-descending-specificity': null,
-		'font-weight-notation': null,
-		'font-family-no-missing-generic-family-keyword': null,
-		'selector-class-pattern': null,
-		'at-rule-empty-line-before': null,
+		"no-descending-specificity": null,
+		"font-weight-notation": null,
+		"selector-class-pattern": null,
 	}
 }
