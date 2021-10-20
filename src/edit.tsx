@@ -112,7 +112,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
 
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( [] );
+		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
@@ -134,7 +134,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( [] );
+		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
@@ -149,7 +149,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
 
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( [] );
+		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
@@ -160,21 +160,21 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = deleteColumn( vTable, { vColIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( [] );
+		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onMergeCells = () => {
 		const newVTable = mergeCells( vTable, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( [] );
+		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onSplitMergedCells = () => {
 		const newVTable = splitMergedCells( vTable, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( [] );
+		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 

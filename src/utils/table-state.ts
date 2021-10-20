@@ -425,8 +425,7 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
  * @return New virtual table state.
  */
 export function mergeCells( vTable: VTable, selectedCells: VCell[] | undefined ): VTable {
-	if ( ! selectedCells ) return vTable;
-	if ( ! selectedCells.length ) return vTable;
+	if ( ! selectedCells || ! selectedCells.length ) return vTable;
 
 	const sectionName: SectionName = selectedCells[ 0 ].sectionName as SectionName;
 
@@ -845,7 +844,7 @@ export function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes 
  * @param  selectedCells Current selected cells.
  * @return True if a rectangle will be formed from the selected cells, false otherwise.
  */
-export function isRectangleSelected( selectedCells: VCell[] ): boolean {
+export function isRectangleSelected( selectedCells: VCell[] | undefined ): boolean {
 	if ( ! selectedCells ) return false;
 
 	// No need to merge If only one or no cell is selected.
@@ -1016,7 +1015,7 @@ export function toRectangledSelectedCells(
  * @param  selectedCells Current selected cells.
  * @return True if the selected cells in the virtual table contain merged cells, false otherwise.
  */
-export function hasMergedCells( selectedCells: VCell[] ): boolean {
+export function hasMergedCells( selectedCells: VCell[] | undefined ): boolean {
 	if ( ! selectedCells ) return false;
 	return selectedCells.some(
 		( { rowSpan, colSpan }: { rowSpan: number; colSpan: number } ) => rowSpan > 1 || colSpan > 1
