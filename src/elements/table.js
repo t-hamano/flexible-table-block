@@ -169,28 +169,28 @@ export default function Table( props ) {
 			vColIndex: selectedVColIndex,
 		} = selectedCells[ 0 ];
 
-		setAttributes( {
+		const newVTable = {
+			...vTable,
 			[ sectionName ]: vTable[ sectionName ].map( ( row, rowIndex ) => {
 				if ( rowIndex !== selectedRowIndex ) {
 					return { cells: row.cells.filter( ( cell ) => ! cell.isHidden ) };
 				}
 
 				return {
-					cells: row.cells
-						.map( ( cell, vColIndex ) => {
-							if ( rowIndex !== selectedRowIndex || vColIndex !== selectedVColIndex ) {
-								return cell;
-							}
-							return {
-								...cell,
-								content,
-							};
-						} )
-						// Delete cells marked as deletion.
-						.filter( ( cell ) => ! cell.isHidden ),
+					cells: row.cells.map( ( cell, vColIndex ) => {
+						if ( rowIndex !== selectedRowIndex || vColIndex !== selectedVColIndex ) {
+							return cell;
+						}
+						return {
+							...cell,
+							content,
+						};
+					} ),
 				};
 			} ),
-		} );
+		};
+
+		setAttributes( toTableAttributes( newVTable ) );
 	};
 
 	const onClickCell = ( event, clickedCell ) => {
