@@ -260,6 +260,7 @@ export default function TableSettings( props ) {
 			<BaseControl
 				id="flexible-table-block/table-width"
 				label={ __( 'Table Width', 'flexible-table-block' ) }
+				className="ftb-width-control"
 			>
 				<UnitControl
 					value={ tableStylesObj?.width }
@@ -301,6 +302,7 @@ export default function TableSettings( props ) {
 			<BaseControl
 				id="flexible-table-block/table-max-width"
 				label={ __( 'Table Max Width', 'flexible-table-block' ) }
+				className="ftb-width-control"
 			>
 				<UnitControl
 					value={ tableStylesObj?.maxWidth }
@@ -344,6 +346,7 @@ export default function TableSettings( props ) {
 			<BaseControl
 				id="flexible-table-block/table-min-width"
 				label={ __( 'Table Min Width', 'flexible-table-block' ) }
+				className="ftb-width-control"
 			>
 				<UnitControl
 					value={ tableStylesObj?.minWidth }
@@ -375,7 +378,7 @@ export default function TableSettings( props ) {
 			<PaddingControl
 				id="flexible-table-block/table-padding"
 				label={ __( 'Table Padding', 'flexible-table-block' ) }
-				help='Table padding is only enable when "cell borders" is set to "separate".'
+				help='Table padding is only enable when "Cell Borders" is set to "Separate".'
 				values={ pickPadding( tableStylesObj ) }
 				onChange={ onChangePadding }
 			/>
@@ -389,7 +392,7 @@ export default function TableSettings( props ) {
 			<BorderWidthControl
 				id="flexible-table-block/table-border-width"
 				label={ __( 'Table Border Width', 'flexible-table-block' ) }
-				help='Table border width is only enable when "cell borders" is set to "separate".'
+				help='Table border width is only enable when "Cell Borders" is set to "Separate".'
 				values={ pickBorderWidth( tableStylesObj ) }
 				onChange={ onChangeBorderWidth }
 			/>

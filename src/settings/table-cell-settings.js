@@ -154,6 +154,7 @@ export default function TableCellSettings( props ) {
 			<BaseControl
 				id="flexible-table-block/cell-font-size"
 				label={ __( 'Cell Font Size', 'flexible-table-block' ) }
+				className="ftb-font-size-control"
 			>
 				<UnitControl
 					value={ cellStylesObj?.fontSize }
@@ -165,6 +166,7 @@ export default function TableCellSettings( props ) {
 			<BaseControl
 				id="flexible-table-block/cell-width"
 				label={ __( 'Cell Width', 'flexible-table-block' ) }
+				className="ftb-width-control"
 			>
 				<UnitControl
 					value={ cellStylesObj?.width }

@@ -240,6 +240,21 @@
 	margin-top: 8px;
 }
 
+.ftb-font-size-control,
+.ftb-width-control {
+
+	.components-input-control {
+		max-width: 100px;
+	}
+}
+
+.ftb-line-height-control {
+
+	.components-base-control {
+		max-width: 60px;
+	}
+}
+
 .ftb-border-radius-control,
 .ftb-border-width-control,
 .ftb-border-style-control,

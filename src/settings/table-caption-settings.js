@@ -80,6 +80,7 @@ export default function TableCaptionSettings( props ) {
 			<BaseControl
 				id="flexible-table-block/caption-font-size"
 				label={ __( 'Caption Font Size', 'flexible-table-block' ) }
+				className="ftb-font-size-control"
 			>
 				<UnitControl
 					value={ captionStylesObj?.fontSize }
@@ -91,17 +92,16 @@ export default function TableCaptionSettings( props ) {
 			<BaseControl
 				id="flexible-table-block/caption-line-height"
 				label={ __( 'Caption Line Height', 'flexible-table-block' ) }
+				className="ftb-line-height-control"
 			>
-				<div className="block-editor-line-height-control">
-					<TextControl
-						autoComplete="off"
-						onChange={ onChangeLineHeight }
-						step={ 0.1 }
-						type="number"
-						value={ captionStylesObj?.lineHeight || '' }
-						min={ 0 }
-					/>
-				</div>
+				<TextControl
+					autoComplete="off"
+					onChange={ onChangeLineHeight }
+					step={ 0.1 }
+					type="number"
+					value={ captionStylesObj?.lineHeight || '' }
+					min={ 0 }
+				/>
 			</BaseControl>
 			<PaddingControl
 				id="flexible-table-block/caption-padding"

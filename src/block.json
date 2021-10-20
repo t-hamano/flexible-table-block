@@ -188,7 +188,7 @@
 	},
 	"supports": {
 		"anchor": true,
-		"align": true,
+		"align": [ "left", "right", "wide", "full"],
 		"color": {
 			"__experimentalSkipSerialization": true,
 			"gradients": true

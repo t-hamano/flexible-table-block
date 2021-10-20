@@ -32,7 +32,7 @@ class Helper {
 
 		$option = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
 
-		// Genelate styles based on global settings.
+		// Genelate styles based on global setting.
 		foreach ( $option as $key => $value ) {
 
 			if ( ! $value ) {

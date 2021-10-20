@@ -96,6 +96,7 @@ function TableEdit( props ) {
 		const insertRowIndex = offset === 0 ? rowIndex : rowIndex + offset + rowSpan - 1;
 
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
+
 		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells();
 		setSelectedLine();

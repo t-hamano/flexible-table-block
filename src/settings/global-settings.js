@@ -163,7 +163,7 @@ export default function GlobalSettings() {
 						) }
 						<br />
 						{ __(
-							'First of all, it is recommended to set the default style of the table from "Global Settings".',
+							'First of all, it is recommended to set the default style of the table from "Global Setting".',
 							'flexible-table-block'
 						) }
 					</p>
@@ -214,7 +214,7 @@ export default function GlobalSettings() {
 						<BaseControl
 							id="flexible-table-block/global-table-width"
 							label={ __( 'Table Width', 'flexible-table-block' ) }
-							className="ftb-global-setting-modal__styles-item"
+							className="ftb-global-setting-modal__styles-item ftb-width-control"
 						>
 							<UnitControl
 								units={ tableWidthUnits }
@@ -234,7 +234,7 @@ export default function GlobalSettings() {
 						<BaseControl
 							id="flexible-table-block/global-table-max-width"
 							label={ __( 'Table Max Width', 'flexible-table-block' ) }
-							className="ftb-global-setting-modal__styles-item"
+							className="ftb-global-setting-modal__styles-item ftb-width-control"
 						>
 							<UnitControl
 								units={ tableWidthUnits }
@@ -591,7 +591,7 @@ export default function GlobalSettings() {
 					{ isAdministrator && (
 						<ToggleControl
 							label={ __(
-								'Show global settings link to non-administrative users',
+								'Show global setting link to non-administrative users',
 								'flexible-table-block'
 							) }
 							checked={ !! options.show_global_setting }
