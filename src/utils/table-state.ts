@@ -151,7 +151,7 @@ export function insertRow(
 					.filter(
 						( cell: VCell ) =>
 							cell.rowIndex < rowIndex &&
-							cell.rowSpan + rowIndex - 1 > rowIndex &&
+							cell.rowIndex + cell.rowSpan - 1 >= rowIndex &&
 							cell.vColIndex <= vColIndex &&
 							vColIndex <= cell.vColIndex + cell.colSpan - 1
 					);
@@ -285,25 +285,27 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 	// Whether to add a column after the last column.
 	const isLastColumnInsert: boolean = vTable.body[ 0 ].cells.length === vColIndex;
 
-	// Some cells will not be filled if there are cells with rowspan in the column to be inserted,
-	// so record the rowindex of the additional cells to be inserted in advance.
-	const rowIndexesToFill: { head: number[]; body: number[]; foot: number[] } = {
-		head: [],
-		body: [],
-		foot: [],
-	};
+	const vRows: VRow[] = toVirtualRows( vTable );
 
-	[ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
-		vTable[ sectionName as SectionName ].forEach( ( row: VRow, cRowIndex ) => {
-			row.cells.forEach( ( cell, cVColIndex ) => {
-				if ( cVColIndex === vColIndex && cell.rowSpan > 1 ) {
-					for ( let i = 1; i < cell.rowSpan; i++ ) {
-						rowIndexesToFill[ sectionName as SectionName ].push( cRowIndex + i );
-					}
-				}
-			} );
-		} );
-	} );
+	// // Some cells will not be filled if there are cells with rowspan in the column to be inserted,
+	// // so record the rowindex of the additional cells to be inserted in advance.
+	// const rowIndexesToFill: { head: number[]; body: number[]; foot: number[] } = {
+	// 	head: [],
+	// 	body: [],
+	// 	foot: [],
+	// };
+
+	// [ 'head', 'body', 'foot' ].forEach( ( sectionName ) => {
+	// 	vTable[ sectionName as SectionName ].forEach( ( row: VRow, cRowIndex ) => {
+	// 		row.cells.forEach( ( cell, cVColIndex ) => {
+	// 			if ( cVColIndex === vColIndex && cell.rowSpan > 1 ) {
+	// 				for ( let i = 1; i < cell.rowSpan; i++ ) {
+	// 					rowIndexesToFill[ sectionName as SectionName ].push( cRowIndex + i );
+	// 				}
+	// 			}
+	// 		} );
+	// 	} );
+	// } );
 
 	return mapValues( vTable, ( section, sectionName ) => {
 		if ( ! section.length ) return [];
@@ -340,6 +342,18 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 
 				// Insert cell (between columns).
 				if ( cVColIndex === vColIndex ) {
+					// Whether the cell to be inserted is a virtual cell filled with colSpan.
+					const colSpanCells: VCell[] = vRows
+						.reduce( ( colSpancells: VCell[], row ) => colSpancells.concat( row.cells ), [] )
+						.filter(
+							( colSpancell: VCell ) =>
+								colSpancell.colSpan > 1 &&
+								colSpancell.rowIndex <= cRowIndex &&
+								colSpancell.rowIndex + colSpancell.rowSpan - 1 >= cRowIndex &&
+								colSpancell.vColIndex <= vColIndex &&
+								vColIndex <= colSpancell.vColIndex + colSpancell.colSpan - 1
+						);
+
 					newCells.push(
 						{
 							content: '',
@@ -349,7 +363,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 							sectionName: cell.sectionName,
 							rowIndex: cell.rowIndex,
 							vColIndex,
-							isHidden: false,
+							isHidden: !! colSpanCells.length,
 						},
 						{
 							...cell,
@@ -359,26 +373,26 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 					return newCells;
 				}
 
-				// Insert cell (additional).
-				if (
-					cVColIndex === vColIndex &&
-					rowIndexesToFill[ sectionName as SectionName ].includes( cRowIndex )
-				) {
-					newCells.push(
-						{
-							content: '',
-							tag: 'head' === sectionName ? 'th' : 'td',
-							rowSpan: 1,
-							colSpan: 1,
-							sectionName: cell.sectionName,
-							rowIndex: cRowIndex,
-							vColIndex: vColIndex + 1,
-							isHidden: false,
-						},
-						cell
-					);
-					return newCells;
-				}
+				// // Insert cell (additional).
+				// if (
+				// 	cVColIndex === vColIndex &&
+				// 	rowIndexesToFill[ sectionName as SectionName ].includes( cRowIndex )
+				// ) {
+				// 	newCells.push(
+				// 		{
+				// 			content: '',
+				// 			tag: 'head' === sectionName ? 'th' : 'td',
+				// 			rowSpan: 1,
+				// 			colSpan: 1,
+				// 			sectionName: cell.sectionName,
+				// 			rowIndex: cRowIndex,
+				// 			vColIndex: vColIndex + 1,
+				// 			isHidden: false,
+				// 		},
+				// 		cell
+				// 	);
+				// 	return newCells;
+				// }
 
 				// increment after column vCol index.
 				if ( vColIndex <= cVColIndex ) {
