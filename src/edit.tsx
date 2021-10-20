@@ -51,8 +51,7 @@ import {
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 import type { BlockEditProps } from '@wordpress/blocks';
-import type BlockAttributes from './BlockAttributes';
-import type { SectionName } from './BlockAttributes';
+import type { BlockAttributes, SectionName } from './BlockAttributes';
 import type { KeyboardEvent } from 'react';
 
 const justifyIcons = {
@@ -64,7 +63,7 @@ const justifyIcons = {
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const { attributes, setAttributes } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
-	const [ selectedCells, setSelectedCells ] = useState< VCell[] >( [] );
+	const [ selectedCells, setSelectedCells ] = useState< VCell[] | undefined >();
 	const [ selectedLine, setSelectedLine ] = useState< {
 		sectionName: SectionName;
 		rowIndex: number;
@@ -103,7 +102,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onInsertRow = ( offset: number ) => {
-		if ( selectedCells.length > 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const { sectionName, rowIndex, rowSpan } = selectedCells[ 0 ];
 
@@ -118,7 +117,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onDeleteRow = () => {
-		if ( selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const { sectionName, rowIndex } = selectedCells[ 0 ];
 
@@ -140,7 +139,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onInsertColumn = ( offset: number ) => {
-		if ( selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const { vColIndex, colSpan } = selectedCells[ 0 ];
 
@@ -155,7 +154,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onDeleteColumn = () => {
-		if ( selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const { vColIndex } = selectedCells[ 0 ];
 
@@ -204,37 +203,37 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		{
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
-			isDisabled: selectedCells.length !== 1,
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onInsertRow( 0 ),
 		},
 		{
 			icon: tableRowAfter,
 			title: __( 'Insert row after', 'flexible-table-block' ),
-			isDisabled: selectedCells.length !== 1,
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onInsertRow( 1 ),
 		},
 		{
 			icon: tableRowDelete,
 			title: __( 'Delete row', 'flexible-table-block' ),
-			isDisabled: selectedCells.length !== 1,
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onDeleteRow(),
 		},
 		{
 			icon: tableColumnBefore,
 			title: __( 'Insert column before', 'flexible-table-block' ),
-			isDisabled: selectedCells.length !== 1,
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onInsertColumn( 0 ),
 		},
 		{
 			icon: tableColumnAfter,
 			title: __( 'Insert column after', 'flexible-table-block' ),
-			isDisabled: selectedCells.length !== 1,
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onInsertColumn( 1 ),
 		},
 		{
 			icon: tableColumnDelete,
 			title: __( 'Delete column', 'flexible-table-block' ),
-			isDisabled: selectedCells.length !== 1,
+			isDisabled: ( selectedCells || [] ).length !== 1,
 			onClick: () => onDeleteColumn(),
 		},
 		{
@@ -290,7 +289,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const tableCellSettingsLabel =
-		selectedCells.length > 1
+		selectedCells && selectedCells.length > 1
 			? __( 'Multi Cells Settings', 'flexible-table-block' )
 			: __( 'Cell Settings', 'flexible-table-block' );
 
@@ -340,7 +339,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 						>
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
-						{ !! selectedCells.length && (
+						{ !! selectedCells?.length && (
 							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
 								<TableCellSettings { ...tableCellSettingsProps } />
 							</PanelBody>

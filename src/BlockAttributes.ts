@@ -2,7 +2,11 @@
 export type SectionName = 'head' | 'body' | 'foot';
 
 // Table attributes
-export type TableAttributes = Record< SectionName, { cells: Cell[] }[] >;
+export type TableAttributes = Record< SectionName, Row[] >;
+
+export interface Row {
+	cells: Cell[];
+}
 
 // Table cell attributes
 export interface Cell {
@@ -14,10 +18,11 @@ export interface Cell {
 	colSpan?: string;
 }
 
-export default interface BlockAttributes extends TableAttributes {
+export interface BlockAttributes extends TableAttributes {
 	contentJustification: 'left' | 'center' | 'right' | undefined;
 	hasFixedLayout: boolean;
 	isScrollOnPc: boolean;
+	isScrollOnMobile: boolean;
 	isStackedOnMobile: boolean;
 	sticky: string;
 	tableStyles: string;

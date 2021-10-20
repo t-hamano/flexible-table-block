@@ -16,7 +16,7 @@ import {
 	updatePadding,
 } from './style-updater';
 import { toInteger } from './helper';
-import type { Cell, SectionName, TableAttributes } from 'src/types';
+import type { Cell, Row, SectionName, TableAttributes } from '../BlockAttributes';
 
 // Virtual table
 export type VTable = Record< SectionName, VRow[] >;
@@ -424,7 +424,8 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
  * @param  selectedCells Current selected cells.
  * @return New virtual table state.
  */
-export function mergeCells( vTable: VTable, selectedCells: VCell[] ): VTable {
+export function mergeCells( vTable: VTable, selectedCells: VCell[] | undefined ): VTable {
+	if ( ! selectedCells ) return vTable;
 	if ( ! selectedCells.length ) return vTable;
 
 	const sectionName: SectionName = selectedCells[ 0 ].sectionName as SectionName;
@@ -506,7 +507,8 @@ export function mergeCells( vTable: VTable, selectedCells: VCell[] ): VTable {
  * @param  selectedCells Current selected cells.
  * @return  New virtual table state.
  */
-export function splitMergedCells( vTable: VTable, selectedCells: VCell[] ): VTable {
+export function splitMergedCells( vTable: VTable, selectedCells: VCell[] | undefined ): VTable {
+	if ( ! selectedCells ) return vTable;
 	// Find the rowspan & colspan cells.
 	const rowColSpanCells: VCell[] = selectedCells.filter(
 		( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1
@@ -717,7 +719,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 		);
 
 		// Mapping the actual section cells on the virtual section cell.
-		section.forEach( ( row, cRowIndex: number ) => {
+		section.forEach( ( row: Row, cRowIndex: number ) => {
 			row.cells.forEach( ( cell ) => {
 				// Colmun index on the virtual section excluding cells already marked as "filled".
 				const vColIndex: number = vSection[ cRowIndex ].cells.findIndex(

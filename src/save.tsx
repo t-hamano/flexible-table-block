@@ -6,9 +6,12 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
+
 import {
 	RichText,
+	// @ts-ignore
 	useBlockProps,
+	// @ts-ignore
 	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,
 } from '@wordpress/block-editor';
 
@@ -16,8 +19,11 @@ import {
  * Internal dependencies
  */
 import { convertToObject } from './utils/style-converter';
+import type { BlockSaveProps } from '@wordpress/blocks';
+import type { BlockAttributes, SectionName, Row } from './BlockAttributes';
+import { toInteger } from './utils/helper';
 
-export default function save( { attributes } ) {
+export default function save( { attributes }: BlockSaveProps< BlockAttributes > ) {
 	const {
 		contentJustification,
 		tableStyles,
@@ -59,10 +65,10 @@ export default function save( { attributes } ) {
 
 	const hasCaption = ! RichText.isEmpty( caption );
 
-	const Section = ( { type, rows } ) => {
+	const Section = ( { type, rows }: { type: SectionName; rows: Row[] } ) => {
 		if ( ! rows.length ) return null;
 
-		const Tag = `t${ type }`;
+		const Tag: 'thead' | 'tbody' | 'tfoot' = `t${ type }`;
 
 		return (
 			<Tag>
@@ -74,8 +80,8 @@ export default function save( { attributes } ) {
 								tagName={ tag }
 								className={ className }
 								value={ content }
-								rowSpan={ rowSpan > 1 ? rowSpan : undefined }
-								colSpan={ colSpan > 1 ? colSpan : undefined }
+								rowSpan={ toInteger( rowSpan ) > 1 ? toInteger( rowSpan ) : undefined }
+								colSpan={ toInteger( colSpan ) > 1 ? toInteger( colSpan ) : undefined }
 								style={ convertToObject( styles ) }
 							/>
 						) ) }

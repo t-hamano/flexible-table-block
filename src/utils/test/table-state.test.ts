@@ -5,10 +5,10 @@ import {
 	insertRow,
 	VCell,
 	VRow,
-	SectionName,
 	VTable,
 } from '../table-state';
 import { times } from 'lodash';
+import type { SectionName } from '../../BlockAttributes';
 
 const getRow = (
 	cells: number,
