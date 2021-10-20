@@ -15,6 +15,7 @@ import {
 	updateBorderWidth,
 	updatePadding,
 } from './style-updater';
+import { toNumber } from './helper';
 
 // Section name types
 export type SectionName = 'head' | 'body' | 'foot';
@@ -679,7 +680,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 		// Create a virtual section array.
 		const rowCount: number = section.length;
 		const colCount: number = section[ 0 ].cells.reduce( ( count: number, cell: Cell ) => {
-			return count + ( cell.colSpan ? parseInt( cell.colSpan ) : 1 );
+			return count + toNumber( cell.colSpan, 1 );
 		}, 0 );
 
 		const vSection: VSection = times(
@@ -712,13 +713,16 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 					( { isFilled } ) => ! isFilled
 				);
 
+				const rowSpan = toNumber( cell.rowSpan, 1 );
+				const colSpan = toNumber( cell.colSpan, 1 );
+
 				// Mark the cell as "filled" and record the position on the virtual section.
 				vSection[ cRowIndex ].cells[ vColIndex ] = {
 					...cell,
 					isFilled: true,
 					sectionName,
-					rowSpan: cell.rowSpan ? parseInt( cell.rowSpan ) : 1,
-					colSpan: cell.colSpan ? parseInt( cell.colSpan ) : 1,
+					rowSpan,
+					colSpan,
 					rowIndex: cRowIndex,
 					vColIndex,
 					isHidden: false,
@@ -726,19 +730,19 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 
 				// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
 				// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
-				if ( cell.colSpan && parseInt( cell.colSpan ) > 1 ) {
-					for ( let i = 1; i < parseInt( cell.colSpan ); i++ ) {
+				if ( colSpan > 1 ) {
+					for ( let i = 1; i < colSpan; i++ ) {
 						vSection[ cRowIndex ].cells[ vColIndex + i ].isFilled = true;
 						vSection[ cRowIndex ].cells[ vColIndex + i ].isHidden = true;
 					}
 				}
-				if ( cell.rowSpan && parseInt( cell.rowSpan ) > 1 ) {
-					for ( let i = 1; i < parseInt( cell.rowSpan ); i++ ) {
+				if ( rowSpan > 1 ) {
+					for ( let i = 1; i < rowSpan; i++ ) {
 						vSection[ cRowIndex + i ].cells[ vColIndex ].isFilled = true;
 						vSection[ cRowIndex + i ].cells[ vColIndex ].isHidden = true;
 
-						if ( cell.colSpan && parseInt( cell.colSpan ) > 1 ) {
-							for ( let j = 1; j < parseInt( cell.colSpan ); j++ ) {
+						if ( colSpan > 1 ) {
+							for ( let j = 1; j < colSpan; j++ ) {
 								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isFilled = true;
 								vSection[ cRowIndex + i ].cells[ vColIndex + j ].isHidden = true;
 							}

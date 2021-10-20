@@ -111,3 +111,27 @@ export function parseUnit( initialValue: string ): [ number, string ] {
 
 	return [ num, unit.toLowerCase() ];
 }
+
+/**
+ * Convert string to number.
+ *
+ * @param  value        Value to converted.
+ * @param  defaultValue Value to be used when the value is falsy.
+ */
+export function toNumber( value: number | string | undefined, defaultValue = 0 ) {
+	if ( ! value ) {
+		return defaultValue;
+	}
+
+	if ( typeof value === 'number' ) {
+		return value;
+	}
+
+	const converted = parseFloat( value );
+
+	if ( isNaN( converted ) ) {
+		return defaultValue;
+	}
+
+	return converted || defaultValue;
+}

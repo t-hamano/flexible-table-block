@@ -1,4 +1,4 @@
-import { parseCssValue, parseUnit, sanitizeUnitValue } from '../helper';
+import { parseCssValue, parseUnit, sanitizeUnitValue, toNumber } from '../helper';
 
 describe( 'helper', () => {
 	describe( 'parseCssValue', () => {
@@ -79,6 +79,24 @@ describe( 'helper', () => {
 
 		it( 'should return zero if it is not a number.', () => {
 			expect( parseUnit( 'red' ) ).toStrictEqual( [ 0, '' ] );
+		} );
+	} );
+
+	describe( 'toNumber', () => {
+		it( 'should return numbers as numbers', () => {
+			expect( toNumber( 10 ) ).toStrictEqual( 10 );
+			expect( toNumber( 2.71828 ) ).toStrictEqual( 2.71828 );
+		} );
+
+		it( 'should convert string to number', () => {
+			expect( toNumber( '20' ) ).toStrictEqual( 20 );
+			expect( toNumber( '3.1415' ) ).toStrictEqual( 3.1415 );
+		} );
+
+		it( 'should return the default value, if falsy is passed.', () => {
+			expect( toNumber( '', 1 ) ).toStrictEqual( 1 );
+			expect( toNumber( undefined, 5 ) ).toStrictEqual( 5 );
+			expect( toNumber( 0, 5 ) ).toStrictEqual( 5 );
 		} );
 	} );
 } );
