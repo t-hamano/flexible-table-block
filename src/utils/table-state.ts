@@ -30,11 +30,7 @@ export interface VRow {
 }
 
 // Virtual table cell state
-export interface VCell {
-	content: string;
-	styles?: string;
-	tag: 'td' | 'th';
-	className?: string;
+export interface VCell extends Omit< Cell, 'rowSpan' | 'colSpan' > {
 	rowSpan: number;
 	colSpan: number;
 	sectionName: SectionName;
