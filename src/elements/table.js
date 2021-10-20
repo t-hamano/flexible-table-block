@@ -244,9 +244,9 @@ export default function Table( props ) {
 		if ( isEmptySection( vTable[ sectionName ] ) ) return result;
 		return {
 			...result,
-			[ sectionName ]: vTable[ sectionName ]
-				.map( ( row ) => ( { cells: row.cells.filter( ( cell ) => ! cell.isHidden ) } ) )
-				.filter( ( row ) => row.cells.length ),
+			[ sectionName ]: vTable[ sectionName ].map( ( row ) => ( {
+				cells: row.cells.filter( ( cell ) => ! cell.isHidden ),
+			} ) ),
 		};
 	}, {} );
 

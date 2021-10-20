@@ -137,21 +137,36 @@ export function insertRow(
 	// Number of columns in the row to be inserted.
 	const newRowColCount: number = vTable.body[ 0 ].cells.length;
 
+	const vRows: VRow[] = toVirtualRows( vTable );
+
 	// Row state to be inserted.
 	const newRow: VRow = {
 		cells: times(
 			newRowColCount,
-			( vColIndex ): VCell => ( {
-				content: '',
-				tag: 'head' === sectionName ? 'th' : 'td',
-				rowSpan: 1,
-				colSpan: 1,
-				sectionName,
-				rowIndex,
-				vColIndex,
-				isFirstSelected: false,
-				isHidden: false,
-			} )
+			( vColIndex ): VCell => {
+				// Find the cell with rowspan that covers the cell in the inserted row.
+				const rowSpanCells: VCell[] = vRows
+					.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
+					.filter(
+						( cell: VCell ) =>
+							cell.rowIndex < rowIndex &&
+							cell.rowSpan + rowIndex - 1 > rowIndex &&
+							cell.vColIndex <= vColIndex &&
+							vColIndex <= cell.vColIndex + cell.colSpan - 1
+					);
+
+				return {
+					content: '',
+					tag: 'head' === sectionName ? 'th' : 'td',
+					rowSpan: 1,
+					colSpan: 1,
+					sectionName,
+					rowIndex,
+					vColIndex,
+					isFirstSelected: false,
+					isHidden: !! rowSpanCells.length,
+				};
+			}
 		),
 	};
 
@@ -176,7 +191,8 @@ export function insertRow(
 						rowSpan: cell.rowSpan + 1,
 					};
 				}
-				return { ...cell, rowIndex: cRowIndex };
+
+				return cell;
 			} ),
 		} ) ),
 	};
@@ -215,31 +231,28 @@ export function deleteRow(
 
 	return {
 		...vTable,
-		[ sectionName ]: vTable[ sectionName ].map( ( { cells }, cRowIndex ) => ( {
-			cells: cells.map( ( cell ) => {
-				// Contract cells with rowspan in the before rows.
-				if (
-					cell.rowSpan > 1 &&
-					cRowIndex < rowIndex &&
-					cRowIndex + cell.rowSpan - 1 >= rowIndex
-				) {
-					return {
-						...cell,
-						rowSpan: cell.rowSpan - 1,
-					};
-				}
+		[ sectionName ]: vTable[ sectionName ].reduce( ( newRows: VRow[], row, cRowIndex ) => {
+			if ( cRowIndex === rowIndex ) return newRows;
 
-				// Cells to be deleted (Mark as deletion).
-				if ( cRowIndex === rowIndex ) {
-					return {
-						...cell,
-						isHidden: true,
-					};
-				}
+			newRows.push( {
+				cells: row.cells.map( ( cell ) => {
+					// Contract cells with rowspan in the before rows.
+					if (
+						cell.rowSpan > 1 &&
+						cRowIndex < rowIndex &&
+						cRowIndex + cell.rowSpan - 1 >= rowIndex
+					) {
+						return {
+							...cell,
+							rowSpan: cell.rowSpan - 1,
+						};
+					}
 
-				return cell;
-			} ),
-		} ) ),
+					return cell;
+				} ),
+			} );
+			return newRows;
+		}, [] ),
 	};
 }
 
@@ -762,25 +775,20 @@ export function toTableAttributes( vTable: VTable ): TableAttributes {
 	return mapValues( vTable, ( vSection ) => {
 		if ( ! vSection.length ) return [];
 
-		return (
-			vSection
-				.map( ( { cells } ) => ( {
-					cells: cells
-						// Delete cells marked as deletion.
-						.filter( ( cell ) => ! cell.isHidden )
-						// Keep only the properties needed.
-						.map( ( cell ) => ( {
-							content: cell.content,
-							styles: cell.styles,
-							tag: cell.tag,
-							className: cell.className,
-							rowSpan: cell.rowSpan > 1 ? String( cell.rowSpan ) : undefined,
-							colSpan: cell.colSpan > 1 ? String( cell.colSpan ) : undefined,
-						} ) ),
-				} ) )
-				// Delete empty row.
-				.filter( ( { cells } ) => cells.length )
-		);
+		return vSection.map( ( { cells } ) => ( {
+			cells: cells
+				// Delete cells marked as deletion.
+				.filter( ( cell ) => ! cell.isHidden )
+				// Keep only the properties needed.
+				.map( ( cell ) => ( {
+					content: cell.content,
+					styles: cell.styles,
+					tag: cell.tag,
+					className: cell.className,
+					rowSpan: cell.rowSpan > 1 ? String( cell.rowSpan ) : undefined,
+					colSpan: cell.colSpan > 1 ? String( cell.colSpan ) : undefined,
+				} ) ),
+		} ) );
 	} );
 }
 
