@@ -257,6 +257,14 @@ export function deleteRow(
 						};
 					}
 
+					// decrement row index.
+					if ( cRowIndex > rowIndex ) {
+						return {
+							...cell,
+							rowIndex: cell.rowIndex - 1,
+						};
+					}
+
 					return cell;
 				} ),
 			} );
@@ -324,14 +332,14 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 						colSpan: 1,
 						sectionName: cell.sectionName,
 						rowIndex: cell.rowIndex,
-						vColIndex: cell.vColIndex + 1,
+						vColIndex: vColIndex + 1,
 						isHidden: false,
 					} );
 					return newCells;
 				}
 
 				// Insert cell (between columns).
-				if ( cVColIndex === vColIndex && ! cell.isHidden ) {
+				if ( cVColIndex === vColIndex ) {
 					newCells.push(
 						{
 							content: '',
@@ -340,10 +348,13 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 							colSpan: 1,
 							sectionName: cell.sectionName,
 							rowIndex: cell.rowIndex,
-							vColIndex: cell.vColIndex - 1,
+							vColIndex,
 							isHidden: false,
 						},
-						cell
+						{
+							...cell,
+							vColIndex: vColIndex + 1,
+						}
 					);
 					return newCells;
 				}
@@ -361,11 +372,20 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 							colSpan: 1,
 							sectionName: cell.sectionName,
 							rowIndex: cRowIndex,
-							vColIndex: cell.vColIndex - 1,
+							vColIndex: vColIndex + 1,
 							isHidden: false,
 						},
 						cell
 					);
+					return newCells;
+				}
+
+				// increment after column vCol index.
+				if ( vColIndex <= cVColIndex ) {
+					newCells.push( {
+						...cell,
+						vColIndex: cVColIndex + 1,
+					} );
 					return newCells;
 				}
 
@@ -390,7 +410,7 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 
 	const colSpanCells: VCell[] = vRows
 		.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
-		.filter( ( cell: VCell ) => cell.colSpan && cell.vColIndex === vColIndex );
+		.filter( ( cell: VCell ) => cell.colSpan > 1 && cell.vColIndex === vColIndex );
 
 	// Split the found colspan cells.
 	if ( colSpanCells.length ) {
@@ -401,28 +421,36 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 		if ( ! section.length ) return [];
 
 		return section.map( ( { cells } ) => ( {
-			cells: cells.map( ( cell, cVColIndex ) => {
+			cells: cells.reduce( ( newCells: VCell[], cell ) => {
+				// Cells to be deleted.
+				if ( cell.vColIndex === vColIndex ) {
+					return newCells;
+				}
+
 				// Contract cells with colspan in the before columns.
 				if (
-					cell.colSpan &&
-					cVColIndex < vColIndex &&
-					cVColIndex + cell.colSpan - 1 >= vColIndex
+					cell.colSpan > 1 &&
+					cell.vColIndex < vColIndex &&
+					cell.vColIndex + cell.colSpan - 1 >= vColIndex
 				) {
-					return {
+					newCells.push( {
 						...cell,
 						colSpan: cell.colSpan - 1,
-					};
+					} );
+					return newCells;
 				}
 
-				// Cells to be deleted (Mark as deletion).
-				if ( cVColIndex === vColIndex ) {
-					return {
+				// decrement vCol index.
+				if ( cell.vColIndex > vColIndex ) {
+					newCells.push( {
 						...cell,
-						isHidden: true,
-					};
+						vColIndex: cell.vColIndex - 1,
+					} );
+					return newCells;
 				}
 
-				return cell;
+				newCells.push( cell );
+				return newCells;
 			}, [] ),
 		} ) );
 	} );
@@ -530,13 +558,7 @@ export function splitMergedCells( vTable: VTable, selectedCells: VCell[] ): VTab
 		} );
 	}
 
-	return mapValues( vTable, ( section ) => {
-		if ( ! section.length ) return [];
-
-		return section.map( ( { cells } ) => ( {
-			cells: cells.map( ( cell ) => cell, [] ),
-		} ) );
-	} );
+	return vTable;
 }
 
 /**
@@ -563,6 +585,8 @@ export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 			vSection[ rowIndex ].cells[ vColIndex + i ] = {
 				...vSection[ rowIndex ].cells[ vColIndex ],
 				content: '',
+				vColIndex: vColIndex + i,
+				isHidden: false,
 			};
 		}
 	}
@@ -572,6 +596,8 @@ export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 			vSection[ rowIndex + i ].cells[ vColIndex ] = {
 				...vSection[ rowIndex ].cells[ vColIndex ],
 				content: '',
+				rowIndex: rowIndex + i,
+				isHidden: false,
 			};
 
 			if ( colSpan > 1 ) {
@@ -579,6 +605,9 @@ export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 					vSection[ rowIndex + i ].cells[ vColIndex + j ] = {
 						...vSection[ rowIndex ].cells[ vColIndex ],
 						content: '',
+						rowIndex: rowIndex + i,
+						vColIndex: vColIndex + i,
+						isHidden: false,
 					};
 				}
 			}
