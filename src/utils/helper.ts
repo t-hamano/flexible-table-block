@@ -5,16 +5,6 @@ import _, { identity, isEmpty, isObject, mapValues, pickBy } from 'lodash';
 
 const DEFAULT_PRECISION: number = 4;
 
-// sanitizeUnitValue function option
-interface SanitizeOptions {
-	minNum?: number;
-	maxNum?: number;
-	precision?: number;
-}
-
-// Array with four values for CSS
-export type FourCssValues = [ string, string, string, string ];
-
 /**
  * Removed falsy values from nested object.
  *
@@ -31,6 +21,9 @@ export const cleanEmptyObject = ( object: {} ): {} | undefined => {
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
 };
 
+// Array with four values for CSS
+export type FourCssValues = [ string, string, string, string ];
+
 /**
  * Convert short-hand/long-hand CSS values into an array with four values.
  *
@@ -38,10 +31,6 @@ export const cleanEmptyObject = ( object: {} ): {} | undefined => {
  * @return Array with four values.
  */
 export function parseCssValue( cssValue: string ): FourCssValues {
-	if ( typeof cssValue !== 'string' ) {
-		return [ '', '', '', '' ];
-	}
-
 	const cssValues: string[] = cssValue.split( ' ' ).map( ( value: string ) => value.toLowerCase() );
 
 	switch ( cssValues.length ) {
@@ -56,6 +45,13 @@ export function parseCssValue( cssValue: string ): FourCssValues {
 		default:
 			return [ '', '', '', '' ];
 	}
+}
+
+// sanitizeUnitValue function option
+interface SanitizeOptions {
+	minNum?: number;
+	maxNum?: number;
+	precision?: number;
 }
 
 /**
@@ -118,7 +114,7 @@ export function parseUnit( initialValue: string ): [ number, string ] {
  * @param  value        Value to converted.
  * @param  defaultValue Value to be used when the value is falsy.
  */
-export function toInteger( value: number | string | undefined, defaultValue = 0 ) {
+export function toInteger( value: number | string | undefined, defaultValue = 0 ): number {
 	if ( ! value ) {
 		return defaultValue;
 	}
