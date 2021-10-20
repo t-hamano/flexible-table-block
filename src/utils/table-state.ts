@@ -16,22 +16,7 @@ import {
 	updatePadding,
 } from './style-updater';
 import { toInteger } from './helper';
-
-// Section name types
-export type SectionName = 'head' | 'body' | 'foot';
-
-// Table attributes
-type TableAttributes = Record< SectionName, { cells: Cell[] }[] >;
-
-// Table cell attributes
-export interface Cell {
-	content: string;
-	styles?: string;
-	tag: 'td' | 'th';
-	className?: string;
-	rowSpan?: string;
-	colSpan?: string;
-}
+import type { Cell, SectionName, TableAttributes } from 'src/types';
 
 // Virtual table
 export type VTable = Record< SectionName, VRow[] >;
@@ -52,7 +37,7 @@ export interface VCell {
 	className?: string;
 	rowSpan: number;
 	colSpan: number;
-	sectionName: string;
+	sectionName: SectionName;
 	rowIndex: number;
 	vColIndex: number;
 	isHidden: boolean;
@@ -719,7 +704,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 						tag: 'head' === sectionName ? 'th' : 'td',
 						rowSpan: 1,
 						colSpan: 1,
-						sectionName,
+						sectionName: sectionName as SectionName,
 						isHidden: false,
 						// Whether the actual cell is placed or not.
 						isFilled: false,
@@ -745,7 +730,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 				vSection[ cRowIndex ].cells[ vColIndex ] = {
 					...cell,
 					isFilled: true,
-					sectionName,
+					sectionName: sectionName as SectionName,
 					rowSpan,
 					colSpan,
 					rowIndex: cRowIndex,

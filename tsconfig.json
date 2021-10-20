@@ -30,9 +30,6 @@
 		"resolveJsonModule": true,
 
 		"typeRoots": [ "./node_modules/@types" ],
-		"types": [
-			"@types/jest"
-		]
 	},
 	"include": [
 		"src/**/*",
