@@ -111,3 +111,23 @@ export function parseUnit( initialValue: string ): [ number, string ] {
 
 	return [ num, unit.toLowerCase() ];
 }
+
+/**
+ * Convert string to number.
+ *
+ * @param  value        Value to converted.
+ * @param  defaultValue Value to be used when the value is falsy.
+ */
+export function toInteger( value: number | string | undefined, defaultValue = 0 ) {
+	if ( ! value ) {
+		return defaultValue;
+	}
+
+	const converted = parseInt( String( value ), 10 );
+
+	if ( isNaN( converted ) ) {
+		return defaultValue;
+	}
+
+	return converted || defaultValue;
+}
