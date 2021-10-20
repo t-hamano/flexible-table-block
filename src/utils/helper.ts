@@ -123,11 +123,7 @@ export function toInteger( value: number | string | undefined, defaultValue = 0 
 		return defaultValue;
 	}
 
-	if ( typeof value === 'number' ) {
-		return Math.floor( value );
-	}
-
-	const converted = parseInt( value, 10 );
+	const converted = parseInt( String( value ), 10 );
 
 	if ( isNaN( converted ) ) {
 		return defaultValue;
