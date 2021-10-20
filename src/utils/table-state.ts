@@ -175,7 +175,15 @@ export function insertRow(
 		[ sectionName ]: [
 			...vTable[ sectionName ].slice( 0, rowIndex ),
 			newRow,
-			...vTable[ sectionName ].slice( rowIndex ),
+			...vTable[ sectionName ].slice( rowIndex ).map( ( { cells } ) => ( {
+				cells: cells.map( ( cell ) => {
+					// increment row index.
+					return {
+						...cell,
+						rowIndex: cell.rowIndex + 1,
+					};
+				} ),
+			} ) ),
 		].map( ( { cells }, cRowIndex ) => ( {
 			cells: cells.map( ( cell ) => {
 				// Expand cells with rowspan in the before and inserted rows.

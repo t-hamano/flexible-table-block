@@ -60,6 +60,8 @@ export default function save( { attributes } ) {
 	const hasCaption = ! RichText.isEmpty( caption );
 
 	const Section = ( { type, rows } ) => {
+		if ( ! rows.length ) return null;
+
 		const Tag = `t${ type }`;
 
 		return (
