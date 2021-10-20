@@ -111,8 +111,7 @@ function TableEdit( props ) {
 		if (
 			sectionName === 'body' &&
 			vTable.body.length === 1 &&
-			vTable.head.length &&
-			vTable.foot.length
+			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
 		) {
 			// eslint-disable-next-line no-alert, no-undef
 			alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
