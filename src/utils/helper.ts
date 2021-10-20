@@ -118,7 +118,7 @@ export function parseUnit( initialValue: string ): [ number, string ] {
  * @param  value        Value to converted.
  * @param  defaultValue Value to be used when the value is falsy.
  */
-export function toInteger( value: number | string | undefined, defaultValue = 0 ) {
+export function toInteger( value: number | string | undefined, defaultValue = 0 ): number {
 	if ( ! value ) {
 		return defaultValue;
 	}
