@@ -333,7 +333,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 								colSpancell.colSpan > 1 &&
 								colSpancell.rowIndex <= cRowIndex &&
 								colSpancell.rowIndex + colSpancell.rowSpan - 1 >= cRowIndex &&
-								colSpancell.vColIndex <= vColIndex &&
+								colSpancell.vColIndex < vColIndex &&
 								vColIndex <= colSpancell.vColIndex + colSpancell.colSpan - 1
 						);
 
