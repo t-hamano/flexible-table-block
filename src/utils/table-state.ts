@@ -49,14 +49,6 @@ interface VRangeIndexes {
 	maxColIndex: number;
 }
 
-// Parameters for creating virtual table
-interface createTableParams {
-	rowCount: number;
-	colCount: number;
-	headerSection: boolean;
-	footerSection: boolean;
-}
-
 /**
  * Creates a table state.
  *
@@ -72,7 +64,12 @@ export function createTable( {
 	colCount,
 	headerSection,
 	footerSection,
-}: createTableParams ) {
+}: {
+	rowCount: number;
+	colCount: number;
+	headerSection: boolean;
+	footerSection: boolean;
+} ) {
 	const createSection = ( rows: number, cols: number, sectionName: SectionName ): VSection => {
 		return times(
 			rows,
