@@ -712,9 +712,8 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 				const vColIndex: number = vSection[ cRowIndex ].cells.findIndex(
 					( { isFilled } ) => ! isFilled
 				);
-
-				const rowSpan = toNumber( cell.rowSpan, 1 );
-				const colSpan = toNumber( cell.colSpan, 1 );
+				const rowSpan = Math.floor( toNumber( cell.rowSpan, 1 ) );
+				const colSpan = Math.floor( toNumber( cell.colSpan, 1 ) );
 
 				// Mark the cell as "filled" and record the position on the virtual section.
 				vSection[ cRowIndex ].cells[ vColIndex ] = {
