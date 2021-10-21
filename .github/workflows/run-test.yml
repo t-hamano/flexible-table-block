@@ -1,0 +1,65 @@
+name: Tests
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Running the tests
+        run: npm run lint
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Running the tests
+        run: npm run test:unit
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install WordPress
+        run: |
+          npm run wp-env start
+
+      - name: Running the tests
+        run: |
+          npm run test:e2e
