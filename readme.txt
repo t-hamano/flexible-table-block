@@ -41,7 +41,6 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
-
 test
 = 2.0.2 =
 * Fix: deploy action
