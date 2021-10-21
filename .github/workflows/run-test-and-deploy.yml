@@ -2,7 +2,7 @@ name: Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ develop ]
   pull_request:
     branches: [ main, develop ]
 
@@ -70,17 +70,17 @@ jobs:
     needs: [lint, unit-tests, e2e-tests]
     steps:
       - name: Checkout
-        if: contains(github.ref, 'tags/')
+        if: contains(github.ref, 'tags/') && github.ref == 'refs/heads/main'
         uses: actions/checkout@v2
 
       - name: Build
-        if: contains(github.ref, 'tags/')
+        if: contains(github.ref, 'tags/') && github.ref == 'refs/heads/main'
         run: |
           npm ci
           npm run build
 
       - name: WordPress Plugin Deploy
-        if: contains(github.ref, 'tags/')
+        if: contains(github.ref, 'tags/') && github.ref == 'refs/heads/main'
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
           generate-zip: true
@@ -90,7 +90,7 @@ jobs:
           SLUG: flexible-table-block
 
       - name: Upload release asset
-        if: contains(github.ref, 'tags/')
+        if: contains(github.ref, 'tags/') && github.ref == 'refs/heads/main'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
