@@ -4,7 +4,7 @@ Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.8
 Tested up to: 5.8
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,9 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 2.0.6 =
+* Fix: typo
 
 = 2.0.5 =
 * Fix: deploy action

@@ -92,7 +92,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 				className="ftb-placeholder__table-wrap"
 				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
 			>
-				<div className="ftb-placeholder__tbl-ttl">{ __( 'Pleview', 'flexible-table-block' ) }</div>
+				<div className="ftb-placeholder__tbl-ttl">{ __( 'Preview', 'flexible-table-block' ) }</div>
 				<table className={ tableClasses }>
 					{ headerSection && rowCount && colCount && (
 						<thead>
