@@ -9,8 +9,10 @@ import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
+// @ts-ignore
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
-import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
+// @ts-ignore
+import { ToolbarDropdownMenu, PanelBody, Toolbar, Slot } from '@wordpress/components';
 import {
 	blockTable,
 	justifyLeft,
@@ -44,9 +46,13 @@ import {
 	toTableAttributes,
 	toVirtualTable,
 	isEmptySection,
+	VCell,
 } from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
+import type { BlockEditProps } from '@wordpress/blocks';
+import type { BlockAttributes, SectionName } from './BlockAttributes';
+import type { KeyboardEvent } from 'react';
 
 const justifyIcons = {
 	left: justifyLeft,
@@ -54,41 +60,52 @@ const justifyIcons = {
 	right: justifyRight,
 };
 
-function TableEdit( props ) {
+function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const { attributes, setAttributes } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
-	const [ selectedCells, setSelectedCells ] = useState();
-	const [ selectedLine, setSelectedLine ] = useState();
-	const [ selectMode, setSelectMode ] = useState();
+	const [ selectedCells, setSelectedCells ] = useState< VCell[] | undefined >();
+	const [ selectedLine, setSelectedLine ] = useState<
+		| {
+				sectionName?: SectionName;
+				rowIndex?: number;
+		  }
+		| { vColIndex: number }
+	>();
+	const [ selectMode, setSelectMode ] = useState< string >( '' );
 
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
 
-	const options = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
+	const options = useSelect< {
+		// eslint-disable-next-line camelcase
+		show_dot_on_th: boolean;
+		// eslint-disable-next-line camelcase
+		show_control_button: boolean;
+	} >( ( select ) => select( STORE_NAME ).getOptions() );
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable = toVirtualTable( attributes );
 
 	// Monitor pressed key to determine whether multi-select mode or range select mode.
-	const onKeyDown = ( event ) => {
+	const onKeyDown = ( event: KeyboardEvent ) => {
 		if ( event.shiftKey ) {
 			setSelectMode( 'range' );
-		} else if ( event.ctrlKey || event.metakey ) {
+		} else if ( event.ctrlKey || event.metaKey ) {
 			setSelectMode( 'multi' );
 		}
 	};
 
 	const onKeyUp = () => {
-		setSelectMode();
+		setSelectMode( '' );
 	};
 
-	const onChangeContentJustification = ( value ) => {
+	const onChangeContentJustification = ( value: keyof typeof justifyIcons ) => {
 		const newValue = contentJustification === value ? undefined : value;
 		setAttributes( { contentJustification: newValue } );
 	};
 
-	const onInsertRow = ( offset ) => {
-		if ( ( selectedCells || [] ).length !== 1 ) return;
+	const onInsertRow = ( offset: number ) => {
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const { sectionName, rowIndex, rowSpan } = selectedCells[ 0 ];
 
@@ -98,12 +115,12 @@ function TableEdit( props ) {
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
 
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
 	const onDeleteRow = () => {
-		if ( ( selectedCells || [] ).length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const { sectionName, rowIndex } = selectedCells[ 0 ];
 
@@ -120,12 +137,12 @@ function TableEdit( props ) {
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
-	const onInsertColumn = ( offset ) => {
-		if ( ( selectedCells || [] ).length !== 1 ) return;
+	const onInsertColumn = ( offset: number ) => {
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const { vColIndex, colSpan } = selectedCells[ 0 ];
 
@@ -135,33 +152,33 @@ function TableEdit( props ) {
 		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
 
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
 	const onDeleteColumn = () => {
-		if ( ( selectedCells || [] ).length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const { vColIndex } = selectedCells[ 0 ];
 
 		const newVTable = deleteColumn( vTable, { vColIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
 	const onMergeCells = () => {
 		const newVTable = mergeCells( vTable, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
 	const onSplitMergedCells = () => {
 		const newVTable = splitMergedCells( vTable, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
 	const TableJustifyControls = [
@@ -237,7 +254,7 @@ function TableEdit( props ) {
 	];
 
 	const isEmpty = ! [ 'head', 'body', 'foot' ].filter(
-		( sectionName ) => ! isEmptySection( vTable[ sectionName ] )
+		( sectionName ) => ! isEmptySection( vTable[ sectionName as SectionName ] )
 	).length;
 
 	const tablePlaceholderProps = useBlockProps();
@@ -275,7 +292,7 @@ function TableEdit( props ) {
 	};
 
 	const tableCellSettingsLabel =
-		( selectedCells || [] ).length > 1
+		selectedCells && selectedCells.length > 1
 			? __( 'Multi Cells Settings', 'flexible-table-block' )
 			: __( 'Cell Settings', 'flexible-table-block' );
 
@@ -301,6 +318,7 @@ function TableEdit( props ) {
 			{ ! isEmpty && (
 				// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
 				<figure { ...tableFigureProps } tabIndex="-1" onKeyDown={ onKeyDown } onKeyUp={ onKeyUp }>
+					{ /* @ts-ignore */ }
 					<BlockControls group="block">
 						<ToolbarDropdownMenu
 							label={ __( 'Change table justification', 'flexible-table-block' ) }
@@ -324,7 +342,7 @@ function TableEdit( props ) {
 						>
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
-						{ !! ( selectedCells || [] ).length && (
+						{ !! selectedCells?.length && (
 							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
 								<TableCellSettings { ...tableCellSettingsProps } />
 							</PanelBody>
