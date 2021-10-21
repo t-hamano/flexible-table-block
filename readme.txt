@@ -42,6 +42,7 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 
 == Changelog ==
 
+test
 = 2.0.2 =
 * Fix: deploy action
 
