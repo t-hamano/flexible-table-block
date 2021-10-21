@@ -16,22 +16,7 @@ import {
 	updatePadding,
 } from './style-updater';
 import { toInteger } from './helper';
-
-// Section name types
-export type SectionName = 'head' | 'body' | 'foot';
-
-// Table attributes
-type TableAttributes = Record< SectionName, { cells: Cell[] }[] >;
-
-// Table cell attributes
-export interface Cell {
-	content: string;
-	styles?: string;
-	tag: 'td' | 'th';
-	className?: string;
-	rowSpan?: string;
-	colSpan?: string;
-}
+import type { Cell, Row, SectionName, TableAttributes } from '../BlockAttributes';
 
 // Virtual table
 export type VTable = Record< SectionName, VRow[] >;
@@ -45,14 +30,10 @@ export interface VRow {
 }
 
 // Virtual table cell state
-export interface VCell {
-	content: string;
-	styles?: string;
-	tag: 'td' | 'th';
-	className?: string;
+export interface VCell extends Omit< Cell, 'rowSpan' | 'colSpan' > {
 	rowSpan: number;
 	colSpan: number;
-	sectionName: string;
+	sectionName: SectionName;
 	rowIndex: number;
 	vColIndex: number;
 	isHidden: boolean;
@@ -66,14 +47,6 @@ interface VRangeIndexes {
 	maxRowIndex: number;
 	minColIndex: number;
 	maxColIndex: number;
-}
-
-// Parameters for creating virtual table
-interface createTableParams {
-	rowCount: number;
-	colCount: number;
-	headerSection: boolean;
-	footerSection: boolean;
 }
 
 /**
@@ -91,7 +64,12 @@ export function createTable( {
 	colCount,
 	headerSection,
 	footerSection,
-}: createTableParams ) {
+}: {
+	rowCount: number;
+	colCount: number;
+	headerSection: boolean;
+	footerSection: boolean;
+} ) {
 	const createSection = ( rows: number, cols: number, sectionName: SectionName ): VSection => {
 		return times(
 			rows,
@@ -439,8 +417,8 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
  * @param  selectedCells Current selected cells.
  * @return New virtual table state.
  */
-export function mergeCells( vTable: VTable, selectedCells: VCell[] ): VTable {
-	if ( ! selectedCells.length ) return vTable;
+export function mergeCells( vTable: VTable, selectedCells: VCell[] | undefined ): VTable {
+	if ( ! selectedCells || ! selectedCells.length ) return vTable;
 
 	const sectionName: SectionName = selectedCells[ 0 ].sectionName as SectionName;
 
@@ -521,7 +499,8 @@ export function mergeCells( vTable: VTable, selectedCells: VCell[] ): VTable {
  * @param  selectedCells Current selected cells.
  * @return  New virtual table state.
  */
-export function splitMergedCells( vTable: VTable, selectedCells: VCell[] ): VTable {
+export function splitMergedCells( vTable: VTable, selectedCells: VCell[] | undefined ): VTable {
+	if ( ! selectedCells ) return vTable;
 	// Find the rowspan & colspan cells.
 	const rowColSpanCells: VCell[] = selectedCells.filter(
 		( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1
@@ -719,7 +698,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 						tag: 'head' === sectionName ? 'th' : 'td',
 						rowSpan: 1,
 						colSpan: 1,
-						sectionName,
+						sectionName: sectionName as SectionName,
 						isHidden: false,
 						// Whether the actual cell is placed or not.
 						isFilled: false,
@@ -732,7 +711,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 		);
 
 		// Mapping the actual section cells on the virtual section cell.
-		section.forEach( ( row, cRowIndex: number ) => {
+		section.forEach( ( row: Row, cRowIndex: number ) => {
 			row.cells.forEach( ( cell ) => {
 				// Colmun index on the virtual section excluding cells already marked as "filled".
 				const vColIndex: number = vSection[ cRowIndex ].cells.findIndex(
@@ -745,7 +724,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 				vSection[ cRowIndex ].cells[ vColIndex ] = {
 					...cell,
 					isFilled: true,
-					sectionName,
+					sectionName: sectionName as SectionName,
 					rowSpan,
 					colSpan,
 					rowIndex: cRowIndex,
@@ -858,7 +837,7 @@ export function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes 
  * @param  selectedCells Current selected cells.
  * @return True if a rectangle will be formed from the selected cells, false otherwise.
  */
-export function isRectangleSelected( selectedCells: VCell[] ): boolean {
+export function isRectangleSelected( selectedCells: VCell[] | undefined ): boolean {
 	if ( ! selectedCells ) return false;
 
 	// No need to merge If only one or no cell is selected.
@@ -1029,7 +1008,7 @@ export function toRectangledSelectedCells(
  * @param  selectedCells Current selected cells.
  * @return True if the selected cells in the virtual table contain merged cells, false otherwise.
  */
-export function hasMergedCells( selectedCells: VCell[] ): boolean {
+export function hasMergedCells( selectedCells: VCell[] | undefined ): boolean {
 	if ( ! selectedCells ) return false;
 	return selectedCells.some(
 		( { rowSpan, colSpan }: { rowSpan: number; colSpan: number } ) => rowSpan > 1 || colSpan > 1
