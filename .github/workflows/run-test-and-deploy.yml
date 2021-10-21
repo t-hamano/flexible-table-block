@@ -70,17 +70,17 @@ jobs:
     needs: [lint, unit-tests, e2e-tests]
     steps:
       - name: Checkout
-        if: contains(github.ref, 'tags/') && github.base_ref == 'main'
+        if: contains(github.ref, 'tags/')
         uses: actions/checkout@v2
 
       - name: Build
-        if: contains(github.ref, 'tags/') && github.base_ref == 'main'
+        if: contains(github.ref, 'tags/')
         run: |
           npm ci
           npm run build
 
       - name: WordPress Plugin Deploy
-        if: contains(github.ref, 'tags/') && github.base_ref == 'main'
+        if: contains(github.ref, 'tags/')
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
           generate-zip: true
@@ -90,7 +90,7 @@ jobs:
           SLUG: flexible-table-block
 
       - name: Upload release asset
-        if: contains(github.ref, 'tags/') && github.base_ref == 'main'
+        if: contains(github.ref, 'tags/')
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
