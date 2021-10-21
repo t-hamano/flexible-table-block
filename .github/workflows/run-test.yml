@@ -1,9 +1,10 @@
-name: Tests and Deploy
+name: Tests
 
 on:
   push:
-    tags:
-    - "*"
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
 
 jobs:
 
@@ -62,35 +63,3 @@ jobs:
       - name: Running the tests
         run: |
           npm run test:e2e
-
-  deploy:
-    name: Deploy to WP.org
-    runs-on: ubuntu-latest
-    needs: [lint, unit-tests, e2e-tests]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
-      - name: Build
-        run: |
-          npm ci
-          npm run build
-
-      - name: WordPress Plugin Deploy
-        uses: 10up/action-wordpress-plugin-deploy@stable
-        with:
-          generate-zip: true
-        env:
-          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-          SLUG: flexible-table-block
-
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ steps.deploy.outputs.zip-path }}
-          asset_name: ${{ github.event.repository.name }}.zip
-          asset_content_type: application/zip
