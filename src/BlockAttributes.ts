@@ -25,8 +25,8 @@ export interface BlockAttributes extends TableAttributes {
 	isScrollOnMobile: boolean;
 	isStackedOnMobile: boolean;
 	sticky: string;
-	tableStyles: string;
-	captionStyles: string;
+	tableStyles?: string;
+	captionStyles?: string;
 	captionSide: string;
 	caption: string;
 }

@@ -64,10 +64,13 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const { attributes, setAttributes } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCells, setSelectedCells ] = useState< VCell[] | undefined >();
-	const [ selectedLine, setSelectedLine ] = useState< {
-		sectionName: SectionName;
-		rowIndex: number;
-	} >();
+	const [ selectedLine, setSelectedLine ] = useState<
+		| {
+				sectionName?: SectionName;
+				rowIndex?: number;
+		  }
+		| { vColIndex: number }
+	>();
 	const [ selectMode, setSelectMode ] = useState< string >( '' );
 
 	const tableStylesObj = convertToObject( tableStyles );
