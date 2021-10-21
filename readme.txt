@@ -43,7 +43,6 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 == Changelog ==
 
 = 2.0.1 =
-test
 * Doc: add LICENSE
 * Clean: add deploy action
 * Clean: refactoring: edit.js to edit.tsx
