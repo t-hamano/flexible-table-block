@@ -1,0 +1,101 @@
+name: Tests
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Running the tests
+        run: npm run lint
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Running the tests
+        run: npm run test:unit
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install WordPress
+        run: |
+          npm run wp-env start
+
+      - name: Running the tests
+        run: |
+          npm run test:e2e
+
+  deploy:
+    name: Deploy to WP.org
+    runs-on: ubuntu-latest
+    needs: [lint, unit-tests, e2e-tests]
+    steps:
+      - name: Checkout
+        if: contains(github.ref, 'tags/') && github.ref == 'refs/heads/main'
+        uses: actions/checkout@v2
+
+      - name: Build
+        if: contains(github.ref, 'tags/') && github.ref == 'refs/heads/main'
+        run: |
+          npm ci
+          npm run build
+
+      - name: WordPress Plugin Deploy
+        if: contains(github.ref, 'tags/') && github.ref == 'refs/heads/main'
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          generate-zip: true
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SLUG: flexible-table-block
+
+      - name: Upload release asset
+        if: contains(github.ref, 'tags/') && github.ref == 'refs/heads/main'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.deploy.outputs.zip-path }}
+          asset_name: ${{ github.event.repository.name }}.zip
+          asset_content_type: application/zip
