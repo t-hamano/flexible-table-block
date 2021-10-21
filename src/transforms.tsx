@@ -46,7 +46,7 @@ const transforms: Transforms = {
 				// Create virtual object array with the cells placed in positions based on how they actually look.
 				let vTable = toVirtualTable( attributes );
 
-				// Find the colspan cells in the column to be deleted.
+				// Find rowspan & colspan cells.
 				const vRows = toVirtualRows( vTable );
 
 				const rowColSpanCells = vRows
