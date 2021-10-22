@@ -378,7 +378,10 @@ export default function TableSettings( props ) {
 			<PaddingControl
 				id="flexible-table-block/table-padding"
 				label={ __( 'Table Padding', 'flexible-table-block' ) }
-				help='Table padding is only enable when "Cell Borders" is set to "Separate".'
+				help={ __(
+					'Table padding is only enable when "Cell Borders" is set to "Separate".',
+					'flexible-table-block'
+				) }
 				values={ pickPadding( tableStylesObj ) }
 				onChange={ onChangePadding }
 			/>
@@ -392,7 +395,10 @@ export default function TableSettings( props ) {
 			<BorderWidthControl
 				id="flexible-table-block/table-border-width"
 				label={ __( 'Table Border Width', 'flexible-table-block' ) }
-				help='Table border width is only enable when "Cell Borders" is set to "Separate".'
+				help={ __(
+					'Table border width is only enable when "Cell Borders" is set to "Separate".',
+					'flexible-table-block'
+				) }
 				values={ pickBorderWidth( tableStylesObj ) }
 				onChange={ onChangeBorderWidth }
 			/>

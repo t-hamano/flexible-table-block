@@ -479,6 +479,11 @@
 	&__confirm-popover-buttons {
 		display: flex;
 		justify-content: space-between;
+		white-space: nowrap;
+
+		.components-button:first-child {
+			margin-right: 8px;
+		}
 	}
 
 	&__notice {
