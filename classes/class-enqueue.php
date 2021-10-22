@@ -59,6 +59,9 @@ class Enqueue {
 			$asset_file['dependencies'],
 			filemtime( FTB_PATH . '/build/index.js' ),
 		);
+
+		// Load translated strings.
+		wp_set_script_translations( FTB_NAMESPACE, FTB_NAMESPACE );
 	}
 
 	/**
