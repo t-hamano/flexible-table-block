@@ -30,3 +30,8 @@ export interface BlockAttributes extends TableAttributes {
 	captionSide: string;
 	caption: string;
 }
+
+export interface CoreTableBlockAttributes extends TableAttributes {
+	hasFixedLayout: string;
+	caption: string;
+}
