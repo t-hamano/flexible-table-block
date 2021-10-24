@@ -111,70 +111,37 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
-			<div className="ftb-border-color-control__header">
-				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</div>
-			<div className="ftb-border-color-control__controls">
-				<div className="ftb-border-color-control__controls-inner">
-					{ ( isLinked || ! allowSides ) && (
-						<div className="ftb-border-color-control__controls-row">
-							{ hasIndicator && <SideIndicatorControl /> }
-							<Button
-								label={ __( 'All', 'flexible-table-block' ) }
-								className="ftb-border-color-control__indicator"
-								onClick={ () => handleOnPickerOpen() }
-							>
-								{ isMixed ? (
-									__( 'Mixed', 'flexible-table-block' )
-								) : (
-									<ColorIndicator
-										className={ classnames( {
-											'component-color-indicator--none': ! allInputValue,
-											'component-color-indicator--transparent': allInputValue === 'transparent',
-										} ) }
-										colorValue={ allInputValue }
-									/>
-								) }
-							</Button>
-							{ isPickerOpen && ! pickerIndex && (
-								<Popover
-									className="ftb-border-color-control__popover"
-									position="top right"
-									onClose={ handleOnPickerClose }
-								>
-									<ColorPalette
-										colors={ colors }
-										value={ allInputValue }
-										onChange={ handleOnChangeAll }
-									/>
-								</Popover>
-							) }
-						</div>
-					) }
-					{ ! isLinked &&
-						allowSides &&
-						SIDES.map( ( item, index ) => (
-							<div className="ftb-border-color-control__controls-row" key={ index }>
-								{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
+		<BaseControl className={ classNames } help={ help }>
+			<div aria-labelledby={ headingId } role="region">
+				<div className="ftb-border-color-control__header">
+					<Text id={ headingId }>{ label }</Text>
+					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+						{ __( 'Reset', 'flexible-table-block' ) }
+					</Button>
+				</div>
+				<div className="ftb-border-color-control__controls">
+					<div className="ftb-border-color-control__controls-inner">
+						{ ( isLinked || ! allowSides ) && (
+							<div className="ftb-border-color-control__controls-row">
+								{ hasIndicator && <SideIndicatorControl /> }
 								<Button
-									label={ item.label }
+									label={ __( 'All', 'flexible-table-block' ) }
 									className="ftb-border-color-control__indicator"
-									onClick={ () => handleOnPickerOpen( index ) }
+									onClick={ () => handleOnPickerOpen() }
 								>
-									<ColorIndicator
-										className={ classnames( {
-											'component-color-indicator--none': ! values[ item.value ],
-											'component-color-indicator--transparent':
-												values[ item.value ] === 'transparent',
-										} ) }
-										colorValue={ values[ item.value ] }
-									/>
+									{ isMixed ? (
+										__( 'Mixed', 'flexible-table-block' )
+									) : (
+										<ColorIndicator
+											className={ classnames( {
+												'component-color-indicator--none': ! allInputValue,
+												'component-color-indicator--transparent': allInputValue === 'transparent',
+											} ) }
+											colorValue={ allInputValue }
+										/>
+									) }
 								</Button>
-								{ isPickerOpen && pickerIndex === index && (
+								{ isPickerOpen && ! pickerIndex && (
 									<Popover
 										className="ftb-border-color-control__popover"
 										position="top right"
@@ -182,29 +149,64 @@ export default function BorderColorControl( {
 									>
 										<ColorPalette
 											colors={ colors }
-											value={ values[ item.value ] }
-											onChange={ ( value ) => handleOnChange( value, item.value ) }
+											value={ allInputValue }
+											onChange={ handleOnChangeAll }
 										/>
 									</Popover>
 								) }
 							</div>
-						) ) }
+						) }
+						{ ! isLinked &&
+							allowSides &&
+							SIDES.map( ( item, index ) => (
+								<div className="ftb-border-color-control__controls-row" key={ index }>
+									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
+									<Button
+										label={ item.label }
+										className="ftb-border-color-control__indicator"
+										onClick={ () => handleOnPickerOpen( index ) }
+									>
+										<ColorIndicator
+											className={ classnames( {
+												'component-color-indicator--none': ! values[ item.value ],
+												'component-color-indicator--transparent':
+													values[ item.value ] === 'transparent',
+											} ) }
+											colorValue={ values[ item.value ] }
+										/>
+									</Button>
+									{ isPickerOpen && pickerIndex === index && (
+										<Popover
+											className="ftb-border-color-control__popover"
+											position="top right"
+											onClose={ handleOnPickerClose }
+										>
+											<ColorPalette
+												colors={ colors }
+												value={ values[ item.value ] }
+												onChange={ ( value ) => handleOnChange( value, item.value ) }
+											/>
+										</Popover>
+									) }
+								</div>
+							) ) }
+					</div>
+					{ allowSides && (
+						<Tooltip text={ linkedLabel }>
+							<span>
+								<Button
+									isSmall
+									isPrimary={ isLinked }
+									isSecondary={ ! isLinked }
+									variant={ isLinked ? 'primary' : 'secondary' }
+									onClick={ toggleLinked }
+									icon={ isLinked ? link : linkOff }
+									iconSize="16"
+								/>
+							</span>
+						</Tooltip>
+					) }
 				</div>
-				{ allowSides && (
-					<Tooltip text={ linkedLabel }>
-						<span>
-							<Button
-								isSmall
-								isPrimary={ isLinked }
-								isSecondary={ ! isLinked }
-								variant={ isLinked ? 'primary' : 'secondary' }
-								onClick={ toggleLinked }
-								icon={ isLinked ? link : linkOff }
-								iconSize="16"
-							/>
-						</span>
-					</Tooltip>
-				) }
 			</div>
 		</BaseControl>
 	);

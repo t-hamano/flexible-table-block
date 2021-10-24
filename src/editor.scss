@@ -228,6 +228,11 @@
 	margin-top: -8px;
 }
 
+.ftb-base-control-label {
+	display: inline-block;
+	margin-bottom: 8px;
+}
+
 .ftb-base-control-row {
 	display: flex;
 
@@ -250,7 +255,8 @@
 
 .ftb-line-height-control {
 
-	.components-base-control {
+	.components-text-control__input {
+		display: block;
 		max-width: 60px;
 	}
 }
@@ -260,6 +266,7 @@
 .ftb-border-style-control,
 .ftb-border-spacing-control,
 .ftb-border-color-control,
+.ftb-padding-control,
 .ftb-color-control {
 
 	&__header {
@@ -272,7 +279,8 @@
 
 .ftb-border-radius-control,
 .ftb-border-width-control,
-.ftb-border-spacing-control {
+.ftb-border-spacing-control,
+.ftb-padding-control {
 
 	&__header-control {
 		display: flex;

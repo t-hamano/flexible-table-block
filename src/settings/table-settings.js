@@ -174,10 +174,7 @@ export default function TableSettings( props ) {
 
 	return (
 		<>
-			<BaseControl
-				id="flexible-table-block/clear-table-settings"
-				className="ftb-reset-settings-control"
-			>
+			<BaseControl className="ftb-reset-settings-control">
 				<Button isLink variant="link" isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear Table Settings', 'flexible-table-block' ) }
 				</Button>
@@ -258,11 +255,12 @@ export default function TableSettings( props ) {
 			/>
 			<hr />
 			<BaseControl
-				id="flexible-table-block/table-width"
+				id="flexible-table-block-table-width"
 				label={ __( 'Table Width', 'flexible-table-block' ) }
 				className="ftb-width-control"
 			>
 				<UnitControl
+					id="flexible-table-block-table-width"
 					value={ tableStylesObj?.width }
 					units={ tableWidthUnits }
 					disabled={ tableStylesObj?.width === 'auto' }
@@ -300,11 +298,12 @@ export default function TableSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
-				id="flexible-table-block/table-max-width"
+				id="flexible-table-block-table-max-width"
 				label={ __( 'Table Max Width', 'flexible-table-block' ) }
 				className="ftb-width-control"
 			>
 				<UnitControl
+					id="flexible-table-block-table-max-width"
 					value={ tableStylesObj?.maxWidth }
 					units={ tableWidthUnits }
 					disabled={ tableStylesObj?.maxWidth === 'none' }
@@ -344,11 +343,12 @@ export default function TableSettings( props ) {
 				</ButtonGroup>
 			</BaseControl>
 			<BaseControl
-				id="flexible-table-block/table-min-width"
+				id="flexible-table-block-table-min-width"
 				label={ __( 'Table Min Width', 'flexible-table-block' ) }
 				className="ftb-width-control"
 			>
 				<UnitControl
+					id="flexible-table-block-table-min-width"
 					value={ tableStylesObj?.minWidth }
 					units={ tableWidthUnits }
 					min="0"
@@ -376,7 +376,7 @@ export default function TableSettings( props ) {
 			</BaseControl>
 			<hr />
 			<PaddingControl
-				id="flexible-table-block/table-padding"
+				id="flexible-table-block-table-padding"
 				label={ __( 'Table Padding', 'flexible-table-block' ) }
 				help={ __(
 					'Table padding is only enable when "Cell Borders" is set to "Separate".',
@@ -387,13 +387,13 @@ export default function TableSettings( props ) {
 			/>
 			<hr />
 			<BorderRadiusControl
-				id="flexible-table-block/table-border-radius"
+				id="flexible-table-block-table-border-radius"
 				label={ __( 'Table Border Radius', 'flexible-table-block' ) }
 				values={ pickBorderRadius( tableStylesObj ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
-				id="flexible-table-block/table-border-width"
+				id="flexible-table-block-table-border-width"
 				label={ __( 'Table Border Width', 'flexible-table-block' ) }
 				help={ __(
 					'Table border width is only enable when "Cell Borders" is set to "Separate".',
@@ -403,42 +403,44 @@ export default function TableSettings( props ) {
 				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
-				id="flexible-table-block/table-border-style"
+				id="flexible-table-block-table-border-style"
 				label={ __( 'Table Border Style', 'flexible-table-block' ) }
 				values={ pickBorderStyle( tableStylesObj ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
-				id="flexible-table-block/table-border-color"
+				id="flexible-table-block-table-border-color"
 				label={ __( 'Table Border Color', 'flexible-table-block' ) }
 				values={ pickBorderColor( tableStylesObj ) }
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />
-			<BaseControl
-				id="flexible-table-block/table-border-collapse"
-				label={ __( 'Cell Borders', 'flexible-table-block' ) }
-			>
-				<ButtonGroup className="ftb-button-group">
-					{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
-						return (
-							<Button
-								key={ value }
-								isPrimary={ value === tableStylesObj?.borderCollapse }
-								isSecondary={ value !== tableStylesObj?.borderCollapse }
-								variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
-								icon={ icon }
-								onClick={ () => onChangeBorderCollapse( value ) }
-							>
-								{ label }
-							</Button>
-						);
-					} ) }
-				</ButtonGroup>
+			<BaseControl>
+				<div aria-labelledby="flexible-table-block-table-border-collapse" role="region">
+					<span id="flexible-table-block-table-border-collapse" className="ftb-base-control-label">
+						{ __( 'Cell Borders', 'flexible-table-block' ) }
+					</span>
+					<ButtonGroup className="ftb-button-group">
+						{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
+							return (
+								<Button
+									key={ value }
+									isPrimary={ value === tableStylesObj?.borderCollapse }
+									isSecondary={ value !== tableStylesObj?.borderCollapse }
+									variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
+									icon={ icon }
+									onClick={ () => onChangeBorderCollapse( value ) }
+								>
+									{ label }
+								</Button>
+							);
+						} ) }
+					</ButtonGroup>
+				</div>
 			</BaseControl>
 			{ 'separate' === tableStylesObj?.borderCollapse && (
 				<BorderSpacingControl
-					id="flexible-table-block/table-border-color"
+					id="flexible-table-block-table-border-spacing"
 					label={ __( 'Border Spacing', 'flexible-table-block' ) }
 					values={ pickBorderSpacing( tableStylesObj ) }
 					onChange={ onChangeBorderSpacing }

@@ -69,32 +69,27 @@ export default function TableCaptionSettings( props ) {
 
 	return (
 		<>
-			<BaseControl
-				id="flexible-table-block/clear-caption-settings"
-				className="ftb-reset-settings-control"
-			>
+			<BaseControl className="ftb-reset-settings-control">
 				<Button isLink variant="link" isDestructive onClick={ onResetSettings }>
 					{ __( 'Clear Caption Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
 			<BaseControl
-				id="flexible-table-block/caption-font-size"
+				id="flexible-table-block-caption-font-size"
 				label={ __( 'Caption Font Size', 'flexible-table-block' ) }
 				className="ftb-font-size-control"
 			>
 				<UnitControl
+					id="flexible-table-block-caption-font-size"
 					value={ captionStylesObj?.fontSize }
 					units={ fontSizeUnits }
 					min="0"
 					onChange={ onChangeFontSize }
 				/>
 			</BaseControl>
-			<BaseControl
-				id="flexible-table-block/caption-line-height"
-				label={ __( 'Caption Line Height', 'flexible-table-block' ) }
-				className="ftb-line-height-control"
-			>
+			<BaseControl className="ftb-line-height-control">
 				<TextControl
+					label={ __( 'Caption Line Height', 'flexible-table-block' ) }
 					autoComplete="off"
 					onChange={ onChangeLineHeight }
 					step={ 0.1 }
@@ -104,48 +99,52 @@ export default function TableCaptionSettings( props ) {
 				/>
 			</BaseControl>
 			<PaddingControl
-				id="flexible-table-block/caption-padding"
+				id="flexible-table-block-caption-padding"
 				label={ __( 'Caption Padding', 'flexible-table-block' ) }
 				values={ pickPadding( captionStylesObj ) }
 				onChange={ onChangePadding }
 			/>
-			<BaseControl
-				id="flexible-table-block/caption-side"
-				label={ __( 'Caption Position', 'flexible-table-block' ) }
-			>
-				<ButtonGroup className="ftb-button-group">
-					{ CAPTION_SIDE_CONTROLS.map( ( { label, value } ) => (
-						<Button
-							key={ value }
-							label={ label }
-							isPrimary={ captionSide === value }
-							variant={ captionSide === value ? 'primary' : undefined }
-							onClick={ () => onChangeSide( value ) }
-						>
-							{ label }
-						</Button>
-					) ) }
-				</ButtonGroup>
-			</BaseControl>
-			<BaseControl
-				id="flexible-table-block/caption-align"
-				label={ __( 'Caption Text alignment', 'flexible-table-block' ) }
-			>
-				<ButtonGroup className="ftb-button-group">
-					{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
-						return (
+			<BaseControl>
+				<div aria-labelledby="flexible-table-block-caption-side" role="region">
+					<span id="flexible-table-block-caption-side" className="ftb-base-control-label">
+						{ __( 'Caption Position', 'flexible-table-block' ) }
+					</span>
+					<ButtonGroup className="ftb-button-group">
+						{ CAPTION_SIDE_CONTROLS.map( ( { label, value } ) => (
 							<Button
 								key={ value }
 								label={ label }
-								isPrimary={ value === captionStylesObj?.textAlign }
-								isSecondary={ value !== captionStylesObj?.textAlign }
-								variant={ value === captionStylesObj?.textAlign ? 'primary' : 'secondary' }
-								icon={ icon }
-								onClick={ () => onChangeAlign( value ) }
-							/>
-						);
-					} ) }
-				</ButtonGroup>
+								isPrimary={ captionSide === value }
+								variant={ captionSide === value ? 'primary' : undefined }
+								onClick={ () => onChangeSide( value ) }
+							>
+								{ label }
+							</Button>
+						) ) }
+					</ButtonGroup>
+				</div>
+			</BaseControl>
+			<BaseControl>
+				<div aria-labelledby="flexible-table-block-caption-align" role="region">
+					<span id="flexible-table-block-caption-align" className="ftb-base-control-label">
+						{ __( 'Caption Text alignment', 'flexible-table-block' ) }
+					</span>
+					<ButtonGroup className="ftb-button-group">
+						{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+							return (
+								<Button
+									key={ value }
+									label={ label }
+									isPrimary={ value === captionStylesObj?.textAlign }
+									isSecondary={ value !== captionStylesObj?.textAlign }
+									variant={ value === captionStylesObj?.textAlign ? 'primary' : 'secondary' }
+									icon={ icon }
+									onClick={ () => onChangeAlign( value ) }
+								/>
+							);
+						} ) }
+					</ButtonGroup>
+				</div>
 			</BaseControl>
 		</>
 	);

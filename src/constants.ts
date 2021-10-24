@@ -39,19 +39,19 @@ export const MAX_BORDER_RADIUS = {
 	px: 200,
 	em: 20,
 	rem: 20,
-};
+} as const;
 
 export const MAX_BORDER_WIDTH = {
 	px: 50,
 	em: 5,
 	rem: 5,
-};
+} as const;
 
 export const MAX_BORDER_SPACING = {
 	px: 50,
 	em: 5,
 	rem: 5,
-};
+} as const;
 
 // Responsive breakpoint settings.
 export const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
@@ -59,20 +59,20 @@ export const MIN_RESPONSIVE_BREAKPOINT = 200;
 export const MAX_RESPONSIVE_BREAKPOINT = 1200;
 
 // Available units on UnitControl component.
-export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ];
-export const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
-export const CELL_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ];
-export const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ];
-export const BORDER_RADIUS_UNITS = [ 'px', 'em', 'rem' ];
-export const BORDER_WIDTH_UNITS = [ 'px', 'em', 'rem' ];
-export const PADDING_UNITS = [ 'px', '%', 'em', 'rem', 'vw', 'vh' ];
+export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ] as const;
+export const TABLE_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ] as const;
+export const CELL_WIDTH_UNITS = [ 'px', 'em', 'rem', '%' ] as const;
+export const BORDER_SPACING_UNITS = [ 'px', 'em', 'rem' ] as const;
+export const BORDER_RADIUS_UNITS = [ 'px', 'em', 'rem' ] as const;
+export const BORDER_WIDTH_UNITS = [ 'px', 'em', 'rem' ] as const;
+export const PADDING_UNITS = [ 'px', '%', 'em', 'rem', 'vw', 'vh' ] as const;
 
 // Label & Text variations.
 export const CELL_ARIA_LABEL = {
 	head: __( 'Header cell text', 'flexible-table-block' ),
 	body: __( 'Body cell text', 'flexible-table-block' ),
 	foot: __( 'Footer cell text', 'flexible-table-block' ),
-};
+} as const;
 
 // Controls variations.
 export const BORDER_COLLAPSE_CONTROLS = [
@@ -86,7 +86,7 @@ export const BORDER_COLLAPSE_CONTROLS = [
 		label: __( 'Separate', 'flexible-table-block' ),
 		value: 'separate',
 	},
-];
+] as const;
 
 export const BORDER_STYLE_CONTROLS = [
 	{
@@ -109,7 +109,7 @@ export const BORDER_STYLE_CONTROLS = [
 		value: 'double',
 		icon: borderDouble,
 	},
-];
+] as const;
 
 export const TEXT_ALIGNMENT_CONTROLS = [
 	{
@@ -127,7 +127,7 @@ export const TEXT_ALIGNMENT_CONTROLS = [
 		label: __( 'Align right', 'flexible-table-block' ),
 		value: 'right',
 	},
-];
+] as const;
 
 export const VERTICAL_ALIGNMENT_CONTROLS = [
 	{
@@ -145,7 +145,7 @@ export const VERTICAL_ALIGNMENT_CONTROLS = [
 		label: __( 'Align bottom', 'flexible-table-block' ),
 		value: 'bottom',
 	},
-];
+] as const;
 
 export const STICKY_CONTROLS = [
 	{
@@ -160,7 +160,7 @@ export const STICKY_CONTROLS = [
 		label: __( 'Fixed first column', 'flexible-table-block' ),
 		value: 'first-column',
 	},
-];
+] as const;
 
 export const CELL_TAG_CONTROLS = [
 	{
@@ -171,7 +171,7 @@ export const CELL_TAG_CONTROLS = [
 		label: __( 'TD', 'flexible-table-block' ),
 		value: 'td',
 	},
-];
+] as const;
 
 export const CAPTION_SIDE_CONTROLS = [
 	{
@@ -182,4 +182,4 @@ export const CAPTION_SIDE_CONTROLS = [
 		label: __( 'Bottom', 'flexible-table-block' ),
 		value: 'bottom',
 	},
-];
+] as const;

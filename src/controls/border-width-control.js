@@ -109,56 +109,58 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
-			<div className="ftb-border-width-control__header">
-				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</div>
-			<div className="ftb-border-width-control__header-control">
-				{ hasIndicator && (
-					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-				) }
-				{ ( isLinked || ! allowSides ) && (
-					<UnitControl
-						aria-label={ __( 'All', 'flexible-table-block' ) }
-						value={ allInputValue }
-						units={ borderWidthUnits }
-						placeholder={ allInputPlaceholder }
-						onChange={ handleOnChangeAll }
-					/>
-				) }
-				{ allowSides && (
-					<Tooltip text={ linkedLabel }>
-						<span>
-							<Button
-								isSmall
-								isPrimary={ isLinked }
-								isSecondary={ ! isLinked }
-								variant={ isLinked ? 'primary' : 'secondary' }
-								icon={ isLinked ? link : linkOff }
-								iconSize="16"
-								onClick={ toggleLinked }
-							/>
-						</span>
-					</Tooltip>
-				) }
-			</div>
-			{ ! isLinked && allowSides && (
-				<div className="ftb-border-width-control__input-controls">
-					{ SIDES.map( ( item ) => (
-						<UnitControl
-							key={ item.value }
-							aria-label={ item.label }
-							value={ values[ item.value ] }
-							units={ borderWidthUnits }
-							onFocus={ () => handleOnFocus( item.value ) }
-							onChange={ ( value ) => handleOnChange( value, item.value ) }
-						/>
-					) ) }
+		<BaseControl className={ classNames } help={ help }>
+			<div aria-labelledby={ headingId } role="region">
+				<div className="ftb-border-width-control__header">
+					<Text id={ headingId }>{ label }</Text>
+					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+						{ __( 'Reset', 'flexible-table-block' ) }
+					</Button>
 				</div>
-			) }
+				<div className="ftb-border-width-control__header-control">
+					{ hasIndicator && (
+						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+					) }
+					{ ( isLinked || ! allowSides ) && (
+						<UnitControl
+							aria-label={ __( 'All', 'flexible-table-block' ) }
+							value={ allInputValue }
+							units={ borderWidthUnits }
+							placeholder={ allInputPlaceholder }
+							onChange={ handleOnChangeAll }
+						/>
+					) }
+					{ allowSides && (
+						<Tooltip text={ linkedLabel }>
+							<span>
+								<Button
+									isSmall
+									isPrimary={ isLinked }
+									isSecondary={ ! isLinked }
+									variant={ isLinked ? 'primary' : 'secondary' }
+									icon={ isLinked ? link : linkOff }
+									iconSize="16"
+									onClick={ toggleLinked }
+								/>
+							</span>
+						</Tooltip>
+					) }
+				</div>
+				{ ! isLinked && allowSides && (
+					<div className="ftb-border-width-control__input-controls">
+						{ SIDES.map( ( item ) => (
+							<UnitControl
+								key={ item.value }
+								aria-label={ item.label }
+								value={ values[ item.value ] }
+								units={ borderWidthUnits }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
+							/>
+						) ) }
+					</div>
+				) }
+			</div>
 		</BaseControl>
 	);
 }
