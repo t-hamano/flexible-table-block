@@ -143,66 +143,65 @@ export default function TableCellSettings( props ) {
 
 	return (
 		<>
-			<BaseControl
-				id="flexible-table-block/clear-cell-settings"
-				className="ftb-reset-settings-control"
-			>
+			<BaseControl className="ftb-reset-settings-control">
 				<Button isLink variant="link" isDestructive onClick={ onResetCellSettings }>
 					{ __( 'Clear Cell Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
 			<BaseControl
-				id="flexible-table-block/cell-font-size"
+				id="flexible-table-block-cell-font-size"
 				label={ __( 'Cell Font Size', 'flexible-table-block' ) }
 				className="ftb-font-size-control"
 			>
 				<UnitControl
+					id="flexible-table-block-cell-font-size"
 					value={ cellStylesObj?.fontSize }
 					units={ fontSizeUnits }
 					min="0"
 					onChange={ onChangeFontSize }
 				/>
 			</BaseControl>
-			<BaseControl
-				id="flexible-table-block/cell-width"
-				label={ __( 'Cell Width', 'flexible-table-block' ) }
-				className="ftb-width-control"
-			>
-				<UnitControl
-					value={ cellStylesObj?.width }
-					units={ cellWidthUnits }
-					min="0"
-					onChange={ onChangeWidth }
-				/>
-				<ButtonGroup
-					aria-label={ __( 'Cell Percentage width', 'flexible-table-block' ) }
-					className="ftb-percent-group"
-				>
-					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = cellStylesObj?.width === `${ perWidth }%`;
-						return (
-							<Button
-								key={ perWidth }
-								isPrimary={ isPressed }
-								variant={ isPressed ? 'primary' : undefined }
-								isSmall
-								onClick={ () => onChangeWidth( isPressed ? undefined : `${ perWidth }%` ) }
-							>
-								{ `${ perWidth }%` }
-							</Button>
-						);
-					} ) }
-				</ButtonGroup>
+			<BaseControl className="ftb-width-control">
+				<div aria-labelledby="flexible-table-block-cell-width" role="region">
+					<span id="flexible-table-block-cell-width" className="ftb-base-control-label">
+						{ __( 'Cell Width', 'flexible-table-block' ) }
+					</span>
+					<UnitControl
+						value={ cellStylesObj?.width }
+						units={ cellWidthUnits }
+						min="0"
+						onChange={ onChangeWidth }
+					/>
+					<ButtonGroup
+						aria-label={ __( 'Cell Percentage width', 'flexible-table-block' ) }
+						className="ftb-percent-group"
+					>
+						{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+							const isPressed = cellStylesObj?.width === `${ perWidth }%`;
+							return (
+								<Button
+									key={ perWidth }
+									isPrimary={ isPressed }
+									variant={ isPressed ? 'primary' : undefined }
+									isSmall
+									onClick={ () => onChangeWidth( isPressed ? undefined : `${ perWidth }%` ) }
+								>
+									{ `${ perWidth }%` }
+								</Button>
+							);
+						} ) }
+					</ButtonGroup>
+				</div>
 			</BaseControl>
 			<hr />
 			<ColorControl
-				id="flexible-table-block/cell-text-color"
+				id="flexible-table-block-cell-text-color"
 				label={ __( 'Cell Text Color', 'flexible-table-block' ) }
 				value={ cellStylesObj.color }
 				onChange={ onChangeColor }
 			/>
 			<ColorControl
-				id="flexible-table-block/cell-background-color"
+				id="flexible-table-block-cell-background-color"
 				label={ __( 'Cell Background Color', 'flexible-table-block' ) }
 				value={ cellStylesObj.backgroundColor }
 				colors={ [
@@ -216,112 +215,112 @@ export default function TableCellSettings( props ) {
 			/>
 			<hr />
 			<PaddingControl
-				id="flexible-table-block/cell-padding"
+				id="flexible-table-block-cell-padding"
 				label={ __( 'Cell Padding', 'flexible-table-block' ) }
 				values={ pickPadding( cellStylesObj ) }
 				onChange={ onChangePadding }
 			/>
 			<hr />
 			<BorderRadiusControl
-				id="flexible-table-block/cell-border-radius"
+				id="flexible-table-block-cell-border-radius"
 				label={ __( 'Cell Border Radius', 'flexible-table-block' ) }
 				values={ pickBorderRadius( cellStylesObj ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
-				id="flexible-table-block/cell-border-width"
+				id="flexible-table-block-cell-border-width"
 				label={ __( 'Cell Border Width', 'flexible-table-block' ) }
 				values={ pickBorderWidth( cellStylesObj ) }
 				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
-				id="flexible-table-block/cell-border-style"
+				id="flexible-table-block-cell-border-style"
 				label={ __( 'Cell Border Style', 'flexible-table-block' ) }
 				values={ pickBorderStyle( cellStylesObj ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
-				id="flexible-table-block/cell-border-color"
+				id="flexible-table-block-cell-border-color"
 				label={ __( 'Cell Border Color', 'flexible-table-block' ) }
 				values={ pickBorderColor( cellStylesObj ) }
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />
-			<BaseControl
-				id="flexible-table-block/cell-text-align"
-				label={ __( 'Cell Alignment', 'flexible-table-block' ) }
-			>
-				<div className="ftb-base-control-row">
-					<ButtonGroup
-						className="ftb-button-group"
-						aria-label={ __( 'Text alignment', 'flexible-table-block' ) }
-					>
-						{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+			<BaseControl>
+				<div aria-labelledby="flexible-table-block-cell-text-align" role="region">
+					<span id="flexible-table-block-cell-text-align" className="ftb-base-control-label">
+						{ __( 'Cell Alignment', 'flexible-table-block' ) }
+					</span>
+					<div className="ftb-base-control-row">
+						<ButtonGroup
+							className="ftb-button-group"
+							aria-label={ __( 'Text alignment', 'flexible-table-block' ) }
+						>
+							{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+								return (
+									<Button
+										key={ value }
+										label={ label }
+										icon={ icon }
+										isPrimary={ value === cellStylesObj?.textAlign }
+										isSecondary={ value !== cellStylesObj?.textAlign }
+										variant={ value === cellStylesObj?.textAlign ? 'primary' : 'secondary' }
+										onClick={ () => onChangeTextAlign( value ) }
+									/>
+								);
+							} ) }
+						</ButtonGroup>
+						<ButtonGroup
+							className="ftb-button-group"
+							aria-label={ __( 'Vertical alignment', 'flexible-table-block' ) }
+						>
+							{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+								return (
+									<Button
+										key={ value }
+										label={ label }
+										icon={ icon }
+										isPrimary={ value === cellStylesObj?.verticalAlign }
+										isSecondary={ value !== cellStylesObj?.verticalAlign }
+										variant={ value === cellStylesObj?.verticalAlign ? 'primary' : 'secondary' }
+										onClick={ () => onChangeVerticalAlign( value ) }
+									/>
+								);
+							} ) }
+						</ButtonGroup>
+					</div>
+				</div>
+			</BaseControl>
+			<hr />
+			<BaseControl>
+				<div aria-labelledby="flexible-table-block-cell-tag" role="region">
+					<span id="flexible-table-block-cell-tag" className="ftb-base-control-label">
+						{ __( 'Cell Tag', 'flexible-table-block' ) }
+					</span>
+					<ButtonGroup className="ftb-button-group">
+						{ CELL_TAG_CONTROLS.map( ( { label, value } ) => {
 							return (
 								<Button
 									key={ value }
-									label={ label }
-									icon={ icon }
-									isPrimary={ value === cellStylesObj?.textAlign }
-									isSecondary={ value !== cellStylesObj?.textAlign }
-									variant={ value === cellStylesObj?.textAlign ? 'primary' : 'secondary' }
-									onClick={ () => onChangeTextAlign( value ) }
-								/>
-							);
-						} ) }
-					</ButtonGroup>
-					<ButtonGroup
-						className="ftb-button-group"
-						aria-label={ __( 'Vertical alignment', 'flexible-table-block' ) }
-					>
-						{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
-							return (
-								<Button
-									key={ value }
-									label={ label }
-									icon={ icon }
-									isPrimary={ value === cellStylesObj?.verticalAlign }
-									isSecondary={ value !== cellStylesObj?.verticalAlign }
-									variant={ value === cellStylesObj?.verticalAlign ? 'primary' : 'secondary' }
-									onClick={ () => onChangeVerticalAlign( value ) }
-								/>
+									isPrimary={ value === targetCell.tag }
+									isSecondary={ value !== targetCell.tag }
+									variant={ value === targetCell.tag ? 'primary' : 'secondary' }
+									onClick={ () => onChangeTag( value ) }
+								>
+									{ label }
+								</Button>
 							);
 						} ) }
 					</ButtonGroup>
 				</div>
 			</BaseControl>
-			<hr />
-			<BaseControl
-				id="flexible-table-block/cell-tag"
-				label={ __( 'Cell Tag', 'flexible-table-block' ) }
-			>
-				<ButtonGroup className="ftb-button-group">
-					{ CELL_TAG_CONTROLS.map( ( { label, value } ) => {
-						return (
-							<Button
-								key={ value }
-								isPrimary={ value === targetCell.tag }
-								isSecondary={ value !== targetCell.tag }
-								variant={ value === targetCell.tag ? 'primary' : 'secondary' }
-								onClick={ () => onChangeTag( value ) }
-							>
-								{ label }
-							</Button>
-						);
-					} ) }
-				</ButtonGroup>
-			</BaseControl>
-			<BaseControl
-				id="flexible-table-block/cell-css"
+			<TextControl
 				label={ __( 'Cell CSS class(es)', 'flexible-table-block' ) }
-			>
-				<TextControl
-					autoComplete="off"
-					value={ targetCell.className || '' }
-					onChange={ onChangeClass }
-					help={ __( 'Separate multiple classes with spaces.' ) }
-				/>
-			</BaseControl>
+				autoComplete="off"
+				value={ targetCell.className || '' }
+				onChange={ onChangeClass }
+				help={ __( 'Separate multiple classes with spaces.' ) }
+			/>
 		</>
 	);
 }

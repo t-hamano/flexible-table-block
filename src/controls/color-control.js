@@ -56,42 +56,44 @@ export default function ColorControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
-			<div className="ftb-color-control__header">
-				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</div>
-			<div className="ftb-color-control__controls">
-				<div className="ftb-color-control__controls-inner">
-					<div className="ftb-color-control__controls-row">
-						<Button
-							label={ __( 'All', 'flexible-table-block' ) }
-							className="ftb-color-control__indicator"
-							onClick={ () => handleOnPickerOpen() }
-						>
-							<ColorIndicator
-								className={ classnames( {
-									'component-color-indicator--none': ! value,
-									'component-color-indicator--transparent': value === 'transparent',
-								} ) }
-								colorValue={ value }
-							/>
-						</Button>
-						{ isPickerOpen && ! pickerIndex && (
-							<Popover
-								className="ftb-color-control__popover"
-								position="top right"
-								onClose={ handleOnPickerClose }
+		<BaseControl className={ classNames } help={ help }>
+			<div aria-labelledby={ headingId } role="region">
+				<div className="ftb-color-control__header">
+					<Text id={ headingId }>{ label }</Text>
+					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+						{ __( 'Reset', 'flexible-table-block' ) }
+					</Button>
+				</div>
+				<div className="ftb-color-control__controls">
+					<div className="ftb-color-control__controls-inner">
+						<div className="ftb-color-control__controls-row">
+							<Button
+								label={ __( 'All', 'flexible-table-block' ) }
+								className="ftb-color-control__indicator"
+								onClick={ () => handleOnPickerOpen() }
 							>
-								<ColorPalette
-									colors={ [ ...colors, ...colorsProp ] }
-									value={ value }
-									onChange={ handleOnChange }
+								<ColorIndicator
+									className={ classnames( {
+										'component-color-indicator--none': ! value,
+										'component-color-indicator--transparent': value === 'transparent',
+									} ) }
+									colorValue={ value }
 								/>
-							</Popover>
-						) }
+							</Button>
+							{ isPickerOpen && ! pickerIndex && (
+								<Popover
+									className="ftb-color-control__popover"
+									position="top right"
+									onClose={ handleOnPickerClose }
+								>
+									<ColorPalette
+										colors={ [ ...colors, ...colorsProp ] }
+										value={ value }
+										onChange={ handleOnChange }
+									/>
+								</Popover>
+							) }
+						</div>
 					</div>
 				</div>
 			</div>
