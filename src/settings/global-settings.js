@@ -212,11 +212,12 @@ export default function GlobalSettings() {
 					<h2>{ __( 'Default Table Style', 'flexible-table-block' ) }</h2>
 					<div className="ftb-global-setting-modal__styles">
 						<BaseControl
-							id="flexible-table-block/global-table-width"
+							id="flexible-table-block-global-table-width"
 							label={ __( 'Table Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item ftb-width-control"
 						>
 							<UnitControl
+								id="flexible-table-block-global-table-width"
 								units={ tableWidthUnits }
 								value={ options.block_style?.table_width }
 								min="0"
@@ -232,11 +233,12 @@ export default function GlobalSettings() {
 							/>
 						</BaseControl>
 						<BaseControl
-							id="flexible-table-block/global-table-max-width"
+							id="flexible-table-block-global-table-max-width"
 							label={ __( 'Table Max Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item ftb-width-control"
 						>
 							<UnitControl
+								id="flexible-table-block-global-table-max-width"
 								units={ tableWidthUnits }
 								value={ options.block_style?.table_max_width }
 								min="0"
@@ -252,7 +254,7 @@ export default function GlobalSettings() {
 							/>
 						</BaseControl>
 						<ColorControl
-							id="flexible-table-block/global-row-odd-color"
+							id="flexible-table-block-global-row-odd-color"
 							label={ __( 'Stripe Style Background Color ( odd rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.row_odd_color }
@@ -267,7 +269,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<ColorControl
-							id="flexible-table-block/global-row-even-color"
+							id="flexible-table-block-global-row-even-color"
 							label={ __( 'Stripe Style Background Color ( even rows )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.row_even_color }
@@ -281,48 +283,57 @@ export default function GlobalSettings() {
 								} );
 							} }
 						/>
-						<BaseControl
-							id="flexible-table-block/table-border-collapse"
-							label={ __( 'Cell Borders', 'flexible-table-block' ) }
-							className="ftb-global-setting-modal__styles-item"
-						>
-							<ButtonGroup className="ftb-button-group">
-								{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
-									return (
-										<Button
-											key={ value }
-											isPrimary={ value === options.block_style?.table_border_collapse }
-											isSecondary={ value !== options.block_style?.table_border_collapse }
-											variant={
-												value === options.block_style?.table_border_collapse
-													? 'primary'
-													: 'secondary'
-											}
-											icon={ icon }
-											onClick={ () => {
-												const borderCollapse =
-													options?.block_style?.table_border_collapse === value ? undefined : value;
-												setOptions( {
-													...options,
-													block_style: {
-														...options.block_style,
-														table_border_collapse: borderCollapse,
-													},
-												} );
-											} }
-										>
-											{ label }
-										</Button>
-									);
-								} ) }
-							</ButtonGroup>
+						<BaseControl className="ftb-global-setting-modal__styles-item">
+							<div
+								aria-labelledby="flexible-table-block-global-table-border-collapse"
+								role="region"
+							>
+								<span
+									id="flexible-table-block-global-table-border-collapse"
+									className="ftb-base-control-label"
+								>
+									{ __( 'Cell Borders', 'flexible-table-block' ) }
+								</span>
+								<ButtonGroup className="ftb-button-group">
+									{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
+										return (
+											<Button
+												key={ value }
+												isPrimary={ value === options.block_style?.table_border_collapse }
+												isSecondary={ value !== options.block_style?.table_border_collapse }
+												variant={
+													value === options.block_style?.table_border_collapse
+														? 'primary'
+														: 'secondary'
+												}
+												icon={ icon }
+												onClick={ () => {
+													const borderCollapse =
+														options?.block_style?.table_border_collapse === value
+															? undefined
+															: value;
+													setOptions( {
+														...options,
+														block_style: {
+															...options.block_style,
+															table_border_collapse: borderCollapse,
+														},
+													} );
+												} }
+											>
+												{ label }
+											</Button>
+										);
+									} ) }
+								</ButtonGroup>
+							</div>
 						</BaseControl>
 					</div>
 					<hr />
 					<h2>{ __( 'Default Cell Style', 'flexible-table-block' ) }</h2>
 					<div className="ftb-global-setting-modal__styles">
 						<ColorControl
-							id="flexible-table-block/global-cell-text-color-th"
+							id="flexible-table-block-global-cell-text-color-th"
 							label={ __( 'Cell Text Color ( th tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_text_color_th }
@@ -337,7 +348,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<ColorControl
-							id="flexible-table-block/global-cell-text-color-td"
+							id="flexible-table-block-global-cell-text-color-td"
 							label={ __( 'Cell Text Color ( td tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_text_color_td }
@@ -352,7 +363,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<ColorControl
-							id="flexible-table-block/global-cell-background-color-th"
+							id="flexible-table-block-global-cell-background-color-th"
 							label={ __( 'Cell Background Color ( th tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_background_color_th }
@@ -367,7 +378,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<ColorControl
-							id="flexible-table-block/global-cell-background-color-td"
+							id="flexible-table-block-global-cell-background-color-td"
 							label={ __( 'Cell Background Color ( td tag )', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_background_color_td }
@@ -382,7 +393,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<PaddingControl
-							id="flexible-table-block/global-cell-border-color"
+							id="flexible-table-block-global-cell-padding"
 							label={ __( 'Cell Padding', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							values={ { top: options.block_style?.cell_padding } }
@@ -399,7 +410,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<BorderWidthControl
-							id="flexible-table-block/global-cell-border-width"
+							id="flexible-table-block-global-cell-border-width"
 							label={ __( 'Cell Border Width', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							values={ { top: options.block_style?.cell_border_width } }
@@ -416,7 +427,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<BorderStyleControl
-							id="flexible-table-block/global-cell-border-style"
+							id="flexible-table-block-global-cell-border-style"
 							label={ __( 'Cell Border Style', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							values={ { top: options.block_style?.cell_border_style } }
@@ -435,7 +446,7 @@ export default function GlobalSettings() {
 							} }
 						/>
 						<ColorControl
-							id="flexible-table-block/global-cell-border-color"
+							id="flexible-table-block-global-cell-border-color"
 							label={ __( 'Cell Border Color', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_border_color }
@@ -449,76 +460,90 @@ export default function GlobalSettings() {
 								} );
 							} }
 						/>
-						<BaseControl
-							id="flexible-table-block/global-cell-text-align"
-							label={ __( 'Cell Text alignment', 'flexible-table-block' ) }
-							className="ftb-global-setting-modal__styles-item"
-						>
-							<ButtonGroup className="ftb-button-group">
-								{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
-									return (
-										<Button
-											key={ value }
-											label={ label }
-											isPrimary={ value === options.block_style?.cell_text_align }
-											isSecondary={ value !== options.block_style?.cell_text_align }
-											variant={
-												value === options.block_style?.cell_text_align ? 'primary' : 'secondary'
-											}
-											icon={ icon }
-											onClick={ () => {
-												const newValue =
-													options?.block_style?.cell_text_align === value ? undefined : value;
-												setOptions( {
-													...options,
-													block_style: {
-														...options.block_style,
-														cell_text_align: newValue,
-													},
-												} );
-											} }
-										/>
-									);
-								} ) }
-							</ButtonGroup>
+						<BaseControl className="ftb-global-setting-modal__styles-item">
+							<div
+								aria-labelledby="flexible-table-block-global-cell-horizontal-align"
+								role="region"
+							>
+								<span
+									id="flexible-table-block-global-cell-horizontal-align"
+									className="ftb-base-control-label"
+								>
+									{ __( 'Cell Text Alignment', 'flexible-table-block' ) }
+								</span>
+								<ButtonGroup className="ftb-button-group">
+									{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+										return (
+											<Button
+												key={ value }
+												label={ label }
+												isPrimary={ value === options.block_style?.cell_text_align }
+												isSecondary={ value !== options.block_style?.cell_text_align }
+												variant={
+													value === options.block_style?.cell_text_align ? 'primary' : 'secondary'
+												}
+												icon={ icon }
+												onClick={ () => {
+													const newValue =
+														options?.block_style?.cell_text_align === value ? undefined : value;
+													setOptions( {
+														...options,
+														block_style: {
+															...options.block_style,
+															cell_text_align: newValue,
+														},
+													} );
+												} }
+											/>
+										);
+									} ) }
+								</ButtonGroup>
+							</div>
 						</BaseControl>
-						<BaseControl
-							id="flexible-table-block/global-cell-vertical-align"
-							label={ __( 'Cell Vertical alignment', 'flexible-table-block' ) }
-							className="ftb-global-setting-modal__styles-item"
-						>
-							<ButtonGroup className="ftb-button-group">
-								{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
-									return (
-										<Button
-											key={ value }
-											label={ label }
-											isPrimary={ value === options.block_style?.cell_vertical_align }
-											isSecondary={ value !== options.block_style?.cell_vertical_align }
-											variant={
-												value === options.block_style?.cell_vertical_align ? 'primary' : 'secondary'
-											}
-											icon={ icon }
-											onClick={ () => {
-												const newValue =
-													options?.block_style?.cell_vertical_align === value ? undefined : value;
-												setOptions( {
-													...options,
-													block_style: {
-														...options.block_style,
-														cell_vertical_align: newValue,
-													},
-												} );
-											} }
-										/>
-									);
-								} ) }
-							</ButtonGroup>
+						<BaseControl className="ftb-global-setting-modal__styles-item">
+							<div aria-labelledby="flexible-table-block-global-cell-vertical-align" role="region">
+								<span
+									id="flexible-table-block-global-cell-vertical-align"
+									className="ftb-base-control-label"
+								>
+									{ __( 'Cell Vertical Alignment', 'flexible-table-block' ) }
+								</span>
+								<ButtonGroup className="ftb-button-group">
+									{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
+										return (
+											<Button
+												key={ value }
+												label={ label }
+												isPrimary={ value === options.block_style?.cell_vertical_align }
+												isSecondary={ value !== options.block_style?.cell_vertical_align }
+												variant={
+													value === options.block_style?.cell_vertical_align
+														? 'primary'
+														: 'secondary'
+												}
+												icon={ icon }
+												onClick={ () => {
+													const newValue =
+														options?.block_style?.cell_vertical_align === value ? undefined : value;
+													setOptions( {
+														...options,
+														block_style: {
+															...options.block_style,
+															cell_vertical_align: newValue,
+														},
+													} );
+												} }
+											/>
+										);
+									} ) }
+								</ButtonGroup>
+							</div>
 						</BaseControl>
 					</div>
 					<hr />
 					<h2>{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }</h2>
 					<RangeControl
+						id="flexible-table-block-global-breakpoint"
 						help={ __(
 							'Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.',
 							'flexible-table-block'

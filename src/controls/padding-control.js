@@ -61,7 +61,7 @@ export default function PaddingControl( {
 	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
 	const allInputValue = isMixed ? undefined : values.top;
 
-	const classNames = classnames( 'ftb-border-width-control', className );
+	const classNames = classnames( 'ftb-padding-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -97,56 +97,58 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
-			<div className="ftb-border-width-control__header">
-				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</div>
-			<div className="ftb-border-width-control__header-control">
-				{ hasIndicator && (
-					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-				) }
-				{ ( isLinked || ! allowSides ) && (
-					<UnitControl
-						placeholder={ allInputPlaceholder }
-						aria-label={ __( 'All', 'flexible-table-block' ) }
-						onChange={ handleOnChangeAll }
-						value={ allInputValue }
-						units={ paddingUnits }
-					/>
-				) }
-				{ allowSides && (
-					<Tooltip text={ linkedLabel }>
-						<span>
-							<Button
-								isSmall
-								isPrimary={ isLinked }
-								isSecondary={ ! isLinked }
-								variant={ isLinked ? 'primary' : 'secondary' }
-								onClick={ toggleLinked }
-								icon={ isLinked ? link : linkOff }
-								iconSize="16"
-							/>
-						</span>
-					</Tooltip>
-				) }
-			</div>
-			{ ! isLinked && allowSides && (
-				<div className="ftb-border-width-control__input-controls">
-					{ SIDES.map( ( item ) => (
+		<BaseControl className={ classNames } help={ help }>
+			<div aria-labelledby={ headingId } role="region">
+				<div className="ftb-padding-control__header">
+					<Text id={ headingId }>{ label }</Text>
+					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+						{ __( 'Reset', 'flexible-table-block' ) }
+					</Button>
+				</div>
+				<div className="ftb-padding-control__header-control">
+					{ hasIndicator && (
+						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+					) }
+					{ ( isLinked || ! allowSides ) && (
 						<UnitControl
-							key={ item.value }
-							aria-label={ item.label }
-							onFocus={ () => handleOnFocus( item.value ) }
-							onChange={ ( value ) => handleOnChange( value, item.value ) }
-							value={ values[ item.value ] }
+							placeholder={ allInputPlaceholder }
+							aria-label={ __( 'All', 'flexible-table-block' ) }
+							onChange={ handleOnChangeAll }
+							value={ allInputValue }
 							units={ paddingUnits }
 						/>
-					) ) }
+					) }
+					{ allowSides && (
+						<Tooltip text={ linkedLabel }>
+							<span>
+								<Button
+									isSmall
+									isPrimary={ isLinked }
+									isSecondary={ ! isLinked }
+									variant={ isLinked ? 'primary' : 'secondary' }
+									onClick={ toggleLinked }
+									icon={ isLinked ? link : linkOff }
+									iconSize="16"
+								/>
+							</span>
+						</Tooltip>
+					) }
 				</div>
-			) }
+				{ ! isLinked && allowSides && (
+					<div className="ftb-padding-control__input-controls">
+						{ SIDES.map( ( item ) => (
+							<UnitControl
+								key={ item.value }
+								aria-label={ item.label }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
+								value={ values[ item.value ] }
+								units={ paddingUnits }
+							/>
+						) ) }
+					</div>
+				) }
+			</div>
 		</BaseControl>
 	);
 }

@@ -113,56 +113,58 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } id={ id } help={ help } aria-labelledby={ headingId }>
-			<div className="ftb-border-radius-control__header">
-				<Text id={ headingId }>{ label }</Text>
-				<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</div>
-			<div className="ftb-border-radius-control__header-control">
-				{ hasIndicator && (
-					<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
-				) }
-				{ isLinked && (
-					<UnitControl
-						aria-label={ __( 'All', 'flexible-table-block' ) }
-						placeholder={ allInputPlaceholder }
-						onChange={ handleOnChangeAll }
-						value={ allInputValue }
-						units={ borderRadiusUnits }
-						min="0"
-					/>
-				) }
-				<Tooltip text={ linkedLabel }>
-					<span>
-						<Button
-							isSmall
-							isPrimary={ isLinked }
-							isSecondary={ ! isLinked }
-							variant={ isLinked ? 'primary' : 'secondary' }
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							iconSize="16"
-						/>
-					</span>
-				</Tooltip>
-			</div>
-			{ ! isLinked && (
-				<div className="ftb-border-radius-control__input-controls">
-					{ CORNERS.map( ( item ) => (
+		<BaseControl className={ classNames } help={ help }>
+			<div aria-labelledby={ headingId } role="region">
+				<div className="ftb-border-radius-control__header">
+					<Text id={ headingId }>{ label }</Text>
+					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+						{ __( 'Reset', 'flexible-table-block' ) }
+					</Button>
+				</div>
+				<div className="ftb-border-radius-control__header-control">
+					{ hasIndicator && (
+						<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
+					) }
+					{ isLinked && (
 						<UnitControl
-							key={ item.value }
-							aria-label={ item.label }
-							value={ values[ item.value ] }
+							aria-label={ __( 'All', 'flexible-table-block' ) }
+							placeholder={ allInputPlaceholder }
+							onChange={ handleOnChangeAll }
+							value={ allInputValue }
 							units={ borderRadiusUnits }
 							min="0"
-							onFocus={ () => handleOnFocus( item.value ) }
-							onChange={ ( value ) => handleOnChange( value, item.value ) }
 						/>
-					) ) }
+					) }
+					<Tooltip text={ linkedLabel }>
+						<span>
+							<Button
+								isSmall
+								isPrimary={ isLinked }
+								isSecondary={ ! isLinked }
+								variant={ isLinked ? 'primary' : 'secondary' }
+								onClick={ toggleLinked }
+								icon={ isLinked ? link : linkOff }
+								iconSize="16"
+							/>
+						</span>
+					</Tooltip>
 				</div>
-			) }
+				{ ! isLinked && (
+					<div className="ftb-border-radius-control__input-controls">
+						{ CORNERS.map( ( item ) => (
+							<UnitControl
+								key={ item.value }
+								aria-label={ item.label }
+								value={ values[ item.value ] }
+								units={ borderRadiusUnits }
+								min="0"
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
+							/>
+						) ) }
+					</div>
+				) }
+			</div>
 		</BaseControl>
 	);
 }
