@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
 
 /**
@@ -149,7 +149,7 @@ export const VERTICAL_ALIGNMENT_CONTROLS = [
 
 export const STICKY_CONTROLS = [
 	{
-		label: __( 'none', 'flexible-table-block' ),
+		label: _x( 'none', 'Fixed control', 'flexible-table-block' ),
 		value: 'none',
 	},
 	{

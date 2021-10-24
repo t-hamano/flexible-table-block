@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import {
 	BaseControl,
@@ -338,7 +338,7 @@ export default function TableSettings( props ) {
 							onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? undefined : 'none' )
 						}
 					>
-						{ __( 'none', 'flexible-table-block' ) }
+						{ _x( 'none', 'width', 'flexible-table-block' ) }
 					</Button>
 				</ButtonGroup>
 			</BaseControl>
