@@ -65,6 +65,10 @@ export default function TableCellSettings( props ) {
 		updateCellsState( { styles: { fontSize: sanitizeUnitValue( value ) } } );
 	};
 
+	const onChangeLineHeight = ( value ) => {
+		updateCellsState( { styles: { lineHeight: value } } );
+	};
+
 	const onChangeColor = ( value ) => {
 		updateCellsState( { styles: { color: value } } );
 	};
@@ -148,19 +152,32 @@ export default function TableCellSettings( props ) {
 					{ __( 'Clear Cell Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
-			<BaseControl
-				id="flexible-table-block-cell-font-size"
-				label={ __( 'Cell Font Size', 'flexible-table-block' ) }
-				className="ftb-font-size-control"
-			>
-				<UnitControl
+			<div className="ftb-base-control-row">
+				<BaseControl
 					id="flexible-table-block-cell-font-size"
-					value={ cellStylesObj?.fontSize }
-					units={ fontSizeUnits }
-					min="0"
-					onChange={ onChangeFontSize }
-				/>
-			</BaseControl>
+					label={ __( 'Cell Font Size', 'flexible-table-block' ) }
+					className="ftb-font-size-control"
+				>
+					<UnitControl
+						id="flexible-table-block-cell-font-size"
+						value={ cellStylesObj?.fontSize }
+						units={ fontSizeUnits }
+						min="0"
+						onChange={ onChangeFontSize }
+					/>
+				</BaseControl>
+				<BaseControl className="ftb-line-height-control">
+					<TextControl
+						label={ __( 'Cell Line Height', 'flexible-table-block' ) }
+						value={ cellStylesObj?.lineHeight || '' }
+						autoComplete="off"
+						type="number"
+						step={ 0.1 }
+						min={ 0 }
+						onChange={ onChangeLineHeight }
+					/>
+				</BaseControl>
+			</div>
 			<BaseControl className="ftb-width-control">
 				<div aria-labelledby="flexible-table-block-cell-width" role="region">
 					<span id="flexible-table-block-cell-width" className="ftb-base-control-label">
@@ -251,7 +268,7 @@ export default function TableCellSettings( props ) {
 					<span id="flexible-table-block-cell-text-align" className="ftb-base-control-label">
 						{ __( 'Cell Alignment', 'flexible-table-block' ) }
 					</span>
-					<div className="ftb-base-control-row">
+					<div className="ftb-base-control-field-row">
 						<ButtonGroup
 							className="ftb-button-group"
 							aria-label={ __( 'Text alignment', 'flexible-table-block' ) }
