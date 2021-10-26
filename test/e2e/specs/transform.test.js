@@ -1,7 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { getEditedPostContent, createNewPost, transformBlockTo } from '@wordpress/e2e-test-utils';
+import {
+	getEditedPostContent,
+	createNewPost,
+	transformBlockTo,
+	clickBlockToolbarButton,
+	clickButton,
+} from '@wordpress/e2e-test-utils';
 
 /**
  * Internal dependencies
@@ -11,6 +17,11 @@ import {
 	createNewCoreTableBlock,
 	coreTableCellSelector,
 	flexibleTableCellSelector,
+	flexibleTableCaptionSelector,
+	clickButtonWithAriaLabel,
+	clickButtonWithText,
+	inputValueFromLabel,
+	inputValueFromLabelledBy,
 	clickToggleControlWithText,
 	openSidebar,
 	openSidebarPanelWithTitle,
@@ -76,31 +87,88 @@ describe( 'Transform from flexible table block to core table block', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	/* eslint-disable jest/no-commented-out-tests */
-	// it( 'should be transformed to core table block with no style & classes table', async () => {
-	// 	await createNewFlexibleTableBlock( { col: 6, row: 3 } );
-	// 	await openSidebar();
-	// 	await openSidebarPanelWithTitle( 'Table Settings' );
-	// 	await clickToggleControlWithText( 'Scroll on PC view' );
-	// 	await clickToggleControlWithText( 'Scroll on Mobile view' );
-	// 	await clickToggleControlWithText( 'Stack on mobile' );
-	// 	await selectOptionFromLabel( 'Fixed control', 'header' );
-	// 	await inputValueFromLabel( 'Table Width', '500px' );
-	// 	await transformBlockTo( 'Table' );
-	// 	expect( await getEditedPostContent() ).toMatchSnapshot();
-	// } );
+	it( 'should be transformed to core table block with no style & classe table', async () => {
+		await createNewFlexibleTableBlock( { col: 6, row: 3 } );
+		await openSidebar();
+		await openSidebarPanelWithTitle( 'Table Settings' );
+		await clickToggleControlWithText( 'Scroll on PC view' );
+		await inputValueFromLabel( 'Table Width', '500px' );
+		await inputValueFromLabelledBy( 'flexible-table-block-table-padding-heading', '1px' );
+		await clickButtonWithAriaLabel(
+			'[aria-labelledby="flexible-table-block-table-border-style-heading"]',
+			'Solid'
+		);
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-table-border-collapse"]',
+			'Share'
+		);
+		await transformBlockTo( 'Table' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
 
-	// 	it( 'should be transformed to core table block with no rowspan / colspan cells', async () => {
-	// 		// 結合セル、未結合セルそれぞれにテキストを入れる
-	// 	} );
+	it( 'should be transformed to core table block with no rowspan / colspan cells', async () => {
+		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
+		const cells = await page.$$( flexibleTableCellSelector );
+		await cells[ 0 ].click();
+		await page.keyboard.type( 'Cell 1' );
+		await cells[ 1 ].click();
+		await page.keyboard.type( 'Cell 2' );
+		await cells[ 0 ].click();
+		await page.keyboard.down( 'Shift' );
+		await cells[ 1 ].click();
+		await page.keyboard.up( 'Shift' );
+		await clickBlockToolbarButton( 'Edit table' );
+		await clickButton( 'Merge Cells' );
+		await transformBlockTo( 'Table' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
 
-	// 	it( 'should be transformed to core table block keeping caption text', async () => {
-	// 		// 改行入りのテキストをテストする
-	// 	} );
+	it( 'should be transformed to core table block width no style & class cells', async () => {
+		await createNewFlexibleTableBlock();
+		const cells = await page.$$( flexibleTableCellSelector );
+		await cells[ 0 ].click();
+		await page.keyboard.type( 'Flexible Table Block' );
+		await openSidebar();
+		await openSidebarPanelWithTitle( 'Cell Settings' );
+		await inputValueFromLabel( 'Cell Font Size', '20px' );
+		await inputValueFromLabelledBy( 'flexible-table-block-cell-padding-heading', '1px' );
+		await clickButtonWithAriaLabel(
+			'[aria-labelledby="flexible-table-block-cell-border-style-heading"]',
+			'Solid'
+		);
+		await clickButtonWithText( '//*[@aria-labelledby="flexible-table-block-cell-tag"]', 'TH' );
+		await transformBlockTo( 'Table' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
 
-	// 	it( 'should be transformed to core table block width no inline-style cells', async () => {} );
+	it( 'should be transformed to core table block keeping caption text', async () => {
+		await createNewFlexibleTableBlock();
+		await page.$$( flexibleTableCaptionSelector );
+		await page.focus( flexibleTableCaptionSelector );
+		await page.keyboard.type( 'Flexible' );
+		await page.keyboard.down( 'Shift' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.up( 'Shift' );
+		await page.keyboard.type( 'Table' );
+		await page.keyboard.down( 'Shift' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.up( 'Shift' );
+		await page.keyboard.type( 'Block' );
+		await transformBlockTo( 'Table' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
 
-	// 	it( 'should be transformed to core table block width no classes cells', async () => {} );
-
-	// it( 'should be transformed to core table block width no inline-style caption text', async () => {} );
+	it( 'should be transformed to core table block width no option caption text', async () => {
+		await createNewFlexibleTableBlock();
+		await page.$$( flexibleTableCaptionSelector );
+		await page.focus( flexibleTableCaptionSelector );
+		await page.keyboard.type( 'Flexible Table Block' );
+		await openSidebar();
+		await openSidebarPanelWithTitle( 'Caption Settings' );
+		await inputValueFromLabel( 'Caption Font Size', '20px' );
+		await inputValueFromLabelledBy( 'flexible-table-block-caption-padding-heading', '20px' );
+		await clickButtonWithText( '//*[@aria-labelledby="flexible-table-block-caption-side"]', 'Top' );
+		await transformBlockTo( 'Table' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
 } );

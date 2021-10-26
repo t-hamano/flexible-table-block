@@ -2,11 +2,11 @@
  * WordPress dependencies
  */
 import { insertBlock, pressKeyWithModifier } from '@wordpress/e2e-test-utils';
-
 export const coreTableSelector = '[data-type="core/table"]';
 export const coreTableCellSelector = `${ coreTableSelector } td`;
 export const flexibleTableSelector = '[data-type="flexible-table-block/table"]';
 export const flexibleTableCellSelector = `${ flexibleTableSelector } td`;
+export const flexibleTableCaptionSelector = `${ flexibleTableSelector } figcaption`;
 
 /** @type {import('puppeteer').Page} */
 const page = global.page;
@@ -69,46 +69,70 @@ export const createNewCoreTableBlock = async ( { col, row } = {} ) => {
 	await page.click( '.blocks-table__placeholder-button' );
 };
 
-export const clickButtonWithAriaLabel = async ( selector, label, index = 0 ) => {
-	const targetSelector = `${ selector } [aria-label="${ label }"]`;
-	const button = await page.$$( targetSelector );
-	if ( button[ index ] ) {
-		await button[ index ].click();
+export const clickButtonWithAriaLabel = async ( parentSelector, label, index = 0 ) => {
+	const selector = `${ parentSelector } button[aria-label="${ label }"]`;
+	const elements = await page.$$( selector );
+	if ( elements[ index ] ) {
+		await elements[ index ].click();
+	}
+};
+
+export const clickButtonWithText = async ( parentPath, text, index = 0 ) => {
+	const xPath = `${ parentPath }//button[contains(.,"${ text }")]`;
+	const elements = await page.$x( xPath );
+	if ( elements[ index ] ) {
+		await elements[ index ].click();
 	}
 };
 
 export const clickToggleControlWithText = async ( text, index = 0 ) => {
 	const xPath = `//label[contains(@class, "components-toggle-control__label")][text()="${ text }"]`;
 	await page.waitForXPath( xPath );
-	const toggleControl = await page.$x( xPath );
-	if ( toggleControl[ index ] ) {
-		await toggleControl[ index ].click();
+	const elements = await page.$x( xPath );
+	if ( elements[ index ] ) {
+		await elements[ index ].click();
 	}
 };
 
 export const selectOptionFromLabel = async ( label, value, index = 0 ) => {
 	const xPath = `//label[contains(@class, "control__label")][text()="${ label }"]`;
 	await page.waitForXPath( xPath );
-	const controlLabel = await page.$x( xPath );
-	if ( controlLabel[ index ] ) {
-		const selectControlId = await page.evaluate(
+	const elements = await page.$x( xPath );
+	if ( elements[ index ] ) {
+		const selectId = await page.evaluate(
 			( element ) => element.getAttribute( 'for' ),
-			controlLabel[ index ]
+			elements[ index ]
 		);
-		await page.select( `#${ selectControlId }`, value );
+		await page.select( `#${ selectId }`, value );
 	}
 };
 
 export const inputValueFromLabel = async ( label, value, index = 0 ) => {
 	const xPath = `//label[contains(@class, "control__label")][text()="${ label }"]`;
 	await page.waitForXPath( xPath );
-	const controlLabel = await page.$x( xPath );
-	if ( controlLabel[ index ] ) {
-		const inputControlId = await page.evaluate(
+	const elements = await page.$x( xPath );
+	if ( elements[ index ] ) {
+		const inputId = await page.evaluate(
 			( element ) => element.getAttribute( 'for' ),
-			controlLabel[ index ]
+			elements[ index ]
 		);
-		await page.focus( `#${ inputControlId }` );
+		await page.focus( `#${ inputId }` );
+		await pressKeyWithModifier( 'primary', 'a' );
+		await page.keyboard.press( 'Delete' );
+		await page.keyboard.type( String( value ) );
+	}
+};
+
+export const inputValueFromLabelledBy = async ( labelledBy, value, index = 0 ) => {
+	const selector = `[aria-labelledby="${ labelledBy }"] input`;
+	await page.waitForSelector( selector );
+	const elements = await page.$$( selector );
+	if ( elements[ index ] ) {
+		const inputId = await page.evaluate(
+			( element ) => element.getAttribute( 'id' ),
+			elements[ index ]
+		);
+		await page.focus( `#${ inputId }` );
 		await pressKeyWithModifier( 'primary', 'a' );
 		await page.keyboard.press( 'Delete' );
 		await page.keyboard.type( String( value ) );
