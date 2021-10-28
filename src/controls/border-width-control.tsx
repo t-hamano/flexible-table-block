@@ -13,8 +13,11 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
+	// @ts-ignore
 	__experimentalText as Text,
+	// @ts-ignore
 	__experimentalUnitControl as UnitControl,
+	// @ts-ignore
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -24,13 +27,17 @@ import {
 import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH } from '../constants';
 import { SIDES, SideIndicatorControl } from './indicator-control';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
+import type { Sides } from './indicator-control';
 
 const DEFAULT_VALUES = {
-	top: null,
-	right: null,
-	bottom: null,
-	left: null,
+	top: undefined,
+	right: undefined,
+	bottom: undefined,
+	left: undefined,
 };
+
+type ValuesKey = keyof typeof DEFAULT_VALUES;
+type MaxBorderWidthKey = keyof typeof MAX_BORDER_WIDTH;
 
 export default function BorderWidthControl( {
 	id,
@@ -41,6 +48,15 @@ export default function BorderWidthControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
+}: {
+	id: string;
+	label: string;
+	help: string;
+	className: string;
+	onChange: ( event: any ) => void;
+	values: typeof DEFAULT_VALUES;
+	allowSides: boolean;
+	hasIndicator: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -53,8 +69,8 @@ export default function BorderWidthControl( {
 
 	const borderWidthUnits = useCustomUnits( { availableUnits: BORDER_WIDTH_UNITS } );
 
-	const [ isLinked, setIsLinked ] = useState( true );
-	const [ side, setSide ] = useState( undefined );
+	const [ isLinked, setIsLinked ] = useState< boolean >( true );
+	const [ side, setSide ] = useState< Sides | undefined >( undefined );
 
 	const headingId = `${ id }-heading`;
 
@@ -75,20 +91,20 @@ export default function BorderWidthControl( {
 	const handleOnReset = () => {
 		setIsLinked( true );
 		onChange( {
-			top: null,
-			right: null,
-			bottom: null,
-			left: null,
+			top: undefined,
+			right: undefined,
+			bottom: undefined,
+			left: undefined,
 		} );
 	};
 
-	const handleOnFocus = ( focusSide ) => {
-		setSide( focusSide );
-	};
+	const handleOnFocus = ( focusSide: Sides ) => setSide( focusSide );
 
-	const handleOnChangeAll = ( inputValue ) => {
+	const handleOnChangeAll = ( inputValue: string ) => {
 		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_WIDTH[ unit ] } );
+		const sanitizedValue = sanitizeUnitValue( inputValue, {
+			maxNum: MAX_BORDER_WIDTH[ unit as MaxBorderWidthKey ],
+		} );
 
 		onChange( {
 			top: sanitizedValue,
@@ -98,9 +114,11 @@ export default function BorderWidthControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue, targetSide ) => {
+	const handleOnChange = ( inputValue: string, targetSide: Sides ) => {
 		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_WIDTH[ unit ] } );
+		const sanitizedValue = sanitizeUnitValue( inputValue, {
+			maxNum: MAX_BORDER_WIDTH[ unit as MaxBorderWidthKey ],
+		} );
 
 		onChange( {
 			...values,
@@ -109,11 +127,11 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } help={ help }>
+		<BaseControl id={ id } className={ classNames } help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-width-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+					<Button isSmall isSecondary onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -137,7 +155,6 @@ export default function BorderWidthControl( {
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }
-									variant={ isLinked ? 'primary' : 'secondary' }
 									icon={ isLinked ? link : linkOff }
 									iconSize="16"
 									onClick={ toggleLinked }
@@ -152,10 +169,10 @@ export default function BorderWidthControl( {
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
-								value={ values[ item.value ] }
+								value={ values[ item.value as ValuesKey ] }
 								units={ borderWidthUnits }
 								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
+								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
 							/>
 						) ) }
 					</div>

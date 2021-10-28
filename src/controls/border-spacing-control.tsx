@@ -13,8 +13,11 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
+	// @ts-ignore
 	__experimentalText as Text,
+	// @ts-ignore
 	__experimentalUnitControl as UnitControl,
+	// @ts-ignore
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -24,11 +27,15 @@ import {
 import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING } from '../constants';
 import { DIRECTIONS, DirectionIndicatorControl } from './indicator-control';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
+import type { Directions } from './indicator-control';
 
 const DEFAULT_VALUES = {
-	horizontal: null,
-	vertical: null,
+	horizontal: undefined,
+	vertical: undefined,
 };
+
+type ValuesKey = keyof typeof DEFAULT_VALUES;
+type MaxBorderSpacingKey = keyof typeof MAX_BORDER_SPACING;
 
 export default function BorderSpacingControl( {
 	id,
@@ -39,6 +46,15 @@ export default function BorderSpacingControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
+}: {
+	id: string;
+	label: string;
+	help: string;
+	className: string;
+	onChange: ( event: any ) => void;
+	values: typeof DEFAULT_VALUES;
+	allowSides: boolean;
+	hasIndicator: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -49,8 +65,8 @@ export default function BorderSpacingControl( {
 
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
-	const [ isLinked, setIsLinked ] = useState( true );
-	const [ direction, setDirection ] = useState( undefined );
+	const [ isLinked, setIsLinked ] = useState< boolean >( true );
+	const [ direction, setDirection ] = useState< Directions | undefined >( undefined );
 
 	const headingId = `${ id }-heading`;
 
@@ -71,18 +87,18 @@ export default function BorderSpacingControl( {
 	const handleOnReset = () => {
 		setIsLinked( true );
 		onChange( {
-			horizontal: null,
-			vertical: null,
+			horizontal: undefined,
+			vertical: undefined,
 		} );
 	};
 
-	const handleOnFocus = ( focusDirection ) => {
-		setDirection( focusDirection );
-	};
+	const handleOnFocus = ( focusDirection: Directions ) => setDirection( focusDirection );
 
-	const handleOnChangeAll = ( inputValue ) => {
+	const handleOnChangeAll = ( inputValue: string ) => {
 		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_SPACING[ unit ] } );
+		const sanitizedValue = sanitizeUnitValue( inputValue, {
+			maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
+		} );
 
 		onChange( {
 			horizontal: sanitizedValue,
@@ -90,9 +106,11 @@ export default function BorderSpacingControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue, targetDirection ) => {
+	const handleOnChange = ( inputValue: string, targetDirection: Directions ) => {
 		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_SPACING[ unit ] } );
+		const sanitizedValue = sanitizeUnitValue( inputValue, {
+			maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
+		} );
 
 		onChange( {
 			...values,
@@ -101,11 +119,11 @@ export default function BorderSpacingControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } help={ help }>
+		<BaseControl id={ id } className={ classNames } help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-spacing-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+					<Button isSmall isSecondary onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -131,7 +149,6 @@ export default function BorderSpacingControl( {
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }
-									variant={ isLinked ? 'primary' : 'secondary' }
 									icon={ isLinked ? link : linkOff }
 									iconSize="16"
 									onClick={ toggleLinked }
@@ -146,10 +163,10 @@ export default function BorderSpacingControl( {
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
-								value={ values[ item.value ] }
+								value={ values[ item.value as ValuesKey ] }
 								units={ borderSpacingUnits }
 								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
+								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
 							/>
 						) ) }
 					</div>

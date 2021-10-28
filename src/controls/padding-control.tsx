@@ -13,8 +13,11 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
+	// @ts-ignore
 	__experimentalText as Text,
+	// @ts-ignore
 	__experimentalUnitControl as UnitControl,
+	// @ts-ignore
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -23,13 +26,16 @@ import {
  */
 import { PADDING_UNITS } from '../constants';
 import { SIDES, SideIndicatorControl } from './indicator-control';
+import type { Sides } from './indicator-control';
 
 const DEFAULT_VALUES = {
-	top: null,
-	right: null,
-	bottom: null,
-	left: null,
+	top: undefined,
+	right: undefined,
+	bottom: undefined,
+	left: undefined,
 };
+
+type ValuesKey = keyof typeof DEFAULT_VALUES;
 
 export default function PaddingControl( {
 	id,
@@ -40,6 +46,15 @@ export default function PaddingControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
+}: {
+	id: string;
+	label: string;
+	help: string;
+	className: string;
+	onChange: ( event: any ) => void;
+	values: typeof DEFAULT_VALUES;
+	allowSides: boolean;
+	hasIndicator: boolean;
 } ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 
@@ -49,8 +64,8 @@ export default function PaddingControl( {
 
 	const paddingUnits = useCustomUnits( { availableUnits: PADDING_UNITS } );
 
-	const [ isLinked, setIsLinked ] = useState( true );
-	const [ side, setSide ] = useState( undefined );
+	const [ isLinked, setIsLinked ] = useState< boolean >( true );
+	const [ side, setSide ] = useState< Sides | undefined >( undefined );
 
 	const headingId = `${ id }-heading`;
 
@@ -71,16 +86,16 @@ export default function PaddingControl( {
 	const handleOnReset = () => {
 		setIsLinked( true );
 		onChange( {
-			top: null,
-			right: null,
-			bottom: null,
-			left: null,
+			top: undefined,
+			right: undefined,
+			bottom: undefined,
+			left: undefined,
 		} );
 	};
 
-	const handleOnFocus = ( focusSide ) => setSide( focusSide );
+	const handleOnFocus = ( focusSide: Sides ) => setSide( focusSide );
 
-	const handleOnChangeAll = ( inputValue ) => {
+	const handleOnChangeAll = ( inputValue: string ) => {
 		onChange( {
 			top: inputValue,
 			right: inputValue,
@@ -89,7 +104,7 @@ export default function PaddingControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue, targetSide ) => {
+	const handleOnChange = ( inputValue: string, targetSide: Sides ) => {
 		onChange( {
 			...values,
 			[ targetSide ]: inputValue,
@@ -97,11 +112,11 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } help={ help }>
+		<BaseControl id={ id } className={ classNames } help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-padding-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+					<Button isSmall isSecondary onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -125,7 +140,6 @@ export default function PaddingControl( {
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }
-									variant={ isLinked ? 'primary' : 'secondary' }
 									onClick={ toggleLinked }
 									icon={ isLinked ? link : linkOff }
 									iconSize="16"
@@ -140,10 +154,10 @@ export default function PaddingControl( {
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-								value={ values[ item.value ] }
+								value={ values[ item.value as ValuesKey ] }
 								units={ paddingUnits }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
 							/>
 						) ) }
 					</div>

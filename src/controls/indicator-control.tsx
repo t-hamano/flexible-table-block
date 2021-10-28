@@ -67,11 +67,15 @@ export const DIRECTIONS = [
 	},
 ];
 
-export function SideIndicatorControl( { sides } ) {
-	const top = ! sides || sides.includes( 'top' );
-	const right = ! sides || sides.includes( 'right' );
-	const bottom = ! sides || sides.includes( 'bottom' );
-	const left = ! sides || sides.includes( 'left' );
+export type Sides = typeof SIDES[ number ][ 'value' ];
+export type Corners = typeof CORNERS[ number ][ 'value' ];
+export type Directions = typeof DIRECTIONS[ number ][ 'value' ];
+
+export function SideIndicatorControl( { sides }: { sides?: Sides[] } ) {
+	const top: boolean = ! sides || sides.includes( 'top' );
+	const right: boolean = ! sides || sides.includes( 'right' );
+	const bottom: boolean = ! sides || sides.includes( 'bottom' );
+	const left: boolean = ! sides || sides.includes( 'left' );
 
 	return (
 		<ViewBox>
@@ -83,7 +87,7 @@ export function SideIndicatorControl( { sides } ) {
 	);
 }
 
-export function CornerIndicatorControl( { corners } ) {
+export function CornerIndicatorControl( { corners }: { corners?: Corners[] } ) {
 	const topLeft = ! corners || corners.includes( 'topLeft' );
 	const topRight = ! corners || corners.includes( 'topRight' );
 	const bottomRight = ! corners || corners.includes( 'bottomRight' );
@@ -99,7 +103,7 @@ export function CornerIndicatorControl( { corners } ) {
 	);
 }
 
-export function DirectionIndicatorControl( { directions } ) {
+export function DirectionIndicatorControl( { directions }: { directions?: Directions[] } ) {
 	const horizontal = ! directions || directions.includes( 'horizontal' );
 	const vertical = ! directions || directions.includes( 'vertical' );
 

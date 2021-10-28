@@ -5,72 +5,68 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 export const ViewBox = styled.span`
+	position: relative;
+	display: block;
 	width: 24px;
 	height: 24px;
-	display: block;
-	position: relative;
 	margin-right: 8px;
 `;
 
-const strokeFocus = ( { isFocused = false } ) => {
-	return css( { opacity: isFocused ? 1 : 0.3 } );
-};
-
-const Side = styled.span`
+const Side = styled.span< { isFocused: boolean } >`
 	background-color: currentColor;
 	box-sizing: border-box;
 	display: block;
 	pointer-events: none;
 	position: absolute;
-	${ strokeFocus };
+	${ ( { isFocused } ) => ! isFocused && css( { opacity: 0.3 } ) }
 `;
 
-const Corner = styled.span`
+const Corner = styled.span< { isFocused: boolean } >`
 	box-sizing: border-box;
 	display: block;
 	pointer-events: none;
 	position: absolute;
 	width: 7px;
 	height: 7px;
-	${ strokeFocus };
+	${ ( { isFocused } ) => ! isFocused && css( { opacity: 0.3 } ) }
 `;
 
 export const TopStroke = styled( Side )`
-	height: 2px;
-	left: 7px;
-	right: 7px;
 	top: 4px;
+	right: 7px;
+	left: 7px;
+	height: 2px;
 `;
 
 export const RightStroke = styled( Side )`
-	background-color: currentColor;
-	bottom: 7px;
 	top: 7px;
-	width: 2px;
 	right: 4px;
+	bottom: 7px;
+	width: 2px;
+	background-color: currentColor;
 `;
 
 export const BottomStroke = styled( Side )`
-	background-color: currentColor;
-	height: 2px;
-	left: 7px;
 	right: 7px;
 	bottom: 4px;
+	left: 7px;
+	height: 2px;
+	background-color: currentColor;
 `;
 
 export const LeftStroke = styled( Side )`
-	background-color: currentColor;
-	bottom: 7px;
 	top: 7px;
-	width: 2px;
+	bottom: 7px;
 	left: 4px;
+	width: 2px;
+	background-color: currentColor;
 `;
 
 export const TopLeftStroke = styled( Corner )`
 	top: 4px;
 	left: 4px;
-	border-left: 2px solid;
 	border-top: 2px solid;
+	border-left: 2px solid;
 `;
 
 export const TopRightStroke = styled( Corner )`
@@ -81,10 +77,10 @@ export const TopRightStroke = styled( Corner )`
 `;
 
 export const BottomRightStroke = styled( Corner )`
-	bottom: 4px;
 	right: 4px;
-	border-bottom: 2px solid;
+	bottom: 4px;
 	border-right: 2px solid;
+	border-bottom: 2px solid;
 `;
 
 export const BottomLeftStroke = styled( Corner )`

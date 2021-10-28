@@ -8,6 +8,8 @@ module.exports = {
 		"node_modules/**/*.css",
 		"vendor/**/*.css",
 		"**/*.js",
+		"**/*.ts",
+		"**/*.tsx",
   ],
 	rules: {
 		"no-descending-specificity": null,
