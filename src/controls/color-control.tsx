@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import type { Property } from 'csstype';
 import { get } from 'lodash';
 import classnames from 'classnames';
 
@@ -16,6 +17,7 @@ import {
 	Popover,
 	ColorIndicator,
 	ColorPalette,
+	// @ts-ignore
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -28,14 +30,26 @@ export default function ColorControl( {
 	onChange,
 	colors: colorsProp = [],
 	value,
+}: {
+	id: string;
+	label: string;
+	help: string;
+	className: string;
+	onChange: ( event: any ) => void;
+	colors: {
+		name: string;
+		slug: string;
+		color: Property.Color;
+	}[];
+	value: Property.Color;
 } ) {
 	const colors = useSelect( ( select ) => {
-		const { getSettings } = select( blockEditorStore );
-		return get( getSettings(), [ 'colors' ], [] );
+		// @ts-ignore
+		const settings = select( blockEditorStore ).getSettings();
+		return get( settings, [ 'colors' ], [] );
 	} );
 
 	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
-	const [ pickerIndex, setPickerIndex ] = useState( undefined );
 
 	const headingId = `${ id }-heading`;
 
@@ -43,24 +57,18 @@ export default function ColorControl( {
 
 	const handleOnReset = () => onChange( undefined );
 
-	const handleOnChange = ( inputValue ) => onChange( inputValue );
+	const handleOnChange = ( inputValue: Property.Color ) => onChange( inputValue );
 
-	const handleOnPickerOpen = ( targetPickerIndex ) => {
-		setIsPickerOpen( true );
-		setPickerIndex( targetPickerIndex );
-	};
+	const handleOnPickerOpen = () => setIsPickerOpen( true );
 
-	const handleOnPickerClose = () => {
-		setIsPickerOpen( false );
-		setPickerIndex();
-	};
+	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<BaseControl className={ classNames } help={ help }>
+		<BaseControl id={ id } className={ classNames } help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-color-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+					<Button isSmall isSecondary onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -80,7 +88,7 @@ export default function ColorControl( {
 									colorValue={ value }
 								/>
 							</Button>
-							{ isPickerOpen && ! pickerIndex && (
+							{ isPickerOpen && (
 								<Popover
 									className="ftb-color-control__popover"
 									position="top right"

@@ -14,6 +14,7 @@ import {
 	ButtonGroup,
 	Button,
 	Tooltip,
+	// @ts-ignore
 	__experimentalText as Text,
 } from '@wordpress/components';
 
@@ -22,13 +23,17 @@ import {
  */
 import { BORDER_STYLE_CONTROLS } from '../constants';
 import { SIDES, SideIndicatorControl } from './indicator-control';
+import type { Sides } from './indicator-control';
 
 const DEFAULT_VALUES = {
-	top: null,
-	right: null,
-	bottom: null,
-	left: null,
+	top: undefined,
+	right: undefined,
+	bottom: undefined,
+	left: undefined,
 };
+
+type ValuesKey = keyof typeof DEFAULT_VALUES;
+type BorderStyleKey = typeof BORDER_STYLE_CONTROLS[ number ][ 'value' ];
 
 export default function BorderStyleControl( {
 	id,
@@ -39,6 +44,15 @@ export default function BorderStyleControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
+}: {
+	id: string;
+	label: string;
+	help: string;
+	className: string;
+	onChange: ( event: any ) => void;
+	values: typeof DEFAULT_VALUES;
+	allowSides: boolean;
+	hasIndicator: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -49,7 +63,7 @@ export default function BorderStyleControl( {
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
-	const [ isLinked, setIsLinked ] = useState( true );
+	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const headingId = `${ id }-heading`;
 
 	const controlLabel =
@@ -63,28 +77,27 @@ export default function BorderStyleControl( {
 
 	const classNames = classnames( 'ftb-border-style-control', className );
 
-	const toggleLinked = () => {
-		setIsLinked( ! isLinked );
-	};
+	const toggleLinked = () => setIsLinked( ! isLinked );
 
 	const handleOnReset = () => {
 		setIsLinked( true );
 		onChange( {
-			top: null,
-			right: null,
-			bottom: null,
-			left: null,
+			top: undefined,
+			right: undefined,
+			bottom: undefined,
+			left: undefined,
 		} );
 	};
 
-	const handleOnClickAll = ( value ) => {
+	const handleOnClickAll = ( value: BorderStyleKey ) => {
 		const newValue =
 			value === values.top &&
 			value === values.right &&
 			value === values.bottom &&
 			value === values.left
-				? null
+				? undefined
 				: value;
+
 		onChange( {
 			top: newValue,
 			right: newValue,
@@ -93,8 +106,12 @@ export default function BorderStyleControl( {
 		} );
 	};
 
-	const handleOnClick = ( value, targetSide ) => {
-		const newValue = values[ targetSide ] && value === values[ targetSide ] ? null : value;
+	const handleOnClick = ( value: BorderStyleKey, targetSide: Sides ) => {
+		const newValue =
+			values[ targetSide as ValuesKey ] && value === values[ targetSide as ValuesKey ]
+				? undefined
+				: value;
+
 		onChange( {
 			...values,
 			[ targetSide ]: newValue,
@@ -102,11 +119,11 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } help={ help }>
+		<BaseControl id={ id } className={ classNames } help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-style-control__header">
 					<Text id={ headingId }>{ controlLabel }</Text>
-					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+					<Button isSmall isSecondary onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -123,7 +140,6 @@ export default function BorderStyleControl( {
 											icon={ borderStyle.icon }
 											isSmall
 											isPrimary={ allInputValue === borderStyle.value }
-											variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
 											onClick={ () => handleOnClickAll( borderStyle.value ) }
 										/>
 									) ) }
@@ -141,10 +157,7 @@ export default function BorderStyleControl( {
 													key={ borderStyle.value }
 													label={ borderStyle.label }
 													icon={ borderStyle.icon }
-													isPrimary={ values[ item.value ] === borderStyle.value }
-													variant={
-														values[ item.value ] === borderStyle.value ? 'primary' : undefined
-													}
+													isPrimary={ values[ item.value as ValuesKey ] === borderStyle.value }
 													isSmall
 													onClick={ () => handleOnClick( borderStyle.value, item.value ) }
 												/>
@@ -161,7 +174,6 @@ export default function BorderStyleControl( {
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }
-									variant={ isLinked ? 'primary' : 'secondary' }
 									onClick={ toggleLinked }
 									icon={ isLinked ? link : linkOff }
 									iconSize="16"

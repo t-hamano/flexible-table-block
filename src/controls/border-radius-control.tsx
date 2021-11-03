@@ -13,8 +13,11 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
+	// @ts-ignore
 	__experimentalText as Text,
+	// @ts-ignore
 	__experimentalUnitControl as UnitControl,
+	// @ts-ignore
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -24,13 +27,17 @@ import {
 import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS } from '../constants';
 import { CORNERS, CornerIndicatorControl } from './indicator-control';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
+import type { Corners } from './indicator-control';
 
 const DEFAULT_VALUES = {
-	topLeft: null,
-	topRight: null,
-	bottomRight: null,
-	bottomLeft: null,
+	topLeft: undefined,
+	topRight: undefined,
+	bottomRight: undefined,
+	bottomLeft: undefined,
 };
+
+type ValuesKey = keyof typeof DEFAULT_VALUES;
+type MaxBorderRadiusKey = keyof typeof MAX_BORDER_RADIUS;
 
 export default function BorderRadiusControl( {
 	id,
@@ -41,6 +48,15 @@ export default function BorderRadiusControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
+}: {
+	id: string;
+	label: string;
+	help: string;
+	className: string;
+	onChange: ( event: any ) => void;
+	values: typeof DEFAULT_VALUES;
+	allowSides: boolean;
+	hasIndicator: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -57,8 +73,8 @@ export default function BorderRadiusControl( {
 
 	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
 
-	const [ isLinked, setIsLinked ] = useState( true );
-	const [ corner, setCorner ] = useState( undefined );
+	const [ isLinked, setIsLinked ] = useState< boolean >( true );
+	const [ corner, setCorner ] = useState< Corners | undefined >( undefined );
 
 	const headingId = `${ id }-heading`;
 
@@ -79,20 +95,20 @@ export default function BorderRadiusControl( {
 	const handleOnReset = () => {
 		setIsLinked( true );
 		onChange( {
-			topLeft: null,
-			topRight: null,
-			bottomRight: null,
-			bottomLeft: null,
+			topLeft: undefined,
+			topRight: undefined,
+			bottomRight: undefined,
+			bottomLeft: undefined,
 		} );
 	};
 
-	const handleOnFocus = ( focusCorner ) => {
-		setCorner( focusCorner );
-	};
+	const handleOnFocus = ( focusCorner: Corners ) => setCorner( focusCorner );
 
-	const handleOnChangeAll = ( inputValue ) => {
+	const handleOnChangeAll = ( inputValue: string ) => {
 		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_RADIUS[ unit ] } );
+		const sanitizedValue = sanitizeUnitValue( inputValue, {
+			maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
+		} );
 
 		onChange( {
 			topLeft: sanitizedValue,
@@ -102,9 +118,11 @@ export default function BorderRadiusControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue, targetCorner ) => {
+	const handleOnChange = ( inputValue: string, targetCorner: Corners ) => {
 		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: MAX_BORDER_RADIUS[ unit ] } );
+		const sanitizedValue = sanitizeUnitValue( inputValue, {
+			maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
+		} );
 
 		onChange( {
 			...values,
@@ -113,11 +131,11 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl className={ classNames } help={ help }>
+		<BaseControl id={ id } className={ classNames } help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-radius-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary variant="secondary" onClick={ handleOnReset }>
+					<Button isSmall isSecondary onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -141,7 +159,6 @@ export default function BorderRadiusControl( {
 								isSmall
 								isPrimary={ isLinked }
 								isSecondary={ ! isLinked }
-								variant={ isLinked ? 'primary' : 'secondary' }
 								onClick={ toggleLinked }
 								icon={ isLinked ? link : linkOff }
 								iconSize="16"
@@ -155,11 +172,11 @@ export default function BorderRadiusControl( {
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
-								value={ values[ item.value ] }
+								value={ values[ item.value as ValuesKey ] }
 								units={ borderRadiusUnits }
 								min="0"
 								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
+								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
 							/>
 						) ) }
 					</div>
