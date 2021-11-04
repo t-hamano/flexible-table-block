@@ -126,6 +126,7 @@ export default function TableCellSettings( props ) {
 			tag: sectionName === 'head' ? 'th' : 'td',
 			styles: {
 				fontSize: undefined,
+				lineHeight: undefined,
 				width: undefined,
 				color: undefined,
 				backgroundColor: undefined,
