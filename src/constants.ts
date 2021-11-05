@@ -19,20 +19,33 @@ import {
 	borderSeparate as borderSeparateIcon,
 } from './icons';
 
+// Store options.
+export interface StoreOptions {
+	/* eslint-disable camelcase */
+	show_label_on_section: boolean;
+	show_control_button: boolean;
+	focus_control_button: boolean;
+	show_dot_on_th: boolean;
+	show_global_setting: boolean;
+	breakpoint: number;
+	block_style: {};
+	/* eslint-enable camelcase */
+}
+
 // Custom store name.
-export const STORE_NAME = 'flexible-table-block';
+export const STORE_NAME = 'flexible-table-block' as const;
 
 // Rest API routes.
-export const REST_API_ROUTE = '/flexible-table-block/v1/options';
+export const REST_API_ROUTE = '/flexible-table-block/v1/options' as const;
 
 // Table placeholder default settings.
-export const DEFAULT_PREVIEW_ROWS = 3;
-export const DEFAULT_PREVIEW_COLUMNS = 3;
-export const MIN_PREVIEW_TABLE_HEIGHT = 150;
-export const MAX_PREVIEW_TABLE_COL = 50;
-export const MAX_PREVIEW_TABLE_ROW = 50;
-export const THRESHOLD_PREVIEW_TABLE_COL = 10;
-export const THRESHOLD_PREVIEW_TABLE_ROW = 10;
+export const DEFAULT_PREVIEW_ROWS = 3 as const;
+export const DEFAULT_PREVIEW_COLUMNS = 3 as const;
+export const MIN_PREVIEW_TABLE_HEIGHT = 150 as const;
+export const MAX_PREVIEW_TABLE_COL = 50 as const;
+export const MAX_PREVIEW_TABLE_ROW = 50 as const;
+export const THRESHOLD_PREVIEW_TABLE_COL = 10 as const;
+export const THRESHOLD_PREVIEW_TABLE_ROW = 10 as const;
 
 // Upper and lower limits.
 export const MAX_BORDER_RADIUS = {
