@@ -87,13 +87,12 @@ class Api {
 
 		// Sanitize option values.
 		foreach ( $params as $key => $value ) {
-
 			if ( ! array_key_exists( $key, Settings::OPTIONS ) ) {
 				continue;
 			}
 
 			if ( 'boolean' === Settings::OPTIONS[ $key ]['type'] ) {
-				$value = (bool) $value;
+				$value = $value ? 1 : 0;
 			}
 
 			if ( 'array' === Settings::OPTIONS[ $key ]['type'] ) {
