@@ -3,24 +3,26 @@
  */
 import apiFetch from '@wordpress/api-fetch';
 import { registerStore } from '@wordpress/data';
-
 /**
  * Internal dependencies
  */
 import { STORE_NAME, REST_API_ROUTE } from './constants';
+
+import type { StoreOptions } from './constants';
+import type { AnyAction as Action } from 'redux';
 
 const DEFAULT_STATE = {
 	options: {},
 };
 
 const actions = {
-	getOptions( path ) {
+	getOptions( path: string ) {
 		return {
 			type: 'GET_OPTIONS',
 			path,
 		};
 	},
-	setOptions( options ) {
+	setOptions( options: StoreOptions ) {
 		return {
 			type: 'SET_OPTIONS',
 			options,
@@ -28,7 +30,7 @@ const actions = {
 	},
 };
 
-const reducer = ( state = DEFAULT_STATE, action ) => {
+const reducer = ( state = DEFAULT_STATE, action: Action ) => {
 	switch ( action.type ) {
 		case 'SET_OPTIONS': {
 			return {
@@ -43,21 +45,21 @@ const reducer = ( state = DEFAULT_STATE, action ) => {
 };
 
 const selectors = {
-	getOptions( state ) {
+	getOptions( state: { options: StoreOptions } ) {
 		const { options } = state;
 		return options;
 	},
 };
 
 const controls = {
-	GET_OPTIONS( action ) {
+	GET_OPTIONS( action: Action ) {
 		return apiFetch( { path: action.path } );
 	},
 };
 
 const resolvers = {
 	*getOptions() {
-		const options = yield actions.getOptions( REST_API_ROUTE );
+		const options: StoreOptions = yield actions.getOptions( REST_API_ROUTE );
 		return actions.setOptions( options );
 	},
 };
