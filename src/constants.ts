@@ -26,6 +26,7 @@ export interface StoreOptions {
 	show_control_button: boolean;
 	focus_control_button: boolean;
 	show_dot_on_th: boolean;
+	merge_content: boolean;
 	show_global_setting: boolean;
 	breakpoint: number;
 	block_style: {};

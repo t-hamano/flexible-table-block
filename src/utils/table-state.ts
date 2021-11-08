@@ -413,11 +413,16 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 /**
  * Merge cells in the virtual table.
  *
- * @param  vTable        Current virtual table state.
- * @param  selectedCells Current selected cells.
+ * @param  vTable         Current virtual table state.
+ * @param  selectedCells  Current selected cells.
+ * @param  isMergeContent Whether keep the contents of all cells when merging cells.
  * @return New virtual table state.
  */
-export function mergeCells( vTable: VTable, selectedCells: VCell[] | undefined ): VTable {
+export function mergeCells(
+	vTable: VTable,
+	selectedCells: VCell[] | undefined,
+	isMergeContent: boolean
+): VTable {
 	if ( ! selectedCells || ! selectedCells.length ) return vTable;
 
 	const sectionName: SectionName = selectedCells[ 0 ].sectionName as SectionName;
@@ -452,6 +457,23 @@ export function mergeCells( vTable: VTable, selectedCells: VCell[] | undefined )
 		}
 	}
 
+	// Merge the contents of the cells to be merged.
+	const mergedCellsContent: string = vTable[ sectionName as SectionName ]
+		.reduce( ( cells: VCell[], row: VRow ) => cells.concat( row.cells ), [] )
+		.reduce( ( result: string[], cell: VCell ) => {
+			if (
+				cell.rowIndex >= minRowIndex &&
+				cell.rowIndex <= maxRowIndex &&
+				cell.vColIndex >= minColIndex &&
+				cell.vColIndex <= maxColIndex &&
+				cell.content
+			) {
+				result.push( cell.content );
+			}
+			return result;
+		}, [] )
+		.join( '<br>' );
+
 	return {
 		...vTable,
 		[ sectionName ]: vTable[ sectionName as SectionName ].map( ( row, rowIndex ) => {
@@ -468,6 +490,7 @@ export function mergeCells( vTable: VTable, selectedCells: VCell[] | undefined )
 							...cell,
 							rowSpan: Math.abs( maxRowIndex - minRowIndex ) + 1,
 							colSpan: Math.abs( maxColIndex - minColIndex ) + 1,
+							content: isMergeContent ? mergedCellsContent : cell.content,
 						};
 					}
 

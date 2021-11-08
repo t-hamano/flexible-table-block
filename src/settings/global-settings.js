@@ -613,6 +613,19 @@ export default function GlobalSettings() {
 							} );
 						} }
 					/>
+					<ToggleControl
+						label={ __(
+							'Keep the contents of all cells when merging cells',
+							'flexible-table-block'
+						) }
+						checked={ !! options.merge_content }
+						onChange={ ( value ) => {
+							setOptions( {
+								...options,
+								merge_content: value,
+							} );
+						} }
+					/>
 					{ isAdministrator && (
 						<ToggleControl
 							label={ __(
