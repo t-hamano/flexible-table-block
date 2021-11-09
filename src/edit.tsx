@@ -53,6 +53,7 @@ import { mergeCell, splitCell } from './icons';
 import type { BlockEditProps } from '@wordpress/blocks';
 import type { BlockAttributes, SectionName } from './BlockAttributes';
 import type { KeyboardEvent } from 'react';
+import type { StoreOptions } from './constants';
 
 const justifyIcons = {
 	left: justifyLeft,
@@ -76,12 +77,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
 
-	const options = useSelect< {
-		// eslint-disable-next-line camelcase
-		show_dot_on_th: boolean;
-		// eslint-disable-next-line camelcase
-		show_control_button: boolean;
-	} >( ( select ) => select( STORE_NAME ).getOptions() );
+	const options = useSelect< StoreOptions >( ( select ) => select( STORE_NAME ).getOptions() );
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable = toVirtualTable( attributes );
@@ -168,7 +164,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onMergeCells = () => {
-		const newVTable = mergeCells( vTable, selectedCells );
+		const newVTable = mergeCells( vTable, selectedCells, options.merge_content );
 		setAttributes( toTableAttributes( newVTable ) );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );

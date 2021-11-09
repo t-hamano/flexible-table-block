@@ -32,6 +32,11 @@ class Settings {
 			'type'    => 'boolean',
 			'default' => true,
 		),
+		// Keep the contents of all cells when merging cells.
+		'merge_content'         => array(
+			'type'    => 'boolean',
+			'default' => false,
+		),
 		// Show global setting link to non-administrative users.
 		'show_global_setting'   => array(
 			'type'    => 'boolean',
