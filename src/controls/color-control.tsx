@@ -33,15 +33,15 @@ export default function ColorControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
-	colors: {
+	colors?: {
 		name: string;
 		slug: string;
 		color: Property.Color;
 	}[];
-	value: Property.Color;
+	value: Property.Color | undefined;
 } ) {
 	const colors = useSelect( ( select ) => {
 		// @ts-ignore
@@ -85,7 +85,7 @@ export default function ColorControl( {
 										'component-color-indicator--none': ! value,
 										'component-color-indicator--transparent': value === 'transparent',
 									} ) }
-									colorValue={ value }
+									colorValue={ value || '' }
 								/>
 							</Button>
 							{ isPickerOpen && (
@@ -96,7 +96,7 @@ export default function ColorControl( {
 								>
 									<ColorPalette
 										colors={ [ ...colors, ...colorsProp ] }
-										value={ value }
+										value={ value || '' }
 										onChange={ handleOnChange }
 									/>
 								</Popover>

@@ -2,6 +2,7 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import type { PropertyValue } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -21,19 +22,18 @@ import {
 /**
  * Internal dependencies
  */
-import { BORDER_STYLE_CONTROLS } from '../constants';
-import { SIDES, SideIndicatorControl } from './indicator-control';
-import type { Sides } from './indicator-control';
+import { BORDER_STYLE_CONTROLS, SIDE_CONTROLS } from '../constants';
+import { SideIndicatorControl } from './indicator-control';
+import type { BorderStyleValue } from '../BlockAttributes';
 
 const DEFAULT_VALUES = {
-	top: undefined,
-	right: undefined,
-	bottom: undefined,
-	left: undefined,
+	top: '',
+	right: '',
+	bottom: '',
+	left: '',
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
-type BorderStyleKey = typeof BORDER_STYLE_CONTROLS[ number ][ 'value' ];
 
 export default function BorderStyleControl( {
 	id,
@@ -47,12 +47,17 @@ export default function BorderStyleControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
-	allowSides: boolean;
-	hasIndicator: boolean;
+	values: {
+		top?: PropertyValue< string >;
+		right?: PropertyValue< string >;
+		bottom?: PropertyValue< string >;
+		left?: PropertyValue< string >;
+	};
+	allowSides?: boolean;
+	hasIndicator?: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -81,15 +86,10 @@ export default function BorderStyleControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
-		onChange( {
-			top: undefined,
-			right: undefined,
-			bottom: undefined,
-			left: undefined,
-		} );
+		onChange( DEFAULT_VALUES );
 	};
 
-	const handleOnClickAll = ( value: BorderStyleKey ) => {
+	const handleOnClickAll = ( value: BorderStyleValue ) => {
 		const newValue =
 			value === values.top &&
 			value === values.right &&
@@ -106,7 +106,7 @@ export default function BorderStyleControl( {
 		} );
 	};
 
-	const handleOnClick = ( value: BorderStyleKey, targetSide: Sides ) => {
+	const handleOnClick = ( value: BorderStyleValue, targetSide: ValuesKey ) => {
 		const newValue =
 			values[ targetSide as ValuesKey ] && value === values[ targetSide as ValuesKey ]
 				? undefined
@@ -147,7 +147,7 @@ export default function BorderStyleControl( {
 							</div>
 						) }
 						{ ! isLinked &&
-							SIDES.map( ( item ) => (
+							SIDE_CONTROLS.map( ( item ) => (
 								<div className="ftb-border-style-control__button-controls-row" key={ item.value }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<ButtonGroup className="ftb-button-group" aria-label={ item.label }>
@@ -159,7 +159,9 @@ export default function BorderStyleControl( {
 													icon={ borderStyle.icon }
 													isPrimary={ values[ item.value as ValuesKey ] === borderStyle.value }
 													isSmall
-													onClick={ () => handleOnClick( borderStyle.value, item.value ) }
+													onClick={ () =>
+														handleOnClick( borderStyle.value, item.value as ValuesKey )
+													}
 												/>
 											);
 										} ) }

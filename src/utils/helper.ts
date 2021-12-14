@@ -2,8 +2,19 @@
  * External dependencies
  */
 import _, { identity, isEmpty, isObject, mapValues, pickBy } from 'lodash';
+import type { PropertyValue } from 'csstype';
 
 const DEFAULT_PRECISION: number = 4;
+
+// Array with four values for CSS
+export type FourCssValues = [ string, string, string, string ];
+
+// sanitizeUnitValue function option
+interface SanitizeOptions {
+	minNum?: number;
+	maxNum?: number;
+	precision?: number;
+}
 
 /**
  * Removed falsy values from nested object.
@@ -20,9 +31,6 @@ export const cleanEmptyObject = ( object: {} ): {} | undefined => {
 
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
 };
-
-// Array with four values for CSS
-export type FourCssValues = [ string, string, string, string ];
 
 /**
  * Convert short-hand/long-hand CSS values into an array with four values.
@@ -47,13 +55,6 @@ export function parseCssValue( cssValue: string ): FourCssValues {
 	}
 }
 
-// sanitizeUnitValue function option
-interface SanitizeOptions {
-	minNum?: number;
-	maxNum?: number;
-	precision?: number;
-}
-
 /**
  * Sanitize the value of UnitControl.
  *
@@ -61,7 +62,10 @@ interface SanitizeOptions {
  * @param  options      Sanitize options.
  * @return Sanitized UnitControl value.
  */
-export function sanitizeUnitValue( initialValue: string, options?: SanitizeOptions ): string {
+export function sanitizeUnitValue(
+	initialValue: PropertyValue< string | number > | undefined,
+	options?: SanitizeOptions
+): string {
 	const value: string = String( initialValue ).trim();
 	let num: number = parseFloat( value );
 

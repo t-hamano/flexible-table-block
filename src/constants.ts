@@ -197,3 +197,52 @@ export const CAPTION_SIDE_CONTROLS = [
 		value: 'bottom',
 	},
 ] as const;
+
+export const CORNER_CONTROLS = [
+	{
+		label: __( 'Top Left', 'flexible-table-block' ),
+		value: 'topLeft',
+	},
+	{
+		label: __( 'Top Right', 'flexible-table-block' ),
+		value: 'topRight',
+	},
+	{
+		label: __( 'Bottom Right', 'flexible-table-block' ),
+		value: 'bottomRight',
+	},
+	{
+		label: __( 'Bottom Left', 'flexible-table-block' ),
+		value: 'bottomLeft',
+	},
+] as const;
+
+export const DIRECTION_CONTROLS = [
+	{
+		label: __( 'Horizontal', 'flexible-table-block' ),
+		value: 'horizontal',
+	},
+	{
+		label: __( 'Vertical', 'flexible-table-block' ),
+		value: 'vertical',
+	},
+];
+
+export const SIDE_CONTROLS = [
+	{
+		label: __( 'Top', 'flexible-table-block' ),
+		value: 'top',
+	},
+	{
+		label: __( 'Right', 'flexible-table-block' ),
+		value: 'right',
+	},
+	{
+		label: __( 'Bottom', 'flexible-table-block' ),
+		value: 'bottom',
+	},
+	{
+		label: __( 'Left', 'flexible-table-block' ),
+		value: 'left',
+	},
+];

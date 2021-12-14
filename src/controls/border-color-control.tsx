@@ -3,6 +3,7 @@
  */
 import { get } from 'lodash';
 import classnames from 'classnames';
+import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -26,14 +27,15 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import { SIDES, SideIndicatorControl } from './indicator-control';
-import type { Sides } from './indicator-control';
+import { SideIndicatorControl } from './indicator-control';
+import { SIDE_CONTROLS } from '../constants';
+import type { SideValue } from '../BlockAttributes';
 
 const DEFAULT_VALUES = {
-	top: undefined,
-	right: undefined,
-	bottom: undefined,
-	left: undefined,
+	top: '',
+	right: '',
+	bottom: '',
+	left: '',
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -50,12 +52,17 @@ export default function BorderColorControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
-	allowSides: boolean;
-	hasIndicator: boolean;
+	values: {
+		top?: Property.BorderTopColor;
+		right?: Property.BorderRightColor;
+		bottom?: Property.BorderBottomColor;
+		left?: Property.BorderLeftColor;
+	};
+	allowSides?: boolean;
+	hasIndicator?: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -90,12 +97,7 @@ export default function BorderColorControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
-		onChange( {
-			top: undefined,
-			right: undefined,
-			bottom: undefined,
-			left: undefined,
-		} );
+		onChange( DEFAULT_VALUES );
 	};
 
 	const handleOnChangeAll = ( inputValue: string ) => {
@@ -107,7 +109,7 @@ export default function BorderColorControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue: string | undefined, targetSide: Sides ) => {
+	const handleOnChange = ( inputValue: string | undefined, targetSide: SideValue ) => {
 		onChange( {
 			...values,
 			[ targetSide ]: inputValue,
@@ -172,7 +174,7 @@ export default function BorderColorControl( {
 						) }
 						{ ! isLinked &&
 							allowSides &&
-							SIDES.map( ( item, index ) => (
+							SIDE_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-color-control__controls-row" key={ index }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<Button

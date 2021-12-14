@@ -5,6 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
+// @ts-ignore
 import { store as coreStore } from '@wordpress/core-data';
 import {
 	Button,
@@ -17,10 +18,12 @@ import {
 	Popover,
 	Notice,
 	ExternalLink,
+	// @ts-ignore
 	__experimentalUnitControl as UnitControl,
+	// @ts-ignore
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { cog, help, mobile, desktop } from '@wordpress/icons';
+import { cog, help } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -38,11 +41,18 @@ import {
 } from '../constants';
 import { BorderWidthControl, BorderStyleControl, ColorControl, PaddingControl } from '../controls';
 import { sanitizeUnitValue } from '../utils/helper';
+import type { Notice as NoticeType } from '@wordpress/components';
+
+interface NoticeInfo {
+	status?: NoticeType.Props[ 'status' ];
+	message?: string;
+}
 
 export default function GlobalSettings() {
 	const storeOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
 
 	const isAdministrator = useSelect( ( select ) =>
+		// @ts-ignore
 		select( coreStore ).canUser( 'create', 'users' )
 	);
 
@@ -50,10 +60,10 @@ export default function GlobalSettings() {
 
 	const [ isSettingModalOpen, setIsSettingModalOpen ] = useState( false );
 	const [ isHelpModalOpen, setIsHelpModalOpen ] = useState( false );
-	const [ notice, setNotice ] = useState();
+	const [ noticeInfo, setNoticeInfo ] = useState< NoticeInfo | undefined >( undefined );
 	const [ isResetPopup, setIsResetPopup ] = useState( false );
 	const [ isWaiting, setIsWaiting ] = useState( false );
-	const [ options, setOptions ] = useState();
+	const [ options, setOptions ] = useState< any >();
 
 	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
 
@@ -64,13 +74,21 @@ export default function GlobalSettings() {
 
 	// Initialize notice message.
 	useEffect( () => {
-		setNotice();
+		setNoticeInfo( undefined );
 	}, [ isSettingModalOpen ] );
+
+	// Force focus on the modal as it loses focus when saving or restoring settings.
+	function focusModal() {
+		const modal = document.querySelector( '.ftb-global-setting-modal' ) as HTMLInputElement;
+		if ( modal ) {
+			modal.focus();
+		}
+	}
 
 	// Update options.
 	const handleUpdateOptions = () => {
 		setIsWaiting( true );
-		setNotice();
+		setNoticeInfo( undefined );
 		setStoreOptions( options );
 
 		apiFetch( {
@@ -78,26 +96,28 @@ export default function GlobalSettings() {
 			method: 'POST',
 			data: options,
 		} )
-			.then( ( response ) => {
-				document.querySelector( '.ftb-global-setting-modal' ).focus();
-
+			.then( ( response: any ) => {
+				focusModal();
 				setIsWaiting( false );
-				setNotice( {
-					status: response.status,
-					message: response.message,
-				} );
+
+				// Show notice message.
+				if ( response.status && response.message ) {
+					setNoticeInfo( {
+						status: response?.status,
+						message: response?.message,
+					} );
+				}
 
 				// Update inline CSS.
 				const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
-				if ( styleSheet ) {
+				if ( response.block_css && styleSheet ) {
 					styleSheet.textContent = response.block_css;
 				}
 			} )
 			.catch( ( response ) => {
-				document.querySelector( '.ftb-global-setting-modal' ).focus();
-
+				focusModal();
 				setIsWaiting( false );
-				setNotice( {
+				setNoticeInfo( {
 					status: 'error',
 					message: response.message,
 				} );
@@ -107,26 +127,32 @@ export default function GlobalSettings() {
 	// Reset state and store options.
 	const handleResetOptions = () => {
 		setIsWaiting( true );
-		setNotice();
+		setNoticeInfo( undefined );
 
 		apiFetch( {
 			path: REST_API_ROUTE,
 			method: 'DELETE',
-		} ).then( ( response ) => {
-			document.querySelector( '.ftb-global-setting-modal' ).focus();
+		} ).then( ( response: any ) => {
+			focusModal();
 			setIsWaiting( false );
 
-			setNotice( {
-				status: response.status,
-				message: response.message,
-			} );
+			// Show notice message.
+			if ( response.status && response.message ) {
+				setNoticeInfo( {
+					status: response.status,
+					message: response.message,
+				} );
+			}
 
-			setOptions( response.options );
-			setStoreOptions( response.options );
+			// Update options.
+			if ( response.options ) {
+				setOptions( response.options );
+				setStoreOptions( response.options );
+			}
 
 			// Update inline CSS.
 			const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
-			if ( styleSheet ) {
+			if ( response.block_css && styleSheet ) {
 				styleSheet.textContent = response.block_css;
 			}
 		} );
@@ -135,16 +161,11 @@ export default function GlobalSettings() {
 	return (
 		<>
 			<div className="ftb-global-setting">
-				<Button icon={ help } isLink variant="link" onClick={ () => setIsHelpModalOpen( true ) }>
+				<Button icon={ help } isLink onClick={ () => setIsHelpModalOpen( true ) }>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
 				{ ( isAdministrator || options?.show_global_setting ) && (
-					<Button
-						icon={ cog }
-						isPrimary
-						variant="primary"
-						onClick={ () => setIsSettingModalOpen( true ) }
-					>
+					<Button icon={ cog } isPrimary onClick={ () => setIsSettingModalOpen( true ) }>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
 					</Button>
 				) }
@@ -221,7 +242,7 @@ export default function GlobalSettings() {
 								units={ tableWidthUnits }
 								value={ options.block_style?.table_width }
 								min="0"
-								onChange={ ( value ) => {
+								onChange={ ( value: string ) => {
 									setOptions( {
 										...options,
 										block_style: {
@@ -242,7 +263,7 @@ export default function GlobalSettings() {
 								units={ tableWidthUnits }
 								value={ options.block_style?.table_max_width }
 								min="0"
-								onChange={ ( value ) => {
+								onChange={ ( value: string ) => {
 									setOptions( {
 										...options,
 										block_style: {
@@ -283,13 +304,16 @@ export default function GlobalSettings() {
 								} );
 							} }
 						/>
-						<BaseControl className="ftb-global-setting-modal__styles-item">
+						<BaseControl
+							id="flexible-table-block-global-table-border-collapse"
+							className="ftb-global-setting-modal__styles-item"
+						>
 							<div
-								aria-labelledby="flexible-table-block-global-table-border-collapse"
+								aria-labelledby="flexible-table-block-global-table-border-collapse-heading"
 								role="region"
 							>
 								<span
-									id="flexible-table-block-global-table-border-collapse"
+									id="flexible-table-block-global-table-border-collapse-heading"
 									className="ftb-base-control-label"
 								>
 									{ __( 'Cell Borders', 'flexible-table-block' ) }
@@ -301,11 +325,6 @@ export default function GlobalSettings() {
 												key={ value }
 												isPrimary={ value === options.block_style?.table_border_collapse }
 												isSecondary={ value !== options.block_style?.table_border_collapse }
-												variant={
-													value === options.block_style?.table_border_collapse
-														? 'primary'
-														: 'secondary'
-												}
 												icon={ icon }
 												onClick={ () => {
 													const borderCollapse =
@@ -460,13 +479,16 @@ export default function GlobalSettings() {
 								} );
 							} }
 						/>
-						<BaseControl className="ftb-global-setting-modal__styles-item">
+						<BaseControl
+							id="flexible-table-block-global-cell-horizontal-align"
+							className="ftb-global-setting-modal__styles-item"
+						>
 							<div
-								aria-labelledby="flexible-table-block-global-cell-horizontal-align"
+								aria-labelledby="flexible-table-block-global-cell-horizontal-align-heading"
 								role="region"
 							>
 								<span
-									id="flexible-table-block-global-cell-horizontal-align"
+									id="flexible-table-block-global-cell-horizontal-align-heading"
 									className="ftb-base-control-label"
 								>
 									{ __( 'Cell Text Alignment', 'flexible-table-block' ) }
@@ -479,9 +501,6 @@ export default function GlobalSettings() {
 												label={ label }
 												isPrimary={ value === options.block_style?.cell_text_align }
 												isSecondary={ value !== options.block_style?.cell_text_align }
-												variant={
-													value === options.block_style?.cell_text_align ? 'primary' : 'secondary'
-												}
 												icon={ icon }
 												onClick={ () => {
 													const newValue =
@@ -500,10 +519,16 @@ export default function GlobalSettings() {
 								</ButtonGroup>
 							</div>
 						</BaseControl>
-						<BaseControl className="ftb-global-setting-modal__styles-item">
-							<div aria-labelledby="flexible-table-block-global-cell-vertical-align" role="region">
+						<BaseControl
+							id="flexible-table-block-global-cell-vertical-align"
+							className="ftb-global-setting-modal__styles-item"
+						>
+							<div
+								aria-labelledby="flexible-table-block-global-cell-vertical-align-heading"
+								role="region"
+							>
 								<span
-									id="flexible-table-block-global-cell-vertical-align"
+									id="flexible-table-block-global-cell-vertical-align-heading"
 									className="ftb-base-control-label"
 								>
 									{ __( 'Cell Vertical Alignment', 'flexible-table-block' ) }
@@ -516,11 +541,6 @@ export default function GlobalSettings() {
 												label={ label }
 												isPrimary={ value === options.block_style?.cell_vertical_align }
 												isSecondary={ value !== options.block_style?.cell_vertical_align }
-												variant={
-													value === options.block_style?.cell_vertical_align
-														? 'primary'
-														: 'secondary'
-												}
 												icon={ icon }
 												onClick={ () => {
 													const newValue =
@@ -548,13 +568,11 @@ export default function GlobalSettings() {
 							'Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.',
 							'flexible-table-block'
 						) }
-						beforeIcon={ mobile }
-						afterIcon={ desktop }
+						beforeIcon="smartphone"
+						afterIcon="desktop"
 						min={ MIN_RESPONSIVE_BREAKPOINT }
 						max={ MAX_RESPONSIVE_BREAKPOINT }
-						value={ parseInt( options.breakpoint ) || undefined }
-						renderTooltipContent={ ( value ) => `${ value }px` }
-						trackColor="transparent"
+						value={ parseInt( options.breakpoint ) || DEFAULT_RESPONSIVE_BREAKPOINT }
 						allowReset
 						onChange={ ( value ) => {
 							setOptions( {
@@ -641,30 +659,24 @@ export default function GlobalSettings() {
 							} }
 						/>
 					) }
-					{ notice?.status && notice?.message && (
+					{ noticeInfo?.status && noticeInfo?.message && (
 						<Notice
 							className="ftb-global-setting-modal__notice"
-							status={ notice.status }
+							status={ noticeInfo.status }
 							onRemove={ () => {
-								setNotice();
-								document.querySelector( '.ftb-global-setting-modal' ).focus();
+								setNoticeInfo( undefined );
+								focusModal();
 							} }
 						>
-							{ notice.message }
+							{ noticeInfo.message }
 						</Notice>
 					) }
 					<div className="ftb-global-setting-modal__buttons">
-						<Button
-							isPrimary
-							variant="primary"
-							disabled={ isWaiting }
-							onClick={ handleUpdateOptions }
-						>
+						<Button isPrimary disabled={ isWaiting } onClick={ handleUpdateOptions }>
 							{ __( 'Save', 'flexible-table-block' ) }
 						</Button>
 						<Button
 							isLink
-							variant="link"
 							isDestructive
 							disabled={ isWaiting }
 							onClick={ () => setIsResetPopup( ! isResetPopup ) }
@@ -682,11 +694,7 @@ export default function GlobalSettings() {
 										<Button isDestructive onClick={ handleResetOptions }>
 											{ __( 'Restore', 'flexible-table-block' ) }
 										</Button>
-										<Button
-											isSecondary
-											variant="secondary"
-											onClick={ () => setIsResetPopup( false ) }
-										>
+										<Button isSecondary onClick={ () => setIsResetPopup( false ) }>
 											{ __( 'Cancel', 'flexible-table-block' ) }
 										</Button>
 									</div>

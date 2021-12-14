@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import type { Properties } from 'csstype';
-import type { Corners, Direction } from './style-picker';
+import type { Corner, Direction } from './style-picker';
 import { pickBy, omit, mapValues } from 'lodash';
 import { sanitizeUnitValue } from './helper';
 
@@ -234,7 +234,7 @@ export function updateBorderSpacing(
  */
 export function updateBorderRadius(
 	styles: Properties,
-	values: Partial< Corners > | undefined
+	values: Partial< Corner > | undefined
 ): Properties {
 	if ( ! values ) return styles;
 

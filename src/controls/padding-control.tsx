@@ -2,6 +2,7 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -24,15 +25,15 @@ import {
 /**
  * Internal dependencies
  */
-import { PADDING_UNITS } from '../constants';
-import { SIDES, SideIndicatorControl } from './indicator-control';
-import type { Sides } from './indicator-control';
+import { PADDING_UNITS, SIDE_CONTROLS } from '../constants';
+import { SideIndicatorControl } from './indicator-control';
+import type { SideValue } from '../BlockAttributes';
 
 const DEFAULT_VALUES = {
-	top: undefined,
-	right: undefined,
-	bottom: undefined,
-	left: undefined,
+	top: '',
+	right: '',
+	bottom: '',
+	left: '',
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -49,12 +50,17 @@ export default function PaddingControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
-	allowSides: boolean;
-	hasIndicator: boolean;
+	values: {
+		top?: Property.PaddingTop;
+		right?: Property.PaddingRight;
+		bottom?: Property.PaddingBottom;
+		left?: Property.PaddingLeft;
+	};
+	allowSides?: boolean;
+	hasIndicator?: boolean;
 } ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 
@@ -65,7 +71,7 @@ export default function PaddingControl( {
 	const paddingUnits = useCustomUnits( { availableUnits: PADDING_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
-	const [ side, setSide ] = useState< Sides | undefined >( undefined );
+	const [ side, setSide ] = useState< SideValue | undefined >( undefined );
 
 	const headingId = `${ id }-heading`;
 
@@ -85,15 +91,10 @@ export default function PaddingControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
-		onChange( {
-			top: undefined,
-			right: undefined,
-			bottom: undefined,
-			left: undefined,
-		} );
+		onChange( DEFAULT_VALUES );
 	};
 
-	const handleOnFocus = ( focusSide: Sides ) => setSide( focusSide );
+	const handleOnFocus = ( focusSide: SideValue ) => setSide( focusSide );
 
 	const handleOnChangeAll = ( inputValue: string ) => {
 		onChange( {
@@ -104,7 +105,7 @@ export default function PaddingControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue: string, targetSide: Sides ) => {
+	const handleOnChange = ( inputValue: string, targetSide: SideValue ) => {
 		onChange( {
 			...values,
 			[ targetSide ]: inputValue,
@@ -150,7 +151,7 @@ export default function PaddingControl( {
 				</div>
 				{ ! isLinked && allowSides && (
 					<div className="ftb-padding-control__input-controls">
-						{ SIDES.map( ( item ) => (
+						{ SIDE_CONTROLS.map( ( item ) => (
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }

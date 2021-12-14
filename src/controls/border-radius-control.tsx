@@ -2,6 +2,7 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -24,16 +25,16 @@ import {
 /**
  * Internal dependencies
  */
-import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS } from '../constants';
-import { CORNERS, CornerIndicatorControl } from './indicator-control';
+import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS, CORNER_CONTROLS } from '../constants';
+import { CornerIndicatorControl } from './indicator-control';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
-import type { Corners } from './indicator-control';
+import type { CornerValue } from '../BlockAttributes';
 
 const DEFAULT_VALUES = {
-	topLeft: undefined,
-	topRight: undefined,
-	bottomRight: undefined,
-	bottomLeft: undefined,
+	topLeft: '',
+	topRight: '',
+	bottomRight: '',
+	bottomLeft: '',
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -51,12 +52,17 @@ export default function BorderRadiusControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
-	allowSides: boolean;
-	hasIndicator: boolean;
+	values: {
+		topLeft?: Property.BorderTopLeftRadius;
+		topRight?: Property.BorderTopRightRadius;
+		bottomRight?: Property.BorderBottomRightRadius;
+		bottomLeft?: Property.BorderBottomLeftRadius;
+	};
+	allowSides?: boolean;
+	hasIndicator?: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -74,7 +80,7 @@ export default function BorderRadiusControl( {
 	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
-	const [ corner, setCorner ] = useState< Corners | undefined >( undefined );
+	const [ corner, setCorner ] = useState< CornerValue | undefined >( undefined );
 
 	const headingId = `${ id }-heading`;
 
@@ -94,15 +100,10 @@ export default function BorderRadiusControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
-		onChange( {
-			topLeft: undefined,
-			topRight: undefined,
-			bottomRight: undefined,
-			bottomLeft: undefined,
-		} );
+		onChange( DEFAULT_VALUES );
 	};
 
-	const handleOnFocus = ( focusCorner: Corners ) => setCorner( focusCorner );
+	const handleOnFocus = ( focusCorner: CornerValue ) => setCorner( focusCorner );
 
 	const handleOnChangeAll = ( inputValue: string ) => {
 		const [ , unit ] = parseUnit( inputValue );
@@ -118,7 +119,7 @@ export default function BorderRadiusControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue: string, targetCorner: Corners ) => {
+	const handleOnChange = ( inputValue: string, targetCorner: CornerValue ) => {
 		const [ , unit ] = parseUnit( inputValue );
 		const sanitizedValue = sanitizeUnitValue( inputValue, {
 			maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
@@ -168,7 +169,7 @@ export default function BorderRadiusControl( {
 				</div>
 				{ ! isLinked && (
 					<div className="ftb-border-radius-control__input-controls">
-						{ CORNERS.map( ( item ) => (
+						{ CORNER_CONTROLS.map( ( item ) => (
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }
