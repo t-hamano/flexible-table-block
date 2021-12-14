@@ -1,25 +1,30 @@
 /**
  * External dependencies
  */
-import type { Property, Properties, PropertyValue } from 'csstype';
+import type { Properties } from 'csstype';
 
 /**
  * Internal dependencies
  */
 import { FourCssValues, parseCssValue } from './helper';
 
-export interface Direction {
+export interface DirectionProps {
 	top: string;
 	right: string;
 	bottom: string;
 	left: string;
 }
 
-export interface Corner {
+export interface CornerProps {
 	topLeft: string;
 	topRight: string;
 	bottomRight: string;
 	bottomLeft: string;
+}
+
+export interface CrossProps {
+	horizontal: string;
+	vertical: string;
 }
 
 /**
@@ -28,14 +33,7 @@ export interface Corner {
  * @param  stylesObj styles object.
  * @return padding styles object.
  */
-export function pickPadding(
-	stylesObj: Properties
-): {
-	top: Property.PaddingTop;
-	right: Property.PaddingRight;
-	bottom: Property.PaddingBottom;
-	left: Property.PaddingLeft;
-} {
+export function pickPadding( stylesObj: Properties ): DirectionProps {
 	if ( stylesObj.padding ) {
 		const paddingValues: FourCssValues = parseCssValue( stylesObj.padding );
 
@@ -61,14 +59,7 @@ export function pickPadding(
  * @param  stylesObj styles object.
  * @return border-width styles object.
  */
-export function pickBorderWidth(
-	stylesObj: Properties
-): {
-	top: Property.BorderTopWidth;
-	right: Property.BorderRightWidth;
-	bottom: Property.BorderBottomWidth;
-	left: Property.BorderLeftWidth;
-} {
+export function pickBorderWidth( stylesObj: Properties ): DirectionProps {
 	if ( stylesObj.borderWidth ) {
 		const borderWidthValues: FourCssValues = parseCssValue( stylesObj.borderWidth );
 
@@ -94,14 +85,7 @@ export function pickBorderWidth(
  * @param  stylesObj styles object.
  * @return border-color styles object.
  */
-export function pickBorderColor(
-	stylesObj: Properties
-): {
-	top: Property.BorderTopColor;
-	right: Property.BorderRightColor;
-	bottom: Property.BorderBottomColor;
-	left: Property.BorderLeftColor;
-} {
+export function pickBorderColor( stylesObj: Properties ): DirectionProps {
 	if ( stylesObj.borderColor ) {
 		const borderColorValues: FourCssValues = parseCssValue( stylesObj.borderColor );
 
@@ -127,14 +111,7 @@ export function pickBorderColor(
  * @param  stylesObj styles object.
  * @return border-style styles object.
  */
-export function pickBorderStyle(
-	stylesObj: Properties
-): {
-	top: PropertyValue< string >;
-	right: PropertyValue< string >;
-	bottom: PropertyValue< string >;
-	left: PropertyValue< string >;
-} {
+export function pickBorderStyle( stylesObj: Properties ): DirectionProps {
 	if ( stylesObj.borderStyle ) {
 		const borderStyleValues: FourCssValues = parseCssValue( stylesObj.borderStyle );
 
@@ -165,14 +142,7 @@ export function pickBorderStyle(
  * @param  stylesObj.borderBottomLeftRadius
  * @return border-radius styles object.
  */
-export function pickBorderRadius(
-	stylesObj: Properties
-): {
-	topLeft: Property.BorderTopLeftRadius;
-	topRight: Property.BorderTopRightRadius;
-	bottomRight: Property.BorderBottomRightRadius;
-	bottomLeft: Property.BorderBottomLeftRadius;
-} {
+export function pickBorderRadius( stylesObj: Properties ): CornerProps {
 	if ( stylesObj.borderRadius ) {
 		const borderRadiusValues: FourCssValues = parseCssValue( stylesObj.borderRadius );
 		return {
@@ -197,9 +167,7 @@ export function pickBorderRadius(
  * @param  stylesObj styles object.
  * @return border-spacing styles object.
  */
-export function pickBorderSpacing(
-	stylesObj: Properties
-): { horizontal: PropertyValue< string >; vertical: PropertyValue< string > } {
+export function pickBorderSpacing( stylesObj: Properties ): CrossProps {
 	const borderSpacingValues: FourCssValues = parseCssValue( stylesObj.borderSpacing || '' );
 
 	return {

@@ -8,7 +8,7 @@ import type { Properties } from 'csstype';
  */
 import { pickBy, omit, mapValues } from 'lodash';
 import { sanitizeUnitValue } from './helper';
-import type { Corner, Direction } from './style-picker';
+import type { CornerProps, DirectionProps } from './style-picker';
 
 function getCssPropertyWithFourDirection(
 	property: keyof Properties,
@@ -49,7 +49,7 @@ function getCssPropertyWithFourDirection(
  */
 export function updatePadding(
 	styles: Properties,
-	values: Partial< Direction > | undefined
+	values: Partial< DirectionProps > | undefined
 ): Properties {
 	if ( ! values ) return styles;
 
@@ -88,7 +88,7 @@ export function updatePadding(
  */
 export function updateBorderWidth(
 	styles: Properties,
-	values: Partial< Direction > | undefined
+	values: Partial< DirectionProps > | undefined
 ): Properties {
 	if ( ! values ) return styles;
 
@@ -128,7 +128,7 @@ export function updateBorderWidth(
  */
 export function updateBorderStyle(
 	styles: Properties,
-	values: Partial< Direction > | undefined
+	values: Partial< DirectionProps > | undefined
 ): Properties {
 	if ( ! values ) return styles;
 
@@ -165,7 +165,7 @@ export function updateBorderStyle(
  */
 export function updateBorderColor(
 	styles: Properties,
-	values: Partial< Direction > | undefined
+	values: Partial< DirectionProps > | undefined
 ): Properties {
 	if ( ! values ) return styles;
 
@@ -238,7 +238,7 @@ export function updateBorderSpacing(
  */
 export function updateBorderRadius(
 	styles: Properties,
-	values: Partial< Corner > | undefined
+	values: Partial< CornerProps > | undefined
 ): Properties {
 	if ( ! values ) return styles;
 

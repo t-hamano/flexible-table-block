@@ -38,8 +38,6 @@ const DEFAULT_VALUES = {
 	left: '',
 };
 
-type ValuesKey = keyof typeof DEFAULT_VALUES;
-
 export default function BorderColorControl( {
 	id,
 	label = __( 'Border Color', 'flexible-table-block' ),
@@ -184,11 +182,11 @@ export default function BorderColorControl( {
 									>
 										<ColorIndicator
 											className={ classnames( {
-												'component-color-indicator--none': ! values[ item.value as ValuesKey ],
+												'component-color-indicator--none': ! values[ item.value ],
 												'component-color-indicator--transparent':
-													values[ item.value as ValuesKey ] === 'transparent',
+													values[ item.value ] === 'transparent',
 											} ) }
-											colorValue={ values[ item.value as ValuesKey ] || '' }
+											colorValue={ values[ item.value ] || '' }
 										/>
 									</Button>
 									{ isPickerOpen && pickerIndex === index && (
@@ -199,7 +197,7 @@ export default function BorderColorControl( {
 										>
 											<ColorPalette
 												colors={ colors }
-												value={ values[ item.value as ValuesKey ] || '' }
+												value={ values[ item.value ] || '' }
 												onChange={ ( value ) => handleOnChange( value, item.value ) }
 											/>
 										</Popover>

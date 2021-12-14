@@ -22,7 +22,7 @@ interface SanitizeOptions {
  * @param  object Nested object.
  * @return Object cleaned from falsy values.
  */
-export const cleanEmptyObject = ( object: {} ): {} | undefined => {
+export function cleanEmptyObject( object: {} ): {} | undefined {
 	if ( ! isObject( object ) || Array.isArray( object ) ) {
 		return object;
 	}
@@ -30,7 +30,7 @@ export const cleanEmptyObject = ( object: {} ): {} | undefined => {
 	const cleanedNestedObjects: {} = pickBy( mapValues( object, cleanEmptyObject ), identity );
 
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
-};
+}
 
 /**
  * Convert short-hand/long-hand CSS values into an array with four values.
@@ -115,8 +115,8 @@ export function parseUnit( initialValue: string ): [ number, string ] {
 /**
  * Convert string to number.
  *
- * @param  value        Value to converted.
- * @param  defaultValue Value to be used when the value is falsy.
+ * @param  value        String to converted.
+ * @param  defaultValue String to be used when the value is falsy.
  */
 export function toInteger( value: number | string | undefined, defaultValue = 0 ): number {
 	if ( ! value ) {
@@ -137,7 +137,7 @@ export function toInteger( value: number | string | undefined, defaultValue = 0 
  *
  * @param  value string to converted.
  */
-export function toUpperFirstLetter( value: string ) {
+export function toUpperFirstLetter( value: string ): string {
 	if ( typeof value !== 'string' ) return value;
 	return value.charAt( 0 ).toUpperCase() + value.substring( 1 ).toLowerCase();
 }

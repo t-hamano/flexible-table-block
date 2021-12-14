@@ -48,13 +48,13 @@ import {
 import { sanitizeUnitValue } from '../utils/helper';
 import type {
 	CellTagValue,
-	TextAlignmentValue,
-	VerticalAlignmentValue,
+	TextAlignValue,
+	VerticalAlignValue,
 	SectionName,
 	BlockAttributes,
 } from '../BlockAttributes';
 import type { VTable, VCell } from '../utils/table-state';
-import type { Corner, Direction } from '../utils/style-picker';
+import type { CornerProps, DirectionProps } from '../utils/style-picker';
 
 export default function TableCellSettings( {
 	vTable,
@@ -103,33 +103,33 @@ export default function TableCellSettings( {
 		updateCellsState( { styles: { width: sanitizeUnitValue( value ) } } );
 	};
 
-	const onChangePadding = ( values: Partial< Direction > ) => {
+	const onChangePadding = ( values: Partial< DirectionProps > ) => {
 		updateCellsState( { styles: { padding: values } } );
 	};
 
-	const onChangeBorderWidth = ( values: Partial< Direction > ) => {
+	const onChangeBorderWidth = ( values: Partial< DirectionProps > ) => {
 		updateCellsState( { styles: { borderWidth: values } } );
 	};
 
-	const onChangeBorderRadius = ( values: Partial< Corner > ) => {
+	const onChangeBorderRadius = ( values: Partial< CornerProps > ) => {
 		updateCellsState( { styles: { borderRadius: values } } );
 	};
 
-	const onChangeBorderStyle = ( values: Partial< Direction > ) => {
+	const onChangeBorderStyle = ( values: Partial< DirectionProps > ) => {
 		updateCellsState( { styles: { borderStyle: values } } );
 	};
 
-	const onChangeBorderColor = ( values: Partial< Direction > ) => {
+	const onChangeBorderColor = ( values: Partial< DirectionProps > ) => {
 		updateCellsState( { styles: { borderColor: values } } );
 	};
 
-	const onChangeTextAlign = ( value: TextAlignmentValue ) => {
+	const onChangeTextAlign = ( value: TextAlignValue ) => {
 		updateCellsState( {
 			styles: { textAlign: value === cellStylesObj.textAlign ? undefined : value },
 		} );
 	};
 
-	const onChangeVerticalAlign = ( value: VerticalAlignmentValue ) => {
+	const onChangeVerticalAlign = ( value: VerticalAlignValue ) => {
 		updateCellsState( {
 			styles: { verticalAlign: value === cellStylesObj.verticalAlign ? undefined : value },
 		} );

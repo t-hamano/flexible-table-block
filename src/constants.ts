@@ -75,9 +75,9 @@ export const MAX_BORDER_SPACING = {
 } as const;
 
 // Responsive breakpoint settings.
-export const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
-export const MIN_RESPONSIVE_BREAKPOINT = 200;
-export const MAX_RESPONSIVE_BREAKPOINT = 1200;
+export const DEFAULT_RESPONSIVE_BREAKPOINT = 768 as const;
+export const MIN_RESPONSIVE_BREAKPOINT = 200 as const;
+export const MAX_RESPONSIVE_BREAKPOINT = 1200 as const;
 
 // Available units on UnitControl component.
 export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ] as const;
@@ -88,7 +88,7 @@ export const BORDER_RADIUS_UNITS = [ 'px', 'em', 'rem' ] as const;
 export const BORDER_WIDTH_UNITS = [ 'px', 'em', 'rem' ] as const;
 export const PADDING_UNITS = [ 'px', '%', 'em', 'rem', 'vw', 'vh' ] as const;
 
-// Label & Text variations.
+// Cell label & text variations.
 export const CELL_ARIA_LABEL = {
 	head: __( 'Header cell text', 'flexible-table-block' ),
 	body: __( 'Body cell text', 'flexible-table-block' ),
@@ -251,7 +251,7 @@ export const DIRECTION_CONTROLS = [
 		label: __( 'Vertical', 'flexible-table-block' ),
 		value: 'vertical',
 	},
-];
+] as const;
 
 export const SIDE_CONTROLS = [
 	{
@@ -270,4 +270,4 @@ export const SIDE_CONTROLS = [
 		label: __( 'Left', 'flexible-table-block' ),
 		value: 'left',
 	},
-];
+] as const;

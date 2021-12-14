@@ -52,6 +52,7 @@ const transforms: Transforms = {
 				const rowColSpanCells = vRows
 					.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
 					.filter( ( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1 );
+
 				// Split the found rowspan & colspan cells.
 				if ( rowColSpanCells.length ) {
 					rowColSpanCells.forEach( ( cell ) => {

@@ -27,8 +27,8 @@ import { convertToInline } from '../utils/style-converter';
 import { pickPadding } from '../utils/style-picker';
 import { updatePadding } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { CaptionSideValue, TextAlignmentValue, BlockAttributes } from '../BlockAttributes';
-import type { Direction } from '../utils/style-picker';
+import type { CaptionSideValue, TextAlignValue, BlockAttributes } from '../BlockAttributes';
+import type { DirectionProps } from '../utils/style-picker';
 
 export default function TableCaptionSettings( {
 	captionStylesObj,
@@ -59,7 +59,7 @@ export default function TableCaptionSettings( {
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangePadding = ( values: Direction ) => {
+	const onChangePadding = ( values: DirectionProps ) => {
 		const newStylesObj = updatePadding( captionStylesObj, values );
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
@@ -68,7 +68,7 @@ export default function TableCaptionSettings( {
 		setAttributes( { captionSide: value } );
 	};
 
-	const onChangeAlign = ( value: TextAlignmentValue ) => {
+	const onChangeAlign = ( value: TextAlignValue ) => {
 		const newStylesObj = {
 			...captionStylesObj,
 			textAlign: value === captionStylesObj.textAlign ? undefined : value,

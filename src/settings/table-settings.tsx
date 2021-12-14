@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import type { Property, Properties } from 'csstype';
+
+/**
  * WordPress dependencies
  */
 import { __, _x, sprintf } from '@wordpress/i18n';
@@ -9,7 +14,9 @@ import {
 	ButtonGroup,
 	SelectControl,
 	ToggleControl,
+	// @ts-ignore
 	__experimentalUnitControl as UnitControl,
+	// @ts-ignore
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -49,9 +56,22 @@ import {
 	updateBorderSpacing,
 } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
+import type { VTable } from '../utils/table-state';
+import type { CornerProps, DirectionProps, CrossProps } from '../utils/style-picker';
+import type { StickyValue, BorderCollapseValue, BlockAttributes } from '../BlockAttributes';
+import type { StoreOptions } from '../constants';
 
-export default function TableSettings( props ) {
-	const { vTable, tableStylesObj, attributes, setAttributes } = props;
+export default function TableSettings( {
+	vTable,
+	tableStylesObj,
+	attributes,
+	setAttributes,
+}: {
+	vTable: VTable;
+	tableStylesObj: Properties;
+	attributes: BlockAttributes;
+	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
+} ) {
 	const {
 		hasFixedLayout,
 		isStackedOnMobile,
@@ -62,7 +82,7 @@ export default function TableSettings( props ) {
 		foot,
 	} = attributes;
 
-	const options = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
+	const options = useSelect< StoreOptions >( ( select ) => select( STORE_NAME ).getOptions() );
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
@@ -82,7 +102,7 @@ export default function TableSettings( props ) {
 		setAttributes( { isScrollOnMobile: ! isScrollOnMobile } );
 	};
 
-	const onChangeSticky = ( value ) => {
+	const onChangeSticky = ( value: StickyValue ) => {
 		setAttributes( { sticky: 'none' === value ? undefined : value } );
 	};
 
@@ -96,7 +116,7 @@ export default function TableSettings( props ) {
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
-	const onChangeWidth = ( value ) => {
+	const onChangeWidth = ( value: Property.Width ) => {
 		const newStylesObj = {
 			...tableStylesObj,
 			width: value,
@@ -104,7 +124,7 @@ export default function TableSettings( props ) {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeMaxWidth = ( value ) => {
+	const onChangeMaxWidth = ( value: Property.MaxWidth ) => {
 		const newStylesObj = {
 			...tableStylesObj,
 			maxWidth: value,
@@ -112,7 +132,7 @@ export default function TableSettings( props ) {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeMinWidth = ( value ) => {
+	const onChangeMinWidth = ( value: Property.MinWidth ) => {
 		const newStylesObj = {
 			...tableStylesObj,
 			minWidth: value,
@@ -120,32 +140,32 @@ export default function TableSettings( props ) {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangePadding = ( values ) => {
+	const onChangePadding = ( values: Partial< DirectionProps > ) => {
 		const newStylesObj = updatePadding( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeBorderWidth = ( values ) => {
+	const onChangeBorderWidth = ( values: Partial< DirectionProps > ) => {
 		const newStylesObj = updateBorderWidth( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeBorderRadius = ( values ) => {
+	const onChangeBorderRadius = ( values: Partial< CornerProps > ) => {
 		const newStylesObj = updateBorderRadius( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeBorderStyle = ( values ) => {
+	const onChangeBorderStyle = ( values: Partial< DirectionProps > ) => {
 		const newStylesObj = updateBorderStyle( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeBorderColor = ( values ) => {
+	const onChangeBorderColor = ( values: Partial< DirectionProps > ) => {
 		const newStylesObj = updateBorderColor( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeBorderCollapse = ( value ) => {
+	const onChangeBorderCollapse = ( value: BorderCollapseValue ) => {
 		const borderCollapse = tableStylesObj?.borderCollapse === value ? undefined : value;
 		const borderSpacing = 'separate' === borderCollapse ? tableStylesObj?.borderSpacing : undefined;
 		const newStylesObj = {
@@ -156,7 +176,7 @@ export default function TableSettings( props ) {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeBorderSpacing = ( values ) => {
+	const onChangeBorderSpacing = ( values: Partial< CrossProps > ) => {
 		const newStylesObj = updateBorderSpacing( tableStylesObj, values );
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
@@ -174,8 +194,11 @@ export default function TableSettings( props ) {
 
 	return (
 		<>
-			<BaseControl className="ftb-reset-settings-control">
-				<Button isLink variant="link" isDestructive onClick={ onResetTableSettings }>
+			<BaseControl
+				id="flexible-table-block-table-clear-settings"
+				className="ftb-reset-settings-control"
+			>
+				<Button isLink isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear Table Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -204,7 +227,7 @@ export default function TableSettings( props ) {
 					sprintf(
 						/* translators: %d is replaced with the number of breakpoint. */
 						__( 'When the screen width is %dpx or more.', 'flexible-table-block' ),
-						parseInt( options.breakpoint ) + 1
+						options.breakpoint + 1
 					)
 				}
 				onChange={ onChangeIsScrollOnPc }
@@ -277,10 +300,9 @@ export default function TableSettings( props ) {
 							<Button
 								key={ perWidth }
 								isPrimary={ isPressed }
-								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () =>
-									onChangeWidth( isPressed ? undefined : sanitizeUnitValue( `${ perWidth }%` ) )
+									onChangeWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
 								}
 							>
 								{ `${ perWidth }%` }
@@ -289,9 +311,8 @@ export default function TableSettings( props ) {
 					} ) }
 					<Button
 						isPrimary={ tableStylesObj?.width === 'auto' }
-						variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
 						isSmall
-						onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? undefined : 'auto' ) }
+						onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? '' : 'auto' ) }
 					>
 						{ __( 'auto', 'flexible-table-block' ) }
 					</Button>
@@ -320,10 +341,9 @@ export default function TableSettings( props ) {
 							<Button
 								key={ perWidth }
 								isPrimary={ isPressed }
-								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () =>
-									onChangeMaxWidth( isPressed ? undefined : sanitizeUnitValue( `${ perWidth }%` ) )
+									onChangeMaxWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
 								}
 							>
 								{ `${ perWidth }%` }
@@ -332,11 +352,8 @@ export default function TableSettings( props ) {
 					} ) }
 					<Button
 						isPrimary={ tableStylesObj?.maxWidth === 'none' }
-						variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
 						isSmall
-						onClick={ () =>
-							onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? undefined : 'none' )
-						}
+						onClick={ () => onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? '' : 'none' ) }
 					>
 						{ _x( 'none', 'width', 'flexible-table-block' ) }
 					</Button>
@@ -364,9 +381,8 @@ export default function TableSettings( props ) {
 							<Button
 								key={ perWidth }
 								isPrimary={ isPressed }
-								variant={ isPressed ? 'primary' : undefined }
 								isSmall
-								onClick={ () => onChangeMinWidth( isPressed ? undefined : `${ perWidth }%` ) }
+								onClick={ () => onChangeMinWidth( isPressed ? '' : `${ perWidth }%` ) }
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -415,9 +431,12 @@ export default function TableSettings( props ) {
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />
-			<BaseControl>
-				<div aria-labelledby="flexible-table-block-table-border-collapse" role="region">
-					<span id="flexible-table-block-table-border-collapse" className="ftb-base-control-label">
+			<BaseControl id="flexible-table-block-table-border-collapse">
+				<div aria-labelledby="flexible-table-block-table-border-collapse-heading" role="region">
+					<span
+						id="flexible-table-block-table-border-collapse-heading"
+						className="ftb-base-control-label"
+					>
 						{ __( 'Cell Borders', 'flexible-table-block' ) }
 					</span>
 					<ButtonGroup className="ftb-button-group">
@@ -427,7 +446,6 @@ export default function TableSettings( props ) {
 									key={ value }
 									isPrimary={ value === tableStylesObj?.borderCollapse }
 									isSecondary={ value !== tableStylesObj?.borderCollapse }
-									variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
 									icon={ icon }
 									onClick={ () => onChangeBorderCollapse( value ) }
 								>
