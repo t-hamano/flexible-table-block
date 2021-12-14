@@ -135,8 +135,9 @@ export function toInteger( value: number | string | undefined, defaultValue = 0 
 /**
  * Convert only the first letter to uppercase
  *
- * @param  str string to converted.
+ * @param  value string to converted.
  */
-export function toUpperFirstLetter( str: string ) {
-	return str.charAt( 0 ).toUpperCase() + str.substring( 1 ).toLowerCase();
+export function toUpperFirstLetter( value: string ) {
+	if ( typeof value !== 'string' ) return value;
+	return value.charAt( 0 ).toUpperCase() + value.substring( 1 ).toLowerCase();
 }
