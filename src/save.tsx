@@ -6,7 +6,6 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-
 import {
 	RichText,
 	// @ts-ignore
@@ -14,14 +13,14 @@ import {
 	// @ts-ignore
 	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,
 } from '@wordpress/block-editor';
+import type { BlockSaveProps } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
  */
 import { convertToObject } from './utils/style-converter';
-import type { BlockSaveProps } from '@wordpress/blocks';
-import type { BlockAttributes, SectionName, Row } from './BlockAttributes';
 import { toInteger } from './utils/helper';
+import type { BlockAttributes, SectionName, Row } from './BlockAttributes';
 
 export default function save( { attributes }: BlockSaveProps< BlockAttributes > ) {
 	const {

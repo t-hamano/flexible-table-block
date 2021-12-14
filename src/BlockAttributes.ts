@@ -11,6 +11,7 @@ import type {
 	DIRECTION_CONTROLS,
 	SIDE_CONTROLS,
 	BORDER_STYLE_CONTROLS,
+	CONTENT_JUSTIFY_CONTROLS,
 } from './constants';
 
 // Controls Attributes value types
@@ -23,7 +24,7 @@ export type CornerValue = typeof CORNER_CONTROLS[ number ][ 'value' ];
 export type DirectionValue = typeof DIRECTION_CONTROLS[ number ][ 'value' ];
 export type SideValue = typeof SIDE_CONTROLS[ number ][ 'value' ];
 export type BorderStyleValue = typeof BORDER_STYLE_CONTROLS[ number ][ 'value' ];
-export type ContentJustificationValue = 'left' | 'center' | 'right';
+export type ContentJustifyValue = typeof CONTENT_JUSTIFY_CONTROLS[ number ][ 'value' ];
 
 // Table section name types
 export type SectionName = 'head' | 'body' | 'foot';
@@ -48,7 +49,7 @@ export interface Cell {
 
 // Block attributes
 export interface BlockAttributes extends TableAttributes {
-	contentJustification: ContentJustificationValue | undefined;
+	contentJustification: ContentJustifyValue | undefined;
 	hasFixedLayout: boolean;
 	isScrollOnPc: boolean;
 	isScrollOnMobile: boolean;

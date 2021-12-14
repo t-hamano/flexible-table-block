@@ -1,8 +1,8 @@
 /**
  * External dependencies
  */
-import type { Properties } from 'csstype';
 import { mapValues, pick, times } from 'lodash';
+import type { Properties } from 'csstype';
 
 /**
  * Internal dependencies

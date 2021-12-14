@@ -2,7 +2,14 @@
  * WordPress dependencies
  */
 import { __, _x } from '@wordpress/i18n';
-import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
+import {
+	justifyLeft,
+	justifyCenter,
+	justifyRight,
+	alignLeft,
+	alignCenter,
+	alignRight,
+} from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -89,6 +96,24 @@ export const CELL_ARIA_LABEL = {
 } as const;
 
 // Controls variations.
+export const CONTENT_JUSTIFY_CONTROLS = [
+	{
+		icon: justifyLeft,
+		label: __( 'Justify table left', 'flexible-table-block' ),
+		value: 'left',
+	},
+	{
+		icon: justifyCenter,
+		label: __( 'Justify table center', 'flexible-table-block' ),
+		value: 'center',
+	},
+	{
+		icon: justifyRight,
+		label: __( 'Justify table right', 'flexible-table-block' ),
+		value: 'right',
+	},
+];
+
 export const BORDER_COLLAPSE_CONTROLS = [
 	{
 		icon: borderCollapseIcon,

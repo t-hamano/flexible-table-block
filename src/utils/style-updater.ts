@@ -1,10 +1,14 @@
 /**
- * Internal dependencies
+ * External dependencies
  */
 import type { Properties } from 'csstype';
-import type { Corner, Direction } from './style-picker';
+
+/**
+ * Internal dependencies
+ */
 import { pickBy, omit, mapValues } from 'lodash';
 import { sanitizeUnitValue } from './helper';
+import type { Corner, Direction } from './style-picker';
 
 function getCssPropertyWithFourDirection(
 	property: keyof Properties,

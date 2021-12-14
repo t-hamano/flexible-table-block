@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import type { Property } from 'csstype';
 import { get } from 'lodash';
 import classnames from 'classnames';
+import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies

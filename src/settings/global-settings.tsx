@@ -24,6 +24,7 @@ import {
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 import { cog, help } from '@wordpress/icons';
+import type { Notice as NoticeType } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -41,7 +42,6 @@ import {
 } from '../constants';
 import { BorderWidthControl, BorderStyleControl, ColorControl, PaddingControl } from '../controls';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { Notice as NoticeType } from '@wordpress/components';
 
 interface NoticeInfo {
 	status?: NoticeType.Props[ 'status' ];
