@@ -136,7 +136,10 @@ describe( 'Transform from flexible table block to core table block', () => {
 			'[aria-labelledby="flexible-table-block-cell-border-style-heading"]',
 			'Solid'
 		);
-		await clickButtonWithText( '//*[@aria-labelledby="flexible-table-block-cell-tag"]', 'TH' );
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
+			'TH'
+		);
 		await transformBlockTo( 'Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
