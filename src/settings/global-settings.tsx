@@ -42,28 +42,37 @@ import {
 } from '../constants';
 import { BorderWidthControl, BorderStyleControl, ColorControl, PaddingControl } from '../controls';
 import { sanitizeUnitValue } from '../utils/helper';
+import type { StoreOptions } from '../store';
 
 interface NoticeInfo {
 	status?: NoticeType.Props[ 'status' ];
 	message?: string;
 }
 
-export default function GlobalSettings() {
-	const storeOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
+export interface ApiResponse {
+	status?: NoticeType.Props[ 'status' ];
+	message?: string;
+	options?: StoreOptions;
+	// eslint-disable-next-line camelcase
+	block_css?: string;
+}
 
-	const isAdministrator = useSelect( ( select ) =>
+export default function GlobalSettings() {
+	const storeOptions: StoreOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
+
+	const isAdministrator: boolean = useSelect( ( select ) =>
 		// @ts-ignore
 		select( coreStore ).canUser( 'create', 'users' )
 	);
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
-	const [ isSettingModalOpen, setIsSettingModalOpen ] = useState( false );
-	const [ isHelpModalOpen, setIsHelpModalOpen ] = useState( false );
+	const [ isSettingModalOpen, setIsSettingModalOpen ] = useState< boolean >( false );
+	const [ isHelpModalOpen, setIsHelpModalOpen ] = useState< boolean >( false );
 	const [ noticeInfo, setNoticeInfo ] = useState< NoticeInfo | undefined >( undefined );
-	const [ isResetPopup, setIsResetPopup ] = useState( false );
-	const [ isWaiting, setIsWaiting ] = useState( false );
-	const [ options, setOptions ] = useState< any >();
+	const [ isResetPopup, setIsResetPopup ] = useState< boolean >( false );
+	const [ isWaiting, setIsWaiting ] = useState< boolean >( false );
+	const [ options, setOptions ] = useState< StoreOptions >();
 
 	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
 
@@ -91,12 +100,12 @@ export default function GlobalSettings() {
 		setNoticeInfo( undefined );
 		setStoreOptions( options );
 
-		apiFetch( {
+		apiFetch< ApiResponse >( {
 			path: REST_API_ROUTE,
 			method: 'POST',
 			data: options,
 		} )
-			.then( ( response: any ) => {
+			.then( ( response ) => {
 				focusModal();
 				setIsWaiting( false );
 
@@ -129,10 +138,10 @@ export default function GlobalSettings() {
 		setIsWaiting( true );
 		setNoticeInfo( undefined );
 
-		apiFetch( {
+		apiFetch< ApiResponse >( {
 			path: REST_API_ROUTE,
 			method: 'DELETE',
-		} ).then( ( response: any ) => {
+		} ).then( ( response ) => {
 			focusModal();
 			setIsWaiting( false );
 
@@ -572,7 +581,7 @@ export default function GlobalSettings() {
 						afterIcon="desktop"
 						min={ MIN_RESPONSIVE_BREAKPOINT }
 						max={ MAX_RESPONSIVE_BREAKPOINT }
-						value={ parseInt( options.breakpoint ) || DEFAULT_RESPONSIVE_BREAKPOINT }
+						value={ options.breakpoint || DEFAULT_RESPONSIVE_BREAKPOINT }
 						allowReset
 						onChange={ ( value ) => {
 							setOptions( {

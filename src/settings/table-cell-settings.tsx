@@ -78,7 +78,7 @@ export default function TableCellSettings( {
 
 	const cellStylesObj = convertToObject( targetCell.styles );
 
-	const updateCellsState = ( state: any ) => {
+	const updateCellsState = ( state: { styles?: any; tag?: CellTagValue; className?: string } ) => {
 		const newVTable = updateCells( vTable, state, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 	};

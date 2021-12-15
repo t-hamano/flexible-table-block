@@ -67,7 +67,7 @@ export default function BorderColorControl( {
 		...valuesProp,
 	};
 
-	const isMixed =
+	const isMixed: boolean =
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
@@ -81,15 +81,15 @@ export default function BorderColorControl( {
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
 	const [ pickerIndex, setPickerIndex ] = useState< number | undefined >( undefined );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const linkedLabel = isLinked
+	const linkedLabel: string = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputValue = isMixed ? undefined : values.top;
+	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames = classnames( 'ftb-border-color-control', className );
+	const classNames: string = classnames( 'ftb-border-color-control', className );
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 

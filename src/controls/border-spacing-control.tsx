@@ -61,23 +61,23 @@ export default function BorderSpacingControl( {
 		...valuesProp,
 	};
 
-	const isMixed = allowSides && ! ( values.horizontal === values.vertical );
+	const isMixed: boolean = allowSides && ! ( values.horizontal === values.vertical );
 
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const [ direction, setDirection ] = useState< DirectionValue | undefined >( undefined );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const linkedLabel = isLinked
+	const linkedLabel: string = isLinked
 		? __( 'Unlink Directions', 'flexible-table-block' )
 		: __( 'Link Directions', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
-	const allInputValue = isMixed ? undefined : values.horizontal;
+	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
+	const allInputValue: string | 0 = isMixed ? '' : values.horizontal;
 
-	const classNames = classnames( 'ftb-border-spacing-control', className );
+	const classNames: string = classnames( 'ftb-border-spacing-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );

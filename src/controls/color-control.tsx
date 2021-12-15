@@ -49,11 +49,11 @@ export default function ColorControl( {
 		return get( settings, [ 'colors' ], [] );
 	} );
 
-	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
+	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const classNames = classnames( 'ftb-color-control', className );
+	const classNames: string = classnames( 'ftb-color-control', className );
 
 	const handleOnReset = () => onChange( undefined );
 

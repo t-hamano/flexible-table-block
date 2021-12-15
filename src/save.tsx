@@ -2,6 +2,7 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import type { Properties } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -39,12 +40,12 @@ export default function save( { attributes }: BlockSaveProps< BlockAttributes > 
 		captionStyles,
 	} = attributes;
 
-	const isEmpty = ! head.length && ! body.length && ! foot.length;
+	const isEmpty: boolean = ! head.length && ! body.length && ! foot.length;
 
 	if ( isEmpty ) return null;
 
-	const tableStylesObj = convertToObject( tableStyles );
-	const captionStylesObj = convertToObject( captionStyles );
+	const tableStylesObj: Properties = convertToObject( tableStyles );
+	const captionStylesObj: Properties = convertToObject( captionStyles );
 
 	const colorProps = getColorClassesAndStyles( attributes );
 
@@ -56,13 +57,13 @@ export default function save( { attributes }: BlockSaveProps< BlockAttributes > 
 		} ),
 	} );
 
-	const tableClasses = classnames( colorProps.className, {
+	const tableClasses: string = classnames( colorProps.className, {
 		'has-fixed-layout': hasFixedLayout,
 		'is-stacked-on-mobile': isStackedOnMobile,
 		[ `is-sticky-${ sticky }` ]: sticky,
 	} );
 
-	const hasCaption = ! RichText.isEmpty( caption );
+	const hasCaption: boolean = ! RichText.isEmpty( caption );
 
 	const Section = ( { type, rows }: { type: SectionName; rows: Row[] } ) => {
 		if ( ! rows.length ) return null;

@@ -26,20 +26,6 @@ import {
 	borderSeparate as borderSeparateIcon,
 } from './icons';
 
-// Store options.
-export interface StoreOptions {
-	/* eslint-disable camelcase */
-	show_label_on_section: boolean;
-	show_control_button: boolean;
-	focus_control_button: boolean;
-	show_dot_on_th: boolean;
-	merge_content: boolean;
-	show_global_setting: boolean;
-	breakpoint: number;
-	block_style: {};
-	/* eslint-enable camelcase */
-}
-
 // Custom store name.
 export const STORE_NAME = 'flexible-table-block' as const;
 

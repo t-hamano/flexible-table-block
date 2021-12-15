@@ -3,6 +3,7 @@
  */
 import classnames from 'classnames';
 import type { KeyboardEvent } from 'react';
+import type { Properties } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -53,6 +54,7 @@ import { toUpperFirstLetter } from './utils/helper';
 import { mergeCell, splitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
 import type { StoreOptions } from './constants';
+import type { VTable } from './utils/table-state';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const { attributes, setAttributes } = props;
@@ -67,13 +69,13 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	>();
 	const [ selectMode, setSelectMode ] = useState< string >( '' );
 
-	const tableStylesObj = convertToObject( tableStyles );
-	const captionStylesObj = convertToObject( captionStyles );
+	const tableStylesObj: Properties = convertToObject( tableStyles );
+	const captionStylesObj: Properties = convertToObject( captionStyles );
 
 	const options = useSelect< StoreOptions >( ( select ) => select( STORE_NAME ).getOptions() );
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
-	const vTable = toVirtualTable( attributes );
+	const vTable: VTable = toVirtualTable( attributes );
 
 	// Monitor pressed key to determine whether multi-select mode or range select mode.
 	const onKeyDown = ( event: KeyboardEvent ) => {
@@ -226,9 +228,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			isDisabled: ! selectedCells || ! isRectangleSelected( selectedCells ),
 			onClick: () => onMergeCells(),
 		},
-	];
+	] as const;
 
-	const isEmpty = ! [ 'head', 'body', 'foot' ].filter(
+	const isEmpty: boolean = ! [ 'head', 'body', 'foot' ].filter(
 		( sectionName ) => ! isEmptySection( vTable[ sectionName as SectionName ] )
 	).length;
 
@@ -266,7 +268,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		selectedCells,
 	};
 
-	const tableCellSettingsLabel =
+	const tableCellSettingsLabel: string =
 		selectedCells && selectedCells.length > 1
 			? __( 'Multi Cells Settings', 'flexible-table-block' )
 			: __( 'Cell Settings', 'flexible-table-block' );

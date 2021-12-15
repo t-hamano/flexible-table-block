@@ -64,23 +64,23 @@ export default function BorderStyleControl( {
 		...valuesProp,
 	};
 
-	const isMixed =
+	const isMixed: boolean =
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const headingId = `${ id }-heading`;
 
-	const controlLabel =
+	const controlLabel: string =
 		isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label;
 
-	const linkedLabel = isLinked
+	const linkedLabel: string = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputValue = isMixed ? undefined : values.top;
+	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames = classnames( 'ftb-border-style-control', className );
+	const classNames: string = classnames( 'ftb-border-style-control', className );
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 

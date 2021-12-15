@@ -69,7 +69,7 @@ export default function BorderRadiusControl( {
 		...valuesProp,
 	};
 
-	const isMixed =
+	const isMixed: boolean =
 		allowSides &&
 		! (
 			values.topLeft === values.topRight &&
@@ -82,16 +82,16 @@ export default function BorderRadiusControl( {
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const [ corner, setCorner ] = useState< CornerValue | undefined >( undefined );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const linkedLabel = isLinked
+	const linkedLabel: string = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
-	const allInputValue = isMixed ? undefined : values.topLeft;
+	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
+	const allInputValue: string | 0 = isMixed ? '' : values.topLeft;
 
-	const classNames = classnames( 'ftb-border-radius-control', className );
+	const classNames: string = classnames( 'ftb-border-radius-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );

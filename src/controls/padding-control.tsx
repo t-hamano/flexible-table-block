@@ -64,7 +64,7 @@ export default function PaddingControl( {
 } ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 
-	const isMixed =
+	const isMixed: boolean =
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
@@ -73,16 +73,16 @@ export default function PaddingControl( {
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const [ side, setSide ] = useState< SideValue | undefined >( undefined );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const linkedLabel = isLinked
+	const linkedLabel: string = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
-	const allInputValue = isMixed ? undefined : values.top;
+	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
+	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames = classnames( 'ftb-padding-control', className );
+	const classNames: string = classnames( 'ftb-padding-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );

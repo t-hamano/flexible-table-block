@@ -59,7 +59,7 @@ import { sanitizeUnitValue } from '../utils/helper';
 import type { VTable } from '../utils/table-state';
 import type { CornerProps, DirectionProps, CrossProps } from '../utils/style-picker';
 import type { StickyValue, BorderCollapseValue, BlockAttributes } from '../BlockAttributes';
-import type { StoreOptions } from '../constants';
+import type { StoreOptions } from '../store';
 
 export default function TableSettings( {
 	vTable,
