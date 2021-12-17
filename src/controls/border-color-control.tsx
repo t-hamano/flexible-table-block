@@ -209,6 +209,7 @@ export default function BorderColorControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									label={ linkedLabel }
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }

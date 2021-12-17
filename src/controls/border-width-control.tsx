@@ -153,6 +153,7 @@ export default function BorderWidthControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									label={ linkedLabel }
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }

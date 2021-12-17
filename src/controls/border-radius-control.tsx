@@ -157,6 +157,7 @@ export default function BorderRadiusControl( {
 					<Tooltip text={ linkedLabel }>
 						<span>
 							<Button
+								label={ linkedLabel }
 								isSmall
 								isPrimary={ isLinked }
 								isSecondary={ ! isLinked }

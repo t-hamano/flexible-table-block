@@ -128,7 +128,7 @@ export default function TableCaptionSettings( {
 			/>
 			<BaseControl id="flexible-table-block-caption-side">
 				<div aria-labelledby="flexible-table-block-caption-side-heading" role="region">
-					<span id="flexible-table-block-caption-side^heading" className="ftb-base-control-label">
+					<span id="flexible-table-block-caption-side-heading" className="ftb-base-control-label">
 						{ __( 'Caption Position', 'flexible-table-block' ) }
 					</span>
 					<ButtonGroup className="ftb-button-group">

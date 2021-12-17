@@ -204,36 +204,37 @@ export default function TableCellSettings( {
 					/>
 				</BaseControl>
 			</div>
-			<BaseControl id="flexible-table-block-cell-width" className="ftb-width-control">
-				<div aria-labelledby="flexible-table-block-cell-width-heading" role="region">
-					<span id="flexible-table-block-cell-width-heading" className="ftb-base-control-label">
-						{ __( 'Cell Width', 'flexible-table-block' ) }
-					</span>
-					<UnitControl
-						value={ cellStylesObj?.width }
-						units={ cellWidthUnits }
-						min="0"
-						onChange={ onChangeWidth }
-					/>
-					<ButtonGroup
-						aria-label={ __( 'Cell Percentage width', 'flexible-table-block' ) }
-						className="ftb-percent-group"
-					>
-						{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-							const isPressed = cellStylesObj?.width === `${ perWidth }%`;
-							return (
-								<Button
-									key={ perWidth }
-									isPrimary={ isPressed }
-									isSmall
-									onClick={ () => onChangeWidth( isPressed ? '' : `${ perWidth }%` ) }
-								>
-									{ `${ perWidth }%` }
-								</Button>
-							);
-						} ) }
-					</ButtonGroup>
-				</div>
+			<BaseControl
+				id="flexible-table-block-cell-width"
+				label={ __( 'Cell Width', 'flexible-table-block' ) }
+				className="ftb-width-control"
+			>
+				<UnitControl
+					id="flexible-table-block-cell-width"
+					aria-label={ __( 'Cell Width', 'flexible-table-block' ) }
+					value={ cellStylesObj?.width }
+					units={ cellWidthUnits }
+					min="0"
+					onChange={ onChangeWidth }
+				/>
+				<ButtonGroup
+					aria-label={ __( 'Cell Percentage width', 'flexible-table-block' ) }
+					className="ftb-percent-group"
+				>
+					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+						const isPressed = cellStylesObj?.width === `${ perWidth }%`;
+						return (
+							<Button
+								key={ perWidth }
+								isPrimary={ isPressed }
+								isSmall
+								onClick={ () => onChangeWidth( isPressed ? '' : `${ perWidth }%` ) }
+							>
+								{ `${ perWidth }%` }
+							</Button>
+						);
+					} ) }
+				</ButtonGroup>
 			</BaseControl>
 			<hr />
 			<ColorControl
