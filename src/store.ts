@@ -2,18 +2,27 @@
  * External dependencies
  */
 import type { AnyAction as Action } from 'redux';
+import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
  */
 import apiFetch from '@wordpress/api-fetch';
 import { registerStore } from '@wordpress/data';
+import type { Notice as NoticeType } from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME, REST_API_ROUTE } from './constants';
-import type { ApiResponse } from './settings/global-settings';
+
+export interface ApiResponse {
+	status?: NoticeType.Props[ 'status' ];
+	message?: string;
+	options?: StoreOptions;
+	// eslint-disable-next-line camelcase
+	block_css?: string;
+}
 
 export interface StoreOptions {
 	/* eslint-disable camelcase */
@@ -24,7 +33,28 @@ export interface StoreOptions {
 	merge_content: boolean;
 	show_global_setting: boolean;
 	breakpoint: number;
-	block_style: { [ key: string ]: string | undefined };
+	block_style: {
+		table_width?: string;
+		table_max_width?: string;
+		row_odd_color?: string;
+		row_even_color?: string;
+		table_border_collapse?: string;
+		cell_text_color_th?: string;
+		cell_text_color_td?: string;
+		cell_background_color_th?: string;
+		cell_background_color_td?: string;
+		cell_padding?: {
+			top?: Property.PaddingTop;
+			right?: Property.PaddingRight;
+			bottom?: Property.PaddingBottom;
+			left?: Property.PaddingLeft;
+		};
+		cell_border_width?: string;
+		cell_border_style?: string;
+		cell_border_color?: string;
+		cell_text_align?: string;
+		cell_vertical_align?: string;
+	};
 	/* eslint-enable camelcase */
 }
 

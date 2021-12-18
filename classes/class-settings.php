@@ -64,7 +64,12 @@ class Settings {
 				'cell_text_color_td'       => null,
 				'cell_background_color_th' => '#f0f0f1',
 				'cell_background_color_td' => '#ffffff',
-				'cell_padding'             => '0.5em',
+				'cell_padding'             => array(
+					'top'    => '0.5em',
+					'right'  => '0.5em',
+					'bottom' => '0.5em',
+					'left'   => '0.5em',
+				),
 				'cell_border_width'        => '1px',
 				'cell_border_style'        => 'solid',
 				'cell_border_color'        => '#000000',
@@ -94,6 +99,18 @@ class Settings {
 			if ( 'boolean' === self::OPTIONS[ $key ]['type'] ) {
 				$options[ $key ] = $options[ $key ] ? true : false;
 			}
+		}
+
+		// Convert cell padding of string values to array.
+		if ( 'string' === gettype( $options['block_style']['cell_padding'] ) ) {
+			$padding_value = $options['block_style']['cell_padding'];
+
+			$options['block_style']['cell_padding'] = array(
+				'top'    => $padding_value,
+				'right'  => $padding_value,
+				'bottom' => $padding_value,
+				'left'   => $padding_value,
+			);
 		}
 
 		return $options;

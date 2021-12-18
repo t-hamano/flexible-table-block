@@ -26,6 +26,7 @@ import {
  * Internal dependencies
  */
 import { PADDING_UNITS, SIDE_CONTROLS } from '../constants';
+import { sanitizeUnitValue } from '../utils/helper';
 import { SideIndicatorControl } from './indicator-control';
 import type { SideValue } from '../BlockAttributes';
 
@@ -97,18 +98,19 @@ export default function PaddingControl( {
 	const handleOnFocus = ( focusSide: SideValue ) => setSide( focusSide );
 
 	const handleOnChangeAll = ( inputValue: string ) => {
+		const sanitizedValue = sanitizeUnitValue( inputValue );
 		onChange( {
-			top: inputValue,
-			right: inputValue,
-			bottom: inputValue,
-			left: inputValue,
+			top: sanitizedValue,
+			right: sanitizedValue,
+			bottom: sanitizedValue,
+			left: sanitizedValue,
 		} );
 	};
 
 	const handleOnChange = ( inputValue: string, targetSide: SideValue ) => {
 		onChange( {
 			...values,
-			[ targetSide ]: inputValue,
+			[ targetSide ]: sanitizeUnitValue( inputValue ),
 		} );
 	};
 
