@@ -53,7 +53,7 @@ import { convertToObject } from './utils/style-converter';
 import { toUpperFirstLetter } from './utils/helper';
 import { mergeCell, splitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
-import type { StoreOptions } from './constants';
+import type { StoreOptions } from './store';
 import type { VTable } from './utils/table-state';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
