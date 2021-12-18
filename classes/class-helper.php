@@ -132,7 +132,7 @@ class Helper {
 			}
 			${selector} table.is-stacked-on-mobile th,
 			${selector} table.is-stacked-on-mobile td {
-				width: 100%;
+				width: 100%!important;
 				display: block;
 			}
 		}
