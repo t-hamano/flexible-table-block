@@ -1,8 +1,8 @@
 /**
  * External dependencies
  */
-import type { Properties } from 'csstype';
 import { mapValues, pick, times } from 'lodash';
+import type { Properties } from 'csstype';
 
 /**
  * Internal dependencies
@@ -16,7 +16,7 @@ import {
 	updatePadding,
 } from './style-updater';
 import { toInteger } from './helper';
-import type { Cell, Row, SectionName, TableAttributes } from '../BlockAttributes';
+import type { CellTagValue, Cell, Row, SectionName, TableAttributes } from '../BlockAttributes';
 
 // Virtual table
 export type VTable = Record< SectionName, VRow[] >;
@@ -613,7 +613,7 @@ export function updateCells(
 	vTable: VTable,
 	cellState: {
 		styles?: any;
-		tag: 'th' | 'td';
+		tag?: CellTagValue;
 		className?: string;
 	},
 	selectedCells: VCell[]

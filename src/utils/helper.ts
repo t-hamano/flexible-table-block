@@ -2,8 +2,19 @@
  * External dependencies
  */
 import _, { identity, isEmpty, isObject, mapValues, pickBy } from 'lodash';
+import type { PropertyValue } from 'csstype';
 
 const DEFAULT_PRECISION: number = 4;
+
+// Array with four values for CSS
+export type FourCssValues = [ string, string, string, string ];
+
+// sanitizeUnitValue function option
+interface SanitizeOptions {
+	minNum?: number;
+	maxNum?: number;
+	precision?: number;
+}
 
 /**
  * Removed falsy values from nested object.
@@ -11,7 +22,7 @@ const DEFAULT_PRECISION: number = 4;
  * @param  object Nested object.
  * @return Object cleaned from falsy values.
  */
-export const cleanEmptyObject = ( object: {} ): {} | undefined => {
+export function cleanEmptyObject( object: {} ): {} | undefined {
 	if ( ! isObject( object ) || Array.isArray( object ) ) {
 		return object;
 	}
@@ -19,10 +30,7 @@ export const cleanEmptyObject = ( object: {} ): {} | undefined => {
 	const cleanedNestedObjects: {} = pickBy( mapValues( object, cleanEmptyObject ), identity );
 
 	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
-};
-
-// Array with four values for CSS
-export type FourCssValues = [ string, string, string, string ];
+}
 
 /**
  * Convert short-hand/long-hand CSS values into an array with four values.
@@ -47,13 +55,6 @@ export function parseCssValue( cssValue: string ): FourCssValues {
 	}
 }
 
-// sanitizeUnitValue function option
-interface SanitizeOptions {
-	minNum?: number;
-	maxNum?: number;
-	precision?: number;
-}
-
 /**
  * Sanitize the value of UnitControl.
  *
@@ -61,7 +62,10 @@ interface SanitizeOptions {
  * @param  options      Sanitize options.
  * @return Sanitized UnitControl value.
  */
-export function sanitizeUnitValue( initialValue: string, options?: SanitizeOptions ): string {
+export function sanitizeUnitValue(
+	initialValue: PropertyValue< string | number > | undefined,
+	options?: SanitizeOptions
+): string {
 	const value: string = String( initialValue ).trim();
 	let num: number = parseFloat( value );
 
@@ -111,8 +115,8 @@ export function parseUnit( initialValue: string ): [ number, string ] {
 /**
  * Convert string to number.
  *
- * @param  value        Value to converted.
- * @param  defaultValue Value to be used when the value is falsy.
+ * @param  value        String to converted.
+ * @param  defaultValue String to be used when the value is falsy.
  */
 export function toInteger( value: number | string | undefined, defaultValue = 0 ): number {
 	if ( ! value ) {
@@ -126,4 +130,14 @@ export function toInteger( value: number | string | undefined, defaultValue = 0 
 	}
 
 	return converted || defaultValue;
+}
+
+/**
+ * Convert only the first letter to uppercase
+ *
+ * @param  value string to converted.
+ */
+export function toUpperFirstLetter( value: string ): string {
+	if ( typeof value !== 'string' ) return value;
+	return value.charAt( 0 ).toUpperCase() + value.substring( 1 ).toLowerCase();
 }

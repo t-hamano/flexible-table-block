@@ -1,15 +1,32 @@
 /**
+ * External dependencies
+ */
+import type { AnyAction as Action } from 'redux';
+
+/**
  * WordPress dependencies
  */
 import apiFetch from '@wordpress/api-fetch';
 import { registerStore } from '@wordpress/data';
+
 /**
  * Internal dependencies
  */
 import { STORE_NAME, REST_API_ROUTE } from './constants';
+import type { ApiResponse } from './settings/global-settings';
 
-import type { StoreOptions } from './constants';
-import type { AnyAction as Action } from 'redux';
+export interface StoreOptions {
+	/* eslint-disable camelcase */
+	show_label_on_section: boolean;
+	show_control_button: boolean;
+	focus_control_button: boolean;
+	show_dot_on_th: boolean;
+	merge_content: boolean;
+	show_global_setting: boolean;
+	breakpoint: number;
+	block_style: { [ key: string ]: string | undefined };
+	/* eslint-enable camelcase */
+}
 
 const DEFAULT_STATE = {
 	options: {},
@@ -53,7 +70,7 @@ const selectors = {
 
 const controls = {
 	GET_OPTIONS( action: Action ) {
-		return apiFetch( { path: action.path } );
+		return apiFetch< ApiResponse >( { path: action.path } );
 	},
 };
 

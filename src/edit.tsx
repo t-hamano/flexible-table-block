@@ -2,6 +2,8 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import type { KeyboardEvent } from 'react';
+import type { Properties } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -16,8 +18,6 @@ import { ToolbarDropdownMenu, PanelBody, Toolbar, Slot } from '@wordpress/compon
 import {
 	blockTable,
 	justifyLeft,
-	justifyCenter,
-	justifyRight,
 	tableColumnAfter,
 	tableColumnBefore,
 	tableColumnDelete,
@@ -25,15 +25,16 @@ import {
 	tableRowBefore,
 	tableRowDelete,
 } from '@wordpress/icons';
+import type { BlockEditProps } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
  */
 import './editor.scss';
+import { CONTENT_JUSTIFY_CONTROLS } from './constants';
 import { STORE_NAME } from './store';
 import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
-
 import {
 	insertRow,
 	deleteRow,
@@ -49,17 +50,11 @@ import {
 	VCell,
 } from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
+import { toUpperFirstLetter } from './utils/helper';
 import { mergeCell, splitCell } from './icons';
-import type { BlockEditProps } from '@wordpress/blocks';
-import type { BlockAttributes, SectionName } from './BlockAttributes';
-import type { KeyboardEvent } from 'react';
-import type { StoreOptions } from './constants';
-
-const justifyIcons = {
-	left: justifyLeft,
-	center: justifyCenter,
-	right: justifyRight,
-};
+import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
+import type { StoreOptions } from './store';
+import type { VTable } from './utils/table-state';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const { attributes, setAttributes } = props;
@@ -74,13 +69,13 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	>();
 	const [ selectMode, setSelectMode ] = useState< string >( '' );
 
-	const tableStylesObj = convertToObject( tableStyles );
-	const captionStylesObj = convertToObject( captionStyles );
+	const tableStylesObj: Properties = convertToObject( tableStyles );
+	const captionStylesObj: Properties = convertToObject( captionStyles );
 
 	const options = useSelect< StoreOptions >( ( select ) => select( STORE_NAME ).getOptions() );
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
-	const vTable = toVirtualTable( attributes );
+	const vTable: VTable = toVirtualTable( attributes );
 
 	// Monitor pressed key to determine whether multi-select mode or range select mode.
 	const onKeyDown = ( event: KeyboardEvent ) => {
@@ -95,7 +90,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		setSelectMode( '' );
 	};
 
-	const onChangeContentJustification = ( value: keyof typeof justifyIcons ) => {
+	const onChangeContentJustification = ( value: ContentJustifyValue ) => {
 		const newValue = contentJustification === value ? undefined : value;
 		setAttributes( { contentJustification: newValue } );
 	};
@@ -177,26 +172,12 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		setSelectedLine( undefined );
 	};
 
-	const TableJustifyControls = [
-		{
-			icon: justifyLeft,
-			title: __( 'Justify table left', 'flexible-table-block' ),
-			isActive: contentJustification === 'left',
-			onClick: () => onChangeContentJustification( 'left' ),
-		},
-		{
-			icon: justifyCenter,
-			title: __( 'Justify table center', 'flexible-table-block' ),
-			isActive: contentJustification === 'center',
-			onClick: () => onChangeContentJustification( 'center' ),
-		},
-		{
-			icon: justifyRight,
-			title: __( 'Justify table right', 'flexible-table-block' ),
-			isActive: contentJustification === 'right',
-			onClick: () => onChangeContentJustification( 'right' ),
-		},
-	];
+	const TableJustifyControls = CONTENT_JUSTIFY_CONTROLS.map( ( { icon, label, value } ) => ( {
+		icon,
+		title: label,
+		isActive: contentJustification === value,
+		onClick: () => onChangeContentJustification( value ),
+	} ) );
 
 	const TableEditControls = [
 		{
@@ -247,9 +228,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			isDisabled: ! selectedCells || ! isRectangleSelected( selectedCells ),
 			onClick: () => onMergeCells(),
 		},
-	];
+	] as const;
 
-	const isEmpty = ! [ 'head', 'body', 'foot' ].filter(
+	const isEmpty: boolean = ! [ 'head', 'body', 'foot' ].filter(
 		( sectionName ) => ! isEmptySection( vTable[ sectionName as SectionName ] )
 	).length;
 
@@ -287,7 +268,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		selectedCells,
 	};
 
-	const tableCellSettingsLabel =
+	const tableCellSettingsLabel: string =
 		selectedCells && selectedCells.length > 1
 			? __( 'Multi Cells Settings', 'flexible-table-block' )
 			: __( 'Cell Settings', 'flexible-table-block' );
@@ -319,7 +300,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 						<ToolbarDropdownMenu
 							label={ __( 'Change table justification', 'flexible-table-block' ) }
 							icon={
-								contentJustification ? justifyIcons[ contentJustification ] : justifyIcons.left
+								contentJustification
+									? `justify${ toUpperFirstLetter( contentJustification ) }`
+									: justifyLeft
 							}
 							controls={ TableJustifyControls }
 							hasArrowIndicator
@@ -338,7 +321,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 						>
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
-						{ !! selectedCells?.length && (
+						{ selectedCells && !! selectedCells.length && (
 							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
 								<TableCellSettings { ...tableCellSettingsProps } />
 							</PanelBody>

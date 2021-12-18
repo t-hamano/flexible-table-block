@@ -2,7 +2,14 @@
  * WordPress dependencies
  */
 import { __, _x } from '@wordpress/i18n';
-import { alignLeft, alignCenter, alignRight } from '@wordpress/icons';
+import {
+	justifyLeft,
+	justifyCenter,
+	justifyRight,
+	alignLeft,
+	alignCenter,
+	alignRight,
+} from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -18,20 +25,6 @@ import {
 	borderCollapse as borderCollapseIcon,
 	borderSeparate as borderSeparateIcon,
 } from './icons';
-
-// Store options.
-export interface StoreOptions {
-	/* eslint-disable camelcase */
-	show_label_on_section: boolean;
-	show_control_button: boolean;
-	focus_control_button: boolean;
-	show_dot_on_th: boolean;
-	merge_content: boolean;
-	show_global_setting: boolean;
-	breakpoint: number;
-	block_style: {};
-	/* eslint-enable camelcase */
-}
 
 // Custom store name.
 export const STORE_NAME = 'flexible-table-block' as const;
@@ -68,9 +61,9 @@ export const MAX_BORDER_SPACING = {
 } as const;
 
 // Responsive breakpoint settings.
-export const DEFAULT_RESPONSIVE_BREAKPOINT = 768;
-export const MIN_RESPONSIVE_BREAKPOINT = 200;
-export const MAX_RESPONSIVE_BREAKPOINT = 1200;
+export const DEFAULT_RESPONSIVE_BREAKPOINT = 768 as const;
+export const MIN_RESPONSIVE_BREAKPOINT = 200 as const;
+export const MAX_RESPONSIVE_BREAKPOINT = 1200 as const;
 
 // Available units on UnitControl component.
 export const FONT_SIZE_UNITS = [ 'px', 'em', 'rem', '%' ] as const;
@@ -81,7 +74,7 @@ export const BORDER_RADIUS_UNITS = [ 'px', 'em', 'rem' ] as const;
 export const BORDER_WIDTH_UNITS = [ 'px', 'em', 'rem' ] as const;
 export const PADDING_UNITS = [ 'px', '%', 'em', 'rem', 'vw', 'vh' ] as const;
 
-// Label & Text variations.
+// Cell label & text variations.
 export const CELL_ARIA_LABEL = {
 	head: __( 'Header cell text', 'flexible-table-block' ),
 	body: __( 'Body cell text', 'flexible-table-block' ),
@@ -89,6 +82,24 @@ export const CELL_ARIA_LABEL = {
 } as const;
 
 // Controls variations.
+export const CONTENT_JUSTIFY_CONTROLS = [
+	{
+		icon: justifyLeft,
+		label: __( 'Justify table left', 'flexible-table-block' ),
+		value: 'left',
+	},
+	{
+		icon: justifyCenter,
+		label: __( 'Justify table center', 'flexible-table-block' ),
+		value: 'center',
+	},
+	{
+		icon: justifyRight,
+		label: __( 'Justify table right', 'flexible-table-block' ),
+		value: 'right',
+	},
+];
+
 export const BORDER_COLLAPSE_CONTROLS = [
 	{
 		icon: borderCollapseIcon,
@@ -195,5 +206,54 @@ export const CAPTION_SIDE_CONTROLS = [
 	{
 		label: __( 'Bottom', 'flexible-table-block' ),
 		value: 'bottom',
+	},
+] as const;
+
+export const CORNER_CONTROLS = [
+	{
+		label: __( 'Top Left', 'flexible-table-block' ),
+		value: 'topLeft',
+	},
+	{
+		label: __( 'Top Right', 'flexible-table-block' ),
+		value: 'topRight',
+	},
+	{
+		label: __( 'Bottom Right', 'flexible-table-block' ),
+		value: 'bottomRight',
+	},
+	{
+		label: __( 'Bottom Left', 'flexible-table-block' ),
+		value: 'bottomLeft',
+	},
+] as const;
+
+export const DIRECTION_CONTROLS = [
+	{
+		label: __( 'Horizontal', 'flexible-table-block' ),
+		value: 'horizontal',
+	},
+	{
+		label: __( 'Vertical', 'flexible-table-block' ),
+		value: 'vertical',
+	},
+] as const;
+
+export const SIDE_CONTROLS = [
+	{
+		label: __( 'Top', 'flexible-table-block' ),
+		value: 'top',
+	},
+	{
+		label: __( 'Right', 'flexible-table-block' ),
+		value: 'right',
+	},
+	{
+		label: __( 'Bottom', 'flexible-table-block' ),
+		value: 'bottom',
+	},
+	{
+		label: __( 'Left', 'flexible-table-block' ),
+		value: 'left',
 	},
 ] as const;

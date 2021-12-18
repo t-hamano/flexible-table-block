@@ -3,6 +3,7 @@
  */
 import { get } from 'lodash';
 import classnames from 'classnames';
+import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -26,17 +27,16 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 /**
  * Internal dependencies
  */
-import { SIDES, SideIndicatorControl } from './indicator-control';
-import type { Sides } from './indicator-control';
+import { SideIndicatorControl } from './indicator-control';
+import { SIDE_CONTROLS } from '../constants';
+import type { SideValue } from '../BlockAttributes';
 
 const DEFAULT_VALUES = {
-	top: undefined,
-	right: undefined,
-	bottom: undefined,
-	left: undefined,
+	top: '',
+	right: '',
+	bottom: '',
+	left: '',
 };
-
-type ValuesKey = keyof typeof DEFAULT_VALUES;
 
 export default function BorderColorControl( {
 	id,
@@ -50,19 +50,24 @@ export default function BorderColorControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
-	allowSides: boolean;
-	hasIndicator: boolean;
+	values: {
+		top?: Property.BorderTopColor;
+		right?: Property.BorderRightColor;
+		bottom?: Property.BorderBottomColor;
+		left?: Property.BorderLeftColor;
+	};
+	allowSides?: boolean;
+	hasIndicator?: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
 
-	const isMixed =
+	const isMixed: boolean =
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
@@ -76,26 +81,21 @@ export default function BorderColorControl( {
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
 	const [ pickerIndex, setPickerIndex ] = useState< number | undefined >( undefined );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const linkedLabel = isLinked
+	const linkedLabel: string = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputValue = isMixed ? undefined : values.top;
+	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames = classnames( 'ftb-border-color-control', className );
+	const classNames: string = classnames( 'ftb-border-color-control', className );
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
 	const handleOnReset = () => {
 		setIsLinked( true );
-		onChange( {
-			top: undefined,
-			right: undefined,
-			bottom: undefined,
-			left: undefined,
-		} );
+		onChange( DEFAULT_VALUES );
 	};
 
 	const handleOnChangeAll = ( inputValue: string ) => {
@@ -107,7 +107,7 @@ export default function BorderColorControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue: string | undefined, targetSide: Sides ) => {
+	const handleOnChange = ( inputValue: string | undefined, targetSide: SideValue ) => {
 		onChange( {
 			...values,
 			[ targetSide ]: inputValue,
@@ -172,7 +172,7 @@ export default function BorderColorControl( {
 						) }
 						{ ! isLinked &&
 							allowSides &&
-							SIDES.map( ( item, index ) => (
+							SIDE_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-color-control__controls-row" key={ index }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<Button
@@ -182,11 +182,11 @@ export default function BorderColorControl( {
 									>
 										<ColorIndicator
 											className={ classnames( {
-												'component-color-indicator--none': ! values[ item.value as ValuesKey ],
+												'component-color-indicator--none': ! values[ item.value ],
 												'component-color-indicator--transparent':
-													values[ item.value as ValuesKey ] === 'transparent',
+													values[ item.value ] === 'transparent',
 											} ) }
-											colorValue={ values[ item.value as ValuesKey ] || '' }
+											colorValue={ values[ item.value ] || '' }
 										/>
 									</Button>
 									{ isPickerOpen && pickerIndex === index && (
@@ -197,7 +197,7 @@ export default function BorderColorControl( {
 										>
 											<ColorPalette
 												colors={ colors }
-												value={ values[ item.value as ValuesKey ] || '' }
+												value={ values[ item.value ] || '' }
 												onChange={ ( value ) => handleOnChange( value, item.value ) }
 											/>
 										</Popover>
@@ -209,6 +209,7 @@ export default function BorderColorControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									label={ linkedLabel }
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }

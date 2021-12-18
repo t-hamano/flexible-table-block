@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import type { Property } from 'csstype';
 import { get } from 'lodash';
 import classnames from 'classnames';
+import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -33,15 +33,15 @@ export default function ColorControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
-	colors: {
+	colors?: {
 		name: string;
 		slug: string;
 		color: Property.Color;
 	}[];
-	value: Property.Color;
+	value: Property.Color | undefined;
 } ) {
 	const colors = useSelect( ( select ) => {
 		// @ts-ignore
@@ -49,11 +49,11 @@ export default function ColorControl( {
 		return get( settings, [ 'colors' ], [] );
 	} );
 
-	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
+	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const classNames = classnames( 'ftb-color-control', className );
+	const classNames: string = classnames( 'ftb-color-control', className );
 
 	const handleOnReset = () => onChange( undefined );
 
@@ -85,7 +85,7 @@ export default function ColorControl( {
 										'component-color-indicator--none': ! value,
 										'component-color-indicator--transparent': value === 'transparent',
 									} ) }
-									colorValue={ value }
+									colorValue={ value || '' }
 								/>
 							</Button>
 							{ isPickerOpen && (
@@ -96,7 +96,7 @@ export default function ColorControl( {
 								>
 									<ColorPalette
 										colors={ [ ...colors, ...colorsProp ] }
-										value={ value }
+										value={ value || '' }
 										onChange={ handleOnChange }
 									/>
 								</Popover>

@@ -24,14 +24,14 @@ import {
 /**
  * Internal dependencies
  */
-import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING } from '../constants';
-import { DIRECTIONS, DirectionIndicatorControl } from './indicator-control';
+import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING, DIRECTION_CONTROLS } from '../constants';
+import { DirectionIndicatorControl } from './indicator-control';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
-import type { Directions } from './indicator-control';
+import type { DirectionValue } from '../BlockAttributes';
 
 const DEFAULT_VALUES = {
-	horizontal: undefined,
-	vertical: undefined,
+	horizontal: '',
+	vertical: '',
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -49,35 +49,35 @@ export default function BorderSpacingControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
 	values: typeof DEFAULT_VALUES;
-	allowSides: boolean;
-	hasIndicator: boolean;
+	allowSides?: boolean;
+	hasIndicator?: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
 
-	const isMixed = allowSides && ! ( values.horizontal === values.vertical );
+	const isMixed: boolean = allowSides && ! ( values.horizontal === values.vertical );
 
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
-	const [ direction, setDirection ] = useState< Directions | undefined >( undefined );
+	const [ direction, setDirection ] = useState< DirectionValue | undefined >( undefined );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const linkedLabel = isLinked
+	const linkedLabel: string = isLinked
 		? __( 'Unlink Directions', 'flexible-table-block' )
 		: __( 'Link Directions', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
-	const allInputValue = isMixed ? undefined : values.horizontal;
+	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
+	const allInputValue: string | 0 = isMixed ? '' : values.horizontal;
 
-	const classNames = classnames( 'ftb-border-spacing-control', className );
+	const classNames: string = classnames( 'ftb-border-spacing-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -86,13 +86,10 @@ export default function BorderSpacingControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
-		onChange( {
-			horizontal: undefined,
-			vertical: undefined,
-		} );
+		onChange( DEFAULT_VALUES );
 	};
 
-	const handleOnFocus = ( focusDirection: Directions ) => setDirection( focusDirection );
+	const handleOnFocus = ( focusDirection: DirectionValue ) => setDirection( focusDirection );
 
 	const handleOnChangeAll = ( inputValue: string ) => {
 		const [ , unit ] = parseUnit( inputValue );
@@ -106,7 +103,7 @@ export default function BorderSpacingControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue: string, targetDirection: Directions ) => {
+	const handleOnChange = ( inputValue: string, targetDirection: DirectionValue ) => {
 		const [ , unit ] = parseUnit( inputValue );
 		const sanitizedValue = sanitizeUnitValue( inputValue, {
 			maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
@@ -146,6 +143,7 @@ export default function BorderSpacingControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									label={ linkedLabel }
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }
@@ -159,7 +157,7 @@ export default function BorderSpacingControl( {
 				</div>
 				{ ! isLinked && allowSides && (
 					<div className="ftb-border-spacing-control__input-controls">
-						{ DIRECTIONS.map( ( item ) => (
+						{ DIRECTION_CONTROLS.map( ( item ) => (
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }

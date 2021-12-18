@@ -2,6 +2,7 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -24,16 +25,16 @@ import {
 /**
  * Internal dependencies
  */
-import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH } from '../constants';
-import { SIDES, SideIndicatorControl } from './indicator-control';
+import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH, SIDE_CONTROLS } from '../constants';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
-import type { Sides } from './indicator-control';
+import { SideIndicatorControl } from './indicator-control';
+import type { SideValue } from '../BlockAttributes';
 
 const DEFAULT_VALUES = {
-	top: undefined,
-	right: undefined,
-	bottom: undefined,
-	left: undefined,
+	top: '',
+	right: '',
+	bottom: '',
+	left: '',
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -51,37 +52,42 @@ export default function BorderWidthControl( {
 }: {
 	id: string;
 	label: string;
-	help: string;
-	className: string;
+	help?: string;
+	className?: string;
 	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
-	allowSides: boolean;
-	hasIndicator: boolean;
+	values: {
+		top?: Property.BorderTopWidth;
+		right?: Property.BorderRightWidth;
+		bottom?: Property.BorderBottomWidth;
+		left?: Property.BorderLeftWidth;
+	};
+	allowSides?: boolean;
+	hasIndicator?: boolean;
 } ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
 
-	const isMixed =
+	const isMixed: boolean =
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
 	const borderWidthUnits = useCustomUnits( { availableUnits: BORDER_WIDTH_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
-	const [ side, setSide ] = useState< Sides | undefined >( undefined );
+	const [ side, setSide ] = useState< SideValue | undefined >( undefined );
 
-	const headingId = `${ id }-heading`;
+	const headingId: string = `${ id }-heading`;
 
-	const linkedLabel = isLinked
+	const linkedLabel: string = isLinked
 		? __( 'Unlink Sides', 'flexible-table-block' )
 		: __( 'Link Sides', 'flexible-table-block' );
 
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : undefined;
-	const allInputValue = isMixed ? undefined : values.top;
+	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
+	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames = classnames( 'ftb-border-width-control', className );
+	const classNames: string = classnames( 'ftb-border-width-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -90,15 +96,10 @@ export default function BorderWidthControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
-		onChange( {
-			top: undefined,
-			right: undefined,
-			bottom: undefined,
-			left: undefined,
-		} );
+		onChange( DEFAULT_VALUES );
 	};
 
-	const handleOnFocus = ( focusSide: Sides ) => setSide( focusSide );
+	const handleOnFocus = ( focusSide: SideValue ) => setSide( focusSide );
 
 	const handleOnChangeAll = ( inputValue: string ) => {
 		const [ , unit ] = parseUnit( inputValue );
@@ -114,7 +115,7 @@ export default function BorderWidthControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue: string, targetSide: Sides ) => {
+	const handleOnChange = ( inputValue: string, targetSide: SideValue ) => {
 		const [ , unit ] = parseUnit( inputValue );
 		const sanitizedValue = sanitizeUnitValue( inputValue, {
 			maxNum: MAX_BORDER_WIDTH[ unit as MaxBorderWidthKey ],
@@ -152,6 +153,7 @@ export default function BorderWidthControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									label={ linkedLabel }
 									isSmall
 									isPrimary={ isLinked }
 									isSecondary={ ! isLinked }
@@ -165,7 +167,7 @@ export default function BorderWidthControl( {
 				</div>
 				{ ! isLinked && allowSides && (
 					<div className="ftb-border-width-control__input-controls">
-						{ SIDES.map( ( item ) => (
+						{ SIDE_CONTROLS.map( ( item ) => (
 							<UnitControl
 								key={ item.value }
 								aria-label={ item.label }

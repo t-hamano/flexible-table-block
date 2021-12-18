@@ -54,6 +54,7 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 		);
 	};
 }, 'withInspectorControl' );
+
 addFilter(
 	'editor.BlockEdit',
 	'flexible-table-block/withInspectorControls',
