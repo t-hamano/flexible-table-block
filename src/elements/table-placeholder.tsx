@@ -3,6 +3,7 @@
  */
 import { times } from 'lodash';
 import classnames from 'classnames';
+import type { FormEvent } from 'react';
 
 /**
  * WordPress dependencies
@@ -26,22 +27,32 @@ import {
 } from '../constants';
 import { createTable, toTableAttributes } from '../utils/table-state';
 import { blockIcon as icon } from '../icons';
+import type { VTable } from '../utils/table-state';
+import type { BlockAttributes } from '../BlockAttributes';
 
-export default function TablePlaceholder( { setAttributes } ) {
-	const [ rowCount, setRowCount ] = useState( DEFAULT_PREVIEW_ROWS );
-	const [ colCount, setColCount ] = useState( DEFAULT_PREVIEW_COLUMNS );
-	const [ headerSection, setHeaderSection ] = useState( false );
-	const [ footerSection, setFooterSection ] = useState( false );
+type Props = {
+	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
+};
 
-	const totalRowCount = rowCount + Number( headerSection ) + Number( footerSection );
-	const cellHeight = parseInt(
-		MIN_PREVIEW_TABLE_HEIGHT / Math.min( THRESHOLD_PREVIEW_TABLE_ROW, totalRowCount )
-	);
+export default function TablePlaceholder( { setAttributes }: Props ) {
+	const [ rowCount, setRowCount ] = useState< number | undefined >( DEFAULT_PREVIEW_ROWS );
+	const [ colCount, setColCount ] = useState< number | undefined >( DEFAULT_PREVIEW_COLUMNS );
+	const [ headerSection, setHeaderSection ] = useState< boolean >( false );
+	const [ footerSection, setFooterSection ] = useState< boolean >( false );
 
-	const onCreateTable = ( event ) => {
+	const totalRowCount: number | undefined = rowCount
+		? rowCount + Number( headerSection ) + Number( footerSection )
+		: undefined;
+	const cellHeight: number | undefined = totalRowCount
+		? Number( MIN_PREVIEW_TABLE_HEIGHT / Math.min( THRESHOLD_PREVIEW_TABLE_ROW, totalRowCount ) )
+		: undefined;
+
+	const onCreateTable = ( event: FormEvent ) => {
 		event.preventDefault();
 
-		const vTable = createTable( {
+		if ( ! rowCount || ! colCount ) return;
+
+		const vTable: VTable = createTable( {
 			rowCount: Math.min( rowCount, MAX_PREVIEW_TABLE_ROW ),
 			colCount: Math.min( colCount, MAX_PREVIEW_TABLE_COL ),
 			headerSection,
@@ -51,31 +62,31 @@ export default function TablePlaceholder( { setAttributes } ) {
 		setAttributes( toTableAttributes( vTable ) );
 	};
 
-	const onChangeColumnCount = ( value ) => {
+	const onChangeColumnCount = ( value: string ) => {
 		const parsedValue = parseInt( value, 10 );
 		if ( isNaN( parsedValue ) ) {
-			setColCount( '' );
+			setColCount( undefined );
 		} else {
 			setColCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_COL, parsedValue ) ) );
 		}
 	};
 
-	const onChangeRowCount = ( value ) => {
-		const parsedValue = parseInt( value, 10 );
+	const onChangeRowCount = ( value: string ) => {
+		const parsedValue = parseInt( value );
 		if ( isNaN( parsedValue ) ) {
-			setRowCount( '' );
+			setRowCount( undefined );
 		} else {
 			setRowCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_ROW, parsedValue ) ) );
 		}
 	};
 
-	const onToggleHeaderSection = ( section ) => setHeaderSection( !! section );
+	const onToggleHeaderSection = ( section: boolean ) => setHeaderSection( section );
 
-	const onToggleFooterSection = ( section ) => setFooterSection( !! section );
+	const onToggleFooterSection = ( section: boolean ) => setFooterSection( section );
 
-	const tableClasses = classnames( 'ftb-placeholder__table', {
-		'is-overflow-row': totalRowCount > THRESHOLD_PREVIEW_TABLE_ROW,
-		'is-overflow-col': colCount > THRESHOLD_PREVIEW_TABLE_COL,
+	const tableClasses: string = classnames( 'ftb-placeholder__table', {
+		'is-overflow-row': totalRowCount && totalRowCount > THRESHOLD_PREVIEW_TABLE_ROW,
+		'is-overflow-col': colCount && colCount > THRESHOLD_PREVIEW_TABLE_COL,
 	} );
 
 	return (
@@ -93,41 +104,43 @@ export default function TablePlaceholder( { setAttributes } ) {
 				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
 			>
 				<div className="ftb-placeholder__tbl-ttl">{ __( 'Preview', 'flexible-table-block' ) }</div>
-				<table className={ tableClasses }>
-					{ headerSection && rowCount && colCount && (
-						<thead>
-							<tr>
-								{ times( colCount, ( colIndex ) => {
-									if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-									return <th key={ colIndex } style={ { height: cellHeight } } />;
-								} ) }
-							</tr>
-						</thead>
-					) }
-					<tbody>
-						{ times( rowCount, ( rowIndex ) => {
-							if ( rowIndex > THRESHOLD_PREVIEW_TABLE_ROW ) return;
-							return (
-								<tr key={ rowIndex }>
-									{ times( Math.min( colCount, MAX_PREVIEW_TABLE_COL ), ( colIndex ) => {
+				{ rowCount && colCount && (
+					<table className={ tableClasses }>
+						{ headerSection && (
+							<thead>
+								<tr>
+									{ times( colCount, ( colIndex ) => {
+										if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
+										return <th key={ colIndex } style={ { height: cellHeight } } />;
+									} ) }
+								</tr>
+							</thead>
+						) }
+						<tbody>
+							{ times( rowCount, ( rowIndex ) => {
+								if ( rowIndex > THRESHOLD_PREVIEW_TABLE_ROW ) return;
+								return (
+									<tr key={ rowIndex }>
+										{ times( Math.min( colCount, MAX_PREVIEW_TABLE_COL ), ( colIndex ) => {
+											if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
+											return <td key={ colIndex } style={ { height: cellHeight } } />;
+										} ) }
+									</tr>
+								);
+							} ) }
+						</tbody>
+						{ footerSection && (
+							<tfoot>
+								<tr>
+									{ times( colCount, ( colIndex ) => {
 										if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
 										return <td key={ colIndex } style={ { height: cellHeight } } />;
 									} ) }
 								</tr>
-							);
-						} ) }
-					</tbody>
-					{ footerSection && rowCount && colCount && (
-						<tfoot>
-							<tr>
-								{ times( colCount, ( colIndex ) => {
-									if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-									return <td key={ colIndex } style={ { height: cellHeight } } />;
-								} ) }
-							</tr>
-						</tfoot>
-					) }
-				</table>
+							</tfoot>
+						) }
+					</table>
+				) }
 			</div>
 			<form className="ftb-placeholder__form" onSubmit={ onCreateTable }>
 				<div className="ftb-placeholder__row">
@@ -151,7 +164,7 @@ export default function TablePlaceholder( { setAttributes } ) {
 						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_COL }
-						value={ colCount }
+						value={ colCount || '' }
 						onChange={ onChangeColumnCount }
 					/>
 					<TextControl
@@ -160,10 +173,10 @@ export default function TablePlaceholder( { setAttributes } ) {
 						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_ROW }
-						value={ rowCount }
+						value={ rowCount || '' }
 						onChange={ onChangeRowCount }
 					/>
-					<Button isPrimary variant="primary" type="submit" disabled={ ! rowCount || ! colCount }>
+					<Button isPrimary type="submit" disabled={ ! rowCount || ! colCount }>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</div>

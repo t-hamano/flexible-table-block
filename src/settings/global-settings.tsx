@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
-// @ts-ignore
+// @ts-ignore: has no exported member
 import { store as coreStore } from '@wordpress/core-data';
 import {
 	Button,
@@ -18,9 +18,9 @@ import {
 	Popover,
 	Notice,
 	ExternalLink,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 import { cog, help } from '@wordpress/icons';

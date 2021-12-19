@@ -2,12 +2,19 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import type { Properties } from 'csstype';
+import type { Dispatch, SetStateAction, MouseEvent } from 'react';
+import { omit } from 'lodash';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { RichText, __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
+import {
+	RichText,
+	// @ts-ignore: has no exported member
+	__experimentalUseColorProps as useColorProps,
+} from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
 
@@ -24,6 +31,7 @@ import {
 	toVirtualRows,
 	toTableAttributes,
 	isEmptySection,
+	VRow,
 } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -37,43 +45,69 @@ import {
 	ButtonColumnDeleter,
 } from './styles';
 
-function TSection( { name, ...props } ) {
+import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttributes';
+import type {
+	VTable,
+	VCell,
+	VSelectMode,
+	VSelectedLine,
+	VSelectedCells,
+} from '../utils/table-state';
+import type { StoreOptions } from '../store';
+
+function TSection( props: any ) {
+	const name: SectionName = props.name;
 	const TagName = `t${ name }`;
-	return <TagName { ...props } />;
+	return <TagName { ...omit( props, 'name' ) } />;
 }
 
-function Cell( { name, ...props } ) {
-	const TagName = name;
-	return <TagName { ...props } />;
+function Cell( props: any ) {
+	const TagName: CellTagValue = props.name;
+	return <TagName { ...omit( props, 'name' ) } />;
 }
 
-export default function Table( props ) {
-	const {
-		attributes,
-		setAttributes,
-		isSelected,
-		options,
-		vTable,
-		tableStylesObj,
-		selectMode,
-		selectedCells,
-		setSelectedCells,
-		selectedLine,
-		setSelectedLine,
-	} = props;
+type Props = {
+	attributes: BlockAttributes;
+	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
+	isSelected: boolean;
+	options: StoreOptions;
+	vTable: VTable;
+	tableStylesObj: Properties;
+	selectMode: VSelectMode;
+	selectedCells: VSelectedCells;
+	setSelectedCells: Dispatch< SetStateAction< VSelectedCells > >;
+	selectedLine: VSelectedLine;
+	setSelectedLine: Dispatch< SetStateAction< VSelectedLine > >;
+};
 
+export default function Table( {
+	attributes,
+	setAttributes,
+	isSelected,
+	options,
+	vTable,
+	tableStylesObj,
+	selectMode,
+	selectedCells,
+	setSelectedCells,
+	selectedLine,
+	setSelectedLine,
+}: Props ) {
 	const { hasFixedLayout, isStackedOnMobile, sticky } = attributes;
 
 	const colorProps = useColorProps( attributes );
 
-	const onInsertRow = ( sectionName, rowIndex ) => {
+	const isRowSelected = selectedLine && 'sectionName' in selectedLine && 'rowIndex' in selectedLine;
+	const isColumnSelected = selectedLine && 'vColIndex' in selectedLine;
+
+	const onInsertRow = ( sectionName: SectionName, rowIndex: number ) => {
 		const newVTable = insertRow( vTable, { sectionName, rowIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
-	const onDeleteRow = ( sectionName, rowIndex ) => {
+	const onDeleteRow = ( sectionName: SectionName, rowIndex: number ) => {
 		// Do not allow tbody to be empty for table with thead /tfoot sections.
 		if (
 			sectionName === 'body' &&
@@ -87,11 +121,11 @@ export default function Table( props ) {
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
-	const onInsertColumn = ( vTargetCell, offset ) => {
+	const onInsertColumn = ( vTargetCell: VCell, offset: number ) => {
 		// Calculate column index to be inserted considering colspan of the target cell.
 		const vColIndex =
 			offset === 0
@@ -100,34 +134,38 @@ export default function Table( props ) {
 
 		const newVTable = insertColumn( vTable, { vColIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
-	const onDeleteColumn = ( vColIndex ) => {
+	const onDeleteColumn = ( vColIndex: number ) => {
 		const newVTable = deleteColumn( vTable, { vColIndex } );
 		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells();
-		setSelectedLine();
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
-	const onSelectSectionCells = ( sectionName ) => {
+	const onSelectSectionCells = ( sectionName: SectionName ) => {
 		setSelectedCells(
-			vTable[ sectionName ].reduce( ( cells, row ) => {
+			vTable[ sectionName ].reduce( ( cells: VCell[], row ) => {
 				return cells.concat( row.cells.filter( ( cell ) => ! cell.isHidden ) );
 			}, [] )
 		);
-		setSelectedLine();
+		setSelectedLine( undefined );
 	};
 
-	const onSelectRow = ( sectionName, rowIndex ) => {
-		if ( selectedLine?.sectionName === sectionName && selectedLine?.rowIndex === rowIndex ) {
-			setSelectedLine();
-			setSelectedCells();
+	const onSelectRow = ( sectionName: SectionName, rowIndex: number ) => {
+		if (
+			isRowSelected &&
+			selectedLine.sectionName === sectionName &&
+			selectedLine.rowIndex === rowIndex
+		) {
+			setSelectedLine( undefined );
+			setSelectedCells( undefined );
 		} else {
 			setSelectedLine( { sectionName, rowIndex } );
 			setSelectedCells(
-				vTable[ sectionName ].reduce( ( cells, row ) => {
+				vTable[ sectionName ].reduce( ( cells: VCell[], row ) => {
 					return cells.concat(
 						row.cells.filter( ( cell ) => cell.rowIndex === rowIndex && ! cell.isHidden )
 					);
@@ -136,16 +174,16 @@ export default function Table( props ) {
 		}
 	};
 
-	const onSelectColumn = ( vColIndex ) => {
-		if ( selectedLine?.vColIndex === vColIndex ) {
-			setSelectedLine();
-			setSelectedCells();
+	const onSelectColumn = ( vColIndex: number ) => {
+		if ( isColumnSelected && selectedLine.vColIndex && selectedLine.vColIndex === vColIndex ) {
+			setSelectedLine( undefined );
+			setSelectedCells( undefined );
 		} else {
 			const vRows = toVirtualRows( vTable );
 
 			setSelectedCells(
 				vRows.reduce(
-					( cells, row ) =>
+					( cells: VCell[], row ) =>
 						cells.concat(
 							row.cells.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isHidden )
 						),
@@ -157,8 +195,8 @@ export default function Table( props ) {
 		}
 	};
 
-	const onChangeCellContent = ( content ) => {
-		if ( ( selectedCells || [] ).length !== 1 ) return;
+	const onChangeCellContent = ( content: string ) => {
+		if ( ! selectedCells || selectedCells.length !== 1 ) return;
 
 		const {
 			sectionName,
@@ -190,22 +228,27 @@ export default function Table( props ) {
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
-	const onClickCell = ( event, clickedCell ) => {
+	const onClickCell = ( event: MouseEvent, clickedCell: VCell ) => {
 		const { sectionName, rowIndex, vColIndex } = clickedCell;
 
 		if ( event.shiftKey ) {
 			// Range select.
-			const fromCell = selectedCells.find( ( { isFirstSelected } ) => isFirstSelected );
+			if ( ! selectedCells ) {
+				setSelectedCells( [ { ...clickedCell, isFirstSelected: true } ] );
+			} else {
+				const fromCell = selectedCells.find( ( { isFirstSelected } ) => isFirstSelected );
 
-			if ( ! fromCell ) return;
+				if ( ! fromCell ) return;
 
-			if ( fromCell.sectionName !== sectionName ) {
-				// eslint-disable-next-line no-alert, no-undef
-				alert( __( 'Cannot select range cells from difference section.', 'flexible-table-block' ) );
-				return;
+				if ( fromCell.sectionName !== sectionName ) {
+					// eslint-disable-next-line no-alert, no-undef
+					alert(
+						__( 'Cannot select range cells from difference section.', 'flexible-table-block' )
+					);
+					return;
+				}
+				setSelectedCells( toRectangledSelectedCells( vTable, { fromCell, toCell: clickedCell } ) );
 			}
-
-			setSelectedCells( toRectangledSelectedCells( vTable, { fromCell, toCell: clickedCell } ) );
 		} else if ( event.ctrlKey || event.metaKey ) {
 			// Multple select.
 			const newSelectedCells = selectedCells ? [ ...selectedCells ] : [];
@@ -237,17 +280,19 @@ export default function Table( props ) {
 	};
 
 	// Remove cells from the virtual table that are not needed for dom rendering.
-	const filteredVTable = Object.keys( vTable ).reduce( ( result, sectionName ) => {
-		if ( isEmptySection( vTable[ sectionName ] ) ) return result;
+	const filteredVTable = Object.keys( vTable ).reduce( ( result: any, sectionName ) => {
+		if ( isEmptySection( vTable[ sectionName as SectionName ] ) ) return result;
 		return {
 			...result,
-			[ sectionName ]: vTable[ sectionName ].map( ( row ) => ( {
+			[ sectionName ]: vTable[ sectionName as SectionName ].map( ( row ) => ( {
 				cells: row.cells.filter( ( cell ) => ! cell.isHidden ),
 			} ) ),
 		};
 	}, {} );
 
-	const filteredSections = Object.keys( filteredVTable );
+	if ( ! filteredVTable ) return null;
+
+	const filteredSections = Object.keys( filteredVTable ) as SectionName[];
 
 	return (
 		<table
@@ -258,11 +303,11 @@ export default function Table( props ) {
 			} ) }
 			style={ { ...tableStylesObj, ...colorProps.style } }
 		>
-			{ filteredSections.map( ( sectionName, sectionIndex ) => (
-				<TSection name={ sectionName } key={ sectionName }>
-					{ filteredVTable[ sectionName ].map( ( row, rowIndex ) => (
+			{ filteredSections.map( ( sectionName: SectionName, sectionIndex ) => (
+				<TSection name={ sectionName } key={ sectionIndex }>
+					{ filteredVTable[ sectionName ].map( ( row: VRow, rowIndex: number ) => (
 						<tr key={ rowIndex }>
-							{ row.cells.map( ( cell ) => {
+							{ row.cells.map( ( cell: VCell ) => {
 								const { content, tag, className, styles, rowSpan, colSpan, vColIndex } = cell;
 
 								// Whether or not the current cell is included in the selected cells.
@@ -283,7 +328,7 @@ export default function Table( props ) {
 										rowSpan={ rowSpan > 1 ? rowSpan : undefined }
 										colSpan={ colSpan > 1 ? colSpan : undefined }
 										style={ cellStylesObj }
-										onClick={ ( event ) => onClickCell( event, cell ) }
+										onClick={ ( event: MouseEvent ) => onClickCell( event, cell ) }
 									>
 										{ isSelected &&
 											options.show_label_on_section &&
@@ -293,8 +338,7 @@ export default function Table( props ) {
 													className="ftb-table-cell-label"
 													tabIndex={ options.focus_control_button ? 0 : -1 }
 													isPrimary
-													variant="primary"
-													onClick={ ( event ) => {
+													onClick={ ( event: MouseEvent ) => {
 														onSelectSectionCells( sectionName );
 														event.stopPropagation();
 													} }
@@ -311,7 +355,7 @@ export default function Table( props ) {
 														icon={ plus }
 														iconSize="18"
 														hasPrevSection={ sectionIndex > 0 }
-														onClick={ ( event ) => {
+														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex );
 															event.stopPropagation();
 														} }
@@ -325,28 +369,24 @@ export default function Table( props ) {
 															icon={ chevronRight }
 															iconSize="16"
 															isPrimary={
-																selectedLine?.sectionName === sectionName &&
-																selectedLine?.rowIndex === rowIndex
+																isRowSelected &&
+																selectedLine.sectionName === sectionName &&
+																selectedLine.rowIndex === rowIndex
 															}
-															variant={
-																selectedLine?.sectionName === sectionName &&
-																selectedLine?.rowIndex === rowIndex
-																	? 'primary'
-																	: undefined
-															}
-															onClick={ ( event ) => {
+															onClick={ ( event: MouseEvent ) => {
 																onSelectRow( sectionName, rowIndex );
 																event.stopPropagation();
 															} }
 														/>
-														{ selectedLine?.sectionName === sectionName &&
-															selectedLine?.rowIndex === rowIndex && (
+														{ isRowSelected &&
+															selectedLine.sectionName === sectionName &&
+															selectedLine.rowIndex === rowIndex && (
 																<ButtonRowDeleter
 																	label={ __( 'Delete row', 'flexible-table-block' ) }
 																	tabIndex={ options.focus_control_button ? 0 : -1 }
 																	icon={ trash }
 																	iconSize={ 20 }
-																	onClick={ ( event ) => {
+																	onClick={ ( event: MouseEvent ) => {
 																		onDeleteRow( sectionName, rowIndex );
 																		event.stopPropagation();
 																	} }
@@ -360,7 +400,7 @@ export default function Table( props ) {
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
 														iconSize="18"
-														onClick={ ( event ) => {
+														onClick={ ( event: MouseEvent ) => {
 															onInsertColumn( cell, 0 );
 															event.stopPropagation();
 														} }
@@ -373,22 +413,19 @@ export default function Table( props ) {
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronDown }
 															iconSize="18"
-															isPrimary={ selectedLine?.vColIndex === vColIndex }
-															variant={
-																selectedLine?.vColIndex === vColIndex ? 'primary' : undefined
-															}
-															onClick={ ( event ) => {
+															isPrimary={ isColumnSelected && selectedLine.vColIndex === vColIndex }
+															onClick={ ( event: MouseEvent ) => {
 																onSelectColumn( vColIndex );
 																event.stopPropagation();
 															} }
-														></ButtonColumnSelector>
-														{ selectedLine?.vColIndex === vColIndex && (
+														/>
+														{ isColumnSelected && selectedLine.vColIndex === vColIndex && (
 															<ButtonColumnDeleter
 																label={ __( 'Delete column', 'flexible-table-block' ) }
 																tabIndex={ options.focus_control_button ? 0 : -1 }
 																icon={ trash }
 																iconSize={ 20 }
-																onClick={ ( event ) => {
+																onClick={ ( event: MouseEvent ) => {
 																	onDeleteColumn( vColIndex );
 																	event.stopPropagation();
 																} }
@@ -403,10 +440,10 @@ export default function Table( props ) {
 														icon={ plus }
 														iconSize="18"
 														hasNextSection={
-															sectionIndex < filteredSections.length - 1 &&
+															sectionIndex < Object.keys( filteredVTable ).length - 1 &&
 															rowIndex + rowSpan - 1 === filteredVTable[ sectionName ].length - 1
 														}
-														onClick={ ( event ) => {
+														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex + rowSpan );
 															event.stopPropagation();
 														} }
@@ -418,13 +455,14 @@ export default function Table( props ) {
 											key={ vColIndex }
 											value={ content }
 											onChange={ onChangeCellContent }
+											// @ts-ignore: `unstableOnFocus` prop is not exist at @types
 											unstableOnFocus={ () => {
 												if ( ! selectMode ) {
-													setSelectedLine();
+													setSelectedLine( undefined );
 													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
 												}
 											} }
-											aria-label={ CELL_ARIA_LABEL[ sectionName ] }
+											aria-label={ CELL_ARIA_LABEL[ sectionName as SectionName ] }
 										/>
 										{ isSelected &&
 											options.show_control_button &&
@@ -435,7 +473,7 @@ export default function Table( props ) {
 													tabIndex={ options.focus_control_button ? 0 : -1 }
 													icon={ plus }
 													iconSize="18"
-													onClick={ ( event ) => {
+													onClick={ ( event: MouseEvent ) => {
 														onInsertColumn( cell, 1 );
 														event.stopPropagation();
 													} }

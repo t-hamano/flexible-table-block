@@ -12,9 +12,9 @@ import {
 	Button,
 	ButtonGroup,
 	TextControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -30,15 +30,17 @@ import { sanitizeUnitValue } from '../utils/helper';
 import type { CaptionSideValue, TextAlignValue, BlockAttributes } from '../BlockAttributes';
 import type { DirectionProps } from '../utils/style-picker';
 
-export default function TableCaptionSettings( {
-	captionStylesObj,
-	attributes,
-	setAttributes,
-}: {
-	captionStylesObj: Properties;
+type Props = {
 	attributes: BlockAttributes;
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
-} ) {
+	captionStylesObj: Properties;
+};
+
+export default function TableCaptionSettings( {
+	attributes,
+	setAttributes,
+	captionStylesObj,
+}: Props ) {
 	const { captionSide } = attributes;
 
 	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );

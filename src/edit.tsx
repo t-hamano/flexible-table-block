@@ -11,9 +11,9 @@ import type { Properties } from 'csstype';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-// @ts-ignore
+// @ts-ignore: has no exported member
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
-// @ts-ignore
+// @ts-ignore: has no exported member
 import { ToolbarDropdownMenu, PanelBody, Toolbar, Slot } from '@wordpress/components';
 import {
 	blockTable,
@@ -47,27 +47,21 @@ import {
 	toTableAttributes,
 	toVirtualTable,
 	isEmptySection,
-	VCell,
 } from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
 import { toUpperFirstLetter } from './utils/helper';
 import { mergeCell, splitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
 import type { StoreOptions } from './store';
-import type { VTable } from './utils/table-state';
+import type { VTable, VSelectMode, VSelectedLine, VSelectedCells } from './utils/table-state';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
-	const { attributes, setAttributes } = props;
+	// @ts-ignore: `insertBlocksAfter` prop is not exist at @types
+	const { attributes, setAttributes, isSelected, insertBlocksAfter } = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
-	const [ selectedCells, setSelectedCells ] = useState< VCell[] | undefined >();
-	const [ selectedLine, setSelectedLine ] = useState<
-		| {
-				sectionName?: SectionName;
-				rowIndex?: number;
-		  }
-		| { vColIndex: number }
-	>();
-	const [ selectMode, setSelectMode ] = useState< string >( '' );
+	const [ selectedCells, setSelectedCells ] = useState< VSelectedCells >( undefined );
+	const [ selectedLine, setSelectedLine ] = useState< VSelectedLine >( undefined );
+	const [ selectMode, setSelectMode ] = useState< VSelectMode >( undefined );
 
 	const tableStylesObj: Properties = convertToObject( tableStyles );
 	const captionStylesObj: Properties = convertToObject( captionStyles );
@@ -86,7 +80,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onKeyUp = () => {
-		setSelectMode( '' );
+		setSelectMode( undefined );
 	};
 
 	const onChangeContentJustification = ( value: ContentJustifyValue ) => {
@@ -244,7 +238,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	} );
 
 	const tableProps = {
-		...props,
+		attributes,
+		setAttributes,
+		isSelected,
 		options,
 		vTable,
 		tableStylesObj,
@@ -256,13 +252,14 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const tableSettingsProps = {
-		...props,
+		attributes,
+		setAttributes,
 		vTable,
 		tableStylesObj,
 	};
 
 	const tableCellSettingsProps = {
-		...props,
+		setAttributes,
 		vTable,
 		selectedCells,
 	};
@@ -273,14 +270,17 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			: __( 'Cell Settings', 'flexible-table-block' );
 
 	const tableCaptionProps = {
-		...props,
-		captionStylesObj,
+		attributes,
+		setAttributes,
+		insertBlocksAfter,
 		setSelectedLine,
 		setSelectedCells,
+		captionStylesObj,
 	};
 
 	const tableCaptionSettingProps = {
-		...props,
+		attributes,
+		setAttributes,
 		captionStylesObj,
 	};
 
@@ -294,8 +294,10 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			{ ! isEmpty && (
 				// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
 				<figure { ...tableFigureProps } tabIndex="-1" onKeyDown={ onKeyDown } onKeyUp={ onKeyUp }>
-					{ /* @ts-ignore */ }
-					<BlockControls group="block">
+					<BlockControls
+						// @ts-ignore: `group` prop is not exist at @types
+						group="block"
+					>
 						<ToolbarDropdownMenu
 							label={ __( 'Change table justification', 'flexible-table-block' ) }
 							icon={

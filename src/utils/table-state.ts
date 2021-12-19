@@ -41,6 +41,18 @@ export interface VCell extends Omit< Cell, 'rowSpan' | 'colSpan' > {
 	isFilled?: boolean;
 }
 
+// Virtual table selected line state
+export type VSelectedLine =
+	| { sectionName: SectionName; rowIndex: number }
+	| { vColIndex: number }
+	| undefined;
+
+// Virtual table selected cells state
+export type VSelectedCells = VCell[] | undefined;
+
+// Determine whether multi-select mode or range select mode
+export type VSelectMode = 'range' | 'multi' | undefined;
+
 // Minimum / maximum row / column virtual indexes on virtual table
 interface VRangeIndexes {
 	minRowIndex: number;
@@ -420,7 +432,7 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
  */
 export function mergeCells(
 	vTable: VTable,
-	selectedCells: VCell[] | undefined,
+	selectedCells: VSelectedCells,
 	isMergeContent: boolean
 ): VTable {
 	if ( ! selectedCells || ! selectedCells.length ) return vTable;
@@ -522,7 +534,7 @@ export function mergeCells(
  * @param  selectedCells Current selected cells.
  * @return  New virtual table state.
  */
-export function splitMergedCells( vTable: VTable, selectedCells: VCell[] | undefined ): VTable {
+export function splitMergedCells( vTable: VTable, selectedCells: VSelectedCells ): VTable {
 	if ( ! selectedCells ) return vTable;
 	// Find the rowspan & colspan cells.
 	const rowColSpanCells: VCell[] = selectedCells.filter(
@@ -860,7 +872,7 @@ export function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes 
  * @param  selectedCells Current selected cells.
  * @return True if a rectangle will be formed from the selected cells, false otherwise.
  */
-export function isRectangleSelected( selectedCells: VCell[] | undefined ): boolean {
+export function isRectangleSelected( selectedCells: VSelectedCells ): boolean {
 	if ( ! selectedCells ) return false;
 
 	// No need to merge If only one or no cell is selected.
@@ -1031,7 +1043,7 @@ export function toRectangledSelectedCells(
  * @param  selectedCells Current selected cells.
  * @return True if the selected cells in the virtual table contain merged cells, false otherwise.
  */
-export function hasMergedCells( selectedCells: VCell[] | undefined ): boolean {
+export function hasMergedCells( selectedCells: VSelectedCells ): boolean {
 	if ( ! selectedCells ) return false;
 	return selectedCells.some(
 		( { rowSpan, colSpan }: { rowSpan: number; colSpan: number } ) => rowSpan > 1 || colSpan > 1

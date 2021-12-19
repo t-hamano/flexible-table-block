@@ -14,11 +14,11 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalText as Text,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -37,19 +37,7 @@ const DEFAULT_VALUES = {
 	left: '',
 };
 
-type ValuesKey = keyof typeof DEFAULT_VALUES;
-type MaxBorderWidthKey = keyof typeof MAX_BORDER_WIDTH;
-
-export default function BorderWidthControl( {
-	id,
-	label = __( 'Border Width', 'flexible-table-block' ),
-	help,
-	className,
-	onChange,
-	values: valuesProp,
-	allowSides = true,
-	hasIndicator = true,
-}: {
+type Props = {
 	id: string;
 	label: string;
 	help?: string;
@@ -63,7 +51,21 @@ export default function BorderWidthControl( {
 	};
 	allowSides?: boolean;
 	hasIndicator?: boolean;
-} ) {
+};
+
+type ValuesKey = keyof typeof DEFAULT_VALUES;
+type MaxBorderWidthKey = keyof typeof MAX_BORDER_WIDTH;
+
+export default function BorderWidthControl( {
+	id,
+	label = __( 'Border Width', 'flexible-table-block' ),
+	help,
+	className,
+	onChange,
+	values: valuesProp,
+	allowSides = true,
+	hasIndicator = true,
+}: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,
