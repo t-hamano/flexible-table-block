@@ -71,7 +71,6 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 	const tableStylesObj: Properties = convertToObject( tableStyles );
 	const captionStylesObj: Properties = convertToObject( captionStyles );
-
 	const options = useSelect< StoreOptions >( ( select ) => select( STORE_NAME ).getOptions() );
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.

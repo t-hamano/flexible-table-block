@@ -213,7 +213,7 @@ export default function Table( props ) {
 				return (
 					cell.sectionName === sectionName &&
 					cell.rowIndex === rowIndex &&
-					cell.colIndex === vColIndex
+					cell.vColIndex === vColIndex
 				);
 			} );
 

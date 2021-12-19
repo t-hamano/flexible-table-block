@@ -41,20 +41,12 @@ import {
 	VERTICAL_ALIGNMENT_CONTROLS,
 } from '../constants';
 import { BorderWidthControl, BorderStyleControl, ColorControl, PaddingControl } from '../controls';
-import { sanitizeUnitValue } from '../utils/helper';
-import type { StoreOptions } from '../store';
+import { sanitizeUnitValue, cleanEmptyObject } from '../utils/helper';
+import type { ApiResponse, StoreOptions } from '../store';
 
 interface NoticeInfo {
 	status?: NoticeType.Props[ 'status' ];
 	message?: string;
-}
-
-export interface ApiResponse {
-	status?: NoticeType.Props[ 'status' ];
-	message?: string;
-	options?: StoreOptions;
-	// eslint-disable-next-line camelcase
-	block_css?: string;
 }
 
 export default function GlobalSettings() {
@@ -424,15 +416,13 @@ export default function GlobalSettings() {
 							id="flexible-table-block-global-cell-padding"
 							label={ __( 'Cell Padding', 'flexible-table-block' ) }
 							className="ftb-global-setting-modal__styles-item"
-							values={ { top: options.block_style?.cell_padding } }
-							allowSides={ false }
-							hasIndicator={ false }
-							onChange={ ( value ) => {
+							values={ options?.block_style.cell_padding || {} }
+							onChange={ ( values ) => {
 								setOptions( {
 									...options,
 									block_style: {
 										...options.block_style,
-										cell_padding: sanitizeUnitValue( value.top ),
+										cell_padding: cleanEmptyObject( values ),
 									},
 								} );
 							} }
@@ -581,7 +571,9 @@ export default function GlobalSettings() {
 						afterIcon="desktop"
 						min={ MIN_RESPONSIVE_BREAKPOINT }
 						max={ MAX_RESPONSIVE_BREAKPOINT }
-						value={ options.breakpoint || DEFAULT_RESPONSIVE_BREAKPOINT }
+						value={
+							options.breakpoint ? Number( options.breakpoint ) : DEFAULT_RESPONSIVE_BREAKPOINT
+						}
 						allowReset
 						onChange={ ( value ) => {
 							setOptions( {

@@ -19,75 +19,75 @@ class Helper {
 
 		// CSS selectors.
 		$styles = array(
-			"${selector} > table"       => '',
-			"${selector}.is-style-stripes tr:nth-child(odd) th" => '',
-			"${selector}.is-style-stripes tr:nth-child(odd) td" => '',
-			"${selector}.is-style-stripes tr:nth-child(even) th" => '',
-			"${selector}.is-style-stripes tr:nth-child(even) td" => '',
-			"${selector} > table tr th, ${selector} > table tr td" => '',
-			"${selector} > table tr th" => '',
-			"${selector} > table tr td" => '',
-			"${selector} > table tr th, ${selector} table > tr td" => '',
+			"{$selector} > table"       => '',
+			"{$selector}.is-style-stripes tr:nth-child(odd) th" => '',
+			"{$selector}.is-style-stripes tr:nth-child(odd) td" => '',
+			"{$selector}.is-style-stripes tr:nth-child(even) th" => '',
+			"{$selector}.is-style-stripes tr:nth-child(even) td" => '',
+			"{$selector} > table tr th, {$selector} > table tr td" => '',
+			"{$selector} > table tr th" => '',
+			"{$selector} > table tr td" => '',
+			"{$selector} > table tr th, {$selector} table > tr td" => '',
 		);
 
 		$option = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
 
 		// Genelate styles based on global setting.
 		foreach ( $option as $key => $value ) {
-
 			if ( ! $value ) {
 				continue;
 			}
 
-			$value = esc_attr( $value );
-
 			switch ( $key ) {
 				case 'table_width':
-					$styles[ "${selector} > table" ] .= "width:${value};";
+					$styles[ "{$selector} > table" ] .= "width:{$value};";
 					break;
 				case 'table_max_width':
-					$styles[ "${selector} > table" ] .= "max-width:${value};";
+					$styles[ "{$selector} > table" ] .= "max-width:{$value};";
 					break;
 				case 'table_border_collapse':
-					$styles[ "${selector} > table" ] .= "border-collapse:${value};";
+					$styles[ "{$selector} > table" ] .= "border-collapse:{$value};";
 					break;
 				case 'row_odd_color':
-					$styles[ "${selector}.is-style-stripes tr:nth-child(odd) th" ] .= "background-color:${value};";
-					$styles[ "${selector}.is-style-stripes tr:nth-child(odd) td" ] .= "background-color:${value};";
+					$styles[ "{$selector}.is-style-stripes tr:nth-child(odd) th" ] .= "background-color:{$value};";
+					$styles[ "{$selector}.is-style-stripes tr:nth-child(odd) td" ] .= "background-color:{$value};";
 					break;
 				case 'row_even_color':
-					$styles[ "${selector}.is-style-stripes tr:nth-child(even) th" ] .= "background-color:${value};";
-					$styles[ "${selector}.is-style-stripes tr:nth-child(even) td" ] .= "background-color:${value};";
+					$styles[ "{$selector}.is-style-stripes tr:nth-child(even) th" ] .= "background-color:{$value};";
+					$styles[ "{$selector}.is-style-stripes tr:nth-child(even) td" ] .= "background-color:{$value};";
 					break;
 				case 'cell_text_align':
-					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "text-align:${value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "text-align:{$value};";
 					break;
 				case 'cell_vertical_align':
-					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "vertical-align:${value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "vertical-align:{$value};";
 					break;
 				case 'cell_text_color_th':
-					$styles[ "${selector} > table tr th" ] .= "color:${value};";
+					$styles[ "{$selector} > table tr th" ] .= "color:{$value};";
 					break;
 				case 'cell_text_color_td':
-					$styles[ "${selector} > table tr td" ] .= "color:${value};";
+					$styles[ "{$selector} > table tr td" ] .= "color:{$value};";
 					break;
 				case 'cell_background_color_th':
-					$styles[ "${selector} > table tr th" ] .= "background-color:${value};";
+					$styles[ "{$selector} > table tr th" ] .= "background-color:{$value};";
 					break;
 				case 'cell_background_color_td':
-					$styles[ "${selector} > table tr td" ] .= "background-color:${value};";
+					$styles[ "{$selector} > table tr td" ] .= "background-color:{$value};";
 					break;
 				case 'cell_padding':
-					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "padding:${value};";
+					$padding_styles = self::get_padding_styles( $value );
+					if ( $padding_styles ) {
+						$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= $padding_styles;
+					}
 					break;
 				case 'cell_border_width':
-					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "border-width:${value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "border-width:{$value};";
 					break;
 				case 'cell_border_style':
-					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "border-style:${value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "border-style:{$value};";
 					break;
 				case 'cell_border_color':
-					$styles[ "${selector} > table tr th, ${selector} > table tr td" ] .= "border-color:${value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "border-color:{$value};";
 					break;
 			}
 		}
@@ -96,7 +96,7 @@ class Helper {
 
 		foreach ( $styles as $selector => $values ) {
 			if ( $values ) {
-				$css .= "${selector} { $values }";
+				$css .= "{$selector} { $values }";
 			}
 		}
 
@@ -116,23 +116,23 @@ class Helper {
 
 		return <<<EOM
 		@media screen and (min-width:{$min_width}px) {
-			${selector}.is-scroll-on-pc {
+			{$selector}.is-scroll-on-pc {
 				overflow-x: scroll;
 			}
-			${selector}.is-scroll-on-pc table {
+			{$selector}.is-scroll-on-pc table {
 				max-width: none;
 			}
 		}
 		@media screen and (max-width:{$max_width}px) {
-			${selector}.is-scroll-on-mobile {
+			{$selector}.is-scroll-on-mobile {
 				overflow-x: scroll;
 			}
-			${selector}.is-scroll-on-mobile table {
+			{$selector}.is-scroll-on-mobile table {
 				max-width: none;
 			}
-			${selector} table.is-stacked-on-mobile th,
-			${selector} table.is-stacked-on-mobile td {
-				width: 100%;
+			{$selector} table.is-stacked-on-mobile th,
+			{$selector} table.is-stacked-on-mobile td {
+				width: 100%!important;
 				display: block;
 			}
 		}
@@ -157,5 +157,66 @@ class Helper {
 
 		$css = preg_replace( array_keys( $replaces ), array_values( $replaces ), $css );
 		return $css;
+	}
+
+	/**
+	 * Get padding styles from string value or array values
+	 *
+	 * @return string
+	 */
+	public static function get_padding_styles( $values ) {
+		if ( gettype( $values ) === 'string' ) {
+			return "padding:{$values};";
+		}
+
+		if ( gettype( $values ) !== 'array' ) {
+			return null;
+		}
+
+		$default_values = array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		);
+		$values         = array_merge( $default_values, $values );
+
+		if ( '' !== $values['top'] && '' !== $values['right'] && '' !== $values['bottom'] && '' !== $values['left'] ) {
+			$padding_value = self::get_shorhand_css_value( $values['top'], $values['right'], $values['bottom'], $values['left'] );
+			return "padding:{$padding_value};";
+		}
+
+		$styles = null;
+
+		foreach ( array( 'top', 'right', 'bottom', 'left' ) as $side ) {
+			if ( '' === $values[ $side ] ) {
+				continue;
+			}
+
+			$styles .= "padding-{$side}:{$values[ $side ]};";
+		}
+
+		return $styles;
+	}
+
+	/**
+	 * Get CSS value in consideration of short-hand from four values
+	 *
+	 * @return string
+	 */
+	public static function get_shorhand_css_value( $top, $right, $bottom, $left ) {
+		if ( $top === $right && $top === $bottom && $top === $left ) {
+			return $top;
+		}
+
+		if ( $top === $bottom && $left === $right ) {
+			return "${top} ${left}";
+		}
+
+		if ( $left === $right ) {
+			return "${top} ${left} ${bottom}";
+		}
+
+		return "${top} ${right} ${bottom} ${left}";
 	}
 }
