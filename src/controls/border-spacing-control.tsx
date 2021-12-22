@@ -88,6 +88,7 @@ export default function BorderSpacingControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
+		setDirection( undefined );
 		onChange( DEFAULT_VALUES );
 	};
 

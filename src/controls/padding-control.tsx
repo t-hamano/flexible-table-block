@@ -94,6 +94,7 @@ export default function PaddingControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
+		setSide( undefined );
 		onChange( DEFAULT_VALUES );
 	};
 

@@ -98,6 +98,7 @@ export default function BorderWidthControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
+		setSide( undefined );
 		onChange( DEFAULT_VALUES );
 	};
 

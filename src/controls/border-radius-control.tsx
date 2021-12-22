@@ -102,6 +102,7 @@ export default function BorderRadiusControl( {
 
 	const handleOnReset = () => {
 		setIsLinked( true );
+		setCorner( undefined );
 		onChange( DEFAULT_VALUES );
 	};
 
