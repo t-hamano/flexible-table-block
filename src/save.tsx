@@ -9,9 +9,9 @@ import type { Properties } from 'csstype';
  */
 import {
 	RichText,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	useBlockProps,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,
 } from '@wordpress/block-editor';
 import type { BlockSaveProps } from '@wordpress/blocks';

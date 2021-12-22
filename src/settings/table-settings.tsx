@@ -14,9 +14,9 @@ import {
 	ButtonGroup,
 	SelectControl,
 	ToggleControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -61,17 +61,19 @@ import type { CornerProps, DirectionProps, CrossProps } from '../utils/style-pic
 import type { StickyValue, BorderCollapseValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
 
-export default function TableSettings( {
-	vTable,
-	tableStylesObj,
-	attributes,
-	setAttributes,
-}: {
-	vTable: VTable;
-	tableStylesObj: Properties;
+type Props = {
 	attributes: BlockAttributes;
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
-} ) {
+	vTable: VTable;
+	tableStylesObj: Properties;
+};
+
+export default function TableSettings( {
+	attributes,
+	setAttributes,
+	vTable,
+	tableStylesObj,
+}: Props ) {
 	const {
 		hasFixedLayout,
 		isStackedOnMobile,

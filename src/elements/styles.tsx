@@ -18,7 +18,6 @@ const ButtonInserter = styled( Button )`
 		padding: 0;
 		border-radius: 50%;
 		color: transparent;
-
 		&::before {
 			position: absolute;
 			top: 6px;
@@ -30,16 +29,13 @@ const ButtonInserter = styled( Button )`
 			border-radius: 50%;
 			content: '';
 		}
-
 		&:hover,
 		&:focus {
 			background: var( --wp-admin-theme-color );
 			color: #fff;
-
 			&::before {
 				content: none;
 			}
-
 			&:active {
 				color: #fff;
 			}
@@ -48,19 +44,21 @@ const ButtonInserter = styled( Button )`
 `;
 
 // eslint-disable-next-line no-unused-vars
-export const ButtonRowBeforeInserter = styled( ( { hasPrevSection, ...props } ) => (
+export const ButtonRowBeforeInserter = styled( ( { hasPrevSection, ...props }: any ) => (
 	<ButtonInserter { ...props } />
 ) )`
 	left: -44px;
-	top: ${ ( props ) => ( props.hasPrevSection ? '3px' : '-9px' ) };
+	top: ${ ( { hasPrevSection }: { hasPrevSection: boolean } ) =>
+		hasPrevSection ? '3px' : '-9px' };
 `;
 
 // eslint-disable-next-line no-unused-vars
-export const ButtonRowAfterInserter = styled( ( { hasNextSection, ...props } ) => (
+export const ButtonRowAfterInserter = styled( ( { hasNextSection, ...props }: any ) => (
 	<ButtonInserter { ...props } />
 ) )`
 	left: -44px;
-	bottom: ${ ( props ) => ( props.hasNextSection ? '3px' : '-9px' ) };
+	bottom: ${ ( { hasNextSection }: { hasNextSection: boolean } ) =>
+		hasNextSection ? '3px' : '-9px' };
 `;
 
 export const ButtonColumnBeforeInserter = styled( ButtonInserter )`
@@ -81,10 +79,8 @@ const ButtonSelector = styled( Button )`
 		background: #eaeaea;
 		position: absolute;
 		color: #1e1e1e;
-
 		&.has-text {
 			justify-content: center;
-
 			svg {
 				margin-right: 0;
 			}

@@ -13,11 +13,11 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalText as Text,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -34,6 +34,17 @@ const DEFAULT_VALUES = {
 	vertical: '',
 };
 
+type Props = {
+	id: string;
+	label: string;
+	help?: string;
+	className?: string;
+	onChange: ( event: any ) => void;
+	values: typeof DEFAULT_VALUES;
+	allowSides?: boolean;
+	hasIndicator?: boolean;
+};
+
 type ValuesKey = keyof typeof DEFAULT_VALUES;
 type MaxBorderSpacingKey = keyof typeof MAX_BORDER_SPACING;
 
@@ -46,16 +57,7 @@ export default function BorderSpacingControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
-}: {
-	id: string;
-	label: string;
-	help?: string;
-	className?: string;
-	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
-	allowSides?: boolean;
-	hasIndicator?: boolean;
-} ) {
+}: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,

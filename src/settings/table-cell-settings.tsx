@@ -12,9 +12,9 @@ import {
 	Button,
 	ButtonGroup,
 	TextControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -53,18 +53,16 @@ import type {
 	SectionName,
 	BlockAttributes,
 } from '../BlockAttributes';
-import type { VTable, VCell } from '../utils/table-state';
+import type { VTable, VSelectedCells } from '../utils/table-state';
 import type { CornerProps, DirectionProps } from '../utils/style-picker';
 
-export default function TableCellSettings( {
-	vTable,
-	selectedCells = [],
-	setAttributes,
-}: {
-	vTable: VTable;
-	selectedCells: VCell[] | undefined;
+type Props = {
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
-} ) {
+	vTable: VTable;
+	selectedCells: VSelectedCells;
+};
+
+export default function TableCellSettings( { setAttributes, vTable, selectedCells = [] }: Props ) {
 	const cellWidthUnits = useCustomUnits( { availableUnits: CELL_WIDTH_UNITS } );
 	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
 

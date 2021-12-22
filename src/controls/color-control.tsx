@@ -17,20 +17,12 @@ import {
 	Popover,
 	ColorIndicator,
 	ColorPalette,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 
-export default function ColorControl( {
-	id,
-	label = __( 'Color', 'flexible-table-block' ),
-	help,
-	className,
-	onChange,
-	colors: colorsProp = [],
-	value,
-}: {
+type Props = {
 	id: string;
 	label: string;
 	help?: string;
@@ -42,7 +34,17 @@ export default function ColorControl( {
 		color: Property.Color;
 	}[];
 	value: Property.Color | undefined;
-} ) {
+};
+
+export default function ColorControl( {
+	id,
+	label = __( 'Color', 'flexible-table-block' ),
+	help,
+	className,
+	onChange,
+	colors: colorsProp = [],
+	value,
+}: Props ) {
 	const colors = useSelect( ( select ) => {
 		// @ts-ignore
 		const settings = select( blockEditorStore ).getSettings();

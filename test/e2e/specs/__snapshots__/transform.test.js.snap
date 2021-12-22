@@ -43,8 +43,8 @@ exports[`Transform from flexible table block to core table block should be trans
 `;
 
 exports[`Transform from flexible table block to core table block should be transformed to core table block with no "Fixed width table cells" option 1`] = `
-"<!-- wp:table {\\"hasFixedLayout\\":true} -->
-<figure class=\\"wp-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+"<!-- wp:table -->
+<figure class=\\"wp-block-table\\"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->"
 `;
 

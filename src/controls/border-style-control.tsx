@@ -33,18 +33,7 @@ const DEFAULT_VALUES = {
 	left: '',
 };
 
-type ValuesKey = keyof typeof DEFAULT_VALUES;
-
-export default function BorderStyleControl( {
-	id,
-	label = __( 'Border Style', 'flexible-table-block' ),
-	help,
-	className,
-	onChange,
-	values: valuesProp,
-	allowSides = true,
-	hasIndicator = true,
-}: {
+type Props = {
 	id: string;
 	label: string;
 	help?: string;
@@ -58,7 +47,20 @@ export default function BorderStyleControl( {
 	};
 	allowSides?: boolean;
 	hasIndicator?: boolean;
-} ) {
+};
+
+type ValuesKey = keyof typeof DEFAULT_VALUES;
+
+export default function BorderStyleControl( {
+	id,
+	label = __( 'Border Style', 'flexible-table-block' ),
+	help,
+	className,
+	onChange,
+	values: valuesProp,
+	allowSides = true,
+	hasIndicator = true,
+}: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,

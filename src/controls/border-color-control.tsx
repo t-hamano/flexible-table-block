@@ -19,7 +19,7 @@ import {
 	Tooltip,
 	ColorIndicator,
 	ColorPalette,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -30,6 +30,22 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 import { SideIndicatorControl } from './indicator-control';
 import { SIDE_CONTROLS } from '../constants';
 import type { SideValue } from '../BlockAttributes';
+
+type Props = {
+	id: string;
+	label: string;
+	help?: string;
+	className?: string;
+	onChange: ( event: any ) => void;
+	values: {
+		top?: Property.BorderTopColor;
+		right?: Property.BorderRightColor;
+		bottom?: Property.BorderBottomColor;
+		left?: Property.BorderLeftColor;
+	};
+	allowSides?: boolean;
+	hasIndicator?: boolean;
+};
 
 const DEFAULT_VALUES = {
 	top: '',
@@ -47,21 +63,7 @@ export default function BorderColorControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
-}: {
-	id: string;
-	label: string;
-	help?: string;
-	className?: string;
-	onChange: ( event: any ) => void;
-	values: {
-		top?: Property.BorderTopColor;
-		right?: Property.BorderRightColor;
-		bottom?: Property.BorderBottomColor;
-		left?: Property.BorderLeftColor;
-	};
-	allowSides?: boolean;
-	hasIndicator?: boolean;
-} ) {
+}: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
 		...valuesProp,

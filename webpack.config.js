@@ -2,6 +2,7 @@ const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
 module.exports = {
 	...defaultConfig,
+	entry: './src/index.tsx',
 	performance: {
 		maxEntrypointSize: 1000000,
 		maxAssetSize: 1000000,
