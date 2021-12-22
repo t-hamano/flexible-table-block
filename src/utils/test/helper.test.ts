@@ -1,10 +1,4 @@
-import {
-	parseCssValue,
-	parseUnit,
-	sanitizeUnitValue,
-	toInteger,
-	toUpperFirstLetter,
-} from '../helper';
+import { parseCssValue, parseUnit, sanitizeUnitValue, toInteger } from '../helper';
 
 describe( 'helper', () => {
 	describe( 'parseCssValue', () => {
@@ -103,13 +97,6 @@ describe( 'helper', () => {
 			expect( toInteger( '', 1 ) ).toStrictEqual( 1 );
 			expect( toInteger( undefined, 5 ) ).toStrictEqual( 5 );
 			expect( toInteger( 0, 5 ) ).toStrictEqual( 5 );
-		} );
-	} );
-
-	describe( 'toUpperFirstLetter', () => {
-		it( 'should convert the first letter to uppercase.', () => {
-			expect( toUpperFirstLetter( 'loremipsum' ) ).toStrictEqual( 'Loremipsum' );
-			expect( toUpperFirstLetter( '' ) ).toStrictEqual( '' );
 		} );
 	} );
 } );

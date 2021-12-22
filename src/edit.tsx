@@ -49,7 +49,6 @@ import {
 	isEmptySection,
 } from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
-import { toUpperFirstLetter } from './utils/helper';
 import { mergeCell, splitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
 import type { StoreOptions } from './store';
@@ -169,6 +168,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		icon,
 		title: label,
 		isActive: contentJustification === value,
+		value,
 		onClick: () => onChangeContentJustification( value ),
 	} ) );
 
@@ -301,9 +301,10 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 						<ToolbarDropdownMenu
 							label={ __( 'Change table justification', 'flexible-table-block' ) }
 							icon={
-								contentJustification
-									? `justify${ toUpperFirstLetter( contentJustification ) }`
-									: justifyLeft
+								( contentJustification &&
+									TableJustifyControls.find( ( control ) => control.value === contentJustification )
+										?.icon ) ||
+								justifyLeft
 							}
 							controls={ TableJustifyControls }
 							hasArrowIndicator
