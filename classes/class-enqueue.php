@@ -38,26 +38,26 @@ class Enqueue {
 		if ( is_admin() ) {
 			wp_register_style(
 				FTB_NAMESPACE,
-				FTB_URL . '/build/main.css',
+				FTB_URL . '/build/index.css',
 				array( 'wp-components' ),
-				filemtime( FTB_PATH . '/build/main.css' ),
+				filemtime( FTB_PATH . '/build/index.css' ),
 			);
 		} else {
 			wp_register_style(
 				FTB_NAMESPACE,
-				FTB_URL . '/build/style-main.css',
+				FTB_URL . '/build/style-index.css',
 				array(),
-				filemtime( FTB_PATH . '/build/style-main.css' ),
+				filemtime( FTB_PATH . '/build/style-index.css' ),
 			);
 		}
 
-		$asset_file = include( FTB_PATH . '/build/main.asset.php' );
+		$asset_file = include( FTB_PATH . '/build/index.asset.php' );
 
 		wp_register_script(
 			FTB_NAMESPACE,
-			FTB_URL . '/build/main.js',
+			FTB_URL . '/build/index.js',
 			$asset_file['dependencies'],
-			filemtime( FTB_PATH . '/build/main.js' ),
+			filemtime( FTB_PATH . '/build/index.js' ),
 		);
 
 		// Load translated strings.
