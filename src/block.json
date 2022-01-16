@@ -199,5 +199,8 @@
 			"__experimentalFontFamily": true
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
-	}
+	},
+	"editorScript": "flexible-table-block-editor-script",
+	"editorStyle": "flexible-table-block-editor-style",
+	"style": "flexible-table-block-style"
 }
