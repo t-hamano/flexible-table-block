@@ -86,10 +86,10 @@ export default function GlobalSettings() {
 		}
 	}
 
-	// Update the inline.
+	// Update the inline CSS.
 	function updateInlineCss( css: string ) {
 		// Update the inline CSS of the global document.
-		const styleSheet = document.getElementById( 'flexible-table-block-editor-style-inline-css' );
+		const styleSheet = document.getElementById( 'flexible-table-block-editor-inline-css' );
 
 		if ( styleSheet ) {
 			styleSheet.textContent = css;
@@ -104,7 +104,7 @@ export default function GlobalSettings() {
 			if ( ! iframeWindow ) continue;
 
 			const iframeStyleSheet = iframeWindow.document.getElementById(
-				'flexible-table-block-editor-style-inline-css'
+				'flexible-table-block-editor-inline-css'
 			);
 
 			if ( iframeStyleSheet ) {

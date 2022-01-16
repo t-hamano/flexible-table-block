@@ -200,7 +200,7 @@
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},
-	"editorScript": "flexible-table-block-editor-script",
-	"editorStyle": "flexible-table-block-editor-style",
-	"style": "flexible-table-block-style"
+	"editorScript": "flexible-table-block-editor",
+	"editorStyle": "flexible-table-block-editor",
+	"style": "flexible-table-block"
 }
