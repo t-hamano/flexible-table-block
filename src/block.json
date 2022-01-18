@@ -191,7 +191,8 @@
 		"align": [ "left", "right", "wide", "full"],
 		"color": {
 			"__experimentalSkipSerialization": true,
-			"gradients": true
+			"gradients": true,
+			"link": true
 		},
 		"typography": {
 			"fontSize": true,
