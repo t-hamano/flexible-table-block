@@ -34,16 +34,6 @@ import {
 	VRow,
 } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
-import {
-	ButtonRowBeforeInserter,
-	ButtonRowAfterInserter,
-	ButtonColumnBeforeInserter,
-	ButtonColumnAfterInserter,
-	ButtonRowSelector,
-	ButtonColumnSelector,
-	ButtonRowDeleter,
-	ButtonColumnDeleter,
-} from './styles';
 
 import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttributes';
 import type {
@@ -349,12 +339,14 @@ export default function Table( {
 										{ isSelected && options.show_control_button && (
 											<>
 												{ rowIndex === 0 && vColIndex === 0 && (
-													<ButtonRowBeforeInserter
+													<Button
+														className={ classnames( 'ftb-row-before-inserter', {
+															'ftb-row-before-inserter--has-prev-section': sectionIndex > 0,
+														} ) }
 														label={ __( 'Insert row before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
 														iconSize="18"
-														hasPrevSection={ sectionIndex > 0 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex );
 															event.stopPropagation();
@@ -363,7 +355,8 @@ export default function Table( {
 												) }
 												{ vColIndex === 0 && (
 													<>
-														<ButtonRowSelector
+														<Button
+															className="ftb-row-selector"
 															label={ __( 'Select row', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronRight }
@@ -381,7 +374,8 @@ export default function Table( {
 														{ isRowSelected &&
 															selectedLine.sectionName === sectionName &&
 															selectedLine.rowIndex === rowIndex && (
-																<ButtonRowDeleter
+																<Button
+																	className="ftb-row-deleter"
 																	label={ __( 'Delete row', 'flexible-table-block' ) }
 																	tabIndex={ options.focus_control_button ? 0 : -1 }
 																	icon={ trash }
@@ -395,7 +389,8 @@ export default function Table( {
 													</>
 												) }
 												{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
-													<ButtonColumnBeforeInserter
+													<Button
+														className={ 'ftb-column-before-inserter' }
 														label={ __( 'Insert column before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
@@ -408,7 +403,8 @@ export default function Table( {
 												) }
 												{ sectionIndex === 0 && rowIndex === 0 && (
 													<>
-														<ButtonColumnSelector
+														<Button
+															className="ftb-column-selector"
 															label={ __( 'Select column', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronDown }
@@ -420,7 +416,8 @@ export default function Table( {
 															} }
 														/>
 														{ isColumnSelected && selectedLine.vColIndex === vColIndex && (
-															<ButtonColumnDeleter
+															<Button
+																className="ftb-column-deleter"
 																label={ __( 'Delete column', 'flexible-table-block' ) }
 																tabIndex={ options.focus_control_button ? 0 : -1 }
 																icon={ trash }
@@ -434,15 +431,16 @@ export default function Table( {
 													</>
 												) }
 												{ vColIndex === 0 && (
-													<ButtonRowAfterInserter
+													<Button
+														className={ classnames( 'ftb-row-after-inserter', {
+															'ftb-row-after-inserter--has-next-section':
+																sectionIndex < Object.keys( filteredVTable ).length - 1 &&
+																rowIndex + rowSpan - 1 === filteredVTable[ sectionName ].length - 1,
+														} ) }
 														label={ __( 'Insert row after', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
 														iconSize="18"
-														hasNextSection={
-															sectionIndex < Object.keys( filteredVTable ).length - 1 &&
-															rowIndex + rowSpan - 1 === filteredVTable[ sectionName ].length - 1
-														}
 														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex + rowSpan );
 															event.stopPropagation();
@@ -468,7 +466,8 @@ export default function Table( {
 											options.show_control_button &&
 											sectionIndex === 0 &&
 											rowIndex === 0 && (
-												<ButtonColumnAfterInserter
+												<Button
+													className={ 'ftb-column-after-inserter' }
 													label={ __( 'Insert column after', 'flexible-table-block' ) }
 													tabIndex={ options.focus_control_button ? 0 : -1 }
 													icon={ plus }

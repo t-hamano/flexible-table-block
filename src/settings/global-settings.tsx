@@ -86,6 +86,33 @@ export default function GlobalSettings() {
 		}
 	}
 
+	// Update the inline CSS.
+	function updateInlineCss( css: string ) {
+		// Update the inline CSS of the global document.
+		const styleSheet = document.getElementById( 'flexible-table-block-editor-inline-css' );
+
+		if ( styleSheet ) {
+			styleSheet.textContent = css;
+		}
+
+		// Update the inline CSS of the iframe editor instance document.
+		const iframeEditor = document.querySelectorAll( 'iframe' );
+
+		for ( let i = 0; i < iframeEditor.length; i++ ) {
+			const iframeWindow = iframeEditor[ i ].contentWindow;
+
+			if ( ! iframeWindow ) continue;
+
+			const iframeStyleSheet = iframeWindow.document.getElementById(
+				'flexible-table-block-editor-inline-css'
+			);
+
+			if ( iframeStyleSheet ) {
+				iframeStyleSheet.textContent = css;
+			}
+		}
+	}
+
 	// Update options.
 	const handleUpdateOptions = () => {
 		setIsWaiting( true );
@@ -109,11 +136,10 @@ export default function GlobalSettings() {
 					} );
 				}
 
+				if ( ! response.block_css ) return;
+
 				// Update inline CSS.
-				const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
-				if ( response.block_css && styleSheet ) {
-					styleSheet.textContent = response.block_css;
-				}
+				updateInlineCss( response.block_css );
 			} )
 			.catch( ( response ) => {
 				focusModal();
@@ -151,11 +177,10 @@ export default function GlobalSettings() {
 				setStoreOptions( response.options );
 			}
 
+			if ( ! response.block_css ) return;
+
 			// Update inline CSS.
-			const styleSheet = document.getElementById( 'flexible-table-block-inline-css' );
-			if ( response.block_css && styleSheet ) {
-				styleSheet.textContent = response.block_css;
-			}
+			updateInlineCss( response.block_css );
 		} );
 	};
 

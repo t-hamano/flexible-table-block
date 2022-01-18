@@ -191,13 +191,21 @@
 		"align": [ "left", "right", "wide", "full"],
 		"color": {
 			"__experimentalSkipSerialization": true,
-			"gradients": true
+			"gradients": true,
+			"link": true
 		},
 		"typography": {
 			"fontSize": true,
 			"lineHeight": true,
-			"__experimentalFontFamily": true
+			"__experimentalFontFamily": true,
+			"__experimentalTextTransform": true,
+			"__experimentalFontStyle": true,
+			"__experimentalFontWeight": true,
+			"__experimentalLetterSpacing": true
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
-	}
+	},
+	"editorScript": "flexible-table-block-editor",
+	"editorStyle": "flexible-table-block-editor",
+	"style": "flexible-table-block"
 }
