@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.8
-Tested up to: 5.8
-Stable tag: 2.3.1
+Tested up to: 5.9
+Stable tag: 2.4.0
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,12 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 2.4.0 =
+* Tested to WordPress 5.9
+* Add: Block supports (link color, text-transform, font-style, font-weight, letter-spacing)
+* Fix: Zero values are not saved correctly in global settings
+* Fix: Changes to global settings are not reflected in iframe editor instances
 
 = 2.3.1 =
 * Fix: Table justify icon does not appear
