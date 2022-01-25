@@ -32,6 +32,11 @@ class Settings {
 			'type'    => 'boolean',
 			'default' => true,
 		),
+		// Use the TAB key to move cells.
+		'tab_move'              => array(
+			'type'    => 'boolean',
+			'default' => false,
+		),
 		// Keep the contents of all cells when merging cells.
 		'merge_content'         => array(
 			'type'    => 'boolean',

@@ -10,7 +10,7 @@ import { omit } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useState, useRef } from '@wordpress/element';
 import {
 	RichText,
 	// @ts-ignore: has no exported member
@@ -87,6 +87,9 @@ export default function Table( {
 	const colorProps = useColorProps( attributes );
 
 	const [ selectMode, setSelectMode ] = useState< VSelectMode >( undefined );
+	const tableRef = useRef( null );
+
+	let isTabMove: boolean = false;
 
 	const isRowSelected = selectedLine && 'sectionName' in selectedLine && 'rowIndex' in selectedLine;
 	const isColumnSelected = selectedLine && 'vColIndex' in selectedLine;
@@ -212,13 +215,62 @@ export default function Table( {
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
-	// Monitor pressed key to determine whether multi-select mode or range select mode.
+	// Monitor pressed key to determine whether multi-select mode or range-select mode.
+	// Also the next cell will be focused if tab key navigation is enabled.
 	const onKeyDown = ( event: KeyboardEvent ) => {
 		const { key } = event;
+
 		if ( key === 'Shift' ) {
+			// range-select mode.
 			setSelectMode( 'range' );
 		} else if ( key === 'Control' || key === 'Meta' ) {
+			// multi-select mode.
 			setSelectMode( 'multi' );
+		} else if ( key === 'Tab' && options.tab_move && tableRef.current ) {
+			// Focus on the next cell.
+			isTabMove = true;
+
+			const tableElement: HTMLElement = tableRef.current;
+			const activeElement = tableElement.querySelector(
+				'th.is-selected [contenteditable], td.is-selected [contenteditable]'
+			);
+
+			if ( ! activeElement ) return;
+
+			const tabbableNodes = tableElement.querySelectorAll( '[contenteditable]' );
+			const tabbableElements = [].slice.call( tabbableNodes );
+			const activeIndex = tabbableElements.findIndex(
+				( element: Node ) => element === activeElement
+			);
+
+			if ( activeIndex === -1 ) return;
+
+			let nextIndex = event.shiftKey ? activeIndex - 1 : activeIndex + 1;
+
+			if ( nextIndex < 0 ) {
+				nextIndex = tabbableElements.length - 1;
+			} else if ( nextIndex >= tabbableElements.length ) {
+				nextIndex = 0;
+			}
+
+			const focusbleElement: HTMLElement = tabbableElements[ nextIndex ];
+			const { ownerDocument } = tableElement;
+
+			if ( focusbleElement ) {
+				event.preventDefault();
+				setSelectMode( undefined );
+				focusbleElement.focus();
+
+				// Select all text if the next cell is not empty.
+				const selection = ownerDocument.getSelection();
+				const range = ownerDocument.createRange();
+
+				if ( selection && focusbleElement.innerText.trim().length ) {
+					range.selectNodeContents( focusbleElement );
+					selection.removeAllRanges();
+					selection.addRange( range );
+				}
+			}
 		}
 	};
 
@@ -304,6 +356,7 @@ export default function Table( {
 				[ `is-sticky-${ sticky }` ]: sticky,
 			} ) }
 			style={ { ...tableStylesObj, ...colorProps.style } }
+			ref={ tableRef }
 			onKeyDown={ onKeyDown }
 			onKeyUp={ onKeyUp }
 		>
@@ -469,7 +522,8 @@ export default function Table( {
 											onChange={ ( value ) => onChangeCellContent( value, cell ) }
 											// @ts-ignore: `unstableOnFocus` prop is not exist at @types
 											unstableOnFocus={ () => {
-												if ( ! selectMode ) {
+												if ( ! selectMode || isTabMove ) {
+													isTabMove = false;
 													setSelectedLine( undefined );
 													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
 												}
