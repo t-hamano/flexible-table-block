@@ -3,13 +3,14 @@
  */
 import classnames from 'classnames';
 import type { Properties } from 'csstype';
-import type { Dispatch, SetStateAction, MouseEvent } from 'react';
+import type { Dispatch, SetStateAction, MouseEvent, KeyboardEvent } from 'react';
 import { omit } from 'lodash';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 import {
 	RichText,
 	// @ts-ignore: has no exported member
@@ -63,7 +64,6 @@ type Props = {
 	options: StoreOptions;
 	vTable: VTable;
 	tableStylesObj: Properties;
-	selectMode: VSelectMode;
 	selectedCells: VSelectedCells;
 	setSelectedCells: Dispatch< SetStateAction< VSelectedCells > >;
 	selectedLine: VSelectedLine;
@@ -77,7 +77,6 @@ export default function Table( {
 	options,
 	vTable,
 	tableStylesObj,
-	selectMode,
 	selectedCells,
 	setSelectedCells,
 	selectedLine,
@@ -86,6 +85,8 @@ export default function Table( {
 	const { hasFixedLayout, isStackedOnMobile, sticky } = attributes;
 
 	const colorProps = useColorProps( attributes );
+
+	const [ selectMode, setSelectMode ] = useState< VSelectMode >( undefined );
 
 	const isRowSelected = selectedLine && 'sectionName' in selectedLine && 'rowIndex' in selectedLine;
 	const isColumnSelected = selectedLine && 'vColIndex' in selectedLine;
@@ -185,14 +186,9 @@ export default function Table( {
 		}
 	};
 
-	const onChangeCellContent = ( content: string ) => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
-
-		const {
-			sectionName,
-			rowIndex: selectedRowIndex,
-			vColIndex: selectedVColIndex,
-		} = selectedCells[ 0 ];
+	const onChangeCellContent = ( content: string, targetCell: VCell ) => {
+		const { sectionName, rowIndex: selectedRowIndex, vColIndex: selectedVColIndex } = targetCell;
+		setSelectedCells( [ { ...targetCell, isFirstSelected: true } ] );
 
 		const newVTable = {
 			...vTable,
@@ -200,7 +196,6 @@ export default function Table( {
 				if ( rowIndex !== selectedRowIndex ) {
 					return { cells: row.cells.filter( ( cell ) => ! cell.isHidden ) };
 				}
-
 				return {
 					cells: row.cells.map( ( cell, vColIndex ) => {
 						if ( rowIndex !== selectedRowIndex || vColIndex !== selectedVColIndex ) {
@@ -214,8 +209,24 @@ export default function Table( {
 				};
 			} ),
 		};
-
 		setAttributes( toTableAttributes( newVTable ) );
+	};
+
+	// Monitor pressed key to determine whether multi-select mode or range select mode.
+	const onKeyDown = ( event: KeyboardEvent ) => {
+		const { key } = event;
+		if ( key === 'Shift' ) {
+			setSelectMode( 'range' );
+		} else if ( key === 'Control' || key === 'Meta' ) {
+			setSelectMode( 'multi' );
+		}
+	};
+
+	const onKeyUp = ( event: KeyboardEvent ) => {
+		const { key } = event;
+		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
+			setSelectMode( undefined );
+		}
 	};
 
 	const onClickCell = ( event: MouseEvent, clickedCell: VCell ) => {
@@ -285,6 +296,7 @@ export default function Table( {
 	const filteredSections = Object.keys( filteredVTable ) as SectionName[];
 
 	return (
+		// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
 		<table
 			className={ classnames( colorProps.className, {
 				'has-fixed-layout': hasFixedLayout,
@@ -292,6 +304,8 @@ export default function Table( {
 				[ `is-sticky-${ sticky }` ]: sticky,
 			} ) }
 			style={ { ...tableStylesObj, ...colorProps.style } }
+			onKeyDown={ onKeyDown }
+			onKeyUp={ onKeyUp }
 		>
 			{ filteredSections.map( ( sectionName: SectionName, sectionIndex ) => (
 				<TSection name={ sectionName } key={ sectionIndex }>
@@ -452,7 +466,7 @@ export default function Table( {
 										<RichText
 											key={ vColIndex }
 											value={ content }
-											onChange={ onChangeCellContent }
+											onChange={ ( value ) => onChangeCellContent( value, cell ) }
 											// @ts-ignore: `unstableOnFocus` prop is not exist at @types
 											unstableOnFocus={ () => {
 												if ( ! selectMode ) {

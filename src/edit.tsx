@@ -2,7 +2,6 @@
  * External dependencies
  */
 import classnames from 'classnames';
-import type { KeyboardEvent } from 'react';
 import type { Properties } from 'csstype';
 
 /**
@@ -52,7 +51,7 @@ import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
 import type { StoreOptions } from './store';
-import type { VTable, VSelectMode, VSelectedLine, VSelectedCells } from './utils/table-state';
+import type { VTable, VSelectedLine, VSelectedCells } from './utils/table-state';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	// @ts-ignore: `insertBlocksAfter` prop is not exist at @types
@@ -60,7 +59,6 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCells, setSelectedCells ] = useState< VSelectedCells >( undefined );
 	const [ selectedLine, setSelectedLine ] = useState< VSelectedLine >( undefined );
-	const [ selectMode, setSelectMode ] = useState< VSelectMode >( undefined );
 
 	const tableStylesObj: Properties = convertToObject( tableStyles );
 	const captionStylesObj: Properties = convertToObject( captionStyles );
@@ -68,19 +66,6 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable: VTable = toVirtualTable( attributes );
-
-	// Monitor pressed key to determine whether multi-select mode or range select mode.
-	const onKeyDown = ( event: KeyboardEvent ) => {
-		if ( event.shiftKey ) {
-			setSelectMode( 'range' );
-		} else if ( event.ctrlKey || event.metaKey ) {
-			setSelectMode( 'multi' );
-		}
-	};
-
-	const onKeyUp = () => {
-		setSelectMode( undefined );
-	};
 
 	const onChangeContentJustification = ( value: ContentJustifyValue ) => {
 		const newValue = contentJustification === value ? undefined : value;
@@ -244,7 +229,6 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		options,
 		vTable,
 		tableStylesObj,
-		selectMode,
 		selectedCells,
 		setSelectedCells,
 		selectedLine,
@@ -292,8 +276,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 				</div>
 			) }
 			{ ! isEmpty && (
-				// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-				<figure { ...tableFigureProps } tabIndex="-1" onKeyDown={ onKeyDown } onKeyUp={ onKeyUp }>
+				<figure { ...tableFigureProps } tabIndex="-1">
 					<BlockControls
 						// @ts-ignore: `group` prop is not exist at @types
 						group="block"
