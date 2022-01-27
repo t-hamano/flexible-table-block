@@ -65,3 +65,9 @@ exports[`Table should create block with option 1`] = `
 <figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td><td></td></tr></tfoot></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;
+
+exports[`Table should move cells with the TAB key. 1`] = `
+"<!-- wp:flexible-table-block/table -->
+<figure class=\\"wp-block-flexible-table-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td>Cell 1</td><td>Cell 2</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;

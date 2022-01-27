@@ -658,6 +658,16 @@ export default function GlobalSettings() {
 						} }
 					/>
 					<ToggleControl
+						label={ __( 'Use the TAB key to move cells', 'flexible-table-block' ) }
+						checked={ !! options.tab_move }
+						onChange={ ( value ) => {
+							setOptions( {
+								...options,
+								tab_move: value,
+							} );
+						} }
+					/>
+					<ToggleControl
 						label={ __(
 							'Keep the contents of all cells when merging cells',
 							'flexible-table-block'

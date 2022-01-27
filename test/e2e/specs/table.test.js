@@ -16,6 +16,9 @@ import {
 	flexibleTableCellSelector,
 	createNewFlexibleTableBlock,
 	clickButtonWithAriaLabel,
+	clickButtonWithText,
+	openSidebar,
+	clickToggleControlWithText,
 } from '../helper';
 
 /** @type {import('puppeteer').Page} */
@@ -147,6 +150,29 @@ describe( 'Table', () => {
 		await clickButton( 'Merge Cells' );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Delete column' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should move cells with the TAB key.', async () => {
+		await createNewFlexibleTableBlock();
+		await openSidebar();
+		await clickButton( 'Global Setting' );
+		await clickToggleControlWithText( 'Use the TAB key to move cells' );
+		await clickButtonWithText( '//div[@class="ftb-global-setting-modal__buttons"]', 'Save' );
+		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
+		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', 'Close dialog' );
+		const cells = await page.$$( flexibleTableCellSelector );
+		await cells[ 0 ].click();
+		await page.keyboard.type( 'Cell 1' );
+		await page.keyboard.down( 'Tab' );
+		await page.keyboard.up( 'Tab' );
+		await page.keyboard.down( 'Tab' );
+		await page.keyboard.up( 'Tab' );
+		await page.keyboard.down( 'Shift' );
+		await page.keyboard.down( 'Tab' );
+		await page.keyboard.up( 'Tab' );
+		await page.keyboard.up( 'Shift' );
+		await page.keyboard.type( 'Cell 2' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 } );
