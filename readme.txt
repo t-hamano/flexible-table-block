@@ -4,7 +4,7 @@ Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.8
 Tested up to: 5.9
-Stable tag: 2.4.0
+Stable tag: 2.5.0
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,10 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 2.5.0 =
+* Add: Option to move cells with the tab key
+* Fix: Cell content is not updated under certain conditions
 
 = 2.4.0 =
 * Tested to WordPress 5.9
