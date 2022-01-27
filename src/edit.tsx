@@ -276,7 +276,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 				</div>
 			) }
 			{ ! isEmpty && (
-				<figure { ...tableFigureProps } tabIndex="-1">
+				<figure { ...tableFigureProps }>
 					<BlockControls
 						// @ts-ignore: `group` prop is not exist at @types
 						group="block"

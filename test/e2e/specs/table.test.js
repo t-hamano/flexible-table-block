@@ -155,7 +155,6 @@ describe( 'Table', () => {
 
 	it( 'should move cells with the TAB key.', async () => {
 		await createNewFlexibleTableBlock();
-		expect( await getEditedPostContent() ).toMatchSnapshot();
 		await openSidebar();
 		await clickButton( 'Global Setting' );
 		await clickToggleControlWithText( 'Use the TAB key to move cells' );
