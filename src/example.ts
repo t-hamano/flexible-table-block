@@ -27,6 +27,22 @@ export default {
 			{
 				cells: [
 					{
+						content: '5.9',
+						tag: 'td',
+					},
+					{
+						content: 'Joséphine Baker',
+						tag: 'td',
+					},
+					{
+						content: __( 'January 25, 2022', 'flexible-table-block' ),
+						tag: 'td',
+					},
+				],
+			},
+			{
+				cells: [
+					{
 						content: '5.8',
 						tag: 'td',
 					},
@@ -52,22 +68,6 @@ export default {
 					},
 					{
 						content: __( 'March 9, 2021', 'flexible-table-block' ),
-						tag: 'td',
-					},
-				],
-			},
-			{
-				cells: [
-					{
-						content: '5.6',
-						tag: 'td',
-					},
-					{
-						content: 'Nina Simone',
-						tag: 'td',
-					},
-					{
-						content: __( 'December 8, 2020', 'flexible-table-block' ),
 						tag: 'td',
 					},
 				],
