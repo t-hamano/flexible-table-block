@@ -48,7 +48,7 @@ describe( 'Table', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'allows cells side by side to be marge', async () => {
+	it( 'allows cells side by side to be merge', async () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
@@ -60,7 +60,7 @@ describe( 'Table', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'allows cells in a vertical line to be marge', async () => {
+	it( 'allows cells in a vertical line to be merge', async () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
@@ -72,7 +72,7 @@ describe( 'Table', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'allows cells to be marge', async () => {
+	it( 'allows cells to be merge', async () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
@@ -102,14 +102,14 @@ describe( 'Table', () => {
 
 	it( 'disallows merging across sections', async () => {
 		await createNewFlexibleTableBlock( { header: true, footer: true } );
-		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column' );
+		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickBlockToolbarButton( 'Edit table' );
 		const [ button ] = await page.$x( `//button[contains(text(), 'Merge Cells')]` );
 		const disabled = await page.evaluate( ( element ) => element.disabled, button );
 		expect( disabled ).toBe( true );
 	} );
 
-	it( 'allows all cells side by side to be marge', async () => {
+	it( 'allows all cells side by side to be merge', async () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select row' );
 		await clickBlockToolbarButton( 'Edit table' );
@@ -117,9 +117,9 @@ describe( 'Table', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'allows all cells in a vertical line to be marge', async () => {
+	it( 'allows all cells in a vertical line to be merge', async () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
-		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column' );
+		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickBlockToolbarButton( 'Edit table' );
 		await clickButton( 'Merge Cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
