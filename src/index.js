@@ -22,6 +22,9 @@ import { GlobalSettings } from './settings';
 
 // Register block.
 const config = {
+	title: __( 'Flexible Table', 'flexible-table-block' ),
+	category: 'text',
+	description: __( 'Create flexible configuration table.', 'flexible-table-block' ),
 	icon,
 	example,
 	transforms,
