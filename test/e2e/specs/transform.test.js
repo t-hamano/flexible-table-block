@@ -69,7 +69,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 	it( 'should be transformed to core table block keeping "Fixed width table cells" option', async () => {
 		await createNewFlexibleTableBlock( { col: 3, row: 6 } );
 		const cells = await page.$$( flexibleTableCellSelector );
-		await cells[ 0 ].click();
+		await cells[ 3 ].click();
 		await page.keyboard.type( 'Flexible Table Block' );
 		await transformBlockTo( 'Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
