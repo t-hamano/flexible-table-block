@@ -42,6 +42,10 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 
 == Changelog ==
 
+= 2.5.1 =
+* Update: Block preview
+* Fix: Error when installing from block directory
+
 = 2.5.0 =
 * Add: Option to move cells with the tab key
 * Fix: Cell content is not updated under certain conditions
