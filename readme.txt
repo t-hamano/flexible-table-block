@@ -43,7 +43,7 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 == Changelog ==
 
 = 2.5.3 =
-
+* Fix: Cell CSS class is reset
 
 = 2.5.2 =
 * Update: Block preview
