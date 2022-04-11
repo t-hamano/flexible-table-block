@@ -78,7 +78,7 @@ export default function save( { attributes }: BlockSaveProps< BlockAttributes > 
 							<RichText.Content
 								key={ cellIndex }
 								tagName={ tag }
-								className={ className }
+								className={ className || undefined }
 								value={ content }
 								rowSpan={ toInteger( rowSpan ) > 1 ? toInteger( rowSpan ) : undefined }
 								colSpan={ toInteger( colSpan ) > 1 ? toInteger( colSpan ) : undefined }

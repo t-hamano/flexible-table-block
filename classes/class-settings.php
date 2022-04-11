@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Flexible_Table_Block;
- * @author Tetsuaki Hamano
+ * @author Aki Hamano
  * @license GPL-2.0+
  */
 

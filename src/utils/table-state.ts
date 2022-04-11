@@ -664,7 +664,7 @@ export function updateCells(
 					...cell,
 					styles: convertToInline( stylesObj ),
 					tag: cellState.tag || cell.tag,
-					className: cellState.className || undefined,
+					className: 'className' in cellState ? cellState.className : cell.className,
 				};
 			}, [] ),
 		} ) );
