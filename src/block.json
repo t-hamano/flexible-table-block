@@ -203,6 +203,9 @@
 			"__experimentalFontWeight": true,
 			"__experimentalLetterSpacing": true
 		},
+		"spacing": {
+			"margin": true
+		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},
 	"editorScript": "flexible-table-block-editor",
