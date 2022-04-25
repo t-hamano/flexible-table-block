@@ -163,6 +163,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				textAlign: undefined,
 				verticalAlign: undefined,
 			},
+			className: undefined,
 		} );
 	};
 
