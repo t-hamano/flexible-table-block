@@ -9,7 +9,6 @@ import type { Properties } from 'csstype';
  */
 import {
 	RichText,
-	// @ts-ignore: has no exported member
 	useBlockProps,
 	// @ts-ignore: has no exported member
 	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,

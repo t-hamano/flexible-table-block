@@ -10,7 +10,6 @@ import type { Properties } from 'csstype';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-// @ts-ignore: has no exported member
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 // @ts-ignore: has no exported member
 import { ToolbarDropdownMenu, PanelBody, Toolbar, Slot } from '@wordpress/components';
