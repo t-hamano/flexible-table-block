@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Block Support dimensions settings should be applied 1`] = `
+"<!-- wp:flexible-table-block/table {\\"style\\":{\\"spacing\\":{\\"margin\\":{\\"top\\":\\"10px\\",\\"right\\":\\"20px\\",\\"bottom\\":\\"30px\\",\\"left\\":\\"40px\\"}}}} -->
+<figure class=\\"wp-block-flexible-table-block-table\\" style=\\"margin-top:10px;margin-right:20px;margin-bottom:30px;margin-left:40px\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;
+
+exports[`Block Support typography settings should be applied 1`] = `
+"<!-- wp:flexible-table-block/table {\\"style\\":{\\"typography\\":{\\"fontStyle\\":\\"normal\\",\\"fontWeight\\":\\"500\\",\\"lineHeight\\":\\"3\\",\\"textTransform\\":\\"lowercase\\",\\"letterSpacing\\":\\"10px\\"}},\\"fontSize\\":\\"large\\",\\"fontFamily\\":\\"source-serif-pro\\"} -->
+<figure class=\\"wp-block-flexible-table-block-table has-source-serif-pro-font-family has-large-font-size\\" style=\\"font-style:normal;font-weight:500;line-height:3;text-transform:lowercase;letter-spacing:10px\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;

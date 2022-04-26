@@ -71,6 +71,7 @@ export const createNewCoreTableBlock = async ( { col, row } = {} ) => {
 
 export const clickButtonWithAriaLabel = async ( parentSelector, label, index = 0 ) => {
 	const selector = `${ parentSelector } button[aria-label="${ label }"]`;
+
 	const elements = await page.$$( selector );
 	if ( elements[ index ] ) {
 		await elements[ index ].click();
@@ -98,6 +99,7 @@ export const selectOptionFromLabel = async ( label, value, index = 0 ) => {
 	const xPath = `//label[contains(@class, "control__label")][text()="${ label }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
+
 	if ( elements[ index ] ) {
 		const selectId = await page.evaluate(
 			( element ) => element.getAttribute( 'for' ),
@@ -117,6 +119,18 @@ export const inputValueFromLabel = async ( label, value, index = 0 ) => {
 			elements[ index ]
 		);
 		await page.focus( `#${ inputId }` );
+		await pressKeyWithModifier( 'primary', 'a' );
+		await page.keyboard.press( 'Delete' );
+		await page.keyboard.type( String( value ) );
+	}
+};
+
+export const inputValueFromAriaLabel = async ( parentSelector, label, value, index = 1 ) => {
+	const selector = `${ parentSelector } input[aria-label="${ label }"]:nth-child(${ index })`;
+
+	const element = await page.$$( selector );
+	if ( element ) {
+		await page.focus( selector );
 		await pressKeyWithModifier( 'primary', 'a' );
 		await page.keyboard.press( 'Delete' );
 		await page.keyboard.type( String( value ) );
@@ -158,5 +172,15 @@ export const openSidebarPanelWithTitle = async ( title, index = 0 ) => {
 	);
 	if ( panel[ index ] ) {
 		await panel[ index ].click();
+	}
+};
+
+export const openToolsPanelMenu = async ( type = 'typography' ) => {
+	const selector = `.${ type }-block-support-panel .components-dropdown-menu__toggle`;
+	await page.waitForSelector( selector );
+
+	const [ toggle ] = await page.$$( selector );
+	if ( toggle ) {
+		await toggle.click();
 	}
 };

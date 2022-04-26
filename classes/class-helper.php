@@ -34,7 +34,7 @@ class Helper {
 
 		// Genelate styles based on global setting.
 		foreach ( $option as $key => $value ) {
-			if ( '' === $value ) {
+			if ( '' === $value || null === $value ) {
 				continue;
 			}
 

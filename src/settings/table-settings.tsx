@@ -74,15 +74,8 @@ export default function TableSettings( {
 	vTable,
 	tableStylesObj,
 }: Props ) {
-	const {
-		hasFixedLayout,
-		isStackedOnMobile,
-		isScrollOnPc,
-		isScrollOnMobile,
-		sticky,
-		head,
-		foot,
-	} = attributes;
+	const { hasFixedLayout, isStackedOnMobile, isScrollOnPc, isScrollOnMobile, sticky, head, foot } =
+		attributes;
 
 	const options = useSelect< StoreOptions >( ( select ) => select( STORE_NAME ).getOptions() );
 

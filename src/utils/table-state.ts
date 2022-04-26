@@ -132,34 +132,31 @@ export function insertRow(
 
 	// Row state to be inserted.
 	const newRow: VRow = {
-		cells: times(
-			newRowColCount,
-			( vColIndex ): VCell => {
-				// Find the cell with rowspan that covers the cell in the inserted row.
-				const rowSpanCells: VCell[] = vRows
-					.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
-					.filter(
-						( cell: VCell ) =>
-							cell.sectionName === sectionName &&
-							cell.rowIndex < rowIndex &&
-							cell.rowIndex + cell.rowSpan - 1 >= rowIndex &&
-							cell.vColIndex <= vColIndex &&
-							vColIndex <= cell.vColIndex + cell.colSpan - 1
-					);
+		cells: times( newRowColCount, ( vColIndex ): VCell => {
+			// Find the cell with rowspan that covers the cell in the inserted row.
+			const rowSpanCells: VCell[] = vRows
+				.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
+				.filter(
+					( cell: VCell ) =>
+						cell.sectionName === sectionName &&
+						cell.rowIndex < rowIndex &&
+						cell.rowIndex + cell.rowSpan - 1 >= rowIndex &&
+						cell.vColIndex <= vColIndex &&
+						vColIndex <= cell.vColIndex + cell.colSpan - 1
+				);
 
-				return {
-					content: '',
-					tag: 'head' === sectionName ? 'th' : 'td',
-					rowSpan: 1,
-					colSpan: 1,
-					sectionName,
-					rowIndex,
-					vColIndex,
-					isFirstSelected: false,
-					isHidden: !! rowSpanCells.length,
-				};
-			}
-		),
+			return {
+				content: '',
+				tag: 'head' === sectionName ? 'th' : 'td',
+				rowSpan: 1,
+				colSpan: 1,
+				sectionName,
+				rowIndex,
+				vColIndex,
+				isFirstSelected: false,
+				isHidden: !! rowSpanCells.length,
+			};
+		} ),
 	};
 
 	return {

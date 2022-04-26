@@ -19,23 +19,20 @@ const getRow = (
 	options = {}
 ): VRow => {
 	return {
-		cells: times(
-			cells,
-			( vColIndex ): VCell => {
-				return {
-					content,
-					tag,
-					rowIndex,
-					vColIndex,
-					sectionName,
-					rowSpan: 1,
-					colSpan: 1,
-					isHidden: false,
-					isFirstSelected: false,
-					...options,
-				};
-			}
-		),
+		cells: times( cells, ( vColIndex ): VCell => {
+			return {
+				content,
+				tag,
+				rowIndex,
+				vColIndex,
+				sectionName,
+				rowSpan: 1,
+				colSpan: 1,
+				isHidden: false,
+				isFirstSelected: false,
+				...options,
+			};
+		} ),
 	};
 };
 
