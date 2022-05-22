@@ -21,6 +21,9 @@ jobs:
           npm ci
           npm run build
 
+      - name: Composer install
+        run: composer install
+
       - name: Running the tests
         run: npm run lint
 
