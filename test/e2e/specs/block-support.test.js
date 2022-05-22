@@ -28,18 +28,14 @@ describe( 'Block Support', () => {
 		await createNewFlexibleTableBlock();
 		await openSidebar();
 
-		const controls = [
-			'Show Font family',
-			'Show Font size',
-			'Show Appearance',
-			'Show Line height',
-			'Show Letter case',
-			'Show Letter-spacing',
-		];
-
-		for ( let i = 0; i < controls.length; i++ ) {
+		for ( let i = 0; i < 6; i++ ) {
 			await openToolsPanelMenu();
-			await page.click( `button[aria-label="${ controls[ i ] }"]` );
+			const selector =
+				i === 0
+					? 'div[aria-label="View and add options"] button.components-menu-item__button'
+					: 'div[aria-label="View options"] button.components-menu-item__button';
+			const elements = await page.$$( selector );
+			await elements[ i ].click();
 		}
 
 		await selectOptionFromLabel( 'Font family', '"Source Serif Pro", serif' );
@@ -52,7 +48,9 @@ describe( 'Block Support', () => {
 
 		await inputValueFromLabel( 'Line height', '3' );
 		await clickButtonWithAriaLabel( '.typography-block-support-panel', 'Lowercase' );
-		await inputValueFromLabel( 'Letter-spacing', '10' );
+		await page.focus( 'input[aria-label="Letter-spacing"], input[aria-label="Letter spacing"]' );
+		await page.keyboard.type( '10' );
+
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
