@@ -544,13 +544,14 @@
 			flex: 1;
 			height: 100%;
 			margin: 0;
+			border-radius: 0;
 
 			&--none::before {
 				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
+				top: 1px;
+				right: 1px;
+				bottom: 1px;
+				left: 1px;
 				content: "";
 				background-color: #fff;
 				background-image: linear-gradient(to right top, transparent 46%, #cc1818 calc(46% + 1px), #cc1818 calc(54% - 1px), transparent 54%);
