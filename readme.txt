@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.8
-Tested up to: 5.9
-Stable tag: 2.6.0
+Tested up to: 6.0
+Stable tag: 2.6.1
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -42,10 +42,15 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 
 == Changelog ==
 
+= 2.6.1 =
+* Tested to WordPress 6.0
+* Fix: Clearing the table settings and then saving the post breaks the block
+* Fix: Adjust indicator style
+
 = 2.6.0 =
-Add: Margin support
-Fix: Cell CSS class is not cleared when cell settings are cleared
-Fix: Output of incorrect inline CSS
+* Add: Margin support
+* Fix: Cell CSS class is not cleared when cell settings are cleared
+* Fix: Output of incorrect inline CSS
 
 = 2.5.3 =
 * Fix: Cell CSS class is reset
