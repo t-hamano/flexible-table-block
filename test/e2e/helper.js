@@ -42,6 +42,8 @@ export const createNewFlexibleTableBlock = async ( {
 
 	await page.waitForSelector( '.ftb-placeholder__form button' );
 	await page.click( '.ftb-placeholder__form button' );
+	// Scroll up once because the block toolbar covers the block depending on the number of rows to be generated.
+	await page.mouse.wheel( { deltaY: -1000 } );
 };
 
 export const createNewCoreTableBlock = async ( { col, row } = {} ) => {

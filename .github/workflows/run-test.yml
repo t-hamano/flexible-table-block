@@ -22,6 +22,12 @@ jobs:
           npm ci
           npm run build
 
+      - name: Composer install
+        run: composer install
+
+      - name: Set phpcs
+        run: composer phpcs
+
       - name: Running the tests
         run: npm run lint
 
