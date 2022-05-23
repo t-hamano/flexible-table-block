@@ -178,10 +178,10 @@ export default function TableSettings( {
 
 	const onResetTableSettings = () => {
 		setAttributes( {
-			hasFixedLayout: undefined,
-			isScrollOnPc: undefined,
-			isScrollOnMobile: undefined,
-			isStackedOnMobile: undefined,
+			hasFixedLayout: false,
+			isScrollOnPc: false,
+			isScrollOnMobile: false,
+			isStackedOnMobile: false,
 			sticky: undefined,
 			tableStyles: undefined,
 		} );
