@@ -121,6 +121,7 @@ class Helper {
 			}
 			{$selector}.is-scroll-on-pc table {
 				max-width: none;
+				align-self: self-start;
 			}
 		}
 		@media screen and (max-width:{$max_width}px) {
@@ -129,6 +130,7 @@ class Helper {
 			}
 			{$selector}.is-scroll-on-mobile table {
 				max-width: none;
+				align-self: self-start;
 			}
 			{$selector} table.is-stacked-on-mobile th,
 			{$selector} table.is-stacked-on-mobile td {
