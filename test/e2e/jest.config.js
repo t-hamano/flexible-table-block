@@ -8,7 +8,6 @@ const jestE2EConfig = {
 		'@wordpress/jest-console',
 		'@wordpress/jest-puppeteer-axe',
 		'expect-puppeteer',
-		'puppeteer-testing-library/extend-expect',
 	],
 };
 
