@@ -13,7 +13,7 @@
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"lint:php": "composer lint",
-		"lint:types": "tsc --project tsconfig.types.json",
+		"lint:types": "tsc",
 		"test": "npm run lint:js && npm run test:e2e && npm run test:unit",
 		"test:e2e": "wp-scripts test-e2e --config test/e2e/jest.config.js",
 		"test:unit": "wp-scripts test-unit-js --config test/unit/jest.config.js"
