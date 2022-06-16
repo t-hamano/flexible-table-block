@@ -27,6 +27,9 @@ import {
 	openSidebarPanelWithTitle,
 } from '../helper';
 
+/** @type {import('puppeteer').Page} */
+const page = global.page;
+
 describe( 'Transform from core table block to flexible table block', () => {
 	beforeEach( async () => {
 		await createNewPost();
