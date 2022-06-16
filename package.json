@@ -31,7 +31,6 @@
 		"@wordpress/jest-preset-default": "^8.4.0",
 		"@wordpress/jest-puppeteer-axe": "^4.0.2",
 		"@wordpress/scripts": "^23.3.0",
-		"jest": "^27.5.1",
 		"opener": "^1.5.2",
 		"prettier": "npm:wp-prettier@2.6.2",
 		"stylelint-config-recess-order": "^3.0.0",
