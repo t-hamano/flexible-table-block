@@ -16,6 +16,11 @@ export const createNewFlexibleTableBlock = async ( {
 	row,
 	header = false,
 	footer = false,
+}: {
+	col?: number;
+	row?: number;
+	header?: boolean;
+	footer?: boolean;
 } = {} ) => {
 	await insertBlock( 'Flexible' );
 
@@ -46,7 +51,10 @@ export const createNewFlexibleTableBlock = async ( {
 	await page.mouse.wheel( { deltaY: -1000 } );
 };
 
-export const createNewCoreTableBlock = async ( { col, row } = {} ) => {
+export const createNewCoreTableBlock = async ( {
+	col,
+	row,
+}: { col?: number; row?: number } = {} ) => {
 	await insertBlock( 'Table' );
 
 	if ( col ) {
