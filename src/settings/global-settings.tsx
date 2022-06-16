@@ -226,6 +226,13 @@ export default function GlobalSettings() {
 							'flexible-table-block'
 						) }
 					</p>
+					<h2>{ __( 'About Scroll Table', 'flexible-table-block' ) }</h2>
+					<p>
+						{ __(
+							'If table scrolling is enabled, set "Table Width" or "Table Min Width" larger than the content width.',
+							'flexible-table-block'
+						) }
+					</p>
 					<ExternalLink
 						href={ __(
 							'https://github.com/t-hamano/flexible-table-block/wiki/English-Manual',
