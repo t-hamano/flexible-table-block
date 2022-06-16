@@ -18,7 +18,7 @@
 		"test:unit": "wp-scripts test-unit-js --config test/unit/jest.config.js"
 	},
 	"devDependencies": {
-		"@types/jest": "^28.1.1",
+		"@types/jest": "^27.5.1",
 		"@types/puppeteer": "^5.4.6",
 		"@types/wordpress__block-editor": "^7.0.0",
 		"@types/wordpress__blocks": "^11.0.1",
