@@ -79,7 +79,11 @@ export const createNewCoreTableBlock = async ( {
 	await page.click( '.blocks-table__placeholder-button' );
 };
 
-export const clickButtonWithAriaLabel = async ( parentSelector, label, index = 0 ) => {
+export const clickButtonWithAriaLabel = async (
+	parentSelector: string,
+	label: string,
+	index: number = 0
+) => {
 	const selector = `${ parentSelector } button[aria-label="${ label }"]`;
 
 	const elements = await page.$$( selector );
@@ -88,7 +92,11 @@ export const clickButtonWithAriaLabel = async ( parentSelector, label, index = 0
 	}
 };
 
-export const clickButtonWithText = async ( parentPath, text, index = 0 ) => {
+export const clickButtonWithText = async (
+	parentPath: string,
+	text: string,
+	index: number = 0
+) => {
 	const xPath = `${ parentPath }//button[contains(.,"${ text }")]`;
 	const elements = await page.$x( xPath );
 	if ( elements[ index ] ) {
@@ -96,7 +104,7 @@ export const clickButtonWithText = async ( parentPath, text, index = 0 ) => {
 	}
 };
 
-export const clickToggleControlWithText = async ( text, index = 0 ) => {
+export const clickToggleControlWithText = async ( text: string, index: number = 0 ) => {
 	const xPath = `//label[contains(@class, "components-toggle-control__label")][text()="${ text }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
@@ -105,7 +113,7 @@ export const clickToggleControlWithText = async ( text, index = 0 ) => {
 	}
 };
 
-export const selectOptionFromLabel = async ( label, value, index = 0 ) => {
+export const selectOptionFromLabel = async ( label: string, value: string, index: number = 0 ) => {
 	const xPath = `//label[contains(@class, "control__label")][text()="${ label }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
@@ -119,7 +127,7 @@ export const selectOptionFromLabel = async ( label, value, index = 0 ) => {
 	}
 };
 
-export const inputValueFromLabel = async ( label, value, index = 0 ) => {
+export const inputValueFromLabel = async ( label: string, value: string, index: number = 0 ) => {
 	const xPath = `//label[contains(@class, "control__label")][text()="${ label }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
@@ -135,7 +143,12 @@ export const inputValueFromLabel = async ( label, value, index = 0 ) => {
 	}
 };
 
-export const inputValueFromAriaLabel = async ( parentSelector, label, value, index = 1 ) => {
+export const inputValueFromAriaLabel = async (
+	parentSelector: string,
+	label: string,
+	value: string,
+	index: number = 1
+) => {
 	const selector = `${ parentSelector } input[aria-label="${ label }"]:nth-child(${ index })`;
 
 	const element = await page.$$( selector );
@@ -147,7 +160,11 @@ export const inputValueFromAriaLabel = async ( parentSelector, label, value, ind
 	}
 };
 
-export const inputValueFromLabelledBy = async ( labelledBy, value, index = 0 ) => {
+export const inputValueFromLabelledBy = async (
+	labelledBy: string,
+	value: string,
+	index: number = 0
+) => {
 	const selector = `[aria-labelledby="${ labelledBy }"] input`;
 	await page.waitForSelector( selector );
 	const elements = await page.$$( selector );
@@ -173,7 +190,7 @@ export const openSidebar = async () => {
 	}
 };
 
-export const openSidebarPanelWithTitle = async ( title, index = 0 ) => {
+export const openSidebarPanelWithTitle = async ( title: string, index: number = 0 ) => {
 	await page.waitForXPath(
 		`//div[contains(@class,"edit-post-sidebar")]//button[@class="components-button components-panel__body-toggle"][contains(.,"${ title }")]`
 	);
@@ -185,7 +202,7 @@ export const openSidebarPanelWithTitle = async ( title, index = 0 ) => {
 	}
 };
 
-export const openToolsPanelMenu = async ( type = 'typography' ) => {
+export const openToolsPanelMenu = async ( type: string = 'typography' ) => {
 	const selector = `.${ type }-block-support-panel .components-dropdown-menu__toggle`;
 	await page.waitForSelector( selector );
 
