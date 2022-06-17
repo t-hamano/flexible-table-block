@@ -365,7 +365,18 @@ export default function Table( {
 					{ filteredVTable[ sectionName ].map( ( row: VRow, rowIndex: number ) => (
 						<tr key={ rowIndex }>
 							{ row.cells.map( ( cell: VCell ) => {
-								const { content, tag, className, styles, rowSpan, colSpan, vColIndex } = cell;
+								const {
+									content,
+									tag,
+									className,
+									id,
+									headers,
+									scope,
+									styles,
+									rowSpan,
+									colSpan,
+									vColIndex,
+								} = cell;
 
 								// Whether or not the current cell is included in the selected cells.
 								const isCellSelected = ( selectedCells || [] ).some(
@@ -385,6 +396,9 @@ export default function Table( {
 										rowSpan={ rowSpan > 1 ? rowSpan : undefined }
 										colSpan={ colSpan > 1 ? colSpan : undefined }
 										style={ cellStylesObj }
+										id={ id }
+										headers={ headers }
+										scope={ scope }
 										onClick={ ( event: MouseEvent ) => onClickCell( event, cell ) }
 									>
 										{ isSelected &&

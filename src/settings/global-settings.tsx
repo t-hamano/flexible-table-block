@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, createInterpolateElement } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 // @ts-ignore: has no exported member
@@ -233,6 +233,34 @@ export default function GlobalSettings() {
 							'flexible-table-block'
 						) }
 					</p>
+					<h2>{ __( 'About Accessibility', 'flexible-table-block' ) }</h2>
+					<p>
+						{ createInterpolateElement(
+							__(
+								'You can tell screenreaders exactly by properly defining <code>id</code>, <code>headers</code>, and <code>scope</code> attributes for each cell.',
+								'flexible-table-block'
+							),
+							{ code: <code /> }
+						) }
+					</p>
+					<p>
+						{ createInterpolateElement(
+							__(
+								'Refer to <Link>this page</Link> for the specifications of each attribute.',
+								'flexible-table-block'
+							),
+							{
+								Link: (
+									<ExternalLink
+										href={ __(
+											'https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Advanced'
+										) }
+									/>
+								),
+							}
+						) }
+					</p>
+					<hr />
 					<ExternalLink
 						href={ __(
 							'https://github.com/t-hamano/flexible-table-block/wiki/English-Manual',

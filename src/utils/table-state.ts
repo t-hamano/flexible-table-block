@@ -16,7 +16,14 @@ import {
 	updatePadding,
 } from './style-updater';
 import { toInteger } from './helper';
-import type { CellTagValue, Cell, Row, SectionName, TableAttributes } from '../BlockAttributes';
+import type {
+	CellTagValue,
+	CellScopeValue,
+	Cell,
+	Row,
+	SectionName,
+	TableAttributes,
+} from '../BlockAttributes';
 
 // Virtual table
 export type VTable = Record< SectionName, VRow[] >;
@@ -615,6 +622,9 @@ export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
  * @param  cellState.styles    Cell styles.
  * @param  cellState.tag       Cell tag.
  * @param  cellState.className Cell classes.
+ * @param  cellState.id        Cell id.
+ * @param  cellState.headers   Cell headers attribute.
+ * @param  cellState.scope     Cell scope attribute.
  * @param  selectedCells       Current selected cells.
  * @return  New virtual table state.
  */
@@ -624,6 +634,9 @@ export function updateCells(
 		styles?: any;
 		tag?: CellTagValue;
 		className?: string;
+		id?: string;
+		headers?: string;
+		scope?: CellScopeValue;
 	},
 	selectedCells: VCell[]
 ): VTable {
@@ -662,6 +675,9 @@ export function updateCells(
 					styles: convertToInline( stylesObj ),
 					tag: cellState.tag || cell.tag,
 					className: 'className' in cellState ? cellState.className : cell.className,
+					id: 'className' in cellState ? cellState.id : cell.id,
+					headers: 'headers' in cellState ? cellState.headers : cell.headers,
+					scope: 'scope' in cellState ? cellState.scope : cell.scope,
 				};
 			}, [] ),
 		} ) );
@@ -812,6 +828,9 @@ export function toTableAttributes( vTable: VTable ): TableAttributes {
 					styles: cell.styles,
 					tag: cell.tag,
 					className: cell.className,
+					id: cell.id,
+					headers: cell.headers,
+					scope: cell.scope,
 					rowSpan: cell.rowSpan > 1 ? String( cell.rowSpan ) : undefined,
 					colSpan: cell.colSpan > 1 ? String( cell.colSpan ) : undefined,
 				} ) ),

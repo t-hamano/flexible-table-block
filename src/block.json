@@ -90,6 +90,21 @@
 							"type": "string",
 							"source": "attribute",
 							"attribute": "colspan"
+						},
+						"id": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "id"
+						},
+						"headers": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "headers"
+						},
+						"scope": {
+							"enum": [ "row", "col", "rowgroup", "colgroup" ],
+							"source": "attribute",
+							"attribute": "colspan"
 						}
 					}
 				}
