@@ -90,7 +90,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'should be transformed to core table block with no style & classe table', async () => {
+	it( 'should be transformed to core table block with no style & class table', async () => {
 		await createNewFlexibleTableBlock( { col: 6, row: 3 } );
 		await openSidebar();
 		await openSidebarPanelWithTitle( 'Table Settings' );
