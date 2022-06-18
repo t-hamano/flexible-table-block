@@ -78,7 +78,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	if ( ! targetCell ) return null;
 
 	const selectedCellTags: ( 'th' | 'td' )[] = selectedCells.reduce(
-		( result: ( 'th' | 'td' )[], selectedCell ) => {
+		( result: CellTagValue[], selectedCell ) => {
 			const { tag } =
 				vTable[ sectionName as SectionName ][ selectedCell.rowIndex ].cells[
 					selectedCell.vColIndex
