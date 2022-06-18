@@ -675,7 +675,7 @@ export function updateCells(
 					styles: convertToInline( stylesObj ),
 					tag: cellState.tag || cell.tag,
 					className: 'className' in cellState ? cellState.className : cell.className,
-					id: 'className' in cellState ? cellState.id : cell.id,
+					id: 'id' in cellState ? cellState.id : cell.id,
 					headers: 'headers' in cellState ? cellState.headers : cell.headers,
 					scope: 'scope' in cellState ? cellState.scope : cell.scope,
 				};

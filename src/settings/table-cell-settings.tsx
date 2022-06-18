@@ -170,7 +170,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	};
 
 	const onChangeHeaders = ( value: string ) => {
-		updateCellsState( { headers: value } );
+		updateCellsState( { headers: value !== '' ? value : undefined } );
 	};
 
 	const onChangeScope = ( value: CellScopeValue ) => {
