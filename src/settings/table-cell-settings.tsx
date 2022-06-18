@@ -174,7 +174,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	};
 
 	const onChangeScope = ( value: CellScopeValue ) => {
-		updateCellsState( { scope: value } );
+		updateCellsState( { scope: value === targetCell.scope ? undefined : value } );
 	};
 
 	const onResetCellSettings = () => {
