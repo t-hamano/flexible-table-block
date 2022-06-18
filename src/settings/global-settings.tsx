@@ -253,7 +253,8 @@ export default function GlobalSettings() {
 								Link: (
 									<ExternalLink
 										href={ __(
-											'https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Advanced'
+											'https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Advanced',
+											'flexible-table-block'
 										) }
 									/>
 								),
