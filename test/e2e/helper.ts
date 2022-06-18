@@ -5,7 +5,7 @@ import { insertBlock, pressKeyWithModifier } from '@wordpress/e2e-test-utils';
 export const coreTableSelector = '[data-type="core/table"]';
 export const coreTableCellSelector = `${ coreTableSelector } td`;
 export const flexibleTableSelector = '[data-type="flexible-table-block/table"]';
-export const flexibleTableCellSelector = `${ flexibleTableSelector } td`;
+export const flexibleTableCellSelector = `${ flexibleTableSelector } th, ${ flexibleTableSelector } td`;
 export const flexibleTableCaptionSelector = `${ flexibleTableSelector } figcaption`;
 
 /** @type {import('puppeteer').Page} */
@@ -128,7 +128,7 @@ export const selectOptionFromLabel = async ( label: string, value: string, index
 };
 
 export const inputValueFromLabel = async ( label: string, value: string, index: number = 0 ) => {
-	const xPath = `//label[contains(@class, "control__label")][text()="${ label }"]`;
+	const xPath = `//label[contains(@class, "control__label")][string()="${ label }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
 	if ( elements[ index ] ) {

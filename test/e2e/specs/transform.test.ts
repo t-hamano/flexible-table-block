@@ -126,7 +126,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'should be transformed to core table block width no style & class cells', async () => {
+	it( 'should be transformed to core table block with no style & class cells', async () => {
 		await createNewFlexibleTableBlock();
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
@@ -139,6 +139,50 @@ describe( 'Transform from flexible table block to core table block', () => {
 			'[aria-labelledby="flexible-table-block-cell-border-style-heading"]',
 			'Solid'
 		);
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
+			'TH'
+		);
+		await transformBlockTo( 'Table' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should be transformed to core table block with no unnecessary attributes cells', async () => {
+		await createNewFlexibleTableBlock();
+		const cells = await page.$$( flexibleTableCellSelector );
+		await cells[ 0 ].click();
+		await openSidebar();
+		await openSidebarPanelWithTitle( 'Cell Settings' );
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
+			'TH'
+		);
+		await inputValueFromLabel( 'id attribute', 'id' );
+		await inputValueFromLabel( 'headers attribute', 'headers' );
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-cell-scope-heading"]',
+			'row'
+		);
+		await transformBlockTo( 'Table' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'should be transformed to core table block with appropriate tag cells', async () => {
+		await createNewFlexibleTableBlock( { header: true, footer: true } );
+		const cells = await page.$$( flexibleTableCellSelector );
+		await cells[ 0 ].click();
+		await openSidebar();
+		await openSidebarPanelWithTitle( 'Cell Settings' );
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
+			'TD'
+		);
+		await cells[ 3 ].click();
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
+			'TH'
+		);
+		await cells[ 12 ].click();
 		await clickButtonWithText(
 			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
 			'TH'
