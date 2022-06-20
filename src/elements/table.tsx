@@ -10,7 +10,7 @@ import { omit } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useRef } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import {
 	RichText,
 	// @ts-ignore: has no exported member
@@ -87,6 +87,11 @@ export default function Table( {
 	const colorProps = useColorProps( attributes );
 
 	const [ selectMode, setSelectMode ] = useState< VSelectMode >( undefined );
+
+	// Manage rendering status as state since some processing may be performed before rendering components.
+	const [ isReady, setIdReady ] = useState< boolean >( false );
+	useEffect( () => setIdReady( true ) );
+
 	const tableRef = useRef( null );
 
 	let isTabMove: boolean = false;
@@ -190,6 +195,10 @@ export default function Table( {
 	};
 
 	const onChangeCellContent = ( content: string, targetCell: VCell ) => {
+		// If inline highlight is applied to the RichText, this process is performed before rendering the component, causing a warning error.
+		// Therefore, nothing is performed if the component has not yet been rendered.
+		if ( ! isReady ) return;
+
 		const { sectionName, rowIndex: selectedRowIndex, vColIndex: selectedVColIndex } = targetCell;
 		setSelectedCells( [ { ...targetCell, isFirstSelected: true } ] );
 
