@@ -73,17 +73,25 @@ export default function save( { attributes }: BlockSaveProps< BlockAttributes > 
 			<Tag>
 				{ rows.map( ( { cells }, rowIndex ) => (
 					<tr key={ rowIndex }>
-						{ cells.map( ( { content, tag, className, rowSpan, colSpan, styles }, cellIndex ) => (
-							<RichText.Content
-								key={ cellIndex }
-								tagName={ tag }
-								className={ className || undefined }
-								value={ content }
-								rowSpan={ toInteger( rowSpan ) > 1 ? toInteger( rowSpan ) : undefined }
-								colSpan={ toInteger( colSpan ) > 1 ? toInteger( colSpan ) : undefined }
-								style={ convertToObject( styles ) }
-							/>
-						) ) }
+						{ cells.map(
+							(
+								{ content, tag, className, id, headers, scope, rowSpan, colSpan, styles },
+								cellIndex
+							) => (
+								<RichText.Content
+									key={ cellIndex }
+									tagName={ tag }
+									className={ className || undefined }
+									id={ ( tag === 'th' && id ) || undefined }
+									headers={ headers || undefined }
+									scope={ ( tag === 'th' && scope ) || undefined }
+									value={ content }
+									rowSpan={ toInteger( rowSpan ) > 1 ? toInteger( rowSpan ) : undefined }
+									colSpan={ toInteger( colSpan ) > 1 ? toInteger( colSpan ) : undefined }
+									style={ convertToObject( styles ) }
+								/>
+							)
+						) }
 					</tr>
 				) ) }
 			</Tag>

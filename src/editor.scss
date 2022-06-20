@@ -716,6 +716,19 @@
 
 .ftb-global-help-modal {
 	max-width: 600px;
+
+	h2 {
+		margin: 1.5em 0 0.5em;
+		font-size: 1rem;
+	}
+
+	p {
+		margin: 0 0 1em;
+	}
+
+	hr {
+		margin: 1.5em 0;
+	}
 }
 
 @media screen and (max-width: 782px) {

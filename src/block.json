@@ -81,6 +81,21 @@
 							"source": "attribute",
 							"attribute": "class"
 						},
+						"id": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "id"
+						},
+						"headers": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "headers"
+						},
+						"scope": {
+							"enum": [ "row", "col", "rowgroup", "colgroup" ],
+							"source": "attribute",
+							"attribute": "scope"
+						},
 						"rowSpan": {
 							"type": "string",
 							"source": "attribute",
@@ -116,16 +131,6 @@
 							"source": "attribute",
 							"attribute": "style"
 						},
-						"colSpan": {
-							"type": "string",
-							"source": "attribute",
-							"attribute": "colspan"
-						},
-						"rowSpan": {
-							"type": "string",
-							"source": "attribute",
-							"attribute": "rowspan"
-						},
 						"tag": {
 							"type": "string",
 							"default": "td",
@@ -135,6 +140,31 @@
 							"type": "string",
 							"source": "attribute",
 							"attribute": "class"
+						},
+						"id": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "id"
+						},
+						"headers": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "headers"
+						},
+						"scope": {
+							"enum": [ "row", "col", "rowgroup", "colgroup" ],
+							"source": "attribute",
+							"attribute": "scope"
+						},
+						"rowSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "rowspan"
+						},
+						"colSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "colspan"
 						}
 					}
 				}
@@ -161,16 +191,6 @@
 							"source": "attribute",
 							"attribute": "style"
 						},
-						"colSpan": {
-							"type": "string",
-							"source": "attribute",
-							"attribute": "colspan"
-						},
-						"rowSpan": {
-							"type": "string",
-							"source": "attribute",
-							"attribute": "rowspan"
-						},
 						"tag": {
 							"type": "string",
 							"default": "td",
@@ -180,6 +200,31 @@
 							"type": "string",
 							"source": "attribute",
 							"attribute": "class"
+						},
+						"id": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "id"
+						},
+						"headers": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "headers"
+						},
+						"scope": {
+							"enum": [ "row", "col", "rowgroup", "colgroup" ],
+							"source": "attribute",
+							"attribute": "scope"
+						},
+						"rowSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "rowspan"
+						},
+						"colSpan": {
+							"type": "string",
+							"source": "attribute",
+							"attribute": "colspan"
 						}
 					}
 				}

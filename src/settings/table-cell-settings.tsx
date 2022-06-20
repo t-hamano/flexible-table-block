@@ -7,6 +7,7 @@ import type { Property } from 'csstype';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { createInterpolateElement } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
@@ -25,6 +26,7 @@ import {
 	FONT_SIZE_UNITS,
 	CELL_WIDTH_UNITS,
 	CELL_TAG_CONTROLS,
+	CELL_SCOPE_CONTROLS,
 	TEXT_ALIGNMENT_CONTROLS,
 	VERTICAL_ALIGNMENT_CONTROLS,
 } from '../constants';
@@ -48,6 +50,7 @@ import {
 import { sanitizeUnitValue } from '../utils/helper';
 import type {
 	CellTagValue,
+	CellScopeValue,
 	TextAlignValue,
 	VerticalAlignValue,
 	SectionName,
@@ -74,9 +77,30 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 
 	if ( ! targetCell ) return null;
 
+	const selectedCellTags: ( 'th' | 'td' )[] = selectedCells.reduce(
+		( result: CellTagValue[], selectedCell ) => {
+			const { tag } =
+				vTable[ sectionName as SectionName ][ selectedCell.rowIndex ].cells[
+					selectedCell.vColIndex
+				];
+			if ( ! result.includes( tag ) ) {
+				result.push( tag );
+			}
+			return result;
+		},
+		[]
+	);
+
 	const cellStylesObj = convertToObject( targetCell.styles );
 
-	const updateCellsState = ( state: { styles?: any; tag?: CellTagValue; className?: string } ) => {
+	const updateCellsState = ( state: {
+		styles?: any;
+		tag?: CellTagValue;
+		className?: string;
+		id?: string;
+		headers?: string;
+		scope?: CellScopeValue;
+	} ) => {
 		const newVTable = updateCells( vTable, state, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 	};
@@ -134,11 +158,23 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	};
 
 	const onChangeTag = ( value: CellTagValue ) => {
-		updateCellsState( { tag: value } );
+		updateCellsState( { tag: value, id: undefined, headers: undefined, scope: undefined } );
 	};
 
 	const onChangeClass = ( value: string ) => {
 		updateCellsState( { className: value !== '' ? value : undefined } );
+	};
+
+	const onChangeId = ( value: string ) => {
+		updateCellsState( { id: value !== '' ? value : undefined } );
+	};
+
+	const onChangeHeaders = ( value: string ) => {
+		updateCellsState( { headers: value !== '' ? value : undefined } );
+	};
+
+	const onChangeScope = ( value: CellScopeValue ) => {
+		updateCellsState( { scope: value === targetCell.scope ? undefined : value } );
 	};
 
 	const onResetCellSettings = () => {
@@ -164,6 +200,9 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				verticalAlign: undefined,
 			},
 			className: undefined,
+			id: undefined,
+			headers: undefined,
+			scope: undefined,
 		} );
 	};
 
@@ -363,6 +402,60 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				onChange={ onChangeClass }
 				help={ __( 'Separate multiple classes with spaces.' ) }
 			/>
+			{ selectedCellTags.length === 1 && (
+				<>
+					<hr />
+					{ selectedCellTags.includes( 'th' ) && (
+						<TextControl
+							label={ createInterpolateElement(
+								__( '<code>id</code> attribute', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
+							autoComplete="off"
+							value={ targetCell.id || '' }
+							onChange={ onChangeId }
+						/>
+					) }
+					<TextControl
+						label={ createInterpolateElement(
+							__( '<code>headers</code> attribute', 'flexible-table-block' ),
+							{ code: <code /> }
+						) }
+						autoComplete="off"
+						value={ targetCell.headers || '' }
+						onChange={ onChangeHeaders }
+					/>
+					{ selectedCellTags.includes( 'th' ) && (
+						<BaseControl id="flexible-table-block-cell-scope">
+							<div aria-labelledby="flexible-table-block-cell-scope-heading" role="region">
+								<span
+									id="flexible-table-block-cell-scope-heading"
+									className="ftb-base-control-label"
+								>
+									{ createInterpolateElement(
+										__( '<code>scope</code> attribute', 'flexible-table-block' ),
+										{ code: <code /> }
+									) }
+								</span>
+								<ButtonGroup className="ftb-button-group">
+									{ CELL_SCOPE_CONTROLS.map( ( { label, value } ) => {
+										return (
+											<Button
+												key={ value }
+												isPrimary={ value === targetCell.scope }
+												isSecondary={ value !== targetCell.scope }
+												onClick={ () => onChangeScope( value ) }
+											>
+												{ label }
+											</Button>
+										);
+									} ) }
+								</ButtonGroup>
+							</div>
+						</BaseControl>
+					) }
+				</>
+			) }
 		</>
 	);
 }

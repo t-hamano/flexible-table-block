@@ -36,9 +36,15 @@ exports[`Transform from flexible table block to core table block should be trans
 <!-- /wp:table -->"
 `;
 
-exports[`Transform from flexible table block to core table block should be transformed to core table block width no style & class cells 1`] = `
+exports[`Transform from flexible table block to core table block should be transformed to core table block with no style & class cells 1`] = `
 "<!-- wp:table {\\"hasFixedLayout\\":true} -->
-<figure class=\\"wp-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><th>Flexible Table Block</th><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class=\\"wp-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->"
+`;
+
+exports[`Transform from flexible table block to core table block should be transformed to core table block with appropriate tag cells 1`] = `
+"<!-- wp:table {\\"hasFixedLayout\\":true} -->
+<figure class=\\"wp-block-table\\"><table class=\\"has-fixed-layout\\"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td></tr></tfoot></table></figure>
 <!-- /wp:table -->"
 `;
 
@@ -54,8 +60,14 @@ exports[`Transform from flexible table block to core table block should be trans
 <!-- /wp:table -->"
 `;
 
-exports[`Transform from flexible table block to core table block should be transformed to core table block with no style & classe table 1`] = `
+exports[`Transform from flexible table block to core table block should be transformed to core table block with no style & class table 1`] = `
 "<!-- wp:table {\\"hasFixedLayout\\":true} -->
 <figure class=\\"wp-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->"
+`;
+
+exports[`Transform from flexible table block to core table block should be transformed to core table block with no unnecessary attributes cells 1`] = `
+"<!-- wp:table {\\"hasFixedLayout\\":true} -->
+<figure class=\\"wp-block-table\\"><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->"
 `;

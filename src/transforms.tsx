@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { mapValues } from 'lodash';
+
+/**
  * WordPress dependencies
  */
 import { createBlock } from '@wordpress/blocks';
@@ -7,13 +12,7 @@ import type { TransformBlock } from '@wordpress/blocks';
 /**
  * Internal dependencies
  */
-import {
-	splitMergedCell,
-	toTableAttributes,
-	toVirtualRows,
-	toVirtualTable,
-	VCell,
-} from './utils/table-state';
+import { splitMergedCell, toVirtualRows, toVirtualTable, VCell } from './utils/table-state';
 import type { BlockAttributes, CoreTableBlockAttributes } from './BlockAttributes';
 
 interface Transforms {
@@ -26,7 +25,7 @@ const transforms: Transforms = {
 		{
 			type: 'block',
 			blocks: [ 'core/table' ],
-			transform: ( attributes: CoreTableBlockAttributes ) => {
+			transform: ( attributes ) => {
 				const { hasFixedLayout, head, body, foot, caption } = attributes;
 				return createBlock( 'flexible-table-block/table', {
 					hasFixedLayout,
@@ -42,7 +41,7 @@ const transforms: Transforms = {
 		{
 			type: 'block',
 			blocks: [ 'core/table' ],
-			transform: ( attributes: BlockAttributes ) => {
+			transform: ( attributes ) => {
 				// Create virtual object array with the cells placed in positions based on how they actually look.
 				let vTable = toVirtualTable( attributes );
 
@@ -61,10 +60,23 @@ const transforms: Transforms = {
 				}
 
 				// Convert to core table block attributes.
-				const tableAttributes = toTableAttributes( vTable );
+				const sectionAttributes: any = mapValues( vTable, ( vSection ) => {
+					if ( ! vSection.length ) return [];
+
+					return vSection.map( ( { cells } ) => ( {
+						cells: cells
+							// Delete cells marked as deletion.
+							.filter( ( cell ) => ! cell.isHidden )
+							// Keep only the properties needed.
+							.map( ( cell ) => ( {
+								content: cell.content,
+								tag: 'head' === cell.sectionName ? 'th' : 'td',
+							} ) ),
+					} ) );
+				} );
 
 				return createBlock( 'core/table', {
-					...tableAttributes,
+					...sectionAttributes,
 					hasFixedLayout: attributes.hasFixedLayout,
 					caption: attributes.caption,
 				} );

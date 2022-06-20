@@ -10,7 +10,7 @@ import { omit } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useRef } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import {
 	RichText,
 	// @ts-ignore: has no exported member
@@ -87,6 +87,11 @@ export default function Table( {
 	const colorProps = useColorProps( attributes );
 
 	const [ selectMode, setSelectMode ] = useState< VSelectMode >( undefined );
+
+	// Manage rendering status as state since some processing may be performed before rendering components.
+	const [ isReady, setIdReady ] = useState< boolean >( false );
+	useEffect( () => setIdReady( true ) );
+
 	const tableRef = useRef( null );
 
 	let isTabMove: boolean = false;
@@ -190,6 +195,10 @@ export default function Table( {
 	};
 
 	const onChangeCellContent = ( content: string, targetCell: VCell ) => {
+		// If inline highlight is applied to the RichText, this process is performed before rendering the component, causing a warning error.
+		// Therefore, nothing is performed if the component has not yet been rendered.
+		if ( ! isReady ) return;
+
 		const { sectionName, rowIndex: selectedRowIndex, vColIndex: selectedVColIndex } = targetCell;
 		setSelectedCells( [ { ...targetCell, isFirstSelected: true } ] );
 
@@ -365,7 +374,18 @@ export default function Table( {
 					{ filteredVTable[ sectionName ].map( ( row: VRow, rowIndex: number ) => (
 						<tr key={ rowIndex }>
 							{ row.cells.map( ( cell: VCell ) => {
-								const { content, tag, className, styles, rowSpan, colSpan, vColIndex } = cell;
+								const {
+									content,
+									tag,
+									className,
+									id,
+									headers,
+									scope,
+									styles,
+									rowSpan,
+									colSpan,
+									vColIndex,
+								} = cell;
 
 								// Whether or not the current cell is included in the selected cells.
 								const isCellSelected = ( selectedCells || [] ).some(
@@ -385,6 +405,9 @@ export default function Table( {
 										rowSpan={ rowSpan > 1 ? rowSpan : undefined }
 										colSpan={ colSpan > 1 ? colSpan : undefined }
 										style={ cellStylesObj }
+										id={ id }
+										headers={ headers }
+										scope={ scope }
 										onClick={ ( event: MouseEvent ) => onClickCell( event, cell ) }
 									>
 										{ isSelected &&

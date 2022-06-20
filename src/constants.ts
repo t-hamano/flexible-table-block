@@ -198,6 +198,25 @@ export const CELL_TAG_CONTROLS = [
 	},
 ] as const;
 
+export const CELL_SCOPE_CONTROLS = [
+	{
+		label: __( 'row', 'flexible-table-block' ),
+		value: 'row',
+	},
+	{
+		label: __( 'col', 'flexible-table-block' ),
+		value: 'col',
+	},
+	{
+		label: __( 'rowgroup', 'flexible-table-block' ),
+		value: 'rowgroup',
+	},
+	{
+		label: __( 'colgroup', 'flexible-table-block' ),
+		value: 'colgroup',
+	},
+] as const;
+
 export const CAPTION_SIDE_CONTROLS = [
 	{
 		label: __( 'Top', 'flexible-table-block' ),
