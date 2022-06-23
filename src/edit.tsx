@@ -238,6 +238,8 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		attributes,
 		setAttributes,
 		vTable,
+		setSelectedCells,
+		setSelectedLine,
 		tableStylesObj,
 	};
 
