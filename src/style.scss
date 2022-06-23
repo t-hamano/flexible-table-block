@@ -22,7 +22,8 @@
 		td {
 			box-sizing: border-box;
 			min-width: auto;
-			word-break: break-all;
+			word-break: normal;
+			overflow-wrap: anywhere;
 
 			img {
 				max-width: 100%;
