@@ -177,7 +177,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 
 	const onResetCellSettings = () => {
 		updateCellsState( {
-			tag: sectionName === 'head' ? 'th' : 'td',
 			styles: {
 				fontSize: undefined,
 				lineHeight: undefined,
