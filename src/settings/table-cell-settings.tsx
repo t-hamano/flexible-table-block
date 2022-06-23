@@ -80,9 +80,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	const selectedCellTags: ( 'th' | 'td' )[] = selectedCells.reduce(
 		( result: CellTagValue[], selectedCell ) => {
 			const { tag } =
-				vTable[ sectionName as SectionName ][ selectedCell.rowIndex ].cells[
-					selectedCell.vColIndex
-				];
+				vTable[ selectedCell.sectionName ][ selectedCell.rowIndex ].cells[ selectedCell.vColIndex ];
 			if ( ! result.includes( tag ) ) {
 				result.push( tag );
 			}

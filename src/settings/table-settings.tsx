@@ -2,6 +2,7 @@
  * External dependencies
  */
 import type { Property, Properties } from 'csstype';
+import type { Dispatch, SetStateAction } from 'react';
 
 /**
  * WordPress dependencies
@@ -56,7 +57,7 @@ import {
 	updateBorderSpacing,
 } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { VTable } from '../utils/table-state';
+import type { VTable, VSelectedCells, VSelectedLine } from '../utils/table-state';
 import type { CornerProps, DirectionProps, CrossProps } from '../utils/style-picker';
 import type { StickyValue, BorderCollapseValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
@@ -65,6 +66,8 @@ type Props = {
 	attributes: BlockAttributes;
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
 	vTable: VTable;
+	setSelectedCells: Dispatch< SetStateAction< VSelectedCells > >;
+	setSelectedLine: Dispatch< SetStateAction< VSelectedLine > >;
 	tableStylesObj: Properties;
 };
 
@@ -72,6 +75,8 @@ export default function TableSettings( {
 	attributes,
 	setAttributes,
 	vTable,
+	setSelectedCells,
+	setSelectedLine,
 	tableStylesObj,
 }: Props ) {
 	const { hasFixedLayout, isStackedOnMobile, isScrollOnPc, isScrollOnMobile, sticky, head, foot } =
@@ -104,11 +109,15 @@ export default function TableSettings( {
 	const onToggleHeaderSection = () => {
 		const newVTable = toggleSection( vTable, 'head' );
 		setAttributes( toTableAttributes( newVTable ) );
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
 	const onToggleFooterSection = () => {
 		const newVTable = toggleSection( vTable, 'foot' );
 		setAttributes( toTableAttributes( newVTable ) );
+		setSelectedCells( undefined );
+		setSelectedLine( undefined );
 	};
 
 	const onChangeWidth = ( value: Property.Width ) => {
