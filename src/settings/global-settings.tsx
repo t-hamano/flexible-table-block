@@ -50,11 +50,18 @@ interface NoticeInfo {
 }
 
 export default function GlobalSettings() {
-	const storeOptions: StoreOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
+	const storeOptions: StoreOptions = useSelect(
+		( select ) =>
+			// @ts-ignore
+			select( STORE_NAME ).getOptions(),
+		[]
+	);
 
-	const isAdministrator: boolean = useSelect( ( select ) =>
-		// @ts-ignore
-		select( coreStore ).canUser( 'create', 'users' )
+	const isAdministrator: boolean = useSelect(
+		( select ) =>
+			// @ts-ignore
+			select( coreStore ).canUser( 'create', 'users' ),
+		[]
 	);
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
@@ -66,6 +73,7 @@ export default function GlobalSettings() {
 	const [ isWaiting, setIsWaiting ] = useState< boolean >( false );
 	const [ options, setOptions ] = useState< StoreOptions >();
 
+	// @ts-ignore
 	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
 
 	// Set options to state.

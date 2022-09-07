@@ -77,7 +77,7 @@ export default function BorderColorControl( {
 		// @ts-ignore
 		const settings = select( blockEditorStore ).getSettings();
 		return get( settings, [ 'colors' ], [] );
-	} );
+	}, [] );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
