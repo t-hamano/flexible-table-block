@@ -15,7 +15,7 @@ import {
 	ButtonGroup,
 	Button,
 	Tooltip,
-	// @ts-ignore
+	// @ts-ignore: has no exported member
 	__experimentalText as Text,
 } from '@wordpress/components';
 

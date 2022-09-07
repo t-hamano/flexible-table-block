@@ -11,8 +11,11 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
-// @ts-ignore: has no exported member
-import { ToolbarDropdownMenu, PanelBody, Toolbar, Slot } from '@wordpress/components';
+import {
+	// @ts-ignore: has no exported member
+	ToolbarDropdownMenu,
+	PanelBody,
+} from '@wordpress/components';
 import {
 	blockTable,
 	justifyLeft,
@@ -53,8 +56,13 @@ import type { StoreOptions } from './store';
 import type { VTable, VSelectedLine, VSelectedCells } from './utils/table-state';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
-	// @ts-ignore: `insertBlocksAfter` prop is not exist at @types
-	const { attributes, setAttributes, isSelected, insertBlocksAfter } = props;
+	const {
+		attributes,
+		setAttributes,
+		isSelected,
+		// @ts-ignore: `insertBlocksAfter` prop is not exist at @types
+		insertBlocksAfter,
+	} = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCells, setSelectedCells ] = useState< VSelectedCells >( undefined );
 	const [ selectedLine, setSelectedLine ] = useState< VSelectedLine >( undefined );
@@ -63,7 +71,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const captionStylesObj: Properties = convertToObject( captionStyles );
 	const options: StoreOptions = useSelect(
 		( select ) =>
-			// @ts-ignore
+			// @ts-ignore TODO
 			select( STORE_NAME ).getOptions(),
 		[]
 	);

@@ -74,7 +74,7 @@ export default function BorderColorControl( {
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
 	const colors = useSelect( ( select ) => {
-		// @ts-ignore
+		// @ts-ignore TODO
 		const settings = select( blockEditorStore ).getSettings();
 		return get( settings, [ 'colors' ], [] );
 	}, [] );
