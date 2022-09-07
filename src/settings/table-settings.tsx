@@ -84,7 +84,7 @@ export default function TableSettings( {
 
 	const options: StoreOptions = useSelect(
 		( select ) =>
-			// @ts-ignore TODO
+			// @ts-ignore
 			select( STORE_NAME ).getOptions(),
 		[]
 	);

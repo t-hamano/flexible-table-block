@@ -71,7 +71,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const captionStylesObj: Properties = convertToObject( captionStyles );
 	const options: StoreOptions = useSelect(
 		( select ) =>
-			// @ts-ignore TODO
+			// @ts-ignore
 			select( STORE_NAME ).getOptions(),
 		[]
 	);

@@ -52,14 +52,14 @@ interface NoticeInfo {
 export default function GlobalSettings() {
 	const storeOptions: StoreOptions = useSelect(
 		( select ) =>
-			// @ts-ignore TODO
+			// @ts-ignore
 			select( STORE_NAME ).getOptions(),
 		[]
 	);
 
 	const isAdministrator: boolean = useSelect(
 		( select ) =>
-			// @ts-ignore TODO
+			// @ts-ignore
 			select( coreStore ).canUser( 'create', 'users' ),
 		[]
 	);
@@ -73,8 +73,10 @@ export default function GlobalSettings() {
 	const [ isWaiting, setIsWaiting ] = useState< boolean >( false );
 	const [ options, setOptions ] = useState< StoreOptions >();
 
-	// @ts-ignore TODO
-	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
+	const {
+		// @ts-ignore
+		setOptions: setStoreOptions,
+	} = useDispatch( STORE_NAME );
 
 	// Set options to state.
 	useEffect( () => {
