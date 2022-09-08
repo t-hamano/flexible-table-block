@@ -694,7 +694,10 @@ export default function GlobalSettings() {
 						/>
 					) }
 					<ToggleControl
-						label={ __( 'Show dot on <th> tag in the editor', 'flexible-table-block' ) }
+						label={ createInterpolateElement(
+							__( 'Show dot on <code>th</code> tag in the editor', 'flexible-table-block' ),
+							{ code: <code /> }
+						) }
 						checked={ !! options.show_dot_on_th }
 						onChange={ ( value ) => {
 							setOptions( {
