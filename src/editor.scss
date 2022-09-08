@@ -189,6 +189,7 @@
 				margin-bottom: 0;
 
 				.components-text-control__input {
+					box-sizing: border-box;
 					height: 36px;
 					margin: 0;
 				}
