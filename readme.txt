@@ -4,7 +4,7 @@ Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.8
 Tested up to: 6.0
-Stable tag: 2.7.2
+Stable tag: 2.7.3
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,12 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 2.7.3 =
+* Add: Loading status to global settings button
+* Clean: Use code tags for text in the options section
+* Fix: Overflow of input field in placeholder
+* Fix: Block toolbar doesn't appear in HTML edit mode
 
 = 2.7.2 =
 * Change: Style to break lines in cells
