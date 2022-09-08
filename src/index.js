@@ -41,9 +41,9 @@ registerBlockType( metadata.name, config );
 
 const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
-		const { name, isSelected } = props;
+		const { name } = props;
 
-		if ( name !== 'flexible-table-block/table' || ! isSelected ) {
+		if ( name !== 'flexible-table-block/table' ) {
 			return <BlockEdit { ...props } />;
 		}
 

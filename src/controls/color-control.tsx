@@ -49,7 +49,7 @@ export default function ColorControl( {
 		// @ts-ignore
 		const settings = select( blockEditorStore ).getSettings();
 		return get( settings, [ 'colors' ], [] );
-	} );
+	}, [] );
 
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
 

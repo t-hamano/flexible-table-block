@@ -21,5 +21,4 @@ package.json
 phpcs.ruleset.xml
 README.md
 tsconfig.json
-webpack.config.js
 *.tsbuildinfo

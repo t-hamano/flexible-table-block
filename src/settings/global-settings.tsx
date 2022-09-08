@@ -50,11 +50,18 @@ interface NoticeInfo {
 }
 
 export default function GlobalSettings() {
-	const storeOptions: StoreOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions() );
+	const storeOptions: StoreOptions = useSelect(
+		( select ) =>
+			// @ts-ignore
+			select( STORE_NAME ).getOptions(),
+		[]
+	);
 
-	const isAdministrator: boolean = useSelect( ( select ) =>
-		// @ts-ignore
-		select( coreStore ).canUser( 'create', 'users' )
+	const isAdministrator: boolean = useSelect(
+		( select ) =>
+			// @ts-ignore
+			select( coreStore ).canUser( 'create', 'users' ),
+		[]
 	);
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
@@ -66,7 +73,10 @@ export default function GlobalSettings() {
 	const [ isWaiting, setIsWaiting ] = useState< boolean >( false );
 	const [ options, setOptions ] = useState< StoreOptions >();
 
-	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
+	const {
+		// @ts-ignore
+		setOptions: setStoreOptions,
+	} = useDispatch( STORE_NAME );
 
 	// Set options to state.
 	useEffect( () => {
@@ -184,13 +194,17 @@ export default function GlobalSettings() {
 		} );
 	};
 
+	const isGlobalSettingLoaded = isAdministrator !== undefined && options !== undefined;
+	const showGlobalSetting = isAdministrator || options?.show_global_setting;
+
 	return (
 		<>
 			<div className="ftb-global-setting">
 				<Button icon={ help } isLink onClick={ () => setIsHelpModalOpen( true ) }>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
-				{ ( isAdministrator || options?.show_global_setting ) && (
+				{ ! isGlobalSettingLoaded && <Spinner /> }
+				{ isGlobalSettingLoaded && showGlobalSetting && (
 					<Button icon={ cog } isPrimary onClick={ () => setIsSettingModalOpen( true ) }>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
 					</Button>
@@ -684,7 +698,10 @@ export default function GlobalSettings() {
 						/>
 					) }
 					<ToggleControl
-						label={ __( 'Show dot on <th> tag in the editor', 'flexible-table-block' ) }
+						label={ createInterpolateElement(
+							__( 'Show dot on <code>th</code> tag in the editor', 'flexible-table-block' ),
+							{ code: <code /> }
+						) }
 						checked={ !! options.show_dot_on_th }
 						onChange={ ( value ) => {
 							setOptions( {
