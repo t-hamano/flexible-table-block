@@ -584,8 +584,13 @@
 
 .ftb-global-setting {
 	display: flex;
+	align-items: center;
 	justify-content: space-between;
 	padding: 8px 16px;
+
+	.components-spinner {
+		margin: 0;
+	}
 }
 
 // Modal Component Styles

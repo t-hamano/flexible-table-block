@@ -194,13 +194,17 @@ export default function GlobalSettings() {
 		} );
 	};
 
+	const isGlobalSettingLoaded = isAdministrator !== undefined && options !== undefined;
+	const showGlobalSetting = isAdministrator || options?.show_global_setting;
+
 	return (
 		<>
 			<div className="ftb-global-setting">
 				<Button icon={ help } isLink onClick={ () => setIsHelpModalOpen( true ) }>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
-				{ ( isAdministrator || options?.show_global_setting ) && (
+				{ ! isGlobalSettingLoaded && <Spinner /> }
+				{ isGlobalSettingLoaded && showGlobalSetting && (
 					<Button icon={ cog } isPrimary onClick={ () => setIsSettingModalOpen( true ) }>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
 					</Button>
