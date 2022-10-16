@@ -162,11 +162,8 @@ export default function BorderRadiusControl( {
 							<Button
 								label={ linkedLabel }
 								isSmall
-								isPrimary={ isLinked }
-								isSecondary={ ! isLinked }
 								onClick={ toggleLinked }
 								icon={ isLinked ? link : linkOff }
-								iconSize="16"
 							/>
 						</span>
 					</Tooltip>

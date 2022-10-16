@@ -200,7 +200,12 @@ export default function GlobalSettings() {
 				</Button>
 				{ ! isGlobalSettingLoaded && <Spinner /> }
 				{ isGlobalSettingLoaded && showGlobalSetting && (
-					<Button icon={ cog } isPrimary onClick={ () => setIsSettingModalOpen( true ) }>
+					<Button
+						icon={ cog }
+						iconSize="20"
+						isPrimary
+						onClick={ () => setIsSettingModalOpen( true ) }
+					>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
 					</Button>
 				) }

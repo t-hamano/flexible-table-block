@@ -148,10 +148,7 @@ export default function BorderSpacingControl( {
 								<Button
 									label={ linkedLabel }
 									isSmall
-									isPrimary={ isLinked }
-									isSecondary={ ! isLinked }
 									icon={ isLinked ? link : linkOff }
-									iconSize="16"
 									onClick={ toggleLinked }
 								/>
 							</span>
