@@ -209,7 +209,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				id="flexible-table-block-cell-clear-settings"
 				className="ftb-reset-settings-control"
 			>
-				<Button isLink isDestructive onClick={ onResetCellSettings }>
+				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
 					{ __( 'Clear Cell Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -261,7 +261,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						return (
 							<Button
 								key={ perWidth }
-								isPrimary={ isPressed }
+								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () => onChangeWidth( isPressed ? '' : `${ perWidth }%` ) }
 							>
@@ -343,8 +343,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 										key={ value }
 										label={ label }
 										icon={ icon }
-										isPrimary={ value === cellStylesObj?.textAlign }
-										isSecondary={ value !== cellStylesObj?.textAlign }
+										variant={ value === cellStylesObj?.textAlign ? 'primary' : 'secondary' }
 										onClick={ () => onChangeTextAlign( value ) }
 									/>
 								);
@@ -360,8 +359,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 										key={ value }
 										label={ label }
 										icon={ icon }
-										isPrimary={ value === cellStylesObj?.verticalAlign }
-										isSecondary={ value !== cellStylesObj?.verticalAlign }
+										variant={ value === cellStylesObj?.verticalAlign ? 'primary' : 'secondary' }
 										onClick={ () => onChangeVerticalAlign( value ) }
 									/>
 								);
@@ -381,8 +379,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							return (
 								<Button
 									key={ value }
-									isPrimary={ value === targetCell.tag }
-									isSecondary={ value !== targetCell.tag }
+									variant={ value === targetCell.tag ? 'primary' : 'secondary' }
 									onClick={ () => onChangeTag( value ) }
 								>
 									{ label }
@@ -439,8 +436,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 										return (
 											<Button
 												key={ value }
-												isPrimary={ value === targetCell.scope }
-												isSecondary={ value !== targetCell.scope }
+												variant={ value === targetCell.scope ? 'primary' : 'secondary' }
 												onClick={ () => onChangeScope( value ) }
 											>
 												{ label }

@@ -195,7 +195,7 @@ export default function GlobalSettings() {
 	return (
 		<>
 			<div className="ftb-global-setting">
-				<Button icon={ help } isLink onClick={ () => setIsHelpModalOpen( true ) }>
+				<Button icon={ help } variant="link" onClick={ () => setIsHelpModalOpen( true ) }>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
 				{ ! isGlobalSettingLoaded && <Spinner /> }
@@ -203,7 +203,7 @@ export default function GlobalSettings() {
 					<Button
 						icon={ cog }
 						iconSize="20"
-						isPrimary
+						variant="primary"
 						onClick={ () => setIsSettingModalOpen( true ) }
 					>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
@@ -399,8 +399,11 @@ export default function GlobalSettings() {
 										return (
 											<Button
 												key={ value }
-												isPrimary={ value === options.block_style?.table_border_collapse }
-												isSecondary={ value !== options.block_style?.table_border_collapse }
+												variant={
+													value === options.block_style?.table_border_collapse
+														? 'primary'
+														: 'secondary'
+												}
 												icon={ icon }
 												onClick={ () => {
 													const borderCollapse =
@@ -573,8 +576,9 @@ export default function GlobalSettings() {
 											<Button
 												key={ value }
 												label={ label }
-												isPrimary={ value === options.block_style?.cell_text_align }
-												isSecondary={ value !== options.block_style?.cell_text_align }
+												variant={
+													value === options.block_style?.cell_text_align ? 'primary' : 'secondary'
+												}
 												icon={ icon }
 												onClick={ () => {
 													const newValue =
@@ -613,8 +617,11 @@ export default function GlobalSettings() {
 											<Button
 												key={ value }
 												label={ label }
-												isPrimary={ value === options.block_style?.cell_vertical_align }
-												isSecondary={ value !== options.block_style?.cell_vertical_align }
+												variant={
+													value === options.block_style?.cell_vertical_align
+														? 'primary'
+														: 'secondary'
+												}
 												icon={ icon }
 												onClick={ () => {
 													const newValue =
@@ -761,11 +768,11 @@ export default function GlobalSettings() {
 						</Notice>
 					) }
 					<div className="ftb-global-setting-modal__buttons">
-						<Button isPrimary disabled={ isWaiting } onClick={ handleUpdateOptions }>
+						<Button variant="primary" disabled={ isWaiting } onClick={ handleUpdateOptions }>
 							{ __( 'Save', 'flexible-table-block' ) }
 						</Button>
 						<Button
-							isLink
+							variant="link"
 							isDestructive
 							disabled={ isWaiting }
 							onClick={ () => setIsResetPopup( ! isResetPopup ) }
@@ -783,7 +790,7 @@ export default function GlobalSettings() {
 										<Button isDestructive onClick={ handleResetOptions }>
 											{ __( 'Restore', 'flexible-table-block' ) }
 										</Button>
-										<Button isSecondary onClick={ () => setIsResetPopup( false ) }>
+										<Button variant="secondary" onClick={ () => setIsResetPopup( false ) }>
 											{ __( 'Cancel', 'flexible-table-block' ) }
 										</Button>
 									</div>

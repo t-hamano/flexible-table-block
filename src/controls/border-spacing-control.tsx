@@ -123,7 +123,7 @@ export default function BorderSpacingControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-spacing-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary onClick={ handleOnReset }>
+					<Button isSmall variant="secondary" onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>

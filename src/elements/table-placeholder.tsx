@@ -176,7 +176,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						value={ rowCount || '' }
 						onChange={ onChangeRowCount }
 					/>
-					<Button isPrimary type="submit" disabled={ ! rowCount || ! colCount }>
+					<Button variant="primary" type="submit" disabled={ ! rowCount || ! colCount }>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</div>

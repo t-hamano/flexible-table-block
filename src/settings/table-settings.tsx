@@ -202,7 +202,7 @@ export default function TableSettings( {
 				id="flexible-table-block-table-clear-settings"
 				className="ftb-reset-settings-control"
 			>
-				<Button isLink isDestructive onClick={ onResetTableSettings }>
+				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear Table Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -303,7 +303,7 @@ export default function TableSettings( {
 						return (
 							<Button
 								key={ perWidth }
-								isPrimary={ isPressed }
+								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () =>
 									onChangeWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
@@ -314,7 +314,7 @@ export default function TableSettings( {
 						);
 					} ) }
 					<Button
-						isPrimary={ tableStylesObj?.width === 'auto' }
+						variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
 						isSmall
 						onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? '' : 'auto' ) }
 					>
@@ -344,7 +344,7 @@ export default function TableSettings( {
 						return (
 							<Button
 								key={ perWidth }
-								isPrimary={ isPressed }
+								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () =>
 									onChangeMaxWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
@@ -355,7 +355,7 @@ export default function TableSettings( {
 						);
 					} ) }
 					<Button
-						isPrimary={ tableStylesObj?.maxWidth === 'none' }
+						variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
 						isSmall
 						onClick={ () => onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? '' : 'none' ) }
 					>
@@ -384,7 +384,7 @@ export default function TableSettings( {
 						return (
 							<Button
 								key={ perWidth }
-								isPrimary={ isPressed }
+								variant={ isPressed ? 'primary' : undefined }
 								isSmall
 								onClick={ () => onChangeMinWidth( isPressed ? '' : `${ perWidth }%` ) }
 							>
@@ -448,8 +448,7 @@ export default function TableSettings( {
 							return (
 								<Button
 									key={ value }
-									isPrimary={ value === tableStylesObj?.borderCollapse }
-									isSecondary={ value !== tableStylesObj?.borderCollapse }
+									variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
 									icon={ icon }
 									onClick={ () => onChangeBorderCollapse( value ) }
 								>

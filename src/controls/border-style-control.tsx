@@ -125,7 +125,7 @@ export default function BorderStyleControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-style-control__header">
 					<Text id={ headingId }>{ controlLabel }</Text>
-					<Button isSmall isSecondary onClick={ handleOnReset }>
+					<Button isSmall variant="secondary" onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -141,7 +141,7 @@ export default function BorderStyleControl( {
 											label={ borderStyle.label }
 											icon={ borderStyle.icon }
 											isSmall
-											isPrimary={ allInputValue === borderStyle.value }
+											variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
 											onClick={ () => handleOnClickAll( borderStyle.value ) }
 										/>
 									) ) }
@@ -159,7 +159,11 @@ export default function BorderStyleControl( {
 													key={ borderStyle.value }
 													label={ borderStyle.label }
 													icon={ borderStyle.icon }
-													isPrimary={ values[ item.value as ValuesKey ] === borderStyle.value }
+													variant={
+														values[ item.value as ValuesKey ] === borderStyle.value
+															? 'primary'
+															: undefined
+													}
 													isSmall
 													onClick={ () =>
 														handleOnClick( borderStyle.value, item.value as ValuesKey )

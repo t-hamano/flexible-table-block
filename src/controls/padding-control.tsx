@@ -122,7 +122,7 @@ export default function PaddingControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-padding-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary onClick={ handleOnReset }>
+					<Button isSmall variant="secondary" onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
