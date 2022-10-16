@@ -410,6 +410,9 @@
 .ftb-base-control-label {
 	display: inline-block;
 	margin-bottom: 8px;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
 }
 
 .ftb-base-control-row {
@@ -465,7 +468,14 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding-bottom: 12px;
+		padding-bottom: 8px;
+
+		.components-text {
+			font-size: 11px;
+			font-weight: 500;
+			line-height: 1.4;
+			text-transform: uppercase;
+		}
 	}
 }
 
