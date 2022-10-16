@@ -15,8 +15,9 @@
 		"lint:php": "composer lint",
 		"lint:types": "tsc",
 		"test": "npm run lint:js && npm run test:e2e && npm run test:unit",
+		"test:unit": "wp-scripts test-unit-js --config test/unit/jest.config.js",
 		"test:e2e": "wp-scripts test-e2e --config test/e2e/jest.config.js",
-		"test:unit": "wp-scripts test-unit-js --config test/unit/jest.config.js"
+		"test:e2e:debug": "wp-scripts test-e2e --config test/e2e/jest.config.js --puppeteer-devtools"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.1.2",
@@ -51,5 +52,13 @@
 		"@wordpress/hooks": "^3.19.0",
 		"@wordpress/i18n": "^4.19.0",
 		"@wordpress/icons": "^9.10.0"
+	},
+	"engines": {
+		"node": ">=16.0.0",
+		"npm": ">=8.0.0"
+	},
+	"volta": {
+		"node": "16.18.0",
+		"npm": "8.19.2"
 	}
 }
