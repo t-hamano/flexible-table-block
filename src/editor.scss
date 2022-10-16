@@ -389,6 +389,12 @@
 
 	.components-button {
 		vertical-align: top;
+
+		&.components-button.is-small {
+			width: auto;
+			min-width: auto;
+			padding: 6px;
+		}
 	}
 }
 
@@ -623,6 +629,10 @@
 
 	.components-range-control__mark-label {
 		color: currentColor;
+	}
+
+	.components-toggle-control__label {
+		flex: 1;
 	}
 
 	.components-disabled label {
