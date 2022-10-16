@@ -112,6 +112,7 @@ const resolvers = {
 	},
 };
 
+// TODO: Deprecated and should be replaced by register
 registerStore( STORE_NAME, {
 	reducer,
 	controls,
