@@ -27,7 +27,7 @@ class Enqueue {
 	 * Register block & scripts
 	 */
 	public function register_block() {
-		register_block_type( FTB_PATH . '/src' );
+		register_block_type( FTB_PATH . '/build' );
 	}
 
 	/**
