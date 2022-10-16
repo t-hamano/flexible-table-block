@@ -46,8 +46,10 @@ export default function ColorControl( {
 	value,
 }: Props ) {
 	const colors = useSelect( ( select ) => {
-		// @ts-ignore
-		const settings = select( blockEditorStore ).getSettings();
+		const settings = select(
+			blockEditorStore
+			// @ts-ignore
+		).getSettings();
 		return get( settings, [ 'colors' ], [] );
 	}, [] );
 

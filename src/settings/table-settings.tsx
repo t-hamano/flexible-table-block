@@ -82,12 +82,7 @@ export default function TableSettings( {
 	const { hasFixedLayout, isStackedOnMobile, isScrollOnPc, isScrollOnMobile, sticky, head, foot } =
 		attributes;
 
-	const options: StoreOptions = useSelect(
-		( select ) =>
-			// @ts-ignore
-			select( STORE_NAME ).getOptions(),
-		[]
-	);
+	const options: StoreOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions(), [] );
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 

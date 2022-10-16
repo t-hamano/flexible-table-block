@@ -51,9 +51,7 @@ interface NoticeInfo {
 
 export default function GlobalSettings() {
 	const storeOptions: StoreOptions = useSelect(
-		( select ) =>
-			// @ts-ignore
-			select( STORE_NAME ).getOptions(),
+		( select ) => select( STORE_NAME ).getOptions(),
 		[]
 	);
 
@@ -73,10 +71,7 @@ export default function GlobalSettings() {
 	const [ isWaiting, setIsWaiting ] = useState< boolean >( false );
 	const [ options, setOptions ] = useState< StoreOptions >();
 
-	const {
-		// @ts-ignore
-		setOptions: setStoreOptions,
-	} = useDispatch( STORE_NAME );
+	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
 
 	// Set options to state.
 	useEffect( () => {

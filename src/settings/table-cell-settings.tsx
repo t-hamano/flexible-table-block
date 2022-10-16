@@ -92,7 +92,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	const cellStylesObj = convertToObject( targetCell.styles );
 
 	const updateCellsState = ( state: {
-		styles?: any;
+		styles?: {};
 		tag?: CellTagValue;
 		className?: string;
 		id?: string;
