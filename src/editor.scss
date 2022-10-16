@@ -660,6 +660,10 @@
 		padding: 8px;
 		margin-bottom: 8px;
 		border: 1px var(--wp-admin-theme-color) solid;
+
+		.components-base-control__field {
+			margin-bottom: 0;
+		}
 	}
 
 	&__styles-color {
