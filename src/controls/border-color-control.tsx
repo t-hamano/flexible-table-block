@@ -144,19 +144,18 @@ export default function BorderColorControl( {
 								{ hasIndicator && <SideIndicatorControl /> }
 								<Button
 									label={ __( 'All', 'flexible-table-block' ) }
-									className="ftb-border-color-control__indicator"
+									className={ classnames( 'ftb-border-color-control__indicator', {
+										'ftb-border-color-control__indicator--none': ! allInputValue && ! isMixed,
+										'ftb-border-color-control__indicator--mixed': isMixed,
+										'ftb-border-color-control__indicator--transparent':
+											allInputValue === 'transparent',
+									} ) }
 									onClick={ () => handleOnPickerOpen( undefined ) }
 								>
 									{ isMixed ? (
 										__( 'Mixed', 'flexible-table-block' )
 									) : (
-										<ColorIndicator
-											className={ classnames( {
-												'component-color-indicator--none': ! allInputValue,
-												'component-color-indicator--transparent': allInputValue === 'transparent',
-											} ) }
-											colorValue={ allInputValue || '' }
-										/>
+										<ColorIndicator colorValue={ allInputValue || '' } />
 									) }
 								</Button>
 								{ isPickerOpen && ! pickerIndex && (
@@ -181,17 +180,14 @@ export default function BorderColorControl( {
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<Button
 										label={ item.label }
-										className="ftb-border-color-control__indicator"
+										className={ classnames( 'ftb-border-color-control__indicator', {
+											'ftb-border-color-control__indicator--none': ! values[ item.value ],
+											'ftb-border-color-control__indicator--transparent':
+												values[ item.value ] === 'transparent',
+										} ) }
 										onClick={ () => handleOnPickerOpen( index ) }
 									>
-										<ColorIndicator
-											className={ classnames( {
-												'component-color-indicator--none': ! values[ item.value ],
-												'component-color-indicator--transparent':
-													values[ item.value ] === 'transparent',
-											} ) }
-											colorValue={ values[ item.value ] || '' }
-										/>
+										<ColorIndicator colorValue={ values[ item.value ] || '' } />
 									</Button>
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover

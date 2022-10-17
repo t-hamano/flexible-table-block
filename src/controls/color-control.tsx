@@ -81,16 +81,13 @@ export default function ColorControl( {
 						<div className="ftb-color-control__controls-row">
 							<Button
 								label={ __( 'All', 'flexible-table-block' ) }
-								className="ftb-color-control__indicator"
+								className={ classnames( 'ftb-color-control__indicator', {
+									'ftb-color-control__indicator--none': ! value,
+									'ftb-color-control__indicator--transparent': value === 'transparent',
+								} ) }
 								onClick={ () => handleOnPickerOpen() }
 							>
-								<ColorIndicator
-									className={ classnames( {
-										'component-color-indicator--none': ! value,
-										'component-color-indicator--transparent': value === 'transparent',
-									} ) }
-									colorValue={ value || '' }
-								/>
+								<ColorIndicator colorValue={ value || '' } />
 							</Button>
 							{ isPickerOpen && (
 								<Popover
