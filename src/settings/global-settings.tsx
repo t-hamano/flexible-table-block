@@ -435,7 +435,10 @@ export default function GlobalSettings() {
 					<div className="ftb-global-setting-modal__styles">
 						<ColorControl
 							id="flexible-table-block-global-cell-text-color-th"
-							label={ __( 'Cell Text Color ( th tag )', 'flexible-table-block' ) }
+							label={ createInterpolateElement(
+								__( 'Cell Text Color ( <code>th</code> tag )', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_text_color_th }
 							onChange={ ( value ) => {
@@ -450,7 +453,10 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block-global-cell-text-color-td"
-							label={ __( 'Cell Text Color ( td tag )', 'flexible-table-block' ) }
+							label={ createInterpolateElement(
+								__( 'Cell Text Color ( <code>td</code> tag )', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_text_color_td }
 							onChange={ ( value ) => {
@@ -465,7 +471,10 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block-global-cell-background-color-th"
-							label={ __( 'Cell Background Color ( th tag )', 'flexible-table-block' ) }
+							label={ createInterpolateElement(
+								__( 'Cell Background Color ( <code>th</code> tag )', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_background_color_th }
 							onChange={ ( value ) => {
@@ -480,7 +489,10 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block-global-cell-background-color-td"
-							label={ __( 'Cell Background Color ( td tag )', 'flexible-table-block' ) }
+							label={ createInterpolateElement(
+								__( 'Cell Background Color ( <code>td</code> tag )', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_background_color_td }
 							onChange={ ( value ) => {

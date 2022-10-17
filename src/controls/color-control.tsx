@@ -4,6 +4,7 @@
 import { get } from 'lodash';
 import classnames from 'classnames';
 import type { Property } from 'csstype';
+import type { ReactElement } from 'react';
 
 /**
  * WordPress dependencies
@@ -24,7 +25,7 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 
 type Props = {
 	id: string;
-	label: string;
+	label: string | ReactElement;
 	help?: string;
 	className?: string;
 	onChange: ( event: any ) => void;
