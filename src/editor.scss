@@ -483,8 +483,10 @@
 		}
 	}
 
-	&__header-linked-button {
+	&__header-linked-button.components-button {
 		display: block;
+		min-width: 24px;
+		padding: 0 !important;
 	}
 }
 
@@ -584,23 +586,20 @@
 			flex: 1;
 			height: 100%;
 			margin: 0;
+			border-radius: 50%;
 		}
 
 		&--none,
 		&--transparent {
 
-			.component-color-indicator {
+			.component-color-indicator::before {
+				position: absolute;
+				top: 1px;
+				right: 1px;
+				bottom: 1px;
+				left: 1px;
+				content: "";
 				border-radius: 50%;
-
-				&::before {
-					position: absolute;
-					top: 1px;
-					right: 1px;
-					bottom: 1px;
-					left: 1px;
-					content: "";
-					border-radius: 50%;
-				}
 			}
 		}
 
@@ -793,5 +792,26 @@
 
 	.ftb-global-setting-modal__styles-item {
 		width: 100%;
+	}
+}
+
+// Backward compatibility
+body.branch-5-9 {
+
+	.ftb-base-control-label {
+		font-size: 13px;
+	}
+
+	.ftb-border-radius-control,
+	.ftb-border-width-control,
+	.ftb-border-style-control,
+	.ftb-border-spacing-control,
+	.ftb-border-color-control,
+	.ftb-padding-control,
+	.ftb-color-control {
+
+		&__header .components-text {
+			font-size: 13px;
+		}
 	}
 }
