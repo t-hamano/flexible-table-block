@@ -158,6 +158,13 @@ describe( 'Table', () => {
 		await openSidebar();
 		await clickButton( 'Global Setting' );
 		await clickToggleControlWithText( 'Use the TAB key to move cells' );
+
+		// clickToggleControlWithText can't be used because the text of this toggle contains HTML tags.
+		const xPath =
+			'//label[contains(@class, "components-toggle-control__label")][contains(string(), "key to move cells")]';
+		const elements = await page.$x( xPath );
+		await elements[ 0 ].click();
+
 		await clickButtonWithText( '//div[@class="ftb-global-setting-modal__buttons"]', 'Save' );
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', 'Close dialog' );
