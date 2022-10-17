@@ -160,6 +160,7 @@ export default function BorderRadiusControl( {
 					<Tooltip text={ linkedLabel }>
 						<span>
 							<Button
+								className="ftb-border-radius-control__header-linked-button"
 								label={ linkedLabel }
 								isSmall
 								onClick={ toggleLinked }

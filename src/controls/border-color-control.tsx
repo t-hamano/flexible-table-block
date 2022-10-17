@@ -213,6 +213,7 @@ export default function BorderColorControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									className="ftb-border-color-control__header-linked-button"
 									label={ linkedLabel }
 									isSmall
 									onClick={ toggleLinked }

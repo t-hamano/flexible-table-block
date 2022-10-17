@@ -146,6 +146,7 @@ export default function BorderSpacingControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									className="ftb-border-spacing-control__header-linked-button"
 									label={ linkedLabel }
 									isSmall
 									icon={ isLinked ? link : linkOff }

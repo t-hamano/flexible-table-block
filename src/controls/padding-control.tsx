@@ -143,6 +143,7 @@ export default function PaddingControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									className="ftb-padding-control__header-linked-button"
 									label={ linkedLabel }
 									isSmall
 									onClick={ toggleLinked }

@@ -156,6 +156,7 @@ export default function BorderWidthControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									className="ftb-border-width-control__header-linked-button"
 									label={ linkedLabel }
 									isSmall
 									icon={ isLinked ? link : linkOff }
