@@ -587,7 +587,7 @@
 
 			&--none::before {
 				background-color: #fff;
-				background-image: linear-gradient(to right top, transparent 48%, #cc1818 calc(48% + 1px), #cc1818 calc(52% - 1px), transparent 52%);
+				background-image: linear-gradient(to left top, transparent 48%, #cc1818 calc(48% + 1px), #cc1818 calc(52% - 1px), transparent 52%);
 			}
 
 			&--transparent::before {
