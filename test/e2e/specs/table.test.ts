@@ -157,7 +157,6 @@ describe( 'Table', () => {
 		await createNewFlexibleTableBlock();
 		await openSidebar();
 		await clickButton( 'Global Setting' );
-		await clickToggleControlWithText( 'Use the TAB key to move cells' );
 
 		// clickToggleControlWithText can't be used because the text of this toggle contains HTML tags.
 		const xPath =
