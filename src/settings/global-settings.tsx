@@ -230,9 +230,12 @@ export default function GlobalSettings() {
 					</p>
 					<h2>{ __( 'Select Multiple Cells', 'flexible-table-block' ) }</h2>
 					<p>
-						{ __(
-							'Hold Ctrl key to select multiple cells or hold Shift key to select range.',
-							'flexible-table-block'
+						{ createInterpolateElement(
+							__(
+								'Hold <code>Ctrl</code> key to select multiple cells or hold <code>Shift</code> key to select range.',
+								'flexible-table-block'
+							),
+							{ code: <code /> }
 						) }
 						<br />
 						{ __(
@@ -718,7 +721,10 @@ export default function GlobalSettings() {
 						} }
 					/>
 					<ToggleControl
-						label={ __( 'Use the TAB key to move cells', 'flexible-table-block' ) }
+						label={ createInterpolateElement(
+							__( 'Use the <code>Tab</code> key to move cells', 'flexible-table-block' ),
+							{ code: <code /> }
+						) }
 						checked={ !! options.tab_move }
 						onChange={ ( value ) => {
 							setOptions( {
