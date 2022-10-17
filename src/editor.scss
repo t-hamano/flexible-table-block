@@ -796,10 +796,13 @@
 }
 
 // Backward compatibility
-body.branch-5-9 {
+body.branch-5-9,
+body.branch-6 {
 
 	.ftb-base-control-label {
 		font-size: 13px;
+		font-weight: normal;
+		text-transform: none;
 	}
 
 	.ftb-border-radius-control,
@@ -812,6 +815,8 @@ body.branch-5-9 {
 
 		&__header .components-text {
 			font-size: 13px;
+			font-weight: normal;
+			text-transform: none;
 		}
 	}
 }
