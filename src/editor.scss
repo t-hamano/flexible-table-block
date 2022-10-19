@@ -102,6 +102,13 @@
 	}
 
 	.ftb-placeholder {
+		// Reset typography support styles
+		padding: 16px;
+		font-style: normal;
+		font-weight: normal;
+		line-height: initial;
+		text-transform: none;
+		letter-spacing: 0;
 
 		code {
 			padding: 3px 5px 2px;
