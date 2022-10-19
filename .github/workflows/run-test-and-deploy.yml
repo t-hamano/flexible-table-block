@@ -13,8 +13,8 @@ jobs:
     strategy:
       matrix:
         php-versions: [ '7.3', '7.4', '8.0' ]
-        wp-versions: [ 'WordPress#5.9.4', 'WordPress#6.0.2' ]
-        # wp-versions: [ 'WordPress#5.9.4', 'WordPress#6.0.2', 'WordPress' ]
+        wp-versions: [ 'WordPress#5.9.4', 'WordPress#6.0.3' ]
+        # wp-versions: [ 'WordPress#5.9.4', 'WordPress#6.0.3', 'WordPress' ]
     name: PHP ${{ matrix.php-versions }} / ${{ matrix.wp-versions }} Test
 
     steps:
