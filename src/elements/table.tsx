@@ -417,7 +417,7 @@ export default function Table( {
 												<Button
 													className="ftb-table-cell-label"
 													tabIndex={ options.focus_control_button ? 0 : -1 }
-													isPrimary
+													variant="primary"
 													onClick={ ( event: MouseEvent ) => {
 														onSelectSectionCells( sectionName );
 														event.stopPropagation();
@@ -451,10 +451,12 @@ export default function Table( {
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronRight }
 															iconSize="16"
-															isPrimary={
+															variant={
 																isRowSelected &&
 																selectedLine.sectionName === sectionName &&
 																selectedLine.rowIndex === rowIndex
+																	? 'primary'
+																	: undefined
 															}
 															onClick={ ( event: MouseEvent ) => {
 																onSelectRow( sectionName, rowIndex );
@@ -499,7 +501,11 @@ export default function Table( {
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronDown }
 															iconSize="18"
-															isPrimary={ isColumnSelected && selectedLine.vColIndex === vColIndex }
+															variant={
+																isColumnSelected && selectedLine.vColIndex === vColIndex
+																	? 'primary'
+																	: undefined
+															}
 															onClick={ ( event: MouseEvent ) => {
 																onSelectColumn( vColIndex );
 																event.stopPropagation();

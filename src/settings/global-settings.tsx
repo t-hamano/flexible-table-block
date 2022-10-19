@@ -51,9 +51,7 @@ interface NoticeInfo {
 
 export default function GlobalSettings() {
 	const storeOptions: StoreOptions = useSelect(
-		( select ) =>
-			// @ts-ignore
-			select( STORE_NAME ).getOptions(),
+		( select ) => select( STORE_NAME ).getOptions(),
 		[]
 	);
 
@@ -73,10 +71,7 @@ export default function GlobalSettings() {
 	const [ isWaiting, setIsWaiting ] = useState< boolean >( false );
 	const [ options, setOptions ] = useState< StoreOptions >();
 
-	const {
-		// @ts-ignore
-		setOptions: setStoreOptions,
-	} = useDispatch( STORE_NAME );
+	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
 
 	// Set options to state.
 	useEffect( () => {
@@ -200,12 +195,17 @@ export default function GlobalSettings() {
 	return (
 		<>
 			<div className="ftb-global-setting">
-				<Button icon={ help } isLink onClick={ () => setIsHelpModalOpen( true ) }>
+				<Button icon={ help } variant="link" onClick={ () => setIsHelpModalOpen( true ) }>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
 				{ ! isGlobalSettingLoaded && <Spinner /> }
 				{ isGlobalSettingLoaded && showGlobalSetting && (
-					<Button icon={ cog } isPrimary onClick={ () => setIsSettingModalOpen( true ) }>
+					<Button
+						icon={ cog }
+						iconSize="20"
+						variant="primary"
+						onClick={ () => setIsSettingModalOpen( true ) }
+					>
 						{ __( 'Global Setting', 'flexible-table-block' ) }
 					</Button>
 				) }
@@ -230,9 +230,12 @@ export default function GlobalSettings() {
 					</p>
 					<h2>{ __( 'Select Multiple Cells', 'flexible-table-block' ) }</h2>
 					<p>
-						{ __(
-							'Hold Ctrl key to select multiple cells or hold Shift key to select range.',
-							'flexible-table-block'
+						{ createInterpolateElement(
+							__(
+								'Hold <code>Ctrl</code> key to select multiple cells or hold <code>Shift</code> key to select range.',
+								'flexible-table-block'
+							),
+							{ code: <code /> }
 						) }
 						<br />
 						{ __(
@@ -399,8 +402,11 @@ export default function GlobalSettings() {
 										return (
 											<Button
 												key={ value }
-												isPrimary={ value === options.block_style?.table_border_collapse }
-												isSecondary={ value !== options.block_style?.table_border_collapse }
+												variant={
+													value === options.block_style?.table_border_collapse
+														? 'primary'
+														: 'secondary'
+												}
 												icon={ icon }
 												onClick={ () => {
 													const borderCollapse =
@@ -429,7 +435,10 @@ export default function GlobalSettings() {
 					<div className="ftb-global-setting-modal__styles">
 						<ColorControl
 							id="flexible-table-block-global-cell-text-color-th"
-							label={ __( 'Cell Text Color ( th tag )', 'flexible-table-block' ) }
+							label={ createInterpolateElement(
+								__( 'Cell Text Color ( <code>th</code> tag )', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_text_color_th }
 							onChange={ ( value ) => {
@@ -444,7 +453,10 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block-global-cell-text-color-td"
-							label={ __( 'Cell Text Color ( td tag )', 'flexible-table-block' ) }
+							label={ createInterpolateElement(
+								__( 'Cell Text Color ( <code>td</code> tag )', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_text_color_td }
 							onChange={ ( value ) => {
@@ -459,7 +471,10 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block-global-cell-background-color-th"
-							label={ __( 'Cell Background Color ( th tag )', 'flexible-table-block' ) }
+							label={ createInterpolateElement(
+								__( 'Cell Background Color ( <code>th</code> tag )', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_background_color_th }
 							onChange={ ( value ) => {
@@ -474,7 +489,10 @@ export default function GlobalSettings() {
 						/>
 						<ColorControl
 							id="flexible-table-block-global-cell-background-color-td"
-							label={ __( 'Cell Background Color ( td tag )', 'flexible-table-block' ) }
+							label={ createInterpolateElement(
+								__( 'Cell Background Color ( <code>td</code> tag )', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
 							className="ftb-global-setting-modal__styles-item"
 							value={ options.block_style?.cell_background_color_td }
 							onChange={ ( value ) => {
@@ -573,8 +591,9 @@ export default function GlobalSettings() {
 											<Button
 												key={ value }
 												label={ label }
-												isPrimary={ value === options.block_style?.cell_text_align }
-												isSecondary={ value !== options.block_style?.cell_text_align }
+												variant={
+													value === options.block_style?.cell_text_align ? 'primary' : 'secondary'
+												}
 												icon={ icon }
 												onClick={ () => {
 													const newValue =
@@ -613,8 +632,11 @@ export default function GlobalSettings() {
 											<Button
 												key={ value }
 												label={ label }
-												isPrimary={ value === options.block_style?.cell_vertical_align }
-												isSecondary={ value !== options.block_style?.cell_vertical_align }
+												variant={
+													value === options.block_style?.cell_vertical_align
+														? 'primary'
+														: 'secondary'
+												}
 												icon={ icon }
 												onClick={ () => {
 													const newValue =
@@ -711,7 +733,10 @@ export default function GlobalSettings() {
 						} }
 					/>
 					<ToggleControl
-						label={ __( 'Use the TAB key to move cells', 'flexible-table-block' ) }
+						label={ createInterpolateElement(
+							__( 'Use the <code>Tab</code> key to move cells', 'flexible-table-block' ),
+							{ code: <code /> }
+						) }
 						checked={ !! options.tab_move }
 						onChange={ ( value ) => {
 							setOptions( {
@@ -761,11 +786,11 @@ export default function GlobalSettings() {
 						</Notice>
 					) }
 					<div className="ftb-global-setting-modal__buttons">
-						<Button isPrimary disabled={ isWaiting } onClick={ handleUpdateOptions }>
+						<Button variant="primary" disabled={ isWaiting } onClick={ handleUpdateOptions }>
 							{ __( 'Save', 'flexible-table-block' ) }
 						</Button>
 						<Button
-							isLink
+							variant="link"
 							isDestructive
 							disabled={ isWaiting }
 							onClick={ () => setIsResetPopup( ! isResetPopup ) }
@@ -783,7 +808,7 @@ export default function GlobalSettings() {
 										<Button isDestructive onClick={ handleResetOptions }>
 											{ __( 'Restore', 'flexible-table-block' ) }
 										</Button>
-										<Button isSecondary onClick={ () => setIsResetPopup( false ) }>
+										<Button variant="secondary" onClick={ () => setIsResetPopup( false ) }>
 											{ __( 'Cancel', 'flexible-table-block' ) }
 										</Button>
 									</div>

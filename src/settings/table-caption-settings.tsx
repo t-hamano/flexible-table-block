@@ -91,7 +91,7 @@ export default function TableCaptionSettings( {
 				id="flexible-table-block-caption-clear-settings"
 				className="ftb-reset-settings-control"
 			>
-				<Button isLink isDestructive onClick={ onResetSettings }>
+				<Button variant="link" isDestructive onClick={ onResetSettings }>
 					{ __( 'Clear Caption Settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
@@ -138,7 +138,7 @@ export default function TableCaptionSettings( {
 							<Button
 								key={ value }
 								label={ label }
-								isPrimary={ captionSide === value }
+								variant={ captionSide === value ? 'primary' : undefined }
 								onClick={ () => onChangeSide( value ) }
 							>
 								{ label }
@@ -158,8 +158,7 @@ export default function TableCaptionSettings( {
 								<Button
 									key={ value }
 									label={ label }
-									isPrimary={ value === captionStylesObj?.textAlign }
-									isSecondary={ value !== captionStylesObj?.textAlign }
+									variant={ value === captionStylesObj?.textAlign ? 'primary' : 'secondary' }
 									icon={ icon }
 									onClick={ () => onChangeAlign( value ) }
 								/>

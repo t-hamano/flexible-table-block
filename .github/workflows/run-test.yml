@@ -1,71 +1,55 @@
-name: Tests
+name: Test
 
 on:
   push:
-    branches: [ main, develop ]
+    tags-ignore:
+      - '**'
+    branches:
+      - '*'
   pull_request:
-    branches: [ main, develop ]
+    branches:
+      - '*'
 
 jobs:
-
-  lint:
-    name: Lint
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '7.3', '7.4', '8.0' ]
+        wp-versions: [ 'WordPress#5.9.4', 'WordPress#6.0.3' ]
+        # wp-versions: [ 'WordPress#5.9.4', 'WordPress#6.0.3', 'WordPress' ]
+    name: PHP ${{ matrix.php-versions }} / ${{ matrix.wp-versions }} Test
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: '16'
 
       - name: Npm install and build
         run: |
           npm ci
           npm run build
 
-      - name: Composer install
-        run: composer install
+      - name: Composer install and set phpcs
+        run: |
+          composer install
+          composer phpcs
 
-      - name: Set phpcs
-        run: composer phpcs
-
-      - name: Running the tests
+      - name: Running lint check
         run: npm run lint
 
-  unit-tests:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-
-      - name: Npm install and build
-        run: |
-          npm ci
-          npm run build
-
-      - name: Running the tests
+      - name: Running unit tests
         run: npm run test:unit
-
-  e2e-tests:
-    name: E2E Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-
-      - name: Npm install and build
-        run: |
-          npm ci
-          npm run build
 
       - name: Install WordPress
         run: |
-          npm run wp-env start
+          WP_ENV_CORE=WordPress/${{ matrix.wp-versions }} WP_ENV_PHP_VERSION=${{ matrix.php-versions }} npm run wp-env start
+          npm run wp-env run cli wp core version
+          npm run wp-env run cli wp cli info
 
-      - name: Running the tests
-        run: |
-          npm run test:e2e
+      - name: Running e2e tests
+        run: npm run test:e2e
+

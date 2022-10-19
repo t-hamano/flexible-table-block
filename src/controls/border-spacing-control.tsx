@@ -123,7 +123,7 @@ export default function BorderSpacingControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-spacing-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary onClick={ handleOnReset }>
+					<Button isSmall variant="secondary" onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -146,12 +146,10 @@ export default function BorderSpacingControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									className="ftb-border-spacing-control__header-linked-button"
 									label={ linkedLabel }
 									isSmall
-									isPrimary={ isLinked }
-									isSecondary={ ! isLinked }
 									icon={ isLinked ? link : linkOff }
-									iconSize="16"
 									onClick={ toggleLinked }
 								/>
 							</span>

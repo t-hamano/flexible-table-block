@@ -74,8 +74,10 @@ export default function BorderColorControl( {
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
 	const colors = useSelect( ( select ) => {
-		// @ts-ignore
-		const settings = select( blockEditorStore ).getSettings();
+		const settings = select(
+			blockEditorStore
+			// @ts-ignore
+		).getSettings();
 		return get( settings, [ 'colors' ], [] );
 	}, [] );
 
@@ -131,7 +133,7 @@ export default function BorderColorControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-color-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary onClick={ handleOnReset }>
+					<Button isSmall variant="secondary" onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -142,19 +144,18 @@ export default function BorderColorControl( {
 								{ hasIndicator && <SideIndicatorControl /> }
 								<Button
 									label={ __( 'All', 'flexible-table-block' ) }
-									className="ftb-border-color-control__indicator"
+									className={ classnames( 'ftb-border-color-control__indicator', {
+										'ftb-border-color-control__indicator--none': ! allInputValue && ! isMixed,
+										'ftb-border-color-control__indicator--mixed': isMixed,
+										'ftb-border-color-control__indicator--transparent':
+											allInputValue === 'transparent',
+									} ) }
 									onClick={ () => handleOnPickerOpen( undefined ) }
 								>
 									{ isMixed ? (
 										__( 'Mixed', 'flexible-table-block' )
 									) : (
-										<ColorIndicator
-											className={ classnames( {
-												'component-color-indicator--none': ! allInputValue,
-												'component-color-indicator--transparent': allInputValue === 'transparent',
-											} ) }
-											colorValue={ allInputValue || '' }
-										/>
+										<ColorIndicator colorValue={ allInputValue || '' } />
 									) }
 								</Button>
 								{ isPickerOpen && ! pickerIndex && (
@@ -179,17 +180,14 @@ export default function BorderColorControl( {
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<Button
 										label={ item.label }
-										className="ftb-border-color-control__indicator"
+										className={ classnames( 'ftb-border-color-control__indicator', {
+											'ftb-border-color-control__indicator--none': ! values[ item.value ],
+											'ftb-border-color-control__indicator--transparent':
+												values[ item.value ] === 'transparent',
+										} ) }
 										onClick={ () => handleOnPickerOpen( index ) }
 									>
-										<ColorIndicator
-											className={ classnames( {
-												'component-color-indicator--none': ! values[ item.value ],
-												'component-color-indicator--transparent':
-													values[ item.value ] === 'transparent',
-											} ) }
-											colorValue={ values[ item.value ] || '' }
-										/>
+										<ColorIndicator colorValue={ values[ item.value ] || '' } />
 									</Button>
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover
@@ -211,13 +209,11 @@ export default function BorderColorControl( {
 						<Tooltip text={ linkedLabel }>
 							<span>
 								<Button
+									className="ftb-border-color-control__header-linked-button"
 									label={ linkedLabel }
 									isSmall
-									isPrimary={ isLinked }
-									isSecondary={ ! isLinked }
 									onClick={ toggleLinked }
 									icon={ isLinked ? link : linkOff }
-									iconSize="16"
 								/>
 							</span>
 						</Tooltip>

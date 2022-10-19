@@ -4,6 +4,7 @@
 import { get } from 'lodash';
 import classnames from 'classnames';
 import type { Property } from 'csstype';
+import type { ReactElement } from 'react';
 
 /**
  * WordPress dependencies
@@ -24,7 +25,7 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 
 type Props = {
 	id: string;
-	label: string;
+	label: string | ReactElement;
 	help?: string;
 	className?: string;
 	onChange: ( event: any ) => void;
@@ -46,8 +47,10 @@ export default function ColorControl( {
 	value,
 }: Props ) {
 	const colors = useSelect( ( select ) => {
-		// @ts-ignore
-		const settings = select( blockEditorStore ).getSettings();
+		const settings = select(
+			blockEditorStore
+			// @ts-ignore
+		).getSettings();
 		return get( settings, [ 'colors' ], [] );
 	}, [] );
 
@@ -70,7 +73,7 @@ export default function ColorControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-color-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall isSecondary onClick={ handleOnReset }>
+					<Button isSmall variant="secondary" onClick={ handleOnReset }>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -79,16 +82,13 @@ export default function ColorControl( {
 						<div className="ftb-color-control__controls-row">
 							<Button
 								label={ __( 'All', 'flexible-table-block' ) }
-								className="ftb-color-control__indicator"
+								className={ classnames( 'ftb-color-control__indicator', {
+									'ftb-color-control__indicator--none': ! value,
+									'ftb-color-control__indicator--transparent': value === 'transparent',
+								} ) }
 								onClick={ () => handleOnPickerOpen() }
 							>
-								<ColorIndicator
-									className={ classnames( {
-										'component-color-indicator--none': ! value,
-										'component-color-indicator--transparent': value === 'transparent',
-									} ) }
-									colorValue={ value || '' }
-								/>
+								<ColorIndicator colorValue={ value || '' } />
 							</Button>
 							{ isPickerOpen && (
 								<Popover

@@ -9,7 +9,7 @@ import type { FormEvent } from 'react';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useState, createInterpolateElement } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
 import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/components';
 
@@ -94,11 +94,16 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			label={ __( 'Flexible Table', 'flexible-table-block' ) }
 			className="ftb-placeholder"
 			icon={ <BlockIcon icon={ icon } showColors /> }
-			instructions={ __(
-				'Hint: Hold Ctrl key to select multiple cells. Hold Shift key to select range.',
-				'flexible-table-block'
-			) }
 		>
+			<legend className="components-placeholder__instructions">
+				{ createInterpolateElement(
+					__(
+						'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select range.',
+						'flexible-table-block'
+					),
+					{ code: <code /> }
+				) }
+			</legend>
 			<div
 				className="ftb-placeholder__table-wrap"
 				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
@@ -176,7 +181,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						value={ rowCount || '' }
 						onChange={ onChangeRowCount }
 					/>
-					<Button isPrimary type="submit" disabled={ ! rowCount || ! colCount }>
+					<Button variant="primary" type="submit" disabled={ ! rowCount || ! colCount }>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</div>

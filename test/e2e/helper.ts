@@ -1,7 +1,12 @@
 /**
  * WordPress dependencies
  */
-import { insertBlock, pressKeyWithModifier } from '@wordpress/e2e-test-utils';
+import {
+	insertBlock,
+	pressKeyWithModifier,
+	switchUserToAdmin,
+	visitAdminPage,
+} from '@wordpress/e2e-test-utils';
 export const coreTableSelector = '[data-type="core/table"]';
 export const coreTableCellSelector = `${ coreTableSelector } td`;
 export const flexibleTableSelector = '[data-type="flexible-table-block/table"]';
@@ -10,6 +15,13 @@ export const flexibleTableCaptionSelector = `${ flexibleTableSelector } figcapti
 
 /** @type {import('puppeteer').Page} */
 const page = global.page;
+
+export const getWpVersion = async () => {
+	const body = await page.$$( 'body' );
+	const bodyClassNames = await ( await body[ 0 ].getProperty( 'className' ) ).jsonValue();
+	const matches = bodyClassNames.match( /branch-([0-9]*-*[0-9])/ );
+	return matches?.[ 1 ];
+};
 
 export const createNewFlexibleTableBlock = async ( {
 	col,
@@ -128,7 +140,7 @@ export const selectOptionFromLabel = async ( label: string, value: string, index
 };
 
 export const inputValueFromLabel = async ( label: string, value: string, index: number = 0 ) => {
-	const xPath = `//label[contains(@class, "control__label")][string()="${ label }"]`;
+	const xPath = `//label[string()="${ label }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
 	if ( elements[ index ] ) {
@@ -202,7 +214,7 @@ export const openSidebarPanelWithTitle = async ( title: string, index: number = 
 	}
 };
 
-export const openToolsPanelMenu = async ( type: string = 'typography' ) => {
+export const toggleToolsPanelMenu = async ( type: string = 'typography' ) => {
 	const selector = `.${ type }-block-support-panel .components-dropdown-menu__toggle`;
 	await page.waitForSelector( selector );
 
