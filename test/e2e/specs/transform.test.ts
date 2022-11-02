@@ -49,7 +49,9 @@ describe( 'Transform from core table block to flexible table block', () => {
 		const wpVersion = await getWpVersion();
 		await createNewCoreTableBlock();
 		await openSidebar();
-		const sidebarPanelTitle = wpVersion === '6-1' ? 'Settings' : 'Table settings';
+		const sidebarPanelTitle = [ '6-1', '6-2' ].includes( wpVersion )
+			? 'Settings'
+			: 'Table settings';
 		await openSidebarPanelWithTitle( sidebarPanelTitle );
 		await clickToggleControlWithText( 'Header section' );
 		await clickToggleControlWithText( 'Footer section' );
@@ -61,7 +63,9 @@ describe( 'Transform from core table block to flexible table block', () => {
 		const wpVersion = await getWpVersion();
 		await createNewCoreTableBlock( { col: 6, row: 6 } );
 		await openSidebar();
-		const sidebarPanelTitle = wpVersion === '6-1' ? 'Settings' : 'Table settings';
+		const sidebarPanelTitle = [ '6-1', '6-2' ].includes( wpVersion )
+			? 'Settings'
+			: 'Table settings';
 		await openSidebarPanelWithTitle( sidebarPanelTitle );
 		await clickToggleControlWithText( 'Fixed width table cells' );
 		await transformBlockTo( 'Flexible Table' );
@@ -213,12 +217,11 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapShot =
-			wpVersion === '6-1'
-				? `<!-- wp:table {"hasFixedLayout":true} -->
+		const snapShot = [ '6-1', '6-2' ].includes( wpVersion )
+			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`
-				: `<!-- wp:table {"hasFixedLayout":true} -->
+			: `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption>Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`;
 
@@ -239,12 +242,11 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapShot =
-			wpVersion === '6-1'
-				? `<!-- wp:table {"hasFixedLayout":true} -->
+		const snapShot = [ '6-1', '6-2' ].includes( wpVersion )
+			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`
-				: `<!-- wp:table {"hasFixedLayout":true} -->
+			: `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption>Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`;
 
