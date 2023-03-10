@@ -18,7 +18,7 @@ import {
 	clickButtonWithAriaLabel,
 	clickButtonWithText,
 	openSidebar,
-	clickToggleControlWithText,
+	getWpVersion,
 } from '../helper';
 
 /** @type {import('puppeteer').Page} */
@@ -154,6 +154,7 @@ describe( 'Table', () => {
 	} );
 
 	it( 'should move cells with the TAB key.', async () => {
+		const wpVersion = await getWpVersion();
 		await createNewFlexibleTableBlock();
 		await openSidebar();
 		await clickButton( 'Global Setting' );
@@ -166,7 +167,8 @@ describe( 'Table', () => {
 
 		await clickButtonWithText( '//div[@class="ftb-global-setting-modal__buttons"]', 'Save' );
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
-		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', 'Close dialog' );
+		const modalCloseLabel = [ '6-2', '6-3' ].includes( wpVersion ) ? 'Close' : 'Close dialog';
+		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', modalCloseLabel );
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await page.keyboard.type( 'Cell 1' );

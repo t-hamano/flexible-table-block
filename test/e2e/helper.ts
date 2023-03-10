@@ -1,12 +1,7 @@
 /**
  * WordPress dependencies
  */
-import {
-	insertBlock,
-	pressKeyWithModifier,
-	switchUserToAdmin,
-	visitAdminPage,
-} from '@wordpress/e2e-test-utils';
+import { insertBlock, pressKeyWithModifier } from '@wordpress/e2e-test-utils';
 export const coreTableSelector = '[data-type="core/table"]';
 export const coreTableCellSelector = `${ coreTableSelector } td`;
 export const flexibleTableSelector = '[data-type="flexible-table-block/table"]';

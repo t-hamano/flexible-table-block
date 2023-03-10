@@ -49,7 +49,7 @@ describe( 'Transform from core table block to flexible table block', () => {
 		const wpVersion = await getWpVersion();
 		await createNewCoreTableBlock();
 		await openSidebar();
-		const sidebarPanelTitle = [ '6-1', '6-2' ].includes( wpVersion )
+		const sidebarPanelTitle = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
 			? 'Settings'
 			: 'Table settings';
 		await openSidebarPanelWithTitle( sidebarPanelTitle );
@@ -63,7 +63,7 @@ describe( 'Transform from core table block to flexible table block', () => {
 		const wpVersion = await getWpVersion();
 		await createNewCoreTableBlock( { col: 6, row: 6 } );
 		await openSidebar();
-		const sidebarPanelTitle = [ '6-1', '6-2' ].includes( wpVersion )
+		const sidebarPanelTitle = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
 			? 'Settings'
 			: 'Table settings';
 		await openSidebarPanelWithTitle( sidebarPanelTitle );
@@ -217,7 +217,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapShot = [ '6-1', '6-2' ].includes( wpVersion )
+		const snapShot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`
@@ -242,7 +242,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapShot = [ '6-1', '6-2' ].includes( wpVersion )
+		const snapShot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`

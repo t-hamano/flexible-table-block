@@ -4,6 +4,7 @@ module.exports = {
 	...config,
 	launch: {
 		...config.launch,
-		slowMo: parseInt( process.env.PUPPETEER_SLOWMO, 10 ) || 50,
+		slowMo: 200,
+		// slowMo: parseInt( process.env.PUPPETEER_SLOWMO, 10 ) || 50,
 	},
 };
