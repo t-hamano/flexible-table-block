@@ -47,7 +47,7 @@ class Settings {
 			'type'    => 'boolean',
 			'default' => false,
 		),
-		// Set the screen width (breakpoint) as the basis for switching between PC and mobile devices.
+		// Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.
 		'breakpoint'            => array(
 			'type'    => 'number',
 			'default' => 768,

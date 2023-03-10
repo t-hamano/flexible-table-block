@@ -17,6 +17,7 @@ import {
 	createNewFlexibleTableBlock,
 	clickButtonWithAriaLabel,
 	clickButtonWithText,
+	clickToggleControlWithText,
 	openSidebar,
 	getWpVersion,
 } from '../helper';
@@ -158,13 +159,8 @@ describe( 'Table', () => {
 		await createNewFlexibleTableBlock();
 		await openSidebar();
 		await clickButton( 'Global Setting' );
-
-		// clickToggleControlWithText can't be used because the text of this toggle contains HTML tags.
-		const xPath =
-			'//label[contains(@class, "components-toggle-control__label")][contains(string(), "key to move cells")]';
-		const elements = await page.$x( xPath );
-		await elements[ 0 ].click();
-
+		await clickButton( 'Editor Options' );
+		await clickToggleControlWithText( 'Keep all contents when merging cells' );
 		await clickButtonWithText( '//div[@class="ftb-global-setting-modal__buttons"]', 'Save' );
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 		const modalCloseLabel = [ '6-2', '6-3' ].includes( wpVersion ) ? 'Close' : 'Close dialog';
