@@ -92,12 +92,12 @@ export default function TableCaptionSettings( {
 				className="ftb-reset-settings-control"
 			>
 				<Button variant="link" isDestructive onClick={ onResetSettings }>
-					{ __( 'Clear Caption Settings', 'flexible-table-block' ) }
+					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
 			<BaseControl
 				id="flexible-table-block-caption-font-size"
-				label={ __( 'Caption Font Size', 'flexible-table-block' ) }
+				label={ __( 'Caption font size', 'flexible-table-block' ) }
 				className="ftb-font-size-control"
 			>
 				<UnitControl
@@ -113,7 +113,7 @@ export default function TableCaptionSettings( {
 				className="ftb-line-height-control"
 			>
 				<TextControl
-					label={ __( 'Caption Line Height', 'flexible-table-block' ) }
+					label={ __( 'Caption line height', 'flexible-table-block' ) }
 					autoComplete="off"
 					onChange={ onChangeLineHeight }
 					step={ 0.1 }
@@ -124,14 +124,14 @@ export default function TableCaptionSettings( {
 			</BaseControl>
 			<PaddingControl
 				id="flexible-table-block-caption-padding"
-				label={ __( 'Caption Padding', 'flexible-table-block' ) }
+				label={ __( 'Caption padding', 'flexible-table-block' ) }
 				values={ pickPadding( captionStylesObj ) }
 				onChange={ onChangePadding }
 			/>
 			<BaseControl id="flexible-table-block-caption-side">
 				<div aria-labelledby="flexible-table-block-caption-side-heading" role="region">
 					<span id="flexible-table-block-caption-side-heading" className="ftb-base-control-label">
-						{ __( 'Caption Position', 'flexible-table-block' ) }
+						{ __( 'Caption position', 'flexible-table-block' ) }
 					</span>
 					<ButtonGroup className="ftb-button-group">
 						{ CAPTION_SIDE_CONTROLS.map( ( { label, value } ) => (
@@ -150,7 +150,7 @@ export default function TableCaptionSettings( {
 			<BaseControl id="flexible-table-block-caption-align">
 				<div aria-labelledby="flexible-table-block-caption-align-heading" role="region">
 					<span id="flexible-table-block-caption-align-heading" className="ftb-base-control-label">
-						{ __( 'Caption Text alignment', 'flexible-table-block' ) }
+						{ __( 'Caption text alignment', 'flexible-table-block' ) }
 					</span>
 					<ButtonGroup className="ftb-button-group">
 						{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {

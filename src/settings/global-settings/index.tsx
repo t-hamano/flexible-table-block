@@ -56,7 +56,7 @@ export default function GlobalSettings() {
 						variant="primary"
 						onClick={ () => setIsSettingModalOpen( true ) }
 					>
-						{ __( 'Global Setting', 'flexible-table-block' ) }
+						{ __( 'Global setting', 'flexible-table-block' ) }
 					</Button>
 				) }
 			</div>

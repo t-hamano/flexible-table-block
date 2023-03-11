@@ -29,9 +29,9 @@ async function applyCellStyles() {
 	const wpVersion = await getWpVersion();
 
 	// Font Size, Line Hiehgt, Width styles.
-	await inputValueFromLabel( 'Cell Font Size', '20px' );
-	await inputValueFromLabel( 'Cell Line Height', '2' );
-	await inputValueFromLabel( 'Cell Width', '100px' );
+	await inputValueFromLabel( 'Cell font size', '20px' );
+	await inputValueFromLabel( 'Cell line height', '2' );
+	await inputValueFromLabel( 'Cell width', '100px' );
 
 	// Text Color, Background Color styles.
 	await clickButtonWithAriaLabel(
@@ -61,14 +61,14 @@ async function applyCellStyles() {
 		{ style: 'padding', labels: [ 'Top', 'Right', 'Bottom', 'Left' ] },
 		{
 			style: 'border-radius',
-			labels: [ 'Top Left', 'Top Right', 'Bottom Right', 'Bottom Left' ],
+			labels: [ 'Top left', 'Top right', 'Bottom right', 'Bottom left' ],
 		},
 		{ style: 'border-width', labels: [ 'Top', 'Right', 'Bottom', 'Left' ] },
 	];
 	for ( let i = 0; i < styles.length; i++ ) {
 		await clickButtonWithAriaLabel(
 			`.ftb-${ styles[ i ].style }-control__header-control`,
-			'Unlink Sides'
+			'Unlink sides'
 		);
 		await inputValueFromAriaLabel(
 			`.ftb-${ styles[ i ].style }-control__input-controls`,
@@ -93,14 +93,14 @@ async function applyCellStyles() {
 	}
 
 	// Boder Style styles.
-	await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Unlink Sides' );
+	await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Unlink sides' );
 	await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Solid', 0 );
 	await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Dotted', 1 );
 	await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Dashed', 2 );
 	await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Double', 3 );
 
 	// Border Color styles.
-	await clickButtonWithAriaLabel( '.ftb-border-color-control__controls', 'Unlink Sides' );
+	await clickButtonWithAriaLabel( '.ftb-border-color-control__controls', 'Unlink sides' );
 	const colors = [
 		{ color: '111111', label: 'Top' },
 		{ color: '222222', label: 'Right' },
@@ -146,33 +146,33 @@ describe( 'Styles', () => {
 		const wpVersion = await getWpVersion();
 		await createNewFlexibleTableBlock();
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Table Settings' );
+		await openSidebarPanelWithTitle( 'Table settings' );
 
 		// Toggle settings.
 		await clickToggleControlWithText( 'Fixed width table cells' );
-		await clickToggleControlWithText( 'Scroll on PC view' );
-		await clickToggleControlWithText( 'Scroll on Mobile view' );
+		await clickToggleControlWithText( 'Scroll on desktop view' );
+		await clickToggleControlWithText( 'Scroll on mobile view' );
 		await clickToggleControlWithText( 'Stack on mobile' );
 		await selectOptionFromLabel( 'Fixed control', 'first-column' );
 
 		// Width styles.
-		await inputValueFromLabel( 'Table Width', '500px' );
-		await inputValueFromLabel( 'Table Max Width', '600px' );
-		await inputValueFromLabel( 'Table Min Width', '400px' );
+		await inputValueFromLabel( 'Table width', '500px' );
+		await inputValueFromLabel( 'Table max width', '600px' );
+		await inputValueFromLabel( 'Table min width', '400px' );
 
 		// Padding, Border Radius, Border Width styles.
 		const styles = [
 			{ style: 'padding', labels: [ 'Top', 'Right', 'Bottom', 'Left' ] },
 			{
 				style: 'border-radius',
-				labels: [ 'Top Left', 'Top Right', 'Bottom Right', 'Bottom Left' ],
+				labels: [ 'Top left', 'Top right', 'Bottom right', 'Bottom left' ],
 			},
 			{ style: 'border-width', labels: [ 'Top', 'Right', 'Bottom', 'Left' ] },
 		];
 		for ( let i = 0; i < styles.length; i++ ) {
 			await clickButtonWithAriaLabel(
 				`.ftb-${ styles[ i ].style }-control__header-control`,
-				'Unlink Sides'
+				'Unlink sides'
 			);
 			await inputValueFromAriaLabel(
 				`.ftb-${ styles[ i ].style }-control__input-controls`,
@@ -197,14 +197,14 @@ describe( 'Styles', () => {
 		}
 
 		// Boder Style styles.
-		await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Unlink Sides' );
+		await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Unlink sides' );
 		await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Solid', 0 );
 		await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Dotted', 1 );
 		await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Dashed', 2 );
 		await clickButtonWithAriaLabel( '.ftb-border-style-control__button-controls', 'Double', 3 );
 
 		// Border Color styles.
-		await clickButtonWithAriaLabel( '.ftb-border-color-control__controls', 'Unlink Sides' );
+		await clickButtonWithAriaLabel( '.ftb-border-color-control__controls', 'Unlink sides' );
 		const colors = [
 			{ color: '111111', label: 'Top' },
 			{ color: '222222', label: 'Right' },
@@ -226,7 +226,7 @@ describe( 'Styles', () => {
 		await clickButton( 'Separate' );
 		await clickButtonWithAriaLabel(
 			'.ftb-border-spacing-control__header-control',
-			'Unlink Directions'
+			'Unlink directions'
 		);
 		await inputValueFromAriaLabel(
 			'.ftb-border-spacing-control__input-controls',
@@ -246,7 +246,7 @@ describe( 'Styles', () => {
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Cell Settings' );
+		await openSidebarPanelWithTitle( 'Cell settings' );
 		await applyCellStyles();
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -255,7 +255,7 @@ describe( 'Styles', () => {
 		await createNewFlexibleTableBlock( { header: true, footer: true } );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Multi Cells Settings' );
+		await openSidebarPanelWithTitle( 'Multi cells settings' );
 		await applyCellStyles();
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -266,10 +266,10 @@ describe( 'Styles', () => {
 		await page.focus( flexibleTableCaptionSelector );
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Caption Settings' );
-		await inputValueFromLabel( 'Caption Font Size', '20px' );
-		await inputValueFromLabel( 'Caption Line Height', '2' );
-		await clickButtonWithAriaLabel( '.ftb-padding-control__header-control', 'Unlink Sides' );
+		await openSidebarPanelWithTitle( 'Caption settings' );
+		await inputValueFromLabel( 'Caption font size', '20px' );
+		await inputValueFromLabel( 'Caption line height', '2' );
+		await clickButtonWithAriaLabel( '.ftb-padding-control__header-control', 'Unlink sides' );
 		await inputValueFromAriaLabel( '.ftb-padding-control__input-controls', 'Top', '1' );
 		await inputValueFromAriaLabel( '.ftb-padding-control__input-controls', 'Right', '2' );
 		await inputValueFromAriaLabel( '.ftb-padding-control__input-controls', 'Bottom', '3' );

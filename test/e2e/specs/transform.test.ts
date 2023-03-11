@@ -85,7 +85,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await cells[ 0 ].click();
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Table Settings' );
+		await openSidebarPanelWithTitle( 'Table settings' );
 		await clickToggleControlWithText( 'Fixed width table cells' );
 		await transformBlockTo( 'Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -94,9 +94,9 @@ describe( 'Transform from flexible table block to core table block', () => {
 	it( 'should be transformed to core table block with no style & class table', async () => {
 		await createNewFlexibleTableBlock( { col: 6, row: 3 } );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Table Settings' );
-		await clickToggleControlWithText( 'Scroll on PC view' );
-		await inputValueFromLabel( 'Table Width', '500px' );
+		await openSidebarPanelWithTitle( 'Table settings' );
+		await clickToggleControlWithText( 'Scroll on desktop view' );
+		await inputValueFromLabel( 'Table width', '500px' );
 		await inputValueFromLabelledBy( 'flexible-table-block-table-padding-heading', '1px' );
 		await clickButtonWithAriaLabel(
 			'[aria-labelledby="flexible-table-block-table-border-style-heading"]',
@@ -119,7 +119,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await cells[ 1 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		await transformBlockTo( 'Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -130,8 +130,8 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await cells[ 0 ].click();
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Cell Settings' );
-		await inputValueFromLabel( 'Cell Font Size', '20px' );
+		await openSidebarPanelWithTitle( 'Cell settings' );
+		await inputValueFromLabel( 'Cell font size', '20px' );
 		await inputValueFromLabelledBy( 'flexible-table-block-cell-padding-heading', '1px' );
 		await clickButtonWithAriaLabel(
 			'[aria-labelledby="flexible-table-block-cell-border-style-heading"]',
@@ -150,7 +150,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Cell Settings' );
+		await openSidebarPanelWithTitle( 'Cell settings' );
 		await clickButtonWithText(
 			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
 			'TH'
@@ -170,7 +170,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Cell Settings' );
+		await openSidebarPanelWithTitle( 'Cell settings' );
 		await clickButtonWithText(
 			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
 			'TD'
@@ -224,8 +224,8 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await page.focus( flexibleTableCaptionSelector );
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Caption Settings' );
-		await inputValueFromLabel( 'Caption Font Size', '20px' );
+		await openSidebarPanelWithTitle( 'Caption settings' );
+		await inputValueFromLabel( 'Caption font size', '20px' );
 		await inputValueFromLabelledBy( 'flexible-table-block-caption-padding-heading', '20px' );
 		await clickButtonWithText(
 			'//*[@aria-labelledby="flexible-table-block-caption-side-heading"]',

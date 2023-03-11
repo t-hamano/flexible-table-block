@@ -50,7 +50,7 @@ type MaxBorderSpacingKey = keyof typeof MAX_BORDER_SPACING;
 
 export default function BorderSpacingControl( {
 	id,
-	label = __( 'Border Spacing', 'flexible-table-block' ),
+	label = __( 'Border spacing', 'flexible-table-block' ),
 	help,
 	className,
 	onChange,
@@ -73,8 +73,8 @@ export default function BorderSpacingControl( {
 	const headingId: string = `${ id }-heading`;
 
 	const linkedLabel: string = isLinked
-		? __( 'Unlink Directions', 'flexible-table-block' )
-		: __( 'Link Directions', 'flexible-table-block' );
+		? __( 'Unlink directions', 'flexible-table-block' )
+		: __( 'Link directions', 'flexible-table-block' );
 
 	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.horizontal;

@@ -210,13 +210,13 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				className="ftb-reset-settings-control"
 			>
 				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
-					{ __( 'Clear Cell Settings', 'flexible-table-block' ) }
+					{ __( 'Clear cell settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
 			<div className="ftb-base-control-row">
 				<BaseControl
 					id="flexible-table-block-cell-font-size"
-					label={ __( 'Cell Font Size', 'flexible-table-block' ) }
+					label={ __( 'Cell font size', 'flexible-table-block' ) }
 					className="ftb-font-size-control"
 				>
 					<UnitControl
@@ -229,7 +229,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				</BaseControl>
 				<BaseControl id="flexible-table-block-cell-line-height" className="ftb-line-height-control">
 					<TextControl
-						label={ __( 'Cell Line Height', 'flexible-table-block' ) }
+						label={ __( 'Cell line height', 'flexible-table-block' ) }
 						value={ cellStylesObj?.lineHeight || '' }
 						autoComplete="off"
 						type="number"
@@ -241,19 +241,19 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			</div>
 			<BaseControl
 				id="flexible-table-block-cell-width"
-				label={ __( 'Cell Width', 'flexible-table-block' ) }
+				label={ __( 'Cell width', 'flexible-table-block' ) }
 				className="ftb-width-control"
 			>
 				<UnitControl
 					id="flexible-table-block-cell-width"
-					aria-label={ __( 'Cell Width', 'flexible-table-block' ) }
+					aria-label={ __( 'Cell width', 'flexible-table-block' ) }
 					value={ cellStylesObj?.width }
 					units={ cellWidthUnits }
 					min="0"
 					onChange={ onChangeWidth }
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Cell Percentage width', 'flexible-table-block' ) }
+					aria-label={ __( 'Cell percentage width', 'flexible-table-block' ) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -274,13 +274,13 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			<hr />
 			<ColorControl
 				id="flexible-table-block-cell-text-color"
-				label={ __( 'Cell Text Color', 'flexible-table-block' ) }
+				label={ __( 'Cell text color', 'flexible-table-block' ) }
 				value={ cellStylesObj.color }
 				onChange={ onChangeColor }
 			/>
 			<ColorControl
 				id="flexible-table-block-cell-background-color"
-				label={ __( 'Cell Background Color', 'flexible-table-block' ) }
+				label={ __( 'Cell background color', 'flexible-table-block' ) }
 				value={ cellStylesObj.backgroundColor }
 				colors={ [
 					{
@@ -294,32 +294,32 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			<hr />
 			<PaddingControl
 				id="flexible-table-block-cell-padding"
-				label={ __( 'Cell Padding', 'flexible-table-block' ) }
+				label={ __( 'Cell padding', 'flexible-table-block' ) }
 				values={ pickPadding( cellStylesObj ) }
 				onChange={ onChangePadding }
 			/>
 			<hr />
 			<BorderRadiusControl
 				id="flexible-table-block-cell-border-radius"
-				label={ __( 'Cell Border Radius', 'flexible-table-block' ) }
+				label={ __( 'Cell border radius', 'flexible-table-block' ) }
 				values={ pickBorderRadius( cellStylesObj ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
 				id="flexible-table-block-cell-border-width"
-				label={ __( 'Cell Border Width', 'flexible-table-block' ) }
+				label={ __( 'Cell border width', 'flexible-table-block' ) }
 				values={ pickBorderWidth( cellStylesObj ) }
 				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
 				id="flexible-table-block-cell-border-style"
-				label={ __( 'Cell Border Style', 'flexible-table-block' ) }
+				label={ __( 'Cell border style', 'flexible-table-block' ) }
 				values={ pickBorderStyle( cellStylesObj ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
 				id="flexible-table-block-cell-border-color"
-				label={ __( 'Cell Border Color', 'flexible-table-block' ) }
+				label={ __( 'Cell border color', 'flexible-table-block' ) }
 				values={ pickBorderColor( cellStylesObj ) }
 				onChange={ onChangeBorderColor }
 			/>
@@ -330,7 +330,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						id="flexible-table-block-cell-text-align-heading"
 						className="ftb-base-control-label"
 					>
-						{ __( 'Cell Alignment', 'flexible-table-block' ) }
+						{ __( 'Cell alignment', 'flexible-table-block' ) }
 					</span>
 					<div className="ftb-base-control-field-row">
 						<ButtonGroup
@@ -372,7 +372,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			<BaseControl id="flexible-table-block-cell-tag">
 				<div aria-labelledby="flexible-table-block-cell-tag-heading" role="region">
 					<span id="flexible-table-block-cell-tag-heading" className="ftb-base-control-label">
-						{ __( 'Cell Tag', 'flexible-table-block' ) }
+						{ __( 'Cell tag', 'flexible-table-block' ) }
 					</span>
 					<ButtonGroup className="ftb-button-group">
 						{ CELL_TAG_CONTROLS.map( ( { label, value } ) => {

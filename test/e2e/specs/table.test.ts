@@ -56,7 +56,7 @@ describe( 'Flexible table', () => {
 		await cells[ 1 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -68,7 +68,7 @@ describe( 'Flexible table', () => {
 		await cells[ 5 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -80,7 +80,7 @@ describe( 'Flexible table', () => {
 		await cells[ 8 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -92,11 +92,11 @@ describe( 'Flexible table', () => {
 		await cells[ 8 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		const mergedCell = await page.$( flexibleTableCellSelector );
 		await mergedCell.click();
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Split Merged Cells' );
+		await clickButton( 'Split merged cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -104,7 +104,7 @@ describe( 'Flexible table', () => {
 		await createNewFlexibleTableBlock( { header: true, footer: true } );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickBlockToolbarButton( 'Edit table' );
-		const [ button ] = await page.$x( `//button[contains(text(), 'Merge Cells')]` );
+		const [ button ] = await page.$x( `//button[contains(text(), 'Merge cells')]` );
 		const disabled = await page.evaluate( ( element ) => element.disabled, button );
 		expect( disabled ).toBe( true );
 	} );
@@ -113,7 +113,7 @@ describe( 'Flexible table', () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select row' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -121,7 +121,7 @@ describe( 'Flexible table', () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -133,7 +133,7 @@ describe( 'Flexible table', () => {
 		await cells[ 44 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select row', 2 );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Delete row' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -147,7 +147,7 @@ describe( 'Flexible table', () => {
 		await cells[ 44 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Delete column' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -157,12 +157,12 @@ describe( 'Flexible table', () => {
 		const wpVersion = await getWpVersion();
 		await createNewFlexibleTableBlock();
 		await openSidebar();
-		await clickButton( 'Global Setting' );
-		await clickButton( 'Editor Options' );
+		await clickButton( 'Global setting' );
+		await clickButton( 'Editor options' );
 		await clickToggleControlWithText( 'Use the tab key to move cells' );
 		await clickButtonWithText(
 			'//div[@class="ftb-global-setting-modal__buttons"]',
-			'Save Setting'
+			'Save setting'
 		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 		const modalCloseLabel = [ '6-2', '6-3' ].includes( wpVersion ) ? 'Close' : 'Close dialog';

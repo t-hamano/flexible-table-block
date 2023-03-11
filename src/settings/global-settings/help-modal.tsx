@@ -17,11 +17,11 @@ type Props = {
 export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 	return (
 		<Modal
-			title={ __( 'Flexible Table Block Help', 'flexible-table-block' ) }
+			title={ __( 'Flexible Table Block help', 'flexible-table-block' ) }
 			className="ftb-global-help-modal"
 			onRequestClose={ () => setIsHelpModalOpen( false ) }
 		>
-			<h2>{ __( 'About Default Table Style', 'flexible-table-block' ) }</h2>
+			<h2>{ __( 'About default table style', 'flexible-table-block' ) }</h2>
 			<p>
 				{ __(
 					'Flexible Table Block is a block that allows you to create tables in various styles.',
@@ -33,7 +33,7 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					'flexible-table-block'
 				) }
 			</p>
-			<h2>{ __( 'Select Multiple Cells', 'flexible-table-block' ) }</h2>
+			<h2>{ __( 'Select multiple cells', 'flexible-table-block' ) }</h2>
 			<p>
 				{ createInterpolateElement(
 					__(
@@ -48,14 +48,14 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					'flexible-table-block'
 				) }
 			</p>
-			<h2>{ __( 'About Scroll Table', 'flexible-table-block' ) }</h2>
+			<h2>{ __( 'About scroll table', 'flexible-table-block' ) }</h2>
 			<p>
 				{ __(
 					'If table scrolling is enabled, set "Table Width" or "Table Min Width" larger than the content width.',
 					'flexible-table-block'
 				) }
 			</p>
-			<h2>{ __( 'About Accessibility', 'flexible-table-block' ) }</h2>
+			<h2>{ __( 'About accessibility', 'flexible-table-block' ) }</h2>
 			<p>
 				{ createInterpolateElement(
 					__(
