@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 5.9
-Tested up to: 6.1
-Stable tag: 2.8.0
+Tested up to: 6.2
+Stable tag: 2.9.0
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,13 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 2.9.0 =
+* Tested to WordPress 6.2
+* Enhancement: Redesign global settings modal
+* Enhancement: Polish style for WP6.2
+* Enhancement: Apply stripe colors to tbody only
+* Fix: Link color is not applied
 
 = 2.8.0 =
 * Tested to WordPress 6.1
