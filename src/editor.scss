@@ -870,6 +870,22 @@
 
 // Backward compatibility
 body.branch-5-9,
+body.branch-6,
+body.branch-6-1 {
+
+	.ftb-global-setting-modal__tab-panel .components-tab-panel__tabs-item {
+
+		&.is-active {
+			box-shadow: none;
+		}
+
+		&:focus:not(:disabled) {
+			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+		}
+	}
+}
+
+body.branch-5-9,
 body.branch-6 {
 
 	.ftb-base-control-label {
@@ -895,16 +911,5 @@ body.branch-6 {
 
 	.ftb-global-setting-modal .components-toggle-control .components-base-control__field {
 		margin-bottom: 0;
-	}
-
-	.ftb-global-setting-modal__tab-panel .components-tab-panel__tabs-item {
-
-		&.is-active {
-			box-shadow: none;
-		}
-
-		&:focus:not(:disabled) {
-			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
-		}
 	}
 }
