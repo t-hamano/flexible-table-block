@@ -1,7 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Style caption settings should be applied 1`] = `
+exports[`Styles caption styles should be applied 1`] = `
 "<!-- wp:flexible-table-block/table {\\"captionSide\\":\\"top\\"} -->
 <figure class=\\"wp-block-flexible-table-block-table\\"><figcaption style=\\"font-size:20px;line-height:2;padding:1px 2% 3em 4rem;text-align:center\\">Flexible Table Block</figcaption><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;
+
+exports[`Styles table styles should be applied 1`] = `
+"<!-- wp:flexible-table-block/table {\\"hasFixedLayout\\":false,\\"isScrollOnPc\\":true,\\"isScrollOnMobile\\":true,\\"isStackedOnMobile\\":true,\\"sticky\\":\\"first-column\\"} -->
+<figure class=\\"wp-block-flexible-table-block-table is-scroll-on-pc is-scroll-on-mobile\\"><table class=\\"is-stacked-on-mobile is-sticky-first-column\\" style=\\"width:500px;max-width:600%;min-width:400em;padding:1px 2% 3em 4rem;border-radius:1px 2em 3rem 4rem;border-width:1px 2em 3rem 4rem;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;border-collapse:separate;border-spacing:10px 5em\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;

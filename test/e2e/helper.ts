@@ -124,7 +124,6 @@ export const selectOptionFromLabel = async ( label: string, value: string, index
 	const xPath = `//label[contains(@class, "control__label")][text()="${ label }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
-
 	if ( elements[ index ] ) {
 		const selectId = await page.evaluate(
 			( element ) => element.getAttribute( 'for' ),
