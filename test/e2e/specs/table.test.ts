@@ -25,7 +25,7 @@ import {
 /** @type {import('puppeteer').Page} */
 const page = global.page;
 
-describe( 'Table', () => {
+describe( 'Flexible table', () => {
 	beforeEach( async () => {
 		await createNewPost();
 	} );

@@ -217,7 +217,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapShot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
+		const snapshot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`
@@ -225,7 +225,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption>Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`;
 
-		expect( await getEditedPostContent() ).toBe( snapShot );
+		expect( await getEditedPostContent() ).toBe( snapshot );
 	} );
 
 	it( 'should be transformed to core table block width no option caption text', async () => {
@@ -238,11 +238,14 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await openSidebarPanelWithTitle( 'Caption Settings' );
 		await inputValueFromLabel( 'Caption Font Size', '20px' );
 		await inputValueFromLabelledBy( 'flexible-table-block-caption-padding-heading', '20px' );
-		await clickButtonWithText( '//*[@aria-labelledby="flexible-table-block-caption-side"]', 'Top' );
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-caption-side-heading"]',
+			'Top'
+		);
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapShot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
+		const snapshot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`
@@ -250,6 +253,6 @@ describe( 'Transform from flexible table block to core table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption>Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`;
 
-		expect( await getEditedPostContent() ).toBe( snapShot );
+		expect( await getEditedPostContent() ).toBe( snapshot );
 	} );
 } );

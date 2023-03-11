@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Style caption settings should be applied 1`] = `
+"<!-- wp:flexible-table-block/table {\\"captionSide\\":\\"top\\"} -->
+<figure class=\\"wp-block-flexible-table-block-table\\"><figcaption style=\\"font-size:20px;line-height:2;padding:1px 2% 3em 4rem;text-align:center\\">Flexible Table Block</figcaption><table class=\\"has-fixed-layout\\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;
