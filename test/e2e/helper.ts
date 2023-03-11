@@ -174,7 +174,9 @@ export const openSidebar = async () => {
 	const [ sidebarButton ] = await page.$$(
 		'.edit-post-header [aria-label="Settings"][aria-expanded="false"]'
 	);
-	await sidebarButton.click();
+	if ( sidebarButton ) {
+		await sidebarButton.click();
+	}
 };
 
 export const openSidebarPanelWithTitle = async ( title: string, index: number = 0 ) => {

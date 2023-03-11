@@ -7,6 +7,7 @@ import { getEditedPostContent, createNewPost, clickButton } from '@wordpress/e2e
  * Internal dependencies
  */
 import {
+	getWpVersion,
 	createNewFlexibleTableBlock,
 	flexibleTableSelector,
 	flexibleTableCellSelector,
@@ -25,6 +26,8 @@ import {
 const page = global.page;
 
 async function applyCellStyles() {
+	const wpVersion = await getWpVersion();
+
 	// Font Size, Line Hiehgt, Width styles.
 	await inputValueFromLabel( 'Cell Font Size', '20px' );
 	await inputValueFromLabel( 'Cell Line Height', '2' );
@@ -36,7 +39,11 @@ async function applyCellStyles() {
 		'All'
 	);
 	await page.keyboard.press( 'Enter' );
-	await inputValueFromLabel( 'Hex color', '#111111' );
+
+	if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+		await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
+	}
+	await inputValueFromLabel( 'Hex color', '111111' );
 	await page.keyboard.press( 'Escape' );
 	await page.keyboard.press( 'Escape' );
 	await clickButtonWithAriaLabel(
@@ -44,7 +51,10 @@ async function applyCellStyles() {
 		'All'
 	);
 	await page.keyboard.press( 'Enter' );
-	await inputValueFromLabel( 'Hex color', '#333333' );
+	if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+		await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
+	}
+	await inputValueFromLabel( 'Hex color', '333333' );
 
 	// Padding, Border Radius, Border Width styles.
 	const styles = [
@@ -70,24 +80,16 @@ async function applyCellStyles() {
 			styles[ i ].labels[ 1 ],
 			'2'
 		);
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
 		await inputValueFromAriaLabel(
 			`.ftb-${ styles[ i ].style }-control__input-controls`,
 			styles[ i ].labels[ 2 ],
 			'3'
 		);
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
-		await page.keyboard.press( 'ArrowDown' );
 		await inputValueFromAriaLabel(
 			`.ftb-${ styles[ i ].style }-control__input-controls`,
 			styles[ i ].labels[ 3 ],
 			'4'
 		);
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
-		await page.keyboard.press( 'ArrowDown' );
 	}
 
 	// Boder Style styles.
@@ -108,6 +110,9 @@ async function applyCellStyles() {
 	for ( let i = 0; i < colors.length; i++ ) {
 		await clickButtonWithAriaLabel( '.ftb-border-color-control__controls', colors[ i ].label );
 		await page.keyboard.press( 'Enter' );
+		if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+			await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
+		}
 		await inputValueFromLabel( 'Hex color', colors[ i ].color );
 		await page.keyboard.press( 'Escape' );
 		await page.keyboard.press( 'Escape' );
@@ -138,6 +143,7 @@ describe( 'Styles', () => {
 	} );
 
 	it( 'table styles should be applied', async () => {
+		const wpVersion = await getWpVersion();
 		await createNewFlexibleTableBlock();
 		await openSidebar();
 		await openSidebarPanelWithTitle( 'Table Settings' );
@@ -152,12 +158,7 @@ describe( 'Styles', () => {
 		// Width styles.
 		await inputValueFromLabel( 'Table Width', '500px' );
 		await inputValueFromLabel( 'Table Max Width', '600px' );
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
 		await inputValueFromLabel( 'Table Min Width', '400px' );
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
-		await page.keyboard.press( 'ArrowDown' );
 
 		// Padding, Border Radius, Border Width styles.
 		const styles = [
@@ -183,24 +184,16 @@ describe( 'Styles', () => {
 				styles[ i ].labels[ 1 ],
 				'2'
 			);
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
 			await inputValueFromAriaLabel(
 				`.ftb-${ styles[ i ].style }-control__input-controls`,
 				styles[ i ].labels[ 2 ],
 				'3'
 			);
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
 			await inputValueFromAriaLabel(
 				`.ftb-${ styles[ i ].style }-control__input-controls`,
 				styles[ i ].labels[ 3 ],
 				'4'
 			);
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
 		}
 
 		// Boder Style styles.
@@ -221,6 +214,9 @@ describe( 'Styles', () => {
 		for ( let i = 0; i < colors.length; i++ ) {
 			await clickButtonWithAriaLabel( '.ftb-border-color-control__controls', colors[ i ].label );
 			await page.keyboard.press( 'Enter' );
+			if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+				await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
+			}
 			await inputValueFromLabel( 'Hex color', colors[ i ].color );
 			await page.keyboard.press( 'Escape' );
 			await page.keyboard.press( 'Escape' );
@@ -242,8 +238,6 @@ describe( 'Styles', () => {
 			'Vertical',
 			'20'
 		);
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -278,16 +272,8 @@ describe( 'Styles', () => {
 		await clickButtonWithAriaLabel( '.ftb-padding-control__header-control', 'Unlink Sides' );
 		await inputValueFromAriaLabel( '.ftb-padding-control__input-controls', 'Top', '1' );
 		await inputValueFromAriaLabel( '.ftb-padding-control__input-controls', 'Right', '2' );
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
 		await inputValueFromAriaLabel( '.ftb-padding-control__input-controls', 'Bottom', '3' );
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
-		await page.keyboard.press( 'ArrowDown' );
 		await inputValueFromAriaLabel( '.ftb-padding-control__input-controls', 'Left', '4' );
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'ArrowDown' );
-		await page.keyboard.press( 'ArrowDown' );
 		await clickButtonWithText(
 			'//*[@aria-labelledby="flexible-table-block-caption-side-heading"]',
 			'Top'

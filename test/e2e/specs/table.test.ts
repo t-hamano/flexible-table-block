@@ -159,8 +159,11 @@ describe( 'Flexible table', () => {
 		await openSidebar();
 		await clickButton( 'Global Setting' );
 		await clickButton( 'Editor Options' );
-		await clickToggleControlWithText( 'Keep all contents when merging cells' );
-		await clickButtonWithText( '//div[@class="ftb-global-setting-modal__buttons"]', 'Save' );
+		await clickToggleControlWithText( 'Use the tab key to move cells' );
+		await clickButtonWithText(
+			'//div[@class="ftb-global-setting-modal__buttons"]',
+			'Save Setting'
+		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 		const modalCloseLabel = [ '6-2', '6-3' ].includes( wpVersion ) ? 'Close' : 'Close dialog';
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', modalCloseLabel );

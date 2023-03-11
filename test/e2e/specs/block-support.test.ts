@@ -31,7 +31,7 @@ describe( 'Block Support', () => {
 		await createNewFlexibleTableBlock();
 		await openSidebar();
 
-		if ( [ '6-3' ].includes( wpVersion ) ) {
+		if ( [ '6-2', '6-3' ].includes( wpVersion ) ) {
 			await clickButtonWithAriaLabel( '.edit-post-sidebar', 'Styles' );
 		}
 
@@ -93,7 +93,7 @@ describe( 'Block Support', () => {
 		await createNewFlexibleTableBlock();
 		await openSidebar();
 
-		if ( [ '6-3' ].includes( wpVersion ) ) {
+		if ( [ '6-2', '6-3' ].includes( wpVersion ) ) {
 			await clickButtonWithAriaLabel( '.edit-post-sidebar', 'Styles' );
 		}
 

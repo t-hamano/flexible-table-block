@@ -49,10 +49,6 @@ describe( 'Transform from core table block to flexible table block', () => {
 		const wpVersion = await getWpVersion();
 		await createNewCoreTableBlock();
 		await openSidebar();
-		const sidebarPanelTitle = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
-			? 'Settings'
-			: 'Table settings';
-		await openSidebarPanelWithTitle( sidebarPanelTitle );
 		await clickToggleControlWithText( 'Header section' );
 		await clickToggleControlWithText( 'Footer section' );
 		await transformBlockTo( 'Flexible Table' );
@@ -63,10 +59,6 @@ describe( 'Transform from core table block to flexible table block', () => {
 		const wpVersion = await getWpVersion();
 		await createNewCoreTableBlock( { col: 6, row: 6 } );
 		await openSidebar();
-		const sidebarPanelTitle = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
-			? 'Settings'
-			: 'Table settings';
-		await openSidebarPanelWithTitle( sidebarPanelTitle );
 		await clickToggleControlWithText( 'Fixed width table cells' );
 		await transformBlockTo( 'Flexible Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -110,10 +102,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 			'[aria-labelledby="flexible-table-block-table-border-style-heading"]',
 			'Solid'
 		);
-		await clickButtonWithText(
-			'//*[@aria-labelledby="flexible-table-block-table-border-collapse"]',
-			'Share'
-		);
+		await clickButton( 'Separate' );
 		await transformBlockTo( 'Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
