@@ -42,7 +42,6 @@ describe( 'Flexible table', () => {
 
 	it( 'should be inserted', async () => {
 		await createNewFlexibleTableBlock();
-
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await page.keyboard.type( 'Flexible Table Block' );
