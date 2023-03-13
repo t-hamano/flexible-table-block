@@ -149,7 +149,7 @@ class Api {
 			array(
 				'options'   => Settings::get_options(),
 				'status'    => 'success',
-				'message'   => __( 'Global settings restored.', 'flexible-table-block' ),
+				'message'   => __( 'Global setting restored.', 'flexible-table-block' ),
 				'block_css' => Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) ),
 			)
 		);

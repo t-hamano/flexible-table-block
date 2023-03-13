@@ -710,7 +710,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 											'flexible-table-block'
 										) }
 										help={ __(
-											'By turning it on, you can prevent non-administrative users from changing global settings.',
+											'By turning it on, you can prevent non-administrative users from changing global setting.',
 											'flexible-table-block'
 										) }
 										checked={ !! currentOptions.show_global_setting }
