@@ -45,8 +45,9 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 = 2.9.0 =
 * Tested to WordPress 6.2
 * Enhancement: Redesign global settings modal
-* Enhancement: Polish style for WP6.2
+* Enhancement: Keep rowspan and colspan attributes when converting to and from the core table block
 * Enhancement: Apply stripe colors to tbody only
+* Enhancement: Polish style for WP6.2
 * Fix: Link color is not applied
 
 = 2.8.0 =
