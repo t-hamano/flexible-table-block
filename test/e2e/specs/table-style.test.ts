@@ -29,9 +29,9 @@ async function applyCellStyles() {
 	const wpVersion = await getWpVersion();
 
 	// Font Size, Line Hiehgt, Width styles.
-	await inputValueFromLabel( 'Cell font size', '20px' );
+	await inputValueFromLabel( 'Cell font size', '20' );
 	await inputValueFromLabel( 'Cell line height', '2' );
-	await inputValueFromLabel( 'Cell width', '100px' );
+	await inputValueFromLabel( 'Cell width', '100' );
 
 	// Text Color, Background Color styles.
 	await clickButtonWithAriaLabel(
@@ -156,9 +156,9 @@ describe( 'Styles', () => {
 		await selectOptionFromLabel( 'Fixed control', 'first-column' );
 
 		// Width styles.
-		await inputValueFromLabel( 'Table width', '500px' );
-		await inputValueFromLabel( 'Table max width', '600px' );
-		await inputValueFromLabel( 'Table min width', '400px' );
+		await inputValueFromLabel( 'Table width', '500' );
+		await inputValueFromLabel( 'Table max width', '600' );
+		await inputValueFromLabel( 'Table min width', '400' );
 
 		// Padding, Border Radius, Border Width styles.
 		const styles = [
@@ -267,7 +267,7 @@ describe( 'Styles', () => {
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
 		await openSidebarPanelWithTitle( 'Caption settings' );
-		await inputValueFromLabel( 'Caption font size', '20px' );
+		await inputValueFromLabel( 'Caption font size', '20' );
 		await inputValueFromLabel( 'Caption line height', '2' );
 		await clickButtonWithAriaLabel( '.ftb-padding-control__header-control', 'Unlink sides' );
 		await inputValueFromAriaLabel( '.ftb-padding-control__input-controls', 'Top', '1' );

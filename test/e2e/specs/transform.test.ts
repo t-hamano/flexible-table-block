@@ -96,8 +96,8 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await openSidebar();
 		await openSidebarPanelWithTitle( 'Table settings' );
 		await clickToggleControlWithText( 'Scroll on desktop view' );
-		await inputValueFromLabel( 'Table width', '500px' );
-		await inputValueFromLabelledBy( 'flexible-table-block-table-padding-heading', '1px' );
+		await inputValueFromLabel( 'Table width', '500' );
+		await inputValueFromLabelledBy( 'flexible-table-block-table-padding-heading', '1' );
 		await clickButtonWithAriaLabel(
 			'[aria-labelledby="flexible-table-block-table-border-style-heading"]',
 			'Solid'
@@ -131,8 +131,8 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
 		await openSidebarPanelWithTitle( 'Cell settings' );
-		await inputValueFromLabel( 'Cell font size', '20px' );
-		await inputValueFromLabelledBy( 'flexible-table-block-cell-padding-heading', '1px' );
+		await inputValueFromLabel( 'Cell font size', '20' );
+		await inputValueFromLabelledBy( 'flexible-table-block-cell-padding-heading', '1' );
 		await clickButtonWithAriaLabel(
 			'[aria-labelledby="flexible-table-block-cell-border-style-heading"]',
 			'Solid'
@@ -225,8 +225,8 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
 		await openSidebarPanelWithTitle( 'Caption settings' );
-		await inputValueFromLabel( 'Caption font size', '20px' );
-		await inputValueFromLabelledBy( 'flexible-table-block-caption-padding-heading', '20px' );
+		await inputValueFromLabel( 'Caption font size', '20' );
+		await inputValueFromLabelledBy( 'flexible-table-block-caption-padding-heading', '20' );
 		await clickButtonWithText(
 			'//*[@aria-labelledby="flexible-table-block-caption-side-heading"]',
 			'Top'
