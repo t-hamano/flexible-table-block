@@ -13,7 +13,7 @@ import type { TransformBlock } from '@wordpress/blocks';
  * Internal dependencies
  */
 import { splitMergedCell, toVirtualRows, toVirtualTable, VCell } from './utils/table-state';
-import type { BlockAttributes, CoreTableBlockAttributes } from './BlockAttributes';
+import type { BlockAttributes, CoreTableCell, CoreTableBlockAttributes } from './BlockAttributes';
 
 interface Transforms {
 	readonly from: ReadonlyArray< TransformBlock< CoreTableBlockAttributes > >;
@@ -27,11 +27,35 @@ const transforms: Transforms = {
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
 				const { hasFixedLayout, head, body, foot, caption } = attributes;
+
+				// Mapping rowspan and colspan properties.
+				const convertedSections = ( section: { cells: CoreTableCell[] }[] ) => {
+					if ( ! section.length ) {
+						return section;
+					}
+					return section.map( ( row ) => {
+						if ( ! row.cells.length ) {
+							return row;
+						}
+						return {
+							cells: row.cells.map( ( cell ) => {
+								const { content, tag, colspan, rowspan } = cell;
+								return {
+									content,
+									tag,
+									colSpan: colspan,
+									rowSpan: rowspan,
+								};
+							} ),
+						};
+					} );
+				};
+
 				return createBlock( 'flexible-table-block/table', {
+					head: convertedSections( head ),
+					body: convertedSections( body ),
+					foot: convertedSections( foot ),
 					hasFixedLayout,
-					head,
-					body,
-					foot,
 					caption,
 				} );
 			},

@@ -71,23 +71,21 @@ export interface BlockAttributes extends TableAttributes {
 // Core Table Block attributes
 export interface CoreTableBlockAttributes {
 	head: {
-		cells: {
-			content: string;
-			tag: CellTagValue;
-		}[];
-	};
+		cells: CoreTableCell[];
+	}[];
 	body: {
-		cells: {
-			content: string;
-			tag: CellTagValue;
-		}[];
-	};
+		cells: CoreTableCell[];
+	}[];
 	foot: {
-		cells: {
-			content: string;
-			tag: CellTagValue;
-		}[];
-	};
+		cells: CoreTableCell[];
+	}[];
 	hasFixedLayout: boolean;
 	caption: string;
+}
+
+export interface CoreTableCell {
+	content: string;
+	tag: CellTagValue;
+	rowspan?: string;
+	colspan?: string;
 }
