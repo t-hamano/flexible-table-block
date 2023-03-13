@@ -6,7 +6,12 @@ import { mapValues } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { createBlock } from '@wordpress/blocks';
+import {
+	createBlock,
+	// @ts-ignore: has no exported member
+	store as blocksStore,
+} from '@wordpress/blocks';
+import { select } from '@wordpress/data';
 import type { TransformBlock } from '@wordpress/blocks';
 
 /**
@@ -66,18 +71,27 @@ const transforms: Transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
+				// Check if the core table block supports rowspan and colspan.
+				const {
+					// @ts-ignore
+					getBlockType,
+				} = select( blocksStore );
+				const blockType = getBlockType( 'core/table' );
+				const hasRowColSpanSupport =
+					!! blockType.attributes.head.query.cells.query.rowspan &&
+					!! blockType.attributes.head.query.cells.query.colspan;
+
 				// Create virtual object array with the cells placed in positions based on how they actually look.
 				let vTable = toVirtualTable( attributes );
 
 				// Find rowspan & colspan cells.
 				const vRows = toVirtualRows( vTable );
-
 				const rowColSpanCells = vRows
 					.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
 					.filter( ( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1 );
 
-				// Split the found rowspan & colspan cells.
-				if ( rowColSpanCells.length ) {
+				// Split the found rowspan and colspan cells If the core table block doesn't support it.
+				if ( rowColSpanCells.length && ! hasRowColSpanSupport ) {
 					rowColSpanCells.forEach( ( cell ) => {
 						vTable = splitMergedCell( vTable, cell );
 					} );
@@ -86,7 +100,6 @@ const transforms: Transforms = {
 				// Convert to core table block attributes.
 				const sectionAttributes: any = mapValues( vTable, ( vSection ) => {
 					if ( ! vSection.length ) return [];
-
 					return vSection.map( ( { cells } ) => ( {
 						cells: cells
 							// Delete cells marked as deletion.
@@ -95,6 +108,8 @@ const transforms: Transforms = {
 							.map( ( cell ) => ( {
 								content: cell.content,
 								tag: 'head' === cell.sectionName ? 'th' : 'td',
+								rowspan: hasRowColSpanSupport ? cell.rowSpan : undefined,
+								colspan: hasRowColSpanSupport ? cell.colSpan : undefined,
 							} ) ),
 					} ) );
 				} );
