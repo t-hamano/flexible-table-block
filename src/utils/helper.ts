@@ -131,3 +131,19 @@ export function toInteger( value: number | string | undefined, defaultValue = 0 
 
 	return converted || defaultValue;
 }
+
+/**
+ * Normalize the rowspan/colspan value.
+ * Returns undefined if the parameter is not a positive number
+ * or the default value (1) for rowspan/colspan.
+ *
+ * @param  rowColSpan rowspan/colspan value.
+ * @return normalized rowspan/colspan value.
+ */
+export function normalizeRowColSpan( rowColSpan: any ) {
+	const parsedValue = parseInt( rowColSpan, 10 );
+	if ( ! Number.isInteger( parsedValue ) ) {
+		return undefined;
+	}
+	return parsedValue < 0 || parsedValue === 1 ? undefined : parsedValue.toString();
+}

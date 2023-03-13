@@ -107,7 +107,8 @@ describe( 'Transform from flexible table block to core table block', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'should be transformed to core table block with no rowspan / colspan cells', async () => {
+	it( 'should be transformed to core table block with rowspan / colspan cells', async () => {
+		const wpVersion = await getWpVersion();
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
@@ -121,7 +122,16 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await clickBlockToolbarButton( 'Edit table' );
 		await clickButton( 'Merge cells' );
 		await transformBlockTo( 'Table' );
-		expect( await getEditedPostContent() ).toMatchSnapshot();
+
+		// In WordPress 6.2, the core table block now supports rowspan and colspan attributes.
+		const snapshot = [ '6-2', '6-3' ].includes( wpVersion )
+			? `<!-- wp:table {"hasFixedLayout":true} -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`
+			: `<!-- wp:table {"hasFixedLayout":true} -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td>Cell 1</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`;
+		expect( await getEditedPostContent() ).toBe( snapshot );
 	} );
 
 	it( 'should be transformed to core table block with no style & class cells', async () => {

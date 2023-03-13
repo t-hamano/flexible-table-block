@@ -18,6 +18,7 @@ import type { TransformBlock } from '@wordpress/blocks';
  * Internal dependencies
  */
 import { splitMergedCell, toVirtualRows, toVirtualTable, VCell } from './utils/table-state';
+import { normalizeRowColSpan } from './utils/helper';
 import type { BlockAttributes, CoreTableCell, CoreTableBlockAttributes } from './BlockAttributes';
 
 interface Transforms {
@@ -48,8 +49,8 @@ const transforms: Transforms = {
 								return {
 									content,
 									tag,
-									colSpan: colspan,
-									rowSpan: rowspan,
+									colSpan: normalizeRowColSpan( colspan ),
+									rowSpan: normalizeRowColSpan( rowspan ),
 								};
 							} ),
 						};
@@ -108,8 +109,8 @@ const transforms: Transforms = {
 							.map( ( cell ) => ( {
 								content: cell.content,
 								tag: 'head' === cell.sectionName ? 'th' : 'td',
-								rowspan: hasRowColSpanSupport ? cell.rowSpan : undefined,
-								colspan: hasRowColSpanSupport ? cell.colSpan : undefined,
+								rowspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.rowSpan ) : undefined,
+								colspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.colSpan ) : undefined,
 							} ) ),
 					} ) );
 				} );
