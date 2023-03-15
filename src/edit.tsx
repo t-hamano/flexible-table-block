@@ -203,13 +203,13 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		},
 		{
 			icon: splitCell,
-			title: __( 'Split Merged Cells', 'flexible-table-block' ),
+			title: __( 'Split merged cells', 'flexible-table-block' ),
 			isDisabled: ! selectedCells || ! hasMergedCells( selectedCells ),
 			onClick: () => onSplitMergedCells(),
 		},
 		{
 			icon: mergeCell,
-			title: __( 'Merge Cells', 'flexible-table-block' ),
+			title: __( 'Merge cells', 'flexible-table-block' ),
 			isDisabled: ! selectedCells || ! isRectangleSelected( selectedCells ),
 			onClick: () => onMergeCells(),
 		},
@@ -259,8 +259,8 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 	const tableCellSettingsLabel: string =
 		selectedCells && selectedCells.length > 1
-			? __( 'Multi Cells Settings', 'flexible-table-block' )
-			: __( 'Cell Settings', 'flexible-table-block' );
+			? __( 'Multi cells settings', 'flexible-table-block' )
+			: __( 'Cell settings', 'flexible-table-block' );
 
 	const tableCaptionProps = {
 		attributes,
@@ -310,7 +310,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 					</BlockControls>
 					<InspectorControls>
 						<PanelBody
-							title={ __( 'Table Settings', 'flexible-table-block' ) }
+							title={ __( 'Table settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
 							<TableSettings { ...tableSettingsProps } />
@@ -321,7 +321,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 							</PanelBody>
 						) }
 						<PanelBody
-							title={ __( 'Caption Settings', 'flexible-table-block' ) }
+							title={ __( 'Caption settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
 							<TableCaptionSettings { ...tableCaptionSettingProps } />

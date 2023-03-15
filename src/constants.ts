@@ -230,19 +230,19 @@ export const CAPTION_SIDE_CONTROLS = [
 
 export const CORNER_CONTROLS = [
 	{
-		label: __( 'Top Left', 'flexible-table-block' ),
+		label: __( 'Top left', 'flexible-table-block' ),
 		value: 'topLeft',
 	},
 	{
-		label: __( 'Top Right', 'flexible-table-block' ),
+		label: __( 'Top right', 'flexible-table-block' ),
 		value: 'topRight',
 	},
 	{
-		label: __( 'Bottom Right', 'flexible-table-block' ),
+		label: __( 'Bottom right', 'flexible-table-block' ),
 		value: 'bottomRight',
 	},
 	{
-		label: __( 'Bottom Left', 'flexible-table-block' ),
+		label: __( 'Bottom left', 'flexible-table-block' ),
 		value: 'bottomLeft',
 	},
 ] as const;

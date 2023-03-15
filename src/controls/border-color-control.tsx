@@ -56,7 +56,7 @@ const DEFAULT_VALUES = {
 
 export default function BorderColorControl( {
 	id,
-	label = __( 'Border Color', 'flexible-table-block' ),
+	label = __( 'Border color', 'flexible-table-block' ),
 	help,
 	className,
 	onChange,
@@ -88,8 +88,8 @@ export default function BorderColorControl( {
 	const headingId: string = `${ id }-heading`;
 
 	const linkedLabel: string = isLinked
-		? __( 'Unlink Sides', 'flexible-table-block' )
-		: __( 'Link Sides', 'flexible-table-block' );
+		? __( 'Unlink sides', 'flexible-table-block' )
+		: __( 'Link sides', 'flexible-table-block' );
 
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
 

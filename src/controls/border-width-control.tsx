@@ -58,7 +58,7 @@ type MaxBorderWidthKey = keyof typeof MAX_BORDER_WIDTH;
 
 export default function BorderWidthControl( {
 	id,
-	label = __( 'Border Width', 'flexible-table-block' ),
+	label = __( 'Border width', 'flexible-table-block' ),
 	help,
 	className,
 	onChange,
@@ -83,8 +83,8 @@ export default function BorderWidthControl( {
 	const headingId: string = `${ id }-heading`;
 
 	const linkedLabel: string = isLinked
-		? __( 'Unlink Sides', 'flexible-table-block' )
-		: __( 'Link Sides', 'flexible-table-block' );
+		? __( 'Unlink sides', 'flexible-table-block' )
+		: __( 'Link sides', 'flexible-table-block' );
 
 	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.top;

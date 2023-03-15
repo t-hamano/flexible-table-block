@@ -53,7 +53,7 @@ type ValuesKey = keyof typeof DEFAULT_VALUES;
 
 export default function BorderStyleControl( {
 	id,
-	label = __( 'Border Style', 'flexible-table-block' ),
+	label = __( 'Border style', 'flexible-table-block' ),
 	help,
 	className,
 	onChange,
@@ -77,8 +77,8 @@ export default function BorderStyleControl( {
 		isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label;
 
 	const linkedLabel: string = isLinked
-		? __( 'Unlink Sides', 'flexible-table-block' )
-		: __( 'Link Sides', 'flexible-table-block' );
+		? __( 'Unlink sides', 'flexible-table-block' )
+		: __( 'Link sides', 'flexible-table-block' );
 
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
 

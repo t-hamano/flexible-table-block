@@ -17,14 +17,15 @@ import {
 	createNewFlexibleTableBlock,
 	clickButtonWithAriaLabel,
 	clickButtonWithText,
-	openSidebar,
 	clickToggleControlWithText,
+	openSidebar,
+	getWpVersion,
 } from '../helper';
 
 /** @type {import('puppeteer').Page} */
 const page = global.page;
 
-describe( 'Table', () => {
+describe( 'Flexible table', () => {
 	beforeEach( async () => {
 		await createNewPost();
 	} );
@@ -41,7 +42,6 @@ describe( 'Table', () => {
 
 	it( 'should be inserted', async () => {
 		await createNewFlexibleTableBlock();
-
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await page.keyboard.type( 'Flexible Table Block' );
@@ -56,7 +56,7 @@ describe( 'Table', () => {
 		await cells[ 1 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -68,7 +68,7 @@ describe( 'Table', () => {
 		await cells[ 5 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -80,7 +80,7 @@ describe( 'Table', () => {
 		await cells[ 8 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -92,11 +92,11 @@ describe( 'Table', () => {
 		await cells[ 8 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		const mergedCell = await page.$( flexibleTableCellSelector );
 		await mergedCell.click();
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Split Merged Cells' );
+		await clickButton( 'Split merged cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -104,7 +104,7 @@ describe( 'Table', () => {
 		await createNewFlexibleTableBlock( { header: true, footer: true } );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickBlockToolbarButton( 'Edit table' );
-		const [ button ] = await page.$x( `//button[contains(text(), 'Merge Cells')]` );
+		const [ button ] = await page.$x( `//button[contains(text(), 'Merge cells')]` );
 		const disabled = await page.evaluate( ( element ) => element.disabled, button );
 		expect( disabled ).toBe( true );
 	} );
@@ -113,7 +113,7 @@ describe( 'Table', () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select row' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -121,7 +121,7 @@ describe( 'Table', () => {
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -133,7 +133,7 @@ describe( 'Table', () => {
 		await cells[ 44 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select row', 2 );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Delete row' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -147,26 +147,26 @@ describe( 'Table', () => {
 		await cells[ 44 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Select column', 2 );
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Delete column' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	it( 'should move cells with the TAB key.', async () => {
+		const wpVersion = await getWpVersion();
 		await createNewFlexibleTableBlock();
 		await openSidebar();
-		await clickButton( 'Global Setting' );
-
-		// clickToggleControlWithText can't be used because the text of this toggle contains HTML tags.
-		const xPath =
-			'//label[contains(@class, "components-toggle-control__label")][contains(string(), "key to move cells")]';
-		const elements = await page.$x( xPath );
-		await elements[ 0 ].click();
-
-		await clickButtonWithText( '//div[@class="ftb-global-setting-modal__buttons"]', 'Save' );
+		await clickButton( 'Global setting' );
+		await clickButton( 'Editor options' );
+		await clickToggleControlWithText( 'Use the tab key to move cells' );
+		await clickButtonWithText(
+			'//div[@class="ftb-global-setting-modal__buttons"]',
+			'Save setting'
+		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
-		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', 'Close dialog' );
+		const modalCloseLabel = [ '6-2', '6-3' ].includes( wpVersion ) ? 'Close' : 'Close dialog';
+		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', modalCloseLabel );
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await page.keyboard.type( 'Cell 1' );

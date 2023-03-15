@@ -58,7 +58,7 @@ type MaxBorderRadiusKey = keyof typeof MAX_BORDER_RADIUS;
 
 export default function BorderRadiusControl( {
 	id,
-	label = __( 'Border Radius', 'flexible-table-block' ),
+	label = __( 'Border radius', 'flexible-table-block' ),
 	help,
 	className,
 	onChange,
@@ -87,8 +87,8 @@ export default function BorderRadiusControl( {
 	const headingId: string = `${ id }-heading`;
 
 	const linkedLabel: string = isLinked
-		? __( 'Unlink Sides', 'flexible-table-block' )
-		: __( 'Link Sides', 'flexible-table-block' );
+		? __( 'Unlink sides', 'flexible-table-block' )
+		: __( 'Link sides', 'flexible-table-block' );
 
 	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.topLeft;

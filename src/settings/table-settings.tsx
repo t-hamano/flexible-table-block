@@ -203,7 +203,7 @@ export default function TableSettings( {
 				className="ftb-reset-settings-control"
 			>
 				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
-					{ __( 'Clear Table Settings', 'flexible-table-block' ) }
+					{ __( 'Clear table settings', 'flexible-table-block' ) }
 				</Button>
 			</BaseControl>
 			<ToggleControl
@@ -223,7 +223,7 @@ export default function TableSettings( {
 				onChange={ onChangeHasFixedLayout }
 			/>
 			<ToggleControl
-				label={ __( 'Scroll on PC view', 'flexible-table-block' ) }
+				label={ __( 'Scroll on desktop view', 'flexible-table-block' ) }
 				className="ftb-toggle-control"
 				checked={ !! isScrollOnPc }
 				help={
@@ -237,7 +237,7 @@ export default function TableSettings( {
 				onChange={ onChangeIsScrollOnPc }
 			/>
 			<ToggleControl
-				label={ __( 'Scroll on Mobile view', 'flexible-table-block' ) }
+				label={ __( 'Scroll on mobile view', 'flexible-table-block' ) }
 				className="ftb-toggle-control"
 				checked={ !! isScrollOnMobile }
 				help={
@@ -274,7 +274,7 @@ export default function TableSettings( {
 					isStackedOnMobile &&
 					sticky &&
 					__(
-						'Fixed control is only enable for PC view because "Stack on mobile" is enabled.',
+						'Fixed control is only enable for desktop view because "Stack on mobile" is enabled.',
 						'flexible-table-block'
 					)
 				}
@@ -283,7 +283,7 @@ export default function TableSettings( {
 			<hr />
 			<BaseControl
 				id="flexible-table-block-table-width"
-				label={ __( 'Table Width', 'flexible-table-block' ) }
+				label={ __( 'Table width', 'flexible-table-block' ) }
 				className="ftb-width-control"
 			>
 				<UnitControl
@@ -295,7 +295,7 @@ export default function TableSettings( {
 					onChange={ onChangeWidth }
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Table Percentage Width', 'flexible-table-block' ) }
+					aria-label={ __( 'Table percentage width', 'flexible-table-block' ) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -324,7 +324,7 @@ export default function TableSettings( {
 			</BaseControl>
 			<BaseControl
 				id="flexible-table-block-table-max-width"
-				label={ __( 'Table Max Width', 'flexible-table-block' ) }
+				label={ __( 'Table max width', 'flexible-table-block' ) }
 				className="ftb-width-control"
 			>
 				<UnitControl
@@ -336,7 +336,7 @@ export default function TableSettings( {
 					onChange={ onChangeMaxWidth }
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Table Percentage Max Width' ) }
+					aria-label={ __( 'Table percentage max width' ) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -365,7 +365,7 @@ export default function TableSettings( {
 			</BaseControl>
 			<BaseControl
 				id="flexible-table-block-table-min-width"
-				label={ __( 'Table Min Width', 'flexible-table-block' ) }
+				label={ __( 'Table min width', 'flexible-table-block' ) }
 				className="ftb-width-control"
 			>
 				<UnitControl
@@ -376,7 +376,7 @@ export default function TableSettings( {
 					onChange={ onChangeMinWidth }
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Table Percentage Min Width' ) }
+					aria-label={ __( 'Table percentage min width' ) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -397,7 +397,7 @@ export default function TableSettings( {
 			<hr />
 			<PaddingControl
 				id="flexible-table-block-table-padding"
-				label={ __( 'Table Padding', 'flexible-table-block' ) }
+				label={ __( 'Table padding', 'flexible-table-block' ) }
 				help={ __(
 					'Table padding is only enable when "Cell Borders" is set to "Separate".',
 					'flexible-table-block'
@@ -408,13 +408,13 @@ export default function TableSettings( {
 			<hr />
 			<BorderRadiusControl
 				id="flexible-table-block-table-border-radius"
-				label={ __( 'Table Border Radius', 'flexible-table-block' ) }
+				label={ __( 'Table border radius', 'flexible-table-block' ) }
 				values={ pickBorderRadius( tableStylesObj ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
 				id="flexible-table-block-table-border-width"
-				label={ __( 'Table Border Width', 'flexible-table-block' ) }
+				label={ __( 'Table border width', 'flexible-table-block' ) }
 				help={ __(
 					'Table border width is only enable when "Cell Borders" is set to "Separate".',
 					'flexible-table-block'
@@ -424,13 +424,13 @@ export default function TableSettings( {
 			/>
 			<BorderStyleControl
 				id="flexible-table-block-table-border-style"
-				label={ __( 'Table Border Style', 'flexible-table-block' ) }
+				label={ __( 'Table border style', 'flexible-table-block' ) }
 				values={ pickBorderStyle( tableStylesObj ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
 				id="flexible-table-block-table-border-color"
-				label={ __( 'Table Border Color', 'flexible-table-block' ) }
+				label={ __( 'Table border color', 'flexible-table-block' ) }
 				values={ pickBorderColor( tableStylesObj ) }
 				onChange={ onChangeBorderColor }
 			/>
@@ -441,7 +441,7 @@ export default function TableSettings( {
 						id="flexible-table-block-table-border-collapse-heading"
 						className="ftb-base-control-label"
 					>
-						{ __( 'Cell Borders', 'flexible-table-block' ) }
+						{ __( 'Cell borders', 'flexible-table-block' ) }
 					</span>
 					<ButtonGroup className="ftb-button-group">
 						{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
@@ -462,7 +462,7 @@ export default function TableSettings( {
 			{ 'separate' === tableStylesObj?.borderCollapse && (
 				<BorderSpacingControl
 					id="flexible-table-block-table-border-spacing"
-					label={ __( 'Border Spacing', 'flexible-table-block' ) }
+					label={ __( 'Border spacing', 'flexible-table-block' ) }
 					values={ pickBorderSpacing( tableStylesObj ) }
 					onChange={ onChangeBorderSpacing }
 				/>

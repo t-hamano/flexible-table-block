@@ -1,12 +1,7 @@
 /**
  * WordPress dependencies
  */
-import {
-	insertBlock,
-	pressKeyWithModifier,
-	switchUserToAdmin,
-	visitAdminPage,
-} from '@wordpress/e2e-test-utils';
+import { insertBlock, pressKeyWithModifier } from '@wordpress/e2e-test-utils';
 export const coreTableSelector = '[data-type="core/table"]';
 export const coreTableCellSelector = `${ coreTableSelector } td`;
 export const flexibleTableSelector = '[data-type="flexible-table-block/table"]';
@@ -97,11 +92,8 @@ export const clickButtonWithAriaLabel = async (
 	index: number = 0
 ) => {
 	const selector = `${ parentSelector } button[aria-label="${ label }"]`;
-
 	const elements = await page.$$( selector );
-	if ( elements[ index ] ) {
-		await elements[ index ].click();
-	}
+	await elements[ index ].click();
 };
 
 export const clickButtonWithText = async (
@@ -111,48 +103,39 @@ export const clickButtonWithText = async (
 ) => {
 	const xPath = `${ parentPath }//button[contains(.,"${ text }")]`;
 	const elements = await page.$x( xPath );
-	if ( elements[ index ] ) {
-		await elements[ index ].click();
-	}
+	await elements[ index ].click();
 };
 
 export const clickToggleControlWithText = async ( text: string, index: number = 0 ) => {
 	const xPath = `//label[contains(@class, "components-toggle-control__label")][text()="${ text }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
-	if ( elements[ index ] ) {
-		await elements[ index ].click();
-	}
+	await elements[ index ].click();
 };
 
 export const selectOptionFromLabel = async ( label: string, value: string, index: number = 0 ) => {
 	const xPath = `//label[contains(@class, "control__label")][text()="${ label }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
-
-	if ( elements[ index ] ) {
-		const selectId = await page.evaluate(
-			( element ) => element.getAttribute( 'for' ),
-			elements[ index ]
-		);
-		await page.select( `#${ selectId }`, value );
-	}
+	const selectId = await page.evaluate(
+		( element ) => element.getAttribute( 'for' ),
+		elements[ index ]
+	);
+	await page.select( `#${ selectId }`, value );
 };
 
 export const inputValueFromLabel = async ( label: string, value: string, index: number = 0 ) => {
 	const xPath = `//label[string()="${ label }"]`;
 	await page.waitForXPath( xPath );
 	const elements = await page.$x( xPath );
-	if ( elements[ index ] ) {
-		const inputId = await page.evaluate(
-			( element ) => element.getAttribute( 'for' ),
-			elements[ index ]
-		);
-		await page.focus( `#${ inputId }` );
-		await pressKeyWithModifier( 'primary', 'a' );
-		await page.keyboard.press( 'Delete' );
-		await page.keyboard.type( String( value ) );
-	}
+	const inputId = await page.evaluate(
+		( element ) => element.getAttribute( 'for' ),
+		elements[ index ]
+	);
+	await page.focus( `#${ inputId }` );
+	await pressKeyWithModifier( 'primary', 'a' );
+	await page.keyboard.press( 'Delete' );
+	await page.keyboard.type( String( value ) );
 };
 
 export const inputValueFromAriaLabel = async (
@@ -162,14 +145,10 @@ export const inputValueFromAriaLabel = async (
 	index: number = 1
 ) => {
 	const selector = `${ parentSelector } input[aria-label="${ label }"]:nth-child(${ index })`;
-
-	const element = await page.$$( selector );
-	if ( element ) {
-		await page.focus( selector );
-		await pressKeyWithModifier( 'primary', 'a' );
-		await page.keyboard.press( 'Delete' );
-		await page.keyboard.type( String( value ) );
-	}
+	await page.focus( selector );
+	await pressKeyWithModifier( 'primary', 'a' );
+	await page.keyboard.press( 'Delete' );
+	await page.keyboard.type( String( value ) );
 };
 
 export const inputValueFromLabelledBy = async (
@@ -180,16 +159,14 @@ export const inputValueFromLabelledBy = async (
 	const selector = `[aria-labelledby="${ labelledBy }"] input`;
 	await page.waitForSelector( selector );
 	const elements = await page.$$( selector );
-	if ( elements[ index ] ) {
-		const inputId = await page.evaluate(
-			( element ) => element.getAttribute( 'id' ),
-			elements[ index ]
-		);
-		await page.focus( `#${ inputId }` );
-		await pressKeyWithModifier( 'primary', 'a' );
-		await page.keyboard.press( 'Delete' );
-		await page.keyboard.type( String( value ) );
-	}
+	const inputId = await page.evaluate(
+		( element ) => element.getAttribute( 'id' ),
+		elements[ index ]
+	);
+	await page.focus( `#${ inputId }` );
+	await pressKeyWithModifier( 'primary', 'a' );
+	await page.keyboard.press( 'Delete' );
+	await page.keyboard.type( String( value ) );
 };
 
 export const openSidebar = async () => {
@@ -209,17 +186,12 @@ export const openSidebarPanelWithTitle = async ( title: string, index: number = 
 	const panel = await page.$x(
 		`//div[contains(@class,"edit-post-sidebar")]//button[@class="components-button components-panel__body-toggle"][@aria-expanded="false"][contains(.,"${ title }")]`
 	);
-	if ( panel[ index ] ) {
-		await panel[ index ].click();
-	}
+	await panel[ index ].click();
 };
 
 export const toggleToolsPanelMenu = async ( type: string = 'typography' ) => {
 	const selector = `.${ type }-block-support-panel .components-dropdown-menu__toggle`;
 	await page.waitForSelector( selector );
-
 	const [ toggle ] = await page.$$( selector );
-	if ( toggle ) {
-		await toggle.click();
-	}
+	await toggle.click();
 };

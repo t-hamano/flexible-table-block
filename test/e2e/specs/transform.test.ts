@@ -49,10 +49,6 @@ describe( 'Transform from core table block to flexible table block', () => {
 		const wpVersion = await getWpVersion();
 		await createNewCoreTableBlock();
 		await openSidebar();
-		const sidebarPanelTitle = [ '6-1', '6-2' ].includes( wpVersion )
-			? 'Settings'
-			: 'Table settings';
-		await openSidebarPanelWithTitle( sidebarPanelTitle );
 		await clickToggleControlWithText( 'Header section' );
 		await clickToggleControlWithText( 'Footer section' );
 		await transformBlockTo( 'Flexible Table' );
@@ -63,10 +59,6 @@ describe( 'Transform from core table block to flexible table block', () => {
 		const wpVersion = await getWpVersion();
 		await createNewCoreTableBlock( { col: 6, row: 6 } );
 		await openSidebar();
-		const sidebarPanelTitle = [ '6-1', '6-2' ].includes( wpVersion )
-			? 'Settings'
-			: 'Table settings';
-		await openSidebarPanelWithTitle( sidebarPanelTitle );
 		await clickToggleControlWithText( 'Fixed width table cells' );
 		await transformBlockTo( 'Flexible Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -93,7 +85,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await cells[ 0 ].click();
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Table Settings' );
+		await openSidebarPanelWithTitle( 'Table settings' );
 		await clickToggleControlWithText( 'Fixed width table cells' );
 		await transformBlockTo( 'Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -102,23 +94,21 @@ describe( 'Transform from flexible table block to core table block', () => {
 	it( 'should be transformed to core table block with no style & class table', async () => {
 		await createNewFlexibleTableBlock( { col: 6, row: 3 } );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Table Settings' );
-		await clickToggleControlWithText( 'Scroll on PC view' );
-		await inputValueFromLabel( 'Table Width', '500px' );
-		await inputValueFromLabelledBy( 'flexible-table-block-table-padding-heading', '1px' );
+		await openSidebarPanelWithTitle( 'Table settings' );
+		await clickToggleControlWithText( 'Scroll on desktop view' );
+		await inputValueFromLabel( 'Table width', '500' );
+		await inputValueFromLabelledBy( 'flexible-table-block-table-padding-heading', '1' );
 		await clickButtonWithAriaLabel(
 			'[aria-labelledby="flexible-table-block-table-border-style-heading"]',
 			'Solid'
 		);
-		await clickButtonWithText(
-			'//*[@aria-labelledby="flexible-table-block-table-border-collapse"]',
-			'Share'
-		);
+		await clickButton( 'Separate' );
 		await transformBlockTo( 'Table' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	it( 'should be transformed to core table block with no rowspan / colspan cells', async () => {
+	it( 'should be transformed to core table block with rowspan / colspan cells', async () => {
+		const wpVersion = await getWpVersion();
 		await createNewFlexibleTableBlock( { col: 5, row: 5 } );
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
@@ -130,9 +120,18 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await cells[ 1 ].click();
 		await page.keyboard.up( 'Shift' );
 		await clickBlockToolbarButton( 'Edit table' );
-		await clickButton( 'Merge Cells' );
+		await clickButton( 'Merge cells' );
 		await transformBlockTo( 'Table' );
-		expect( await getEditedPostContent() ).toMatchSnapshot();
+
+		// In WordPress 6.2, the core table block now supports rowspan and colspan attributes.
+		const snapshot = [ '6-2', '6-3' ].includes( wpVersion )
+			? `<!-- wp:table {"hasFixedLayout":true} -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`
+			: `<!-- wp:table {"hasFixedLayout":true} -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td>Cell 1</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`;
+		expect( await getEditedPostContent() ).toBe( snapshot );
 	} );
 
 	it( 'should be transformed to core table block with no style & class cells', async () => {
@@ -141,9 +140,9 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await cells[ 0 ].click();
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Cell Settings' );
-		await inputValueFromLabel( 'Cell Font Size', '20px' );
-		await inputValueFromLabelledBy( 'flexible-table-block-cell-padding-heading', '1px' );
+		await openSidebarPanelWithTitle( 'Cell settings' );
+		await inputValueFromLabel( 'Cell font size', '20' );
+		await inputValueFromLabelledBy( 'flexible-table-block-cell-padding-heading', '1' );
 		await clickButtonWithAriaLabel(
 			'[aria-labelledby="flexible-table-block-cell-border-style-heading"]',
 			'Solid'
@@ -161,7 +160,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Cell Settings' );
+		await openSidebarPanelWithTitle( 'Cell settings' );
 		await clickButtonWithText(
 			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
 			'TH'
@@ -181,7 +180,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Cell Settings' );
+		await openSidebarPanelWithTitle( 'Cell settings' );
 		await clickButtonWithText(
 			'//*[@aria-labelledby="flexible-table-block-cell-tag-heading"]',
 			'TD'
@@ -217,7 +216,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapShot = [ '6-1', '6-2' ].includes( wpVersion )
+		const snapshot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`
@@ -225,7 +224,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption>Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`;
 
-		expect( await getEditedPostContent() ).toBe( snapShot );
+		expect( await getEditedPostContent() ).toBe( snapshot );
 	} );
 
 	it( 'should be transformed to core table block width no option caption text', async () => {
@@ -235,14 +234,17 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await page.focus( flexibleTableCaptionSelector );
 		await page.keyboard.type( 'Flexible Table Block' );
 		await openSidebar();
-		await openSidebarPanelWithTitle( 'Caption Settings' );
-		await inputValueFromLabel( 'Caption Font Size', '20px' );
-		await inputValueFromLabelledBy( 'flexible-table-block-caption-padding-heading', '20px' );
-		await clickButtonWithText( '//*[@aria-labelledby="flexible-table-block-caption-side"]', 'Top' );
+		await openSidebarPanelWithTitle( 'Caption settings' );
+		await inputValueFromLabel( 'Caption font size', '20' );
+		await inputValueFromLabelledBy( 'flexible-table-block-caption-padding-heading', '20' );
+		await clickButtonWithText(
+			'//*[@aria-labelledby="flexible-table-block-caption-side-heading"]',
+			'Top'
+		);
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapShot = [ '6-1', '6-2' ].includes( wpVersion )
+		const snapshot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`
@@ -250,6 +252,6 @@ describe( 'Transform from flexible table block to core table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption>Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`;
 
-		expect( await getEditedPostContent() ).toBe( snapShot );
+		expect( await getEditedPostContent() ).toBe( snapshot );
 	} );
 } );

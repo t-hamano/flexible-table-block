@@ -18,6 +18,7 @@ import { blockIcon as icon } from './icons';
 import edit from './edit';
 import save from './save';
 import transforms from './transforms';
+import deprecated from './deprecated';
 import { GlobalSettings } from './settings';
 
 // Register block.
@@ -30,6 +31,7 @@ const config = {
 	transforms,
 	edit,
 	save,
+	deprecated,
 	styles: [
 		{
 			name: 'stripes',

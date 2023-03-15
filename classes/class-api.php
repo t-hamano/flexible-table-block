@@ -129,7 +129,7 @@ class Api {
 		return rest_ensure_response(
 			array(
 				'status'    => 'success',
-				'message'   => __( 'Setting saved.', 'flexible-table-block' ),
+				'message'   => __( 'Global setting saved.', 'flexible-table-block' ),
 				'block_css' => Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) ),
 			)
 		);
@@ -149,7 +149,7 @@ class Api {
 			array(
 				'options'   => Settings::get_options(),
 				'status'    => 'success',
-				'message'   => __( 'Settings have been restored.', 'flexible-table-block' ),
+				'message'   => __( 'Global setting restored.', 'flexible-table-block' ),
 				'block_css' => Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) ),
 			)
 		);
