@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { mapValues, pick, times } from 'lodash';
+import { mapValues, pick } from 'lodash';
 import type { Properties } from 'csstype';
 
 /**
@@ -90,12 +90,10 @@ export function createTable( {
 	footerSection: boolean;
 } ) {
 	const createSection = ( rows: number, cols: number, sectionName: SectionName ): VSection => {
-		return times(
-			rows,
-			( rowIndex ): VRow => ( {
-				cells: times(
-					cols,
-					( vColIndex ): VCell => ( {
+		return Array.from( { length: rows } ).map(
+			( _row, rowIndex ): VRow => ( {
+				cells: Array.from( { length: cols } ).map(
+					( _col, vColIndex ): VCell => ( {
 						content: '',
 						tag: sectionName === 'head' ? 'th' : 'td',
 						rowSpan: 1,
@@ -139,7 +137,7 @@ export function insertRow(
 
 	// Row state to be inserted.
 	const newRow: VRow = {
-		cells: times( newRowColCount, ( vColIndex ): VCell => {
+		cells: Array.from( { length: newRowColCount } ).map( ( _, vColIndex ): VCell => {
 			// Find the cell with rowspan that covers the cell in the inserted row.
 			const rowSpanCells: VCell[] = vRows
 				.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
@@ -736,12 +734,10 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 			return count + toInteger( cell.colSpan, 1 );
 		}, 0 );
 
-		const vSection: VSection = times(
-			rowCount,
-			( rowIndex ): VRow => ( {
-				cells: times(
-					colCount,
-					( vColIndex ): VCell => ( {
+		const vSection: VSection = Array.from( { length: rowCount } ).map(
+			( _row, rowIndex ): VRow => ( {
+				cells: Array.from( { length: colCount } ).map(
+					( _col, vColIndex ): VCell => ( {
 						content: '',
 						tag: 'head' === sectionName ? 'th' : 'td',
 						rowSpan: 1,
@@ -1087,7 +1083,7 @@ export function toggleSection( vTable: VTable, sectionName: SectionName ): VTabl
 
 	// Row state to be inserted.
 	const newRow: VRow = {
-		cells: times( newRowColCount, ( vColIndex ) => ( {
+		cells: Array.from( { length: newRowColCount } ).map( ( _, vColIndex ) => ( {
 			content: '',
 			tag: 'head' === sectionName ? 'th' : 'td',
 			rowSpan: 1,
