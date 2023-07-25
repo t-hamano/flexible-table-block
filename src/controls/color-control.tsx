@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { get } from 'lodash';
 import classnames from 'classnames';
 import type { Property } from 'csstype';
 import type { ReactElement } from 'react';
@@ -51,7 +50,7 @@ export default function ColorControl( {
 			blockEditorStore
 			// @ts-ignore
 		).getSettings();
-		return get( settings, [ 'colors' ], [] );
+		return settings?.colors ?? [];
 	}, [] );
 
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );

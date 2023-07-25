@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { get } from 'lodash';
 import classnames from 'classnames';
 import type { Property } from 'csstype';
 
@@ -78,7 +77,7 @@ export default function BorderColorControl( {
 			blockEditorStore
 			// @ts-ignore
 		).getSettings();
-		return get( settings, [ 'colors' ], [] );
+		return settings?.colors ?? [];
 	}, [] );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
