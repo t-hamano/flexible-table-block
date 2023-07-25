@@ -59,3 +59,10 @@ jobs:
       - name: Running e2e tests
         run: npm run test:e2e
 
+      - name: Archive debug artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: failures-artifacts
+          path: artifacts
+          if-no-files-found: ignore
