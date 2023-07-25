@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import _, { identity, isEmpty, isObject, mapValues, pickBy } from 'lodash';
+import _ from 'lodash';
 import type { PropertyValue } from 'csstype';
 
 const DEFAULT_PRECISION: number = 4;
@@ -23,13 +23,14 @@ interface SanitizeOptions {
  * @return Object cleaned from falsy values.
  */
 export function cleanEmptyObject( object: {} ): {} | undefined {
-	if ( ! isObject( object ) || Array.isArray( object ) ) {
+	if ( object === null || typeof object !== 'object' || Array.isArray( object ) ) {
 		return object;
 	}
 
-	const cleanedNestedObjects: {} = pickBy( mapValues( object, cleanEmptyObject ), identity );
-
-	return isEmpty( cleanedNestedObjects ) ? undefined : cleanedNestedObjects;
+	const cleanedNestedObjects = Object.entries( object )
+		.map( ( [ key, value ] ) => [ key, cleanEmptyObject( value ) ] )
+		.filter( ( [ , value ] ) => value !== undefined );
+	return ! cleanedNestedObjects.length ? undefined : Object.fromEntries( cleanedNestedObjects );
 }
 
 /**

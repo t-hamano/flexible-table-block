@@ -56,7 +56,7 @@ export function updatePadding(
 	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
 		sanitizeUnitValue( value )
 	);
-	const newValues = {
+	const newPaddingValues = {
 		paddingTop: top,
 		paddingRight: right,
 		paddingBottom: bottom,
@@ -68,7 +68,7 @@ export function updatePadding(
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return pickBy( {
 			...newStyles,
-			...newValues,
+			...newPaddingValues,
 		} );
 	}
 
@@ -95,7 +95,7 @@ export function updateBorderWidth(
 		sanitizeUnitValue( value )
 	);
 
-	const newValues = {
+	const newBorderWidthValues = {
 		borderTopWidth: top,
 		borderRightWidth: right,
 		borderBottomWidth: bottom,
@@ -114,7 +114,7 @@ export function updateBorderWidth(
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return pickBy( {
 			...newStyles,
-			...newValues,
+			...newBorderWidthValues,
 		} );
 	}
 
@@ -138,7 +138,7 @@ export function updateBorderStyle(
 	if ( ! values ) return styles;
 
 	const { top, right, bottom, left } = pickBy( values );
-	const newValues = {
+	const newBorderStyleValues = {
 		borderTopStyle: top,
 		borderRightStyle: right,
 		borderBottomStyle: bottom,
@@ -157,7 +157,7 @@ export function updateBorderStyle(
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return pickBy( {
 			...newStyles,
-			...newValues,
+			...newBorderStyleValues,
 		} );
 	}
 
@@ -181,7 +181,7 @@ export function updateBorderColor(
 	if ( ! values ) return styles;
 
 	const { top, right, bottom, left } = pickBy( values );
-	const newValues = {
+	const newBorderColorValues = {
 		borderTopColor: top,
 		borderRightColor: right,
 		borderBottomColor: bottom,
@@ -200,7 +200,7 @@ export function updateBorderColor(
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return pickBy( {
 			...newStyles,
-			...newValues,
+			...newBorderColorValues,
 		} );
 	}
 
@@ -263,7 +263,7 @@ export function updateBorderRadius(
 		sanitizeUnitValue( value )
 	);
 
-	const newValues = {
+	const newBorderRadiusValues = {
 		borderTopLeftRadius: topLeft,
 		borderTopRightRadius: topRight,
 		borderBottomRightRadius: bottomRight,
@@ -282,7 +282,7 @@ export function updateBorderRadius(
 	if ( ! topLeft || ! topRight || ! bottomRight || ! bottomLeft ) {
 		return pickBy( {
 			...newStyles,
-			...newValues,
+			...newBorderRadiusValues,
 		} );
 	}
 
