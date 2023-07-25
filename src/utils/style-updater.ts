@@ -6,7 +6,7 @@ import type { Properties } from 'csstype';
 /**
  * Internal dependencies
  */
-import { pickBy, omit, mapValues } from 'lodash';
+import { pickBy, mapValues } from 'lodash';
 import { sanitizeUnitValue } from './helper';
 import type { CornerProps, DirectionProps } from './style-picker';
 
@@ -53,7 +53,6 @@ export function updatePadding(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'padding';
 	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
 		sanitizeUnitValue( value )
 	);
@@ -64,7 +63,7 @@ export function updatePadding(
 		paddingLeft: left,
 	};
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...newStyles } = styles;
 
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return pickBy( {
@@ -75,7 +74,7 @@ export function updatePadding(
 
 	return {
 		...newStyles,
-		...getCssPropertyWithFourDirection( shortHandPropName, top, right, bottom, left ),
+		...getCssPropertyWithFourDirection( 'padding', top, right, bottom, left ),
 	};
 }
 
@@ -92,7 +91,6 @@ export function updateBorderWidth(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'borderWidth';
 	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
 		sanitizeUnitValue( value )
 	);
@@ -104,7 +102,14 @@ export function updateBorderWidth(
 		borderLeftWidth: left,
 	};
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const {
+		borderWidth,
+		borderTopWidth,
+		borderRightWidth,
+		borderBottomWidth,
+		borderLeftWidth,
+		...newStyles
+	} = styles;
 
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return pickBy( {
@@ -115,7 +120,7 @@ export function updateBorderWidth(
 
 	return {
 		...newStyles,
-		...getCssPropertyWithFourDirection( shortHandPropName, top, right, bottom, left ),
+		...getCssPropertyWithFourDirection( 'borderWidth', top, right, bottom, left ),
 	};
 }
 
@@ -132,7 +137,6 @@ export function updateBorderStyle(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'borderStyle';
 	const { top, right, bottom, left } = pickBy( values );
 	const newValues = {
 		borderTopStyle: top,
@@ -141,7 +145,14 @@ export function updateBorderStyle(
 		borderLeftStyle: left,
 	};
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const {
+		borderStyle,
+		borderTopStyle,
+		borderRightStyle,
+		borderBottomStyle,
+		borderLeftStyle,
+		...newStyles
+	} = styles;
 
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return pickBy( {
@@ -152,7 +163,7 @@ export function updateBorderStyle(
 
 	return {
 		...newStyles,
-		...getCssPropertyWithFourDirection( shortHandPropName, top, right, bottom, left ),
+		...getCssPropertyWithFourDirection( 'borderStyle', top, right, bottom, left ),
 	};
 }
 
@@ -169,7 +180,6 @@ export function updateBorderColor(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'borderColor';
 	const { top, right, bottom, left } = pickBy( values );
 	const newValues = {
 		borderTopColor: top,
@@ -178,7 +188,14 @@ export function updateBorderColor(
 		borderLeftColor: left,
 	};
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const {
+		borderColor,
+		borderTopColor,
+		borderRightColor,
+		borderBottomColor,
+		borderLeftColor,
+		...newStyles
+	} = styles;
 
 	if ( ! top || ! right || ! bottom || ! right ) {
 		return pickBy( {
@@ -189,7 +206,7 @@ export function updateBorderColor(
 
 	return {
 		...newStyles,
-		...getCssPropertyWithFourDirection( shortHandPropName, top, right, bottom, left ),
+		...getCssPropertyWithFourDirection( 'borderColor', top, right, bottom, left ),
 	};
 }
 
@@ -208,7 +225,7 @@ export function updateBorderSpacing(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const newStyles = omit( styles, [ 'borderSpacing' ] );
+	const { borderSpacing, ...newStyles } = styles;
 	const { horizontal, vertical } = mapValues( pickBy( values ), ( value ) =>
 		sanitizeUnitValue( value )
 	);
@@ -242,7 +259,6 @@ export function updateBorderRadius(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'borderRadius';
 	const { topLeft, topRight, bottomRight, bottomLeft } = mapValues( pickBy( values ), ( value ) =>
 		sanitizeUnitValue( value )
 	);
@@ -254,7 +270,14 @@ export function updateBorderRadius(
 		borderBottomLeftRadius: bottomLeft,
 	};
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const {
+		borderRadius,
+		borderTopLeftRadius,
+		borderTopRightRadius,
+		borderBottomRightRadius,
+		borderBottomLeftRadius,
+		...newStyles
+	} = styles;
 
 	if ( ! topLeft || ! topRight || ! bottomRight || ! bottomLeft ) {
 		return pickBy( {
@@ -266,7 +289,7 @@ export function updateBorderRadius(
 	return {
 		...newStyles,
 		...getCssPropertyWithFourDirection(
-			shortHandPropName,
+			'borderRadius',
 			topLeft,
 			topRight,
 			bottomRight,

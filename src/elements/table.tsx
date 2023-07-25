@@ -4,7 +4,6 @@
 import classnames from 'classnames';
 import type { Properties } from 'csstype';
 import type { Dispatch, SetStateAction, MouseEvent, KeyboardEvent } from 'react';
-import { omit } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -47,14 +46,15 @@ import type {
 import type { StoreOptions } from '../store';
 
 function TSection( props: any ) {
-	const name: SectionName = props.name;
+	const { name, ...restProps } = props;
 	const TagName = `t${ name }`;
-	return <TagName { ...omit( props, 'name' ) } />;
+	return <TagName { ...restProps } />;
 }
 
 function Cell( props: any ) {
-	const TagName: CellTagValue = props.name;
-	return <TagName { ...omit( props, 'name' ) } />;
+	const { name, ...restProps } = props;
+	const TagName: CellTagValue = name;
+	return <TagName { ...restProps } />;
 }
 
 type Props = {
