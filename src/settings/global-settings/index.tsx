@@ -19,7 +19,10 @@ import type { StoreOptions } from '../../store';
 
 export default function GlobalSettings() {
 	const storeOptions: StoreOptions = useSelect(
-		( select ) => select( STORE_NAME ).getOptions(),
+		( select ) =>
+			select( STORE_NAME )
+				// @ts-ignore
+				.getOptions(),
 		[]
 	);
 

@@ -43,8 +43,8 @@ function getCssPropertyWithFourDirection(
 /**
  * Update padding style of styles object.
  *
- * @param  styles Styles object.
- * @param  values padding values object.
+ * @param styles Styles object.
+ * @param values padding values object.
  * @return  New Styles object.
  */
 export function updatePadding(
@@ -82,8 +82,8 @@ export function updatePadding(
 /**
  * Update border-width style of styles object.
  *
- * @param  styles Styles object.
- * @param  values border-width values object.
+ * @param styles Styles object.
+ * @param values border-width values object.
  * @return  New Styles object.
  */
 export function updateBorderWidth(
@@ -122,8 +122,8 @@ export function updateBorderWidth(
 /**
  * Update border-style style of styles object.
  *
- * @param  styles Styles object.
- * @param  values border-style values object.
+ * @param styles Styles object.
+ * @param values border-style values object.
  * @return New Styles object.
  */
 export function updateBorderStyle(
@@ -159,8 +159,8 @@ export function updateBorderStyle(
 /**
  * Update border-scoloryle style of styles object.
  *
- * @param  styles Styles object.
- * @param  values border-color values object.
+ * @param styles Styles object.
+ * @param values border-color values object.
  * @return New Styles object.
  */
 export function updateBorderColor(
@@ -196,10 +196,10 @@ export function updateBorderColor(
 /**
  * Update border-spacing style of styles object.
  *
- * @param  styles            Styles object.
- * @param  values            border-spacing values object.
- * @param  values.horizontal
- * @param  values.vertical
+ * @param styles            Styles object.
+ * @param values            border-spacing values object.
+ * @param values.horizontal
+ * @param values.vertical
  * @return New Styles object.
  */
 export function updateBorderSpacing(
@@ -232,8 +232,8 @@ export function updateBorderSpacing(
 /**
  * Update border-radius style of styles object.
  *
- * @param  styles Styles object.
- * @param  values border-radius values object.
+ * @param styles Styles object.
+ * @param values border-radius values object.
  * @return  New Styles object.
  */
 export function updateBorderRadius(

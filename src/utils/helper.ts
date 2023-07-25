@@ -19,7 +19,7 @@ interface SanitizeOptions {
 /**
  * Removed falsy values from nested object.
  *
- * @param  object Nested object.
+ * @param object Nested object.
  * @return Object cleaned from falsy values.
  */
 export function cleanEmptyObject( object: {} ): {} | undefined {
@@ -35,7 +35,7 @@ export function cleanEmptyObject( object: {} ): {} | undefined {
 /**
  * Convert short-hand/long-hand CSS values into an array with four values.
  *
- * @param  cssValue CSS value.
+ * @param cssValue CSS value.
  * @return Array with four values.
  */
 export function parseCssValue( cssValue: string ): FourCssValues {
@@ -58,8 +58,8 @@ export function parseCssValue( cssValue: string ): FourCssValues {
 /**
  * Sanitize the value of UnitControl.
  *
- * @param  initialValue UnitControl value.
- * @param  options      Sanitize options.
+ * @param initialValue UnitControl value.
+ * @param options      Sanitize options.
  * @return Sanitized UnitControl value.
  */
 export function sanitizeUnitValue(
@@ -96,7 +96,7 @@ export function sanitizeUnitValue(
 /**
  * Parses a number and unit from a value.
  *
- * @param  initialValue Value to parse
+ * @param initialValue Value to parse
  * @return The extracted number and unit.
  */
 export function parseUnit( initialValue: string ): [ number, string ] {
@@ -112,12 +112,8 @@ export function parseUnit( initialValue: string ): [ number, string ] {
 	return [ num, unit.toLowerCase() ];
 }
 
-/**
- * Convert string to number.
- *
- * @param  value        String to converted.
- * @param  defaultValue String to be used when the value is falsy.
- */
+// Convert string to number.
+// JSDoc is not used because parsing in eslint fails
 export function toInteger( value: number | string | undefined, defaultValue = 0 ): number {
 	if ( ! value ) {
 		return defaultValue;
@@ -137,7 +133,7 @@ export function toInteger( value: number | string | undefined, defaultValue = 0 
  * Returns undefined if the parameter is not a positive number
  * or the default value (1) for rowspan/colspan.
  *
- * @param  rowColSpan rowspan/colspan value.
+ * @param rowColSpan rowspan/colspan value.
  * @return normalized rowspan/colspan value.
  */
 export function normalizeRowColSpan( rowColSpan: any ) {

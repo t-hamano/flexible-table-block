@@ -32,7 +32,6 @@ import {
 	toVirtualRows,
 	toTableAttributes,
 	isEmptySection,
-	VRow,
 } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 
@@ -40,6 +39,7 @@ import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttribu
 import type {
 	VTable,
 	VCell,
+	VRow,
 	VSelectMode,
 	VSelectedLine,
 	VSelectedCells,
@@ -90,7 +90,7 @@ export default function Table( {
 
 	// Manage rendering status as state since some processing may be performed before rendering components.
 	const [ isReady, setIdReady ] = useState< boolean >( false );
-	useEffect( () => setIdReady( true ) );
+	useEffect( () => setIdReady( true ), [] );
 
 	const tableRef = useRef( null );
 

@@ -71,11 +71,11 @@ interface VRangeIndexes {
 /**
  * Creates a table state.
  *
- * @param  options
- * @param  options.rowCount      Row count for the table to create.
- * @param  options.colCount      Column count for the table to create.
- * @param  options.headerSection With/without header section.
- * @param  options.footerSection With/without footer section.
+ * @param options
+ * @param options.rowCount      Row count for the table to create.
+ * @param options.colCount      Column count for the table to create.
+ * @param options.headerSection With/without header section.
+ * @param options.footerSection With/without footer section.
  * @return New virtual table state.
  */
 export function createTable( {
@@ -121,10 +121,10 @@ export function createTable( {
 /**
  * Inserts a row in the virtual table state.
  *
- * @param  vTable              Virtual table in which to insert the row.
- * @param  options
- * @param  options.sectionName Section in which to insert the row.
- * @param  options.rowIndex    Row index at which to insert the row.
+ * @param vTable              Virtual table in which to insert the row.
+ * @param options
+ * @param options.sectionName Section in which to insert the row.
+ * @param options.rowIndex    Row index at which to insert the row.
  * @return  New virtual table state.
  */
 
@@ -206,10 +206,10 @@ export function insertRow(
 /**
  * Deletes a row from the virtual table.
  *
- * @param  vTable              Virtual table in which to delete the row.
- * @param  options
- * @param  options.sectionName Section in which to delete the row.
- * @param  options.rowIndex    Row index at which to delete the row.
+ * @param vTable              Virtual table in which to delete the row.
+ * @param options
+ * @param options.sectionName Section in which to delete the row.
+ * @param options.rowIndex    Row index at which to delete the row.
  * @return  New virtual table state.
  */
 export function deleteRow(
@@ -272,9 +272,9 @@ export function deleteRow(
 /**
  * Inserts a column in the virtual table.
  *
- * @param  vTable            Virtual table in which to insert column.
- * @param  options
- * @param  options.vColIndex Virtual column index at which to insert column.
+ * @param vTable            Virtual table in which to insert column.
+ * @param options
+ * @param options.vColIndex Virtual column index at which to insert column.
  * @return  New virtual table state.
  */
 export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number } ): VTable {
@@ -369,9 +369,9 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 /**
  * Deletes a column from the virtual table.
  *
- * @param  vTable            Virtual table in which to delete column.
- * @param  options
- * @param  options.vColIndex Virtual column index at which to delete column.
+ * @param vTable            Virtual table in which to delete column.
+ * @param options
+ * @param options.vColIndex Virtual column index at which to delete column.
  * @return  New virtual table state.
  */
 export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number } ): VTable {
@@ -429,9 +429,9 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 /**
  * Merge cells in the virtual table.
  *
- * @param  vTable         Current virtual table state.
- * @param  selectedCells  Current selected cells.
- * @param  isMergeContent Whether keep the contents of all cells when merging cells.
+ * @param vTable         Current virtual table state.
+ * @param selectedCells  Current selected cells.
+ * @param isMergeContent Whether keep the contents of all cells when merging cells.
  * @return New virtual table state.
  */
 export function mergeCells(
@@ -534,8 +534,8 @@ export function mergeCells(
 /**
  * Split selected cells in the virtual table state.
  *
- * @param  vTable        Current virtual table state.
- * @param  selectedCells Current selected cells.
+ * @param vTable        Current virtual table state.
+ * @param selectedCells Current selected cells.
  * @return  New virtual table state.
  */
 export function splitMergedCells( vTable: VTable, selectedCells: VSelectedCells ): VTable {
@@ -558,8 +558,8 @@ export function splitMergedCells( vTable: VTable, selectedCells: VSelectedCells 
 /**
  * Split single cell in the virtual table state.
  *
- * @param  vTable       Current virtual table state.
- * @param  selectedCell Current selected cells.
+ * @param vTable       Current virtual table state.
+ * @param selectedCell Current selected cells.
  * @return New virtual table state.
  */
 export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
@@ -617,15 +617,15 @@ export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 /**
  * Update cells state( styles, tag ) of selected section.
  *
- * @param  vTable              Current virtual table state.
- * @param  cellState           Cell states to update.
- * @param  cellState.styles    Cell styles.
- * @param  cellState.tag       Cell tag.
- * @param  cellState.className Cell classes.
- * @param  cellState.id        Cell id.
- * @param  cellState.headers   Cell headers attribute.
- * @param  cellState.scope     Cell scope attribute.
- * @param  selectedCells       Current selected cells.
+ * @param vTable              Current virtual table state.
+ * @param cellState           Cell states to update.
+ * @param cellState.styles    Cell styles.
+ * @param cellState.tag       Cell tag.
+ * @param cellState.className Cell classes.
+ * @param cellState.id        Cell id.
+ * @param cellState.headers   Cell headers attribute.
+ * @param cellState.scope     Cell scope attribute.
+ * @param selectedCells       Current selected cells.
  * @return  New virtual table state.
  */
 export function updateCells(
@@ -687,7 +687,7 @@ export function updateCells(
 /**
  * Determines whether a virtual section is empty.
  *
- * @param  section Virtual section state.
+ * @param section Virtual section state.
  * @return True if the virtual section is empty, false otherwise.
  */
 export function isEmptySection( section: VSection ): boolean {
@@ -701,7 +701,7 @@ export function isEmptySection( section: VSection ): boolean {
 /**
  * Determines whether multiple sections are selected on the virtual table.
  *
- * @param  selectedCells Current selected cells.
+ * @param selectedCells Current selected cells.
  * @return True if multiple sections are selected, false otherwise.
  */
 export function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
@@ -722,7 +722,7 @@ export function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
  * Create virtual table object with the cells placed in positions based on how they actually look.
  * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
  *
- * @param  state Current table state.
+ * @param state Current table state.
  * @return Object of virtual table.
  */
 export function toVirtualTable( state: TableAttributes ): VTable {
@@ -841,7 +841,7 @@ export function toTableAttributes( vTable: VTable ): TableAttributes {
 /**
  * Create an array of rows from a virtual table by removing empty sections.
  *
- * @param  vTable Current virtual table state.
+ * @param vTable Current virtual table state.
  * @return virtual table rows array.
  */
 export function toVirtualRows( vTable: VTable ): VRow[] {
@@ -855,7 +855,7 @@ export function toVirtualRows( vTable: VTable ): VRow[] {
 /**
  * Get the minimum / maximum row / column virtual indexes on virtual table from selected cells.
  *
- * @param  selectedCells Current selected cells.
+ * @param selectedCells Current selected cells.
  * @return Minimum / maximum virtual indexes.
  */
 export function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes {
@@ -885,7 +885,7 @@ export function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes 
  * Determines whether a rectangle will be formed from the selected cells in the virtual table.
  * This function is used to determines whether to allow cell merging from the selected cells.
  *
- * @param  selectedCells Current selected cells.
+ * @param selectedCells Current selected cells.
  * @return True if a rectangle will be formed from the selected cells, false otherwise.
  */
 export function isRectangleSelected( selectedCells: VSelectedCells ): boolean {
@@ -942,10 +942,10 @@ export function isRectangleSelected( selectedCells: VSelectedCells ): boolean {
 /**
  * Return a set of cells from the start cell and the end cell that will form a rectangle, taking into account the join cells.
  *
- * @param  vTable           Current virtual table state.
- * @param  options
- * @param  options.fromCell Start cell of the selected range.
- * @param  options.toCell   End cell of the selected range.
+ * @param vTable           Current virtual table state.
+ * @param options
+ * @param options.fromCell Start cell of the selected range.
+ * @param options.toCell   End cell of the selected range.
  * @return Selected cells that represent a rectangle.
  */
 export function toRectangledSelectedCells(
@@ -1056,7 +1056,7 @@ export function toRectangledSelectedCells(
 /**
  * Determines whether the selected cells in the virtual table contain merged cells.
  *
- * @param  selectedCells Current selected cells.
+ * @param selectedCells Current selected cells.
  * @return True if the selected cells in the virtual table contain merged cells, false otherwise.
  */
 export function hasMergedCells( selectedCells: VSelectedCells ): boolean {
@@ -1069,8 +1069,8 @@ export function hasMergedCells( selectedCells: VSelectedCells ): boolean {
 /**
  * Toggles the existance of a section.
  *
- * @param  vTable      Current virtual table state.
- * @param  sectionName Name of the section to toggle.
+ * @param vTable      Current virtual table state.
+ * @param sectionName Name of the section to toggle.
  * @return New virtual table state.
  */
 export function toggleSection( vTable: VTable, sectionName: SectionName ): VTable {
