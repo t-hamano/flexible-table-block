@@ -17,8 +17,8 @@ jobs:
           '8.0'
         ]
         wp-versions: [
-          'WordPress#6.0.5',
-          'WordPress#6.1.1',
+          'WordPress#6.1.3',
+          'WordPress#6.2.2',
           'WordPress'
         ]
     name: PHP ${{ matrix.php-versions }} / ${{ matrix.wp-versions }} Test

@@ -83,26 +83,6 @@ function observeConsoleLogging() {
 			return;
 		}
 
-		// Ignore console errors that occur in WordPress 6.0 and below.
-		if ( text.includes( 'wp-block-button' ) ) {
-			return;
-		}
-		if ( text.includes( 'wp-block-button__link' ) ) {
-			return;
-		}
-		if ( text.includes( 'wp-block-cover' ) ) {
-			return;
-		}
-		if ( text.includes( 'wp-block-media-text' ) ) {
-			return;
-		}
-		if ( text.includes( 'https://s.w.org/images/core/5.8/art-01.jpg' ) ) {
-			return;
-		}
-		if ( text.includes( 'Expected tag name `%s`, instead saw `%s`. figure div' ) ) {
-			return;
-		}
-
 		// A bug present in WordPress 5.2 will produce console warnings when
 		// loading the Dashicons font. These can be safely ignored, as they do
 		// not otherwise regress on application behavior. This logic should be
