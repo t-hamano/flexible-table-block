@@ -6,7 +6,6 @@ import type { Properties } from 'csstype';
 /**
  * Internal dependencies
  */
-import { pickBy, mapValues } from 'lodash';
 import { sanitizeUnitValue } from './helper';
 import type { CornerProps, DirectionProps } from './style-picker';
 
@@ -53,9 +52,11 @@ export function updatePadding(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
-		sanitizeUnitValue( value )
-	);
+	const top = values.top ? sanitizeUnitValue( values.top ) : undefined;
+	const right = values.right ? sanitizeUnitValue( values.right ) : undefined;
+	const bottom = values.bottom ? sanitizeUnitValue( values.bottom ) : undefined;
+	const left = values.left ? sanitizeUnitValue( values.left ) : undefined;
+
 	const newPaddingValues = {
 		paddingTop: top,
 		paddingRight: right,
@@ -65,11 +66,11 @@ export function updatePadding(
 
 	const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...newStyles } = styles;
 
-	if ( ! top || ! right || ! bottom || ! right ) {
-		return pickBy( {
+	if ( ! top || ! right || ! bottom || ! left ) {
+		return {
 			...newStyles,
 			...newPaddingValues,
-		} );
+		};
 	}
 
 	return {
@@ -91,16 +92,10 @@ export function updateBorderWidth(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
-		sanitizeUnitValue( value )
-	);
-
-	const newBorderWidthValues = {
-		borderTopWidth: top,
-		borderRightWidth: right,
-		borderBottomWidth: bottom,
-		borderLeftWidth: left,
-	};
+	const top = values.top ? sanitizeUnitValue( values.top ) : undefined;
+	const right = values.right ? sanitizeUnitValue( values.right ) : undefined;
+	const bottom = values.bottom ? sanitizeUnitValue( values.bottom ) : undefined;
+	const left = values.left ? sanitizeUnitValue( values.left ) : undefined;
 
 	const {
 		borderWidth,
@@ -111,11 +106,16 @@ export function updateBorderWidth(
 		...newStyles
 	} = styles;
 
-	if ( ! top || ! right || ! bottom || ! right ) {
-		return pickBy( {
+	if ( ! top || ! right || ! bottom || ! left ) {
+		return {
 			...newStyles,
-			...newBorderWidthValues,
-		} );
+			...{
+				borderTopWidth: top,
+				borderRightWidth: right,
+				borderBottomWidth: bottom,
+				borderLeftWidth: left,
+			},
+		};
 	}
 
 	return {
@@ -137,13 +137,10 @@ export function updateBorderStyle(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const { top, right, bottom, left } = pickBy( values );
-	const newBorderStyleValues = {
-		borderTopStyle: top,
-		borderRightStyle: right,
-		borderBottomStyle: bottom,
-		borderLeftStyle: left,
-	};
+	const top = values.top ?? undefined;
+	const right = values.right ?? undefined;
+	const bottom = values.bottom ?? undefined;
+	const left = values.left ?? undefined;
 
 	const {
 		borderStyle,
@@ -154,11 +151,16 @@ export function updateBorderStyle(
 		...newStyles
 	} = styles;
 
-	if ( ! top || ! right || ! bottom || ! right ) {
-		return pickBy( {
+	if ( ! top || ! right || ! bottom || ! left ) {
+		return {
 			...newStyles,
-			...newBorderStyleValues,
-		} );
+			...( {
+				borderTopStyle: top,
+				borderRightStyle: right,
+				borderBottomStyle: bottom,
+				borderLeftStyle: left,
+			} as Properties ),
+		};
 	}
 
 	return {
@@ -168,7 +170,7 @@ export function updateBorderStyle(
 }
 
 /**
- * Update border-scoloryle style of styles object.
+ * Update border-color style of styles object.
  *
  * @param styles Styles object.
  * @param values border-color values object.
@@ -180,13 +182,10 @@ export function updateBorderColor(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const { top, right, bottom, left } = pickBy( values );
-	const newBorderColorValues = {
-		borderTopColor: top,
-		borderRightColor: right,
-		borderBottomColor: bottom,
-		borderLeftColor: left,
-	};
+	const top = values.top ?? undefined;
+	const right = values.right ?? undefined;
+	const bottom = values.bottom ?? undefined;
+	const left = values.left ?? undefined;
 
 	const {
 		borderColor,
@@ -197,11 +196,16 @@ export function updateBorderColor(
 		...newStyles
 	} = styles;
 
-	if ( ! top || ! right || ! bottom || ! right ) {
-		return pickBy( {
+	if ( ! top || ! right || ! bottom || ! left ) {
+		return {
 			...newStyles,
-			...newBorderColorValues,
-		} );
+			...{
+				borderTopColor: top,
+				borderRightColor: right,
+				borderBottomColor: bottom,
+				borderLeftColor: left,
+			},
+		};
 	}
 
 	return {
@@ -226,9 +230,9 @@ export function updateBorderSpacing(
 	if ( ! values ) return styles;
 
 	const { borderSpacing, ...newStyles } = styles;
-	const { horizontal, vertical } = mapValues( pickBy( values ), ( value ) =>
-		sanitizeUnitValue( value )
-	);
+
+	const horizontal = values.horizontal ? sanitizeUnitValue( values.horizontal ) : undefined;
+	const vertical = values.vertical ? sanitizeUnitValue( values.vertical ) : undefined;
 
 	if ( horizontal === undefined && vertical === undefined ) {
 		return newStyles;
@@ -259,16 +263,10 @@ export function updateBorderRadius(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const { topLeft, topRight, bottomRight, bottomLeft } = mapValues( pickBy( values ), ( value ) =>
-		sanitizeUnitValue( value )
-	);
-
-	const newBorderRadiusValues = {
-		borderTopLeftRadius: topLeft,
-		borderTopRightRadius: topRight,
-		borderBottomRightRadius: bottomRight,
-		borderBottomLeftRadius: bottomLeft,
-	};
+	const topLeft = values?.topLeft ? sanitizeUnitValue( values.topLeft ) : undefined;
+	const topRight = values?.topRight ? sanitizeUnitValue( values.topRight ) : undefined;
+	const bottomRight = values?.bottomRight ? sanitizeUnitValue( values.bottomRight ) : undefined;
+	const bottomLeft = values?.bottomLeft ? sanitizeUnitValue( values.bottomLeft ) : undefined;
 
 	const {
 		borderRadius,
@@ -280,10 +278,15 @@ export function updateBorderRadius(
 	} = styles;
 
 	if ( ! topLeft || ! topRight || ! bottomRight || ! bottomLeft ) {
-		return pickBy( {
+		return {
 			...newStyles,
-			...newBorderRadiusValues,
-		} );
+			...{
+				borderTopLeftRadius: topLeft,
+				borderTopRightRadius: topRight,
+				borderBottomRightRadius: bottomRight,
+				borderBottomLeftRadius: bottomLeft,
+			},
+		};
 	}
 
 	return {
