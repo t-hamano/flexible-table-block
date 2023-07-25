@@ -145,7 +145,9 @@ describe( 'Global Setting', () => {
 			`.editor-styles-wrapper .wp-block-flexible-table-block-table>table{width:100%;max-width:100%;border-collapse:collapse;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#ffffff;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th,.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{background-color:#ffffff;}`
 		);
 
-		const modalCloseLabel = [ '6-2', '6-3' ].includes( wpVersion ) ? 'Close' : 'Close dialog';
+		const modalCloseLabel = [ '6-2', '6-3', '6-4' ].includes( wpVersion )
+			? 'Close'
+			: 'Close dialog';
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', modalCloseLabel );
 	} );
 } );
