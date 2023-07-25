@@ -38,15 +38,7 @@ describe( 'Global Setting', () => {
 
 		// Apply table styles.
 		await inputValueFromLabel( 'Table width', '90' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromLabel( 'Table max width', '110' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await clickButton( 'Separate' );
 		const tableColors = [
 			{ color: '111111', selector: 'odd' },
@@ -58,7 +50,7 @@ describe( 'Global Setting', () => {
 				'All'
 			);
 			await page.keyboard.press( 'Enter' );
-			if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+			if ( wpVersion === '6' ) {
 				await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
 			}
 			await inputValueFromLabel( 'Hex color', tableColors[ i ].color );
@@ -82,7 +74,7 @@ describe( 'Global Setting', () => {
 			);
 
 			await page.keyboard.press( 'Enter' );
-			if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+			if ( wpVersion === '6' ) {
 				await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
 			}
 			await inputValueFromLabel( 'Hex color', cellColors[ i ].color );
@@ -91,29 +83,9 @@ describe( 'Global Setting', () => {
 		}
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal__styles-item', 'Unlink sides' );
 		await inputValueFromAriaLabel( '.ftb-global-setting-modal__styles-item', 'Top', '1' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromAriaLabel( '.ftb-global-setting-modal__styles-item', 'Right', '2' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromAriaLabel( '.ftb-global-setting-modal__styles-item', 'Bottom', '3' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromAriaLabel( '.ftb-global-setting-modal__styles-item', 'Left', '4' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromAriaLabel( '.ftb-border-width-control__header-control', 'All', '2' );
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal__styles-item', 'Dotted' );
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal__styles-item', 'Align center' );
