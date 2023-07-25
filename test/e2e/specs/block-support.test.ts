@@ -12,6 +12,7 @@ import {
 	openSidebar,
 	toggleToolsPanelMenu,
 	clickButtonWithAriaLabel,
+	clickButtonWithText,
 	inputValueFromLabel,
 	inputValueFromAriaLabel,
 	selectOptionFromLabel,
@@ -101,10 +102,16 @@ describe( 'Block Support', () => {
 
 		await toggleToolsPanelMenu( 'dimensions' );
 		await page.click( `button[aria-label="Show Margin"]` );
-		const unlinkSidesLabel = [ '6-1', '6-2', '6-3', '6-4' ].includes( wpVersion )
-			? 'Unlink sides'
-			: 'Unlink Sides';
-		await clickButtonWithAriaLabel( '.dimensions-block-support-panel', unlinkSidesLabel );
+		await toggleToolsPanelMenu( 'dimensions' );
+
+		if ( wpVersion === '6' ) {
+			await clickButtonWithAriaLabel( '.dimensions-block-support-panel', 'Unlink Sides' );
+		} else if ( [ '6-1', '6-2' ].includes( wpVersion ) ) {
+			await clickButtonWithAriaLabel( '.dimensions-block-support-panel', 'Unlink sides' );
+		} else {
+			await clickButtonWithAriaLabel( '.dimensions-block-support-panel', 'Margin options' );
+			await clickButtonWithText( '//div[@aria-label="Margin options"]', 'Custom' );
+		}
 
 		if ( [ '6-1', '6-2', '6-3', '6-4' ].includes( wpVersion ) ) {
 			for ( let i = 0; i < 4; i++ ) {

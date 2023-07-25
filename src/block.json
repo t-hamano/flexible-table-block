@@ -246,10 +246,16 @@
 			"__experimentalTextTransform": true,
 			"__experimentalFontStyle": true,
 			"__experimentalFontWeight": true,
-			"__experimentalLetterSpacing": true
+			"__experimentalLetterSpacing": true,
+			"__experimentalDefaultControls": {
+				"fontSize": false
+			}
 		},
 		"spacing": {
-			"margin": true
+			"margin": true,
+			"__experimentalDefaultControls": {
+				"margin": false
+			}
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},
