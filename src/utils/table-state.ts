@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { mapValues, pick } from 'lodash';
+import { mapValues } from 'lodash';
 import type { Properties } from 'csstype';
 
 /**
@@ -724,7 +724,12 @@ export function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
  * @return Object of virtual table.
  */
 export function toVirtualTable( state: TableAttributes ): VTable {
-	const vSections = pick( state, [ 'head', 'body', 'foot' ] );
+	const { head, body, foot } = state;
+	const vSections = {
+		head,
+		body,
+		foot,
+	};
 
 	return mapValues( vSections, ( section, sectionName ) => {
 		if ( ! section.length ) return [];
