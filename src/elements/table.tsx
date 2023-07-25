@@ -549,8 +549,17 @@ export default function Table( {
 											key={ vColIndex }
 											value={ content }
 											onChange={ ( value ) => onChangeCellContent( value, cell ) }
+											// Up to WordPres 6.2
 											// @ts-ignore: `unstableOnFocus` prop is not exist at @types
 											unstableOnFocus={ () => {
+												if ( ! selectMode || isTabMove ) {
+													isTabMove = false;
+													setSelectedLine( undefined );
+													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+												}
+											} }
+											// From WordPress 6.3
+											onFocus={ () => {
 												if ( ! selectMode || isTabMove ) {
 													isTabMove = false;
 													setSelectedLine( undefined );

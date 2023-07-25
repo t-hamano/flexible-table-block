@@ -47,8 +47,14 @@ export default function TableCaption( {
 			style={ captionStylesObj }
 			value={ caption }
 			onChange={ onChange }
+			// Up to WordPres 6.2
 			// @ts-ignore: `unstableOnFocus` prop is not exist at @types
 			unstableOnFocus={ () => {
+				setSelectedLine( undefined );
+				setSelectedCells( undefined );
+			} }
+			// From WordPress 6.3
+			onFocus={ () => {
 				setSelectedLine( undefined );
 				setSelectedCells( undefined );
 			} }
