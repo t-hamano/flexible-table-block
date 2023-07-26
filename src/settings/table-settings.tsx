@@ -237,7 +237,7 @@ export default function TableSettings( {
 					sprintf(
 						/* translators: %d is replaced with the number of breakpoint. */
 						__( 'When the screen width is %dpx or more.', 'flexible-table-block' ),
-						options.breakpoint + 1
+						Math.abs( options.breakpoint ) + 1
 					)
 				}
 				onChange={ onChangeIsScrollOnPc }
