@@ -95,6 +95,11 @@ function observeConsoleLogging() {
 			return;
 		}
 
+		// unstableOnFocus property of RichText component removed in WordPress 6.3
+		if ( text.startsWith( 'Warning: React does not recognize the `%s` prop on a DOM element.' ) ) {
+			return;
+		}
+
 		const logFunction = OBSERVED_CONSOLE_MESSAGE_TYPES[ type ];
 
 		// As of Puppeteer 1.6.1, `message.text()` wrongly returns an object of
