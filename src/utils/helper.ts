@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import _ from 'lodash';
 import type { PropertyValue } from 'csstype';
 
 const DEFAULT_PRECISION: number = 4;
