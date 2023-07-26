@@ -1,11 +1,7 @@
 /**
  * WordPress dependencies
  */
-import {
-	createBlock,
-	// @ts-ignore: has no exported member
-	store as blocksStore,
-} from '@wordpress/blocks';
+import { createBlock, store as blocksStore } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import type { TransformBlock } from '@wordpress/blocks';
 
