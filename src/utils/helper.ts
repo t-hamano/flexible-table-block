@@ -59,8 +59,11 @@ export function parseCssValue( cssValue: string ): FourCssValues {
 /**
  * Sanitize the value of UnitControl.
  *
- * @param initialValue UnitControl value.
- * @param options      Sanitize options.
+ * @param initialValue      UnitControl value.
+ * @param options           Sanitize options.
+ * @param options.minNum    Minimum number.
+ * @param options.maxNum    Minimum number.
+ * @param options.precision Precision.
  * @return Sanitized UnitControl value.
  */
 export function sanitizeUnitValue(
@@ -87,7 +90,8 @@ export function sanitizeUnitValue(
 		num = Math.min( options.maxNum, num );
 	}
 
-	num = _.floor( num, options?.precision || DEFAULT_PRECISION );
+	const modifier = 10 ** ( options?.precision || DEFAULT_PRECISION );
+	num = Math.round( num * modifier ) / modifier;
 
 	const unit: string = value.match( /[\d.\-+]*\s*(.*)/ )?.[ 1 ] ?? '';
 
