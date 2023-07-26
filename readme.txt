@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 6.1
-Tested up to: 6.2
-Stable tag: 2.9.1
+Tested up to: 6.3
+Stable tag: 3.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,13 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.0.0 =
+
+* Tested to WordPress 6.3
+* Fix: Add missing top border in the block sidebar
+* Drop support for WordPress 5.9, 6.0
+* Drop support for PHP7.3
 
 = 2.9.1 =
 * Enhancement: Adjust tab width in global setting modal
