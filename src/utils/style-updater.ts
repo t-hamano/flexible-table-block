@@ -6,7 +6,7 @@ import type { Properties } from 'csstype';
 /**
  * Internal dependencies
  */
-import { sanitizeUnitValue } from './helper';
+import { cleanEmptyObject, sanitizeUnitValue } from './helper';
 import type { CornerProps, DirectionProps } from './style-picker';
 
 function getCssPropertyWithFourDirection(
@@ -57,19 +57,17 @@ export function updatePadding(
 	const bottom = values.bottom ? sanitizeUnitValue( values.bottom ) : undefined;
 	const left = values.left ? sanitizeUnitValue( values.left ) : undefined;
 
-	const newPaddingValues = {
-		paddingTop: top,
-		paddingRight: right,
-		paddingBottom: bottom,
-		paddingLeft: left,
-	};
-
 	const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...newStyles } = styles;
 
 	if ( ! top || ! right || ! bottom || ! left ) {
 		return {
 			...newStyles,
-			...newPaddingValues,
+			...cleanEmptyObject( {
+				paddingTop: top,
+				paddingRight: right,
+				paddingBottom: bottom,
+				paddingLeft: left,
+			} ),
 		};
 	}
 
@@ -109,12 +107,12 @@ export function updateBorderWidth(
 	if ( ! top || ! right || ! bottom || ! left ) {
 		return {
 			...newStyles,
-			...{
+			...cleanEmptyObject( {
 				borderTopWidth: top,
 				borderRightWidth: right,
 				borderBottomWidth: bottom,
 				borderLeftWidth: left,
-			},
+			} ),
 		};
 	}
 
@@ -154,12 +152,12 @@ export function updateBorderStyle(
 	if ( ! top || ! right || ! bottom || ! left ) {
 		return {
 			...newStyles,
-			...( {
+			...cleanEmptyObject( {
 				borderTopStyle: top,
 				borderRightStyle: right,
 				borderBottomStyle: bottom,
 				borderLeftStyle: left,
-			} as Properties ),
+			} ),
 		};
 	}
 
@@ -199,12 +197,12 @@ export function updateBorderColor(
 	if ( ! top || ! right || ! bottom || ! left ) {
 		return {
 			...newStyles,
-			...{
+			...cleanEmptyObject( {
 				borderTopColor: top,
 				borderRightColor: right,
 				borderBottomColor: bottom,
 				borderLeftColor: left,
-			},
+			} ),
 		};
 	}
 
@@ -280,12 +278,12 @@ export function updateBorderRadius(
 	if ( ! topLeft || ! topRight || ! bottomRight || ! bottomLeft ) {
 		return {
 			...newStyles,
-			...{
+			...cleanEmptyObject( {
 				borderTopLeftRadius: topLeft,
 				borderTopRightRadius: topRight,
 				borderBottomRightRadius: bottomRight,
 				borderBottomLeftRadius: bottomLeft,
-			},
+			} ),
 		};
 	}
 
