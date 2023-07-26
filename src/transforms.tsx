@@ -105,8 +105,8 @@ const transforms: Transforms = {
 								.map( ( cell ) => ( {
 									content: cell.content,
 									tag: 'head' === cell.sectionName ? 'th' : 'td',
-									// rowspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.rowSpan ) : undefined,
-									// colspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.colSpan ) : undefined,
+									rowspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.rowSpan ) : undefined,
+									colspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.colSpan ) : undefined,
 								} ) ),
 						} ) );
 						coreTableAttributes[ sectionName ] = newSection;
