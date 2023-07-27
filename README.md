@@ -5,4 +5,4 @@
 
 ![Flexible Table Block](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/banner-1544x500.png)
 
-"Flexible Table Block" is a custom block plugin for the WordPress block editor that allows you to create tables in any configuration.
+Flexible Table Block is a custom block plugin for the WordPress block editor that allows you to create tables in any configuration.

@@ -19,7 +19,7 @@ You can merge or split cells from multiple selected cells.
 
 **Flexible Styling**
 
-You can set various styles for each tag of table, cell, and caption indivisually.
+You can set various styles for each tag of table, cell, and caption individually.
 
 **Advanced UI**
 
