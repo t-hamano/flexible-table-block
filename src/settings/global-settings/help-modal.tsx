@@ -83,15 +83,6 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					}
 				) }
 			</p>
-			<hr />
-			<ExternalLink
-				href={ __(
-					'https://github.com/t-hamano/flexible-table-block/wiki/English-Manual',
-					'flexible-table-block'
-				) }
-			>
-				{ __( 'Read more in the manual', 'flexible-table-block' ) }
-			</ExternalLink>
 		</Modal>
 	);
 }
