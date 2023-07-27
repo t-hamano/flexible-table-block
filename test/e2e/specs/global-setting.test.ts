@@ -107,9 +107,12 @@ describe( 'Global Setting', () => {
 			`.editor-styles-wrapper .wp-block-flexible-table-block-table>table{width:90%;max-width:110%;border-collapse:separate;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th,.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th{color:#333333;background-color:#555555;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{color:#444444;background-color:#666666;}`
 		);
 
-		// Restor settings.
+		// Restore settings.
 		await clickButton( 'Restore default settings' );
-		await clickButton( 'Restore' );
+		await clickButtonWithText(
+			'//div[contains(@class,"ftb-global-setting-modal__confirm-popover")]',
+			'Restore'
+		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 		const [ defaultStyleTag ] = await page.$$( '#flexible-table-block-editor-inline-css' );
 		const defaultInnerText = await page.evaluate(
