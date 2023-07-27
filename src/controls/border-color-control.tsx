@@ -160,7 +160,6 @@ export default function BorderColorControl( {
 								{ isPickerOpen && ! pickerIndex && (
 									<Popover
 										className="ftb-border-color-control__popover"
-										position="top right"
 										onClose={ handleOnPickerClose }
 									>
 										<ColorPalette
@@ -191,7 +190,6 @@ export default function BorderColorControl( {
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover
 											className="ftb-border-color-control__popover"
-											position="top right"
 											onClose={ handleOnPickerClose }
 										>
 											<ColorPalette

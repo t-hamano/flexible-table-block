@@ -92,11 +92,7 @@ export default function ColorControl( {
 									<ColorIndicator colorValue={ value || '' } />
 								</Button>
 								{ isPickerOpen && (
-									<Popover
-										className="ftb-color-control__popover"
-										position="top right"
-										onClose={ handleOnPickerClose }
-									>
+									<Popover className="ftb-color-control__popover" onClose={ handleOnPickerClose }>
 										<ColorPalette
 											colors={ [ ...colors, ...colorsProp ] }
 											value={ value || '' }
@@ -104,11 +100,11 @@ export default function ColorControl( {
 										/>
 									</Popover>
 								) }
-								<Popover.Slot />
 							</div>
 						</div>
 					</div>
 				</div>
+				<Popover.Slot />
 			</BaseControl>
 		</SlotFillProvider>
 	);
