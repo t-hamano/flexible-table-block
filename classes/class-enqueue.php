@@ -37,7 +37,7 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue front-end inline style
+	 * Enqueue front-end inline scripts
 	 */
 	public function enqueue_scripts() {
 		$responsive_css = Helper::get_responsive_css();
@@ -48,9 +48,19 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue block-editor inline style
+	 * Enqueue block-editor inline scripts
 	 */
 	public function enqueue_block_editor_assets() {
+		// TODO: Once the minimum WordPress version supported by the plugin is 6.3 or higher,
+		// this process will be removed.
+		wp_localize_script(
+			'flexible-table-block-table-editor-script',
+			'ftbObj',
+			array(
+				'useOnFocus' => is_wp_version_compatible( '6.3' ),
+			)
+		);
+
 		$block_css = Helper::get_block_css( '.editor-styles-wrapper ' );
 		$css       = Helper::minify_css( $block_css );
 

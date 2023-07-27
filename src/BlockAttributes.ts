@@ -16,6 +16,12 @@ import type {
 	BORDER_COLLAPSE_CONTROLS,
 } from './constants';
 
+declare global {
+	interface Window {
+		ftbObj: any;
+	}
+}
+
 // Controls Attributes value types
 export type StickyValue = ( typeof STICKY_CONTROLS )[ number ][ 'value' ];
 export type CaptionSideValue = ( typeof CAPTION_SIDE_CONTROLS )[ number ][ 'value' ];

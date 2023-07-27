@@ -399,6 +399,30 @@ export default function Table( {
 
 								const cellStylesObj = convertToObject( styles );
 
+								// TODO: Once the minimum WordPress version supported by the plugin is 6.3 or higher,
+								// Use only onFocus.
+								const useOnFocus = !! window?.ftbObj?.useOnFocus;
+
+								const focusProp = useOnFocus
+									? {
+											onFocus: () => {
+												if ( ! selectMode || isTabMove ) {
+													isTabMove = false;
+													setSelectedLine( undefined );
+													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+												}
+											},
+									  }
+									: {
+											unstableOnFocus: () => {
+												if ( ! selectMode || isTabMove ) {
+													isTabMove = false;
+													setSelectedLine( undefined );
+													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+												}
+											},
+									  };
+
 								return (
 									<Cell
 										key={ vColIndex }
@@ -551,23 +575,7 @@ export default function Table( {
 											key={ vColIndex }
 											value={ content }
 											onChange={ ( value ) => onChangeCellContent( value, cell ) }
-											// Up to WordPres 6.2
-											// @ts-ignore: `unstableOnFocus` prop is not exist at @types
-											unstableOnFocus={ () => {
-												if ( ! selectMode || isTabMove ) {
-													isTabMove = false;
-													setSelectedLine( undefined );
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-												}
-											} }
-											// From WordPress 6.3
-											onFocus={ () => {
-												if ( ! selectMode || isTabMove ) {
-													isTabMove = false;
-													setSelectedLine( undefined );
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-												}
-											} }
+											{ ...focusProp }
 											aria-label={ CELL_ARIA_LABEL[ sectionName as SectionName ] }
 										/>
 										{ isSelected &&
