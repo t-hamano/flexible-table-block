@@ -657,7 +657,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												'flexible-table-block'
 											) }
 											help={ __(
-												'Focus insert/select buttons, select row/column buttons, section label with the cursor movement keys.',
+												'Focus insert/select buttons, select row/column buttons, and section label with the cursor movement keys.',
 												'flexible-table-block'
 											) }
 											checked={ !! currentOptions.focus_control_button }
@@ -686,7 +686,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									<ToggleControl
 										label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
 										help={ __(
-											'Pressing the tab key moves focus to the next cell. Holding down the shift key moves focus to the previous cell.',
+											'Pressing the tab key moves focus to the next cell. Hold down the shift key moves focus to the previous cell.',
 											'flexible-table-block'
 										) }
 										checked={ !! currentOptions.tab_move }
