@@ -20,7 +20,13 @@ class Enqueue {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Enqueue block-editor inline style.
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
+		// TODO: Once the minimum WordPress version supported by the plugin is 6.3 or higher,
+		// enqueue_block_editor_assets will be removed.
+		if ( is_wp_version_compatible( '6.3' ) ) {
+			add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_editor_assets' ) );
+		} else {
+			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
+		}
 	}
 
 	/**
