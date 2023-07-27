@@ -97,7 +97,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			<legend className="components-placeholder__instructions">
 				{ createInterpolateElement(
 					__(
-						'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select range.',
+						'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
 						'flexible-table-block'
 					),
 					{ code: <code /> }

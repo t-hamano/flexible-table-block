@@ -305,7 +305,7 @@ export default function Table( {
 				if ( fromCell.sectionName !== sectionName ) {
 					// eslint-disable-next-line no-alert, no-undef
 					alert(
-						__( 'Cannot select range cells from difference section.', 'flexible-table-block' )
+						__( 'Cannot select range cells from difference sections.', 'flexible-table-block' )
 					);
 					return;
 				}
@@ -324,7 +324,9 @@ export default function Table( {
 
 			if ( newSelectedCells.length && sectionName !== newSelectedCells[ 0 ].sectionName ) {
 				// eslint-disable-next-line no-alert, no-undef
-				alert( __( 'Cannot select multi cells from difference section.', 'flexible-table-block' ) );
+				alert(
+					__( 'Cannot select multi cells from difference sections.', 'flexible-table-block' )
+				);
 				return;
 			}
 

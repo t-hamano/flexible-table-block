@@ -181,7 +181,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 	return (
 		<SlotFillProvider>
 			<Modal
-				title={ __( 'Flexible Table Block global setting', 'flexible-table-block' ) }
+				title={ __( 'Flexible Table Block Global setting', 'flexible-table-block' ) }
 				className="ftb-global-setting-modal"
 				onRequestClose={ () => setIsSettingModalOpen( false ) }
 			>
@@ -312,7 +312,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										<ColorControl
 											id="flexible-table-block-global-row-odd-color"
 											label={ __(
-												'Stripe style background color ( odd rows )',
+												'Striped style background color ( odd rows )',
 												'flexible-table-block'
 											) }
 											className="ftb-global-setting-modal__styles-item"
@@ -330,7 +330,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										<ColorControl
 											id="flexible-table-block-global-row-even-color"
 											label={ __(
-												'Stripe style background color ( even rows )',
+												'Striped style background color ( even rows )',
 												'flexible-table-block'
 											) }
 											className="ftb-global-setting-modal__styles-item"
@@ -686,7 +686,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									<ToggleControl
 										label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
 										help={ __(
-											'Pressing the tab key moves focus to the next cell. Hold down the shift key moves focus to the previous cell.',
+											'Pressing the tab key moves the focus to the next cell. Holding down the shift key moves the focus to the previous cell.',
 											'flexible-table-block'
 										) }
 										checked={ !! currentOptions.tab_move }
@@ -714,11 +714,11 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									{ isAdministrator && (
 										<ToggleControl
 											label={ __(
-												'Show global setting button to non-administrative users',
+												'Show Global setting button to non-administrative users',
 												'flexible-table-block'
 											) }
 											help={ __(
-												'By turning it on, you can prevent non-administrative users from changing global setting.',
+												'By turning it on, you can prevent non-administrative users from changing Global setting.',
 												'flexible-table-block'
 											) }
 											checked={ !! currentOptions.show_global_setting }

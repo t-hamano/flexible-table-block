@@ -37,7 +37,7 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 			<p>
 				{ createInterpolateElement(
 					__(
-						'Hold <code>Ctrl</code> key to select multiple cells or hold <code>Shift</code> key to select range.',
+						'Hold <code>Ctrl</code> key to select multiple cells or hold <code>Shift</code> key to select the range.',
 						'flexible-table-block'
 					),
 					{ code: <code /> }
