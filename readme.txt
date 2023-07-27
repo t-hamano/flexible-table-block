@@ -49,6 +49,7 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 * Fix: Incorrect pixel value in description about breakpoint
 * Fix: Popovers in Global Settings modal are not showing in the Site Editor
 * Fix: Cursor style when mousing over RichText in the cell
+* Change: Style and script enqueue handle name
 * Clean: Remove link to wiki page in help modal
 * Drop support for WordPress 5.9, 6.0
 * Drop support for PHP7.3
