@@ -32,7 +32,10 @@ describe( 'Global Setting', () => {
 
 		// Restor settings.
 		await clickButton( 'Restore default settings' );
-		await clickButton( 'Restore' );
+		await clickButtonWithText(
+			'//div[contains(@class,"ftb-global-setting-modal__confirm-popover")]',
+			'Restore'
+		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal__notice', 'Dismiss this notice' );
 
