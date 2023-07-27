@@ -83,7 +83,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 	// Update the inline CSS.
 	function updateInlineCss( css: string ) {
 		// Update the inline CSS of the global document.
-		const styleSheet = document.getElementById( 'flexible-table-block-editor-inline-css' );
+		const styleSheet = document.getElementById( 'flexible-table-block-table-editor-style-css' );
 
 		if ( styleSheet ) {
 			styleSheet.textContent = css;
@@ -98,7 +98,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 			if ( ! iframeWindow ) continue;
 
 			const iframeStyleSheet = iframeWindow.document.getElementById(
-				'flexible-table-block-editor-inline-css'
+				'flexible-table-block-table-editor-style-css'
 			);
 
 			if ( iframeStyleSheet ) {
