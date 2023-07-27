@@ -43,9 +43,13 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 == Changelog ==
 
 = 3.0.0 =
-
 * Tested to WordPress 6.3
-* Fix: Add missing top border in the block sidebar
+* Fix: Missing top border in the block sidebar
+* Fix: Some grammatical errors
+* Fix: Incorrect pixel value in description about breakpoint
+* Fix: Popovers in Global Settings modal are not showing in the Site Editor
+* Fix: Cursor style when mousing over RichText in the cell
+* Clean: Remove link to wiki page in help modal
 * Drop support for WordPress 5.9, 6.0
 * Drop support for PHP7.3
 
