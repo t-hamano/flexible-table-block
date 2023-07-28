@@ -6,7 +6,8 @@ import type { Properties } from 'csstype';
 /**
  * Internal dependencies
  */
-import { FourCssValues, parseCssValue } from './helper';
+import { parseCssValue } from './helper';
+import type { FourCssValues } from './helper';
 
 export interface DirectionProps {
 	top: string;
@@ -30,7 +31,7 @@ export interface CrossProps {
 /**
  * Pick padding style as object from style object.
  *
- * @param  stylesObj styles object.
+ * @param stylesObj styles object.
  * @return padding styles object.
  */
 export function pickPadding( stylesObj: Properties ): DirectionProps {
@@ -56,7 +57,7 @@ export function pickPadding( stylesObj: Properties ): DirectionProps {
 /**
  * Pick border-width style as object from style object.
  *
- * @param  stylesObj styles object.
+ * @param stylesObj styles object.
  * @return border-width styles object.
  */
 export function pickBorderWidth( stylesObj: Properties ): DirectionProps {
@@ -82,7 +83,7 @@ export function pickBorderWidth( stylesObj: Properties ): DirectionProps {
 /**
  * Pick border-color style as object from style object.
  *
- * @param  stylesObj styles object.
+ * @param stylesObj styles object.
  * @return border-color styles object.
  */
 export function pickBorderColor( stylesObj: Properties ): DirectionProps {
@@ -108,7 +109,7 @@ export function pickBorderColor( stylesObj: Properties ): DirectionProps {
 /**
  * Pick border-style style as object from style object.
  *
- * @param  stylesObj styles object.
+ * @param stylesObj styles object.
  * @return border-style styles object.
  */
 export function pickBorderStyle( stylesObj: Properties ): DirectionProps {
@@ -134,12 +135,12 @@ export function pickBorderStyle( stylesObj: Properties ): DirectionProps {
 /**
  * Pick border-radius style as object from style object.
  *
- * @param  stylesObj                         styles object.
- * @param  stylesObj.borderRadius
- * @param  stylesObj.borderTopLeftRadius
- * @param  stylesObj.borderTopRightRadius
- * @param  stylesObj.borderBottomRightRadius
- * @param  stylesObj.borderBottomLeftRadius
+ * @param stylesObj                         styles object.
+ * @param stylesObj.borderRadius
+ * @param stylesObj.borderTopLeftRadius
+ * @param stylesObj.borderTopRightRadius
+ * @param stylesObj.borderBottomRightRadius
+ * @param stylesObj.borderBottomLeftRadius
  * @return border-radius styles object.
  */
 export function pickBorderRadius( stylesObj: Properties ): CornerProps {
@@ -164,7 +165,7 @@ export function pickBorderRadius( stylesObj: Properties ): CornerProps {
 /**
  * Pick border-spacing style as object from style object.
  *
- * @param  stylesObj styles object.
+ * @param stylesObj styles object.
  * @return border-spacing styles object.
  */
 export function pickBorderSpacing( stylesObj: Properties ): CrossProps {

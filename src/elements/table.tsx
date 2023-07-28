@@ -4,7 +4,6 @@
 import classnames from 'classnames';
 import type { Properties } from 'csstype';
 import type { Dispatch, SetStateAction, MouseEvent, KeyboardEvent } from 'react';
-import { omit } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -32,7 +31,6 @@ import {
 	toVirtualRows,
 	toTableAttributes,
 	isEmptySection,
-	VRow,
 } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 
@@ -40,6 +38,7 @@ import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttribu
 import type {
 	VTable,
 	VCell,
+	VRow,
 	VSelectMode,
 	VSelectedLine,
 	VSelectedCells,
@@ -47,14 +46,15 @@ import type {
 import type { StoreOptions } from '../store';
 
 function TSection( props: any ) {
-	const name: SectionName = props.name;
+	const { name, ...restProps } = props;
 	const TagName = `t${ name }`;
-	return <TagName { ...omit( props, 'name' ) } />;
+	return <TagName { ...restProps } />;
 }
 
 function Cell( props: any ) {
-	const TagName: CellTagValue = props.name;
-	return <TagName { ...omit( props, 'name' ) } />;
+	const { name, ...restProps } = props;
+	const TagName: CellTagValue = name;
+	return <TagName { ...restProps } />;
 }
 
 type Props = {
@@ -90,7 +90,7 @@ export default function Table( {
 
 	// Manage rendering status as state since some processing may be performed before rendering components.
 	const [ isReady, setIdReady ] = useState< boolean >( false );
-	useEffect( () => setIdReady( true ) );
+	useEffect( () => setIdReady( true ), [] );
 
 	const tableRef = useRef( null );
 
@@ -305,7 +305,7 @@ export default function Table( {
 				if ( fromCell.sectionName !== sectionName ) {
 					// eslint-disable-next-line no-alert, no-undef
 					alert(
-						__( 'Cannot select range cells from difference section.', 'flexible-table-block' )
+						__( 'Cannot select range cells from difference sections.', 'flexible-table-block' )
 					);
 					return;
 				}
@@ -324,7 +324,9 @@ export default function Table( {
 
 			if ( newSelectedCells.length && sectionName !== newSelectedCells[ 0 ].sectionName ) {
 				// eslint-disable-next-line no-alert, no-undef
-				alert( __( 'Cannot select multi cells from difference section.', 'flexible-table-block' ) );
+				alert(
+					__( 'Cannot select multi cells from difference sections.', 'flexible-table-block' )
+				);
 				return;
 			}
 
@@ -396,6 +398,30 @@ export default function Table( {
 								);
 
 								const cellStylesObj = convertToObject( styles );
+
+								// TODO: Once the minimum WordPress version supported by the plugin is 6.3 or higher,
+								// Use only onFocus.
+								const useOnFocus = !! window?.ftbObj?.useOnFocus;
+
+								const focusProp = useOnFocus
+									? {
+											onFocus: () => {
+												if ( ! selectMode || isTabMove ) {
+													isTabMove = false;
+													setSelectedLine( undefined );
+													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+												}
+											},
+									  }
+									: {
+											unstableOnFocus: () => {
+												if ( ! selectMode || isTabMove ) {
+													isTabMove = false;
+													setSelectedLine( undefined );
+													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+												}
+											},
+									  };
 
 								return (
 									<Cell
@@ -549,14 +575,7 @@ export default function Table( {
 											key={ vColIndex }
 											value={ content }
 											onChange={ ( value ) => onChangeCellContent( value, cell ) }
-											// @ts-ignore: `unstableOnFocus` prop is not exist at @types
-											unstableOnFocus={ () => {
-												if ( ! selectMode || isTabMove ) {
-													isTabMove = false;
-													setSelectedLine( undefined );
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-												}
-											} }
+											{ ...focusProp }
 											aria-label={ CELL_ARIA_LABEL[ sectionName as SectionName ] }
 										/>
 										{ isSelected &&

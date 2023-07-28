@@ -32,21 +32,16 @@ describe( 'Global Setting', () => {
 
 		// Restor settings.
 		await clickButton( 'Restore default settings' );
-		await clickButton( 'Restore' );
+		await clickButtonWithText(
+			'//div[contains(@class,"ftb-global-setting-modal__confirm-popover")]',
+			'Restore'
+		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal__notice', 'Dismiss this notice' );
 
 		// Apply table styles.
 		await inputValueFromLabel( 'Table width', '90' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromLabel( 'Table max width', '110' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await clickButton( 'Separate' );
 		const tableColors = [
 			{ color: '111111', selector: 'odd' },
@@ -58,7 +53,7 @@ describe( 'Global Setting', () => {
 				'All'
 			);
 			await page.keyboard.press( 'Enter' );
-			if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+			if ( wpVersion === '6' ) {
 				await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
 			}
 			await inputValueFromLabel( 'Hex color', tableColors[ i ].color );
@@ -82,7 +77,7 @@ describe( 'Global Setting', () => {
 			);
 
 			await page.keyboard.press( 'Enter' );
-			if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+			if ( wpVersion === '6' ) {
 				await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
 			}
 			await inputValueFromLabel( 'Hex color', cellColors[ i ].color );
@@ -91,29 +86,9 @@ describe( 'Global Setting', () => {
 		}
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal__styles-item', 'Unlink sides' );
 		await inputValueFromAriaLabel( '.ftb-global-setting-modal__styles-item', 'Top', '1' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromAriaLabel( '.ftb-global-setting-modal__styles-item', 'Right', '2' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromAriaLabel( '.ftb-global-setting-modal__styles-item', 'Bottom', '3' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromAriaLabel( '.ftb-global-setting-modal__styles-item', 'Left', '4' );
-		if ( [ '5-9' ].includes( wpVersion ) ) {
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'ArrowDown' );
-			await page.keyboard.press( 'ArrowDown' );
-		}
 		await inputValueFromAriaLabel( '.ftb-border-width-control__header-control', 'All', '2' );
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal__styles-item', 'Dotted' );
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal__styles-item', 'Align center' );
@@ -132,9 +107,12 @@ describe( 'Global Setting', () => {
 			`.editor-styles-wrapper .wp-block-flexible-table-block-table>table{width:90%;max-width:110%;border-collapse:separate;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th,.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th{color:#333333;background-color:#555555;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{color:#444444;background-color:#666666;}`
 		);
 
-		// Restor settings.
+		// Restore settings.
 		await clickButton( 'Restore default settings' );
-		await clickButton( 'Restore' );
+		await clickButtonWithText(
+			'//div[contains(@class,"ftb-global-setting-modal__confirm-popover")]',
+			'Restore'
+		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 		const [ defaultStyleTag ] = await page.$$( '#flexible-table-block-editor-inline-css' );
 		const defaultInnerText = await page.evaluate(
@@ -145,7 +123,9 @@ describe( 'Global Setting', () => {
 			`.editor-styles-wrapper .wp-block-flexible-table-block-table>table{width:100%;max-width:100%;border-collapse:collapse;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#ffffff;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th,.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{background-color:#ffffff;}`
 		);
 
-		const modalCloseLabel = [ '6-2', '6-3' ].includes( wpVersion ) ? 'Close' : 'Close dialog';
+		const modalCloseLabel = [ '6-2', '6-3', '6-4' ].includes( wpVersion )
+			? 'Close'
+			: 'Close dialog';
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', modalCloseLabel );
 	} );
 } );

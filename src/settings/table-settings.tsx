@@ -82,7 +82,13 @@ export default function TableSettings( {
 	const { hasFixedLayout, isStackedOnMobile, isScrollOnPc, isScrollOnMobile, sticky, head, foot } =
 		attributes;
 
-	const options: StoreOptions = useSelect( ( select ) => select( STORE_NAME ).getOptions(), [] );
+	const options: StoreOptions = useSelect(
+		( select ) =>
+			select( STORE_NAME )
+				// @ts-ignore
+				.getOptions(),
+		[]
+	);
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
@@ -231,7 +237,7 @@ export default function TableSettings( {
 					sprintf(
 						/* translators: %d is replaced with the number of breakpoint. */
 						__( 'When the screen width is %dpx or more.', 'flexible-table-block' ),
-						options.breakpoint + 1
+						Math.abs( options.breakpoint ) + 1
 					)
 				}
 				onChange={ onChangeIsScrollOnPc }
@@ -274,7 +280,7 @@ export default function TableSettings( {
 					isStackedOnMobile &&
 					sticky &&
 					__(
-						'Fixed control is only enable for desktop view because "Stack on mobile" is enabled.',
+						'Fixed control is only enabled for desktop view because "Stack on mobile" is enabled.',
 						'flexible-table-block'
 					)
 				}
@@ -399,7 +405,7 @@ export default function TableSettings( {
 				id="flexible-table-block-table-padding"
 				label={ __( 'Table padding', 'flexible-table-block' ) }
 				help={ __(
-					'Table padding is only enable when "Cell Borders" is set to "Separate".',
+					'Table padding is only enabled when "Cell Borders" is set to "Separate".',
 					'flexible-table-block'
 				) }
 				values={ pickPadding( tableStylesObj ) }
@@ -416,7 +422,7 @@ export default function TableSettings( {
 				id="flexible-table-block-table-border-width"
 				label={ __( 'Table border width', 'flexible-table-block' ) }
 				help={ __(
-					'Table border width is only enable when "Cell Borders" is set to "Separate".',
+					'Table border width is only enabled when "Cell Borders" is set to "Separate".',
 					'flexible-table-block'
 				) }
 				values={ pickBorderWidth( tableStylesObj ) }

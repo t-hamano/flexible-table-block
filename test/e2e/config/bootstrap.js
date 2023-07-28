@@ -1,4 +1,3 @@
-import { get } from 'lodash';
 import {
 	clearLocalStorage,
 	enablePageDialogAccept,
@@ -83,26 +82,6 @@ function observeConsoleLogging() {
 			return;
 		}
 
-		// Ignore console errors that occur in WordPress 6.0 and below.
-		if ( text.includes( 'wp-block-button' ) ) {
-			return;
-		}
-		if ( text.includes( 'wp-block-button__link' ) ) {
-			return;
-		}
-		if ( text.includes( 'wp-block-cover' ) ) {
-			return;
-		}
-		if ( text.includes( 'wp-block-media-text' ) ) {
-			return;
-		}
-		if ( text.includes( 'https://s.w.org/images/core/5.8/art-01.jpg' ) ) {
-			return;
-		}
-		if ( text.includes( 'Expected tag name `%s`, instead saw `%s`. figure div' ) ) {
-			return;
-		}
-
 		// A bug present in WordPress 5.2 will produce console warnings when
 		// loading the Dashicons font. These can be safely ignored, as they do
 		// not otherwise regress on application behavior. This logic should be
@@ -129,13 +108,7 @@ function observeConsoleLogging() {
 		// correctly. Instead, the logic here synchronously inspects the
 		// internal object shape of the JSHandle to find the error text. If it
 		// cannot be found, the default text value is used instead.
-		text = get( message.args(), [ 0, '_remoteObject', 'description' ], text );
-
-		// Ignore some error messages output in WordPress 6.0 RC4
-		const url = get( message, [ '_stackTraceLocations', 0, 'url' ], undefined );
-		if ( url.includes( '_wp-find-template=true' ) ) {
-			return;
-		}
+		text = message.args()?.[ 0 ]?._remoteObject?.description ?? text;
 
 		// Disable reason: We intentionally bubble up the console message
 		// which, unless the test explicitly anticipates the logging via

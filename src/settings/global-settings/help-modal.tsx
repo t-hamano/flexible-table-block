@@ -24,12 +24,7 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 			<h2>{ __( 'About default table style', 'flexible-table-block' ) }</h2>
 			<p>
 				{ __(
-					'Flexible Table Block is a block that allows you to create tables in various styles.',
-					'flexible-table-block'
-				) }
-				<br />
-				{ __(
-					'First of all, it is recommended to set the default style of the table from "Global Setting".',
+					'Flexible Table Block is a block that allows you to create tables in various styles. First of all, it is recommended to set the default style of the table from "Global Setting".',
 					'flexible-table-block'
 				) }
 			</p>
@@ -37,15 +32,10 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 			<p>
 				{ createInterpolateElement(
 					__(
-						'Hold <code>Ctrl</code> key to select multiple cells or hold <code>Shift</code> key to select range.',
+						'Hold <code>Ctrl</code> key to select multiple cells or hold <code>Shift</code> key to select the range. Selecting multiple cells is used to merge cells or to change styles of multiple cells.',
 						'flexible-table-block'
 					),
 					{ code: <code /> }
-				) }
-				<br />
-				{ __(
-					'Select multiple cells is used to merge cells or to change styles of multiple cells.',
-					'flexible-table-block'
 				) }
 			</p>
 			<h2>{ __( 'About scroll table', 'flexible-table-block' ) }</h2>
@@ -83,15 +73,6 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					}
 				) }
 			</p>
-			<hr />
-			<ExternalLink
-				href={ __(
-					'https://github.com/t-hamano/flexible-table-block/wiki/English-Manual',
-					'flexible-table-block'
-				) }
-			>
-				{ __( 'Read more in the manual', 'flexible-table-block' ) }
-			</ExternalLink>
 		</Modal>
 	);
 }

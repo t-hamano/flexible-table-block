@@ -1,25 +1,17 @@
 /**
- * External dependencies
- */
-import { mapValues } from 'lodash';
-
-/**
  * WordPress dependencies
  */
-import {
-	createBlock,
-	// @ts-ignore: has no exported member
-	store as blocksStore,
-} from '@wordpress/blocks';
+import { createBlock, store as blocksStore } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import type { TransformBlock } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
  */
-import { splitMergedCell, toVirtualRows, toVirtualTable, VCell } from './utils/table-state';
+import { splitMergedCell, toVirtualRows, toVirtualTable } from './utils/table-state';
 import { normalizeRowColSpan } from './utils/helper';
 import type { BlockAttributes, CoreTableCell, CoreTableBlockAttributes } from './BlockAttributes';
+import type { VCell } from './utils/table-state';
 
 interface Transforms {
 	readonly from: ReadonlyArray< TransformBlock< CoreTableBlockAttributes > >;
@@ -99,21 +91,29 @@ const transforms: Transforms = {
 				}
 
 				// Convert to core table block attributes.
-				const sectionAttributes: any = mapValues( vTable, ( vSection ) => {
-					if ( ! vSection.length ) return [];
-					return vSection.map( ( { cells } ) => ( {
-						cells: cells
-							// Delete cells marked as deletion.
-							.filter( ( cell ) => ! cell.isHidden )
-							// Keep only the properties needed.
-							.map( ( cell ) => ( {
-								content: cell.content,
-								tag: 'head' === cell.sectionName ? 'th' : 'td',
-								rowspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.rowSpan ) : undefined,
-								colspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.colSpan ) : undefined,
-							} ) ),
-					} ) );
-				} );
+				const sectionAttributes = Object.entries( vTable ).reduce(
+					( coreTableAttributes: any, [ sectionName, section ] ) => {
+						if ( ! section.length ) {
+							return coreTableAttributes;
+						}
+
+						const newSection = section.map( ( { cells } ) => ( {
+							cells: cells
+								// Delete cells marked as deletion.
+								.filter( ( cell ) => ! cell.isHidden )
+								// Keep only the properties needed.
+								.map( ( cell ) => ( {
+									content: cell.content,
+									tag: 'head' === cell.sectionName ? 'th' : 'td',
+									rowspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.rowSpan ) : undefined,
+									colspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.colSpan ) : undefined,
+								} ) ),
+						} ) );
+						coreTableAttributes[ sectionName ] = newSection;
+						return coreTableAttributes;
+					},
+					{}
+				);
 
 				return createBlock( 'core/table', {
 					...sectionAttributes,

@@ -165,7 +165,9 @@ describe( 'Flexible table', () => {
 			'Save setting'
 		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
-		const modalCloseLabel = [ '6-2', '6-3' ].includes( wpVersion ) ? 'Close' : 'Close dialog';
+		const modalCloseLabel = [ '6-2', '6-3', '6-4' ].includes( wpVersion )
+			? 'Close'
+			: 'Close dialog';
 		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', modalCloseLabel );
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();

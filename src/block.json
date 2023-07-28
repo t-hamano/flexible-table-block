@@ -4,7 +4,7 @@
 	"title": "Flexible Table",
 	"category": "text",
 	"keywords": [ "table", "cell", "data"],
-	"description": "Create flexible configuration table.",
+	"description": "Create a flexible configuration table.",
 	"textdomain": "flexible-table-block",
 	"attributes": {
 		"contentJustification": {
@@ -246,10 +246,16 @@
 			"__experimentalTextTransform": true,
 			"__experimentalFontStyle": true,
 			"__experimentalFontWeight": true,
-			"__experimentalLetterSpacing": true
+			"__experimentalLetterSpacing": true,
+			"__experimentalDefaultControls": {
+				"fontSize": false
+			}
 		},
 		"spacing": {
-			"margin": true
+			"margin": true,
+			"__experimentalDefaultControls": {
+				"margin": false
+			}
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},

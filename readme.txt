@@ -2,10 +2,10 @@
 Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
-Requires at least: 5.9
-Tested up to: 6.2
-Stable tag: 2.9.1
-Requires PHP: 7.3
+Requires at least: 6.1
+Tested up to: 6.3
+Stable tag: 3.0.0
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ You can merge or split cells from multiple selected cells.
 
 **Flexible Styling**
 
-You can set various styles for each tag of table, cell, and caption indivisually.
+You can set various styles for each tag of table, cell, and caption individually.
 
 **Advanced UI**
 
@@ -41,6 +41,17 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.0.0 =
+* Tested to WordPress 6.3
+* Fix: Missing top border in the block sidebar
+* Fix: Some grammatical errors
+* Fix: Incorrect pixel value in description about breakpoint
+* Fix: Popovers in Global Settings modal are not showing in the Site Editor
+* Fix: Cursor style when mousing over RichText in the cell
+* Clean: Remove link to wiki page in help modal
+* Drop support for WordPress 5.9, 6.0
+* Drop support for PHP7.3
 
 = 2.9.1 =
 * Enhancement: Adjust tab width in global setting modal

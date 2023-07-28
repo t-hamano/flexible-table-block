@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { times } from 'lodash';
 import classnames from 'classnames';
 import type { FormEvent } from 'react';
 
@@ -98,7 +97,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			<legend className="components-placeholder__instructions">
 				{ createInterpolateElement(
 					__(
-						'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select range.',
+						'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
 						'flexible-table-block'
 					),
 					{ code: <code /> }
@@ -114,33 +113,35 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						{ headerSection && (
 							<thead>
 								<tr>
-									{ times( colCount, ( colIndex ) => {
-										if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-										return <th key={ colIndex } style={ { height: cellHeight } } />;
-									} ) }
+									{ Array.from( {
+										length: Math.min( colCount, THRESHOLD_PREVIEW_TABLE_COL ),
+									} ).map( ( _col, colIndex ) => (
+										<th key={ colIndex } style={ { height: cellHeight } } />
+									) ) }
 								</tr>
 							</thead>
 						) }
 						<tbody>
-							{ times( rowCount, ( rowIndex ) => {
-								if ( rowIndex > THRESHOLD_PREVIEW_TABLE_ROW ) return;
-								return (
+							{ Array.from( { length: Math.min( rowCount, THRESHOLD_PREVIEW_TABLE_ROW ) } ).map(
+								( _row, rowIndex ) => (
 									<tr key={ rowIndex }>
-										{ times( Math.min( colCount, MAX_PREVIEW_TABLE_COL ), ( colIndex ) => {
-											if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-											return <td key={ colIndex } style={ { height: cellHeight } } />;
-										} ) }
+										{ Array.from( {
+											length: Math.min( colCount, THRESHOLD_PREVIEW_TABLE_COL ),
+										} ).map( ( _col, colIndex ) => (
+											<td key={ colIndex } style={ { height: cellHeight } } />
+										) ) }
 									</tr>
-								);
-							} ) }
+								)
+							) }
 						</tbody>
 						{ footerSection && (
 							<tfoot>
 								<tr>
-									{ times( colCount, ( colIndex ) => {
-										if ( colIndex > THRESHOLD_PREVIEW_TABLE_COL ) return;
-										return <td key={ colIndex } style={ { height: cellHeight } } />;
-									} ) }
+									{ Array.from( {
+										length: Math.min( colCount, THRESHOLD_PREVIEW_TABLE_COL ),
+									} ).map( ( _col, colIndex ) => (
+										<td key={ colIndex } style={ { height: cellHeight } } />
+									) ) }
 								</tr>
 							</tfoot>
 						) }

@@ -398,6 +398,13 @@
 	}
 }
 
+// TODO: Fix that cursor does not change when mouseover RichText
+// in the Site Editor. This seems to be a bug in the core and will
+// be removed as soon as it is fixed in the core.
+.is-outline-mode .wp-block-flexible-table-block-table.is-selected .rich-text {
+	cursor: initial;
+}
+
 // Setting Component Styles
 .ftb-button-group {
 	display: block;
@@ -640,6 +647,7 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: 16px;
+	border-top: 1px solid #e0e0e0;
 
 	.components-spinner {
 		margin: 0;
@@ -870,8 +878,6 @@
 }
 
 // Backward compatibility
-body.branch-5-9,
-body.branch-6,
 body.branch-6-1 {
 
 	.ftb-global-setting-modal__tab-panel .components-tab-panel__tabs-item {
@@ -883,34 +889,5 @@ body.branch-6-1 {
 		&:focus:not(:disabled) {
 			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
 		}
-	}
-}
-
-body.branch-5-9,
-body.branch-6 {
-
-	.ftb-base-control-label {
-		font-size: 13px;
-		font-weight: normal;
-		text-transform: none;
-	}
-
-	.ftb-border-radius-control,
-	.ftb-border-width-control,
-	.ftb-border-style-control,
-	.ftb-border-spacing-control,
-	.ftb-border-color-control,
-	.ftb-padding-control,
-	.ftb-color-control {
-
-		&__header .components-text {
-			font-size: 13px;
-			font-weight: normal;
-			text-transform: none;
-		}
-	}
-
-	.ftb-global-setting-modal .components-toggle-control .components-base-control__field {
-		margin-bottom: 0;
 	}
 }

@@ -15,7 +15,7 @@ class Helper {
 	 * @return string
 	 */
 	public static function get_block_css( $prefix = '' ) {
-		$selector = "${prefix}." . FTB_BLOCK_CLASS;
+		$selector = "{$prefix}." . FTB_BLOCK_CLASS;
 
 		// CSS selectors.
 		$styles = array(
@@ -32,7 +32,7 @@ class Helper {
 
 		$option = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
 
-		// Genelate styles based on global setting.
+		// Genelate styles based on Global setting.
 		foreach ( $option as $key => $value ) {
 			if ( '' === $value || null === $value ) {
 				continue;
@@ -109,7 +109,7 @@ class Helper {
 	 * @return string
 	 */
 	public static function get_responsive_css( $prefix = '' ) {
-		$selector   = "${prefix}." . FTB_BLOCK_CLASS;
+		$selector   = "{$prefix}." . FTB_BLOCK_CLASS;
 		$breakpoint = get_option( FTB_OPTION_PREFIX . '_breakpoint', Settings::OPTIONS['breakpoint']['default'] );
 		$max_width  = $breakpoint;
 		$min_width  = $max_width + 1;
@@ -212,13 +212,13 @@ class Helper {
 		}
 
 		if ( $top === $bottom && $left === $right ) {
-			return "${top} ${left}";
+			return "{$top} {$left}";
 		}
 
 		if ( $left === $right ) {
-			return "${top} ${left} ${bottom}";
+			return "{$top} {$left} {$bottom}";
 		}
 
-		return "${top} ${right} ${bottom} ${left}";
+		return "{$top} {$right} {$bottom} {$left}";
 	}
 }

@@ -6,8 +6,7 @@ import type { Properties } from 'csstype';
 /**
  * Internal dependencies
  */
-import { pickBy, omit, mapValues } from 'lodash';
-import { sanitizeUnitValue } from './helper';
+import { cleanEmptyObject, sanitizeUnitValue } from './helper';
 import type { CornerProps, DirectionProps } from './style-picker';
 
 function getCssPropertyWithFourDirection(
@@ -43,8 +42,8 @@ function getCssPropertyWithFourDirection(
 /**
  * Update padding style of styles object.
  *
- * @param  styles Styles object.
- * @param  values padding values object.
+ * @param styles Styles object.
+ * @param values padding values object.
  * @return  New Styles object.
  */
 export function updatePadding(
@@ -53,37 +52,36 @@ export function updatePadding(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'padding';
-	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
-		sanitizeUnitValue( value )
-	);
-	const newValues = {
-		paddingTop: top,
-		paddingRight: right,
-		paddingBottom: bottom,
-		paddingLeft: left,
-	};
+	const top = values.top ? sanitizeUnitValue( values.top ) : undefined;
+	const right = values.right ? sanitizeUnitValue( values.right ) : undefined;
+	const bottom = values.bottom ? sanitizeUnitValue( values.bottom ) : undefined;
+	const left = values.left ? sanitizeUnitValue( values.left ) : undefined;
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...newStyles } = styles;
 
-	if ( ! top || ! right || ! bottom || ! right ) {
-		return pickBy( {
+	if ( ! top || ! right || ! bottom || ! left ) {
+		return {
 			...newStyles,
-			...newValues,
-		} );
+			...cleanEmptyObject( {
+				paddingTop: top,
+				paddingRight: right,
+				paddingBottom: bottom,
+				paddingLeft: left,
+			} ),
+		};
 	}
 
 	return {
 		...newStyles,
-		...getCssPropertyWithFourDirection( shortHandPropName, top, right, bottom, left ),
+		...getCssPropertyWithFourDirection( 'padding', top, right, bottom, left ),
 	};
 }
 
 /**
  * Update border-width style of styles object.
  *
- * @param  styles Styles object.
- * @param  values border-width values object.
+ * @param styles Styles object.
+ * @param values border-width values object.
  * @return  New Styles object.
  */
 export function updateBorderWidth(
@@ -92,38 +90,43 @@ export function updateBorderWidth(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'borderWidth';
-	const { top, right, bottom, left } = mapValues( pickBy( values ), ( value ) =>
-		sanitizeUnitValue( value )
-	);
+	const top = values.top ? sanitizeUnitValue( values.top ) : undefined;
+	const right = values.right ? sanitizeUnitValue( values.right ) : undefined;
+	const bottom = values.bottom ? sanitizeUnitValue( values.bottom ) : undefined;
+	const left = values.left ? sanitizeUnitValue( values.left ) : undefined;
 
-	const newValues = {
-		borderTopWidth: top,
-		borderRightWidth: right,
-		borderBottomWidth: bottom,
-		borderLeftWidth: left,
-	};
+	const {
+		borderWidth,
+		borderTopWidth,
+		borderRightWidth,
+		borderBottomWidth,
+		borderLeftWidth,
+		...newStyles
+	} = styles;
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
-
-	if ( ! top || ! right || ! bottom || ! right ) {
-		return pickBy( {
+	if ( ! top || ! right || ! bottom || ! left ) {
+		return {
 			...newStyles,
-			...newValues,
-		} );
+			...cleanEmptyObject( {
+				borderTopWidth: top,
+				borderRightWidth: right,
+				borderBottomWidth: bottom,
+				borderLeftWidth: left,
+			} ),
+		};
 	}
 
 	return {
 		...newStyles,
-		...getCssPropertyWithFourDirection( shortHandPropName, top, right, bottom, left ),
+		...getCssPropertyWithFourDirection( 'borderWidth', top, right, bottom, left ),
 	};
 }
 
 /**
  * Update border-style style of styles object.
  *
- * @param  styles Styles object.
- * @param  values border-style values object.
+ * @param styles Styles object.
+ * @param values border-style values object.
  * @return New Styles object.
  */
 export function updateBorderStyle(
@@ -132,35 +135,43 @@ export function updateBorderStyle(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'borderStyle';
-	const { top, right, bottom, left } = pickBy( values );
-	const newValues = {
-		borderTopStyle: top,
-		borderRightStyle: right,
-		borderBottomStyle: bottom,
-		borderLeftStyle: left,
-	};
+	const top = values.top ?? undefined;
+	const right = values.right ?? undefined;
+	const bottom = values.bottom ?? undefined;
+	const left = values.left ?? undefined;
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const {
+		borderStyle,
+		borderTopStyle,
+		borderRightStyle,
+		borderBottomStyle,
+		borderLeftStyle,
+		...newStyles
+	} = styles;
 
-	if ( ! top || ! right || ! bottom || ! right ) {
-		return pickBy( {
+	if ( ! top || ! right || ! bottom || ! left ) {
+		return {
 			...newStyles,
-			...newValues,
-		} );
+			...cleanEmptyObject( {
+				borderTopStyle: top,
+				borderRightStyle: right,
+				borderBottomStyle: bottom,
+				borderLeftStyle: left,
+			} ),
+		};
 	}
 
 	return {
 		...newStyles,
-		...getCssPropertyWithFourDirection( shortHandPropName, top, right, bottom, left ),
+		...getCssPropertyWithFourDirection( 'borderStyle', top, right, bottom, left ),
 	};
 }
 
 /**
- * Update border-scoloryle style of styles object.
+ * Update border-color style of styles object.
  *
- * @param  styles Styles object.
- * @param  values border-color values object.
+ * @param styles Styles object.
+ * @param values border-color values object.
  * @return New Styles object.
  */
 export function updateBorderColor(
@@ -169,37 +180,45 @@ export function updateBorderColor(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'borderColor';
-	const { top, right, bottom, left } = pickBy( values );
-	const newValues = {
-		borderTopColor: top,
-		borderRightColor: right,
-		borderBottomColor: bottom,
-		borderLeftColor: left,
-	};
+	const top = values.top ?? undefined;
+	const right = values.right ?? undefined;
+	const bottom = values.bottom ?? undefined;
+	const left = values.left ?? undefined;
 
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const {
+		borderColor,
+		borderTopColor,
+		borderRightColor,
+		borderBottomColor,
+		borderLeftColor,
+		...newStyles
+	} = styles;
 
-	if ( ! top || ! right || ! bottom || ! right ) {
-		return pickBy( {
+	if ( ! top || ! right || ! bottom || ! left ) {
+		return {
 			...newStyles,
-			...newValues,
-		} );
+			...cleanEmptyObject( {
+				borderTopColor: top,
+				borderRightColor: right,
+				borderBottomColor: bottom,
+				borderLeftColor: left,
+			} ),
+		};
 	}
 
 	return {
 		...newStyles,
-		...getCssPropertyWithFourDirection( shortHandPropName, top, right, bottom, left ),
+		...getCssPropertyWithFourDirection( 'borderColor', top, right, bottom, left ),
 	};
 }
 
 /**
  * Update border-spacing style of styles object.
  *
- * @param  styles            Styles object.
- * @param  values            border-spacing values object.
- * @param  values.horizontal
- * @param  values.vertical
+ * @param styles            Styles object.
+ * @param values            border-spacing values object.
+ * @param values.horizontal
+ * @param values.vertical
  * @return New Styles object.
  */
 export function updateBorderSpacing(
@@ -208,10 +227,10 @@ export function updateBorderSpacing(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const newStyles = omit( styles, [ 'borderSpacing' ] );
-	const { horizontal, vertical } = mapValues( pickBy( values ), ( value ) =>
-		sanitizeUnitValue( value )
-	);
+	const { borderSpacing, ...newStyles } = styles;
+
+	const horizontal = values.horizontal ? sanitizeUnitValue( values.horizontal ) : undefined;
+	const vertical = values.vertical ? sanitizeUnitValue( values.vertical ) : undefined;
 
 	if ( horizontal === undefined && vertical === undefined ) {
 		return newStyles;
@@ -232,8 +251,8 @@ export function updateBorderSpacing(
 /**
  * Update border-radius style of styles object.
  *
- * @param  styles Styles object.
- * @param  values border-radius values object.
+ * @param styles Styles object.
+ * @param values border-radius values object.
  * @return  New Styles object.
  */
 export function updateBorderRadius(
@@ -242,31 +261,36 @@ export function updateBorderRadius(
 ): Properties {
 	if ( ! values ) return styles;
 
-	const shortHandPropName = 'borderRadius';
-	const { topLeft, topRight, bottomRight, bottomLeft } = mapValues( pickBy( values ), ( value ) =>
-		sanitizeUnitValue( value )
-	);
+	const topLeft = values?.topLeft ? sanitizeUnitValue( values.topLeft ) : undefined;
+	const topRight = values?.topRight ? sanitizeUnitValue( values.topRight ) : undefined;
+	const bottomRight = values?.bottomRight ? sanitizeUnitValue( values.bottomRight ) : undefined;
+	const bottomLeft = values?.bottomLeft ? sanitizeUnitValue( values.bottomLeft ) : undefined;
 
-	const newValues = {
-		borderTopLeftRadius: topLeft,
-		borderTopRightRadius: topRight,
-		borderBottomRightRadius: bottomRight,
-		borderBottomLeftRadius: bottomLeft,
-	};
-
-	const newStyles = omit( styles, [ shortHandPropName, ...Object.keys( newValues ) ] );
+	const {
+		borderRadius,
+		borderTopLeftRadius,
+		borderTopRightRadius,
+		borderBottomRightRadius,
+		borderBottomLeftRadius,
+		...newStyles
+	} = styles;
 
 	if ( ! topLeft || ! topRight || ! bottomRight || ! bottomLeft ) {
-		return pickBy( {
+		return {
 			...newStyles,
-			...newValues,
-		} );
+			...cleanEmptyObject( {
+				borderTopLeftRadius: topLeft,
+				borderTopRightRadius: topRight,
+				borderBottomRightRadius: bottomRight,
+				borderBottomLeftRadius: bottomLeft,
+			} ),
+		};
 	}
 
 	return {
 		...newStyles,
 		...getCssPropertyWithFourDirection(
-			shortHandPropName,
+			'borderRadius',
 			topLeft,
 			topRight,
 			bottomRight,

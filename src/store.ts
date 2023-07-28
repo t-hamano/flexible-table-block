@@ -8,7 +8,7 @@ import type { Property } from 'csstype';
  * WordPress dependencies
  */
 import apiFetch from '@wordpress/api-fetch';
-import { registerStore } from '@wordpress/data';
+import { createReduxStore, register } from '@wordpress/data';
 import type { Notice as NoticeType } from '@wordpress/components';
 
 /**
@@ -112,13 +112,14 @@ const resolvers = {
 	},
 };
 
-// TODO: Deprecated and should be replaced by register
-registerStore( STORE_NAME, {
+const store = createReduxStore( STORE_NAME, {
 	reducer,
 	controls,
 	selectors,
 	resolvers,
 	actions,
 } );
+
+register( store );
 
 export { STORE_NAME };

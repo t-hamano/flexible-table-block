@@ -19,14 +19,15 @@ import type { StoreOptions } from '../../store';
 
 export default function GlobalSettings() {
 	const storeOptions: StoreOptions = useSelect(
-		( select ) => select( STORE_NAME ).getOptions(),
+		( select ) =>
+			select( STORE_NAME )
+				// @ts-ignore
+				.getOptions(),
 		[]
 	);
 
 	const isAdministrator: boolean = useSelect(
-		( select ) =>
-			// @ts-ignore
-			select( coreStore ).canUser( 'create', 'users' ),
+		( select ) => select( coreStore ).canUser( 'create', 'users' ),
 		[]
 	);
 

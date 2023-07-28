@@ -1,14 +1,6 @@
-import {
-	createTable,
-	deleteColumn,
-	deleteRow,
-	insertRow,
-	VCell,
-	VRow,
-	VTable,
-} from '../table-state';
-import { times } from 'lodash';
+import { createTable, deleteColumn, deleteRow, insertRow } from '../table-state';
 import type { SectionName } from '../../BlockAttributes';
+import type { VTable, VRow, VCell } from '../../utils/table-state';
 
 const getRow = (
 	cells: number,
@@ -19,7 +11,7 @@ const getRow = (
 	options = {}
 ): VRow => {
 	return {
-		cells: times( cells, ( vColIndex ): VCell => {
+		cells: Array.from( { length: cells } ).map( ( _, vColIndex ): VCell => {
 			return {
 				content,
 				tag,

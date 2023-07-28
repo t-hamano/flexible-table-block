@@ -124,7 +124,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// In WordPress 6.2, the core table block now supports rowspan and colspan attributes.
-		const snapshot = [ '6-2', '6-3' ].includes( wpVersion )
+		const snapshot = [ '6-2', '6-3', '6-4' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
@@ -216,7 +216,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapshot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
+		const snapshot = [ '6-1', '6-2', , '6-4' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`
@@ -244,7 +244,7 @@ describe( 'Transform from flexible table block to core table block', () => {
 		await transformBlockTo( 'Table' );
 
 		// Figcaption has `.wp-element-caption` class in WordPress 6.1
-		const snapshot = [ '6-1', '6-2', '6-3' ].includes( wpVersion )
+		const snapshot = [ '6-1', '6-2', '6-3', '6-4' ].includes( wpVersion )
 			? `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`

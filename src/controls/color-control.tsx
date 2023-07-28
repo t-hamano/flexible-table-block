@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { get } from 'lodash';
 import classnames from 'classnames';
 import type { Property } from 'csstype';
 import type { ReactElement } from 'react';
@@ -18,6 +17,7 @@ import {
 	Popover,
 	ColorIndicator,
 	ColorPalette,
+	SlotFillProvider,
 	// @ts-ignore: has no exported member
 	__experimentalText as Text,
 } from '@wordpress/components';
@@ -51,7 +51,7 @@ export default function ColorControl( {
 			blockEditorStore
 			// @ts-ignore
 		).getSettings();
-		return get( settings, [ 'colors' ], [] );
+		return settings?.colors ?? [];
 	}, [] );
 
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
@@ -69,44 +69,43 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<BaseControl id={ id } className={ classNames } help={ help }>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-color-control__header">
-					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall variant="secondary" onClick={ handleOnReset }>
-						{ __( 'Reset', 'flexible-table-block' ) }
-					</Button>
-				</div>
-				<div className="ftb-color-control__controls">
-					<div className="ftb-color-control__controls-inner">
-						<div className="ftb-color-control__controls-row">
-							<Button
-								label={ __( 'All', 'flexible-table-block' ) }
-								className={ classnames( 'ftb-color-control__indicator', {
-									'ftb-color-control__indicator--none': ! value,
-									'ftb-color-control__indicator--transparent': value === 'transparent',
-								} ) }
-								onClick={ () => handleOnPickerOpen() }
-							>
-								<ColorIndicator colorValue={ value || '' } />
-							</Button>
-							{ isPickerOpen && (
-								<Popover
-									className="ftb-color-control__popover"
-									position="top right"
-									onClose={ handleOnPickerClose }
+		<SlotFillProvider>
+			<BaseControl id={ id } className={ classNames } help={ help }>
+				<div aria-labelledby={ headingId } role="region">
+					<div className="ftb-color-control__header">
+						<Text id={ headingId }>{ label }</Text>
+						<Button isSmall variant="secondary" onClick={ handleOnReset }>
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</div>
+					<div className="ftb-color-control__controls">
+						<div className="ftb-color-control__controls-inner">
+							<div className="ftb-color-control__controls-row">
+								<Button
+									label={ __( 'All', 'flexible-table-block' ) }
+									className={ classnames( 'ftb-color-control__indicator', {
+										'ftb-color-control__indicator--none': ! value,
+										'ftb-color-control__indicator--transparent': value === 'transparent',
+									} ) }
+									onClick={ () => handleOnPickerOpen() }
 								>
-									<ColorPalette
-										colors={ [ ...colors, ...colorsProp ] }
-										value={ value || '' }
-										onChange={ handleOnChange }
-									/>
-								</Popover>
-							) }
+									<ColorIndicator colorValue={ value || '' } />
+								</Button>
+								{ isPickerOpen && (
+									<Popover className="ftb-color-control__popover" onClose={ handleOnPickerClose }>
+										<ColorPalette
+											colors={ [ ...colors, ...colorsProp ] }
+											value={ value || '' }
+											onChange={ handleOnChange }
+										/>
+									</Popover>
+								) }
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</BaseControl>
+				<Popover.Slot />
+			</BaseControl>
+		</SlotFillProvider>
 	);
 }

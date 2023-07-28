@@ -42,7 +42,7 @@ class Settings {
 			'type'    => 'boolean',
 			'default' => false,
 		),
-		// Show global setting link to non-administrative users.
+		// Show Global setting button to non-administrative users.
 		'show_global_setting'   => array(
 			'type'    => 'boolean',
 			'default' => false,

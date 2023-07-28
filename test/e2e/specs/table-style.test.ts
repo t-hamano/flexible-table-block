@@ -40,7 +40,7 @@ async function applyCellStyles() {
 	);
 	await page.keyboard.press( 'Enter' );
 
-	if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+	if ( wpVersion === '6' ) {
 		await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
 	}
 	await inputValueFromLabel( 'Hex color', '111111' );
@@ -51,7 +51,7 @@ async function applyCellStyles() {
 		'All'
 	);
 	await page.keyboard.press( 'Enter' );
-	if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+	if ( wpVersion === '6' ) {
 		await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
 	}
 	await inputValueFromLabel( 'Hex color', '333333' );
@@ -110,7 +110,7 @@ async function applyCellStyles() {
 	for ( let i = 0; i < colors.length; i++ ) {
 		await clickButtonWithAriaLabel( '.ftb-border-color-control__controls', colors[ i ].label );
 		await page.keyboard.press( 'Enter' );
-		if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+		if ( wpVersion === '6' ) {
 			await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
 		}
 		await inputValueFromLabel( 'Hex color', colors[ i ].color );
@@ -214,7 +214,7 @@ describe( 'Styles', () => {
 		for ( let i = 0; i < colors.length; i++ ) {
 			await clickButtonWithAriaLabel( '.ftb-border-color-control__controls', colors[ i ].label );
 			await page.keyboard.press( 'Enter' );
-			if ( [ '5-9', '6' ].includes( wpVersion ) ) {
+			if ( wpVersion === '6' ) {
 				await clickButtonWithAriaLabel( '.components-popover__content', 'Show detailed inputs' );
 			}
 			await inputValueFromLabel( 'Hex color', colors[ i ].color );

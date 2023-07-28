@@ -6,7 +6,7 @@ import type { Properties } from 'csstype';
 /**
  * Convert inline CSS styles to object.
  *
- * @param  inlineStyles Inline CSS styles.
+ * @param inlineStyles Inline CSS styles.
  * @return CSS styles object.
  */
 export function convertToObject( inlineStyles: string | undefined ): Properties {
@@ -36,7 +36,7 @@ export function convertToObject( inlineStyles: string | undefined ): Properties 
 /**
  * Convert CSS styles object to Inline CSS styles.
  *
- * @param  stylesObj CSS styles object.
+ * @param stylesObj CSS styles object.
  * @return Inline CSS styles
  */
 export function convertToInline( stylesObj: Properties ): string {
