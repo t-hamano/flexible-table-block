@@ -657,7 +657,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												'flexible-table-block'
 											) }
 											help={ __(
-												'Focus insert/select buttons, select row/column buttons, and section label with the cursor movement keys.',
+												'Focus insert/select buttons, select row/column buttons, and section labels with the cursor movement keys.',
 												'flexible-table-block'
 											) }
 											checked={ !! currentOptions.focus_control_button }
