@@ -100,7 +100,7 @@ describe( 'Global Setting', () => {
 		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
 
-		const [ styleTag ] = await page.$$( '#flexible-table-block-table-editor-style-inline-css' );
+		const [ styleTag ] = await page.$$( '#flexible-table-block-editor-inline-css' );
 		const innerText = await page.evaluate( ( element ) => element.innerText, styleTag );
 
 		expect( innerText ).toBe(
@@ -114,9 +114,7 @@ describe( 'Global Setting', () => {
 			'Restore'
 		);
 		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
-		const [ defaultStyleTag ] = await page.$$(
-			'#flexible-table-block-table-editor-style-inline-css'
-		);
+		const [ defaultStyleTag ] = await page.$$( '#flexible-table-block-editor-inline-css' );
 		const defaultInnerText = await page.evaluate(
 			( element ) => element.innerText,
 			defaultStyleTag
