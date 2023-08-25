@@ -241,12 +241,15 @@ export default function Table( {
 
 			const tableElement: HTMLElement = tableRef.current;
 			const activeElement = tableElement.querySelector(
-				'th.is-selected [contenteditable], td.is-selected [contenteditable]'
+				'th.is-selected > [contenteditable="true"], td.is-selected > [contenteditable="true"]'
 			);
 
 			if ( ! activeElement ) return;
 
-			const tabbableNodes = tableElement.querySelectorAll( '[contenteditable]' );
+			const tabbableNodes = tableElement.querySelectorAll(
+				'th > [contenteditable="true"], td > [contenteditable="true"]'
+			);
+
 			const tabbableElements = [].slice.call( tabbableNodes );
 			const activeIndex = tabbableElements.findIndex(
 				( element: Node ) => element === activeElement
