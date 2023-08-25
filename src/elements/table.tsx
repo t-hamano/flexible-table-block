@@ -35,14 +35,7 @@ import {
 import { convertToObject } from '../utils/style-converter';
 
 import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttributes';
-import type {
-	VTable,
-	VCell,
-	VRow,
-	VSelectMode,
-	VSelectedLine,
-	VSelectedCells,
-} from '../utils/table-state';
+import type { VTable, VCell, VRow, VSelectedLine, VSelectedCells } from '../utils/table-state';
 import type { StoreOptions } from '../store';
 
 function TSection( props: any ) {
@@ -86,7 +79,7 @@ export default function Table( {
 
 	const colorProps = useColorProps( attributes );
 
-	const [ selectMode, setSelectMode ] = useState< VSelectMode >( undefined );
+	const [ isSelectMode, setIsSelectMode ] = useState< boolean >( false );
 
 	// Manage rendering status as state since some processing may be performed before rendering components.
 	const [ isReady, setIdReady ] = useState< boolean >( false );
@@ -229,12 +222,9 @@ export default function Table( {
 	const onKeyDown = ( event: KeyboardEvent ) => {
 		const { key } = event;
 
-		if ( key === 'Shift' ) {
-			// range-select mode.
-			setSelectMode( 'range' );
-		} else if ( key === 'Control' || key === 'Meta' ) {
-			// multi-select mode.
-			setSelectMode( 'multi' );
+		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
+			// range-select mode or multi-select mode.
+			setIsSelectMode( true );
 		} else if ( key === 'Tab' && options.tab_move && tableRef.current ) {
 			// Focus on the next cell.
 			isTabMove = true;
@@ -270,7 +260,7 @@ export default function Table( {
 
 			if ( focusbleElement ) {
 				event.preventDefault();
-				setSelectMode( undefined );
+				setIsSelectMode( false );
 				focusbleElement.focus();
 
 				// Select all text if the next cell is not empty.
@@ -288,8 +278,8 @@ export default function Table( {
 
 	const onKeyUp = ( event: KeyboardEvent ) => {
 		const { key } = event;
-		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
-			setSelectMode( undefined );
+		if ( isSelectMode && ( key === 'Shift' || key === 'Control' || key === 'Meta' ) ) {
+			setIsSelectMode( false );
 		}
 	};
 
@@ -409,7 +399,7 @@ export default function Table( {
 								const focusProp = useOnFocus
 									? {
 											onFocus: () => {
-												if ( ! selectMode || isTabMove ) {
+												if ( ! isSelectMode || isTabMove ) {
 													isTabMove = false;
 													setSelectedLine( undefined );
 													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
@@ -418,7 +408,7 @@ export default function Table( {
 									  }
 									: {
 											unstableOnFocus: () => {
-												if ( ! selectMode || isTabMove ) {
+												if ( ! isSelectMode || isTabMove ) {
 													isTabMove = false;
 													setSelectedLine( undefined );
 													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );

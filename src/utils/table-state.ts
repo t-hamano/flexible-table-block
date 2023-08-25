@@ -56,9 +56,6 @@ export type VSelectedLine =
 // Virtual table selected cells state
 export type VSelectedCells = VCell[] | undefined;
 
-// Determine whether multi-select mode or range select mode
-export type VSelectMode = 'range' | 'multi' | undefined;
-
 // Minimum / maximum row / column virtual indexes on virtual table
 interface VRangeIndexes {
 	minRowIndex: number;
