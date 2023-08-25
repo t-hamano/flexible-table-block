@@ -94,7 +94,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onInsertRow = ( offset: number ) => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) {
+			return;
+		}
 
 		const { sectionName, rowIndex, rowSpan } = selectedCells[ 0 ];
 
@@ -109,7 +111,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onDeleteRow = () => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) {
+			return;
+		}
 
 		const { sectionName, rowIndex } = selectedCells[ 0 ];
 
@@ -131,7 +135,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onInsertColumn = ( offset: number ) => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) {
+			return;
+		}
 
 		const { vColIndex, colSpan } = selectedCells[ 0 ];
 
@@ -146,7 +152,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onDeleteColumn = () => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) {
+			return;
+		}
 
 		const { vColIndex } = selectedCells[ 0 ];
 

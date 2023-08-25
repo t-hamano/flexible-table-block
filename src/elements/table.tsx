@@ -190,7 +190,9 @@ export default function Table( {
 	const onChangeCellContent = ( content: string, targetCell: VCell ) => {
 		// If inline highlight is applied to the RichText, this process is performed before rendering the component, causing a warning error.
 		// Therefore, nothing is performed if the component has not yet been rendered.
-		if ( ! isReady ) return;
+		if ( ! isReady ) {
+			return;
+		}
 
 		const { sectionName, rowIndex: selectedRowIndex, vColIndex: selectedVColIndex } = targetCell;
 		setSelectedCells( [ { ...targetCell, isFirstSelected: true } ] );
@@ -230,55 +232,75 @@ export default function Table( {
 			isTabMove = true;
 
 			const tableElement: HTMLElement = tableRef.current;
-			const activeElement = tableElement.querySelector(
+			const { ownerDocument } = tableElement;
+			const { activeElement } = ownerDocument;
+
+			const activeCell = tableElement.querySelector(
 				'th.is-selected > [contenteditable="true"], td.is-selected > [contenteditable="true"]'
 			);
+			const isInsidePopover =
+				activeElement && activeElement.closest( '.components-popover' ) !== null;
+			const hasLinkControl = !! ownerDocument.querySelector( '.block-editor-link-control' );
 
-			if ( ! activeElement ) return;
+			if ( ! activeCell || isInsidePopover || hasLinkControl ) {
+				return;
+			}
 
 			const tabbableNodes = tableElement.querySelectorAll(
 				'th > [contenteditable="true"], td > [contenteditable="true"]'
 			);
 
 			const tabbableElements = [].slice.call( tabbableNodes );
-			const activeIndex = tabbableElements.findIndex(
-				( element: Node ) => element === activeElement
+			const activeCellIndex = tabbableElements.findIndex(
+				( element: Node ) => element === activeCell
 			);
 
-			if ( activeIndex === -1 ) return;
-
-			let nextIndex = event.shiftKey ? activeIndex - 1 : activeIndex + 1;
-
-			if ( nextIndex < 0 ) {
-				nextIndex = tabbableElements.length - 1;
-			} else if ( nextIndex >= tabbableElements.length ) {
-				nextIndex = 0;
+			if ( activeCellIndex === -1 ) {
+				return;
 			}
 
-			const focusbleElement: HTMLElement = tabbableElements[ nextIndex ];
-			const { ownerDocument } = tableElement;
+			let nextCellIndex = event.shiftKey ? activeCellIndex - 1 : activeCellIndex + 1;
 
-			if ( focusbleElement ) {
-				event.preventDefault();
-				setIsSelectMode( false );
-				focusbleElement.focus();
+			if ( nextCellIndex < 0 ) {
+				nextCellIndex = tabbableElements.length - 1;
+			} else if ( nextCellIndex >= tabbableElements.length ) {
+				nextCellIndex = 0;
+			}
 
-				// Select all text if the next cell is not empty.
-				const selection = ownerDocument.getSelection();
-				const range = ownerDocument.createRange();
+			const focusbleElement: HTMLElement = tabbableElements[ nextCellIndex ];
 
-				if ( selection && focusbleElement.innerText.trim().length ) {
-					range.selectNodeContents( focusbleElement );
-					selection.removeAllRanges();
-					selection.addRange( range );
-				}
+			if ( ! focusbleElement ) {
+				return;
+			}
+
+			event.preventDefault();
+			setIsSelectMode( false );
+			focusbleElement.focus();
+
+			// Select all text if the next cell is not empty.
+			const selection = ownerDocument.getSelection();
+			const range = ownerDocument.createRange();
+
+			if ( selection && focusbleElement.innerText.trim().length ) {
+				range.selectNodeContents( focusbleElement );
+				selection.removeAllRanges();
+				selection.addRange( range );
 			}
 		}
 	};
 
 	const onKeyUp = ( event: KeyboardEvent ) => {
-		const { key } = event;
-		if ( isSelectMode && ( key === 'Shift' || key === 'Control' || key === 'Meta' ) ) {
+		const { key, target } = event;
+
+		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
+			// Don't interfere with text input in link controls.
+			if (
+				target instanceof HTMLElement &&
+				( target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' )
+			) {
+				return;
+			}
+
 			setIsSelectMode( false );
 		}
 	};
@@ -293,7 +315,9 @@ export default function Table( {
 			} else {
 				const fromCell = selectedCells.find( ( { isFirstSelected } ) => isFirstSelected );
 
-				if ( ! fromCell ) return;
+				if ( ! fromCell ) {
+					return;
+				}
 
 				if ( fromCell.sectionName !== sectionName ) {
 					// eslint-disable-next-line no-alert, no-undef
@@ -396,25 +420,19 @@ export default function Table( {
 								// Use only onFocus.
 								const useOnFocus = !! window?.ftbObj?.useOnFocus;
 
-								const focusProp = useOnFocus
-									? {
-											onFocus: () => {
-												if ( ! isSelectMode || isTabMove ) {
-													isTabMove = false;
-													setSelectedLine( undefined );
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-												}
-											},
-									  }
-									: {
-											unstableOnFocus: () => {
-												if ( ! isSelectMode || isTabMove ) {
-													isTabMove = false;
-													setSelectedLine( undefined );
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-												}
-											},
-									  };
+								const focusEvent = () => {
+									isTabMove = false;
+									setSelectedLine( undefined );
+									setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+								};
+
+								const focusProp =
+									! isSelectMode || isTabMove
+										? {
+												...( useOnFocus && { onFocus: focusEvent } ),
+												...( ! useOnFocus && { unstableOnFocus: focusEvent } ),
+										  }
+										: {};
 
 								return (
 									<Cell
