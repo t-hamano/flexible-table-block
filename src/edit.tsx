@@ -8,7 +8,7 @@ import type { Properties } from 'csstype';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import {
@@ -76,6 +76,14 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 				.getOptions(),
 		[]
 	);
+
+	// Release cell selection.
+	useEffect( () => {
+		if ( ! isSelected ) {
+			setSelectedCells( undefined );
+			setSelectedLine( undefined );
+		}
+	}, [ isSelected ] );
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable: VTable = toVirtualTable( attributes );
