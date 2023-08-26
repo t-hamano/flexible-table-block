@@ -85,6 +85,12 @@ describe( 'Flexible table cell', () => {
 		await page.keyboard.down( 'Shift' );
 		await page.keyboard.type( '#anchor' );
 		await page.keyboard.up( 'Shift' );
+
+		// To avoid React warning error in WordPres 6.1
+		if ( wpVersion === '6-1' ) {
+			await page.waitForTimeout( 1000 );
+		}
+
 		await page.keyboard.press( 'Enter' );
 
 		expect( await getEditedPostContent() ).toMatchSnapshot();
@@ -98,6 +104,12 @@ describe( 'Flexible table cell', () => {
 		await page.keyboard.type( '-updated' );
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.type( '#anchor-updated' );
+
+		// To avoid React warning error in WordPres 6.1
+		if ( wpVersion === '6-1' ) {
+			await page.waitForTimeout( 1000 );
+		}
+
 		await page.keyboard.press( 'Enter' );
 
 		// Toggle "Open in new tab".
