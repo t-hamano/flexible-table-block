@@ -14,6 +14,6 @@ exports[`Flexible table cell allows keyboard operation within the link popover 1
 
 exports[`Flexible table cell allows keyboard operation within the link popover 2`] = `
 "<!-- wp:flexible-table-block/table -->
-<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td><a href="#anchor-updated">Link-updated</a></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td><a href="#anchor-updated" target="_blank" rel="noreferrer noopener">Link-updated</a></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->"
 `;

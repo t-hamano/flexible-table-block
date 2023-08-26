@@ -96,8 +96,11 @@ describe( 'Flexible table cell', () => {
 		await page.keyboard.type( '-updated' );
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.type( '#anchor-updated' );
+		await page.keyboard.press( 'Tab' );
 		await page.keyboard.press( 'Enter' );
-
+		await page.keyboard.press( 'Tab' );
+		await page.keyboard.press( 'Space' );
+		await clickButtonWithText( '//div[contains(@class,"components-popover")]', 'Save' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 } );

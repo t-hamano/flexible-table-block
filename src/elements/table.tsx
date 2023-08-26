@@ -306,9 +306,18 @@ export default function Table( {
 	};
 
 	const onClickCell = ( event: MouseEvent, clickedCell: VCell ) => {
+		const { shiftKey, ctrlKey, metaKey } = event;
+		const clickedElement = event.target as HTMLElement;
+		const isInsideTableBlock =
+			clickedElement.closest( '.wp-block-flexible-table-block-table' ) !== null;
+
+		if ( ! isInsideTableBlock ) {
+			return;
+		}
+
 		const { sectionName, rowIndex, vColIndex } = clickedCell;
 
-		if ( event.shiftKey ) {
+		if ( shiftKey ) {
 			// Range select.
 			if ( ! selectedCells ) {
 				setSelectedCells( [ { ...clickedCell, isFirstSelected: true } ] );
@@ -328,7 +337,7 @@ export default function Table( {
 				}
 				setSelectedCells( toRectangledSelectedCells( vTable, { fromCell, toCell: clickedCell } ) );
 			}
-		} else if ( event.ctrlKey || event.metaKey ) {
+		} else if ( ctrlKey || metaKey ) {
 			// Multple select.
 			const newSelectedCells = selectedCells ? [ ...selectedCells ] : [];
 			const existCellIndex = newSelectedCells.findIndex( ( cell ) => {
