@@ -73,6 +73,7 @@ describe( 'Flexible table cell', () => {
 	} );
 
 	it( 'allows keyboard operation within the link popover', async () => {
+		const wpVersion = await getWpVersion();
 		await createNewFlexibleTableBlock();
 		const cells = await page.$$( flexibleTableCellSelector );
 		await cells[ 0 ].click();
@@ -89,18 +90,33 @@ describe( 'Flexible table cell', () => {
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 
 		// Edit the link.
-		await page.keyboard.press( 'ArrowLeft' );
+		await pressKeyWithModifier( 'primary', 'a' );
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.press( 'Enter' );
+		await page.focus( '.components-popover .components-text-control__input' );
 		await page.keyboard.type( '-updated' );
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.type( '#anchor-updated' );
-		await page.keyboard.press( 'Tab' );
 		await page.keyboard.press( 'Enter' );
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'Space' );
-		await clickButtonWithText( '//div[contains(@class,"components-popover")]', 'Save' );
+
+		// Toggle "Open in new tab".
+		await pressKeyWithModifier( 'primary', 'a' );
+
+		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Enter' );
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Enter' );
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Space' );
+			await clickButtonWithText( '//div[contains(@class,"components-popover")]', 'Save' );
+		} else {
+			await clickToggleControlWithText( 'Open in new tab' );
+		}
+
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 } );
