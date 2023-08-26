@@ -1,7 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { getEditedPostContent, createNewPost, clickButton } from '@wordpress/e2e-test-utils';
+import {
+	getEditedPostContent,
+	createNewPost,
+	clickButton,
+	clickBlockToolbarButton,
+	pressKeyWithModifier,
+} from '@wordpress/e2e-test-utils';
 
 /**
  * Internal dependencies
@@ -15,6 +21,7 @@ import {
 	openSidebar,
 	getWpVersion,
 } from '../helper';
+import { link } from '@wordpress/icons';
 
 /** @type {import('puppeteer').Page} */
 const page = global.page;
@@ -62,6 +69,35 @@ describe( 'Flexible table cell', () => {
 		await page.keyboard.up( 'Tab' );
 		await page.keyboard.up( 'Shift' );
 		await page.keyboard.type( 'Cell 2' );
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	it( 'allows keyboard operation within the link popover', async () => {
+		await createNewFlexibleTableBlock();
+		const cells = await page.$$( flexibleTableCellSelector );
+		await cells[ 0 ].click();
+		await page.keyboard.type( 'Link' );
+		await pressKeyWithModifier( 'primary', 'a' );
+		await clickBlockToolbarButton( 'Link' );
+
+		// Create a link.
+		await page.keyboard.down( 'Shift' );
+		await page.keyboard.type( '#anchor' );
+		await page.keyboard.up( 'Shift' );
+		await page.keyboard.press( 'Enter' );
+
+		expect( await getEditedPostContent() ).toMatchSnapshot();
+
+		// Edit the link.
+		await page.keyboard.press( 'ArrowLeft' );
+		await page.keyboard.press( 'Tab' );
+		await page.keyboard.press( 'Tab' );
+		await page.keyboard.press( 'Enter' );
+		await page.keyboard.type( '-updated' );
+		await page.keyboard.press( 'Tab' );
+		await page.keyboard.type( '#anchor-updated' );
+		await page.keyboard.press( 'Enter' );
+
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
 } );
