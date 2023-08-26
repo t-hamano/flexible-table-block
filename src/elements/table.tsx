@@ -35,14 +35,7 @@ import {
 import { convertToObject } from '../utils/style-converter';
 
 import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttributes';
-import type {
-	VTable,
-	VCell,
-	VRow,
-	VSelectMode,
-	VSelectedLine,
-	VSelectedCells,
-} from '../utils/table-state';
+import type { VTable, VCell, VRow, VSelectedLine, VSelectedCells } from '../utils/table-state';
 import type { StoreOptions } from '../store';
 
 function TSection( props: any ) {
@@ -86,7 +79,7 @@ export default function Table( {
 
 	const colorProps = useColorProps( attributes );
 
-	const [ selectMode, setSelectMode ] = useState< VSelectMode >( undefined );
+	const [ isSelectMode, setIsSelectMode ] = useState< boolean >( false );
 
 	// Manage rendering status as state since some processing may be performed before rendering components.
 	const [ isReady, setIdReady ] = useState< boolean >( false );
@@ -197,7 +190,9 @@ export default function Table( {
 	const onChangeCellContent = ( content: string, targetCell: VCell ) => {
 		// If inline highlight is applied to the RichText, this process is performed before rendering the component, causing a warning error.
 		// Therefore, nothing is performed if the component has not yet been rendered.
-		if ( ! isReady ) return;
+		if ( ! isReady ) {
+			return;
+		}
 
 		const { sectionName, rowIndex: selectedRowIndex, vColIndex: selectedVColIndex } = targetCell;
 		setSelectedCells( [ { ...targetCell, isFirstSelected: true } ] );
@@ -229,78 +224,109 @@ export default function Table( {
 	const onKeyDown = ( event: KeyboardEvent ) => {
 		const { key } = event;
 
-		if ( key === 'Shift' ) {
-			// range-select mode.
-			setSelectMode( 'range' );
-		} else if ( key === 'Control' || key === 'Meta' ) {
-			// multi-select mode.
-			setSelectMode( 'multi' );
+		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
+			// range-select mode or multi-select mode.
+			setIsSelectMode( true );
 		} else if ( key === 'Tab' && options.tab_move && tableRef.current ) {
 			// Focus on the next cell.
 			isTabMove = true;
 
 			const tableElement: HTMLElement = tableRef.current;
-			const activeElement = tableElement.querySelector(
-				'th.is-selected [contenteditable], td.is-selected [contenteditable]'
+			const { ownerDocument } = tableElement;
+			const { activeElement } = ownerDocument;
+
+			const activeCell = tableElement.querySelector(
+				'th.is-selected > [contenteditable="true"], td.is-selected > [contenteditable="true"]'
 			);
+			const isInsidePopover =
+				activeElement && activeElement.closest( '.components-popover' ) !== null;
+			const hasLinkControl = !! ownerDocument.querySelector( '.block-editor-link-control' );
 
-			if ( ! activeElement ) return;
-
-			const tabbableNodes = tableElement.querySelectorAll( '[contenteditable]' );
-			const tabbableElements = [].slice.call( tabbableNodes );
-			const activeIndex = tabbableElements.findIndex(
-				( element: Node ) => element === activeElement
-			);
-
-			if ( activeIndex === -1 ) return;
-
-			let nextIndex = event.shiftKey ? activeIndex - 1 : activeIndex + 1;
-
-			if ( nextIndex < 0 ) {
-				nextIndex = tabbableElements.length - 1;
-			} else if ( nextIndex >= tabbableElements.length ) {
-				nextIndex = 0;
+			if ( ! activeCell || isInsidePopover || hasLinkControl ) {
+				return;
 			}
 
-			const focusbleElement: HTMLElement = tabbableElements[ nextIndex ];
-			const { ownerDocument } = tableElement;
+			const tabbableNodes = tableElement.querySelectorAll(
+				'th > [contenteditable="true"], td > [contenteditable="true"]'
+			);
 
-			if ( focusbleElement ) {
-				event.preventDefault();
-				setSelectMode( undefined );
-				focusbleElement.focus();
+			const tabbableElements = [].slice.call( tabbableNodes );
+			const activeCellIndex = tabbableElements.findIndex(
+				( element: Node ) => element === activeCell
+			);
 
-				// Select all text if the next cell is not empty.
-				const selection = ownerDocument.getSelection();
-				const range = ownerDocument.createRange();
+			if ( activeCellIndex === -1 ) {
+				return;
+			}
 
-				if ( selection && focusbleElement.innerText.trim().length ) {
-					range.selectNodeContents( focusbleElement );
-					selection.removeAllRanges();
-					selection.addRange( range );
-				}
+			let nextCellIndex = event.shiftKey ? activeCellIndex - 1 : activeCellIndex + 1;
+
+			if ( nextCellIndex < 0 ) {
+				nextCellIndex = tabbableElements.length - 1;
+			} else if ( nextCellIndex >= tabbableElements.length ) {
+				nextCellIndex = 0;
+			}
+
+			const focusbleElement: HTMLElement = tabbableElements[ nextCellIndex ];
+
+			if ( ! focusbleElement ) {
+				return;
+			}
+
+			event.preventDefault();
+			setIsSelectMode( false );
+			focusbleElement.focus();
+
+			// Select all text if the next cell is not empty.
+			const selection = ownerDocument.getSelection();
+			const range = ownerDocument.createRange();
+
+			if ( selection && focusbleElement.innerText.trim().length ) {
+				range.selectNodeContents( focusbleElement );
+				selection.removeAllRanges();
+				selection.addRange( range );
 			}
 		}
 	};
 
 	const onKeyUp = ( event: KeyboardEvent ) => {
 		const { key } = event;
+
 		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
-			setSelectMode( undefined );
+			const targetElement = event.target as HTMLElement;
+			const isInsideTableBlock =
+				targetElement.closest( '.wp-block-flexible-table-block-table' ) !== null;
+
+			if ( ! isInsideTableBlock ) {
+				return;
+			}
+
+			setIsSelectMode( false );
 		}
 	};
 
 	const onClickCell = ( event: MouseEvent, clickedCell: VCell ) => {
+		const { shiftKey, ctrlKey, metaKey } = event;
+		const clickedElement = event.target as HTMLElement;
+		const isInsideTableBlock =
+			clickedElement.closest( '.wp-block-flexible-table-block-table' ) !== null;
+
+		if ( ! isInsideTableBlock ) {
+			return;
+		}
+
 		const { sectionName, rowIndex, vColIndex } = clickedCell;
 
-		if ( event.shiftKey ) {
+		if ( shiftKey ) {
 			// Range select.
 			if ( ! selectedCells ) {
 				setSelectedCells( [ { ...clickedCell, isFirstSelected: true } ] );
 			} else {
 				const fromCell = selectedCells.find( ( { isFirstSelected } ) => isFirstSelected );
 
-				if ( ! fromCell ) return;
+				if ( ! fromCell ) {
+					return;
+				}
 
 				if ( fromCell.sectionName !== sectionName ) {
 					// eslint-disable-next-line no-alert, no-undef
@@ -311,7 +337,7 @@ export default function Table( {
 				}
 				setSelectedCells( toRectangledSelectedCells( vTable, { fromCell, toCell: clickedCell } ) );
 			}
-		} else if ( event.ctrlKey || event.metaKey ) {
+		} else if ( ctrlKey || metaKey ) {
 			// Multple select.
 			const newSelectedCells = selectedCells ? [ ...selectedCells ] : [];
 			const existCellIndex = newSelectedCells.findIndex( ( cell ) => {
@@ -403,25 +429,19 @@ export default function Table( {
 								// Use only onFocus.
 								const useOnFocus = !! window?.ftbObj?.useOnFocus;
 
-								const focusProp = useOnFocus
-									? {
-											onFocus: () => {
-												if ( ! selectMode || isTabMove ) {
-													isTabMove = false;
-													setSelectedLine( undefined );
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-												}
-											},
-									  }
-									: {
-											unstableOnFocus: () => {
-												if ( ! selectMode || isTabMove ) {
-													isTabMove = false;
-													setSelectedLine( undefined );
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-												}
-											},
-									  };
+								const focusEvent = () => {
+									isTabMove = false;
+									setSelectedLine( undefined );
+									setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+								};
+
+								const focusProp =
+									! isSelectMode || isTabMove
+										? {
+												...( useOnFocus && { onFocus: focusEvent } ),
+												...( ! useOnFocus && { unstableOnFocus: focusEvent } ),
+										  }
+										: {};
 
 								return (
 									<Cell

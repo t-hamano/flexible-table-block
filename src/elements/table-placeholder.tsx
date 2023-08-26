@@ -49,7 +49,9 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 	const onCreateTable = ( event: FormEvent ) => {
 		event.preventDefault();
 
-		if ( ! rowCount || ! colCount ) return;
+		if ( ! rowCount || ! colCount ) {
+			return;
+		}
 
 		const vTable: VTable = createTable( {
 			rowCount: Math.min( rowCount, MAX_PREVIEW_TABLE_ROW ),

@@ -130,7 +130,9 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 					} );
 				}
 
-				if ( ! response.block_css ) return;
+				if ( ! response.block_css ) {
+					return;
+				}
 
 				// Update inline CSS.
 				updateInlineCss( response.block_css );
@@ -171,7 +173,9 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 				setStoreOptions( response.options );
 			}
 
-			if ( ! response.block_css ) return;
+			if ( ! response.block_css ) {
+				return;
+			}
 
 			// Update inline CSS.
 			updateInlineCss( response.block_css );

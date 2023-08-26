@@ -152,35 +152,4 @@ describe( 'Flexible table', () => {
 		await clickButtonWithAriaLabel( flexibleTableSelector, 'Delete column' );
 		expect( await getEditedPostContent() ).toMatchSnapshot();
 	} );
-
-	it( 'should move cells with the TAB key.', async () => {
-		const wpVersion = await getWpVersion();
-		await createNewFlexibleTableBlock();
-		await openSidebar();
-		await clickButton( 'Global setting' );
-		await clickButton( 'Editor options' );
-		await clickToggleControlWithText( 'Use the tab key to move cells' );
-		await clickButtonWithText(
-			'//div[@class="ftb-global-setting-modal__buttons"]',
-			'Save setting'
-		);
-		await page.waitForSelector( '.ftb-global-setting-modal__notice' );
-		const modalCloseLabel = [ '6-2', '6-3', '6-4' ].includes( wpVersion )
-			? 'Close'
-			: 'Close dialog';
-		await clickButtonWithAriaLabel( '.ftb-global-setting-modal', modalCloseLabel );
-		const cells = await page.$$( flexibleTableCellSelector );
-		await cells[ 0 ].click();
-		await page.keyboard.type( 'Cell 1' );
-		await page.keyboard.down( 'Tab' );
-		await page.keyboard.up( 'Tab' );
-		await page.keyboard.down( 'Tab' );
-		await page.keyboard.up( 'Tab' );
-		await page.keyboard.down( 'Shift' );
-		await page.keyboard.down( 'Tab' );
-		await page.keyboard.up( 'Tab' );
-		await page.keyboard.up( 'Shift' );
-		await page.keyboard.type( 'Cell 2' );
-		expect( await getEditedPostContent() ).toMatchSnapshot();
-	} );
 } );

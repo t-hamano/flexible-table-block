@@ -8,7 +8,7 @@ import type { Properties } from 'csstype';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import {
@@ -77,6 +77,14 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		[]
 	);
 
+	// Release cell selection.
+	useEffect( () => {
+		if ( ! isSelected ) {
+			setSelectedCells( undefined );
+			setSelectedLine( undefined );
+		}
+	}, [ isSelected ] );
+
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable: VTable = toVirtualTable( attributes );
 
@@ -86,7 +94,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onInsertRow = ( offset: number ) => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) {
+			return;
+		}
 
 		const { sectionName, rowIndex, rowSpan } = selectedCells[ 0 ];
 
@@ -101,7 +111,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onDeleteRow = () => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) {
+			return;
+		}
 
 		const { sectionName, rowIndex } = selectedCells[ 0 ];
 
@@ -123,7 +135,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onInsertColumn = ( offset: number ) => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) {
+			return;
+		}
 
 		const { vColIndex, colSpan } = selectedCells[ 0 ];
 
@@ -138,7 +152,9 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	};
 
 	const onDeleteColumn = () => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) return;
+		if ( ! selectedCells || selectedCells.length !== 1 ) {
+			return;
+		}
 
 		const { vColIndex } = selectedCells[ 0 ];
 

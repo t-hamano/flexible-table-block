@@ -4,7 +4,7 @@ Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 6.1
 Tested up to: 6.3
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,11 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.0.1 =
+* Fix: Keyboard controls don't work within the link control popover
+* Fix: Tab key focus doesn't work when cell text contains footnote links
+* Enhancement: Release cell selection when the block is unselected
 
 = 3.0.0 =
 * Tested to WordPress 6.3
