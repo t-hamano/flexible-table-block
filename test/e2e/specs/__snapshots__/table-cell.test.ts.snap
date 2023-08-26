@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Flexible table cell allows cell movement with tab key. 1`] = `
+"<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td>Cell 1</td><td>Cell 2</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->"
+`;

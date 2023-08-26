@@ -30,7 +30,7 @@ describe( 'Global Setting', () => {
 		await openSidebar();
 		await clickButton( 'Global setting' );
 
-		// Restor settings.
+		// Restore settings.
 		await clickButton( 'Restore default settings' );
 		await clickButtonWithText(
 			'//div[contains(@class,"ftb-global-setting-modal__confirm-popover")]',
