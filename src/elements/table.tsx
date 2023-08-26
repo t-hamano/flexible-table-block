@@ -290,14 +290,14 @@ export default function Table( {
 	};
 
 	const onKeyUp = ( event: KeyboardEvent ) => {
-		const { key, target } = event;
+		const { key } = event;
 
 		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
-			// Don't interfere with text input in link controls.
-			if (
-				target instanceof HTMLElement &&
-				( target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' )
-			) {
+			const targetElement = event.target as HTMLElement;
+			const isInsideTableBlock =
+				targetElement.closest( '.wp-block-flexible-table-block-table' ) !== null;
+
+			if ( ! isInsideTableBlock ) {
 				return;
 			}
 
