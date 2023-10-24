@@ -12,7 +12,7 @@ class Enqueue {
 	/**
 	 * Constructor
 	 */
-	function __construct() {
+	public function __construct() {
 		// Register block.
 		add_action( 'init', array( $this, 'register_block' ) );
 
@@ -56,7 +56,7 @@ class Enqueue {
 	 * Enqueue block-editor scripts
 	 */
 	public function enqueue_block_editor_assets() {
-		$asset_file = include( FTB_PATH . '/build/index.asset.php' );
+		$asset_file = include FTB_PATH . '/build/index.asset.php';
 
 		wp_register_script(
 			'flexible-table-block-editor',
