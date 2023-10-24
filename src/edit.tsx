@@ -33,7 +33,7 @@ import type { BlockEditProps } from '@wordpress/blocks';
  */
 import './editor.scss';
 import { CONTENT_JUSTIFY_CONTROLS } from './constants';
-import { STORE_NAME } from './store';
+import { STORE_NAME, type StoreOptions } from './store';
 import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
 import {
@@ -48,12 +48,13 @@ import {
 	toTableAttributes,
 	toVirtualTable,
 	isEmptySection,
+	type VTable,
+	type VSelectedLine,
+	type VSelectedCells,
 } from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
 import { mergeCell, splitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
-import type { StoreOptions } from './store';
-import type { VTable, VSelectedLine, VSelectedCells } from './utils/table-state';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const {

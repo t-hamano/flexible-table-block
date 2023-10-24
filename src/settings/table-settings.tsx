@@ -38,7 +38,13 @@ import {
 	BorderSpacingControl,
 	PaddingControl,
 } from '../controls';
-import { toggleSection, toTableAttributes } from '../utils/table-state';
+import {
+	toggleSection,
+	toTableAttributes,
+	type VTable,
+	type VSelectedCells,
+	type VSelectedLine,
+} from '../utils/table-state';
 import { convertToInline } from '../utils/style-converter';
 import {
 	pickPadding,
@@ -47,6 +53,9 @@ import {
 	pickBorderStyle,
 	pickBorderColor,
 	pickBorderSpacing,
+	type CornerProps,
+	type DirectionProps,
+	type CrossProps,
 } from '../utils/style-picker';
 import {
 	updatePadding,
@@ -57,8 +66,6 @@ import {
 	updateBorderSpacing,
 } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { VTable, VSelectedCells, VSelectedLine } from '../utils/table-state';
-import type { CornerProps, DirectionProps, CrossProps } from '../utils/style-picker';
 import type { StickyValue, BorderCollapseValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
 

@@ -26,8 +26,8 @@ import {
 	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 	SlotFillProvider,
+	type Notice as NoticeType,
 } from '@wordpress/components';
-import type { Notice as NoticeType } from '@wordpress/components';
 
 /**
  * Internal dependencies

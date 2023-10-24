@@ -6,8 +6,7 @@ import type { Properties } from 'csstype';
 /**
  * Internal dependencies
  */
-import { parseCssValue } from './helper';
-import type { FourCssValues } from './helper';
+import { parseCssValue, type FourCssValues } from './helper';
 
 export interface DirectionProps {
 	top: string;

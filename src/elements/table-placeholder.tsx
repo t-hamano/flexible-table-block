@@ -24,9 +24,8 @@ import {
 	THRESHOLD_PREVIEW_TABLE_COL,
 	THRESHOLD_PREVIEW_TABLE_ROW,
 } from '../constants';
-import { createTable, toTableAttributes } from '../utils/table-state';
+import { createTable, toTableAttributes, type VTable } from '../utils/table-state';
 import { blockIcon as icon } from '../icons';
-import type { VTable } from '../utils/table-state';
 import type { BlockAttributes } from '../BlockAttributes';
 
 type Props = {
@@ -153,13 +152,11 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			<form className="ftb-placeholder__form" onSubmit={ onCreateTable }>
 				<div className="ftb-placeholder__row">
 					<ToggleControl
-						className="ftb-placeholder__toggle-header"
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
 						onChange={ onToggleHeaderSection }
 					/>
 					<ToggleControl
-						className="ftb-placeholder__toggle-footer"
 						label={ __( 'Footer section', 'flexible-table-block' ) }
 						checked={ !! footerSection }
 						onChange={ onToggleFooterSection }

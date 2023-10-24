@@ -1,0 +1,3 @@
+<!-- wp:flexible-table-block/table {"isScrollOnPc":true,"isScrollOnMobile":true,"isStackedOnMobile":true,"sticky":"first-column"} -->
+<figure class="wp-block-flexible-table-block-table is-scroll-on-pc is-scroll-on-mobile"><table class="has-fixed-layout is-stacked-on-mobile is-sticky-first-column" style="width:500px;max-width:600px;min-width:400px;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;border-collapse:separate;border-spacing:10px 20px"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->
