@@ -401,6 +401,7 @@
 // TODO: Fix that cursor does not change when mouseover RichText
 // in the Site Editor. This seems to be a bug in the core and will
 // be removed as soon as it is fixed in the core.
+// See: https://github.com/WordPress/gutenberg/issues/53374
 .is-outline-mode .wp-block-flexible-table-block-table.is-selected .rich-text {
 	cursor: initial;
 }
