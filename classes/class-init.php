@@ -36,9 +36,9 @@ class Init {
 	 * Load classes
 	 */
 	public function load_classes() {
-		require_once( FTB_PATH . '/classes/class-helper.php' );
-		require_once( FTB_PATH . '/classes/class-settings.php' );
-		require_once( FTB_PATH . '/classes/class-enqueue.php' );
-		require_once( FTB_PATH . '/classes/class-api.php' );
+		require_once FTB_PATH . '/classes/class-helper.php';
+		require_once FTB_PATH . '/classes/class-settings.php';
+		require_once FTB_PATH . '/classes/class-enqueue.php';
+		require_once FTB_PATH . '/classes/class-api.php';
 	}
 }
