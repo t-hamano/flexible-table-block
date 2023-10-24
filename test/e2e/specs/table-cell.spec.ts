@@ -77,7 +77,7 @@ test.describe( 'Flexible table cell', () => {
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.press( 'Enter' );
-		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
+		if ( [ '6-3', '6-4', '6-5' ].includes( wpVersion ) ) {
 			await page.fill( 'role=combobox[name="Link"i]', '#anchor-updated' );
 		} else {
 			await page.fill( 'role=combobox[name="URL"i]', '#anchor-updated' );
@@ -86,7 +86,7 @@ test.describe( 'Flexible table cell', () => {
 
 		// Toggle "Open in new tab".
 		await pageUtils.pressKeys( 'primary+a' );
-		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
+		if ( [ '6-3', '6-4', '6-5' ].includes( wpVersion ) ) {
 			await page.keyboard.press( 'Tab' );
 			await page.keyboard.press( 'Tab' );
 			await page.keyboard.press( 'Enter' );
