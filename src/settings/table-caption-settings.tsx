@@ -24,11 +24,10 @@ import {
 import { FONT_SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS, CAPTION_SIDE_CONTROLS } from '../constants';
 import { PaddingControl } from '../controls';
 import { convertToInline } from '../utils/style-converter';
-import { pickPadding } from '../utils/style-picker';
+import { pickPadding, type DirectionProps } from '../utils/style-picker';
 import { updatePadding } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
 import type { CaptionSideValue, TextAlignValue, BlockAttributes } from '../BlockAttributes';
-import type { DirectionProps } from '../utils/style-picker';
 
 type Props = {
 	attributes: BlockAttributes;

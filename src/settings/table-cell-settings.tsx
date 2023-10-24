@@ -38,7 +38,12 @@ import {
 	PaddingControl,
 	ColorControl,
 } from '../controls';
-import { toTableAttributes, updateCells } from '../utils/table-state';
+import {
+	toTableAttributes,
+	updateCells,
+	type VTable,
+	type VSelectedCells,
+} from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
 	pickPadding,
@@ -46,6 +51,8 @@ import {
 	pickBorderRadius,
 	pickBorderStyle,
 	pickBorderColor,
+	type CornerProps,
+	type DirectionProps,
 } from '../utils/style-picker';
 import { sanitizeUnitValue } from '../utils/helper';
 import type {
@@ -56,8 +63,6 @@ import type {
 	SectionName,
 	BlockAttributes,
 } from '../BlockAttributes';
-import type { VTable, VSelectedCells } from '../utils/table-state';
-import type { CornerProps, DirectionProps } from '../utils/style-picker';
 
 type Props = {
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;

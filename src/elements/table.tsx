@@ -31,11 +31,15 @@ import {
 	toVirtualRows,
 	toTableAttributes,
 	isEmptySection,
+	type VTable,
+	type VCell,
+	type VRow,
+	type VSelectedLine,
+	type VSelectedCells,
 } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 
 import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttributes';
-import type { VTable, VCell, VRow, VSelectedLine, VSelectedCells } from '../utils/table-state';
 import type { StoreOptions } from '../store';
 
 function TSection( props: any ) {

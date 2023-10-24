@@ -1,0 +1,3 @@
+<!-- wp:flexible-table-block/table {"hasFixedLayout":false} -->
+<figure class="wp-block-flexible-table-block-table"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td></tr></tfoot></table></figure>
+<!-- /wp:flexible-table-block/table -->

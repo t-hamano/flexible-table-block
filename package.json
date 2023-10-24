@@ -16,8 +16,8 @@
 		"lint:types": "tsc",
 		"test": "npm run lint:js && npm run test:e2e && npm run test:unit",
 		"test:unit": "wp-scripts test-unit-js --config test/unit/jest.config.js",
-		"test:e2e": "wp-scripts test-e2e --config test/e2e/jest.config.js",
-		"test:e2e:debug": "wp-scripts test-e2e --config test/e2e/jest.config.js --puppeteer-devtools"
+		"test:e2e": "wp-scripts test-playwright",
+		"test:e2e:debug": "wp-scripts test-playwright --debug"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.5.3",
@@ -29,12 +29,12 @@
 		"@typescript-eslint/parser": "^6.2.0",
 		"@wordpress/e2e-test-utils": "^10.9.0",
 		"@wordpress/env": "^8.4.0",
+		"@wordpress/eslint-plugin": "17.1.0",
 		"@wordpress/jest-preset-default": "^11.9.0",
 		"@wordpress/jest-puppeteer-axe": "^6.9.0",
-		"@wordpress/scripts": "^26.9.0",
+		"@wordpress/scripts": "^26.15.0",
 		"opener": "^1.5.2",
-		"prettier": "npm:wp-prettier@2.8.5",
-		"stylelint-config-recess-order": "^3.1.0",
+		"prettier": "npm:wp-prettier@3.0.3",
 		"typescript": "^5.1.6"
 	},
 	"dependencies": {

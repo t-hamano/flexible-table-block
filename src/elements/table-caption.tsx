@@ -9,8 +9,7 @@ import type { Dispatch, SetStateAction } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { RichText } from '@wordpress/block-editor';
-import { createBlock } from '@wordpress/blocks';
-import type { BlockInstance } from '@wordpress/blocks';
+import { createBlock, type BlockInstance } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
