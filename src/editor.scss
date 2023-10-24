@@ -876,18 +876,3 @@
 		margin: 1.5em 0;
 	}
 }
-
-// Backward compatibility
-body.branch-6-1 {
-
-	.ftb-global-setting-modal__tab-panel .components-tab-panel__tabs-item {
-
-		&.is-active {
-			box-shadow: none;
-		}
-
-		&:focus:not(:disabled) {
-			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
-		}
-	}
-}
