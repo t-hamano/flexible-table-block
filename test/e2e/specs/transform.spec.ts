@@ -25,9 +25,7 @@ test.describe( 'Transform from core table block', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createCoreTableBlock();
-		await page
-			.locator( 'role=rowgroup >> nth=0 >> role=textbox[name="Body cell text"i] >> nth=0' )
-			.click();
+		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
 		await page.keyboard.type( 'Core Table Block' );
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();

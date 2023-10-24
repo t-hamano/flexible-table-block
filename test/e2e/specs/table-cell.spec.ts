@@ -77,7 +77,11 @@ test.describe( 'Flexible table cell', () => {
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.press( 'Tab' );
 		await page.keyboard.press( 'Enter' );
-		await page.fill( 'role=combobox[name="Link"i]', '#anchor-updated' );
+		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
+			await page.fill( 'role=combobox[name="Link"i]', '#anchor-updated' );
+		} else {
+			await page.fill( 'role=combobox[name="URL"i]', '#anchor-updated' );
+		}
 		await page.keyboard.press( 'Enter' );
 
 		// Toggle "Open in new tab".
@@ -90,7 +94,7 @@ test.describe( 'Flexible table cell', () => {
 			await page.locator( 'role=checkbox[name="Open in new tab"i]' ).check();
 			await page.click( 'role=button[name="Save"i]' );
 		} else {
-			await page.locator( 'role=checkbox[name="Open in new tab"i]' ).check();
+			await page.locator( 'role=checkbox[name="Open in new tab"i]' ).click();
 		}
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
