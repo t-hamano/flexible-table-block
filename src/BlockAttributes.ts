@@ -22,6 +22,10 @@ declare global {
 	}
 }
 
+type NestedObject = {
+	[ key: string ]: NestedObject | null | undefined;
+};
+
 // Controls Attributes value types
 export type StickyValue = ( typeof STICKY_CONTROLS )[ number ][ 'value' ];
 export type CaptionSideValue = ( typeof CAPTION_SIDE_CONTROLS )[ number ][ 'value' ];
@@ -72,6 +76,7 @@ export interface BlockAttributes extends TableAttributes {
 	captionStyles?: string;
 	captionSide: CaptionSideValue;
 	caption: string;
+	style: NestedObject;
 }
 
 // Core Table Block attributes
@@ -87,6 +92,7 @@ export interface CoreTableBlockAttributes {
 	}[];
 	hasFixedLayout: boolean;
 	caption: string;
+	style: NestedObject;
 }
 
 export interface CoreTableCell {
