@@ -72,6 +72,7 @@ export interface BlockAttributes extends TableAttributes {
 	captionStyles?: string;
 	captionSide: CaptionSideValue;
 	caption: string;
+	style: any;
 }
 
 // Core Table Block attributes
@@ -87,6 +88,7 @@ export interface CoreTableBlockAttributes {
 	}[];
 	hasFixedLayout: boolean;
 	caption: string;
+	style: any;
 }
 
 export interface CoreTableCell {

@@ -22,7 +22,7 @@ const transforms: Transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
-				const { hasFixedLayout, head, body, foot, caption } = attributes;
+				const { hasFixedLayout, head, body, foot, caption, style } = attributes;
 
 				// Mapping rowspan and colspan properties.
 				const convertedSections = ( section: { cells: CoreTableCell[] }[] ) => {
@@ -53,6 +53,7 @@ const transforms: Transforms = {
 					foot: convertedSections( foot ),
 					hasFixedLayout,
 					caption,
+					style,
 				} );
 			},
 		},
@@ -117,6 +118,7 @@ const transforms: Transforms = {
 					...sectionAttributes,
 					hasFixedLayout: attributes.hasFixedLayout,
 					caption: attributes.caption,
+					style: attributes.style,
 				} );
 			},
 		},
