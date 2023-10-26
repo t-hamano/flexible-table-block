@@ -17,6 +17,8 @@ import {
 } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
+import { store as noticesStore } from '@wordpress/notices';
+import { useDispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -90,6 +92,7 @@ export default function Table( {
 	useEffect( () => setIdReady( true ), [] );
 
 	const tableRef = useRef( null );
+	const { createWarningNotice } = useDispatch( noticesStore );
 
 	let isTabMove: boolean = false;
 
@@ -110,8 +113,13 @@ export default function Table( {
 			vTable.body.length === 1 &&
 			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
 		) {
-			// eslint-disable-next-line no-alert, no-undef
-			alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
+			createWarningNotice(
+				__( 'The table body must have one or more rows.', 'flexible-table-block' ),
+				{
+					id: 'flexible-table-block-body-row',
+					type: 'snackbar',
+				}
+			);
 			return;
 		}
 
@@ -333,9 +341,12 @@ export default function Table( {
 				}
 
 				if ( fromCell.sectionName !== sectionName ) {
-					// eslint-disable-next-line no-alert, no-undef
-					alert(
-						__( 'Cannot select range cells from difference sections.', 'flexible-table-block' )
+					createWarningNotice(
+						__( 'Cannot select range cells from difference sections.', 'flexible-table-block' ),
+						{
+							id: 'flexible-table-block-range-sections',
+							type: 'snackbar',
+						}
 					);
 					return;
 				}
@@ -353,9 +364,12 @@ export default function Table( {
 			} );
 
 			if ( newSelectedCells.length && sectionName !== newSelectedCells[ 0 ].sectionName ) {
-				// eslint-disable-next-line no-alert, no-undef
-				alert(
-					__( 'Cannot select multi cells from difference sections.', 'flexible-table-block' )
+				createWarningNotice(
+					__( 'Cannot select multi cells from difference sections.', 'flexible-table-block' ),
+					{
+						id: 'flexible-table-block-multi-sections',
+						type: 'snackbar',
+					}
 				);
 				return;
 			}

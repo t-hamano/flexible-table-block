@@ -9,7 +9,7 @@ import type { Properties } from 'csstype';
  */
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	// @ts-ignore: has no exported member
@@ -26,6 +26,7 @@ import {
 	tableRowBefore,
 	tableRowDelete,
 } from '@wordpress/icons';
+import { store as noticesStore } from '@wordpress/notices';
 import type { BlockEditProps } from '@wordpress/blocks';
 
 /**
@@ -77,6 +78,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 				.getOptions(),
 		[]
 	);
+	const { createWarningNotice } = useDispatch( noticesStore );
 
 	// Release cell selection.
 	useEffect( () => {
@@ -124,8 +126,13 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			vTable.body.length === 1 &&
 			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
 		) {
-			// eslint-disable-next-line no-alert, no-undef
-			alert( __( 'The table body must have one or more rows.', 'flexible-table-block' ) );
+			createWarningNotice(
+				__( 'The table body must have one or more rows.', 'flexible-table-block' ),
+				{
+					id: 'flexible-table-block-body-row',
+					type: 'snackbar',
+				}
+			);
 			return;
 		}
 
