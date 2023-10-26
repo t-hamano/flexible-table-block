@@ -142,4 +142,54 @@ test.describe( 'Flexible table', () => {
 		await page.locator( 'role=button[name="Delete column"i]' ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
+
+	test( 'disallows to select cells across sections', async ( { page, fsbUtils } ) => {
+		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
+
+		// Test range selection.
+		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.keyboard.down( 'Shift' );
+		await page.locator( 'role=textbox[name="Header cell text"i] >> nth=0' ).click();
+		await expect(
+			page.locator(
+				'role=button[name="Dismiss this notice"i] >> text=Cannot select range cells from difference sections.'
+			)
+		).toBeVisible();
+
+		// Test multi selection.
+		await page.keyboard.up( 'Shift' );
+		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.keyboard.down( 'Control' );
+		await page.locator( 'role=textbox[name="Header cell text"i] >> nth=0' ).click();
+		await expect(
+			page.locator(
+				'role=button[name="Dismiss this notice"i] >> text=Cannot select multi cells from difference sections.'
+			)
+		).toBeVisible();
+		await page.keyboard.up( 'Control' );
+	} );
+
+	test( 'disallows to delete the only row in the table body', async ( {
+		editor,
+		page,
+		fsbUtils,
+	} ) => {
+		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true, row: 1 } );
+		await page.locator( 'role=button[name="Select row"i] >> nth=1' ).click();
+		await page.locator( 'role=button[name="Delete row"i]' ).click();
+		const snackbar = page.locator(
+			'role=button[name="Dismiss this notice"i] >> text=The table body must have one or more rows.'
+		);
+		await expect( snackbar ).toBeVisible();
+		snackbar.click();
+		await expect( snackbar ).toBeHidden();
+		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await editor.clickBlockToolbarButton( 'Edit table' );
+		await page.click( 'role=menuitem[name="Delete row"i]' );
+		await expect(
+			page.locator(
+				'role=button[name="Dismiss this notice"i] >> text=The table body must have one or more rows.'
+			)
+		).toBeVisible();
+	} );
 } );
