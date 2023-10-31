@@ -2,9 +2,9 @@
 Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
-Requires at least: 6.1
-Tested up to: 6.3
-Stable tag: 3.0.1
+Requires at least: 6.2
+Tested up to: 6.4
+Stable tag: 3.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,12 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.1.0 =
+* Tested to WordPress 6.4
+* Drop support for WordPress 6.1
+* Enhancement: Use Snackbar component instead of window.alert
+* Fix: Some block styles are not carried over when transforming the block
 
 = 3.0.1 =
 * Fix: Keyboard controls don't work within the link control popover
