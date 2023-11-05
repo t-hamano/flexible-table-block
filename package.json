@@ -20,19 +20,19 @@
 		"test:e2e:debug": "wp-scripts test-playwright --debug"
 	},
 	"devDependencies": {
-		"@types/jest": "^29.5.6",
+		"@types/jest": "^29.5.7",
 		"@types/puppeteer": "^5.4.7",
 		"@types/wordpress__block-editor": "^11.5.6",
 		"@types/wordpress__components": "^23.0.5",
 		"@types/wordpress__data": "^6.0.2",
-		"@typescript-eslint/eslint-plugin": "^6.9.0",
-		"@typescript-eslint/parser": "^6.9.0",
-		"@wordpress/e2e-test-utils": "^10.15.0",
-		"@wordpress/env": "^8.10.0",
-		"@wordpress/eslint-plugin": "17.1.0",
-		"@wordpress/jest-preset-default": "^11.15.0",
-		"@wordpress/jest-puppeteer-axe": "^6.15.0",
-		"@wordpress/scripts": "^26.15.0",
+		"@typescript-eslint/eslint-plugin": "^6.9.1",
+		"@typescript-eslint/parser": "^6.9.1",
+		"@wordpress/e2e-test-utils": "^10.16.0",
+		"@wordpress/env": "^8.11.0",
+		"@wordpress/eslint-plugin": "17.2.0",
+		"@wordpress/jest-preset-default": "^11.16.0",
+		"@wordpress/jest-puppeteer-axe": "^6.16.0",
+		"@wordpress/scripts": "^26.16.0",
 		"opener": "^1.5.2",
 		"prettier": "npm:wp-prettier@3.0.3",
 		"typescript": "^5.2.2"
@@ -40,7 +40,7 @@
 	"dependencies": {
 		"@emotion/react": "^11.11.1",
 		"@emotion/styled": "^11.11.0",
-		"@wordpress/icons": "^9.35.0"
+		"@wordpress/icons": "^9.36.0"
 	},
 	"engines": {
 		"node": ">=16.0.0",
