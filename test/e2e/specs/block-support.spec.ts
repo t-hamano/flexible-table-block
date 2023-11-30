@@ -36,7 +36,7 @@ test.describe( 'Block Support', () => {
 		await page.click( 'role=radiogroup[name="Font size"i] >> role=radio[name="Large"i]' );
 		await page.click( 'role=button[name="Appearance"i]' );
 
-		page.waitForTimeout( 3000 );
+		await page.locator( '.components-custom-select-control__menu' );
 		for ( let i = 0; i < 5; i++ ) {
 			await page.keyboard.press( 'ArrowDown' );
 		}
