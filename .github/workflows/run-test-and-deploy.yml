@@ -58,8 +58,7 @@ jobs:
         run: npm run test:unit
 
       - name: Install Playwright dependencies
-        run: |
-            npx playwright install chromium firefox webkit --with-deps
+        run: npx playwright install chromium firefox webkit --with-deps
 
       - name: Install WordPress
         run: |
@@ -73,7 +72,7 @@ jobs:
   deploy:
     name: Deploy to WP.org
     runs-on: ubuntu-latest
-    needs: [ test ]
+    needs: [test]
 
     steps:
       - name: Checkout
