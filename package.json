@@ -1,23 +1,31 @@
 {
 	"name": "flexible-table-block",
+	"version": "2.3.0",
+	"description": "The custom block plugin for the WordPress block editor that allows you to create tables with flexible configurations.",
 	"author": "Aki Hamano",
-	"license": "GPL-2.0+",
-	"scripts": {
-		"wp-env": "wp-env",
-		"open": "wp-env start && opener http://localhost:8888",
-		"stop": "wp-env stop",
-		"start": "wp-scripts start",
-		"build": "wp-scripts build",
-		"format": "wp-scripts format ./src",
-		"lint": "npm run lint:css && npm run lint:js && npm run lint:types && npm run lint:php",
-		"lint:css": "wp-scripts lint-style",
-		"lint:js": "wp-scripts lint-js",
-		"lint:php": "composer lint",
-		"lint:types": "tsc",
-		"test": "npm run lint:js && npm run test:e2e && npm run test:unit",
-		"test:unit": "wp-scripts test-unit-js --config test/unit/jest.config.js",
-		"test:e2e": "wp-scripts test-playwright",
-		"test:e2e:debug": "wp-scripts test-playwright --debug"
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"gutenberg",
+		"block",
+		"table"
+	],
+	"homepage": "https://github.com/t-hamano/flexible-table-block",
+	"repository": "git+https://github.com/t-hamano/flexible-table-block.git",
+	"bugs": {
+		"url": "https://github.com/t-hamano/flexible-table-block/issues"
+	},
+	"engines": {
+		"node": ">=16.0.0",
+		"npm": ">=8.0.0"
+	},
+	"volta": {
+		"node": "16.18.0",
+		"npm": "8.19.2"
+	},
+	"dependencies": {
+		"@emotion/react": "^11.11.1",
+		"@emotion/styled": "^11.11.0",
+		"@wordpress/icons": "^9.35.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.5.6",
@@ -37,17 +45,24 @@
 		"prettier": "npm:wp-prettier@3.0.3",
 		"typescript": "^5.2.2"
 	},
-	"dependencies": {
-		"@emotion/react": "^11.11.1",
-		"@emotion/styled": "^11.11.0",
-		"@wordpress/icons": "^9.35.0"
-	},
-	"engines": {
-		"node": ">=16.0.0",
-		"npm": ">=8.0.0"
-	},
-	"volta": {
-		"node": "16.18.0",
-		"npm": "8.19.2"
+	"scripts": {
+		"wp-env": "wp-env",
+		"open": "wp-env start && opener http://localhost:8888",
+		"stop": "wp-env stop",
+		"start": "wp-scripts start",
+		"build": "wp-scripts build",
+		"check-licenses": "wp-scripts check-licenses",
+		"lint": "npm run lint:css && npm run lint:js && npm run lint:types && npm run lint:php && npm run lint:md-docs && npm run lint:pkg-json",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"lint:types": "tsc",
+		"lint:php": "composer lint",
+		"lint:md-docs": "wp-scripts lint-md-docs",
+		"lint:pkg-json": "wp-scripts lint-pkg-json",
+		"format": "wp-scripts format",
+		"test": "npm run lint:js && npm run test:e2e && npm run test:unit",
+		"test:unit": "wp-scripts test-unit-js --config test/unit/jest.config.js",
+		"test:e2e": "wp-scripts test-playwright",
+		"test:e2e:debug": "wp-scripts test-playwright --debug"
 	}
 }
