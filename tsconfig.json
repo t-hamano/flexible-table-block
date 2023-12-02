@@ -10,7 +10,7 @@
 		"composite": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": [ "./src/*" ]
 		},
 		"noEmit": true,
 		"strict": true,
@@ -25,11 +25,6 @@
 		"typeRoots": [ "./node_modules/@types" ],
 		"skipLibCheck": true
 	},
-	"include": [
-		"src/**/*",
-		"src/**/*.json"
-	],
-	"exclude": [
-		"**/build/**"
-	]
+	"include": [ "src/**/*", "src/**/*.json" ],
+	"exclude": [ "**/build/**" ]
 }
