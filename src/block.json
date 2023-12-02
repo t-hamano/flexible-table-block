@@ -3,7 +3,7 @@
 	"name": "flexible-table-block/table",
 	"title": "Flexible Table",
 	"category": "text",
-	"keywords": [ "table", "cell", "data"],
+	"keywords": [ "table", "cell", "data" ],
 	"description": "Create a flexible configuration table.",
 	"textdomain": "flexible-table-block",
 	"attributes": {
@@ -233,7 +233,7 @@
 	},
 	"supports": {
 		"anchor": true,
-		"align": [ "left", "right", "wide", "full"],
+		"align": [ "left", "right", "wide", "full" ],
 		"color": {
 			"__experimentalSkipSerialization": [ "text", "background", "gradients" ],
 			"gradients": true,
