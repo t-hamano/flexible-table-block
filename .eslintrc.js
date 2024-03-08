@@ -6,18 +6,9 @@ module.exports = {
 	plugins: [ '@typescript-eslint' ],
 	parser: '@typescript-eslint/parser',
 	rules: {
+		'react/jsx-boolean-value': 'error',
 		'import/no-extraneous-dependencies': 'off',
-		'import/no-unresolved': 'off',
-		'import/no-duplicates': [
-			'error',
-			{
-				considerQueryString: true,
-				'prefer-inline': true,
-			},
-		],
 		'@wordpress/no-unsafe-wp-apis': 'off',
-		'@typescript-eslint/no-duplicate-imports': 'off',
-		'jsdoc/require-param-type': 0,
 		'prettier/prettier': [
 			'error',
 			{
