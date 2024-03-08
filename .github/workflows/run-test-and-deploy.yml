@@ -32,12 +32,13 @@ jobs:
     name: PHP ${{ matrix.php }} / ${{ matrix.wp }} Test
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
+      - name: Use desired version of Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version-file: '.nvmrc'
 
       - name: Npm install and build
         run: |
@@ -74,12 +75,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
+      - name: Use desired version of Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version-file: '.nvmrc'
 
       - name: Npm install and build
         run: |
