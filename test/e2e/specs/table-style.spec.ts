@@ -27,8 +27,7 @@ async function applyCellStyles( page, pageUtils ) {
 		.click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '111111' );
-	await pageUtils.pressKeys( 'Escape' );
-	await pageUtils.pressKeys( 'Escape' );
+	await pageUtils.pressKeys( 'Escape', { times: 2 } );
 	await page
 		.locator( '[aria-labelledby="flexible-table-block-cell-background-color-heading"]' )
 		.getByRole( 'button', { name: 'All' } )
@@ -193,8 +192,7 @@ test.describe( 'Styles', () => {
 				.click();
 			await pageUtils.pressKeys( 'Enter' );
 			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( colors[ i ].color );
-			await pageUtils.pressKeys( 'Escape' );
-			await pageUtils.pressKeys( 'Escape' );
+			await pageUtils.pressKeys( 'Escape', { times: 2 } );
 		}
 
 		// Border Spacing styles.

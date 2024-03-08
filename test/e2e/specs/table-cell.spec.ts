@@ -43,8 +43,7 @@ test.describe( 'Flexible table cell', () => {
 			.click();
 		// Try to move within cells.
 		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Cell 1' );
-		await pageUtils.pressKeys( 'Tab' );
-		await pageUtils.pressKeys( 'Tab' );
+		await pageUtils.pressKeys( 'Tab', { times: 2 } );
 		await pageUtils.pressKeys( 'shift+Tab' );
 		await page.keyboard.type( 'Cell 2' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
