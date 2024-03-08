@@ -15,11 +15,11 @@
 		"url": "https://github.com/t-hamano/flexible-table-block/issues"
 	},
 	"engines": {
-		"node": ">=16.0.0",
-		"npm": ">=8.0.0"
+		"node": ">=20.0.0",
+		"npm": ">=10.0.0"
 	},
 	"volta": {
-		"node": "16.18.0",
+		"node": "20.11.1",
 		"npm": "8.19.2"
 	},
 	"dependencies": {
