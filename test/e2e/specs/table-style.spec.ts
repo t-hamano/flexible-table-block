@@ -14,27 +14,27 @@ test.use( {
 	},
 } );
 
-async function applyCellStyles( page ) {
+async function applyCellStyles( page, pageUtils ) {
 	// Font Size, Line Hiehgt, Width styles.
-	await page.fill( 'role=spinbutton[name="Cell font size"i]', '20' );
-	await page.fill( 'role=spinbutton[name="Cell line height"i]', '2' );
-	await page.fill( 'role=spinbutton[name="Cell width"i]', '100' );
+	await page.getByRole( 'spinbutton', { name: 'Cell font size' } ).fill( '20' );
+	await page.getByRole( 'spinbutton', { name: 'Cell line height' } ).fill( '2' );
+	await page.getByRole( 'spinbutton', { name: 'Cell width' } ).fill( '100' );
 
 	// Text Color, Background Color styles.
-	await page.click(
-		'[aria-labelledby="flexible-table-block-cell-text-color-heading"] >> role=button[name="All"i]',
-		'All'
-	);
-	await page.keyboard.press( 'Enter' );
-	await page.fill( 'role=textbox[name="Hex color"i]', '111111' );
-	await page.keyboard.press( 'Escape' );
-	await page.keyboard.press( 'Escape' );
-	await page.click(
-		'[aria-labelledby="flexible-table-block-cell-background-color-heading"] >> role=button[name="All"i]',
-		'All'
-	);
-	await page.keyboard.press( 'Enter' );
-	await page.fill( 'role=textbox[name="Hex color"i]', '333333' );
+	await page
+		.locator( '[aria-labelledby="flexible-table-block-cell-text-color-heading"]' )
+		.getByRole( 'button', { name: 'All' } )
+		.click();
+	await pageUtils.pressKeys( 'Enter' );
+	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '111111' );
+	await pageUtils.pressKeys( 'Escape' );
+	await pageUtils.pressKeys( 'Escape' );
+	await page
+		.locator( '[aria-labelledby="flexible-table-block-cell-background-color-heading"]' )
+		.getByRole( 'button', { name: 'All' } )
+		.click();
+	await pageUtils.pressKeys( 'Enter' );
+	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '333333' );
 
 	// Padding, Border Radius, Border Width styles.
 	const styles = [
@@ -53,28 +53,33 @@ async function applyCellStyles( page ) {
 	];
 	for ( let i = 0; i < styles.length; i++ ) {
 		const { selector, labels } = styles[ i ];
-		await page.click(
-			`.ftb-${ selector }-control__header-control >> role=button[name="Unlink sides"i]`
-		);
+		await page
+			.locator( `.ftb-${ selector }-control__header-control` )
+			.getByRole( 'button', { name: 'Unlink sides' } )
+			.click();
 		for ( let j = 0; j < labels.length; j++ ) {
-			await page.fill(
-				`.ftb-${ selector }-control__input-controls >> role=spinbutton[name="${ labels[ j ] }"i]`,
-				( j + 1 ).toString()
-			);
+			await page
+				.locator( `.ftb-${ selector }-control__input-controls` )
+				.getByRole( 'spinbutton', { name: labels[ j ] } )
+				.fill( ( j + 1 ).toString() );
 		}
 	}
 
 	// Boder Style styles.
-	await page.click(
-		'.ftb-border-style-control__button-controls >> role=button[name="Unlink sides"i]'
-	);
-	await page.click( 'role=button[name="Solid"i] >> nth=0' );
-	await page.click( 'role=button[name="Dotted"i] >> nth=1' );
-	await page.click( 'role=button[name="Dashed"i] >> nth=2' );
-	await page.click( 'role=button[name="Double"i] >> nth=3' );
+	await page
+		.locator( '.ftb-border-style-control__button-controls' )
+		.getByRole( 'button', { name: 'Unlink sides' } )
+		.click();
+	await page.getByRole( 'button', { name: 'Solid' } ).nth( 0 ).click();
+	await page.getByRole( 'button', { name: 'Dotted' } ).nth( 1 ).click();
+	await page.getByRole( 'button', { name: 'Dashed' } ).nth( 2 ).click();
+	await page.getByRole( 'button', { name: 'Double' } ).nth( 3 ).click();
 
 	// Border Color styles.
-	await page.click( '.ftb-border-color-control__controls >> role=button[name="Unlink sides"i]' );
+	await page
+		.locator( '.ftb-border-color-control__controls' )
+		.getByRole( 'button', { name: 'Unlink sides' } )
+		.click();
 	const colors = [
 		{ color: '111111', label: 'Top' },
 		{ color: '222222', label: 'Right' },
@@ -82,29 +87,25 @@ async function applyCellStyles( page ) {
 		{ color: '444444', label: 'Left' },
 	];
 	for ( let i = 0; i < colors.length; i++ ) {
-		await page.click(
-			`.ftb-border-color-control__controls >> role=button[name="${ colors[ i ].label }"i]`
-		);
-		await page.keyboard.press( 'Enter' );
-		await page.fill( 'role=textbox[name="Hex color"i]', colors[ i ].color );
-		await page.keyboard.press( 'Escape' );
-		await page.keyboard.press( 'Escape' );
+		await page
+			.locator( '.ftb-border-color-control__controls' )
+			.getByRole( 'button', { name: colors[ i ].label } )
+			.click();
+		await pageUtils.pressKeys( 'Enter' );
+		await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( colors[ i ].color );
+		await pageUtils.pressKeys( 'Escape', { times: 2 } );
 	}
-
 	// Cell Alignment styles.
-	await page.click( 'role=button[name="Align center"i]' );
-	await page.click( 'role=button[name="Align middle"i]' );
-
+	await page.getByRole( 'button', { name: 'Align center' } ).click();
+	await page.getByRole( 'button', { name: 'Align middle' } ).click();
 	// Cell Tag element.
-	await page.click( 'role=button[name="TH"i]' );
-
+	await page.getByRole( 'button', { name: 'TH', exact: true } ).click();
 	// Cell CSS class.
-	await page.fill( 'role=textbox[name="Cell CSS class(es)"i]', 'custom' );
-
+	await page.getByRole( 'textbox', { name: 'Cell CSS class(es)' } ).fill( 'custom' );
 	// id, headers, scope getBlockAttributes.
-	await page.fill( 'role=textbox[name="id attribute"i]', 'id' );
-	await page.fill( 'role=textbox[name="headers attribute"i]', 'headers' );
-	await page.click( 'role=button[name="row"i]' );
+	await page.getByRole( 'textbox', { name: 'id attribute' } ).fill( 'id' );
+	await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
+	await page.getByRole( 'button', { name: 'row', exact: true } ).click();
 }
 
 test.describe( 'Styles', () => {
@@ -112,24 +113,29 @@ test.describe( 'Styles', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'table styles should be applied', async ( { editor, page, fsbUtils } ) => {
+	test( 'table styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
-		await page.click( 'role=region[name="Editor settings"i] >> role=tab[name="Settings"i]' );
-		await page.click( 'role=button[name="Table settings"i]' );
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Table settings' } ).click();
 
 		// Toggle settings.
-		await page.locator( 'role=checkbox[name="Fixed width table cells"i]' ).check();
-		await page.locator( 'role=checkbox[name="Scroll on desktop view"i]' ).check();
-		await page.locator( 'role=checkbox[name="Scroll on mobile view"i]' ).check();
-		await page.locator( 'role=checkbox[name="Stack on mobile"i]' ).check();
-		await page.selectOption( 'role=combobox[name="Fixed control"i]', 'Fixed first column' );
+		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
+		await page.getByRole( 'checkbox', { name: 'Scroll on desktop view' } ).check();
+		await page.getByRole( 'checkbox', { name: 'Scroll on mobile view' } ).check();
+		await page.getByRole( 'checkbox', { name: 'Stack on mobile' } ).check();
+		await page
+			.getByRole( 'combobox', { name: 'Fixed control' } )
+			.selectOption( 'Fixed first column' );
 
 		// Width styles.
-		await page.fill( 'role=spinbutton[name="Table width"i]', '500' );
-		await page.fill( 'role=spinbutton[name="Table max width"i]', '600' );
-		await page.fill( 'role=spinbutton[name="Table min width"i]', '400' );
-
+		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '500' );
+		// Change table max width.
+		await page.getByRole( 'spinbutton', { name: 'Table max width' } ).fill( '600' );
+		await page.getByRole( 'spinbutton', { name: 'Table min width' } ).fill( '400' );
 		// Padding, Border Radius, Border Width styles.
 		const styles = [
 			{
@@ -147,28 +153,33 @@ test.describe( 'Styles', () => {
 		];
 		for ( let i = 0; i < styles.length; i++ ) {
 			const { selector, labels } = styles[ i ];
-			await page.click(
-				`.ftb-${ selector }-control__header-control >> role=button[name="Unlink sides"i]`
-			);
+			await page
+				.locator( `.ftb-${ selector }-control__header-control` )
+				.getByRole( 'button', { name: 'Unlink sides' } )
+				.click();
 			for ( let j = 0; j < labels.length; j++ ) {
-				await page.fill(
-					`.ftb-${ selector }-control__input-controls >> role=spinbutton[name="${ labels[ j ] }"i]`,
-					( j + 1 ).toString()
-				);
+				await page
+					.locator( `.ftb-${ selector }-control__input-controls` )
+					.getByRole( 'spinbutton', { name: labels[ j ] } )
+					.fill( ( j + 1 ).toString() );
 			}
 		}
 
 		// Boder Style styles.
-		await page.click(
-			'.ftb-border-style-control__button-controls >> role=button[name="Unlink sides"i]'
-		);
-		await page.click( 'role=button[name="Solid"i] >> nth=0' );
-		await page.click( 'role=button[name="Dotted"i] >> nth=1' );
-		await page.click( 'role=button[name="Dashed"i] >> nth=2' );
-		await page.click( 'role=button[name="Double"i] >> nth=3' );
+		await page
+			.locator( '.ftb-border-style-control__button-controls' )
+			.getByRole( 'button', { name: 'Unlink sides' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Solid' } ).nth( 0 ).click();
+		await page.getByRole( 'button', { name: 'Dotted' } ).nth( 1 ).click();
+		await page.getByRole( 'button', { name: 'Dashed' } ).nth( 2 ).click();
+		await page.getByRole( 'button', { name: 'Double' } ).nth( 3 ).click();
 
 		// Border Color styles.
-		await page.click( '.ftb-border-color-control__controls >> role=button[name="Unlink sides"i]' );
+		await page
+			.locator( '.ftb-border-color-control__controls' )
+			.getByRole( 'button', { name: 'Unlink sides' } )
+			.click();
 		const colors = [
 			{ color: '111111', label: 'Top' },
 			{ color: '222222', label: 'Right' },
@@ -176,63 +187,78 @@ test.describe( 'Styles', () => {
 			{ color: '444444', label: 'Left' },
 		];
 		for ( let i = 0; i < colors.length; i++ ) {
-			await page.click(
-				`.ftb-border-color-control__controls >> role=button[name="${ colors[ i ].label }"i]`
-			);
-			await page.keyboard.press( 'Enter' );
-			await page.fill( 'role=textbox[name="Hex color"i]', colors[ i ].color );
-			await page.keyboard.press( 'Escape' );
-			await page.keyboard.press( 'Escape' );
+			await page
+				.locator( '.ftb-border-color-control__controls' )
+				.getByRole( 'button', { name: colors[ i ].label } )
+				.click();
+			await pageUtils.pressKeys( 'Enter' );
+			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( colors[ i ].color );
+			await pageUtils.pressKeys( 'Escape' );
+			await pageUtils.pressKeys( 'Escape' );
 		}
 
 		// Border Spacing styles.
-		await page.click( 'role=button[name="Separate"i]' );
-		await page.click( 'role=button[name="Unlink directions"i]' );
-		await page.fill( 'role=spinbutton[name="Horizontal"i]', '10' );
-		await page.fill( 'role=spinbutton[name="Vertical"i]', '20' );
+		await page.getByRole( 'button', { name: 'Separate' } ).click();
+		await page.getByRole( 'button', { name: 'Unlink directions' } ).click();
+		await page.getByRole( 'spinbutton', { name: 'Horizontal' } ).fill( '10' );
+		await page.getByRole( 'spinbutton', { name: 'Vertical' } ).fill( '20' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'cell styles should be applied', async ( { editor, page, fsbUtils } ) => {
+	test( 'cell styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await page
-			.locator( 'role=rowgroup >> nth=0 >> role=textbox[name="Body cell text"i] >> nth=0' )
-			.click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await editor.openDocumentSettingsSidebar();
-		await page.click( 'role=region[name="Editor settings"i] >> role=tab[name="Settings"i]' );
-		await page.click( 'role=button[name="Cell settings"i]' );
-		await applyCellStyles( page );
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
+		await applyCellStyles( page, pageUtils );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'cell styles should be applied to multiple cells', async ( { editor, page, fsbUtils } ) => {
+	test( 'cell styles should be applied to multiple cells', async ( {
+		editor,
+		page,
+		pageUtils,
+		fsbUtils,
+	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
-		await page.locator( 'role=button[name="Select column"i] >> nth=2' ).click();
+		await page.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
 		await editor.openDocumentSettingsSidebar();
-		await page.click( 'role=region[name="Editor settings"i] >> role=tab[name="Settings"i]' );
-		await page.click( 'role=button[name="Multi cells settings"i]' );
-		await applyCellStyles( page );
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Multi cells settings' } ).click();
+		await applyCellStyles( page, pageUtils );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'caption styles should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await page.locator( 'role=document[name="Block: Flexible Table"i] >> figcaption' ).click();
-		await page.keyboard.type( 'Flexible Table Block' );
+		await page
+			.getByRole( 'textbox', { name: 'Table caption text' } )
+			.fill( 'Flexible Table Block' );
 		await editor.openDocumentSettingsSidebar();
-		await page.click( 'role=region[name="Editor settings"i] >> role=tab[name="Settings"i]' );
-		await page.click( 'role=button[name="Caption settings"i]' );
-		await page.fill( 'role=spinbutton[name="Caption font size"i]', '20' );
-		await page.fill( 'role=spinbutton[name="Caption line height"i]', '2' );
-		await page.click( 'role=button[name="Unlink sides"i]' );
-		await page.fill( 'role=spinbutton[name="Top"i]', '1' );
-		await page.fill( 'role=spinbutton[name="Right"i]', '2' );
-		await page.fill( 'role=spinbutton[name="Bottom"i]', '3' );
-		await page.fill( 'role=spinbutton[name="Left"i]', '4' );
-		await page.click(
-			'[aria-labelledby="flexible-table-block-caption-side-heading"] >> role=button[name="Top"i]'
-		);
-		await page.click( 'role=button[name="Align center"i]' );
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Caption settings' } ).click();
+		await page.getByRole( 'spinbutton', { name: 'Caption font size' } ).fill( '20' );
+		await page.getByRole( 'spinbutton', { name: 'Caption line height' } ).fill( '2' );
+		await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
+		await page.getByRole( 'spinbutton', { name: 'Top' } ).fill( '1' );
+		await page.getByRole( 'spinbutton', { name: 'Right' } ).fill( '2' );
+		await page.getByRole( 'spinbutton', { name: 'Bottom' } ).fill( '3' );
+		await page.getByRole( 'spinbutton', { name: 'Left' } ).fill( '4' );
+		await page
+			.locator( '[aria-labelledby="flexible-table-block-caption-side-heading"]' )
+			.getByRole( 'button', { name: 'Top' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Align center' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 } );

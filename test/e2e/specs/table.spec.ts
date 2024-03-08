@@ -32,80 +32,80 @@ test.describe( 'Flexible table', () => {
 	test( 'should be inserted', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await page
-			.locator( 'role=rowgroup >> nth=0 >> role=textbox[name="Body cell text"i] >> nth=0' )
-			.click();
-		await page.keyboard.type( 'Flexible Table Block' );
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 0 )
+			.fill( 'Flexible Table Block' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'allows cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await page.keyboard.down( 'Shift' );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=1' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 1 ).click();
 		await page.keyboard.up( 'Shift' );
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Merge cells"i]' );
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'allows cells in a vertical line to be merge', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await page.keyboard.down( 'Shift' );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=5' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 5 ).click();
 		await page.keyboard.up( 'Shift' );
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Merge cells"i]' );
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'allows cells to be merge', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await page.keyboard.down( 'Shift' );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=8' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 8 ).click();
 		await page.keyboard.up( 'Shift' );
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Merge cells"i]' );
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'allows merged cells to be split', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await page.keyboard.down( 'Shift' );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=8' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 8 ).click();
 		await page.keyboard.up( 'Shift' );
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Merge cells"i]' );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Split merged cells"i]' );
+		await page.getByRole( 'menuitem', { name: 'Split merged cells' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'disallows merging across sections', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
-		await page.locator( 'role=button[name="Select column"i] >> nth=0' ).click();
+		await page.getByRole( 'button', { name: 'Select column' } ).nth( 0 ).click();
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		const mergeButton = page.locator( 'role=menuitem[name="Merge cells"i]' );
+		const mergeButton = page.getByRole( 'menuitem', { name: 'Merge cells' } );
 		expect( mergeButton ).toBeDisabled();
 	} );
 
 	test( 'allows all cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-		await page.locator( 'role=button[name="Select row"i] >> nth=0' ).click();
+		await page.getByRole( 'button', { name: 'Select row' } ).nth( 0 ).click();
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Merge cells"i]' );
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'allows all cells in a vertical line to be merge', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-		await page.locator( 'role=button[name="Select column"i] >> nth=2' ).click();
+		await page.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Merge cells"i]' );
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -115,14 +115,14 @@ test.describe( 'Flexible table', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 10, row: 10 } );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=11' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 11 ).click();
 		await page.keyboard.down( 'Shift' );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=44' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 44 ).click();
 		await page.keyboard.up( 'Shift' );
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Merge cells"i]' );
-		await page.locator( 'role=button[name="Select row"i] >> nth=2' ).click();
-		await page.locator( 'role=button[name="Delete row"i]' ).click();
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
+		await page.getByRole( 'button', { name: 'Select row' } ).nth( 2 ).click();
+		await page.getByRole( 'button', { name: 'Delete row' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -132,41 +132,47 @@ test.describe( 'Flexible table', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 10, row: 10 } );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=11' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 11 ).click();
 		await page.keyboard.down( 'Shift' );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=44' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 44 ).click();
 		await page.keyboard.up( 'Shift' );
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Merge cells"i]' );
-		await page.locator( 'role=button[name="Select column"i] >> nth=2' ).click();
-		await page.locator( 'role=button[name="Delete column"i]' ).click();
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
+		await page.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
+		await page.getByRole( 'button', { name: 'Delete column' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'disallows to select cells across sections', async ( { page, fsbUtils } ) => {
+	test( 'disallows to select cells across sections (range select)', async ( {
+		page,
+		fsbUtils,
+	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
-
-		// Test range selection.
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await page.keyboard.down( 'Shift' );
-		await page.locator( 'role=textbox[name="Header cell text"i] >> nth=0' ).click();
-		await expect(
-			page.locator(
-				'role=button[name="Dismiss this notice"i] >> text=Cannot select range cells from difference sections.'
-			)
-		).toBeVisible();
+		await page.getByRole( 'textbox', { name: 'Header cell text' } ).nth( 0 ).click();
 
-		// Test multi selection.
-		await page.keyboard.up( 'Shift' );
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
-		await page.keyboard.down( 'Control' );
-		await page.locator( 'role=textbox[name="Header cell text"i] >> nth=0' ).click();
 		await expect(
-			page.locator(
-				'role=button[name="Dismiss this notice"i] >> text=Cannot select multi cells from difference sections.'
-			)
+			page.getByRole( 'button', {
+				name: 'Dismiss this notice',
+			} )
+		).toHaveText( 'Cannot select range cells from difference sections.' );
+	} );
+
+	test( 'disallows to select cells across sections (multi select)', async ( {
+		page,
+		fsbUtils,
+	} ) => {
+		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+		await page.keyboard.down( 'Control' );
+		await page.getByRole( 'textbox', { name: 'Header cell text' } ).nth( 0 ).click();
+		await expect(
+			page.getByRole( 'button', {
+				name: 'Dismiss this notice',
+				text: 'Cannot select multi cells from difference sections.',
+			} )
 		).toBeVisible();
-		await page.keyboard.up( 'Control' );
 	} );
 
 	test( 'disallows to delete the only row in the table body', async ( {
@@ -175,21 +181,21 @@ test.describe( 'Flexible table', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true, row: 1 } );
-		await page.locator( 'role=button[name="Select row"i] >> nth=1' ).click();
-		await page.locator( 'role=button[name="Delete row"i]' ).click();
-		const snackbar = page.locator(
-			'role=button[name="Dismiss this notice"i] >> text=The table body must have one or more rows.'
-		);
-		await expect( snackbar ).toBeVisible();
+		await page.getByRole( 'button', { name: 'Select row' } ).nth( 1 ).click();
+		await page.getByRole( 'button', { name: 'Delete row' } ).click();
+		const snackbar = page.getByRole( 'button', {
+			name: 'Dismiss this notice',
+		} );
+		await expect( snackbar ).toHaveText( 'The table body must have one or more rows.' );
 		snackbar.click();
 		await expect( snackbar ).toBeHidden();
-		await page.locator( 'role=textbox[name="Body cell text"i] >> nth=0' ).click();
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await editor.clickBlockToolbarButton( 'Edit table' );
-		await page.click( 'role=menuitem[name="Delete row"i]' );
+		await page.getByRole( 'menuitem', { name: 'Delete row' } ).click();
 		await expect(
-			page.locator(
-				'role=button[name="Dismiss this notice"i] >> text=The table body must have one or more rows.'
-			)
-		).toBeVisible();
+			page.getByRole( 'button', {
+				name: 'Dismiss this notice',
+			} )
+		).toHaveText( 'The table body must have one or more rows.' );
 	} );
 } );

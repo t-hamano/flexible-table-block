@@ -22,28 +22,27 @@ test.describe( 'Flexible table cell', () => {
 	test( 'allows cell movement with tab key.', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
-		await page.click( 'role=button[name="Global setting"i]' );
+		await page.getByRole( 'button', { name: 'Global setting' } ).click();
 
 		// Restore settings.
-		await page.click( 'role=button[name="Restore default settings"i]' );
-		await page.click( 'role=button[name="Restore"i]' );
+		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
+		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
 		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
 			'Global setting restored.'
 		);
-		await page.click( '.ftb-global-setting-modal__notice >> role=button' );
+		await page.locator( '.ftb-global-setting-modal__notice ' ).getByRole( 'button' ).click();
 
 		// Update Editor Option.
-		await page.click( 'role=tab[name="Editor options"i]' );
-		await page.locator( 'role=checkbox[name="Use the tab key to move cells"i]' ).check();
-		await page.click( 'role=button[name="Save settings"i]' );
-		await page.click( '.ftb-global-setting-modal__notice >> role=button' );
-		await page.click( 'role=dialog >> role=button[name="Close"i]' );
-
-		// Try to move within cells.
+		await page.getByRole( 'tab', { name: 'Editor options' } ).click();
+		await page.getByRole( 'checkbox', { name: 'Use the tab key to move cells' } ).check();
+		await page.getByRole( 'button', { name: 'Save settings' } ).click();
+		await page.locator( '.ftb-global-setting-modal__notice' ).getByRole( 'button' ).click();
 		await page
-			.locator( 'role=rowgroup >> nth=0 >> role=textbox[name="Body cell text"i] >> nth=0' )
+			.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } )
+			.getByRole( 'button', { name: 'Close' } )
 			.click();
-		await page.keyboard.type( 'Cell 1' );
+		// Try to move within cells.
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Cell 1' );
 		await pageUtils.pressKeys( 'Tab' );
 		await pageUtils.pressKeys( 'Tab' );
 		await pageUtils.pressKeys( 'shift+Tab' );
@@ -59,16 +58,13 @@ test.describe( 'Flexible table cell', () => {
 	} ) => {
 		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
-		await page
-			.locator( 'role=rowgroup >> nth=0 >> role=textbox[name="Body cell text"i] >> nth=0' )
-			.click();
-		await page.keyboard.type( 'Link' );
+		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Link' );
 		await pageUtils.pressKeys( 'primary+a' );
 		await editor.clickBlockToolbarButton( 'Link' );
 
 		// Create a link.
 		await page.keyboard.type( '#anchor' );
-		await page.keyboard.press( 'Enter' );
+		await pageUtils.pressKeys( 'Enter' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 
@@ -76,34 +72,35 @@ test.describe( 'Flexible table cell', () => {
 		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
 			// WP6.3, 6.4
 			await pageUtils.pressKeys( 'primary+a' );
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'Enter' );
+			await pageUtils.pressKeys( 'Tab', { times: 2 } );
+			await pageUtils.pressKeys( 'Enter' );
 		} else {
 			// WP6.5, 6.6
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'Enter' );
+			await pageUtils.pressKeys( 'Tab' );
+			await pageUtils.pressKeys( 'Enter' );
 		}
 
-		await page.fill( 'role=combobox[name="Link"i]', '#anchor-updated' );
-		await page.keyboard.press( 'Enter' );
+		await page.getByRole( 'combobox', { name: 'Link' } ).fill( '#anchor-updated' );
+		await pageUtils.pressKeys( 'Enter' );
 
 		// Toggle "Open in new tab".
 		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
 			// WP6.3, 6.4
 			await pageUtils.pressKeys( 'primary+a' );
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'Enter' );
+			await pageUtils.pressKeys( 'Tab', { times: 2 } );
+			await pageUtils.pressKeys( 'Enter' );
 		} else {
 			// WP6.5, 6.6
-			await page.keyboard.press( 'Enter' );
-			await page.keyboard.press( 'Tab' );
-			await page.keyboard.press( 'Enter' );
+			await pageUtils.pressKeys( 'Enter' );
+			await pageUtils.pressKeys( 'Tab' );
+			await pageUtils.pressKeys( 'Enter' );
 		}
-		await page.click( '.block-editor-link-control__tools >> role=button[name="Advanced"i]' );
-		await page.locator( 'role=checkbox[name="Open in new tab"i]' ).check();
-		await page.click( 'role=button[name="Save"i]' );
+		await page
+			.locator( '.block-editor-link-control__tools ' )
+			.getByRole( 'button', { name: 'Advanced' } )
+			.click();
+		await page.getByRole( 'checkbox', { name: 'Open in new tab' } ).click();
+		await page.getByRole( 'button', { name: 'Save', exact: true } ).click();
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
