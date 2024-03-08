@@ -50,7 +50,6 @@ test.describe( 'Block Support', () => {
 	} );
 
 	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
 		await page.click( 'role=region[name="Editor settings"i] >> role=tab[name="Styles"i]' );
@@ -60,12 +59,8 @@ test.describe( 'Block Support', () => {
 		);
 		await page.click( 'role=button[name="Dimensions options"i]' );
 
-		if ( wpVersion === '6-2' ) {
-			await page.click( 'role=button[name="Unlink sides"i]' );
-		} else {
-			await page.click( 'role=button[name="Margin options"i]' );
-			await page.click( 'role=menu[name="Margin options"i] >> role=menuitemradio[name="Custom"i]' );
-		}
+		await page.click( 'role=button[name="Margin options"i]' );
+		await page.click( 'role=menu[name="Margin options"i] >> role=menuitemradio[name="Custom"i]' );
 
 		for ( let i = 0; i < 4; i++ ) {
 			await page.click( 'role=button[name="Set custom size"i] >> nth=0' );

@@ -73,29 +73,37 @@ test.describe( 'Flexible table cell', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 
 		// Edit the link.
-		await pageUtils.pressKeys( 'primary+a' );
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'Tab' );
-		await page.keyboard.press( 'Enter' );
-		if ( [ '6-3', '6-4', '6-5' ].includes( wpVersion ) ) {
-			await page.fill( 'role=combobox[name="Link"i]', '#anchor-updated' );
-		} else {
-			await page.fill( 'role=combobox[name="URL"i]', '#anchor-updated' );
-		}
-		await page.keyboard.press( 'Enter' );
-
-		// Toggle "Open in new tab".
-		await pageUtils.pressKeys( 'primary+a' );
-		if ( [ '6-3', '6-4', '6-5' ].includes( wpVersion ) ) {
+		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
+			// WP6.3, 6.4
+			await pageUtils.pressKeys( 'primary+a' );
 			await page.keyboard.press( 'Tab' );
 			await page.keyboard.press( 'Tab' );
 			await page.keyboard.press( 'Enter' );
-			await page.click( '.block-editor-link-control__tools >> role=button[name="Advanced"i]' );
-			await page.locator( 'role=checkbox[name="Open in new tab"i]' ).check();
-			await page.click( 'role=button[name="Save"i]' );
 		} else {
-			await page.locator( 'role=checkbox[name="Open in new tab"i]' ).click();
+			// WP6.5, 6.6
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Enter' );
 		}
+
+		await page.fill( 'role=combobox[name="Link"i]', '#anchor-updated' );
+		await page.keyboard.press( 'Enter' );
+
+		// Toggle "Open in new tab".
+		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
+			// WP6.3, 6.4
+			await pageUtils.pressKeys( 'primary+a' );
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Enter' );
+		} else {
+			// WP6.5, 6.6
+			await page.keyboard.press( 'Enter' );
+			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( 'Enter' );
+		}
+		await page.click( '.block-editor-link-control__tools >> role=button[name="Advanced"i]' );
+		await page.locator( 'role=checkbox[name="Open in new tab"i]' ).check();
+		await page.click( 'role=button[name="Save"i]' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
