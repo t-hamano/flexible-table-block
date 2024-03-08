@@ -2,7 +2,7 @@
 Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
-Requires at least: 6.2
+Requires at least: 6.3
 Tested up to: 6.4
 Stable tag: 3.1.0
 Requires PHP: 7.4
