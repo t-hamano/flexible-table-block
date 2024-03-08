@@ -19,57 +19,80 @@ test.describe( 'Block Support', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'typography settings should be applied', async ( { editor, page, fsbUtils } ) => {
+	test( 'typography settings should be applied', async ( {
+		editor,
+		page,
+		pageUtils,
+		fsbUtils,
+	} ) => {
 		await fsbUtils.createFlexibleTableBlock();
+		// Open the sidebar.
 		await editor.openDocumentSettingsSidebar();
-		await page.click( 'role=region[name="Editor settings"i] >> role=tab[name="Styles"i]' );
-
-		await page.click( 'role=button[name="Typography options"i]' );
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Styles' } )
+			.click();
+		// Show all typography controls.
+		await page.getByRole( 'button', { name: 'Typography options' } ).click();
 		for ( let i = 0; i < 6; i++ ) {
-			await page.click(
-				`[aria-label="Typography options"] >> role=menuitemcheckbox >> nth=${ i }`
-			);
+			await page
+				.getByRole( 'menu', { name: 'Typography options' } )
+				.getByRole( 'menuitemcheckbox' )
+				.nth( i )
+				.click();
 		}
-		await page.click( 'role=button[name="Typography options"i]' );
-
-		await page.selectOption( 'role=combobox[name="Font"i]', 'Source Serif Pro' );
-		await page.click( 'role=radiogroup[name="Font size"i] >> role=radio[name="Large"i]' );
-		await page.click( 'role=button[name="Appearance"i]' );
-
-		await page.locator( '.components-custom-select-control__menu' );
-		for ( let i = 0; i < 5; i++ ) {
-			await page.keyboard.press( 'ArrowDown' );
-		}
-		await page.keyboard.press( 'Enter' );
-
-		await page.fill( 'role=spinbutton[name="Line height"i]', '3' );
-		await page.click( 'role=button[name="Lowercase"i]' );
-		await page.fill( 'role=spinbutton[name="Letter spacing"i]', '10' );
+		await page.getByRole( 'button', { name: 'Typography options' } ).click();
+		// Change font family.
+		await page.getByRole( 'combobox', { name: 'Font' } ).selectOption( 'Source Serif Pro' );
+		// Change font size.
+		await page
+			.getByRole( 'radiogroup', { name: 'Font size' } )
+			.getByRole( 'radio', { name: 'Large', exact: true } )
+			.click();
+		// Change font appearance.
+		await page.getByRole( 'button', { name: 'Appearance' } ).click();
+		await page.getByRole( 'listbox', { name: 'Appearance' } );
+		await pageUtils.pressKeys( 'ArrowDown', { times: 5 } );
+		await pageUtils.pressKeys( 'Enter' );
+		// Change line height.
+		await page.getByRole( 'spinbutton', { name: 'Line height' } ).fill( '3' );
+		// Change letter case.
+		await page.getByRole( 'button', { name: 'Lowercase' } ).click();
+		// Change letter spacing.
+		await page.getByRole( 'spinbutton', { name: 'Letter spacing' } ).fill( '10' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
+		// Open the sidebar.
 		await editor.openDocumentSettingsSidebar();
-		await page.click( 'role=region[name="Editor settings"i] >> role=tab[name="Styles"i]' );
-		await page.click( 'role=button[name="Dimensions options"i]' );
-		await page.click(
-			'role=menu[name="Dimensions options"] >> role=menuitemcheckbox[name="Show Margin"]'
-		);
-		await page.click( 'role=button[name="Dimensions options"i]' );
-
-		await page.click( 'role=button[name="Margin options"i]' );
-		await page.click( 'role=menu[name="Margin options"i] >> role=menuitemradio[name="Custom"i]' );
-
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Styles' } )
+			.click();
+		// Show margin control.
+		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
+		await page
+			.getByRole( 'menu', { name: 'Dimensions options' } )
+			.getByRole( 'menuitemcheckbox', { name: 'Show Margin' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
+		// Show custom controls.
+		await page.getByRole( 'button', { name: 'Margin options' } ).click();
+		await page
+			.getByRole( 'menu', { name: 'Margin options' } )
+			.getByRole( 'menuitemradio', { name: 'Custom' } )
+			.click();
+		// Change margin values.
 		for ( let i = 0; i < 4; i++ ) {
-			await page.click( 'role=button[name="Set custom size"i] >> nth=0' );
+			await page.getByRole( 'button', { name: 'Set custom size' } ).nth( 0 ).click();
 		}
-
-		await page.fill( 'role=spinbutton[name="Top margin"i]', '10' );
-		await page.fill( 'role=spinbutton[name="Right margin"i]', '20' );
-		await page.fill( 'role=spinbutton[name="Bottom margin"i]', '30' );
-		await page.fill( 'role=spinbutton[name="Left margin"i]', '40' );
+		await page.getByRole( 'spinbutton', { name: 'Top margin' } ).fill( '10' );
+		await page.getByRole( 'spinbutton', { name: 'Right margin' } ).fill( '20' );
+		await page.getByRole( 'spinbutton', { name: 'Bottom margin' } ).fill( '30' );
+		await page.getByRole( 'spinbutton', { name: 'Left margin' } ).fill( '40' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
