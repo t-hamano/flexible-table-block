@@ -63,14 +63,6 @@ class Enqueue {
 			filemtime( FTB_PATH . '/build/index.js' ),
 		);
 
-		wp_localize_script(
-			'flexible-table-block-editor',
-			'ftbObj',
-			array(
-				'useOnFocus' => is_wp_version_compatible( '6.3' ),
-			)
-		);
-
 		wp_set_script_translations( 'flexible-table-block-editor', FTB_NAMESPACE );
 
 		wp_register_style(

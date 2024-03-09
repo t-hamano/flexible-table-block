@@ -16,12 +16,6 @@ import type {
 	BORDER_COLLAPSE_CONTROLS,
 } from './constants';
 
-declare global {
-	interface Window {
-		ftbObj: any;
-	}
-}
-
 type NestedObject = {
 	[ key: string ]: NestedObject | null | undefined;
 };

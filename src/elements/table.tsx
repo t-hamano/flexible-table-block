@@ -443,24 +443,6 @@ export default function Table( {
 
 								const cellStylesObj = convertToObject( styles );
 
-								// TODO: Once the minimum WordPress version supported by the plugin is 6.3 or higher,
-								// Use only onFocus.
-								const useOnFocus = !! window?.ftbObj?.useOnFocus;
-
-								const focusEvent = () => {
-									isTabMove = false;
-									setSelectedLine( undefined );
-									setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-								};
-
-								const focusProp =
-									! isSelectMode || isTabMove
-										? {
-												...( useOnFocus && { onFocus: focusEvent } ),
-												...( ! useOnFocus && { unstableOnFocus: focusEvent } ),
-										  }
-										: {};
-
 								return (
 									<Cell
 										key={ vColIndex }
@@ -613,7 +595,13 @@ export default function Table( {
 											key={ vColIndex }
 											value={ content }
 											onChange={ ( value ) => onChangeCellContent( value, cell ) }
-											{ ...focusProp }
+											{ ...( ( ! isSelectMode || isTabMove ) && {
+												onFocus: () => {
+													isTabMove = false;
+													setSelectedLine( undefined );
+													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+												},
+											} ) }
 											aria-label={ CELL_ARIA_LABEL[ sectionName as SectionName ] }
 										/>
 										{ isSelected &&
