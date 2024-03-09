@@ -114,6 +114,7 @@ export default function TableCaptionSettings( {
 					className="ftb-line-height-control"
 				>
 					<TextControl
+						className="ftb-is-next-40px-default-size"
 						label={ __( 'Caption line height', 'flexible-table-block' ) }
 						autoComplete="off"
 						onChange={ onChangeLineHeight }
@@ -121,8 +122,6 @@ export default function TableCaptionSettings( {
 						type="number"
 						value={ captionStylesObj?.lineHeight || '' }
 						min={ 0 }
-						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
-						__next40pxDefaultSize
 					/>
 				</BaseControl>
 			</div>

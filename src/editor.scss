@@ -402,6 +402,13 @@
 	cursor: initial;
 }
 
+// TODO: Remove this style and replace it with `__next40pxDefaultSize` prop
+// when supported WordPress versions are greater than or equal to 6.5.
+// See: https://github.com/WordPress/gutenberg/pull/55471
+.ftb-is-next-40px-default-size .components-text-control__input {
+	height: 40px;
+}
+
 // Setting Component Styles
 .ftb-button-group {
 	display: block;
@@ -468,7 +475,7 @@
 	background-image: none;
 }
 
-.ftb-line-height-control 	.components-text-control__input {
+.ftb-line-height-control .components-text-control__input {
 	display: block;
 	max-width: 72px;
 }

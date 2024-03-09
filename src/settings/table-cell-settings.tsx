@@ -235,6 +235,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				</BaseControl>
 				<BaseControl id="flexible-table-block-cell-line-height" className="ftb-line-height-control">
 					<TextControl
+						className="ftb-is-next-40px-default-size"
 						label={ __( 'Cell line height', 'flexible-table-block' ) }
 						value={ cellStylesObj?.lineHeight || '' }
 						autoComplete="off"
@@ -242,8 +243,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						step={ 0.1 }
 						min={ 0 }
 						onChange={ onChangeLineHeight }
-						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
-						__next40pxDefaultSize
 					/>
 				</BaseControl>
 			</div>
@@ -406,19 +405,19 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				</div>
 			</BaseControl>
 			<TextControl
+				className="ftb-is-next-40px-default-size"
 				label={ __( 'Cell CSS class(es)', 'flexible-table-block' ) }
 				autoComplete="off"
 				value={ targetCell.className || '' }
 				onChange={ onChangeClass }
 				help={ __( 'Separate multiple classes with spaces.' ) }
-				// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
-				__next40pxDefaultSize
 			/>
 			{ selectedCellTags.length === 1 && (
 				<>
 					<hr />
 					{ selectedCellTags.includes( 'th' ) && (
 						<TextControl
+							className="ftb-is-next-40px-default-size"
 							label={ createInterpolateElement(
 								__( '<code>id</code> attribute', 'flexible-table-block' ),
 								{ code: <code /> }
@@ -426,11 +425,10 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							autoComplete="off"
 							value={ targetCell.id || '' }
 							onChange={ onChangeId }
-							// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
-							__next40pxDefaultSize
 						/>
 					) }
 					<TextControl
+						className="ftb-is-next-40px-default-size"
 						label={ createInterpolateElement(
 							__( '<code>headers</code> attribute', 'flexible-table-block' ),
 							{ code: <code /> }
@@ -438,8 +436,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						autoComplete="off"
 						value={ targetCell.headers || '' }
 						onChange={ onChangeHeaders }
-						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
-						__next40pxDefaultSize
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
 						<BaseControl id="flexible-table-block-cell-scope">
