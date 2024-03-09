@@ -46,7 +46,13 @@ export default function GlobalSettings() {
 	return (
 		<>
 			<div className="ftb-global-setting">
-				<Button icon={ help } variant="link" onClick={ () => setIsHelpModalOpen( true ) }>
+				<Button
+					icon={ help }
+					variant="link"
+					onClick={ () => setIsHelpModalOpen( true ) }
+					// @ts-ignore: `size` prop is not exist at @types
+					size="compact"
+				>
 					{ __( 'Help', 'flexible-table-block' ) }
 				</Button>
 				{ ! isGlobalSettingLoaded && <Spinner /> }
@@ -56,6 +62,8 @@ export default function GlobalSettings() {
 						iconSize="20"
 						variant="primary"
 						onClick={ () => setIsSettingModalOpen( true ) }
+						// @ts-ignore: `size` prop is not exist at @types
+						size="compact"
 					>
 						{ __( 'Global setting', 'flexible-table-block' ) }
 					</Button>

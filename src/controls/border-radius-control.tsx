@@ -139,7 +139,12 @@ export default function BorderRadiusControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-radius-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall variant="secondary" onClick={ handleOnReset }>
+					<Button
+						variant="secondary"
+						onClick={ handleOnReset }
+						// @ts-ignore: `size` prop is not exist at @types
+						size="small"
+					>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -155,6 +160,7 @@ export default function BorderRadiusControl( {
 							value={ allInputValue }
 							units={ borderRadiusUnits }
 							min="0"
+							size="__unstable-large"
 						/>
 					) }
 					<Tooltip text={ linkedLabel }>
@@ -162,9 +168,10 @@ export default function BorderRadiusControl( {
 							<Button
 								className="ftb-border-radius-control__header-linked-button"
 								label={ linkedLabel }
-								isSmall
 								onClick={ toggleLinked }
 								icon={ isLinked ? link : linkOff }
+								// @ts-ignore: `size` prop is not exist at @types
+								size="small"
 							/>
 						</span>
 					</Tooltip>
@@ -180,6 +187,7 @@ export default function BorderRadiusControl( {
 								min="0"
 								onFocus={ () => handleOnFocus( item.value ) }
 								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
+								size="__unstable-large"
 							/>
 						) ) }
 					</div>

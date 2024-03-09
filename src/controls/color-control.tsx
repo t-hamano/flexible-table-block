@@ -74,7 +74,12 @@ export default function ColorControl( {
 				<div aria-labelledby={ headingId } role="region">
 					<div className="ftb-color-control__header">
 						<Text id={ headingId }>{ label }</Text>
-						<Button isSmall variant="secondary" onClick={ handleOnReset }>
+						<Button
+							variant="secondary"
+							onClick={ handleOnReset }
+							// @ts-ignore: `size` prop is not exist at @types
+							size="small"
+						>
 							{ __( 'Reset', 'flexible-table-block' ) }
 						</Button>
 					</div>

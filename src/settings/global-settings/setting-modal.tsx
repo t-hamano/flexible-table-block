@@ -241,6 +241,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 														},
 													} );
 												} }
+												size="__unstable-large"
 											/>
 										</BaseControl>
 										<BaseControl
@@ -262,6 +263,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 														},
 													} );
 												} }
+												size="__unstable-large"
 											/>
 										</BaseControl>
 										<BaseControl
@@ -302,6 +304,8 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 																		},
 																	} );
 																} }
+																// @ts-ignore: `size` prop is not exist at @types
+																size="compact"
 															>
 																{ label }
 															</Button>
@@ -541,6 +545,8 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 																		},
 																	} );
 																} }
+																// @ts-ignore: `size` prop is not exist at @types
+																size="compact"
 															/>
 														);
 													} ) }
@@ -586,6 +592,8 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 																		},
 																	} );
 																} }
+																// @ts-ignore: `size` prop is not exist at @types
+																size="compact"
 															/>
 														);
 													} ) }
@@ -620,6 +628,8 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
 											} );
 										} }
+										// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+										__next40pxDefaultSize
 									/>
 								</>
 							) }
@@ -752,14 +762,21 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 					</Notice>
 				) }
 				<div className="ftb-global-setting-modal__buttons">
-					<Button variant="primary" disabled={ isWaiting } onClick={ handleUpdateOptions }>
+					<Button
+						variant="primary"
+						disabled={ isWaiting }
+						onClick={ handleUpdateOptions }
+						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+						__next40pxDefaultSize
+					>
 						{ __( 'Save settings', 'flexible-table-block' ) }
 					</Button>
 					<Button
-						variant="link"
 						isDestructive
 						disabled={ isWaiting }
 						onClick={ () => setIsResetPopup( ! isResetPopup ) }
+						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+						__next40pxDefaultSize
 					>
 						{ __( 'Restore default settings', 'flexible-table-block' ) }
 						{ isResetPopup && (
@@ -770,10 +787,20 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 							>
 								<p>{ __( 'Are you sure?', 'flexible-table-block' ) }</p>
 								<div className="ftb-global-setting-modal__confirm-popover-buttons">
-									<Button isDestructive onClick={ handleResetOptions }>
+									<Button
+										isDestructive
+										onClick={ handleResetOptions }
+										// @ts-ignore: `size` prop is not exist at @types
+										size="compact"
+									>
 										{ __( 'Restore', 'flexible-table-block' ) }
 									</Button>
-									<Button variant="secondary" onClick={ () => setIsResetPopup( false ) }>
+									<Button
+										variant="secondary"
+										onClick={ () => setIsResetPopup( false ) }
+										// @ts-ignore: `size` prop is not exist at @types
+										size="compact"
+									>
 										{ __( 'Cancel', 'flexible-table-block' ) }
 									</Button>
 								</div>
