@@ -25,6 +25,7 @@ test.describe( 'Block Support', () => {
 		pageUtils,
 		fsbUtils,
 	} ) => {
+		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the sidebar.
 		await editor.openDocumentSettingsSidebar();
@@ -43,7 +44,12 @@ test.describe( 'Block Support', () => {
 		}
 		await page.getByRole( 'button', { name: 'Typography options' } ).click();
 		// Change font family.
-		await page.getByRole( 'combobox', { name: 'Font' } ).selectOption( 'Source Serif Pro' );
+		const fontFamily = [ '6-3' ].includes( wpVersion )
+			? // WP6.3 (Twenty Twenty-Three)
+			  'Source Serif Pro'
+			: // WP6.4, 6.5, 6.6 (Twenty Twenty-Four)
+			  'System Sans-serif';
+		await page.getByRole( 'combobox', { name: 'Font' } ).selectOption( fontFamily );
 		// Change font size.
 		await page
 			.getByRole( 'radiogroup', { name: 'Font size' } )
@@ -61,7 +67,17 @@ test.describe( 'Block Support', () => {
 		// Change letter spacing.
 		await page.getByRole( 'spinbutton', { name: 'Letter spacing' } ).fill( '10' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		const expected = [ '6-3' ].includes( wpVersion )
+			? // WP6.3
+			  `<!-- wp:flexible-table-block/table {\"style\":{\"typography\":{\"fontStyle\":\"normal\",\"fontWeight\":\"500\",\"lineHeight\":\"3\",\"textTransform\":\"lowercase\",\"letterSpacing\":\"10px\"}},\"fontSize\":\"large\",\"fontFamily\":\"source-serif-pro\"} -->
+<figure class=\"wp-block-flexible-table-block-table has-source-serif-pro-font-family has-large-font-size\" style=\"font-style:normal;font-weight:500;letter-spacing:10px;line-height:3;text-transform:lowercase\"><table class=\"has-fixed-layout\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			: // WP6.4, 6.5, 6.6
+			  `<!-- wp:flexible-table-block/table {\"style\":{\"typography\":{\"fontStyle\":\"normal\",\"fontWeight\":\"500\",\"lineHeight\":\"3\",\"textTransform\":\"lowercase\",\"letterSpacing\":\"10px\"}},\"fontSize\":\"large\",\"fontFamily\":\"system-sans-serif\"} -->
+<figure class=\"wp-block-flexible-table-block-table has-system-sans-serif-font-family has-large-font-size\" style=\"font-style:normal;font-weight:500;letter-spacing:10px;line-height:3;text-transform:lowercase\"><table class=\"has-fixed-layout\"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`;
+
+		expect( await editor.getEditedPostContent() ).toBe( expected );
 	} );
 
 	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
