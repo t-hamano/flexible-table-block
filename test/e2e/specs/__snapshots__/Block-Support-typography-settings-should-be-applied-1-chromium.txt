@@ -1,3 +1,0 @@
-<!-- wp:flexible-table-block/table {"style":{"typography":{"fontStyle":"normal","fontWeight":"500","lineHeight":"3","textTransform":"lowercase","letterSpacing":"10px"}},"fontSize":"large","fontFamily":"source-serif-pro"} -->
-<figure class="wp-block-flexible-table-block-table has-source-serif-pro-font-family has-large-font-size" style="font-style:normal;font-weight:500;letter-spacing:10px;line-height:3;text-transform:lowercase"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:flexible-table-block/table -->
