@@ -249,12 +249,12 @@ export const CORNER_CONTROLS = [
 
 export const DIRECTION_CONTROLS = [
 	{
-		label: __( 'Horizontal', 'flexible-table-block' ),
-		value: 'horizontal',
-	},
-	{
 		label: __( 'Vertical', 'flexible-table-block' ),
 		value: 'vertical',
+	},
+	{
+		label: __( 'Horizontal', 'flexible-table-block' ),
+		value: 'horizontal',
 	},
 ] as const;
 

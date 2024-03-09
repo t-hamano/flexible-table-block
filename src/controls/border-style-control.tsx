@@ -125,7 +125,12 @@ export default function BorderStyleControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-style-control__header">
 					<Text id={ headingId }>{ controlLabel }</Text>
-					<Button isSmall variant="secondary" onClick={ handleOnReset }>
+					<Button
+						variant="secondary"
+						onClick={ handleOnReset }
+						// @ts-ignore: `size` prop is not exist at @types
+						size="small"
+					>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -140,9 +145,10 @@ export default function BorderStyleControl( {
 											key={ borderStyle.value }
 											label={ borderStyle.label }
 											icon={ borderStyle.icon }
-											isSmall
 											variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
 											onClick={ () => handleOnClickAll( borderStyle.value ) }
+											// @ts-ignore: `size` prop is not exist at @types
+											size="compact"
 										/>
 									) ) }
 								</ButtonGroup>
@@ -164,10 +170,11 @@ export default function BorderStyleControl( {
 															? 'primary'
 															: undefined
 													}
-													isSmall
 													onClick={ () =>
 														handleOnClick( borderStyle.value, item.value as ValuesKey )
 													}
+													// @ts-ignore: `size` prop is not exist at @types
+													size="compact"
 												/>
 											);
 										} ) }
@@ -181,9 +188,10 @@ export default function BorderStyleControl( {
 								<Button
 									className="ftb-border-style-control__header-linked-button"
 									label={ linkedLabel }
-									isSmall
 									onClick={ toggleLinked }
 									icon={ isLinked ? link : linkOff }
+									// @ts-ignore: `size` prop is not exist at @types
+									size="small"
 								/>
 							</span>
 						</Tooltip>

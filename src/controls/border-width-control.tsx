@@ -135,7 +135,12 @@ export default function BorderWidthControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-width-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button isSmall variant="secondary" onClick={ handleOnReset }>
+					<Button
+						variant="secondary"
+						onClick={ handleOnReset }
+						// @ts-ignore: `size` prop is not exist at @types
+						size="small"
+					>
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -150,6 +155,7 @@ export default function BorderWidthControl( {
 							units={ borderWidthUnits }
 							placeholder={ allInputPlaceholder }
 							onChange={ handleOnChangeAll }
+							size="__unstable-large"
 						/>
 					) }
 					{ allowSides && (
@@ -158,9 +164,10 @@ export default function BorderWidthControl( {
 								<Button
 									className="ftb-border-width-control__header-linked-button"
 									label={ linkedLabel }
-									isSmall
 									icon={ isLinked ? link : linkOff }
 									onClick={ toggleLinked }
+									// @ts-ignore: `size` prop is not exist at @types
+									size="small"
 								/>
 							</span>
 						</Tooltip>
@@ -176,6 +183,7 @@ export default function BorderWidthControl( {
 								units={ borderWidthUnits }
 								onFocus={ () => handleOnFocus( item.value ) }
 								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
+								size="__unstable-large"
 							/>
 						) ) }
 					</div>

@@ -171,6 +171,8 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						max={ MAX_PREVIEW_TABLE_COL }
 						value={ colCount || '' }
 						onChange={ onChangeColumnCount }
+						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+						__next40pxDefaultSize
 					/>
 					<TextControl
 						className="ftb-placeholder__row-count"
@@ -180,8 +182,16 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						max={ MAX_PREVIEW_TABLE_ROW }
 						value={ rowCount || '' }
 						onChange={ onChangeRowCount }
+						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+						__next40pxDefaultSize
 					/>
-					<Button variant="primary" type="submit" disabled={ ! rowCount || ! colCount }>
+					<Button
+						variant="primary"
+						type="submit"
+						disabled={ ! rowCount || ! colCount }
+						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+						__next40pxDefaultSize
+					>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</div>

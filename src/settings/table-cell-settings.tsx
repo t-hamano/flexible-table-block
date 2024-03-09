@@ -230,6 +230,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						units={ fontSizeUnits }
 						min="0"
 						onChange={ onChangeFontSize }
+						size="__unstable-large"
 					/>
 				</BaseControl>
 				<BaseControl id="flexible-table-block-cell-line-height" className="ftb-line-height-control">
@@ -241,6 +242,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						step={ 0.1 }
 						min={ 0 }
 						onChange={ onChangeLineHeight }
+						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+						__next40pxDefaultSize
 					/>
 				</BaseControl>
 			</div>
@@ -256,6 +259,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					units={ cellWidthUnits }
 					min="0"
 					onChange={ onChangeWidth }
+					size="__unstable-large"
 				/>
 				<ButtonGroup
 					aria-label={ __( 'Cell percentage width', 'flexible-table-block' ) }
@@ -267,8 +271,9 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							<Button
 								key={ perWidth }
 								variant={ isPressed ? 'primary' : undefined }
-								isSmall
 								onClick={ () => onChangeWidth( isPressed ? '' : `${ perWidth }%` ) }
+								// @ts-ignore: `size` prop is not exist at @types
+								size="small"
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -350,6 +355,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 										icon={ icon }
 										variant={ value === cellStylesObj?.textAlign ? 'primary' : 'secondary' }
 										onClick={ () => onChangeTextAlign( value ) }
+										/// @ts-ignore: `size` prop is not exist at @types
+										size="compact"
 									/>
 								);
 							} ) }
@@ -366,6 +373,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 										icon={ icon }
 										variant={ value === cellStylesObj?.verticalAlign ? 'primary' : 'secondary' }
 										onClick={ () => onChangeVerticalAlign( value ) }
+										// @ts-ignore: `size` prop is not exist at @types
+										size="compact"
 									/>
 								);
 							} ) }
@@ -386,6 +395,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 									key={ value }
 									variant={ value === targetCell.tag ? 'primary' : 'secondary' }
 									onClick={ () => onChangeTag( value ) }
+									// @ts-ignore: `size` prop is not exist at @types
+									size="compact"
 								>
 									{ label }
 								</Button>
@@ -400,6 +411,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				value={ targetCell.className || '' }
 				onChange={ onChangeClass }
 				help={ __( 'Separate multiple classes with spaces.' ) }
+				// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+				__next40pxDefaultSize
 			/>
 			{ selectedCellTags.length === 1 && (
 				<>
@@ -413,6 +426,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							autoComplete="off"
 							value={ targetCell.id || '' }
 							onChange={ onChangeId }
+							// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+							__next40pxDefaultSize
 						/>
 					) }
 					<TextControl
@@ -423,6 +438,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						autoComplete="off"
 						value={ targetCell.headers || '' }
 						onChange={ onChangeHeaders }
+						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
+						__next40pxDefaultSize
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
 						<BaseControl id="flexible-table-block-cell-scope">
@@ -443,6 +460,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 												key={ value }
 												variant={ value === targetCell.scope ? 'primary' : 'secondary' }
 												onClick={ () => onChangeScope( value ) }
+												// @ts-ignore: `size` prop is not exist at @types
+												size="compact"
 											>
 												{ label }
 											</Button>

@@ -205,12 +205,6 @@
 		.components-base-control__field {
 			margin-right: 8px;
 			margin-bottom: 0;
-
-			.components-text-control__input {
-				box-sizing: border-box;
-				height: 36px;
-				margin: 0;
-			}
 		}
 	}
 
@@ -463,7 +457,7 @@
 .ftb-font-size-control,
 .ftb-width-control {
 
-	.components-input-control {
+	.components-input-control.components-input-control {
 		max-width: 100px;
 		margin-bottom: 0;
 	}
@@ -476,6 +470,5 @@
 
 .ftb-line-height-control 	.components-text-control__input {
 	display: block;
-	max-width: 60px;
-	padding: 5px 8px;
+	max-width: 72px;
 }

@@ -292,6 +292,8 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeSticky }
+				// @ts-ignore: `size` prop is not exist at @types
+				size="__unstable-large"
 			/>
 			<hr />
 			<BaseControl
@@ -306,6 +308,7 @@ export default function TableSettings( {
 					disabled={ tableStylesObj?.width === 'auto' }
 					min="0"
 					onChange={ onChangeWidth }
+					size="__unstable-large"
 				/>
 				<ButtonGroup
 					aria-label={ __( 'Table percentage width', 'flexible-table-block' ) }
@@ -317,10 +320,11 @@ export default function TableSettings( {
 							<Button
 								key={ perWidth }
 								variant={ isPressed ? 'primary' : undefined }
-								isSmall
 								onClick={ () =>
 									onChangeWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
 								}
+								// @ts-ignore: `size` prop is not exist at @types
+								size="small"
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -328,8 +332,9 @@ export default function TableSettings( {
 					} ) }
 					<Button
 						variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
-						isSmall
 						onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? '' : 'auto' ) }
+						// @ts-ignore: `size` prop is not exist at @types
+						size="small"
 					>
 						{ __( 'auto', 'flexible-table-block' ) }
 					</Button>
@@ -347,6 +352,7 @@ export default function TableSettings( {
 					disabled={ tableStylesObj?.maxWidth === 'none' }
 					min="0"
 					onChange={ onChangeMaxWidth }
+					size="__unstable-large"
 				/>
 				<ButtonGroup
 					aria-label={ __( 'Table percentage max width' ) }
@@ -358,10 +364,11 @@ export default function TableSettings( {
 							<Button
 								key={ perWidth }
 								variant={ isPressed ? 'primary' : undefined }
-								isSmall
 								onClick={ () =>
 									onChangeMaxWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
 								}
+								// @ts-ignore: `size` prop is not exist at @types
+								size="small"
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -369,8 +376,9 @@ export default function TableSettings( {
 					} ) }
 					<Button
 						variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
-						isSmall
 						onClick={ () => onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? '' : 'none' ) }
+						// @ts-ignore: `size` prop is not exist at @types
+						size="small"
 					>
 						{ _x( 'none', 'width', 'flexible-table-block' ) }
 					</Button>
@@ -387,6 +395,7 @@ export default function TableSettings( {
 					units={ tableWidthUnits }
 					min="0"
 					onChange={ onChangeMinWidth }
+					size="__unstable-large"
 				/>
 				<ButtonGroup
 					aria-label={ __( 'Table percentage min width' ) }
@@ -398,8 +407,9 @@ export default function TableSettings( {
 							<Button
 								key={ perWidth }
 								variant={ isPressed ? 'primary' : undefined }
-								isSmall
 								onClick={ () => onChangeMinWidth( isPressed ? '' : `${ perWidth }%` ) }
+								// @ts-ignore: `size` prop is not exist at @types
+								size="small"
 							>
 								{ `${ perWidth }%` }
 							</Button>
@@ -464,6 +474,8 @@ export default function TableSettings( {
 									variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
 									icon={ icon }
 									onClick={ () => onChangeBorderCollapse( value ) }
+									// @ts-ignore: `size` prop is not exist at @types
+									size="compact"
 								>
 									{ label }
 								</Button>
