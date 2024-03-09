@@ -36,24 +36,6 @@ export default function TableCaption( {
 }: Props ) {
 	const { caption } = attributes;
 
-	const useOnFocus = !! window?.ftbObj?.useOnFocus;
-
-	// TODO: Once the minimum WordPress version supported by the plugin is 6.3 or higher,
-	// Use only onFocus.
-	const focusProp = useOnFocus
-		? {
-				onFocus: () => {
-					setSelectedLine( undefined );
-					setSelectedCells( undefined );
-				},
-		  }
-		: {
-				unstableOnFocus: () => {
-					setSelectedLine( undefined );
-					setSelectedCells( undefined );
-				},
-		  };
-
 	const onChange = ( value: string ) => setAttributes( { caption: value } );
 
 	return (
@@ -64,7 +46,10 @@ export default function TableCaption( {
 			style={ captionStylesObj }
 			value={ caption }
 			onChange={ onChange }
-			{ ...focusProp }
+			onFocus={ () => {
+				setSelectedLine( undefined );
+				setSelectedCells( undefined );
+			} }
 			// @ts-ignore: `__unstableOnSplitAtEnd` prop is not exist at @types
 			__unstableOnSplitAtEnd={ () => insertBlocksAfter( createBlock( 'core/paragraph' ) ) }
 		/>

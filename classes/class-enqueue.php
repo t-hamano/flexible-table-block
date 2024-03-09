@@ -19,12 +19,10 @@ class Enqueue {
 		// Enqueue front-end scripts.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		// Enqueue block-editor scripts.
-		// TODO: Once the minimum WordPress version supported by the plugin is 6.3 or higher,
-		// Use enqueue_block_assets instead of enqueue_block_editor_assets.
-		// See: https://github.com/t-hamano/flexible-table-block/pull/161/commits/c2ce9851eb0812e7a2a3e660555ab553c5c3e8e3
-		// See: https://github.com/t-hamano/flexible-table-block/pull/161/commits/0019f8c961f04ba95a7447149eb8dab61fbcd0ee
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
+		// Enqueue block-editor assets.
+		if ( is_admin() ) {
+			add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_editor_assets' ) );
+		}
 	}
 
 	/**
@@ -53,7 +51,7 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue block-editor scripts
+	 * Enqueue block-editor assets
 	 */
 	public function enqueue_block_editor_assets() {
 		$asset_file = include FTB_PATH . '/build/index.asset.php';
@@ -63,14 +61,6 @@ class Enqueue {
 			FTB_URL . '/build/index.js',
 			$asset_file['dependencies'],
 			filemtime( FTB_PATH . '/build/index.js' ),
-		);
-
-		wp_localize_script(
-			'flexible-table-block-editor',
-			'ftbObj',
-			array(
-				'useOnFocus' => is_wp_version_compatible( '6.3' ),
-			)
 		);
 
 		wp_set_script_translations( 'flexible-table-block-editor', FTB_NAMESPACE );
