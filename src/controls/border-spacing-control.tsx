@@ -68,7 +68,6 @@ export default function BorderSpacingControl( {
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
-	const [ direction, setDirection ] = useState< DirectionValue | undefined >( undefined );
 
 	const headingId: string = `${ id }-heading`;
 
@@ -83,12 +82,10 @@ export default function BorderSpacingControl( {
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
-		setDirection( undefined );
 	};
 
 	const handleOnReset = () => {
 		setIsLinked( true );
-		setDirection( undefined );
 		onChange( DEFAULT_VALUES );
 	};
 
