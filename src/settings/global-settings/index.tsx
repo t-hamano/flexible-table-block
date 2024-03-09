@@ -59,7 +59,6 @@ export default function GlobalSettings() {
 				{ isGlobalSettingLoaded && showGlobalSetting && (
 					<Button
 						icon={ cog }
-						iconSize="20"
 						variant="primary"
 						onClick={ () => setIsSettingModalOpen( true ) }
 						// @ts-ignore: `size` prop is not exist at @types
