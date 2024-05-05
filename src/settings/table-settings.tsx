@@ -355,7 +355,7 @@ export default function TableSettings( {
 					size="__unstable-large"
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Table percentage max width' ) }
+					aria-label={ __( 'Table percentage max width', 'flexible-table-block' ) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
@@ -398,7 +398,7 @@ export default function TableSettings( {
 					size="__unstable-large"
 				/>
 				<ButtonGroup
-					aria-label={ __( 'Table percentage min width' ) }
+					aria-label={ __( 'Table percentage min width', 'flexible-table-block' ) }
 					className="ftb-percent-group"
 				>
 					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {

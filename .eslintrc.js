@@ -8,7 +8,14 @@ module.exports = {
 	rules: {
 		'react/jsx-boolean-value': 'error',
 		'import/no-extraneous-dependencies': 'off',
+		'@wordpress/dependency-group': 'error',
 		'@wordpress/no-unsafe-wp-apis': 'off',
+		'@wordpress/i18n-text-domain': [
+			'error',
+			{
+				allowedTextDomain: 'flexible-table-block',
+			},
+		],
 		'prettier/prettier': [
 			'error',
 			{
