@@ -410,7 +410,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				autoComplete="off"
 				value={ targetCell.className || '' }
 				onChange={ onChangeClass }
-				help={ __( 'Separate multiple classes with spaces.' ) }
+				help={ __( 'Separate multiple classes with spaces.', 'flexible-table-block' ) }
 			/>
 			{ selectedCellTags.length === 1 && (
 				<>

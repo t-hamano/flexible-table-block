@@ -1,3 +1,6 @@
+/**
+ * Internal dependencies
+ */
 import { parseCssValue, parseUnit, sanitizeUnitValue, toInteger } from '../helper';
 
 describe( 'helper', () => {
