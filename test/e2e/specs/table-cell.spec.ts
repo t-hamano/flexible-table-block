@@ -74,7 +74,8 @@ test.describe( 'Flexible table cell', () => {
 		if ( wpVersion === '6-4' ) {
 			// WP6.4
 			await pageUtils.pressKeys( 'primary+a' );
-			await pageUtils.pressKeys( 'Tab', { times: 2 } );
+			await page.locator( '.block-editor-link-control__search-item-title' ).focus();
+			await pageUtils.pressKeys( 'Tab' );
 			await pageUtils.pressKeys( 'Enter' );
 		} else {
 			// WP6.5, 6.6
@@ -89,7 +90,8 @@ test.describe( 'Flexible table cell', () => {
 		if ( wpVersion === '6-4' ) {
 			// WP6.4
 			await pageUtils.pressKeys( 'primary+a' );
-			await pageUtils.pressKeys( 'Tab', { times: 2 } );
+			await page.locator( '.block-editor-link-control__search-item-title' ).focus();
+			await pageUtils.pressKeys( 'Tab' );
 			await pageUtils.pressKeys( 'Enter' );
 		} else {
 			// WP6.5, 6.6
