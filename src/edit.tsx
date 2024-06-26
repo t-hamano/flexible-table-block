@@ -10,7 +10,13 @@ import type { Properties } from 'csstype';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
+import {
+	InspectorControls,
+	BlockControls,
+	useBlockProps,
+	// @ts-ignore: has no exported member
+	useBlockEditingMode,
+} from '@wordpress/block-editor';
 import {
 	// @ts-ignore: has no exported member
 	ToolbarDropdownMenu,
@@ -79,6 +85,8 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		[]
 	);
 	const { createWarningNotice } = useDispatch( noticesStore );
+	const blockEditingMode = useBlockEditingMode();
+	const isContentOnlyMode = blockEditingMode === 'contentOnly';
 
 	// Release cell selection.
 	useEffect( () => {
@@ -256,6 +264,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			[ `is-content-justification-${ contentJustification }` ]: contentJustification,
 			'show-dot-on-th': options.show_dot_on_th,
 			'show-control-button': options.show_control_button,
+			'is-content-only': isContentOnlyMode,
 		} ),
 	} );
 
@@ -270,6 +279,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		setSelectedCells,
 		selectedLine,
 		setSelectedLine,
+		isContentOnlyMode,
 	};
 
 	const tableSettingsProps = {
@@ -316,28 +326,33 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			) }
 			{ ! isEmpty && (
 				<figure { ...tableFigureProps }>
-					<BlockControls
-						// @ts-ignore: `group` prop is not exist at @types
-						group="block"
-					>
-						<ToolbarDropdownMenu
-							label={ __( 'Change table justification', 'flexible-table-block' ) }
-							icon={
-								( contentJustification &&
-									TableJustifyControls.find( ( control ) => control.value === contentJustification )
-										?.icon ) ||
-								justifyLeft
-							}
-							controls={ TableJustifyControls }
-							hasArrowIndicator
-						/>
-						<ToolbarDropdownMenu
-							label={ __( 'Edit table', 'flexible-table-block' ) }
-							icon={ blockTable }
-							controls={ TableEditControls }
-							hasArrowIndicator
-						/>
-					</BlockControls>
+					{ ! isContentOnlyMode && (
+						<>
+							<BlockControls
+								// @ts-ignore: `group` prop is not exist at @types
+								group="block"
+							>
+								<ToolbarDropdownMenu
+									label={ __( 'Change table justification', 'flexible-table-block' ) }
+									icon={
+										( contentJustification &&
+											TableJustifyControls.find(
+												( control ) => control.value === contentJustification
+											)?.icon ) ||
+										justifyLeft
+									}
+									controls={ TableJustifyControls }
+									hasArrowIndicator
+								/>
+								<ToolbarDropdownMenu
+									label={ __( 'Edit table', 'flexible-table-block' ) }
+									icon={ blockTable }
+									controls={ TableEditControls }
+									hasArrowIndicator
+								/>
+							</BlockControls>
+						</>
+					) }
 					<InspectorControls>
 						<PanelBody
 							title={ __( 'Table settings', 'flexible-table-block' ) }

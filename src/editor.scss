@@ -67,7 +67,7 @@
 			border-radius: 50%;
 		}
 
-		&.show-control-button {
+		&.show-control-button:not(.is-content-only) {
 			padding-left: 40px;
 
 			&.is-caption-side-bottom {
