@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -85,7 +85,7 @@ export default function PaddingControl( {
 	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames: string = classnames( 'ftb-padding-control', className );
+	const classNames: string = clsx( 'ftb-padding-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );

@@ -231,7 +231,9 @@ export function deleteRow(
 	return {
 		...vTable,
 		[ sectionName ]: vTable[ sectionName ].reduce( ( newRows: VRow[], row, cRowIndex ) => {
-			if ( cRowIndex === rowIndex ) return newRows;
+			if ( cRowIndex === rowIndex ) {
+				return newRows;
+			}
 
 			newRows.push( {
 				cells: row.cells.map( ( cell ) => {
@@ -451,7 +453,9 @@ export function mergeCells(
 	selectedCells: VSelectedCells,
 	isMergeContent: boolean
 ): VTable {
-	if ( ! selectedCells || ! selectedCells.length ) return vTable;
+	if ( ! selectedCells || ! selectedCells.length ) {
+		return vTable;
+	}
 
 	const sectionName: SectionName = selectedCells[ 0 ].sectionName as SectionName;
 
@@ -551,7 +555,9 @@ export function mergeCells(
  * @return  New virtual table state.
  */
 export function splitMergedCells( vTable: VTable, selectedCells: VSelectedCells ): VTable {
-	if ( ! selectedCells ) return vTable;
+	if ( ! selectedCells ) {
+		return vTable;
+	}
 	// Find the rowspan & colspan cells.
 	const rowColSpanCells: VCell[] = selectedCells.filter(
 		( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1
@@ -667,7 +673,9 @@ export function updateCells(
 							targetCell.vColIndex === cVColIndex
 					);
 
-					if ( ! isTargetCell ) return cell;
+					if ( ! isTargetCell ) {
+						return cell;
+					}
 
 					let stylesObj: Properties = convertToObject( cell?.styles );
 
@@ -890,7 +898,9 @@ export function toTableAttributes( vTable: VTable ): TableAttributes {
  */
 export function toVirtualRows( vTable: VTable ): VRow[] {
 	return Object.keys( vTable ).reduce( ( result: VRow[], sectionName ) => {
-		if ( isEmptySection( vTable[ sectionName as SectionName ] ) ) return result;
+		if ( isEmptySection( vTable[ sectionName as SectionName ] ) ) {
+			return result;
+		}
 		result.push( ...vTable[ sectionName as SectionName ] );
 		return result;
 	}, [] );
@@ -933,13 +943,19 @@ export function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes 
  * @return True if a rectangle will be formed from the selected cells, false otherwise.
  */
 export function isRectangleSelected( selectedCells: VSelectedCells ): boolean {
-	if ( ! selectedCells ) return false;
+	if ( ! selectedCells ) {
+		return false;
+	}
 
 	// No need to merge If only one or no cell is selected.
-	if ( selectedCells.length <= 1 ) return false;
+	if ( selectedCells.length <= 1 ) {
+		return false;
+	}
 
 	// Check if multiple sections are selected.
-	if ( isMultiSectionSelected( selectedCells ) ) return false;
+	if ( isMultiSectionSelected( selectedCells ) ) {
+		return false;
+	}
 
 	// Get the minimum / maximum virtual indexes of the matrix from the selected cells.
 	const vRangeIndexes: VRangeIndexes = getVirtualRangeIndexes( selectedCells );
@@ -996,10 +1012,14 @@ export function toRectangledSelectedCells(
 	vTable: VTable,
 	{ fromCell, toCell }: { fromCell: VCell; toCell: VCell }
 ): VCell[] {
-	if ( ! fromCell || ! toCell ) return [];
+	if ( ! fromCell || ! toCell ) {
+		return [];
+	}
 
 	// Check if multiple sections are selected.
-	if ( fromCell.sectionName !== toCell.sectionName ) return [];
+	if ( fromCell.sectionName !== toCell.sectionName ) {
+		return [];
+	}
 
 	// Get the minimum / maximum virtual indexes of the matrix from the selected cells.
 	const vRangeIndexes: VRangeIndexes = getVirtualRangeIndexes( [ fromCell, toCell ] );
@@ -1037,7 +1057,9 @@ export function toRectangledSelectedCells(
 		} );
 
 		const isTopFixed: boolean = minRowIndex === 0 || ! topCells.length;
-		if ( ! isTopFixed ) minRowIndex--;
+		if ( ! isTopFixed ) {
+			minRowIndex--;
+		}
 
 		// Extend the virtual range to right if there are cells that overlap to right.
 		const rightCells: VCell[] = VCells.filter( ( cell: VCell ) => {
@@ -1052,7 +1074,9 @@ export function toRectangledSelectedCells(
 		} );
 
 		const isRightFixed: boolean = maxColIndex === colCount - 1 || ! rightCells.length;
-		if ( ! isRightFixed ) maxColIndex++;
+		if ( ! isRightFixed ) {
+			maxColIndex++;
+		}
 
 		// Extend the virtual range to bottom if there are cells that overlap to bottom.
 		const bottomCells: VCell[] = VCells.filter( ( cell: VCell ) => {
@@ -1067,7 +1091,9 @@ export function toRectangledSelectedCells(
 		} );
 
 		const isBottomFixed: boolean = maxRowIndex === rowCount - 1 || ! bottomCells.length;
-		if ( ! isBottomFixed ) maxRowIndex++;
+		if ( ! isBottomFixed ) {
+			maxRowIndex++;
+		}
 
 		// Extend the virtual range to left if there are cells that overlap to left.
 		const leftCells: VCell[] = VCells.filter( ( cell: VCell ) => {
@@ -1082,7 +1108,9 @@ export function toRectangledSelectedCells(
 		} );
 
 		const isLeftFixed: boolean = maxColIndex === colCount - 1 || ! leftCells.length;
-		if ( ! isLeftFixed ) minColIndex--;
+		if ( ! isLeftFixed ) {
+			minColIndex--;
+		}
 
 		isRectangled = isTopFixed && isRightFixed && isBottomFixed && isLeftFixed;
 	}
@@ -1104,7 +1132,9 @@ export function toRectangledSelectedCells(
  * @return True if the selected cells in the virtual table contain merged cells, false otherwise.
  */
 export function hasMergedCells( selectedCells: VSelectedCells ): boolean {
-	if ( ! selectedCells ) return false;
+	if ( ! selectedCells ) {
+		return false;
+	}
 	return selectedCells.some(
 		( { rowSpan, colSpan }: { rowSpan: number; colSpan: number } ) => rowSpan > 1 || colSpan > 1
 	);

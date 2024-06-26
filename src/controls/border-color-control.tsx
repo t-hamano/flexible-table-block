@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -92,7 +92,7 @@ export default function BorderColorControl( {
 
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames: string = classnames( 'ftb-border-color-control', className );
+	const classNames: string = clsx( 'ftb-border-color-control', className );
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
@@ -147,7 +147,7 @@ export default function BorderColorControl( {
 								{ hasIndicator && <SideIndicatorControl /> }
 								<Button
 									label={ __( 'All', 'flexible-table-block' ) }
-									className={ classnames( 'ftb-border-color-control__indicator', {
+									className={ clsx( 'ftb-border-color-control__indicator', {
 										'ftb-border-color-control__indicator--none': ! allInputValue && ! isMixed,
 										'ftb-border-color-control__indicator--mixed': isMixed,
 										'ftb-border-color-control__indicator--transparent':
@@ -182,7 +182,7 @@ export default function BorderColorControl( {
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<Button
 										label={ item.label }
-										className={ classnames( 'ftb-border-color-control__indicator', {
+										className={ clsx( 'ftb-border-color-control__indicator', {
 											'ftb-border-color-control__indicator--none': ! values[ item.value ],
 											'ftb-border-color-control__indicator--transparent':
 												values[ item.value ] === 'transparent',

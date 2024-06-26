@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 import type { ReactElement } from 'react';
 
@@ -58,7 +58,7 @@ export default function ColorControl( {
 
 	const headingId: string = `${ id }-heading`;
 
-	const classNames: string = classnames( 'ftb-color-control', className );
+	const classNames: string = clsx( 'ftb-color-control', className );
 
 	const handleOnReset = () => onChange( undefined );
 
@@ -88,7 +88,7 @@ export default function ColorControl( {
 							<div className="ftb-color-control__controls-row">
 								<Button
 									label={ __( 'All', 'flexible-table-block' ) }
-									className={ classnames( 'ftb-color-control__indicator', {
+									className={ clsx( 'ftb-color-control__indicator', {
 										'ftb-color-control__indicator--none': ! value,
 										'ftb-color-control__indicator--transparent': value === 'transparent',
 									} ) }

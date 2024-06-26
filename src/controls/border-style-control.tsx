@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { PropertyValue } from 'csstype';
 
 /**
@@ -82,7 +82,7 @@ export default function BorderStyleControl( {
 
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames: string = classnames( 'ftb-border-style-control', className );
+	const classNames: string = clsx( 'ftb-border-style-control', className );
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
