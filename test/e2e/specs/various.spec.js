@@ -27,7 +27,7 @@ test.describe( 'Various', () => {
 			},
 			innerBlocks: [ { name: 'flexible-table-block/table' } ],
 		} );
-		await page.getByRole( 'button', { name: 'Create Table' } ).click();
+		await editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 		await expect(
 			page
 				.getByRole( 'region', { name: 'Editor settings' } )
