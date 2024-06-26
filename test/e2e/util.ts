@@ -31,19 +31,23 @@ export default class FlexibleTableBlockUtils {
 		await this.editor.insertBlock( { name: 'flexible-table-block/table' } );
 
 		if ( header ) {
-			await this.page.locator( 'role=checkbox[name="Header section"i]' ).check();
+			await this.editor.canvas.getByRole( 'checkbox', { name: 'Header section' } ).check();
 		}
 		if ( footer ) {
-			await this.page.locator( 'role=checkbox[name="Footer section"i]' ).check();
+			await this.editor.canvas.getByRole( 'checkbox', { name: 'Footer section' } ).check();
 		}
 		if ( col ) {
-			await this.page.fill( 'role=spinbutton[name="Column count"i]', String( col ) );
+			await this.editor.canvas
+				.getByRole( 'spinbutton', { name: 'Column count' } )
+				.fill( String( col ) );
 		}
 		if ( row ) {
-			await this.page.fill( 'role=spinbutton[name="Row count"i]', String( row ) );
+			await this.editor.canvas
+				.getByRole( 'spinbutton', { name: 'Row count' } )
+				.fill( String( row ) );
 		}
 
-		await this.page.locator( 'role=button[name="Create Table"i]' ).click();
+		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 	}
 
 	async createCoreTableBlock( {
@@ -56,13 +60,17 @@ export default class FlexibleTableBlockUtils {
 		await this.editor.insertBlock( { name: 'core/table' } );
 
 		if ( col ) {
-			await this.page.fill( 'role=spinbutton[name="Column count"i]', String( col ) );
+			await this.editor.canvas
+				.getByRole( 'spinbutton', { name: 'Column count' } )
+				.fill( String( col ) );
 		}
 		if ( row ) {
-			await this.page.fill( 'role=spinbutton[name="Row count"i]', String( col ) );
+			await this.editor.canvas
+				.getByRole( 'spinbutton', { name: 'Row count' } )
+				.fill( String( row ) );
 		}
 
-		await this.page.locator( 'role=button[name="Create Table"i]' ).click();
+		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 	}
 
 	async getWpVersion() {

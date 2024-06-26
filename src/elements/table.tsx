@@ -240,6 +240,12 @@ export default function Table( {
 			// range-select mode or multi-select mode.
 			setIsSelectMode( true );
 		} else if ( key === 'Tab' && options.tab_move && tableRef.current ) {
+			const isInsideTableBlock =
+				( event.target as HTMLElement ).closest( '.wp-block-flexible-table-block-table' ) !== null;
+
+			if ( ! isInsideTableBlock ) {
+				return;
+			}
 			// Focus on the next cell.
 			isTabMove = true;
 
@@ -305,9 +311,8 @@ export default function Table( {
 		const { key } = event;
 
 		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
-			const targetElement = event.target as HTMLElement;
 			const isInsideTableBlock =
-				targetElement.closest( '.wp-block-flexible-table-block-table' ) !== null;
+				( event.target as HTMLElement ).closest( '.wp-block-flexible-table-block-table' ) !== null;
 
 			if ( ! isInsideTableBlock ) {
 				return;
@@ -319,9 +324,8 @@ export default function Table( {
 
 	const onClickCell = ( event: MouseEvent, clickedCell: VCell ) => {
 		const { shiftKey, ctrlKey, metaKey } = event;
-		const clickedElement = event.target as HTMLElement;
 		const isInsideTableBlock =
-			clickedElement.closest( '.wp-block-flexible-table-block-table' ) !== null;
+			( event.target as HTMLElement ).closest( '.wp-block-flexible-table-block-table' ) !== null;
 
 		if ( ! isInsideTableBlock ) {
 			return;

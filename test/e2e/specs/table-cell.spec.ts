@@ -42,7 +42,10 @@ test.describe( 'Flexible table cell', () => {
 			.getByRole( 'button', { name: 'Close' } )
 			.click();
 		// Try to move within cells.
-		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Cell 1' );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 0 )
+			.fill( 'Cell 1' );
 		await pageUtils.pressKeys( 'Tab', { times: 2 } );
 		await pageUtils.pressKeys( 'shift+Tab' );
 		await page.keyboard.type( 'Cell 2' );
@@ -57,7 +60,7 @@ test.describe( 'Flexible table cell', () => {
 	} ) => {
 		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
-		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Link' );
+		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Link' );
 		await pageUtils.pressKeys( 'primary+a' );
 		await editor.clickBlockToolbarButton( 'Link' );
 
