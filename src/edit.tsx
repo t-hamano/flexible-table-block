@@ -14,6 +14,7 @@ import {
 	InspectorControls,
 	BlockControls,
 	useBlockProps,
+	// @ts-ignore: has no exported member
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
 import {
