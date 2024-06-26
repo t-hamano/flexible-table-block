@@ -67,6 +67,7 @@ type Props = {
 	setSelectedCells: Dispatch< SetStateAction< VSelectedCells > >;
 	selectedLine: VSelectedLine;
 	setSelectedLine: Dispatch< SetStateAction< VSelectedLine > >;
+	isContentOnlyMode: boolean;
 };
 
 export default function Table( {
@@ -80,6 +81,7 @@ export default function Table( {
 	setSelectedCells,
 	selectedLine,
 	setSelectedLine,
+	isContentOnlyMode,
 }: Props ) {
 	const { hasFixedLayout, isStackedOnMobile, sticky } = attributes;
 
@@ -465,6 +467,7 @@ export default function Table( {
 										onClick={ ( event: MouseEvent ) => onClickCell( event, cell ) }
 									>
 										{ isSelected &&
+											! isContentOnlyMode &&
 											options.show_label_on_section &&
 											rowIndex === 0 &&
 											vColIndex === 0 && (
@@ -480,7 +483,7 @@ export default function Table( {
 													{ `t${ sectionName }` }
 												</Button>
 											) }
-										{ isSelected && options.show_control_button && (
+										{ isSelected && ! isContentOnlyMode && options.show_control_button && (
 											<>
 												{ rowIndex === 0 && vColIndex === 0 && (
 													<Button
@@ -613,6 +616,7 @@ export default function Table( {
 											aria-label={ CELL_ARIA_LABEL[ sectionName as SectionName ] }
 										/>
 										{ isSelected &&
+											! isContentOnlyMode &&
 											options.show_control_button &&
 											sectionIndex === 0 &&
 											rowIndex === 0 && (
