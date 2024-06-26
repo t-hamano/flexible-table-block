@@ -68,8 +68,8 @@ test.describe( 'Flexible table cell', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 
 		// Edit the link.
-		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
-			// WP6.3, 6.4
+		if ( wpVersion === '6-4' ) {
+			// WP6.4
 			await pageUtils.pressKeys( 'primary+a' );
 			await pageUtils.pressKeys( 'Tab', { times: 2 } );
 			await pageUtils.pressKeys( 'Enter' );
@@ -83,8 +83,8 @@ test.describe( 'Flexible table cell', () => {
 		await pageUtils.pressKeys( 'Enter' );
 
 		// Toggle "Open in new tab".
-		if ( [ '6-3', '6-4' ].includes( wpVersion ) ) {
-			// WP6.3, 6.4
+		if ( wpVersion === '6-4' ) {
+			// WP6.4
 			await pageUtils.pressKeys( 'primary+a' );
 			await pageUtils.pressKeys( 'Tab', { times: 2 } );
 			await pageUtils.pressKeys( 'Enter' );

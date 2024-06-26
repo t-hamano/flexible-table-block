@@ -89,8 +89,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
@@ -123,8 +123,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table -->
 <figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
@@ -157,8 +157,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
@@ -188,8 +188,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
@@ -225,8 +225,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
@@ -259,8 +259,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
@@ -294,8 +294,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td></tr></tfoot></table></figure>
 <!-- /wp:table -->`
@@ -324,8 +324,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`
@@ -359,8 +359,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-3', '6-4', '6-5' ].includes( wpVersion )
-			? // WP6.3, 6.4, 6.5
+		const expected = [ '6-4', '6-5' ].includes( wpVersion )
+			? // WP6.4, 6.5
 			  `<!-- wp:table {"hasFixedLayout":true} -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`
