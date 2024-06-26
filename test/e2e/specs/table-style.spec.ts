@@ -205,7 +205,7 @@ test.describe( 'Styles', () => {
 
 	test( 'cell styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await page.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await editor.openDocumentSettingsSidebar();
 		await page
 			.getByRole( 'region', { name: 'Editor settings' } )
@@ -223,7 +223,7 @@ test.describe( 'Styles', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
-		await page.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
+		await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
 		await editor.openDocumentSettingsSidebar();
 		await page
 			.getByRole( 'region', { name: 'Editor settings' } )
@@ -236,7 +236,7 @@ test.describe( 'Styles', () => {
 
 	test( 'caption styles should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await page
+		await editor.canvas
 			.getByRole( 'textbox', { name: 'Table caption text' } )
 			.fill( 'Flexible Table Block' );
 		await editor.openDocumentSettingsSidebar();
