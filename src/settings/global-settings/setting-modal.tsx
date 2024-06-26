@@ -95,7 +95,9 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 		for ( let i = 0; i < iframeEditor.length; i++ ) {
 			const iframeWindow = iframeEditor[ i ].contentWindow;
 
-			if ( ! iframeWindow ) continue;
+			if ( ! iframeWindow ) {
+				continue;
+			}
 
 			const iframeStyleSheet = iframeWindow.document.getElementById(
 				'flexible-table-block-editor-inline-css'

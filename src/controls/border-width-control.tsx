@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -89,7 +89,7 @@ export default function BorderWidthControl( {
 	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const classNames: string = classnames( 'ftb-border-width-control', className );
+	const classNames: string = clsx( 'ftb-border-width-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );

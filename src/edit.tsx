@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { Properties } from 'csstype';
 
 /**
@@ -252,7 +252,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const tablePlaceholderProps = useBlockProps();
 
 	const tableFigureProps = useBlockProps( {
-		className: classnames( `is-caption-side-${ captionSide }`, {
+		className: clsx( `is-caption-side-${ captionSide }`, {
 			[ `is-content-justification-${ contentJustification }` ]: contentJustification,
 			'show-dot-on-th': options.show_dot_on_th,
 			'show-control-button': options.show_control_button,

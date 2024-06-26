@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { FormEvent } from 'react';
 
 /**
@@ -84,7 +84,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 
 	const onToggleFooterSection = ( section: boolean ) => setFooterSection( section );
 
-	const tableClasses: string = classnames( 'ftb-placeholder__table', {
+	const tableClasses: string = clsx( 'ftb-placeholder__table', {
 		'is-overflow-row': totalRowCount && totalRowCount > THRESHOLD_PREVIEW_TABLE_ROW,
 		'is-overflow-col': colCount && colCount > THRESHOLD_PREVIEW_TABLE_COL,
 	} );

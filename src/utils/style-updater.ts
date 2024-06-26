@@ -50,7 +50,9 @@ export function updatePadding(
 	styles: Properties,
 	values: Partial< DirectionProps > | undefined
 ): Properties {
-	if ( ! values ) return styles;
+	if ( ! values ) {
+		return styles;
+	}
 
 	const top = values.top ? sanitizeUnitValue( values.top ) : undefined;
 	const right = values.right ? sanitizeUnitValue( values.right ) : undefined;
@@ -88,7 +90,9 @@ export function updateBorderWidth(
 	styles: Properties,
 	values: Partial< DirectionProps > | undefined
 ): Properties {
-	if ( ! values ) return styles;
+	if ( ! values ) {
+		return styles;
+	}
 
 	const top = values.top ? sanitizeUnitValue( values.top ) : undefined;
 	const right = values.right ? sanitizeUnitValue( values.right ) : undefined;
@@ -133,7 +137,9 @@ export function updateBorderStyle(
 	styles: Properties,
 	values: Partial< DirectionProps > | undefined
 ): Properties {
-	if ( ! values ) return styles;
+	if ( ! values ) {
+		return styles;
+	}
 
 	const top = values.top ?? undefined;
 	const right = values.right ?? undefined;
@@ -178,7 +184,9 @@ export function updateBorderColor(
 	styles: Properties,
 	values: Partial< DirectionProps > | undefined
 ): Properties {
-	if ( ! values ) return styles;
+	if ( ! values ) {
+		return styles;
+	}
 
 	const top = values.top ?? undefined;
 	const right = values.right ?? undefined;
@@ -225,7 +233,9 @@ export function updateBorderSpacing(
 	styles: Properties,
 	values: { horizontal?: string; vertical?: string } | undefined
 ): Properties {
-	if ( ! values ) return styles;
+	if ( ! values ) {
+		return styles;
+	}
 
 	const { borderSpacing, ...newStyles } = styles;
 
@@ -259,7 +269,9 @@ export function updateBorderRadius(
 	styles: Properties,
 	values: Partial< CornerProps > | undefined
 ): Properties {
-	if ( ! values ) return styles;
+	if ( ! values ) {
+		return styles;
+	}
 
 	const topLeft = values?.topLeft ? sanitizeUnitValue( values.topLeft ) : undefined;
 	const topRight = values?.topRight ? sanitizeUnitValue( values.topRight ) : undefined;

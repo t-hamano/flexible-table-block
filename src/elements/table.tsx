@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import type { Properties } from 'csstype';
 import type { Dispatch, SetStateAction, MouseEvent, KeyboardEvent } from 'react';
 
@@ -389,7 +389,9 @@ export default function Table( {
 
 	// Remove cells from the virtual table that are not needed for dom rendering.
 	const filteredVTable = Object.keys( vTable ).reduce( ( result: any, sectionName ) => {
-		if ( isEmptySection( vTable[ sectionName as SectionName ] ) ) return result;
+		if ( isEmptySection( vTable[ sectionName as SectionName ] ) ) {
+			return result;
+		}
 		return {
 			...result,
 			[ sectionName ]: vTable[ sectionName as SectionName ].map( ( row ) => ( {
@@ -398,14 +400,16 @@ export default function Table( {
 		};
 	}, {} );
 
-	if ( ! filteredVTable ) return null;
+	if ( ! filteredVTable ) {
+		return null;
+	}
 
 	const filteredSections = Object.keys( filteredVTable ) as SectionName[];
 
 	return (
 		// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
 		<table
-			className={ classnames( colorProps.className, {
+			className={ clsx( colorProps.className, {
 				'has-fixed-layout': hasFixedLayout,
 				'is-stacked-on-mobile': isStackedOnMobile,
 				[ `is-sticky-${ sticky }` ]: sticky,
@@ -447,7 +451,7 @@ export default function Table( {
 									<Cell
 										key={ vColIndex }
 										name={ tag }
-										className={ classnames( className, { 'is-selected': isCellSelected } ) }
+										className={ clsx( className, { 'is-selected': isCellSelected } ) }
 										rowSpan={ rowSpan > 1 ? rowSpan : undefined }
 										colSpan={ colSpan > 1 ? colSpan : undefined }
 										style={ cellStylesObj }
@@ -476,7 +480,7 @@ export default function Table( {
 											<>
 												{ rowIndex === 0 && vColIndex === 0 && (
 													<Button
-														className={ classnames( 'ftb-row-before-inserter', {
+														className={ clsx( 'ftb-row-before-inserter', {
 															'ftb-row-before-inserter--has-prev-section': sectionIndex > 0,
 														} ) }
 														label={ __( 'Insert row before', 'flexible-table-block' ) }
@@ -574,7 +578,7 @@ export default function Table( {
 												) }
 												{ vColIndex === 0 && (
 													<Button
-														className={ classnames( 'ftb-row-after-inserter', {
+														className={ clsx( 'ftb-row-after-inserter', {
 															'ftb-row-after-inserter--has-next-section':
 																sectionIndex < Object.keys( filteredVTable ).length - 1 &&
 																rowIndex + rowSpan - 1 === filteredVTable[ sectionName ].length - 1,

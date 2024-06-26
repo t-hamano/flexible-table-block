@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 /**
  * WordPress dependencies
@@ -78,7 +78,7 @@ export default function BorderSpacingControl( {
 	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.horizontal;
 
-	const classNames: string = classnames( 'ftb-border-spacing-control', className );
+	const classNames: string = clsx( 'ftb-border-spacing-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
