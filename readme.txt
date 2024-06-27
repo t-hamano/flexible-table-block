@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 6.4
-Tested up to: 6.5
-Stable tag: 3.2.0
+Tested up to: 6.6
+Stable tag: 3.3.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,12 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.3.0 =
+* Tested to WordPress 6.6
+* Drop support for WordPress 6.3
+* Enhancement: Support content only mode
+* Enhancement: Update API version from 2 to 3
 
 = 3.2.0 =
 * Tested to WordPress 6.5
