@@ -7,6 +7,7 @@ module.exports = {
 	parser: '@typescript-eslint/parser',
 	rules: {
 		'react/jsx-boolean-value': 'error',
+		'react/jsx-curly-brace-presence': [ 'error', { props: 'never', children: 'never' } ],
 		'import/no-extraneous-dependencies': 'off',
 		'@wordpress/dependency-group': 'error',
 		'@wordpress/no-unsafe-wp-apis': 'off',

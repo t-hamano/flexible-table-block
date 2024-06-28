@@ -539,7 +539,7 @@ export default function Table( {
 												) }
 												{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
 													<Button
-														className={ 'ftb-column-before-inserter' }
+														className="ftb-column-before-inserter"
 														label={ __( 'Insert column before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
@@ -621,7 +621,7 @@ export default function Table( {
 											sectionIndex === 0 &&
 											rowIndex === 0 && (
 												<Button
-													className={ 'ftb-column-after-inserter' }
+													className="ftb-column-after-inserter"
 													label={ __( 'Insert column after', 'flexible-table-block' ) }
 													tabIndex={ options.focus_control_button ? 0 : -1 }
 													icon={ plus }
