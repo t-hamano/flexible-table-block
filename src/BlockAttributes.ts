@@ -2,7 +2,6 @@
  * Internal dependencies
  */
 import type {
-	STICKY_CONTROLS,
 	CAPTION_SIDE_CONTROLS,
 	CELL_TAG_CONTROLS,
 	CELL_SCOPE_CONTROLS,
@@ -21,7 +20,6 @@ type NestedObject = {
 };
 
 // Controls Attributes value types
-export type StickyValue = ( typeof STICKY_CONTROLS )[ number ][ 'value' ];
 export type CaptionSideValue = ( typeof CAPTION_SIDE_CONTROLS )[ number ][ 'value' ];
 export type CellTagValue = ( typeof CELL_TAG_CONTROLS )[ number ][ 'value' ];
 export type CellScopeValue = ( typeof CELL_SCOPE_CONTROLS )[ number ][ 'value' ];
@@ -65,7 +63,7 @@ export interface BlockAttributes extends TableAttributes {
 	isScrollOnPc: boolean;
 	isScrollOnMobile: boolean;
 	isStackedOnMobile: boolean;
-	sticky: StickyValue | undefined;
+	sticky: string | undefined;
 	tableStyles?: string;
 	captionStyles?: string;
 	captionSide: CaptionSideValue;

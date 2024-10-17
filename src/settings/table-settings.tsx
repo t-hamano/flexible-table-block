@@ -15,9 +15,7 @@ import {
 	ButtonGroup,
 	SelectControl,
 	ToggleControl,
-	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -66,7 +64,7 @@ import {
 	updateBorderSpacing,
 } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { StickyValue, BorderCollapseValue, BlockAttributes } from '../BlockAttributes';
+import type { BorderCollapseValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
 
 type Props = {
@@ -115,7 +113,7 @@ export default function TableSettings( {
 		setAttributes( { isScrollOnMobile: ! isScrollOnMobile } );
 	};
 
-	const onChangeSticky = ( value: StickyValue ) => {
+	const onChangeSticky = ( value: string ) => {
 		setAttributes( { sticky: 'none' === value ? undefined : value } );
 	};
 
@@ -133,7 +131,7 @@ export default function TableSettings( {
 		setSelectedLine( undefined );
 	};
 
-	const onChangeWidth = ( value: Property.Width ) => {
+	const onChangeWidth = ( value: Property.Width | undefined ) => {
 		const newStylesObj = {
 			...tableStylesObj,
 			width: value,
@@ -141,7 +139,7 @@ export default function TableSettings( {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeMaxWidth = ( value: Property.MaxWidth ) => {
+	const onChangeMaxWidth = ( value: Property.MaxWidth | undefined ) => {
 		const newStylesObj = {
 			...tableStylesObj,
 			maxWidth: value,
@@ -149,7 +147,7 @@ export default function TableSettings( {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeMinWidth = ( value: Property.MinWidth ) => {
+	const onChangeMinWidth = ( value: Property.MinWidth | undefined ) => {
 		const newStylesObj = {
 			...tableStylesObj,
 			minWidth: value,
@@ -292,7 +290,6 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeSticky }
-				// @ts-ignore: `size` prop is not exist at @types
 				size="__unstable-large"
 			/>
 			<hr />
@@ -306,7 +303,7 @@ export default function TableSettings( {
 					value={ tableStylesObj?.width }
 					units={ tableWidthUnits }
 					disabled={ tableStylesObj?.width === 'auto' }
-					min="0"
+					min={ 0 }
 					onChange={ onChangeWidth }
 					size="__unstable-large"
 				/>
@@ -323,7 +320,6 @@ export default function TableSettings( {
 								onClick={ () =>
 									onChangeWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
 								}
-								// @ts-ignore: `size` prop is not exist at @types
 								size="small"
 							>
 								{ `${ perWidth }%` }
@@ -333,7 +329,6 @@ export default function TableSettings( {
 					<Button
 						variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
 						onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? '' : 'auto' ) }
-						// @ts-ignore: `size` prop is not exist at @types
 						size="small"
 					>
 						{ __( 'auto', 'flexible-table-block' ) }
@@ -350,7 +345,7 @@ export default function TableSettings( {
 					value={ tableStylesObj?.maxWidth }
 					units={ tableWidthUnits }
 					disabled={ tableStylesObj?.maxWidth === 'none' }
-					min="0"
+					min={ 0 }
 					onChange={ onChangeMaxWidth }
 					size="__unstable-large"
 				/>
@@ -367,7 +362,6 @@ export default function TableSettings( {
 								onClick={ () =>
 									onChangeMaxWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
 								}
-								// @ts-ignore: `size` prop is not exist at @types
 								size="small"
 							>
 								{ `${ perWidth }%` }
@@ -377,7 +371,6 @@ export default function TableSettings( {
 					<Button
 						variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
 						onClick={ () => onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? '' : 'none' ) }
-						// @ts-ignore: `size` prop is not exist at @types
 						size="small"
 					>
 						{ _x( 'none', 'width', 'flexible-table-block' ) }
@@ -393,7 +386,7 @@ export default function TableSettings( {
 					id="flexible-table-block-table-min-width"
 					value={ tableStylesObj?.minWidth }
 					units={ tableWidthUnits }
-					min="0"
+					min={ 0 }
 					onChange={ onChangeMinWidth }
 					size="__unstable-large"
 				/>
@@ -408,7 +401,6 @@ export default function TableSettings( {
 								key={ perWidth }
 								variant={ isPressed ? 'primary' : undefined }
 								onClick={ () => onChangeMinWidth( isPressed ? '' : `${ perWidth }%` ) }
-								// @ts-ignore: `size` prop is not exist at @types
 								size="small"
 							>
 								{ `${ perWidth }%` }
@@ -474,7 +466,6 @@ export default function TableSettings( {
 									variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
 									icon={ icon }
 									onClick={ () => onChangeBorderCollapse( value ) }
-									// @ts-ignore: `size` prop is not exist at @types
 									size="compact"
 								>
 									{ label }

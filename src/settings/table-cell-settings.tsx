@@ -13,9 +13,7 @@ import {
 	Button,
 	ButtonGroup,
 	TextControl,
-	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -112,7 +110,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
-	const onChangeFontSize = ( value: string ) => {
+	const onChangeFontSize = ( value: string | undefined ) => {
 		updateCellsState( { styles: { fontSize: sanitizeUnitValue( value ) } } );
 	};
 
@@ -128,7 +126,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 		updateCellsState( { styles: { backgroundColor: value } } );
 	};
 
-	const onChangeWidth = ( value: Property.Width ) => {
+	const onChangeWidth = ( value: Property.Width | undefined ) => {
 		updateCellsState( { styles: { width: sanitizeUnitValue( value ) } } );
 	};
 
@@ -232,7 +230,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						id="flexible-table-block-cell-font-size"
 						value={ cellStylesObj?.fontSize }
 						units={ fontSizeUnits }
-						min="0"
+						min={ 0 }
 						onChange={ onChangeFontSize }
 						size="__unstable-large"
 					/>
@@ -260,7 +258,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					aria-label={ __( 'Cell width', 'flexible-table-block' ) }
 					value={ cellStylesObj?.width }
 					units={ cellWidthUnits }
-					min="0"
+					min={ 0 }
 					onChange={ onChangeWidth }
 					size="__unstable-large"
 				/>
@@ -275,7 +273,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 								key={ perWidth }
 								variant={ isPressed ? 'primary' : undefined }
 								onClick={ () => onChangeWidth( isPressed ? '' : `${ perWidth }%` ) }
-								// @ts-ignore: `size` prop is not exist at @types
 								size="small"
 							>
 								{ `${ perWidth }%` }
@@ -358,7 +355,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 										icon={ icon }
 										variant={ value === cellStylesObj?.textAlign ? 'primary' : 'secondary' }
 										onClick={ () => onChangeTextAlign( value ) }
-										/// @ts-ignore: `size` prop is not exist at @types
 										size="compact"
 									/>
 								);
@@ -376,7 +372,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 										icon={ icon }
 										variant={ value === cellStylesObj?.verticalAlign ? 'primary' : 'secondary' }
 										onClick={ () => onChangeVerticalAlign( value ) }
-										// @ts-ignore: `size` prop is not exist at @types
 										size="compact"
 									/>
 								);
@@ -398,7 +393,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 									key={ value }
 									variant={ value === targetCell.tag ? 'primary' : 'secondary' }
 									onClick={ () => onChangeTag( value ) }
-									// @ts-ignore: `size` prop is not exist at @types
 									size="compact"
 								>
 									{ label }
@@ -460,7 +454,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 												key={ value }
 												variant={ value === targetCell.scope ? 'primary' : 'secondary' }
 												onClick={ () => onChangeScope( value ) }
-												// @ts-ignore: `size` prop is not exist at @types
 												size="compact"
 											>
 												{ label }

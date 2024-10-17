@@ -17,11 +17,7 @@ import {
 	// @ts-ignore: has no exported member
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
-import {
-	// @ts-ignore: has no exported member
-	ToolbarDropdownMenu,
-	PanelBody,
-} from '@wordpress/components';
+import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import {
 	blockTable,
 	justifyLeft,
@@ -134,6 +130,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			vTable.body.length === 1 &&
 			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
 		) {
+			// @ts-ignore
 			createWarningNotice(
 				__( 'The table body must have one or more rows.', 'flexible-table-block' ),
 				{
@@ -251,7 +248,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			isDisabled: ! selectedCells || ! isRectangleSelected( selectedCells ),
 			onClick: () => onMergeCells(),
 		},
-	] as const;
+	];
 
 	const isEmpty: boolean = ! [ 'head', 'body', 'foot' ].filter(
 		( sectionName ) => ! isEmptySection( vTable[ sectionName as SectionName ] )
@@ -328,10 +325,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 				<figure { ...tableFigureProps }>
 					{ ! isContentOnlyMode && (
 						<>
-							<BlockControls
-								// @ts-ignore: `group` prop is not exist at @types
-								group="block"
-							>
+							<BlockControls group="block">
 								<ToolbarDropdownMenu
 									label={ __( 'Change table justification', 'flexible-table-block' ) }
 									icon={
@@ -342,13 +336,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 										justifyLeft
 									}
 									controls={ TableJustifyControls }
-									hasArrowIndicator
 								/>
 								<ToolbarDropdownMenu
 									label={ __( 'Edit table', 'flexible-table-block' ) }
 									icon={ blockTable }
 									controls={ TableEditControls }
-									hasArrowIndicator
 								/>
 							</BlockControls>
 						</>

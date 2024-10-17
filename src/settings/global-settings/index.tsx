@@ -50,7 +50,6 @@ export default function GlobalSettings() {
 					icon={ help }
 					variant="link"
 					onClick={ () => setIsHelpModalOpen( true ) }
-					// @ts-ignore: `size` prop is not exist at @types
 					size="compact"
 				>
 					{ __( 'Help', 'flexible-table-block' ) }
@@ -61,7 +60,6 @@ export default function GlobalSettings() {
 						icon={ cog }
 						variant="primary"
 						onClick={ () => setIsSettingModalOpen( true ) }
-						// @ts-ignore: `size` prop is not exist at @types
 						size="compact"
 					>
 						{ __( 'Global setting', 'flexible-table-block' ) }

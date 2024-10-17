@@ -9,7 +9,7 @@ import type { Property } from 'csstype';
  */
 import apiFetch from '@wordpress/api-fetch';
 import { createReduxStore, register } from '@wordpress/data';
-import type { Notice as NoticeType } from '@wordpress/components';
+import type { NoticeProps } from '@wordpress/components/build-types/notice/types';
 
 /**
  * Internal dependencies
@@ -17,7 +17,7 @@ import type { Notice as NoticeType } from '@wordpress/components';
 import { STORE_NAME, REST_API_ROUTE } from './constants';
 
 export interface ApiResponse {
-	status?: NoticeType.Props[ 'status' ];
+	status?: NoticeProps[ 'status' ];
 	message?: string;
 	options?: StoreOptions;
 	// eslint-disable-next-line camelcase

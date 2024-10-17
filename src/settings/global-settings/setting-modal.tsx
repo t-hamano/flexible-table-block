@@ -21,12 +21,9 @@ import {
 	Spinner,
 	RangeControl,
 	ToggleControl,
-	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 	SlotFillProvider,
-	type Notice as NoticeType,
 } from '@wordpress/components';
 
 /**
@@ -51,6 +48,7 @@ import {
 } from '../../controls';
 import { sanitizeUnitValue, cleanEmptyObject } from '../../utils/helper';
 import type { ApiResponse, StoreOptions } from '../../store';
+import type { NoticeProps } from '@wordpress/components/build-types/notice/types';
 
 type Props = {
 	options: StoreOptions;
@@ -59,7 +57,7 @@ type Props = {
 };
 
 interface NoticeInfo {
-	status?: NoticeType.Props[ 'status' ];
+	status?: NoticeProps[ 'status' ];
 	message?: string;
 }
 
@@ -233,8 +231,8 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												id="flexible-table-block-global-table-width"
 												units={ tableWidthUnits }
 												value={ currentOptions.block_style?.table_width }
-												min="0"
-												onChange={ ( value: string ) => {
+												min={ 0 }
+												onChange={ ( value ) => {
 													setCurrentOptions( {
 														...currentOptions,
 														block_style: {
@@ -255,8 +253,8 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												id="flexible-table-block-global-table-max-width"
 												units={ tableWidthUnits }
 												value={ currentOptions.block_style?.table_max_width }
-												min="0"
-												onChange={ ( value: string ) => {
+												min={ 0 }
+												onChange={ ( value ) => {
 													setCurrentOptions( {
 														...currentOptions,
 														block_style: {
@@ -306,7 +304,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 																		},
 																	} );
 																} }
-																// @ts-ignore: `size` prop is not exist at @types
 																size="compact"
 															>
 																{ label }
@@ -547,7 +544,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 																		},
 																	} );
 																} }
-																// @ts-ignore: `size` prop is not exist at @types
 																size="compact"
 															/>
 														);
@@ -594,7 +590,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 																		},
 																	} );
 																} }
-																// @ts-ignore: `size` prop is not exist at @types
 																size="compact"
 															/>
 														);
@@ -630,7 +625,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
 											} );
 										} }
-										// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
 										__next40pxDefaultSize
 									/>
 								</>
@@ -768,7 +762,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 						variant="primary"
 						disabled={ isWaiting }
 						onClick={ handleUpdateOptions }
-						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
 						__next40pxDefaultSize
 					>
 						{ __( 'Save settings', 'flexible-table-block' ) }
@@ -777,30 +770,23 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 						isDestructive
 						disabled={ isWaiting }
 						onClick={ () => setIsResetPopup( ! isResetPopup ) }
-						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
 						__next40pxDefaultSize
 					>
 						{ __( 'Restore default settings', 'flexible-table-block' ) }
 						{ isResetPopup && (
 							<Popover
 								className="ftb-global-setting-modal__confirm-popover"
-								focusOnMount="container"
+								focusOnMount="firstElement"
 								onClose={ () => setIsResetPopup( false ) }
 							>
 								<p>{ __( 'Are you sure?', 'flexible-table-block' ) }</p>
 								<div className="ftb-global-setting-modal__confirm-popover-buttons">
-									<Button
-										isDestructive
-										onClick={ handleResetOptions }
-										// @ts-ignore: `size` prop is not exist at @types
-										size="compact"
-									>
+									<Button isDestructive onClick={ handleResetOptions } size="compact">
 										{ __( 'Restore', 'flexible-table-block' ) }
 									</Button>
 									<Button
 										variant="secondary"
 										onClick={ () => setIsResetPopup( false ) }
-										// @ts-ignore: `size` prop is not exist at @types
 										size="compact"
 									>
 										{ __( 'Cancel', 'flexible-table-block' ) }
@@ -810,6 +796,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 						) }
 					</Button>
 				</div>
+				{ /* @ts-ignore Slot is not currently typed on Popover */ }
 				<Popover.Slot />
 			</Modal>
 		</SlotFillProvider>

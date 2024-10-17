@@ -12,9 +12,7 @@ import {
 	Button,
 	ButtonGroup,
 	TextControl,
-	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -44,7 +42,7 @@ export default function TableCaptionSettings( {
 
 	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
 
-	const onChangeFontSize = ( value: Property.FontSize ) => {
+	const onChangeFontSize = ( value: Property.FontSize | undefined ) => {
 		const newStylesObj = {
 			...captionStylesObj,
 			fontSize: sanitizeUnitValue( value ),
@@ -104,7 +102,7 @@ export default function TableCaptionSettings( {
 						id="flexible-table-block-caption-font-size"
 						value={ captionStylesObj?.fontSize }
 						units={ fontSizeUnits }
-						min="0"
+						min={ 0 }
 						onChange={ onChangeFontSize }
 						size="__unstable-large"
 					/>
@@ -143,7 +141,6 @@ export default function TableCaptionSettings( {
 								label={ label }
 								variant={ captionSide === value ? 'primary' : undefined }
 								onClick={ () => onChangeSide( value ) }
-								// @ts-ignore: `size` prop is not exist at @types
 								size="compact"
 							>
 								{ label }
@@ -166,7 +163,6 @@ export default function TableCaptionSettings( {
 									variant={ value === captionStylesObj?.textAlign ? 'primary' : 'secondary' }
 									icon={ icon }
 									onClick={ () => onChangeAlign( value ) }
-									// @ts-ignore: `size` prop is not exist at @types
 									size="compact"
 								/>
 							);

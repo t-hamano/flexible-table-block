@@ -63,6 +63,7 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					),
 					{
 						Link: (
+							// @ts-ignore
 							<ExternalLink
 								href={ __(
 									'https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Advanced',

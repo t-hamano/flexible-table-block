@@ -14,11 +14,8 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
-	// @ts-ignore: has no exported member
 	__experimentalText as Text,
-	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -104,30 +101,44 @@ export default function BorderWidthControl( {
 
 	const handleOnFocus = ( focusSide: SideValue ) => setSide( focusSide );
 
-	const handleOnChangeAll = ( inputValue: string ) => {
-		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, {
-			maxNum: MAX_BORDER_WIDTH[ unit as MaxBorderWidthKey ],
-		} );
-
-		onChange( {
-			top: sanitizedValue,
-			right: sanitizedValue,
-			bottom: sanitizedValue,
-			left: sanitizedValue,
-		} );
+	const handleOnChangeAll = ( inputValue: string | undefined ) => {
+		if ( inputValue ) {
+			const [ , unit ] = parseUnit( inputValue );
+			const sanitizedValue = sanitizeUnitValue( inputValue, {
+				maxNum: MAX_BORDER_WIDTH[ unit as MaxBorderWidthKey ],
+			} );
+			onChange( {
+				top: sanitizedValue,
+				right: sanitizedValue,
+				bottom: sanitizedValue,
+				left: sanitizedValue,
+			} );
+		} else {
+			onChange( {
+				top: undefined,
+				right: undefined,
+				bottom: undefined,
+				left: undefined,
+			} );
+		}
 	};
 
-	const handleOnChange = ( inputValue: string, targetSide: SideValue ) => {
-		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, {
-			maxNum: MAX_BORDER_WIDTH[ unit as MaxBorderWidthKey ],
-		} );
-
-		onChange( {
-			...values,
-			[ targetSide ]: sanitizedValue,
-		} );
+	const handleOnChange = ( inputValue: string | undefined, targetSide: SideValue ) => {
+		if ( inputValue ) {
+			const [ , unit ] = parseUnit( inputValue );
+			const sanitizedValue = sanitizeUnitValue( inputValue, {
+				maxNum: MAX_BORDER_WIDTH[ unit as MaxBorderWidthKey ],
+			} );
+			onChange( {
+				...values,
+				[ targetSide ]: sanitizedValue,
+			} );
+		} else {
+			onChange( {
+				...values,
+				[ targetSide ]: undefined,
+			} );
+		}
 	};
 
 	return (
@@ -135,12 +146,7 @@ export default function BorderWidthControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-width-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button
-						variant="secondary"
-						onClick={ handleOnReset }
-						// @ts-ignore: `size` prop is not exist at @types
-						size="small"
-					>
+					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -166,7 +172,6 @@ export default function BorderWidthControl( {
 									label={ linkedLabel }
 									icon={ isLinked ? link : linkOff }
 									onClick={ toggleLinked }
-									// @ts-ignore: `size` prop is not exist at @types
 									size="small"
 								/>
 							</span>
@@ -182,7 +187,7 @@ export default function BorderWidthControl( {
 								value={ values[ item.value as ValuesKey ] }
 								units={ borderWidthUnits }
 								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
 								size="__unstable-large"
 							/>
 						) ) }

@@ -18,7 +18,6 @@ import {
 	ColorIndicator,
 	ColorPalette,
 	SlotFillProvider,
-	// @ts-ignore: has no exported member
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -62,7 +61,7 @@ export default function ColorControl( {
 
 	const handleOnReset = () => onChange( undefined );
 
-	const handleOnChange = ( inputValue: Property.Color ) => onChange( inputValue );
+	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
 
 	const handleOnPickerOpen = () => setIsPickerOpen( true );
 
@@ -74,12 +73,7 @@ export default function ColorControl( {
 				<div aria-labelledby={ headingId } role="region">
 					<div className="ftb-color-control__header">
 						<Text id={ headingId }>{ label }</Text>
-						<Button
-							variant="secondary"
-							onClick={ handleOnReset }
-							// @ts-ignore: `size` prop is not exist at @types
-							size="small"
-						>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
 							{ __( 'Reset', 'flexible-table-block' ) }
 						</Button>
 					</div>
@@ -109,6 +103,7 @@ export default function ColorControl( {
 						</div>
 					</div>
 				</div>
+				{ /* @ts-ignore Slot is not currently typed on Popover */ }
 				<Popover.Slot />
 			</BaseControl>
 		</SlotFillProvider>

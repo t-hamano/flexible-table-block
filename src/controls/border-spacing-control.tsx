@@ -13,11 +13,8 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
-	// @ts-ignore: has no exported member
 	__experimentalText as Text,
-	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -89,28 +86,42 @@ export default function BorderSpacingControl( {
 		onChange( DEFAULT_VALUES );
 	};
 
-	const handleOnChangeAll = ( inputValue: string ) => {
-		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, {
-			maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
-		} );
+	const handleOnChangeAll = ( inputValue: string | undefined ) => {
+		if ( inputValue ) {
+			const [ , unit ] = parseUnit( inputValue );
+			const sanitizedValue = sanitizeUnitValue( inputValue, {
+				maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
+			} );
 
-		onChange( {
-			horizontal: sanitizedValue,
-			vertical: sanitizedValue,
-		} );
+			onChange( {
+				horizontal: sanitizedValue,
+				vertical: sanitizedValue,
+			} );
+		} else {
+			onChange( {
+				horizontal: undefined,
+				vertical: undefined,
+			} );
+		}
 	};
 
-	const handleOnChange = ( inputValue: string, targetDirection: DirectionValue ) => {
-		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, {
-			maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
-		} );
+	const handleOnChange = ( inputValue: string | undefined, targetDirection: DirectionValue ) => {
+		if ( inputValue ) {
+			const [ , unit ] = parseUnit( inputValue );
+			const sanitizedValue = sanitizeUnitValue( inputValue, {
+				maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
+			} );
 
-		onChange( {
-			...values,
-			[ targetDirection ]: sanitizedValue,
-		} );
+			onChange( {
+				...values,
+				[ targetDirection ]: sanitizedValue,
+			} );
+		} else {
+			onChange( {
+				...values,
+				[ targetDirection ]: undefined,
+			} );
+		}
 	};
 
 	return (
@@ -118,12 +129,7 @@ export default function BorderSpacingControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-spacing-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button
-						variant="secondary"
-						onClick={ handleOnReset }
-						// @ts-ignore: `size` prop is not exist at @types
-						size="small"
-					>
+					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -152,7 +158,7 @@ export default function BorderSpacingControl( {
 										aria-label={ item.label }
 										value={ values[ item.value as ValuesKey ] }
 										units={ borderSpacingUnits }
-										onChange={ ( value: string ) => handleOnChange( value, item.value ) }
+										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										size="__unstable-large"
 									/>
 								</div>
@@ -166,7 +172,6 @@ export default function BorderSpacingControl( {
 									label={ linkedLabel }
 									icon={ isLinked ? link : linkOff }
 									onClick={ toggleLinked }
-									// @ts-ignore: `size` prop is not exist at @types
 									size="small"
 								/>
 							</span>
