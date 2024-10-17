@@ -77,7 +77,6 @@ test.describe( 'Transform from flexible table block', () => {
 
 	test( 'should be transformed to core table block keeping Fixed width table cells option', async ( {
 		editor,
-		page,
 		fsbUtils,
 	} ) => {
 		const wpVersion = await fsbUtils.getWpVersion();

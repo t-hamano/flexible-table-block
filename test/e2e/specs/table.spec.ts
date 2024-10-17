@@ -29,7 +29,7 @@ test.describe( 'Flexible table', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'should be inserted', async ( { editor, page, fsbUtils } ) => {
+	test( 'should be inserted', async ( { editor, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
