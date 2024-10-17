@@ -58,7 +58,6 @@ test.describe( 'Flexible table cell', () => {
 		pageUtils,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Link' );
 		await pageUtils.pressKeys( 'primary+a' );
