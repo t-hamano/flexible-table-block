@@ -18,16 +18,7 @@ import {
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
-import {
-	blockTable,
-	justifyLeft,
-	tableColumnAfter,
-	tableColumnBefore,
-	tableColumnDelete,
-	tableRowAfter,
-	tableRowBefore,
-	tableRowDelete,
-} from '@wordpress/icons';
+import { blockTable, justifyLeft } from '@wordpress/icons';
 import { store as noticesStore } from '@wordpress/notices';
 import type { BlockEditProps } from '@wordpress/blocks';
 
@@ -56,7 +47,16 @@ import {
 	type VSelectedCells,
 } from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
-import { mergeCell, splitCell } from './icons';
+import {
+	tableRowAfter,
+	tableRowBefore,
+	tableColumnBefore,
+	tableColumnAfter,
+	tableColumnDelete,
+	tableRowDelete,
+	tableMergeCell,
+	tableSplitCell,
+} from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
@@ -237,13 +237,13 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			onClick: () => onDeleteColumn(),
 		},
 		{
-			icon: splitCell,
+			icon: tableSplitCell,
 			title: __( 'Split merged cells', 'flexible-table-block' ),
 			isDisabled: ! selectedCells || ! hasMergedCells( selectedCells ),
 			onClick: () => onSplitMergedCells(),
 		},
 		{
-			icon: mergeCell,
+			icon: tableMergeCell,
 			title: __( 'Merge cells', 'flexible-table-block' ),
 			isDisabled: ! selectedCells || ! isRectangleSelected( selectedCells ),
 			onClick: () => onMergeCells(),
