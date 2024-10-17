@@ -193,7 +193,7 @@ export default function BorderRadiusControl( {
 								units={ borderRadiusUnits }
 								min={ 0 }
 								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value: string | undefined ) => handleOnChange( value, item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
 								size="__unstable-large"
 							/>
 						) ) }

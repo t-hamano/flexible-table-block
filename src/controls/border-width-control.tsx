@@ -187,7 +187,7 @@ export default function BorderWidthControl( {
 								value={ values[ item.value as ValuesKey ] }
 								units={ borderWidthUnits }
 								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value: string | undefined ) => handleOnChange( value, item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
 								size="__unstable-large"
 							/>
 						) ) }

@@ -158,9 +158,7 @@ export default function BorderSpacingControl( {
 										aria-label={ item.label }
 										value={ values[ item.value as ValuesKey ] }
 										units={ borderSpacingUnits }
-										onChange={ ( value: string | undefined ) =>
-											handleOnChange( value, item.value )
-										}
+										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										size="__unstable-large"
 									/>
 								</div>

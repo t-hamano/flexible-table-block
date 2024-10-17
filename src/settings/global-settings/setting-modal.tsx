@@ -232,7 +232,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												units={ tableWidthUnits }
 												value={ currentOptions.block_style?.table_width }
 												min={ 0 }
-												onChange={ ( value: string | undefined ) => {
+												onChange={ ( value ) => {
 													setCurrentOptions( {
 														...currentOptions,
 														block_style: {
@@ -254,7 +254,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												units={ tableWidthUnits }
 												value={ currentOptions.block_style?.table_max_width }
 												min={ 0 }
-												onChange={ ( value: string | undefined ) => {
+												onChange={ ( value ) => {
 													setCurrentOptions( {
 														...currentOptions,
 														block_style: {
