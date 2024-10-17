@@ -15,6 +15,10 @@ test.use( {
 } );
 
 test.describe( 'Block Support', () => {
+	test.beforeAll( async ( { requestUtils } ) => {
+		await requestUtils.activateTheme( 'twentytwentyfour' );
+	} );
+
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
 	} );
