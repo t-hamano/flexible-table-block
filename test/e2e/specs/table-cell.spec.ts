@@ -58,7 +58,6 @@ test.describe( 'Flexible table cell', () => {
 		pageUtils,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Link' );
 		await pageUtils.pressKeys( 'primary+a' );
@@ -71,34 +70,15 @@ test.describe( 'Flexible table cell', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 
 		// Edit the link.
-		if ( wpVersion === '6-4' ) {
-			// WP6.4
-			await pageUtils.pressKeys( 'primary+a' );
-			await page.locator( '.block-editor-link-control__search-item-title' ).focus();
-			await pageUtils.pressKeys( 'Tab' );
-			await pageUtils.pressKeys( 'Enter' );
-		} else {
-			// WP6.5, 6.6
-			await pageUtils.pressKeys( 'Tab' );
-			await pageUtils.pressKeys( 'Enter' );
-		}
-
+		await pageUtils.pressKeys( 'Tab' );
+		await pageUtils.pressKeys( 'Enter' );
 		await page.getByRole( 'combobox', { name: 'Link' } ).fill( '#anchor-updated' );
 		await pageUtils.pressKeys( 'Enter' );
 
 		// Toggle "Open in new tab".
-		if ( wpVersion === '6-4' ) {
-			// WP6.4
-			await pageUtils.pressKeys( 'primary+a' );
-			await page.locator( '.block-editor-link-control__search-item-title' ).focus();
-			await pageUtils.pressKeys( 'Tab' );
-			await pageUtils.pressKeys( 'Enter' );
-		} else {
-			// WP6.5, 6.6
-			await pageUtils.pressKeys( 'Enter' );
-			await pageUtils.pressKeys( 'Tab' );
-			await pageUtils.pressKeys( 'Enter' );
-		}
+		await pageUtils.pressKeys( 'Enter' );
+		await pageUtils.pressKeys( 'Tab' );
+		await pageUtils.pressKeys( 'Enter' );
 		await page
 			.locator( '.block-editor-link-control__tools ' )
 			.getByRole( 'button', { name: 'Advanced' } )

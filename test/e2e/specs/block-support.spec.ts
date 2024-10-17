@@ -15,6 +15,10 @@ test.use( {
 } );
 
 test.describe( 'Block Support', () => {
+	test.beforeAll( async ( { requestUtils } ) => {
+		await requestUtils.activateTheme( 'twentytwentyfour' );
+	} );
+
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
 	} );
@@ -50,8 +54,13 @@ test.describe( 'Block Support', () => {
 			.getByRole( 'radiogroup', { name: 'Font size' } )
 			.getByRole( 'radio', { name: 'Large', exact: true } )
 			.click();
+
 		// Change font appearance.
-		await page.getByRole( 'button', { name: 'Appearance' } ).click();
+		await page
+			.getByRole( [ '6-5', '6-6' ].includes( wpVersion ) ? 'button' : 'combobox', {
+				name: 'Appearance',
+			} )
+			.click();
 		await page.getByRole( 'listbox', { name: 'Appearance' } );
 		await pageUtils.pressKeys( 'ArrowDown', { times: 5 } );
 		await pageUtils.pressKeys( 'Enter' );
@@ -66,6 +75,7 @@ test.describe( 'Block Support', () => {
 	} );
 
 	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
+		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the sidebar.
 		await editor.openDocumentSettingsSidebar();
@@ -81,11 +91,15 @@ test.describe( 'Block Support', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		// Show custom controls.
-		await page.getByRole( 'button', { name: 'Margin options' } ).click();
-		await page
-			.getByRole( 'menu', { name: 'Margin options' } )
-			.getByRole( 'menuitemradio', { name: 'Custom' } )
-			.click();
+		if ( [ '6-5', '6-6' ].includes( wpVersion ) ) {
+			await page.getByRole( 'button', { name: 'Margin options' } ).click();
+			await page
+				.getByRole( 'menu', { name: 'Margin options' } )
+				.getByRole( 'menuitemradio', { name: 'Custom' } )
+				.click();
+		} else {
+			await page.getByRole( 'button', { name: 'Unlink margin' } ).click();
+		}
 		// Change margin values.
 		for ( let i = 0; i < 4; i++ ) {
 			await page.getByRole( 'button', { name: 'Set custom size' } ).nth( 0 ).click();
