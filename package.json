@@ -32,6 +32,7 @@
 		"@types/wordpress__block-editor": "^11.5.15",
 		"@wordpress/env": "^10.10.0",
 		"@wordpress/eslint-plugin": "21.3.0",
+		"@wordpress/notices": "5.10.0",
 		"@wordpress/scripts": "^27.9.0",
 		"clsx": "2.1.1",
 		"husky": "^9.1.6",

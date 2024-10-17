@@ -115,6 +115,7 @@ export default function Table( {
 			vTable.body.length === 1 &&
 			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
 		) {
+			// @ts-ignore
 			createWarningNotice(
 				__( 'The table body must have one or more rows.', 'flexible-table-block' ),
 				{
@@ -347,6 +348,7 @@ export default function Table( {
 				}
 
 				if ( fromCell.sectionName !== sectionName ) {
+					// @ts-ignore
 					createWarningNotice(
 						__( 'Cannot select range cells from difference sections.', 'flexible-table-block' ),
 						{
@@ -370,6 +372,7 @@ export default function Table( {
 			} );
 
 			if ( newSelectedCells.length && sectionName !== newSelectedCells[ 0 ].sectionName ) {
+				// @ts-ignore
 				createWarningNotice(
 					__( 'Cannot select multi cells from difference sections.', 'flexible-table-block' ),
 					{
@@ -493,7 +496,7 @@ export default function Table( {
 														label={ __( 'Insert row before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
-														iconSize="18"
+														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex );
 															event.stopPropagation();
@@ -507,7 +510,7 @@ export default function Table( {
 															label={ __( 'Select row', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronRight }
-															iconSize="16"
+															iconSize={ 16 }
 															variant={
 																isRowSelected &&
 																selectedLine.sectionName === sectionName &&
@@ -543,7 +546,7 @@ export default function Table( {
 														label={ __( 'Insert column before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
-														iconSize="18"
+														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertColumn( cell, 0 );
 															event.stopPropagation();
@@ -557,7 +560,7 @@ export default function Table( {
 															label={ __( 'Select column', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronDown }
-															iconSize="18"
+															iconSize={ 18 }
 															variant={
 																isColumnSelected && selectedLine.vColIndex === vColIndex
 																	? 'primary'
@@ -593,7 +596,7 @@ export default function Table( {
 														label={ __( 'Insert row after', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
-														iconSize="18"
+														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex + rowSpan );
 															event.stopPropagation();
@@ -625,7 +628,7 @@ export default function Table( {
 													label={ __( 'Insert column after', 'flexible-table-block' ) }
 													tabIndex={ options.focus_control_button ? 0 : -1 }
 													icon={ plus }
-													iconSize="18"
+													iconSize={ 18 }
 													onClick={ ( event: MouseEvent ) => {
 														onInsertColumn( cell, 1 );
 														event.stopPropagation();

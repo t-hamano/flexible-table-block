@@ -14,11 +14,8 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
-	// @ts-ignore: has no exported member
 	__experimentalText as Text,
-	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -100,7 +97,7 @@ export default function PaddingControl( {
 
 	const handleOnFocus = ( focusSide: SideValue ) => setSide( focusSide );
 
-	const handleOnChangeAll = ( inputValue: string ) => {
+	const handleOnChangeAll = ( inputValue: string | undefined ) => {
 		const sanitizedValue = sanitizeUnitValue( inputValue );
 		onChange( {
 			top: sanitizedValue,
@@ -110,7 +107,7 @@ export default function PaddingControl( {
 		} );
 	};
 
-	const handleOnChange = ( inputValue: string, targetSide: SideValue ) => {
+	const handleOnChange = ( inputValue: string | undefined, targetSide: SideValue ) => {
 		onChange( {
 			...values,
 			[ targetSide ]: sanitizeUnitValue( inputValue ),
@@ -122,12 +119,7 @@ export default function PaddingControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-padding-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button
-						variant="secondary"
-						onClick={ handleOnReset }
-						// @ts-ignore: `size` prop is not exist at @types
-						size="small"
-					>
+					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -153,7 +145,6 @@ export default function PaddingControl( {
 									label={ linkedLabel }
 									onClick={ toggleLinked }
 									icon={ isLinked ? link : linkOff }
-									// @ts-ignore: `size` prop is not exist at @types
 									size="small"
 								/>
 							</span>
@@ -169,7 +160,7 @@ export default function PaddingControl( {
 								value={ values[ item.value as ValuesKey ] }
 								units={ paddingUnits }
 								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
 								size="__unstable-large"
 							/>
 						) ) }

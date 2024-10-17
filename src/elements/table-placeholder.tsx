@@ -185,7 +185,6 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						variant="primary"
 						type="submit"
 						disabled={ ! rowCount || ! colCount }
-						// @ts-ignore: `__next40pxDefaultSize` prop is not exist at @types
 						__next40pxDefaultSize
 					>
 						{ __( 'Create Table', 'flexible-table-block' ) }

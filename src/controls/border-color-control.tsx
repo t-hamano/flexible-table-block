@@ -18,7 +18,6 @@ import {
 	Tooltip,
 	ColorIndicator,
 	ColorPalette,
-	// @ts-ignore: has no exported member
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -101,7 +100,7 @@ export default function BorderColorControl( {
 		onChange( DEFAULT_VALUES );
 	};
 
-	const handleOnChangeAll = ( inputValue: string ) => {
+	const handleOnChangeAll = ( inputValue: string | undefined ) => {
 		onChange( {
 			top: inputValue,
 			right: inputValue,
@@ -132,11 +131,7 @@ export default function BorderColorControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-color-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button
-						variant="secondary"
-						onClick={ handleOnReset } // @ts-ignore: `size` prop is not exist at @types
-						size="small"
-					>
+					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -214,7 +209,6 @@ export default function BorderColorControl( {
 									label={ linkedLabel }
 									onClick={ toggleLinked }
 									icon={ isLinked ? link : linkOff }
-									// @ts-ignore: `size` prop is not exist at @types
 									size="small"
 								/>
 							</span>

@@ -14,11 +14,8 @@ import {
 	BaseControl,
 	Button,
 	Tooltip,
-	// @ts-ignore: has no exported member
 	__experimentalText as Text,
-	// @ts-ignore: has no exported member
 	__experimentalUnitControl as UnitControl,
-	// @ts-ignore: has no exported member
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
 
@@ -108,30 +105,46 @@ export default function BorderRadiusControl( {
 
 	const handleOnFocus = ( focusCorner: CornerValue ) => setCorner( focusCorner );
 
-	const handleOnChangeAll = ( inputValue: string ) => {
-		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, {
-			maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
-		} );
+	const handleOnChangeAll = ( inputValue: string | undefined ) => {
+		if ( inputValue ) {
+			const [ , unit ] = parseUnit( inputValue );
+			const sanitizedValue = sanitizeUnitValue( inputValue, {
+				maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
+			} );
 
-		onChange( {
-			topLeft: sanitizedValue,
-			topRight: sanitizedValue,
-			bottomRight: sanitizedValue,
-			bottomLeft: sanitizedValue,
-		} );
+			onChange( {
+				topLeft: sanitizedValue,
+				topRight: sanitizedValue,
+				bottomRight: sanitizedValue,
+				bottomLeft: sanitizedValue,
+			} );
+		} else {
+			onChange( {
+				topLeft: undefined,
+				topRight: undefined,
+				bottomRight: undefined,
+				bottomLeft: undefined,
+			} );
+		}
 	};
 
-	const handleOnChange = ( inputValue: string, targetCorner: CornerValue ) => {
-		const [ , unit ] = parseUnit( inputValue );
-		const sanitizedValue = sanitizeUnitValue( inputValue, {
-			maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
-		} );
+	const handleOnChange = ( inputValue: string | undefined, targetCorner: CornerValue ) => {
+		if ( inputValue ) {
+			const [ , unit ] = parseUnit( inputValue );
+			const sanitizedValue = sanitizeUnitValue( inputValue, {
+				maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
+			} );
 
-		onChange( {
-			...values,
-			[ targetCorner ]: sanitizedValue,
-		} );
+			onChange( {
+				...values,
+				[ targetCorner ]: sanitizedValue,
+			} );
+		} else {
+			onChange( {
+				...values,
+				[ targetCorner ]: undefined,
+			} );
+		}
 	};
 
 	return (
@@ -139,12 +152,7 @@ export default function BorderRadiusControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-radius-control__header">
 					<Text id={ headingId }>{ label }</Text>
-					<Button
-						variant="secondary"
-						onClick={ handleOnReset }
-						// @ts-ignore: `size` prop is not exist at @types
-						size="small"
-					>
+					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -159,7 +167,7 @@ export default function BorderRadiusControl( {
 							onChange={ handleOnChangeAll }
 							value={ allInputValue }
 							units={ borderRadiusUnits }
-							min="0"
+							min={ 0 }
 							size="__unstable-large"
 						/>
 					) }
@@ -170,7 +178,6 @@ export default function BorderRadiusControl( {
 								label={ linkedLabel }
 								onClick={ toggleLinked }
 								icon={ isLinked ? link : linkOff }
-								// @ts-ignore: `size` prop is not exist at @types
 								size="small"
 							/>
 						</span>
@@ -184,9 +191,9 @@ export default function BorderRadiusControl( {
 								aria-label={ item.label }
 								value={ values[ item.value as ValuesKey ] }
 								units={ borderRadiusUnits }
-								min="0"
+								min={ 0 }
 								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value: string ) => handleOnChange( value, item.value ) }
+								onChange={ ( value: string | undefined ) => handleOnChange( value, item.value ) }
 								size="__unstable-large"
 							/>
 						) ) }

@@ -15,7 +15,6 @@ import {
 	ButtonGroup,
 	Button,
 	Tooltip,
-	// @ts-ignore: has no exported member
 	__experimentalText as Text,
 } from '@wordpress/components';
 
@@ -125,12 +124,7 @@ export default function BorderStyleControl( {
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-style-control__header">
 					<Text id={ headingId }>{ controlLabel }</Text>
-					<Button
-						variant="secondary"
-						onClick={ handleOnReset }
-						// @ts-ignore: `size` prop is not exist at @types
-						size="small"
-					>
+					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
 				</div>
@@ -147,7 +141,6 @@ export default function BorderStyleControl( {
 											icon={ borderStyle.icon }
 											variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
 											onClick={ () => handleOnClickAll( borderStyle.value ) }
-											// @ts-ignore: `size` prop is not exist at @types
 											size="compact"
 										/>
 									) ) }
@@ -173,7 +166,6 @@ export default function BorderStyleControl( {
 													onClick={ () =>
 														handleOnClick( borderStyle.value, item.value as ValuesKey )
 													}
-													// @ts-ignore: `size` prop is not exist at @types
 													size="compact"
 												/>
 											);
@@ -190,7 +182,6 @@ export default function BorderStyleControl( {
 									label={ linkedLabel }
 									onClick={ toggleLinked }
 									icon={ isLinked ? link : linkOff }
-									// @ts-ignore: `size` prop is not exist at @types
 									size="small"
 								/>
 							</span>
