@@ -5,12 +5,9 @@ import type {
 	CAPTION_SIDE_CONTROLS,
 	CELL_TAG_CONTROLS,
 	CELL_SCOPE_CONTROLS,
-	TEXT_ALIGNMENT_CONTROLS,
-	VERTICAL_ALIGNMENT_CONTROLS,
 	CORNER_CONTROLS,
 	DIRECTION_CONTROLS,
 	SIDE_CONTROLS,
-	BORDER_STYLE_CONTROLS,
 	CONTENT_JUSTIFY_CONTROLS,
 	BORDER_COLLAPSE_CONTROLS,
 } from './constants';
@@ -23,12 +20,9 @@ type NestedObject = {
 export type CaptionSideValue = ( typeof CAPTION_SIDE_CONTROLS )[ number ][ 'value' ];
 export type CellTagValue = ( typeof CELL_TAG_CONTROLS )[ number ][ 'value' ];
 export type CellScopeValue = ( typeof CELL_SCOPE_CONTROLS )[ number ][ 'value' ];
-export type TextAlignValue = ( typeof TEXT_ALIGNMENT_CONTROLS )[ number ][ 'value' ];
-export type VerticalAlignValue = ( typeof VERTICAL_ALIGNMENT_CONTROLS )[ number ][ 'value' ];
 export type CornerValue = ( typeof CORNER_CONTROLS )[ number ][ 'value' ];
 export type DirectionValue = ( typeof DIRECTION_CONTROLS )[ number ][ 'value' ];
 export type SideValue = ( typeof SIDE_CONTROLS )[ number ][ 'value' ];
-export type BorderStyleValue = ( typeof BORDER_STYLE_CONTROLS )[ number ][ 'value' ];
 export type ContentJustifyValue = ( typeof CONTENT_JUSTIFY_CONTROLS )[ number ][ 'value' ];
 export type BorderCollapseValue = ( typeof BORDER_COLLAPSE_CONTROLS )[ number ][ 'value' ];
 
