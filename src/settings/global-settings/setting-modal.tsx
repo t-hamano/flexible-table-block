@@ -523,7 +523,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												value={ currentOptions.block_style?.cell_text_align }
 												isDeselectable
 												onChange={ ( value ) => {
-													if ( typeof value !== 'string' || value !== undefined ) {
+													if ( typeof value !== 'string' && value !== undefined ) {
 														return;
 													}
 													const newValue =
@@ -556,7 +556,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												value={ currentOptions.block_style?.cell_vertical_align }
 												isDeselectable
 												onChange={ ( value ) => {
-													if ( typeof value !== 'string' || value !== undefined ) {
+													if ( typeof value !== 'string' && value !== undefined ) {
 														return;
 													}
 													const newValue =
