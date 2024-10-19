@@ -8,6 +8,8 @@ import {
 	BaseControl,
 	Button,
 	__experimentalText as Text,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -31,7 +33,6 @@ type Props = {
 	help?: string;
 	onChange: ( event: any ) => void;
 	values: typeof DEFAULT_VALUES;
-	allowSides?: boolean;
 	hasIndicator?: boolean;
 };
 
@@ -43,7 +44,6 @@ export default function BorderSpacingControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	allowSides = true,
 	hasIndicator = true,
 }: Props ) {
 	const values = {
@@ -53,7 +53,7 @@ export default function BorderSpacingControl( {
 	const instanceId = useInstanceId( BorderSpacingControl, 'ftb-border-spacing-control' );
 	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean = allowSides && ! ( values.horizontal === values.vertical );
+	const isMixed: boolean = ! ( values.horizontal === values.vertical );
 
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
@@ -115,32 +115,32 @@ export default function BorderSpacingControl( {
 
 	return (
 		<BaseControl className="ftb-border-spacing-control" help={ help } __nextHasNoMarginBottom>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-border-spacing-control__header">
-					<Text id={ headingId }>{ label }</Text>
+			<VStack aria-labelledby={ headingId } role="region">
+				<HStack>
+					<Text id={ headingId } upperCase size="11" weight="500">
+						{ label }
+					</Text>
 					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
-				</div>
-				<div className="ftb-border-spacing-control__controls">
-					<div className="ftb-border-spacing-control__controls-inner">
-						{ ( isLinked || ! allowSides ) && (
-							<div className="ftb-border-spacing-control__controls-row">
-								{ hasIndicator && <DirectionIndicatorControl /> }
-								<UnitControl
-									aria-label={ __( 'All', 'flexible-table-block' ) }
-									value={ allInputValue }
-									units={ borderSpacingUnits }
-									placeholder={ allInputPlaceholder }
-									onChange={ handleOnChangeAll }
-									size="__unstable-large"
-								/>
-							</div>
-						) }
-						{ ! isLinked &&
-							allowSides &&
-							DIRECTION_CONTROLS.map( ( item, index ) => (
-								<div className="ftb-border-spacing-control__controls-row" key={ index }>
+				</HStack>
+				<HStack>
+					{ isLinked ? (
+						<HStack>
+							{ hasIndicator && <DirectionIndicatorControl /> }
+							<UnitControl
+								aria-label={ __( 'All', 'flexible-table-block' ) }
+								value={ allInputValue }
+								units={ borderSpacingUnits }
+								placeholder={ allInputPlaceholder }
+								onChange={ handleOnChangeAll }
+								size="__unstable-large"
+							/>
+						</HStack>
+					) : (
+						<VStack spacing={ 1 }>
+							{ DIRECTION_CONTROLS.map( ( item, index ) => (
+								<HStack key={ index }>
 									{ hasIndicator && <DirectionIndicatorControl directions={ [ item.value ] } /> }
 									<UnitControl
 										key={ item.value }
@@ -150,20 +150,18 @@ export default function BorderSpacingControl( {
 										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										size="__unstable-large"
 									/>
-								</div>
+								</HStack>
 							) ) }
-					</div>
-					{ allowSides && (
-						<Button
-							className="ftb-border-spacing-control__header-linked-button"
-							label={ linkedLabel }
-							icon={ isLinked ? link : linkOff }
-							onClick={ toggleLinked }
-							size="small"
-						/>
+						</VStack>
 					) }
-				</div>
-			</div>
+					<Button
+						label={ linkedLabel }
+						icon={ isLinked ? link : linkOff }
+						onClick={ toggleLinked }
+						size="small"
+					/>
+				</HStack>
+			</VStack>
 		</BaseControl>
 	);
 }

@@ -6,10 +6,8 @@ import styled from '@emotion/styled';
 
 export const ViewBox = styled.span`
 	position: relative;
-	display: block;
 	width: 24px;
 	height: 24px;
-	margin-right: 12px;
 `;
 
 const Side = styled.span< { isFocused: boolean } >`

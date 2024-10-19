@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 import type { ReactElement } from 'react';
 
@@ -15,13 +14,19 @@ import {
 	BaseControl,
 	Button,
 	Popover,
-	ColorIndicator,
 	ColorPalette,
 	SlotFillProvider,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
+
+/**
+ * Internal dependencies
+ */
+import ColorIndicatorButton from './color-indicator-button';
 
 type Props = {
 	label: string | ReactElement;
@@ -65,26 +70,25 @@ export default function ColorControl( {
 	return (
 		<SlotFillProvider>
 			<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
-				<div aria-labelledby={ headingId } role="region">
-					<div className="ftb-color-control__header">
-						<Text id={ headingId }>{ label }</Text>
+				<VStack aria-labelledby={ headingId } role="region">
+					<HStack>
+						<Text id={ headingId } upperCase size="11" weight="500">
+							{ label }
+						</Text>
 						<Button variant="secondary" onClick={ handleOnReset } size="small">
 							{ __( 'Reset', 'flexible-table-block' ) }
 						</Button>
-					</div>
+					</HStack>
 					<div className="ftb-color-control__controls">
 						<div className="ftb-color-control__controls-inner">
 							<div className="ftb-color-control__controls-row">
-								<Button
+								<ColorIndicatorButton
 									label={ __( 'All', 'flexible-table-block' ) }
-									className={ clsx( 'ftb-color-control__indicator', {
-										'ftb-color-control__indicator--none': ! value,
-										'ftb-color-control__indicator--transparent': value === 'transparent',
-									} ) }
-									onClick={ () => handleOnPickerOpen() }
-								>
-									<ColorIndicator colorValue={ value || '' } />
-								</Button>
+									value={ value }
+									onClick={ handleOnPickerOpen }
+									isNone={ ! value }
+									isTransparent={ value === 'transparent' }
+								/>
 								{ isPickerOpen && (
 									<Popover className="ftb-color-control__popover" onClose={ handleOnPickerClose }>
 										<ColorPalette
@@ -97,7 +101,7 @@ export default function ColorControl( {
 							</div>
 						</div>
 					</div>
-				</div>
+				</VStack>
 				{ /* @ts-ignore Slot is not currently typed on Popover */ }
 				<Popover.Slot />
 			</BaseControl>

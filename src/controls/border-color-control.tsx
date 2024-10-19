@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -15,8 +14,9 @@ import {
 	BaseControl,
 	Button,
 	Popover,
-	ColorIndicator,
 	ColorPalette,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -25,6 +25,7 @@ import { useInstanceId } from '@wordpress/compose';
 /**
  * Internal dependencies
  */
+import ColorIndicatorButton from './color-indicator-button';
 import { SideIndicatorControl } from './indicator-control';
 import { SIDE_CONTROLS } from '../constants';
 import type { SideValue } from '../BlockAttributes';
@@ -34,12 +35,11 @@ type Props = {
 	help?: string;
 	onChange: ( event: any ) => void;
 	values: {
-		top?: Property.BorderTopColor;
-		right?: Property.BorderRightColor;
-		bottom?: Property.BorderBottomColor;
-		left?: Property.BorderLeftColor;
+		top?: Property.Color;
+		right?: Property.Color;
+		bottom?: Property.Color;
+		left?: Property.Color;
 	};
-	allowSides?: boolean;
 	hasIndicator?: boolean;
 };
 
@@ -55,7 +55,6 @@ export default function BorderColorControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	allowSides = true,
 	hasIndicator = true,
 }: Props ) {
 	const values = {
@@ -65,9 +64,11 @@ export default function BorderColorControl( {
 	const instanceId = useInstanceId( BorderColorControl, 'ftb-border-color-control' );
 	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean =
-		allowSides &&
-		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
+	const isMixed: boolean = ! (
+		values.top === values.right &&
+		values.top === values.bottom &&
+		values.top === values.left
+	);
 
 	const colors = useSelect( ( select ) => {
 		const settings = select(
@@ -122,64 +123,52 @@ export default function BorderColorControl( {
 
 	return (
 		<BaseControl className="ftb-border-color-control" help={ help } __nextHasNoMarginBottom>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-border-color-control__header">
-					<Text id={ headingId }>{ label }</Text>
+			<VStack aria-labelledby={ headingId } role="region">
+				<HStack>
+					<Text id={ headingId } upperCase size="11" weight="500">
+						{ label }
+					</Text>
 					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
-				</div>
-				<div className="ftb-border-color-control__controls">
-					<div className="ftb-border-color-control__controls-inner">
-						{ ( isLinked || ! allowSides ) && (
-							<div className="ftb-border-color-control__controls-row">
-								{ hasIndicator && <SideIndicatorControl /> }
-								<Button
-									label={ __( 'All', 'flexible-table-block' ) }
-									className={ clsx( 'ftb-border-color-control__indicator', {
-										'ftb-border-color-control__indicator--none': ! allInputValue && ! isMixed,
-										'ftb-border-color-control__indicator--mixed': isMixed,
-										'ftb-border-color-control__indicator--transparent':
-											allInputValue === 'transparent',
-									} ) }
-									onClick={ () => handleOnPickerOpen( undefined ) }
+				</HStack>
+				<HStack alignment="start" justify="space-between">
+					{ isLinked ? (
+						<HStack spacing={ 3 } justify="start">
+							{ hasIndicator && <SideIndicatorControl /> }
+							<ColorIndicatorButton
+								label={ __( 'All', 'flexible-table-block' ) }
+								value={ allInputValue }
+								onClick={ () => handleOnPickerOpen( undefined ) }
+								isNone={ ! allInputValue && ! isMixed }
+								isTransparent={ allInputValue === 'transparent' }
+								isMixed={ isMixed }
+							/>
+							{ isPickerOpen && ! pickerIndex && (
+								<Popover
+									className="ftb-border-color-control__popover"
+									onClose={ handleOnPickerClose }
 								>
-									{ isMixed ? (
-										__( 'Mixed', 'flexible-table-block' )
-									) : (
-										<ColorIndicator colorValue={ allInputValue || '' } />
-									) }
-								</Button>
-								{ isPickerOpen && ! pickerIndex && (
-									<Popover
-										className="ftb-border-color-control__popover"
-										onClose={ handleOnPickerClose }
-									>
-										<ColorPalette
-											colors={ colors }
-											value={ allInputValue || '' }
-											onChange={ handleOnChangeAll }
-										/>
-									</Popover>
-								) }
-							</div>
-						) }
-						{ ! isLinked &&
-							allowSides &&
-							SIDE_CONTROLS.map( ( item, index ) => (
-								<div className="ftb-border-color-control__controls-row" key={ index }>
+									<ColorPalette
+										colors={ colors }
+										value={ allInputValue || '' }
+										onChange={ handleOnChangeAll }
+									/>
+								</Popover>
+							) }
+						</HStack>
+					) : (
+						<VStack>
+							{ SIDE_CONTROLS.map( ( item, index ) => (
+								<HStack spacing={ 3 } justify="start" key={ item.value }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
-									<Button
+									<ColorIndicatorButton
 										label={ item.label }
-										className={ clsx( 'ftb-border-color-control__indicator', {
-											'ftb-border-color-control__indicator--none': ! values[ item.value ],
-											'ftb-border-color-control__indicator--transparent':
-												values[ item.value ] === 'transparent',
-										} ) }
+										value={ values[ item.value ] }
 										onClick={ () => handleOnPickerOpen( index ) }
-									>
-										<ColorIndicator colorValue={ values[ item.value ] || '' } />
-									</Button>
+										isNone={ ! values[ item.value ] }
+										isTransparent={ values[ item.value ] === 'transparent' }
+									/>
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover
 											className="ftb-border-color-control__popover"
@@ -192,20 +181,18 @@ export default function BorderColorControl( {
 											/>
 										</Popover>
 									) }
-								</div>
+								</HStack>
 							) ) }
-					</div>
-					{ allowSides && (
-						<Button
-							className="ftb-border-color-control__header-linked-button"
-							label={ linkedLabel }
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							size="small"
-						/>
+						</VStack>
 					) }
-				</div>
-			</div>
+					<Button
+						label={ linkedLabel }
+						onClick={ toggleLinked }
+						icon={ isLinked ? link : linkOff }
+						size="small"
+					/>
+				</HStack>
+			</VStack>
 		</BaseControl>
 	);
 }

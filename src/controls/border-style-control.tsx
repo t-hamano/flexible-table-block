@@ -12,6 +12,8 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalText as Text,
@@ -68,9 +70,6 @@ export default function BorderStyleControl( {
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 
-	const controlLabel: string =
-		isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label;
-
 	const linkedLabel: string = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
 		: __( 'Link sides', 'flexible-table-block' );
@@ -115,40 +114,43 @@ export default function BorderStyleControl( {
 
 	return (
 		<BaseControl className="ftb-border-style-control" help={ help } __nextHasNoMarginBottom>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-border-style-control__header">
-					<Text id={ headingId }>{ controlLabel }</Text>
+			<VStack aria-labelledby={ headingId } role="region">
+				<HStack>
+					<Text id={ headingId } upperCase size="11" weight="500">
+						{ isMixed && isLinked
+							? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
+							: label }
+					</Text>
 					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
-				</div>
-				<div className="ftb-border-style-control__button-controls">
-					<div className="ftb-border-style-control__button-controls-inner">
-						{ isLinked && (
-							<div className="ftb-border-style-control__button-controls-row">
-								{ hasIndicator && <SideIndicatorControl /> }
-								<ToggleGroupControl
-									hideLabelFromVision
-									__nextHasNoMarginBottom
-									label={ label }
-									value={ allInputValue }
-									isDeselectable
-									onChange={ handleOnClickAll }
-								>
-									{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => (
-										<ToggleGroupControlOptionIcon
-											key={ borderStyle.value }
-											label={ borderStyle.label }
-											value={ borderStyle.value }
-											icon={ borderStyle.icon }
-										/>
-									) ) }
-								</ToggleGroupControl>
-							</div>
-						) }
-						{ ! isLinked &&
-							SIDE_CONTROLS.map( ( item ) => (
-								<div className="ftb-border-style-control__button-controls-row" key={ item.value }>
+				</HStack>
+				<HStack alignment="start" justify="space-between">
+					{ isLinked ? (
+						<HStack spacing={ 2 } justify="start">
+							{ hasIndicator && <SideIndicatorControl /> }
+							<ToggleGroupControl
+								hideLabelFromVision
+								__nextHasNoMarginBottom
+								label={ label }
+								value={ allInputValue }
+								isDeselectable
+								onChange={ handleOnClickAll }
+							>
+								{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => (
+									<ToggleGroupControlOptionIcon
+										key={ borderStyle.value }
+										label={ borderStyle.label }
+										value={ borderStyle.value }
+										icon={ borderStyle.icon }
+									/>
+								) ) }
+							</ToggleGroupControl>
+						</HStack>
+					) : (
+						<VStack spacing={ 1 }>
+							{ SIDE_CONTROLS.map( ( item ) => (
+								<HStack spacing={ 2 } justify="start" key={ item.value }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
 									<ToggleGroupControl
 										hideLabelFromVision
@@ -167,9 +169,10 @@ export default function BorderStyleControl( {
 											/>
 										) ) }
 									</ToggleGroupControl>
-								</div>
+								</HStack>
 							) ) }
-					</div>
+						</VStack>
+					) }
 					{ allowSides && (
 						<Button
 							className="ftb-border-style-control__header-linked-button"
@@ -177,10 +180,11 @@ export default function BorderStyleControl( {
 							onClick={ toggleLinked }
 							icon={ isLinked ? link : linkOff }
 							size="small"
+							style={ { marginTop: '6px' } }
 						/>
 					) }
-				</div>
-			</div>
+				</HStack>
+			</VStack>
 		</BaseControl>
 	);
 }

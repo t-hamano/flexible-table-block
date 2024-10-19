@@ -12,6 +12,8 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -109,13 +111,15 @@ export default function PaddingControl( {
 
 	return (
 		<BaseControl className="ftb-padding-control" help={ help } __nextHasNoMarginBottom>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-padding-control__header">
-					<Text id={ headingId }>{ label }</Text>
+			<VStack aria-labelledby={ headingId } role="region">
+				<HStack>
+					<Text id={ headingId } upperCase size="11" weight="500">
+						{ label }
+					</Text>
 					<Button variant="secondary" onClick={ handleOnReset } size="small">
 						{ __( 'Reset', 'flexible-table-block' ) }
 					</Button>
-				</div>
+				</HStack>
 				<div className="ftb-padding-control__header-control">
 					{ hasIndicator && (
 						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
@@ -155,7 +159,7 @@ export default function PaddingControl( {
 						) ) }
 					</div>
 				) }
-			</div>
+			</VStack>
 		</BaseControl>
 	);
 }

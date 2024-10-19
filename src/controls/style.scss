@@ -1,39 +1,3 @@
-// Header common styles.
-.ftb-border-radius-control__header,
-.ftb-border-width-control__header,
-.ftb-border-style-control__header,
-.ftb-border-spacing-control__header,
-.ftb-border-color-control__header,
-.ftb-padding-control__header,
-.ftb-color-control__header {
-	display: flex;
-	gap: 8px;
-	align-items: center;
-	justify-content: space-between;
-	padding-bottom: 8px;
-
-	.components-text {
-		font-size: 11px;
-		font-weight: 500;
-		line-height: 1.4;
-		text-transform: uppercase;
-	}
-}
-
-// Linked button common styles.
-.ftb-border-radius-control__header-linked-button,
-.ftb-border-width-control__header-linked-button,
-.ftb-border-style-control__header-linked-button,
-.ftb-border-spacing-control__header-linked-button,
-.ftb-border-color-control__header-linked-button,
-.ftb-padding-control__header-linked-button,
-.ftb-color-control__header-linked-button {
-
-	&.components-button {
-		display: block;
-	}
-}
-
 // Header control styles.
 .ftb-border-radius-control__header-control,
 .ftb-border-width-control__header-control,
@@ -119,51 +83,16 @@
 	}
 }
 
-// Button controls styles.
-.ftb-border-style-control__button-controls {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-
-	.ftb-border-style-control__header-linked-button {
-		margin-top: 6px;
-	}
-}
-
-.ftb-border-style-control__button-controls-row {
-	display: flex;
-	align-items: center;
-
-	&:not(:first-child) {
-		padding-top: 8px;
-	}
-}
-
 // Controls styles.
 .ftb-border-color-control__controls,
-.ftb-color-control__controls,
-.ftb-border-spacing-control__controls {
+.ftb-color-control__controls {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-}
-
-.ftb-border-spacing-control__controls {
-
-	.ftb-border-spacing-control__header-linked-button {
-		margin-top: 8px;
-	}
-
-	.components-unit-control-wrapper.components-unit-control-wrapper {
-		max-width: 104px;
-		margin-bottom: 0;
-	}
 }
 
 // Controls row styles.
-.ftb-border-color-control__controls-row,
-.ftb-color-control__controls-row,
-.ftb-border-spacing-control__controls-row {
+.ftb-color-control__controls-row {
 	display: flex;
 	align-items: center;
 
@@ -172,18 +101,11 @@
 	}
 }
 
-// Indicator styles.
-.ftb-border-color-control__indicator,
-.ftb-color-control__indicator {
+// Color indicator button styles.
+.ftb-color-indicator-button {
 	position: relative;
 	justify-content: center;
 	height: 24px;
-
-	&:not(.ftb-border-color-control__indicator--mixed) {
-		width: 24px;
-		padding: 0;
-		border-radius: 50%;
-	}
 
 	.component-color-indicator {
 		position: relative;
@@ -192,43 +114,38 @@
 		margin: 0;
 		border-radius: 50%;
 	}
-}
 
-.ftb-border-color-control__indicator--mixed,
-.ftb-color-control__indicator--mixed {
-	padding-right: 4px;
-	padding-left: 4px;
-}
-
-.ftb-border-color-control__indicator--none,
-.ftb-color-control__indicator--none,
-.ftb-border-color-control__indicator--transparent,
-.ftb-color-control__indicator--transparent {
-
-	.component-color-indicator::before {
-		position: absolute;
-		top: 1px;
-		right: 1px;
-		bottom: 1px;
-		left: 1px;
-		content: "";
+	&:not(.is-mixed) {
+		width: 24px;
+		padding: 0;
 		border-radius: 50%;
 	}
-}
 
-.ftb-border-color-control__indicator--none,
-.ftb-color-control__indicator--none {
+	&.is-mixed {
+		padding-right: 4px;
+		padding-left: 4px;
+	}
 
-	.component-color-indicator::before {
+	&.is-none,
+	&.is-transparent {
+
+		.component-color-indicator::before {
+			position: absolute;
+			top: 1px;
+			right: 1px;
+			bottom: 1px;
+			left: 1px;
+			content: "";
+			border-radius: 50%;
+		}
+	}
+
+	&.is-none .component-color-indicator::before {
 		background-color: #fff;
 		background-image: linear-gradient(to left top, transparent 48%, #cc1818 calc(48% + 1px), #cc1818 calc(52% - 1px), transparent 52%);
 	}
-}
 
-.ftb-border-color-control__indicator--transparent,
-.ftb-color-control__indicator--transparent {
-
-	.component-color-indicator::before {
+	&.is-transparent .component-color-indicator::before {
 		z-index: -1;
 		/* stylelint-disable-next-line function-url-quotes */
 		background: url("data:image/svg+xml;charset=utf-8,%3Csvg width='28' height='28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8V6H4v2h2zm2 0V6h2v2H8zm2 8H8v-2h2v2zm2 0v-2h2v2h-2zm0 2v-2h-2v2H8v2h2v-2h2zm2 0v2h-2v-2h2zm2 0h-2v-2h2v2z' fill='%23555D65'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M18 18h2v-2h-2v-2h2v-2h-2v-2h2V8h-2v2h-2V8h-2v2h2v2h-2v2h2v2h2v2zm-2-4v-2h2v2h-2z' fill='%23555D65'/%3E%3Cpath d='M18 18v2h-2v-2h2z' fill='%23555D65'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8 10V8H6v2H4v2h2v2H4v2h2v2H4v2h2v2H4v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2V8h-2V6h2V4h-2v2h-2V4h-2v2h-2V4h-2v2h-2V4h-2v2h2v2h-2v2H8zm0 2v-2H6v2h2zm2 0v-2h2v2h-2zm0 2v-2H8v2H6v2h2v2H6v2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2V8h-2V6h-2v2h-2V6h-2v2h-2v2h2v2h-2v2h-2z' fill='%23555D65'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 0H2v2H0v2h2v2H0v2h2v2H0v2h2v2H0v2h2v2H0v2h2v2H0v2h2v2H0v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2V8h-2V6h2V4h-2V2h2V0h-2v2h-2V0h-2v2h-2V0h-2v2h-2V0h-2v2h-2V0h-2v2H8V0H6v2H4V0zm0 4V2H2v2h2zm2 0V2h2v2H6zm0 2V4H4v2H2v2h2v2H2v2h2v2H2v2h2v2H2v2h2v2H2v2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2v-2h2V8h-2V6h2V4h-2V2h-2v2h-2V2h-2v2h-2V2h-2v2h-2V2h-2v2H8v2H6z' fill='%23555D65'/%3E%3C/svg%3E");
