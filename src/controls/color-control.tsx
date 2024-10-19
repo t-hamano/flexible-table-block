@@ -26,7 +26,6 @@ type Props = {
 	id: string;
 	label: string | ReactElement;
 	help?: string;
-	className?: string;
 	onChange: ( event: any ) => void;
 	colors?: {
 		name: string;
@@ -40,7 +39,6 @@ export default function ColorControl( {
 	id,
 	label = __( 'Color', 'flexible-table-block' ),
 	help,
-	className,
 	onChange,
 	colors: colorsProp = [],
 	value,
@@ -57,8 +55,6 @@ export default function ColorControl( {
 
 	const headingId: string = `${ id }-heading`;
 
-	const classNames: string = clsx( 'ftb-color-control', className );
-
 	const handleOnReset = () => onChange( undefined );
 
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
@@ -69,7 +65,7 @@ export default function ColorControl( {
 
 	return (
 		<SlotFillProvider>
-			<BaseControl id={ id } className={ classNames } help={ help }>
+			<BaseControl id={ id } className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
 				<div aria-labelledby={ headingId } role="region">
 					<div className="ftb-color-control__header">
 						<Text id={ headingId }>{ label }</Text>

@@ -8,9 +8,11 @@ import type { Property, Properties } from 'csstype';
  */
 import { __ } from '@wordpress/i18n';
 import {
-	BaseControl,
 	Button,
+	Flex,
+	FlexBlock,
 	TextControl,
+	__experimentalSpacer as Spacer,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
@@ -98,45 +100,40 @@ export default function TableCaptionSettings( {
 
 	return (
 		<>
-			<BaseControl
-				id="flexible-table-block-caption-clear-settings"
-				className="ftb-reset-settings-control"
-			>
-				<Button variant="link" isDestructive onClick={ onResetSettings }>
-					{ __( 'Clear caption settings', 'flexible-table-block' ) }
-				</Button>
-			</BaseControl>
-			<div className="ftb-base-control-row">
-				<BaseControl
-					id="flexible-table-block-caption-font-size"
-					label={ __( 'Caption font size', 'flexible-table-block' ) }
-					className="ftb-font-size-control"
-				>
-					<UnitControl
-						id="flexible-table-block-caption-font-size"
-						value={ captionStylesObj?.fontSize }
-						units={ fontSizeUnits }
-						min={ 0 }
-						onChange={ onChangeFontSize }
-						size="__unstable-large"
-					/>
-				</BaseControl>
-				<BaseControl
-					id="flexible-table-block-caption-line-height"
-					className="ftb-line-height-control"
-				>
-					<TextControl
-						className="ftb-is-next-40px-default-size"
-						label={ __( 'Caption line height', 'flexible-table-block' ) }
-						autoComplete="off"
-						onChange={ onChangeLineHeight }
-						step={ 0.1 }
-						type="number"
-						value={ captionStylesObj?.lineHeight || '' }
-						min={ 0 }
-					/>
-				</BaseControl>
-			</div>
+			<Spacer marginBottom="4">
+				<Flex justify="end">
+					<Button variant="link" isDestructive onClick={ onResetSettings }>
+						{ __( 'Clear caption settings', 'flexible-table-block' ) }
+					</Button>
+				</Flex>
+			</Spacer>
+			<Spacer marginBottom="4">
+				<Flex align="end">
+					<FlexBlock>
+						<UnitControl
+							label={ __( 'Caption font size', 'flexible-table-block' ) }
+							value={ captionStylesObj?.fontSize }
+							units={ fontSizeUnits }
+							min={ 0 }
+							onChange={ onChangeFontSize }
+							size="__unstable-large"
+						/>
+					</FlexBlock>
+					<FlexBlock>
+						<TextControl
+							label={ __( 'Caption line height', 'flexible-table-block' ) }
+							autoComplete="off"
+							onChange={ onChangeLineHeight }
+							step={ 0.1 }
+							type="number"
+							value={ captionStylesObj?.lineHeight || '' }
+							min={ 0 }
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+						/>
+					</FlexBlock>
+				</Flex>
+			</Spacer>
 			<PaddingControl
 				id="flexible-table-block-caption-padding"
 				label={ __( 'Caption padding', 'flexible-table-block' ) }

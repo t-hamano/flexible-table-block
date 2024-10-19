@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { PropertyValue } from 'csstype';
 
 /**
@@ -35,7 +34,6 @@ type Props = {
 	id: string;
 	label: string;
 	help?: string;
-	className?: string;
 	onChange: ( event: any ) => void;
 	values: {
 		top?: PropertyValue< string >;
@@ -53,7 +51,6 @@ export default function BorderStyleControl( {
 	id,
 	label = __( 'Border style', 'flexible-table-block' ),
 	help,
-	className,
 	onChange,
 	values: valuesProp,
 	allowSides = true,
@@ -79,8 +76,6 @@ export default function BorderStyleControl( {
 		: __( 'Link sides', 'flexible-table-block' );
 
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
-
-	const classNames: string = clsx( 'ftb-border-style-control', className );
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
@@ -119,7 +114,12 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl id={ id } className={ classNames } help={ help }>
+		<BaseControl
+			id={ id }
+			className="ftb-border-style-control"
+			help={ help }
+			__nextHasNoMarginBottom
+		>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-style-control__header">
 					<Text id={ headingId }>{ controlLabel }</Text>

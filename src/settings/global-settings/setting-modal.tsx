@@ -12,7 +12,6 @@ import { createInterpolateElement, useState } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
-	BaseControl,
 	Button,
 	Notice,
 	Modal,
@@ -225,52 +224,42 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									<h2>{ __( 'Default table styles', 'flexible-table-block' ) }</h2>
 									<div className="ftb-global-setting-modal__styles">
 										<div className="ftb-global-setting-modal__styles-item">
-											<BaseControl
-												id="flexible-table-block-global-table-width"
+											<UnitControl
 												label={ __( 'Table width', 'flexible-table-block' ) }
-												className="ftb-width-control"
-											>
-												<UnitControl
-													id="flexible-table-block-global-table-width"
-													units={ tableWidthUnits }
-													value={ currentOptions.block_style?.table_width }
-													min={ 0 }
-													onChange={ ( value ) => {
-														setCurrentOptions( {
-															...currentOptions,
-															block_style: {
-																...currentOptions.block_style,
-																table_width: sanitizeUnitValue( value ),
-															},
-														} );
-													} }
-													size="__unstable-large"
-												/>
-											</BaseControl>
+												units={ tableWidthUnits }
+												value={ currentOptions.block_style?.table_width }
+												min={ 0 }
+												onChange={ ( value ) => {
+													setCurrentOptions( {
+														...currentOptions,
+														block_style: {
+															...currentOptions.block_style,
+															table_width: sanitizeUnitValue( value ),
+														},
+													} );
+												} }
+												size="__unstable-large"
+												__unstableInputWidth="100px"
+											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
-											<BaseControl
-												id="flexible-table-block-global-table-max-width"
+											<UnitControl
 												label={ __( 'Table max width', 'flexible-table-block' ) }
-												className="ftb-width-control"
-											>
-												<UnitControl
-													id="flexible-table-block-global-table-max-width"
-													units={ tableWidthUnits }
-													value={ currentOptions.block_style?.table_max_width }
-													min={ 0 }
-													onChange={ ( value ) => {
-														setCurrentOptions( {
-															...currentOptions,
-															block_style: {
-																...currentOptions.block_style,
-																table_max_width: sanitizeUnitValue( value ),
-															},
-														} );
-													} }
-													size="__unstable-large"
-												/>
-											</BaseControl>
+												units={ tableWidthUnits }
+												value={ currentOptions.block_style?.table_max_width }
+												min={ 0 }
+												onChange={ ( value ) => {
+													setCurrentOptions( {
+														...currentOptions,
+														block_style: {
+															...currentOptions.block_style,
+															table_max_width: sanitizeUnitValue( value ),
+														},
+													} );
+												} }
+												size="__unstable-large"
+												__unstableInputWidth="100px"
+											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ToggleGroupControl
@@ -611,6 +600,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 											} );
 										} }
 										__next40pxDefaultSize
+										__nextHasNoMarginBottom
 									/>
 								</>
 							) }
@@ -629,6 +619,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												show_label_on_section: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									<ToggleControl
 										label={ __( 'Show control buttons', 'flexible-table-block' ) }
@@ -643,6 +634,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												show_control_button: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									{ ( currentOptions.show_label_on_section ||
 										currentOptions.show_control_button ) && (
@@ -662,6 +654,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 													focus_control_button: value,
 												} );
 											} }
+											__nextHasNoMarginBottom
 										/>
 									) }
 									<ToggleControl
@@ -677,6 +670,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												show_dot_on_th: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									<ToggleControl
 										label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
@@ -691,6 +685,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												tab_move: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									<ToggleControl
 										label={ __( 'Keep all contents when merging cells', 'flexible-table-block' ) }
@@ -705,6 +700,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												merge_content: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									{ isAdministrator && (
 										<ToggleControl
@@ -723,6 +719,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 													show_global_setting: value,
 												} );
 											} }
+											__nextHasNoMarginBottom
 										/>
 									) }
 								</>

@@ -204,7 +204,6 @@
 
 		.components-base-control__field {
 			margin-right: 8px;
-			margin-bottom: 0;
 		}
 	}
 
@@ -402,13 +401,6 @@
 	cursor: initial;
 }
 
-// TODO: Remove this style and replace it with `__next40pxDefaultSize` prop
-// when supported WordPress versions are greater than or equal to 6.5.
-// See: https://github.com/WordPress/gutenberg/pull/55471
-.ftb-is-next-40px-default-size .components-text-control__input {
-	height: 40px;
-}
-
 // Setting Component Styles
 .ftb-button-group {
 	display: block;
@@ -424,11 +416,6 @@
 	}
 }
 
-.ftb-reset-settings-control .components-base-control__field {
-	display: flex;
-	justify-content: flex-end;
-}
-
 .ftb-base-control-label {
 	display: inline-block;
 	margin-bottom: 8px;
@@ -437,45 +424,10 @@
 	text-transform: uppercase;
 }
 
-.ftb-base-control-row {
-	display: flex;
-
-	.components-base-control__field {
-		margin-bottom: 0;
-	}
-
-	> *:first-child {
-		margin-right: 16px;
-	}
-}
-
-.ftb-base-control-field-row {
-	display: flex;
-
-	> *:first-child {
-		margin-right: 16px;
-	}
-}
-
 .ftb-percent-group {
-	margin-top: 8px;
-}
+	margin-top: -8px;
 
-.ftb-font-size-control,
-.ftb-width-control {
-
-	.components-input-control.components-input-control {
-		max-width: 100px;
-		margin-bottom: 0;
+	&:has(+ .components-base-control) {
+		margin-bottom: 16px;
 	}
-}
-
-.ftb-width-control .components-unit-control .components-unit-control__select {
-	background-color: transparent;
-	background-image: none;
-}
-
-.ftb-line-height-control .components-text-control__input {
-	display: block;
-	max-width: 72px;
 }
