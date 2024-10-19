@@ -45,8 +45,6 @@ type Props = {
 		bottomRight?: Property.BorderBottomRightRadius;
 		bottomLeft?: Property.BorderBottomLeftRadius;
 	};
-	allowSides?: boolean;
-	hasIndicator?: boolean;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -57,8 +55,6 @@ export default function BorderRadiusControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	allowSides = true,
-	hasIndicator = true,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -67,13 +63,11 @@ export default function BorderRadiusControl( {
 	const instanceId = useInstanceId( BorderRadiusControl, 'ftb-border-radius-control' );
 	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean =
-		allowSides &&
-		! (
-			values.topLeft === values.topRight &&
-			values.topLeft === values.bottomRight &&
-			values.topLeft === values.bottomLeft
-		);
+	const isMixed: boolean = ! (
+		values.topLeft === values.topRight &&
+		values.topLeft === values.bottomRight &&
+		values.topLeft === values.bottomLeft
+	);
 
 	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
 
@@ -154,9 +148,7 @@ export default function BorderRadiusControl( {
 					</Button>
 				</HStack>
 				<div className="ftb-border-radius-control__header-control">
-					{ hasIndicator && (
-						<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
-					) }
+					<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
 					{ isLinked && (
 						<UnitControl
 							hideLabelFromVision
@@ -170,7 +162,6 @@ export default function BorderRadiusControl( {
 						/>
 					) }
 					<Button
-						className="ftb-border-radius-control__header-linked-button"
 						label={ linkedLabel }
 						onClick={ toggleLinked }
 						icon={ isLinked ? link : linkOff }

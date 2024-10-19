@@ -45,8 +45,6 @@ type Props = {
 		bottom?: Property.PaddingBottom;
 		left?: Property.PaddingLeft;
 	};
-	allowSides?: boolean;
-	hasIndicator?: boolean;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -56,16 +54,16 @@ export default function PaddingControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	allowSides = true,
-	hasIndicator = true,
 }: Props ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 	const instanceId = useInstanceId( PaddingControl, 'ftb-padding-control' );
 	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean =
-		allowSides &&
-		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
+	const isMixed: boolean = ! (
+		values.top === values.right &&
+		values.top === values.bottom &&
+		values.top === values.left
+	);
 
 	const paddingUnits = useCustomUnits( { availableUnits: PADDING_UNITS } );
 
@@ -121,10 +119,8 @@ export default function PaddingControl( {
 					</Button>
 				</HStack>
 				<div className="ftb-padding-control__header-control">
-					{ hasIndicator && (
-						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-					) }
-					{ ( isLinked || ! allowSides ) && (
+					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+					{ isLinked && (
 						<UnitControl
 							placeholder={ allInputPlaceholder }
 							aria-label={ __( 'All', 'flexible-table-block' ) }
@@ -134,17 +130,15 @@ export default function PaddingControl( {
 							size="__unstable-large"
 						/>
 					) }
-					{ allowSides && (
-						<Button
-							className="ftb-padding-control__header-linked-button"
-							label={ linkedLabel }
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							size="small"
-						/>
-					) }
+					<Button
+						className="ftb-padding-control__header-linked-button"
+						label={ linkedLabel }
+						onClick={ toggleLinked }
+						icon={ isLinked ? link : linkOff }
+						size="small"
+					/>
 				</div>
-				{ ! isLinked && allowSides && (
+				{ ! isLinked && (
 					<div className="ftb-padding-control__input-controls">
 						{ SIDE_CONTROLS.map( ( item ) => (
 							<UnitControl

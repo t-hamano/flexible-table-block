@@ -175,7 +175,6 @@ export default function BorderStyleControl( {
 					) }
 					{ allowSides && (
 						<Button
-							className="ftb-border-style-control__header-linked-button"
 							label={ linkedLabel }
 							onClick={ toggleLinked }
 							icon={ isLinked ? link : linkOff }

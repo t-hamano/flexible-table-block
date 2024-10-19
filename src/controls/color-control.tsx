@@ -16,6 +16,7 @@ import {
 	Popover,
 	ColorPalette,
 	SlotFillProvider,
+	__experimentalSpacer as Spacer,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
@@ -70,7 +71,7 @@ export default function ColorControl( {
 	return (
 		<SlotFillProvider>
 			<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
-				<VStack aria-labelledby={ headingId } role="region">
+				<VStack aria-labelledby={ headingId } justify="start" role="region">
 					<HStack>
 						<Text id={ headingId } upperCase size="11" weight="500">
 							{ label }
@@ -79,29 +80,25 @@ export default function ColorControl( {
 							{ __( 'Reset', 'flexible-table-block' ) }
 						</Button>
 					</HStack>
-					<div className="ftb-color-control__controls">
-						<div className="ftb-color-control__controls-inner">
-							<div className="ftb-color-control__controls-row">
-								<ColorIndicatorButton
-									label={ __( 'All', 'flexible-table-block' ) }
-									value={ value }
-									onClick={ handleOnPickerOpen }
-									isNone={ ! value }
-									isTransparent={ value === 'transparent' }
-								/>
-								{ isPickerOpen && (
-									<Popover className="ftb-color-control__popover" onClose={ handleOnPickerClose }>
-										<ColorPalette
-											colors={ [ ...colors, ...colorsProp ] }
-											value={ value || '' }
-											onChange={ handleOnChange }
-										/>
-									</Popover>
-								) }
-							</div>
-						</div>
-					</div>
+					<ColorIndicatorButton
+						label={ __( 'All', 'flexible-table-block' ) }
+						value={ value }
+						onClick={ handleOnPickerOpen }
+						isNone={ ! value }
+						isTransparent={ value === 'transparent' }
+					/>
 				</VStack>
+				{ isPickerOpen && (
+					<Popover onClose={ handleOnPickerClose }>
+						<Spacer padding={ 4 } margin={ 0 }>
+							<ColorPalette
+								colors={ [ ...colors, ...colorsProp ] }
+								value={ value || '' }
+								onChange={ handleOnChange }
+							/>
+						</Spacer>
+					</Popover>
+				) }
 				{ /* @ts-ignore Slot is not currently typed on Popover */ }
 				<Popover.Slot />
 			</BaseControl>

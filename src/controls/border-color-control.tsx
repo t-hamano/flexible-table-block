@@ -15,6 +15,7 @@ import {
 	Button,
 	Popover,
 	ColorPalette,
+	__experimentalSpacer as Spacer,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
@@ -40,7 +41,6 @@ type Props = {
 		bottom?: Property.Color;
 		left?: Property.Color;
 	};
-	hasIndicator?: boolean;
 };
 
 const DEFAULT_VALUES = {
@@ -55,7 +55,6 @@ export default function BorderColorControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	hasIndicator = true,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -135,7 +134,7 @@ export default function BorderColorControl( {
 				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
 						<HStack spacing={ 3 } justify="start">
-							{ hasIndicator && <SideIndicatorControl /> }
+							<SideIndicatorControl />
 							<ColorIndicatorButton
 								label={ __( 'All', 'flexible-table-block' ) }
 								value={ allInputValue }
@@ -145,15 +144,14 @@ export default function BorderColorControl( {
 								isMixed={ isMixed }
 							/>
 							{ isPickerOpen && ! pickerIndex && (
-								<Popover
-									className="ftb-border-color-control__popover"
-									onClose={ handleOnPickerClose }
-								>
-									<ColorPalette
-										colors={ colors }
-										value={ allInputValue || '' }
-										onChange={ handleOnChangeAll }
-									/>
+								<Popover onClose={ handleOnPickerClose }>
+									<Spacer padding={ 4 }>
+										<ColorPalette
+											colors={ colors }
+											value={ allInputValue || '' }
+											onChange={ handleOnChangeAll }
+										/>
+									</Spacer>
 								</Popover>
 							) }
 						</HStack>
@@ -161,7 +159,7 @@ export default function BorderColorControl( {
 						<VStack>
 							{ SIDE_CONTROLS.map( ( item, index ) => (
 								<HStack spacing={ 3 } justify="start" key={ item.value }>
-									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
+									<SideIndicatorControl sides={ [ item.value ] } />
 									<ColorIndicatorButton
 										label={ item.label }
 										value={ values[ item.value ] }
@@ -170,15 +168,14 @@ export default function BorderColorControl( {
 										isTransparent={ values[ item.value ] === 'transparent' }
 									/>
 									{ isPickerOpen && pickerIndex === index && (
-										<Popover
-											className="ftb-border-color-control__popover"
-											onClose={ handleOnPickerClose }
-										>
-											<ColorPalette
-												colors={ colors }
-												value={ values[ item.value ] || '' }
-												onChange={ ( value ) => handleOnChange( value, item.value ) }
-											/>
+										<Popover onClose={ handleOnPickerClose }>
+											<Spacer padding={ 4 } margin={ 0 }>
+												<ColorPalette
+													colors={ colors }
+													value={ values[ item.value ] || '' }
+													onChange={ ( value ) => handleOnChange( value, item.value ) }
+												/>
+											</Spacer>
 										</Popover>
 									) }
 								</HStack>
