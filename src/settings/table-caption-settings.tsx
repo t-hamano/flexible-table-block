@@ -27,7 +27,7 @@ import { convertToInline } from '../utils/style-converter';
 import { pickPadding, type DirectionProps } from '../utils/style-picker';
 import { updatePadding } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { BlockAttributes } from '../BlockAttributes';
+import type { CaptionSideValue, BlockAttributes } from '../BlockAttributes';
 
 type Props = {
 	attributes: BlockAttributes;
@@ -66,7 +66,10 @@ export default function TableCaptionSettings( {
 	};
 
 	const onChangeSide = ( value: string | number | undefined ) => {
-		if ( value === 'top' || value === 'bottom' ) {
+		const isAllowedValue = ( _value: any ): _value is CaptionSideValue => {
+			return CAPTION_SIDE_CONTROLS.some( ( control ) => control.value === _value );
+		};
+		if ( isAllowedValue( value ) ) {
 			setAttributes( { captionSide: value } );
 		}
 	};
