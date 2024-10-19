@@ -66,7 +66,7 @@ import {
 	updateBorderSpacing,
 } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { BlockAttributes } from '../BlockAttributes';
+import type { StickyValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
 
 type Props = {
@@ -113,7 +113,12 @@ export default function TableSettings( {
 	};
 
 	const onChangeSticky = ( value: string ) => {
-		setAttributes( { sticky: 'none' === value ? undefined : value } );
+		const isAllowedValue = ( _value: any ): _value is StickyValue => {
+			return ! value || STICKY_CONTROLS.some( ( control ) => control.value === _value );
+		};
+		if ( isAllowedValue( value ) ) {
+			setAttributes( { sticky: 'none' === value ? undefined : value } );
+		}
 	};
 
 	const onToggleHeaderSection = () => {

@@ -10,6 +10,7 @@ import type {
 	SIDE_CONTROLS,
 	CONTENT_JUSTIFY_CONTROLS,
 	BORDER_COLLAPSE_CONTROLS,
+	STICKY_CONTROLS,
 } from './constants';
 
 type NestedObject = {
@@ -25,6 +26,7 @@ export type DirectionValue = ( typeof DIRECTION_CONTROLS )[ number ][ 'value' ];
 export type SideValue = ( typeof SIDE_CONTROLS )[ number ][ 'value' ];
 export type ContentJustifyValue = ( typeof CONTENT_JUSTIFY_CONTROLS )[ number ][ 'value' ];
 export type BorderCollapseValue = ( typeof BORDER_COLLAPSE_CONTROLS )[ number ][ 'value' ];
+export type StickyValue = ( typeof STICKY_CONTROLS )[ number ][ 'value' ];
 
 // Table section name types
 export type SectionName = 'head' | 'body' | 'foot';
@@ -57,7 +59,7 @@ export interface BlockAttributes extends TableAttributes {
 	isScrollOnPc: boolean;
 	isScrollOnMobile: boolean;
 	isStackedOnMobile: boolean;
-	sticky: string | undefined;
+	sticky: StickyValue;
 	tableStyles?: string;
 	captionStyles?: string;
 	captionSide: CaptionSideValue;
