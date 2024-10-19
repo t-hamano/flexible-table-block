@@ -13,7 +13,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Tooltip,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -162,7 +161,8 @@ export default function BorderRadiusControl( {
 					) }
 					{ isLinked && (
 						<UnitControl
-							aria-label={ __( 'All', 'flexible-table-block' ) }
+							hideLabelFromVision
+							label={ __( 'All', 'flexible-table-block' ) }
 							placeholder={ allInputPlaceholder }
 							onChange={ handleOnChangeAll }
 							value={ allInputValue }
@@ -171,17 +171,13 @@ export default function BorderRadiusControl( {
 							size="__unstable-large"
 						/>
 					) }
-					<Tooltip text={ linkedLabel }>
-						<span>
-							<Button
-								className="ftb-border-radius-control__header-linked-button"
-								label={ linkedLabel }
-								onClick={ toggleLinked }
-								icon={ isLinked ? link : linkOff }
-								size="small"
-							/>
-						</span>
-					</Tooltip>
+					<Button
+						className="ftb-border-radius-control__header-linked-button"
+						label={ linkedLabel }
+						onClick={ toggleLinked }
+						icon={ isLinked ? link : linkOff }
+						size="small"
+					/>
 				</div>
 				{ ! isLinked && (
 					<div className="ftb-border-radius-control__input-controls">

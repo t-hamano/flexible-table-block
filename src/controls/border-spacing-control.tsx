@@ -12,7 +12,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Tooltip,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -165,17 +164,13 @@ export default function BorderSpacingControl( {
 							) ) }
 					</div>
 					{ allowSides && (
-						<Tooltip text={ linkedLabel }>
-							<span>
-								<Button
-									className="ftb-border-spacing-control__header-linked-button"
-									label={ linkedLabel }
-									icon={ isLinked ? link : linkOff }
-									onClick={ toggleLinked }
-									size="small"
-								/>
-							</span>
-						</Tooltip>
+						<Button
+							className="ftb-border-spacing-control__header-linked-button"
+							label={ linkedLabel }
+							icon={ isLinked ? link : linkOff }
+							onClick={ toggleLinked }
+							size="small"
+						/>
 					) }
 				</div>
 			</div>

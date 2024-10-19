@@ -13,7 +13,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Tooltip,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalText as Text,
@@ -177,17 +176,13 @@ export default function BorderStyleControl( {
 							) ) }
 					</div>
 					{ allowSides && (
-						<Tooltip text={ linkedLabel }>
-							<span>
-								<Button
-									className="ftb-border-style-control__header-linked-button"
-									label={ linkedLabel }
-									onClick={ toggleLinked }
-									icon={ isLinked ? link : linkOff }
-									size="small"
-								/>
-							</span>
-						</Tooltip>
+						<Button
+							className="ftb-border-style-control__header-linked-button"
+							label={ linkedLabel }
+							onClick={ toggleLinked }
+							icon={ isLinked ? link : linkOff }
+							size="small"
+						/>
 					) }
 				</div>
 			</div>

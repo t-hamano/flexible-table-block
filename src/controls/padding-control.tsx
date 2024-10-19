@@ -13,7 +13,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Tooltip,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -138,17 +137,13 @@ export default function PaddingControl( {
 						/>
 					) }
 					{ allowSides && (
-						<Tooltip text={ linkedLabel }>
-							<span>
-								<Button
-									className="ftb-padding-control__header-linked-button"
-									label={ linkedLabel }
-									onClick={ toggleLinked }
-									icon={ isLinked ? link : linkOff }
-									size="small"
-								/>
-							</span>
-						</Tooltip>
+						<Button
+							className="ftb-padding-control__header-linked-button"
+							label={ linkedLabel }
+							onClick={ toggleLinked }
+							icon={ isLinked ? link : linkOff }
+							size="small"
+						/>
 					) }
 				</div>
 				{ ! isLinked && allowSides && (

@@ -15,7 +15,6 @@ import {
 	BaseControl,
 	Button,
 	Popover,
-	Tooltip,
 	ColorIndicator,
 	ColorPalette,
 	__experimentalText as Text,
@@ -202,17 +201,13 @@ export default function BorderColorControl( {
 							) ) }
 					</div>
 					{ allowSides && (
-						<Tooltip text={ linkedLabel }>
-							<span>
-								<Button
-									className="ftb-border-color-control__header-linked-button"
-									label={ linkedLabel }
-									onClick={ toggleLinked }
-									icon={ isLinked ? link : linkOff }
-									size="small"
-								/>
-							</span>
-						</Tooltip>
+						<Button
+							className="ftb-border-color-control__header-linked-button"
+							label={ linkedLabel }
+							onClick={ toggleLinked }
+							icon={ isLinked ? link : linkOff }
+							size="small"
+						/>
 					) }
 				</div>
 			</div>
