@@ -10,8 +10,10 @@ import { __ } from '@wordpress/i18n';
 import {
 	BaseControl,
 	Button,
-	ButtonGroup,
 	TextControl,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -25,7 +27,7 @@ import { convertToInline } from '../utils/style-converter';
 import { pickPadding, type DirectionProps } from '../utils/style-picker';
 import { updatePadding } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { CaptionSideValue, TextAlignValue, BlockAttributes } from '../BlockAttributes';
+import type { CaptionSideValue, BlockAttributes } from '../BlockAttributes';
 
 type Props = {
 	attributes: BlockAttributes;
@@ -63,16 +65,28 @@ export default function TableCaptionSettings( {
 		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeSide = ( value: CaptionSideValue ) => {
-		setAttributes( { captionSide: value } );
+	const onChangeSide = ( value: string | number | undefined ) => {
+		const isAllowedValue = ( _value: any ): _value is CaptionSideValue => {
+			return CAPTION_SIDE_CONTROLS.some( ( control ) => control.value === _value );
+		};
+		if ( isAllowedValue( value ) ) {
+			setAttributes( { captionSide: value } );
+		}
 	};
 
-	const onChangeAlign = ( value: TextAlignValue ) => {
-		const newStylesObj = {
-			...captionStylesObj,
-			textAlign: value === captionStylesObj.textAlign ? undefined : value,
+	const onChangeAlign = ( value: string | number | undefined ) => {
+		const isAllowedValue = ( _value: any ): _value is Properties[ 'textAlign' ] => {
+			return ! value || TEXT_ALIGNMENT_CONTROLS.some( ( control ) => control.value === _value );
 		};
-		setAttributes( { captionStyles: convertToInline( newStylesObj ) } );
+		if ( isAllowedValue( value ) ) {
+			const newStylesObj = {
+				...captionStylesObj,
+				textAlign: value === captionStylesObj.textAlign ? undefined : value,
+			};
+			setAttributes( {
+				captionStyles: convertToInline( newStylesObj ),
+			} );
+		}
 	};
 
 	const onResetSettings = () => {
@@ -129,47 +143,33 @@ export default function TableCaptionSettings( {
 				values={ pickPadding( captionStylesObj ) }
 				onChange={ onChangePadding }
 			/>
-			<BaseControl id="flexible-table-block-caption-side">
-				<div aria-labelledby="flexible-table-block-caption-side-heading" role="region">
-					<span id="flexible-table-block-caption-side-heading" className="ftb-base-control-label">
-						{ __( 'Caption position', 'flexible-table-block' ) }
-					</span>
-					<ButtonGroup className="ftb-button-group">
-						{ CAPTION_SIDE_CONTROLS.map( ( { label, value } ) => (
-							<Button
-								key={ value }
-								label={ label }
-								variant={ captionSide === value ? 'primary' : undefined }
-								onClick={ () => onChangeSide( value ) }
-								size="compact"
-							>
-								{ label }
-							</Button>
-						) ) }
-					</ButtonGroup>
-				</div>
-			</BaseControl>
-			<BaseControl id="flexible-table-block-caption-align">
-				<div aria-labelledby="flexible-table-block-caption-align-heading" role="region">
-					<span id="flexible-table-block-caption-align-heading" className="ftb-base-control-label">
-						{ __( 'Caption text alignment', 'flexible-table-block' ) }
-					</span>
-					<ButtonGroup className="ftb-button-group">
-						{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => {
-							return (
-								<Button
-									key={ value }
-									label={ label }
-									variant={ value === captionStylesObj?.textAlign ? 'primary' : 'secondary' }
-									icon={ icon }
-									onClick={ () => onChangeAlign( value ) }
-									size="compact"
-								/>
-							);
-						} ) }
-					</ButtonGroup>
-				</div>
-			</BaseControl>
+			<ToggleGroupControl
+				__nextHasNoMarginBottom
+				label={ __( 'Caption position', 'flexible-table-block' ) }
+				value={ captionSide }
+				isBlock
+				onChange={ onChangeSide }
+			>
+				{ CAPTION_SIDE_CONTROLS.map( ( { label, value } ) => (
+					<ToggleGroupControlOption key={ value } value={ value } label={ label } />
+				) ) }
+			</ToggleGroupControl>
+			<ToggleGroupControl
+				__nextHasNoMarginBottom
+				label={ __( 'Caption text alignment', 'flexible-table-block' ) }
+				value={ captionStylesObj?.textAlign }
+				isDeselectable
+				onChange={ onChangeAlign }
+			>
+				{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
+					<ToggleGroupControlOptionIcon
+						key={ value }
+						value={ value }
+						icon={ icon }
+						label={ label }
+					/>
+				) ) }
+			</ToggleGroupControl>
 		</>
 	);
 }

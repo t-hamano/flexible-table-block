@@ -17,6 +17,8 @@ import {
 	ToggleControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
 
 /**
@@ -64,7 +66,7 @@ import {
 	updateBorderSpacing,
 } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
-import type { BorderCollapseValue, BlockAttributes } from '../BlockAttributes';
+import type { BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
 
 type Props = {
@@ -87,13 +89,10 @@ export default function TableSettings( {
 	const { hasFixedLayout, isStackedOnMobile, isScrollOnPc, isScrollOnMobile, sticky, head, foot } =
 		attributes;
 
-	const options: StoreOptions = useSelect(
-		( select ) =>
-			select( STORE_NAME )
-				// @ts-ignore
-				.getOptions(),
-		[]
-	);
+	const options = useSelect( ( select ) => {
+		const { getOptions }: { getOptions: () => StoreOptions } = select( STORE_NAME );
+		return getOptions();
+	}, [] );
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
@@ -180,15 +179,23 @@ export default function TableSettings( {
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
 
-	const onChangeBorderCollapse = ( value: BorderCollapseValue ) => {
-		const borderCollapse = tableStylesObj?.borderCollapse === value ? undefined : value;
-		const borderSpacing = 'separate' === borderCollapse ? tableStylesObj?.borderSpacing : undefined;
-		const newStylesObj = {
-			...tableStylesObj,
-			borderCollapse,
-			borderSpacing,
+	const onChangeBorderCollapse = ( value: string | number | undefined ) => {
+		const isAllowedValue = ( _value: any ): _value is Properties[ 'borderCollapse' ] => {
+			return ! value || BORDER_COLLAPSE_CONTROLS.some( ( control ) => control.value === _value );
 		};
-		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+		if ( isAllowedValue( value ) ) {
+			const borderCollapse = tableStylesObj?.borderCollapse === value ? undefined : value;
+			const borderSpacing =
+				'separate' === borderCollapse ? tableStylesObj?.borderSpacing : undefined;
+			const newStylesObj = {
+				...tableStylesObj,
+				borderCollapse,
+				borderSpacing,
+			};
+			setAttributes( {
+				tableStyles: convertToInline( newStylesObj ),
+			} );
+		}
 	};
 
 	const onChangeBorderSpacing = ( values: Partial< CrossProps > ) => {
@@ -450,31 +457,22 @@ export default function TableSettings( {
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />
-			<BaseControl id="flexible-table-block-table-border-collapse">
-				<div aria-labelledby="flexible-table-block-table-border-collapse-heading" role="region">
-					<span
-						id="flexible-table-block-table-border-collapse-heading"
-						className="ftb-base-control-label"
-					>
-						{ __( 'Cell borders', 'flexible-table-block' ) }
-					</span>
-					<ButtonGroup className="ftb-button-group">
-						{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => {
-							return (
-								<Button
-									key={ value }
-									variant={ value === tableStylesObj?.borderCollapse ? 'primary' : 'secondary' }
-									icon={ icon }
-									onClick={ () => onChangeBorderCollapse( value ) }
-									size="compact"
-								>
-									{ label }
-								</Button>
-							);
-						} ) }
-					</ButtonGroup>
-				</div>
-			</BaseControl>
+			<ToggleGroupControl
+				__nextHasNoMarginBottom
+				label={ __( 'Cell borders', 'flexible-table-block' ) }
+				value={ tableStylesObj?.borderCollapse }
+				isDeselectable
+				onChange={ onChangeBorderCollapse }
+			>
+				{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => (
+					<ToggleGroupControlOptionIcon
+						key={ value }
+						label={ label }
+						value={ value }
+						icon={ icon }
+					/>
+				) ) }
+			</ToggleGroupControl>
 			{ 'separate' === tableStylesObj?.borderCollapse && (
 				<BorderSpacingControl
 					id="flexible-table-block-table-border-spacing"

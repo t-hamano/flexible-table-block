@@ -98,7 +98,8 @@ async function applyCellStyles( page, pageUtils ) {
 	await page.getByRole( 'button', { name: 'Align center' } ).click();
 	await page.getByRole( 'button', { name: 'Align middle' } ).click();
 	// Cell Tag element.
-	await page.getByRole( 'button', { name: 'TH', exact: true } ).click();
+	await page.getByRole( 'radio', { name: 'TD' } ).click();
+	await page.getByRole( 'radio', { name: 'TH' } ).click();
 	// Cell CSS class.
 	await page.getByRole( 'textbox', { name: 'Cell CSS class(es)' } ).fill( 'custom' );
 	// id, headers, scope getBlockAttributes.
@@ -252,10 +253,7 @@ test.describe( 'Styles', () => {
 		await page.getByRole( 'spinbutton', { name: 'Right' } ).fill( '2' );
 		await page.getByRole( 'spinbutton', { name: 'Bottom' } ).fill( '3' );
 		await page.getByRole( 'spinbutton', { name: 'Left' } ).fill( '4' );
-		await page
-			.locator( '[aria-labelledby="flexible-table-block-caption-side-heading"]' )
-			.getByRole( 'button', { name: 'Top' } )
-			.click();
+		await page.getByRole( 'radio', { name: 'Top' } ).click();
 		await page.getByRole( 'button', { name: 'Align center' } ).click();
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );

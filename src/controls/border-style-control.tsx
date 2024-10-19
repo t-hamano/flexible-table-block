@@ -12,9 +12,10 @@ import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import {
 	BaseControl,
-	ButtonGroup,
 	Button,
 	Tooltip,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalText as Text,
 } from '@wordpress/components';
 
@@ -23,7 +24,6 @@ import {
  */
 import { BORDER_STYLE_CONTROLS, SIDE_CONTROLS } from '../constants';
 import { SideIndicatorControl } from './indicator-control';
-import type { BorderStyleValue } from '../BlockAttributes';
 
 const DEFAULT_VALUES = {
 	top: '',
@@ -90,7 +90,7 @@ export default function BorderStyleControl( {
 		onChange( DEFAULT_VALUES );
 	};
 
-	const handleOnClickAll = ( value: BorderStyleValue ) => {
+	const handleOnClickAll = ( value: string | number | undefined ) => {
 		const newValue =
 			value === values.top &&
 			value === values.right &&
@@ -107,7 +107,7 @@ export default function BorderStyleControl( {
 		} );
 	};
 
-	const handleOnClick = ( value: BorderStyleValue, targetSide: ValuesKey ) => {
+	const handleOnClick = ( value: string | number | undefined, targetSide: ValuesKey ) => {
 		const newValue =
 			values[ targetSide as ValuesKey ] && value === values[ targetSide as ValuesKey ]
 				? undefined
@@ -133,44 +133,46 @@ export default function BorderStyleControl( {
 						{ isLinked && (
 							<div className="ftb-border-style-control__button-controls-row">
 								{ hasIndicator && <SideIndicatorControl /> }
-								<ButtonGroup className="ftb-button-group">
+								<ToggleGroupControl
+									hideLabelFromVision
+									__nextHasNoMarginBottom
+									label={ label }
+									value={ allInputValue }
+									isDeselectable
+									onChange={ handleOnClickAll }
+								>
 									{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => (
-										<Button
+										<ToggleGroupControlOptionIcon
 											key={ borderStyle.value }
 											label={ borderStyle.label }
+											value={ borderStyle.value }
 											icon={ borderStyle.icon }
-											variant={ allInputValue === borderStyle.value ? 'primary' : undefined }
-											onClick={ () => handleOnClickAll( borderStyle.value ) }
-											size="compact"
 										/>
 									) ) }
-								</ButtonGroup>
+								</ToggleGroupControl>
 							</div>
 						) }
 						{ ! isLinked &&
 							SIDE_CONTROLS.map( ( item ) => (
 								<div className="ftb-border-style-control__button-controls-row" key={ item.value }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
-									<ButtonGroup className="ftb-button-group" aria-label={ item.label }>
-										{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => {
-											return (
-												<Button
-													key={ borderStyle.value }
-													label={ borderStyle.label }
-													icon={ borderStyle.icon }
-													variant={
-														values[ item.value as ValuesKey ] === borderStyle.value
-															? 'primary'
-															: undefined
-													}
-													onClick={ () =>
-														handleOnClick( borderStyle.value, item.value as ValuesKey )
-													}
-													size="compact"
-												/>
-											);
-										} ) }
-									</ButtonGroup>
+									<ToggleGroupControl
+										hideLabelFromVision
+										__nextHasNoMarginBottom
+										label={ item.label }
+										value={ values[ item.value as ValuesKey ] }
+										isDeselectable
+										onChange={ ( value ) => handleOnClick( value, item.value as ValuesKey ) }
+									>
+										{ BORDER_STYLE_CONTROLS.map( ( borderStyle ) => (
+											<ToggleGroupControlOptionIcon
+												key={ borderStyle.value }
+												label={ borderStyle.label }
+												value={ borderStyle.value }
+												icon={ borderStyle.icon }
+											/>
+										) ) }
+									</ToggleGroupControl>
 								</div>
 							) ) }
 					</div>
