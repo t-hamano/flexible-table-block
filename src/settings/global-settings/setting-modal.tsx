@@ -308,7 +308,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									<div className="ftb-global-setting-modal__styles">
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												id="flexible-table-block-global-row-odd-color"
 												label={ __(
 													'Striped style background color ( odd rows )',
 													'flexible-table-block'
@@ -327,7 +326,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												id="flexible-table-block-global-row-even-color"
 												label={ __(
 													'Striped style background color ( even rows )',
 													'flexible-table-block'
@@ -353,7 +351,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									<div className="ftb-global-setting-modal__styles">
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												id="flexible-table-block-global-cell-text-color-th"
 												label={ createInterpolateElement(
 													__( 'Cell text color ( <code>th</code> tag )', 'flexible-table-block' ),
 													{ code: <code /> }
@@ -372,7 +369,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												id="flexible-table-block-global-cell-text-color-td"
 												label={ createInterpolateElement(
 													__( 'Cell text color ( <code>td</code> tag )', 'flexible-table-block' ),
 													{ code: <code /> }
@@ -391,7 +387,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												id="flexible-table-block-global-cell-background-color-th"
 												label={ createInterpolateElement(
 													__(
 														'Cell background color ( <code>th</code> tag )',
@@ -413,7 +408,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												id="flexible-table-block-global-cell-background-color-td"
 												label={ createInterpolateElement(
 													__(
 														'Cell background color ( <code>td</code> tag )',
@@ -435,7 +429,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<PaddingControl
-												id="flexible-table-block-global-cell-padding"
 												label={ __( 'Cell padding', 'flexible-table-block' ) }
 												values={ currentOptions?.block_style.cell_padding || {} }
 												onChange={ ( values ) => {
@@ -451,7 +444,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<BorderWidthControl
-												id="flexible-table-block-global-cell-border-width"
 												label={ __( 'Cell border width', 'flexible-table-block' ) }
 												values={ { top: currentOptions.block_style?.cell_border_width } }
 												allowSides={ false }
@@ -469,7 +461,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<BorderStyleControl
-												id="flexible-table-block-global-cell-border-style"
 												label={ __( 'Cell border style', 'flexible-table-block' ) }
 												values={ { top: currentOptions.block_style?.cell_border_style } }
 												allowSides={ false }
@@ -491,7 +482,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												id="flexible-table-block-global-cell-border-color"
 												label={ __( 'Cell border color', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.cell_border_color }
 												onChange={ ( value ) => {
@@ -578,7 +568,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 								<>
 									<h2>{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }</h2>
 									<RangeControl
-										id="flexible-table-block-global-breakpoint"
 										help={ __(
 											'Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.',
 											'flexible-table-block'

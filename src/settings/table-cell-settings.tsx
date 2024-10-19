@@ -281,13 +281,11 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			</ButtonGroup>
 			<hr />
 			<ColorControl
-				id="flexible-table-block-cell-text-color"
 				label={ __( 'Cell text color', 'flexible-table-block' ) }
 				value={ cellStylesObj.color }
 				onChange={ onChangeColor }
 			/>
 			<ColorControl
-				id="flexible-table-block-cell-background-color"
 				label={ __( 'Cell background color', 'flexible-table-block' ) }
 				value={ cellStylesObj.backgroundColor }
 				colors={ [
@@ -301,32 +299,27 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			/>
 			<hr />
 			<PaddingControl
-				id="flexible-table-block-cell-padding"
 				label={ __( 'Cell padding', 'flexible-table-block' ) }
 				values={ pickPadding( cellStylesObj ) }
 				onChange={ onChangePadding }
 			/>
 			<hr />
 			<BorderRadiusControl
-				id="flexible-table-block-cell-border-radius"
 				label={ __( 'Cell border radius', 'flexible-table-block' ) }
 				values={ pickBorderRadius( cellStylesObj ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
-				id="flexible-table-block-cell-border-width"
 				label={ __( 'Cell border width', 'flexible-table-block' ) }
 				values={ pickBorderWidth( cellStylesObj ) }
 				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
-				id="flexible-table-block-cell-border-style"
 				label={ __( 'Cell border style', 'flexible-table-block' ) }
 				values={ pickBorderStyle( cellStylesObj ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
-				id="flexible-table-block-cell-border-color"
 				label={ __( 'Cell border color', 'flexible-table-block' ) }
 				values={ pickBorderColor( cellStylesObj ) }
 				onChange={ onChangeBorderColor }

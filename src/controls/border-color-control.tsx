@@ -20,6 +20,7 @@ import {
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -29,7 +30,6 @@ import { SIDE_CONTROLS } from '../constants';
 import type { SideValue } from '../BlockAttributes';
 
 type Props = {
-	id: string;
 	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
@@ -51,7 +51,6 @@ const DEFAULT_VALUES = {
 };
 
 export default function BorderColorControl( {
-	id,
 	label = __( 'Border color', 'flexible-table-block' ),
 	help,
 	onChange,
@@ -63,6 +62,8 @@ export default function BorderColorControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
+	const instanceId = useInstanceId( BorderColorControl, 'ftb-border-color-control' );
+	const headingId = `${ instanceId }-heading`;
 
 	const isMixed: boolean =
 		allowSides &&
@@ -79,8 +80,6 @@ export default function BorderColorControl( {
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
 	const [ pickerIndex, setPickerIndex ] = useState< number | undefined >( undefined );
-
-	const headingId: string = `${ id }-heading`;
 
 	const linkedLabel: string = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
@@ -122,12 +121,7 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl
-			id={ id }
-			className="ftb-border-color-control"
-			help={ help }
-			__nextHasNoMarginBottom
-		>
+		<BaseControl className="ftb-border-color-control" help={ help } __nextHasNoMarginBottom>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-color-control__header">
 					<Text id={ headingId }>{ label }</Text>
