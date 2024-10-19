@@ -1,15 +1,3 @@
-.ftb-global-setting {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 16px;
-	border-top: 1px solid #e0e0e0;
-
-	.components-spinner {
-		margin: 0;
-	}
-}
-
 .ftb-global-setting-modal {
 
 	@media (min-width: 600px) {
@@ -23,46 +11,6 @@
 
 	@media (min-width: 960px) {
 		height: 75%;
-	}
-
-	h2 {
-		margin-top: 2em;
-		margin-bottom: 1em;
-		font-size: 0.9rem;
-
-		&:first-of-type {
-			margin-top: 0;
-		}
-	}
-
-	hr {
-		margin: 1em 0;
-	}
-
-	.components-modal__content {
-		padding-bottom: 40px;
-		margin-bottom: 60px;
-	}
-
-	.components-toggle-control {
-		margin-bottom: 16px;
-
-		.components-base-control__help {
-			margin-top: 0;
-			margin-left: 48px;
-		}
-	}
-
-	.components-range-control__mark {
-		background-color: #d7dade;
-	}
-
-	.components-range-control__mark-label {
-		color: currentColor;
-	}
-
-	.components-disabled label {
-		opacity: 0.3;
 	}
 }
 
@@ -126,25 +74,8 @@
 	padding: 8px;
 	border: 1px var(--wp-admin-theme-color) solid;
 
-	.components-base-control__field {
-		margin-bottom: 0;
-	}
-
 	@media screen and (max-width: 782px) {
 		width: 100%;
-	}
-}
-
-.ftb-global-setting-modal__styles-color {
-	position: relative;
-	padding-left: 28px;
-
-	.component-color-indicator {
-		position: absolute;
-		top: 50%;
-		left: 0;
-		margin-top: -8px;
-		margin-left: 0;
 	}
 }
 
@@ -152,29 +83,13 @@
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	height: 60px;
+	height: 56px;
 	padding: 0 24px;
 	background: #fff;
 }
 
 .ftb-global-setting-modal__confirm-popover .components-popover__content {
 	min-width: 150px;
-	padding: 8px;
-
-	p {
-		margin: 0 0 1em;
-	}
-}
-
-.ftb-global-setting-modal__confirm-popover-buttons {
-	display: flex;
-	gap: 8px;
-	justify-content: space-between;
-	white-space: nowrap;
 }
 
 .ftb-global-setting-modal__notice {
@@ -183,50 +98,15 @@
 	bottom: 60px;
 	left: 24px;
 	z-index: 6;
-	padding-top: 0;
-	padding-bottom: 0;
-	margin: 0;
-
-	&.is-dismissible {
-		padding-right: 8px;
-
-		svg {
-			width: 16px;
-			height: 16px;
-		}
-	}
-
-	.components-button {
-		align-self: center;
-	}
 }
 
 .ftb-global-setting-modal__loading {
 	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+	inset: 0;
 	z-index: 5;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	background: rgba(0, 0, 0, 0.2);
 }
 
 .ftb-global-help-modal {
 	max-width: 600px;
-
-	h2 {
-		margin: 1.5em 0 0.5em;
-		font-size: 0.9rem;
-	}
-
-	p {
-		margin: 0 0 1em;
-	}
-
-	hr {
-		margin: 1.5em 0;
-	}
 }

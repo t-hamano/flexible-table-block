@@ -15,6 +15,9 @@ import {
 	Button,
 	Popover,
 	ColorPalette,
+	Flex,
+	FlexBlock,
+	FlexItem,
 	__experimentalSpacer as Spacer,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
@@ -124,12 +127,18 @@ export default function BorderColorControl( {
 		<BaseControl className="ftb-border-color-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="region">
 				<HStack>
-					<Text id={ headingId } upperCase size="11" weight="500">
-						{ label }
-					</Text>
-					<Button variant="secondary" onClick={ handleOnReset } size="small">
-						{ __( 'Reset', 'flexible-table-block' ) }
-					</Button>
+					<Flex>
+						<FlexBlock>
+							<Text id={ headingId } upperCase size="11" weight="500">
+								{ label }
+							</Text>
+						</FlexBlock>
+						<FlexItem>
+							<Button variant="secondary" onClick={ handleOnReset } size="small">
+								{ __( 'Reset', 'flexible-table-block' ) }
+							</Button>
+						</FlexItem>
+					</Flex>
 				</HStack>
 				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
@@ -169,7 +178,7 @@ export default function BorderColorControl( {
 									/>
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover onClose={ handleOnPickerClose }>
-											<Spacer padding={ 4 } margin={ 0 }>
+											<Spacer padding={ 4 } marginBottom={ 0 }>
 												<ColorPalette
 													colors={ colors }
 													value={ values[ item.value ] || '' }

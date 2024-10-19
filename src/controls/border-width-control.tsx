@@ -12,6 +12,9 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
+	Flex,
+	FlexBlock,
+	FlexItem,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
@@ -140,12 +143,18 @@ export default function BorderWidthControl( {
 		<BaseControl className="ftb-border-width-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="region">
 				<HStack>
-					<Text id={ headingId } upperCase size="11" weight="500">
-						{ label }
-					</Text>
-					<Button variant="secondary" onClick={ handleOnReset } size="small">
-						{ __( 'Reset', 'flexible-table-block' ) }
-					</Button>
+					<Flex>
+						<FlexBlock>
+							<Text id={ headingId } upperCase size="11" weight="500">
+								{ label }
+							</Text>
+						</FlexBlock>
+						<FlexItem>
+							<Button variant="secondary" onClick={ handleOnReset } size="small">
+								{ __( 'Reset', 'flexible-table-block' ) }
+							</Button>
+						</FlexItem>
+					</Flex>
 				</HStack>
 				<div className="ftb-border-width-control__header-control">
 					{ hasIndicator && (

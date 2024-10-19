@@ -6,7 +6,12 @@ import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 // @ts-ignore: has no exported member
 import { store as coreStore } from '@wordpress/core-data';
-import { Button, Spinner } from '@wordpress/components';
+import {
+	Button,
+	Spinner,
+	__experimentalSpacer as Spacer,
+	__experimentalHStack as HStack,
+} from '@wordpress/components';
 import { cog, help } from '@wordpress/icons';
 
 /**
@@ -45,27 +50,29 @@ export default function GlobalSettings() {
 
 	return (
 		<>
-			<div className="ftb-global-setting">
-				<Button
-					icon={ help }
-					variant="link"
-					onClick={ () => setIsHelpModalOpen( true ) }
-					size="compact"
-				>
-					{ __( 'Help', 'flexible-table-block' ) }
-				</Button>
-				{ ! isGlobalSettingLoaded && <Spinner /> }
-				{ isGlobalSettingLoaded && showGlobalSetting && (
+			<Spacer padding={ 4 } marginBottom={ 0 } style={ { borderTop: '1px solid #e0e0e0' } }>
+				<HStack>
 					<Button
-						icon={ cog }
-						variant="primary"
-						onClick={ () => setIsSettingModalOpen( true ) }
+						icon={ help }
+						variant="link"
+						onClick={ () => setIsHelpModalOpen( true ) }
 						size="compact"
 					>
-						{ __( 'Global setting', 'flexible-table-block' ) }
+						{ __( 'Help', 'flexible-table-block' ) }
 					</Button>
-				) }
-			</div>
+					{ ! isGlobalSettingLoaded && <Spinner style={ { margin: 0 } } /> }
+					{ isGlobalSettingLoaded && showGlobalSetting && (
+						<Button
+							icon={ cog }
+							variant="primary"
+							onClick={ () => setIsSettingModalOpen( true ) }
+							size="compact"
+						>
+							{ __( 'Global setting', 'flexible-table-block' ) }
+						</Button>
+					) }
+				</HStack>
+			</Spacer>
 			{ isHelpModalOpen && <HelpModal { ...{ setIsHelpModalOpen } } /> }
 			{ options && isSettingModalOpen && ( isAdministrator || options?.show_global_setting ) && (
 				<SettingModal

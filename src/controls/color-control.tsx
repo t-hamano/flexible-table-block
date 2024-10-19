@@ -16,8 +16,10 @@ import {
 	Popover,
 	ColorPalette,
 	SlotFillProvider,
+	Flex,
+	FlexBlock,
+	FlexItem,
 	__experimentalSpacer as Spacer,
-	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
 } from '@wordpress/components';
@@ -72,14 +74,18 @@ export default function ColorControl( {
 		<SlotFillProvider>
 			<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
 				<VStack aria-labelledby={ headingId } justify="start" role="region">
-					<HStack>
-						<Text id={ headingId } upperCase size="11" weight="500">
-							{ label }
-						</Text>
-						<Button variant="secondary" onClick={ handleOnReset } size="small">
-							{ __( 'Reset', 'flexible-table-block' ) }
-						</Button>
-					</HStack>
+					<Flex>
+						<FlexBlock>
+							<Text id={ headingId } upperCase size="11" weight="500">
+								{ label }
+							</Text>
+						</FlexBlock>
+						<FlexItem>
+							<Button variant="secondary" onClick={ handleOnReset } size="small">
+								{ __( 'Reset', 'flexible-table-block' ) }
+							</Button>
+						</FlexItem>
+					</Flex>
 					<ColorIndicatorButton
 						label={ __( 'All', 'flexible-table-block' ) }
 						value={ value }
@@ -90,7 +96,7 @@ export default function ColorControl( {
 				</VStack>
 				{ isPickerOpen && (
 					<Popover onClose={ handleOnPickerClose }>
-						<Spacer padding={ 4 } margin={ 0 }>
+						<Spacer padding={ 4 } marginBottom={ 0 }>
 							<ColorPalette
 								colors={ [ ...colors, ...colorsProp ] }
 								value={ value || '' }

@@ -12,6 +12,9 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
+	Flex,
+	FlexBlock,
+	FlexItem,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -116,14 +119,20 @@ export default function BorderStyleControl( {
 		<BaseControl className="ftb-border-style-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="region">
 				<HStack>
-					<Text id={ headingId } upperCase size="11" weight="500">
-						{ isMixed && isLinked
-							? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
-							: label }
-					</Text>
-					<Button variant="secondary" onClick={ handleOnReset } size="small">
-						{ __( 'Reset', 'flexible-table-block' ) }
-					</Button>
+					<Flex>
+						<FlexBlock>
+							<Text id={ headingId } upperCase size="11" weight="500">
+								{ isMixed && isLinked
+									? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
+									: label }
+							</Text>
+						</FlexBlock>
+						<FlexItem>
+							<Button variant="secondary" onClick={ handleOnReset } size="small">
+								{ __( 'Reset', 'flexible-table-block' ) }
+							</Button>
+						</FlexItem>
+					</Flex>
 				</HStack>
 				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
