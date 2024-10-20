@@ -5,7 +5,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	min-height: 40px;
+	min-height: 40px !important;
 
 	.components-unit-control-wrapper {
 		max-width: 104px;

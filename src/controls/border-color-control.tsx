@@ -126,20 +126,16 @@ export default function BorderColorControl( {
 	return (
 		<BaseControl className="ftb-border-color-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="region">
-				<HStack>
-					<Flex>
-						<FlexBlock>
-							<Text id={ headingId } upperCase size="11" weight="500">
-								{ label }
-							</Text>
-						</FlexBlock>
-						<FlexItem>
-							<Button variant="secondary" onClick={ handleOnReset } size="small">
-								{ __( 'Reset', 'flexible-table-block' ) }
-							</Button>
-						</FlexItem>
-					</Flex>
-				</HStack>
+				<Flex>
+					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+						{ label }
+					</Text>
+					<FlexItem>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
 				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
 						<HStack spacing={ 3 } justify="start">

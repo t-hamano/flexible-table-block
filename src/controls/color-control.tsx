@@ -13,12 +13,12 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Popover,
-	ColorPalette,
-	SlotFillProvider,
 	Flex,
 	FlexBlock,
 	FlexItem,
+	Popover,
+	ColorPalette,
+	SlotFillProvider,
 	__experimentalSpacer as Spacer,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
@@ -74,13 +74,11 @@ export default function ColorControl( {
 	return (
 		<SlotFillProvider>
 			<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
-				<VStack aria-labelledby={ headingId } justify="start" role="region">
+				<VStack aria-labelledby={ headingId } role="region">
 					<Flex>
-						<FlexBlock>
-							<Text id={ headingId } upperCase size="11" weight="500">
-								{ label }
-							</Text>
-						</FlexBlock>
+						<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+							{ label }
+						</Text>
 						<FlexItem>
 							<Button variant="secondary" onClick={ handleOnReset } size="small">
 								{ __( 'Reset', 'flexible-table-block' ) }

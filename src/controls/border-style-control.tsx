@@ -118,22 +118,20 @@ export default function BorderStyleControl( {
 	return (
 		<BaseControl className="ftb-border-style-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="region">
-				<HStack>
-					<Flex>
-						<FlexBlock>
-							<Text id={ headingId } upperCase size="11" weight="500">
-								{ isMixed && isLinked
-									? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
-									: label }
-							</Text>
-						</FlexBlock>
-						<FlexItem>
-							<Button variant="secondary" onClick={ handleOnReset } size="small">
-								{ __( 'Reset', 'flexible-table-block' ) }
-							</Button>
-						</FlexItem>
-					</Flex>
-				</HStack>
+				<Flex>
+					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+						<Text id={ headingId } upperCase size="11" weight="500">
+							{ isMixed && isLinked
+								? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
+								: label }
+						</Text>
+					</Text>
+					<FlexItem>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
 				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
 						<HStack spacing={ 2 } justify="start">

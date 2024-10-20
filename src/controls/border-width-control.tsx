@@ -15,7 +15,6 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
-	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
@@ -142,20 +141,16 @@ export default function BorderWidthControl( {
 	return (
 		<BaseControl className="ftb-border-width-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="region">
-				<HStack>
-					<Flex>
-						<FlexBlock>
-							<Text id={ headingId } upperCase size="11" weight="500">
-								{ label }
-							</Text>
-						</FlexBlock>
-						<FlexItem>
-							<Button variant="secondary" onClick={ handleOnReset } size="small">
-								{ __( 'Reset', 'flexible-table-block' ) }
-							</Button>
-						</FlexItem>
-					</Flex>
-				</HStack>
+				<Flex>
+					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+						{ label }
+					</Text>
+					<FlexItem>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
 				<div className="ftb-border-width-control__header-control">
 					{ hasIndicator && (
 						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
