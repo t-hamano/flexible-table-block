@@ -758,22 +758,20 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 								focusOnMount="firstElement"
 								onClose={ () => setIsResetPopup( false ) }
 							>
-								<Spacer marginBottom={ 0 } padding={ 2 }>
-									<VStack spacing={ 4 }>
-										<Text as="p">{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
-										<HStack>
-											<Button isDestructive onClick={ handleResetOptions } size="compact">
-												{ __( 'Restore', 'flexible-table-block' ) }
-											</Button>
-											<Button
-												variant="secondary"
-												onClick={ () => setIsResetPopup( false ) }
-												size="compact"
-											>
-												{ __( 'Cancel', 'flexible-table-block' ) }
-											</Button>
-										</HStack>
-									</VStack>
+								<Spacer as={ VStack } marginBottom={ 0 } padding={ 2 } spacing={ 4 }>
+									<Text as="p">{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
+									<HStack>
+										<Button isDestructive onClick={ handleResetOptions } size="compact">
+											{ __( 'Restore', 'flexible-table-block' ) }
+										</Button>
+										<Button
+											variant="secondary"
+											onClick={ () => setIsResetPopup( false ) }
+											size="compact"
+										>
+											{ __( 'Cancel', 'flexible-table-block' ) }
+										</Button>
+									</HStack>
 								</Spacer>
 							</Popover>
 						) }
