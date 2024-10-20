@@ -223,32 +223,30 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					{ __( 'Clear cell settings', 'flexible-table-block' ) }
 				</Button>
 			</Spacer>
-			<Spacer marginBottom="4">
-				<Flex>
-					<FlexBlock>
-						<UnitControl
-							label={ __( 'Cell font size', 'flexible-table-block' ) }
-							value={ cellStylesObj?.fontSize }
-							units={ fontSizeUnits }
-							min={ 0 }
-							onChange={ onChangeFontSize }
-							size="__unstable-large"
-						/>
-					</FlexBlock>
-					<FlexBlock>
-						<TextControl
-							label={ __( 'Cell line height', 'flexible-table-block' ) }
-							value={ cellStylesObj?.lineHeight || '' }
-							autoComplete="off"
-							type="number"
-							step={ 0.1 }
-							min={ 0 }
-							onChange={ onChangeLineHeight }
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-						/>
-					</FlexBlock>
-				</Flex>
+			<Spacer marginBottom="4" as={ Flex }>
+				<FlexBlock>
+					<UnitControl
+						label={ __( 'Cell font size', 'flexible-table-block' ) }
+						value={ cellStylesObj?.fontSize }
+						units={ fontSizeUnits }
+						min={ 0 }
+						onChange={ onChangeFontSize }
+						size="__unstable-large"
+					/>
+				</FlexBlock>
+				<FlexBlock>
+					<TextControl
+						label={ __( 'Cell line height', 'flexible-table-block' ) }
+						value={ cellStylesObj?.lineHeight || '' }
+						autoComplete="off"
+						type="number"
+						step={ 0.1 }
+						min={ 0 }
+						onChange={ onChangeLineHeight }
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+					/>
+				</FlexBlock>
 			</Spacer>
 			<UnitControl
 				label={ __( 'Cell width', 'flexible-table-block' ) }

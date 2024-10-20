@@ -105,32 +105,30 @@ export default function TableCaptionSettings( {
 					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
 			</Spacer>
-			<Spacer marginBottom="4">
-				<Flex align="end">
-					<FlexBlock>
-						<UnitControl
-							label={ __( 'Caption font size', 'flexible-table-block' ) }
-							value={ captionStylesObj?.fontSize }
-							units={ fontSizeUnits }
-							min={ 0 }
-							onChange={ onChangeFontSize }
-							size="__unstable-large"
-						/>
-					</FlexBlock>
-					<FlexBlock>
-						<TextControl
-							label={ __( 'Caption line height', 'flexible-table-block' ) }
-							autoComplete="off"
-							onChange={ onChangeLineHeight }
-							step={ 0.1 }
-							type="number"
-							value={ captionStylesObj?.lineHeight || '' }
-							min={ 0 }
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-						/>
-					</FlexBlock>
-				</Flex>
+			<Spacer marginBottom="4" as={ Flex } align="end">
+				<FlexBlock>
+					<UnitControl
+						label={ __( 'Caption font size', 'flexible-table-block' ) }
+						value={ captionStylesObj?.fontSize }
+						units={ fontSizeUnits }
+						min={ 0 }
+						onChange={ onChangeFontSize }
+						size="__unstable-large"
+					/>
+				</FlexBlock>
+				<FlexBlock>
+					<TextControl
+						label={ __( 'Caption line height', 'flexible-table-block' ) }
+						autoComplete="off"
+						onChange={ onChangeLineHeight }
+						step={ 0.1 }
+						type="number"
+						value={ captionStylesObj?.lineHeight || '' }
+						min={ 0 }
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+					/>
+				</FlexBlock>
 			</Spacer>
 			<PaddingControl
 				label={ __( 'Caption padding', 'flexible-table-block' ) }
