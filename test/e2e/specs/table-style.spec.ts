@@ -21,15 +21,19 @@ async function applyCellStyles( page, pageUtils ) {
 	await page.getByRole( 'spinbutton', { name: 'Cell width' } ).fill( '100' );
 
 	// Text Color, Background Color styles.
+	const cellTextColorId = await page.getByText( 'Cell text color' ).getAttribute( 'id' );
 	await page
-		.locator( '[aria-labelledby="flexible-table-block-cell-text-color-heading"]' )
+		.locator( `[aria-labelledby="${ cellTextColorId }"]` )
 		.getByRole( 'button', { name: 'All' } )
 		.click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '111111' );
 	await pageUtils.pressKeys( 'Escape', { times: 2 } );
+	const cellBackgroundColorId = await page
+		.getByText( 'Cell background color' )
+		.getAttribute( 'id' );
 	await page
-		.locator( '[aria-labelledby="flexible-table-block-cell-background-color-heading"]' )
+		.locator( `[aria-labelledby="${ cellBackgroundColorId }"]` )
 		.getByRole( 'button', { name: 'All' } )
 		.click();
 	await pageUtils.pressKeys( 'Enter' );
