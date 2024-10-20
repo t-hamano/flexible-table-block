@@ -10,6 +10,7 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
+	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
@@ -126,23 +127,24 @@ export default function BorderSpacingControl( {
 						</Button>
 					</FlexItem>
 				</Flex>
-				<div className="ftb-border-spacing-control__controls">
-					<div className="ftb-border-spacing-control__controls-inner">
-						{ isLinked ? (
-							<div className="ftb-border-spacing-control__controls-row">
-								<DirectionIndicatorControl />
-								<UnitControl
-									aria-label={ __( 'All', 'flexible-table-block' ) }
-									value={ allInputValue }
-									units={ borderSpacingUnits }
-									placeholder={ allInputPlaceholder }
-									onChange={ handleOnChangeAll }
-									size="__unstable-large"
-								/>
-							</div>
-						) : (
-							DIRECTION_CONTROLS.map( ( item, index ) => (
-								<div className="ftb-border-spacing-control__controls-row" key={ index }>
+				<HStack alignment="start" justify="space-between">
+					{ isLinked ? (
+						<HStack justify="start">
+							<DirectionIndicatorControl />
+							<UnitControl
+								aria-label={ __( 'All', 'flexible-table-block' ) }
+								value={ allInputValue }
+								units={ borderSpacingUnits }
+								placeholder={ allInputPlaceholder }
+								onChange={ handleOnChangeAll }
+								size="__unstable-large"
+								__unstableInputWidth="100px"
+							/>
+						</HStack>
+					) : (
+						<VStack spacing={ 1 }>
+							{ DIRECTION_CONTROLS.map( ( item ) => (
+								<HStack justify="start" key={ item.value }>
 									<DirectionIndicatorControl directions={ [ item.value ] } />
 									<UnitControl
 										key={ item.value }
@@ -151,19 +153,20 @@ export default function BorderSpacingControl( {
 										units={ borderSpacingUnits }
 										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										size="__unstable-large"
+										__unstableInputWidth="100px"
 									/>
-								</div>
-							) )
-						) }
-					</div>
+								</HStack>
+							) ) }
+						</VStack>
+					) }
 					<Button
-						className="ftb-border-spacing-control__header-linked-button"
 						label={ linkedLabel }
 						icon={ isLinked ? link : linkOff }
 						onClick={ toggleLinked }
 						size="small"
+						style={ { marginTop: '8px' } }
 					/>
-				</div>
+				</HStack>
 			</VStack>
 		</BaseControl>
 	);
