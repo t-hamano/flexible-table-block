@@ -106,7 +106,6 @@
 
 	.ftb-placeholder {
 		// Reset typography support styles
-		padding: 16px;
 		font-style: normal;
 		font-weight: normal;
 		line-height: initial;
@@ -124,21 +123,13 @@
 
 	.ftb-placeholder__table-wrap {
 		width: 100%;
-		padding: 12px 24px 16px;
 		background-color: #eaeaea;
-	}
-
-	.ftb-placeholder__tbl-ttl {
-		margin-bottom: 8px;
-		font-size: 16px;
-		font-weight: bold;
-		text-align: center;
+		box-sizing: border-box;
 	}
 
 	.ftb-placeholder__table {
 		width: 100%;
 		max-width: 330px;
-		margin: 0 auto;
 		vertical-align: middle;
 		table-layout: fixed;
 		border-spacing: 3px;
@@ -191,27 +182,8 @@
 		}
 	}
 
-	.ftb-placeholder__form {
-		display: block !important;
-		flex-wrap: nowrap;
-
-		.components-base-control {
-			width: 100px;
-
-			&.components-toggle-control {
-				width: auto;
-			}
-		}
-
-		.components-base-control__field {
-			margin-right: 8px;
-		}
-	}
-
-	.ftb-placeholder__row {
-		display: flex;
-		align-items: flex-end;
-		margin-top: 16px;
+	.ftb-placeholder__input {
+		width: 112px;
 	}
 
 	.ftb-table-cell-label {
