@@ -50,6 +50,9 @@ export default function ColorControl( {
 	colors: colorsProp = [],
 	value,
 }: Props ) {
+	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
+	const headingId = `${ instanceId }-heading`;
+
 	const colors = useSelect( ( select ) => {
 		const settings = select(
 			blockEditorStore
@@ -57,8 +60,6 @@ export default function ColorControl( {
 		).getSettings();
 		return settings?.colors ?? [];
 	}, [] );
-	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
-	const headingId = `${ instanceId }-heading`;
 
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
 

@@ -54,7 +54,7 @@ export default function BorderSpacingControl( {
 	const instanceId = useInstanceId( BorderSpacingControl, 'ftb-border-spacing-control' );
 	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean = ! ( values.horizontal === values.vertical );
+	const isMixed = ! ( values.horizontal === values.vertical );
 
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
