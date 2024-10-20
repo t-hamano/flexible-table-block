@@ -3,7 +3,6 @@
 .ftb-border-width-control__header-linked-button,
 .ftb-border-style-control__header-linked-button,
 .ftb-border-spacing-control__header-linked-button,
-.ftb-border-color-control__header-linked-button,
 .ftb-padding-control__header-linked-button,
 .ftb-color-control__header-linked-button {
 
@@ -169,14 +168,10 @@
 }
 
 // Controls styles.
-.ftb-border-color-control__controls,
 .ftb-border-spacing-control__controls {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-}
-
-.ftb-border-spacing-control__controls {
 
 	.ftb-border-spacing-control__header-linked-button {
 		margin-top: 8px;
@@ -189,7 +184,6 @@
 }
 
 // Controls row styles.
-.ftb-border-color-control__controls-row,
 .ftb-border-spacing-control__controls-row {
 	display: flex;
 	align-items: center;

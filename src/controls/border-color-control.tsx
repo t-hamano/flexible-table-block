@@ -18,6 +18,7 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
+	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 	__experimentalText as Text,
@@ -135,39 +136,34 @@ export default function BorderColorControl( {
 						</Button>
 					</FlexItem>
 				</Flex>
-				<div className="ftb-border-color-control__controls">
-					<div className="ftb-border-color-control__controls-inner">
-						{ isLinked ? (
-							<div className="ftb-border-color-control__controls-row">
-								<SideIndicatorControl />
-								<ColorIndicatorButton
-									label={ __( 'All', 'flexible-table-block' ) }
-									value={ allInputValue }
-									onClick={ () => handleOnPickerOpen( undefined ) }
-									isNone={ ! allInputValue && ! isMixed }
-									isTransparent={ allInputValue === 'transparent' }
-									isMixed={ isMixed }
-								/>
-								{ isPickerOpen && ! pickerIndex && (
-									<Popover
-										placement="left-start"
-										shift
-										offset={ 36 }
-										onClose={ handleOnPickerClose }
-									>
-										<Spacer padding={ 4 } marginBottom={ 0 }>
-											<ColorPalette
-												colors={ colors }
-												value={ allInputValue || '' }
-												onChange={ handleOnChangeAll }
-											/>
-										</Spacer>
-									</Popover>
-								) }
-							</div>
-						) : (
-							SIDE_CONTROLS.map( ( item, index ) => (
-								<div className="ftb-border-color-control__controls-row" key={ index }>
+				<HStack alignment="start" justify="space-between">
+					{ isLinked ? (
+						<HStack spacing={ 3 } justify="start">
+							<SideIndicatorControl />
+							<ColorIndicatorButton
+								label={ __( 'All', 'flexible-table-block' ) }
+								value={ allInputValue }
+								onClick={ () => handleOnPickerOpen( undefined ) }
+								isNone={ ! allInputValue && ! isMixed }
+								isTransparent={ allInputValue === 'transparent' }
+								isMixed={ isMixed }
+							/>
+							{ isPickerOpen && ! pickerIndex && (
+								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
+									<Spacer padding={ 4 } marginBottom={ 0 }>
+										<ColorPalette
+											colors={ colors }
+											value={ allInputValue || '' }
+											onChange={ handleOnChangeAll }
+										/>
+									</Spacer>
+								</Popover>
+							) }
+						</HStack>
+					) : (
+						<VStack>
+							{ SIDE_CONTROLS.map( ( item, index ) => (
+								<HStack spacing={ 3 } justify="start" key={ item.value }>
 									<SideIndicatorControl sides={ [ item.value ] } />
 									<ColorIndicatorButton
 										label={ item.label }
@@ -192,18 +188,17 @@ export default function BorderColorControl( {
 											</Spacer>
 										</Popover>
 									) }
-								</div>
-							) )
-						) }
-					</div>
+								</HStack>
+							) ) }
+						</VStack>
+					) }
 					<Button
-						className="ftb-border-color-control__header-linked-button"
 						label={ linkedLabel }
 						onClick={ toggleLinked }
 						icon={ isLinked ? link : linkOff }
 						size="small"
 					/>
-				</div>
+				</HStack>
 			</VStack>
 		</BaseControl>
 	);
