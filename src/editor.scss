@@ -2,6 +2,7 @@
 @import "controls/style";
 
 .editor-styles-wrapper .wp-block-flexible-table-block-table {
+	box-sizing: border-box;
 
 	> table {
 
