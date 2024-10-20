@@ -64,7 +64,7 @@ export default function save( { attributes }: BlockSaveProps< BlockAttributes > 
 		[ `is-sticky-${ sticky }` ]: sticky,
 	} );
 
-	const hasCaption: boolean = ! RichText.isEmpty( caption );
+	const hasCaption: boolean = ! RichText.isEmpty( caption || '' );
 
 	const Section = ( { type, rows }: { type: SectionName; rows: Row[] } ) => {
 		if ( ! rows.length ) {
@@ -103,7 +103,7 @@ export default function save( { attributes }: BlockSaveProps< BlockAttributes > 
 	};
 
 	const Caption = () => (
-		<RichText.Content tagName="figcaption" value={ caption } style={ captionStylesObj } />
+		<RichText.Content tagName="figcaption" value={ caption || '' } style={ captionStylesObj } />
 	);
 
 	return (
