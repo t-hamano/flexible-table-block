@@ -56,14 +56,6 @@ export default function GlobalSettings() {
 				marginBottom={ 0 }
 				style={ { borderTop: '1px solid #e0e0e0' } }
 			>
-				<Button
-					icon={ help }
-					variant="link"
-					onClick={ () => setIsHelpModalOpen( true ) }
-					size="compact"
-				>
-					{ __( 'Help', 'flexible-table-block' ) }
-				</Button>
 				{ ! isGlobalSettingLoaded && <Spinner /> }
 				{ isGlobalSettingLoaded && showGlobalSetting && (
 					<Button
@@ -75,6 +67,13 @@ export default function GlobalSettings() {
 						{ __( 'Global setting', 'flexible-table-block' ) }
 					</Button>
 				) }
+				<Button
+					icon={ help }
+					variant="link"
+					onClick={ () => setIsHelpModalOpen( true ) }
+					label={ __( 'Help', 'flexible-table-block' ) }
+					size="compact"
+				/>
 			</Spacer>
 			{ isHelpModalOpen && <HelpModal { ...{ setIsHelpModalOpen } } /> }
 			{ options && isSettingModalOpen && ( isAdministrator || options?.show_global_setting ) && (

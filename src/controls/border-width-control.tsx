@@ -167,7 +167,7 @@ export default function BorderWidthControl( {
 									placeholder={ allInputPlaceholder }
 									onChange={ handleOnChangeAll }
 									size="__unstable-large"
-									__unstableInputWidth="110px"
+									__unstableInputWidth="100px"
 								/>
 							</div>
 						) }
@@ -205,7 +205,7 @@ export default function BorderWidthControl( {
 										onFocus={ () => handleOnFocus( item.value ) }
 										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										size="__unstable-large"
-										__unstableInputWidth="110px"
+										__unstableInputWidth="100px"
 									/>
 								</div>
 							);

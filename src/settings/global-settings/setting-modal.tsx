@@ -250,7 +250,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 											size="__unstable-large"
-											__unstableInputWidth="110px"
+											__unstableInputWidth="100px"
 										/>
 									</Spacer>
 									<Spacer
@@ -273,7 +273,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 											size="__unstable-large"
-											__unstableInputWidth="110px"
+											__unstableInputWidth="100px"
 										/>
 									</Spacer>
 									<Spacer

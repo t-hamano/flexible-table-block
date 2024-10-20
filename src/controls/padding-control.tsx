@@ -136,7 +136,7 @@ export default function PaddingControl( {
 									value={ allInputValue }
 									units={ paddingUnits }
 									size="__unstable-large"
-									__unstableInputWidth="110px"
+									__unstableInputWidth="100px"
 								/>
 							</div>
 						) }
@@ -172,7 +172,7 @@ export default function PaddingControl( {
 										onFocus={ () => handleOnFocus( item.value ) }
 										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										size="__unstable-large"
-										__unstableInputWidth="110px"
+										__unstableInputWidth="100px"
 									/>
 								</div>
 							);
