@@ -13,8 +13,10 @@ import {
 	BaseControl,
 	Button,
 	ButtonGroup,
+	Flex,
 	SelectControl,
 	ToggleControl,
+	__experimentalSpacer as Spacer,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -221,14 +223,11 @@ export default function TableSettings( {
 
 	return (
 		<>
-			<BaseControl
-				id="flexible-table-block-table-clear-settings"
-				className="ftb-reset-settings-control"
-			>
+			<Spacer marginBottom="4" as={ Flex } justify="end">
 				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear table settings', 'flexible-table-block' ) }
 				</Button>
-			</BaseControl>
+			</Spacer>
 			<ToggleControl
 				label={ __( 'Header section', 'flexible-table-block' ) }
 				checked={ !! ( head && head.length ) }

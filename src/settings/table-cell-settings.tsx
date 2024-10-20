@@ -12,7 +12,9 @@ import {
 	BaseControl,
 	Button,
 	ButtonGroup,
+	Flex,
 	TextControl,
+	__experimentalSpacer as Spacer,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
@@ -215,14 +217,11 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 
 	return (
 		<>
-			<BaseControl
-				id="flexible-table-block-cell-clear-settings"
-				className="ftb-reset-settings-control"
-			>
+			<Spacer marginBottom="4" as={ Flex } justify="end">
 				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
 					{ __( 'Clear cell settings', 'flexible-table-block' ) }
 				</Button>
-			</BaseControl>
+			</Spacer>
 			<div className="ftb-base-control-row">
 				<BaseControl
 					id="flexible-table-block-cell-font-size"
