@@ -227,6 +227,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					id="flexible-table-block-cell-font-size"
 					label={ __( 'Cell font size', 'flexible-table-block' ) }
 					className="ftb-font-size-control"
+					__nextHasNoMarginBottom
 				>
 					<UnitControl
 						id="flexible-table-block-cell-font-size"
@@ -237,7 +238,11 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						size="__unstable-large"
 					/>
 				</BaseControl>
-				<BaseControl id="flexible-table-block-cell-line-height" className="ftb-line-height-control">
+				<BaseControl
+					id="flexible-table-block-cell-line-height"
+					className="ftb-line-height-control"
+					__nextHasNoMarginBottom
+				>
 					<TextControl
 						className="ftb-is-next-40px-default-size"
 						label={ __( 'Cell line height', 'flexible-table-block' ) }
@@ -247,6 +252,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						step={ 0.1 }
 						min={ 0 }
 						onChange={ onChangeLineHeight }
+						__nextHasNoMarginBottom
 					/>
 				</BaseControl>
 			</div>
@@ -254,6 +260,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				id="flexible-table-block-cell-width"
 				label={ __( 'Cell width', 'flexible-table-block' ) }
 				className="ftb-width-control"
+				__nextHasNoMarginBottom
 			>
 				<UnitControl
 					id="flexible-table-block-cell-width"
@@ -329,7 +336,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />
-			<BaseControl id="flexible-table-block-cell-text-align">
+			<BaseControl id="flexible-table-block-cell-text-align" __nextHasNoMarginBottom>
 				<div aria-labelledby="flexible-table-block-cell-text-align-heading" role="region">
 					<span
 						id="flexible-table-block-cell-text-align-heading"
@@ -394,6 +401,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				value={ targetCell.className || '' }
 				onChange={ onChangeClass }
 				help={ __( 'Separate multiple classes with spaces.', 'flexible-table-block' ) }
+				__nextHasNoMarginBottom
 			/>
 			{ selectedCellTags.length === 1 && (
 				<>
@@ -408,6 +416,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							autoComplete="off"
 							value={ targetCell.id || '' }
 							onChange={ onChangeId }
+							__nextHasNoMarginBottom
 						/>
 					) }
 					<TextControl
@@ -419,9 +428,10 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						autoComplete="off"
 						value={ targetCell.headers || '' }
 						onChange={ onChangeHeaders }
+						__nextHasNoMarginBottom
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
-						<BaseControl id="flexible-table-block-cell-scope">
+						<BaseControl id="flexible-table-block-cell-scope" __nextHasNoMarginBottom>
 							<div aria-labelledby="flexible-table-block-cell-scope-heading" role="region">
 								<span
 									id="flexible-table-block-cell-scope-heading"

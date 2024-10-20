@@ -110,6 +110,7 @@ export default function TableCaptionSettings( {
 					id="flexible-table-block-caption-font-size"
 					label={ __( 'Caption font size', 'flexible-table-block' ) }
 					className="ftb-font-size-control"
+					__nextHasNoMarginBottom
 				>
 					<UnitControl
 						id="flexible-table-block-caption-font-size"
@@ -123,6 +124,7 @@ export default function TableCaptionSettings( {
 				<BaseControl
 					id="flexible-table-block-caption-line-height"
 					className="ftb-line-height-control"
+					__nextHasNoMarginBottom
 				>
 					<TextControl
 						className="ftb-is-next-40px-default-size"
@@ -133,6 +135,7 @@ export default function TableCaptionSettings( {
 						type="number"
 						value={ captionStylesObj?.lineHeight || '' }
 						min={ 0 }
+						__nextHasNoMarginBottom
 					/>
 				</BaseControl>
 			</div>

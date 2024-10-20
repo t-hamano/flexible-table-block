@@ -69,7 +69,7 @@ export default function ColorControl( {
 
 	return (
 		<SlotFillProvider>
-			<BaseControl className="ftb-color-control" help={ help }>
+			<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
 				<div aria-labelledby={ headingId } role="region">
 					<div className="ftb-color-control__header">
 						<Text id={ headingId }>{ label }</Text>

@@ -106,7 +106,7 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-padding-control" help={ help }>
+		<BaseControl className="ftb-padding-control" help={ help } __nextHasNoMarginBottom>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-padding-control__header">
 					<Text id={ headingId }>{ label }</Text>

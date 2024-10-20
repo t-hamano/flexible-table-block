@@ -233,6 +233,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												id="flexible-table-block-global-table-width"
 												label={ __( 'Table width', 'flexible-table-block' ) }
 												className="ftb-width-control"
+												__nextHasNoMarginBottom
 											>
 												<UnitControl
 													id="flexible-table-block-global-table-width"
@@ -257,6 +258,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												id="flexible-table-block-global-table-max-width"
 												label={ __( 'Table max width', 'flexible-table-block' ) }
 												className="ftb-width-control"
+												__nextHasNoMarginBottom
 											>
 												<UnitControl
 													id="flexible-table-block-global-table-max-width"
@@ -605,6 +607,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 											} );
 										} }
 										__next40pxDefaultSize
+										__nextHasNoMarginBottom
 									/>
 								</>
 							) }
@@ -623,6 +626,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												show_label_on_section: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									<ToggleControl
 										label={ __( 'Show control buttons', 'flexible-table-block' ) }
@@ -637,6 +641,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												show_control_button: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									{ ( currentOptions.show_label_on_section ||
 										currentOptions.show_control_button ) && (
@@ -656,6 +661,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 													focus_control_button: value,
 												} );
 											} }
+											__nextHasNoMarginBottom
 										/>
 									) }
 									<ToggleControl
@@ -671,6 +677,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												show_dot_on_th: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									<ToggleControl
 										label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
@@ -685,6 +692,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												tab_move: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									<ToggleControl
 										label={ __( 'Keep all contents when merging cells', 'flexible-table-block' ) }
@@ -699,6 +707,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												merge_content: value,
 											} );
 										} }
+										__nextHasNoMarginBottom
 									/>
 									{ isAdministrator && (
 										<ToggleControl
@@ -717,6 +726,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 													show_global_setting: value,
 												} );
 											} }
+											__nextHasNoMarginBottom
 										/>
 									) }
 								</>

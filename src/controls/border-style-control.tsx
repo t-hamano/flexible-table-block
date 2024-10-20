@@ -114,7 +114,7 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-style-control" help={ help }>
+		<BaseControl className="ftb-border-style-control" help={ help } __nextHasNoMarginBottom>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-style-control__header">
 					<Text id={ headingId }>{ controlLabel }</Text>

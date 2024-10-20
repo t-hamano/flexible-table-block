@@ -135,7 +135,7 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-width-control" help={ help }>
+		<BaseControl className="ftb-border-width-control" help={ help } __nextHasNoMarginBottom>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-width-control__header">
 					<Text id={ headingId }>{ label }</Text>
