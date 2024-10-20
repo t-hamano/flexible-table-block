@@ -138,7 +138,7 @@ export default function BorderSpacingControl( {
 								placeholder={ allInputPlaceholder }
 								onChange={ handleOnChangeAll }
 								size="__unstable-large"
-								__unstableInputWidth="100px"
+								__unstableInputWidth="110px"
 							/>
 						</HStack>
 					) : (
@@ -153,7 +153,7 @@ export default function BorderSpacingControl( {
 										units={ borderSpacingUnits }
 										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										size="__unstable-large"
-										__unstableInputWidth="100px"
+										__unstableInputWidth="110px"
 									/>
 								</HStack>
 							) ) }

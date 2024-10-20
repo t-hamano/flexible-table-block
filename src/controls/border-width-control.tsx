@@ -15,6 +15,8 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
+	__experimentalGrid as Grid,
+	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
@@ -151,44 +153,64 @@ export default function BorderWidthControl( {
 						</Button>
 					</FlexItem>
 				</Flex>
-				<div className="ftb-border-width-control__header-control">
-					{ hasIndicator && (
-						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-					) }
-					{ ( isLinked || ! allowSides ) && (
-						<UnitControl
-							aria-label={ __( 'All', 'flexible-table-block' ) }
-							value={ allInputValue }
-							units={ borderWidthUnits }
-							placeholder={ allInputPlaceholder }
-							onChange={ handleOnChangeAll }
-							size="__unstable-large"
-						/>
-					) }
+				<HStack alignment="center" justify="space-between" style={ { minHeight: '40px' } }>
+					<HStack justify="start">
+						{ hasIndicator && (
+							<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+						) }
+						{ ( isLinked || ! allowSides ) && (
+							<div>
+								<UnitControl
+									aria-label={ __( 'All', 'flexible-table-block' ) }
+									value={ allInputValue }
+									units={ borderWidthUnits }
+									placeholder={ allInputPlaceholder }
+									onChange={ handleOnChangeAll }
+									size="__unstable-large"
+									__unstableInputWidth="110px"
+								/>
+							</div>
+						) }
+					</HStack>
 					{ allowSides && (
 						<Button
-							className="ftb-border-width-control__header-linked-button"
 							label={ linkedLabel }
 							icon={ isLinked ? link : linkOff }
 							onClick={ toggleLinked }
 							size="small"
 						/>
 					) }
-				</div>
+				</HStack>
 				{ ! isLinked && allowSides && (
-					<div className="ftb-border-width-control__input-controls">
-						{ SIDE_CONTROLS.map( ( item ) => (
-							<UnitControl
-								key={ item.value }
-								aria-label={ item.label }
-								value={ values[ item.value as ValuesKey ] }
-								units={ borderWidthUnits }
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-								size="__unstable-large"
-							/>
-						) ) }
-					</div>
+					<Grid gap={ 2 } columns={ 2 } rows={ 3 }>
+						{ SIDE_CONTROLS.map( ( item ) => {
+							const gridStyles = ( value: SideValue ) => {
+								if ( value === 'top' || value === 'bottom' ) {
+									return {
+										gridColumn: 'span 2',
+										margin: '0 auto',
+									};
+								}
+								if ( value === 'right' ) {
+									return { gridColumn: 2, display: 'flex', justifyContent: 'flex-end' };
+								}
+								return { gridRow: 2 };
+							};
+							return (
+								<div key={ item.value } style={ gridStyles( item.value ) }>
+									<UnitControl
+										aria-label={ item.label }
+										value={ values[ item.value as ValuesKey ] }
+										units={ borderWidthUnits }
+										onFocus={ () => handleOnFocus( item.value ) }
+										onChange={ ( value ) => handleOnChange( value, item.value ) }
+										size="__unstable-large"
+										__unstableInputWidth="110px"
+									/>
+								</div>
+							);
+						} ) }
+					</Grid>
 				) }
 			</VStack>
 		</BaseControl>
