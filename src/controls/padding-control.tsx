@@ -15,6 +15,8 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
+	__experimentalGrid as Grid,
+	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
@@ -122,40 +124,60 @@ export default function PaddingControl( {
 						</Button>
 					</FlexItem>
 				</Flex>
-				<div className="ftb-padding-control__header-control">
-					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-					{ isLinked && (
-						<UnitControl
-							placeholder={ allInputPlaceholder }
-							aria-label={ __( 'All', 'flexible-table-block' ) }
-							onChange={ handleOnChangeAll }
-							value={ allInputValue }
-							units={ paddingUnits }
-							size="__unstable-large"
-						/>
-					) }
+				<HStack alignment="center" justify="space-between" style={ { minHeight: '40px' } }>
+					<HStack justify="start">
+						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+						{ isLinked && (
+							<div>
+								<UnitControl
+									placeholder={ allInputPlaceholder }
+									aria-label={ __( 'All', 'flexible-table-block' ) }
+									onChange={ handleOnChangeAll }
+									value={ allInputValue }
+									units={ paddingUnits }
+									size="__unstable-large"
+									__unstableInputWidth="110px"
+								/>
+							</div>
+						) }
+					</HStack>
 					<Button
-						className="ftb-padding-control__header-linked-button"
 						label={ linkedLabel }
 						onClick={ toggleLinked }
 						icon={ isLinked ? link : linkOff }
 						size="small"
 					/>
-				</div>
+				</HStack>
 				{ ! isLinked && (
-					<div className="ftb-padding-control__input-controls">
-						{ SIDE_CONTROLS.map( ( item ) => (
-							<UnitControl
-								key={ item.value }
-								aria-label={ item.label }
-								value={ values[ item.value as ValuesKey ] }
-								units={ paddingUnits }
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-								size="__unstable-large"
-							/>
-						) ) }
-					</div>
+					<Grid gap={ 2 } columns={ 2 } rows={ 3 }>
+						{ SIDE_CONTROLS.map( ( item ) => {
+							const gridStyles = ( value: SideValue ) => {
+								if ( value === 'top' || value === 'bottom' ) {
+									return {
+										gridColumn: 'span 2',
+										margin: '0 auto',
+									};
+								}
+								if ( value === 'right' ) {
+									return { gridColumn: 2, display: 'flex', justifyContent: 'flex-end' };
+								}
+								return { gridRow: 2 };
+							};
+							return (
+								<div key={ item.value } style={ gridStyles( item.value ) }>
+									<UnitControl
+										aria-label={ item.label }
+										value={ values[ item.value as ValuesKey ] }
+										units={ paddingUnits }
+										onFocus={ () => handleOnFocus( item.value ) }
+										onChange={ ( value ) => handleOnChange( value, item.value ) }
+										size="__unstable-large"
+										__unstableInputWidth="110px"
+									/>
+								</div>
+							);
+						} ) }
+					</Grid>
 				) }
 			</VStack>
 		</BaseControl>
