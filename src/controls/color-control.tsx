@@ -102,8 +102,6 @@ export default function ColorControl( {
 					</Spacer>
 				</Popover>
 			) }
-			{ /* @ts-ignore Slot is not currently typed on Popover */ }
-			<Popover.Slot />
 		</BaseControl>
 	);
 }
