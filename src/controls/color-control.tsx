@@ -76,28 +76,22 @@ export default function ColorControl( {
 							{ __( 'Reset', 'flexible-table-block' ) }
 						</Button>
 					</div>
-					<div className="ftb-color-control__controls">
-						<div className="ftb-color-control__controls-inner">
-							<div className="ftb-color-control__controls-row">
-								<ColorIndicatorButton
-									label={ __( 'All', 'flexible-table-block' ) }
-									value={ value }
-									onClick={ handleOnPickerOpen }
-									isNone={ ! value }
-									isTransparent={ value === 'transparent' }
-								/>
-								{ isPickerOpen && (
-									<Popover className="ftb-color-control__popover" onClose={ handleOnPickerClose }>
-										<ColorPalette
-											colors={ [ ...colors, ...colorsProp ] }
-											value={ value || '' }
-											onChange={ handleOnChange }
-										/>
-									</Popover>
-								) }
-							</div>
-						</div>
-					</div>
+					<ColorIndicatorButton
+						label={ __( 'Color', 'flexible-table-block' ) }
+						value={ value }
+						onClick={ handleOnPickerOpen }
+						isNone={ ! value }
+						isTransparent={ value === 'transparent' }
+					/>
+					{ isPickerOpen && (
+						<Popover className="ftb-color-control__popover" onClose={ handleOnPickerClose }>
+							<ColorPalette
+								colors={ [ ...colors, ...colorsProp ] }
+								value={ value || '' }
+								onChange={ handleOnChange }
+							/>
+						</Popover>
+					) }
 				</div>
 				{ /* @ts-ignore Slot is not currently typed on Popover */ }
 				<Popover.Slot />
