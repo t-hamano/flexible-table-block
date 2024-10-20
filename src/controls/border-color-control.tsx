@@ -38,7 +38,6 @@ type Props = {
 		bottom?: Property.BorderBottomColor;
 		left?: Property.BorderLeftColor;
 	};
-	hasIndicator?: boolean;
 };
 
 const DEFAULT_VALUES = {
@@ -53,7 +52,6 @@ export default function BorderColorControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	hasIndicator = true,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -132,7 +130,7 @@ export default function BorderColorControl( {
 					<div className="ftb-border-color-control__controls-inner">
 						{ isLinked && (
 							<div className="ftb-border-color-control__controls-row">
-								{ hasIndicator && <SideIndicatorControl /> }
+								<SideIndicatorControl />
 								<ColorIndicatorButton
 									label={ __( 'All', 'flexible-table-block' ) }
 									value={ allInputValue }
@@ -158,7 +156,7 @@ export default function BorderColorControl( {
 						{ ! isLinked &&
 							SIDE_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-color-control__controls-row" key={ index }>
-									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
+									<SideIndicatorControl sides={ [ item.value ] } />
 									<ColorIndicatorButton
 										label={ item.label }
 										value={ values[ item.value ] }
