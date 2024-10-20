@@ -222,12 +222,10 @@ export default function TableSettings( {
 
 	return (
 		<>
-			<Spacer marginBottom="4">
-				<Flex justify="end">
-					<Button variant="link" isDestructive onClick={ onResetTableSettings }>
-						{ __( 'Clear table settings', 'flexible-table-block' ) }
-					</Button>
-				</Flex>
+			<Spacer marginBottom="4" as={ Flex } justify="end">
+				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
+					{ __( 'Clear table settings', 'flexible-table-block' ) }
+				</Button>
 			</Spacer>
 			<ToggleControl
 				label={ __( 'Header section', 'flexible-table-block' ) }

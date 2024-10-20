@@ -218,12 +218,10 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 
 	return (
 		<>
-			<Spacer marginBottom="4">
-				<Flex justify="end">
-					<Button variant="link" isDestructive onClick={ onResetCellSettings }>
-						{ __( 'Clear cell settings', 'flexible-table-block' ) }
-					</Button>
-				</Flex>
+			<Spacer marginBottom="4" as={ Flex } justify="end">
+				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
+					{ __( 'Clear cell settings', 'flexible-table-block' ) }
+				</Button>
 			</Spacer>
 			<Spacer marginBottom="4">
 				<Flex>

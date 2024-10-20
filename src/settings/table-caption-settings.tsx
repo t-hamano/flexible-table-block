@@ -100,12 +100,10 @@ export default function TableCaptionSettings( {
 
 	return (
 		<>
-			<Spacer marginBottom="4">
-				<Flex justify="end">
-					<Button variant="link" isDestructive onClick={ onResetSettings }>
-						{ __( 'Clear caption settings', 'flexible-table-block' ) }
-					</Button>
-				</Flex>
+			<Spacer marginBottom="4" as={ Flex } justify="end">
+				<Button variant="link" isDestructive onClick={ onResetSettings }>
+					{ __( 'Clear caption settings', 'flexible-table-block' ) }
+				</Button>
 			</Spacer>
 			<Spacer marginBottom="4">
 				<Flex align="end">
