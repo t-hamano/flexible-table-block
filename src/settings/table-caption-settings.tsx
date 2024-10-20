@@ -127,7 +127,6 @@ export default function TableCaptionSettings( {
 					__nextHasNoMarginBottom
 				>
 					<TextControl
-						className="ftb-is-next-40px-default-size"
 						label={ __( 'Caption line height', 'flexible-table-block' ) }
 						autoComplete="off"
 						onChange={ onChangeLineHeight }
@@ -136,6 +135,7 @@ export default function TableCaptionSettings( {
 						value={ captionStylesObj?.lineHeight || '' }
 						min={ 0 }
 						__nextHasNoMarginBottom
+						__next40pxDefaultSize
 					/>
 				</BaseControl>
 			</div>

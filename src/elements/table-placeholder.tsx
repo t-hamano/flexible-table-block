@@ -166,7 +166,6 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 				</div>
 				<div className="ftb-placeholder__row">
 					<TextControl
-						className="ftb-is-next-40px-default-size"
 						label={ __( 'Column count', 'flexible-table-block' ) }
 						type="number"
 						min="1"
@@ -174,9 +173,9 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						value={ colCount || '' }
 						onChange={ onChangeColumnCount }
 						__nextHasNoMarginBottom
+						__next40pxDefaultSize
 					/>
 					<TextControl
-						className="ftb-is-next-40px-default-size"
 						label={ __( 'Row count', 'flexible-table-block' ) }
 						type="number"
 						min="1"
@@ -184,6 +183,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						value={ rowCount || '' }
 						onChange={ onChangeRowCount }
 						__nextHasNoMarginBottom
+						__next40pxDefaultSize
 					/>
 					<Button
 						variant="primary"
