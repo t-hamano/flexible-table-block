@@ -16,6 +16,7 @@ import {
 	Popover,
 	ColorPalette,
 	SlotFillProvider,
+	__experimentalSpacer as Spacer,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -84,12 +85,14 @@ export default function ColorControl( {
 						isTransparent={ value === 'transparent' }
 					/>
 					{ isPickerOpen && (
-						<Popover className="ftb-color-control__popover" onClose={ handleOnPickerClose }>
-							<ColorPalette
-								colors={ [ ...colors, ...colorsProp ] }
-								value={ value || '' }
-								onChange={ handleOnChange }
-							/>
+						<Popover onClose={ handleOnPickerClose }>
+							<Spacer padding={ 4 } marginBottom={ 0 }>
+								<ColorPalette
+									colors={ [ ...colors, ...colorsProp ] }
+									value={ value || '' }
+									onChange={ handleOnChange }
+								/>
+							</Spacer>
 						</Popover>
 					) }
 				</div>

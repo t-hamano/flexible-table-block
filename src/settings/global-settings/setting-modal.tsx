@@ -21,6 +21,10 @@ import {
 	Spinner,
 	RangeControl,
 	ToggleControl,
+	__experimentalText as Text,
+	__experimentalSpacer as Spacer,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -754,19 +758,23 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 								focusOnMount="firstElement"
 								onClose={ () => setIsResetPopup( false ) }
 							>
-								<p>{ __( 'Are you sure?', 'flexible-table-block' ) }</p>
-								<div className="ftb-global-setting-modal__confirm-popover-buttons">
-									<Button isDestructive onClick={ handleResetOptions } size="compact">
-										{ __( 'Restore', 'flexible-table-block' ) }
-									</Button>
-									<Button
-										variant="secondary"
-										onClick={ () => setIsResetPopup( false ) }
-										size="compact"
-									>
-										{ __( 'Cancel', 'flexible-table-block' ) }
-									</Button>
-								</div>
+								<Spacer marginBottom={ 0 } padding={ 2 }>
+									<VStack spacing={ 4 }>
+										<Text as="p">{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
+										<HStack>
+											<Button isDestructive onClick={ handleResetOptions } size="compact">
+												{ __( 'Restore', 'flexible-table-block' ) }
+											</Button>
+											<Button
+												variant="secondary"
+												onClick={ () => setIsResetPopup( false ) }
+												size="compact"
+											>
+												{ __( 'Cancel', 'flexible-table-block' ) }
+											</Button>
+										</HStack>
+									</VStack>
+								</Spacer>
 							</Popover>
 						) }
 					</Button>

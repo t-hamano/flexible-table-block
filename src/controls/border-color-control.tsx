@@ -15,6 +15,7 @@ import {
 	Button,
 	Popover,
 	ColorPalette,
+	__experimentalSpacer as Spacer,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -140,15 +141,14 @@ export default function BorderColorControl( {
 									isMixed={ isMixed }
 								/>
 								{ isPickerOpen && ! pickerIndex && (
-									<Popover
-										className="ftb-border-color-control__popover"
-										onClose={ handleOnPickerClose }
-									>
-										<ColorPalette
-											colors={ colors }
-											value={ allInputValue || '' }
-											onChange={ handleOnChangeAll }
-										/>
+									<Popover onClose={ handleOnPickerClose }>
+										<Spacer padding={ 4 } marginBottom={ 0 }>
+											<ColorPalette
+												colors={ colors }
+												value={ allInputValue || '' }
+												onChange={ handleOnChangeAll }
+											/>
+										</Spacer>
 									</Popover>
 								) }
 							</div>
@@ -165,15 +165,14 @@ export default function BorderColorControl( {
 										isTransparent={ values[ item.value ] === 'transparent' }
 									/>
 									{ isPickerOpen && pickerIndex === index && (
-										<Popover
-											className="ftb-border-color-control__popover"
-											onClose={ handleOnPickerClose }
-										>
-											<ColorPalette
-												colors={ colors }
-												value={ values[ item.value ] || '' }
-												onChange={ ( value ) => handleOnChange( value, item.value ) }
-											/>
+										<Popover onClose={ handleOnPickerClose }>
+											<Spacer padding={ 4 } marginBottom={ 0 }>
+												<ColorPalette
+													colors={ colors }
+													value={ values[ item.value ] || '' }
+													onChange={ ( value ) => handleOnChange( value, item.value ) }
+												/>
+											</Spacer>
 										</Popover>
 									) }
 								</div>
