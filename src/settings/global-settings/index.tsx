@@ -6,7 +6,12 @@ import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 // @ts-ignore: has no exported member
 import { store as coreStore } from '@wordpress/core-data';
-import { Button, Spinner } from '@wordpress/components';
+import {
+	Button,
+	Spinner,
+	__experimentalSpacer as Spacer,
+	__experimentalHStack as HStack,
+} from '@wordpress/components';
 import { cog, help } from '@wordpress/icons';
 
 /**
@@ -45,7 +50,12 @@ export default function GlobalSettings() {
 
 	return (
 		<>
-			<div className="ftb-global-setting">
+			<Spacer
+				as={ HStack }
+				padding={ 4 }
+				marginBottom={ 0 }
+				style={ { borderTop: '1px solid #e0e0e0' } }
+			>
 				<Button
 					icon={ help }
 					variant="link"
@@ -65,7 +75,7 @@ export default function GlobalSettings() {
 						{ __( 'Global setting', 'flexible-table-block' ) }
 					</Button>
 				) }
-			</div>
+			</Spacer>
 			{ isHelpModalOpen && <HelpModal { ...{ setIsHelpModalOpen } } /> }
 			{ options && isSettingModalOpen && ( isAdministrator || options?.show_global_setting ) && (
 				<SettingModal
