@@ -1,5 +1,4 @@
 // Linked button common styles.
-.ftb-border-radius-control__header-linked-button,
 .ftb-border-width-control__header-linked-button,
 .ftb-padding-control__header-linked-button,
 .ftb-color-control__header-linked-button {
@@ -10,7 +9,6 @@
 }
 
 // Header control styles.
-.ftb-border-radius-control__header-control,
 .ftb-border-width-control__header-control,
 .ftb-padding-control__header-control {
 	display: flex;
@@ -26,7 +24,6 @@
 }
 
 // Input controls styles.
-.ftb-border-radius-control__input-controls,
 .ftb-border-width-control__input-controls,
 .ftb-padding-control__input-controls {
 	display: grid;
@@ -37,10 +34,6 @@
 	.components-unit-control-wrapper.components-unit-control-wrapper {
 		margin-bottom: 0;
 	}
-}
-
-.ftb-border-width-control__input-controls,
-.ftb-padding-control__input-controls {
 
 	.components-unit-control-wrapper {
 
@@ -59,32 +52,6 @@
 			margin: 0 auto;
 			max-width: 116px;
 			grid-column: span 2;
-		}
-
-		&:nth-child(4) {
-			grid-row: 2;
-			grid-column: 1;
-		}
-	}
-}
-
-.ftb-border-radius-control__input-controls {
-
-	.components-unit-control-wrapper {
-
-		&:nth-child(1) {
-			grid-row: 1;
-			grid-column: 1;
-		}
-
-		&:nth-child(2) {
-			grid-row: 1;
-			grid-column: 2;
-		}
-
-		&:nth-child(3) {
-			grid-row: 2;
-			grid-column: 2;
 		}
 
 		&:nth-child(4) {
