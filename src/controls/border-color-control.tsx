@@ -18,9 +18,9 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
-	__experimentalSpacer as Spacer,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
+	__experimentalSpacer as Spacer,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
@@ -150,7 +150,7 @@ export default function BorderColorControl( {
 							/>
 							{ isPickerOpen && ! pickerIndex && (
 								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-									<Spacer padding={ 4 }>
+									<Spacer padding={ 4 } marginBottom={ 0 }>
 										<ColorPalette
 											colors={ colors }
 											value={ allInputValue || '' }
