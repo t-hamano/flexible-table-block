@@ -62,7 +62,7 @@ export default function BorderRadiusControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
-	const instanceId = useInstanceId( BorderRadiusControl, 'ftb-border-radius-contro' );
+	const instanceId = useInstanceId( BorderRadiusControl, 'ftb-border-radius-control' );
 	const headingId = `${ instanceId }-heading`;
 
 	const isMixed = ! (
