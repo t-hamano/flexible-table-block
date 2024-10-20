@@ -15,10 +15,10 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
+	__experimentalHStack as HStack,
+	__experimentalVStack as VStack,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
@@ -120,11 +120,9 @@ export default function BorderStyleControl( {
 			<VStack aria-labelledby={ headingId } role="region">
 				<Flex>
 					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
-						<Text id={ headingId } upperCase size="11" weight="500">
-							{ isMixed && isLinked
-								? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
-								: label }
-						</Text>
+						{ isMixed && isLinked
+							? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
+							: label }
 					</Text>
 					<FlexItem>
 						<Button variant="secondary" onClick={ handleOnReset } size="small">
