@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 import type { ReactElement } from 'react';
 
@@ -15,13 +14,17 @@ import {
 	BaseControl,
 	Button,
 	Popover,
-	ColorIndicator,
 	ColorPalette,
 	SlotFillProvider,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
+
+/**
+ * Internal dependencies
+ */
+import ColorIndicatorButton from './color-indicator-button';
 
 type Props = {
 	label: string | ReactElement;
@@ -76,16 +79,13 @@ export default function ColorControl( {
 					<div className="ftb-color-control__controls">
 						<div className="ftb-color-control__controls-inner">
 							<div className="ftb-color-control__controls-row">
-								<Button
+								<ColorIndicatorButton
 									label={ __( 'All', 'flexible-table-block' ) }
-									className={ clsx( 'ftb-color-control__indicator', {
-										'ftb-color-control__indicator--none': ! value,
-										'ftb-color-control__indicator--transparent': value === 'transparent',
-									} ) }
-									onClick={ () => handleOnPickerOpen() }
-								>
-									<ColorIndicator colorValue={ value || '' } />
-								</Button>
+									value={ value }
+									onClick={ handleOnPickerOpen }
+									isNone={ ! value }
+									isTransparent={ value === 'transparent' }
+								/>
 								{ isPickerOpen && (
 									<Popover className="ftb-color-control__popover" onClose={ handleOnPickerClose }>
 										<ColorPalette

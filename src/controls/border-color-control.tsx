@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -15,7 +14,6 @@ import {
 	BaseControl,
 	Button,
 	Popover,
-	ColorIndicator,
 	ColorPalette,
 	__experimentalText as Text,
 } from '@wordpress/components';
@@ -25,6 +23,7 @@ import { useInstanceId } from '@wordpress/compose';
 /**
  * Internal dependencies
  */
+import ColorIndicatorButton from './color-indicator-button';
 import { SideIndicatorControl } from './indicator-control';
 import { SIDE_CONTROLS } from '../constants';
 import type { SideValue } from '../BlockAttributes';
@@ -134,22 +133,14 @@ export default function BorderColorControl( {
 						{ isLinked && (
 							<div className="ftb-border-color-control__controls-row">
 								{ hasIndicator && <SideIndicatorControl /> }
-								<Button
+								<ColorIndicatorButton
 									label={ __( 'All', 'flexible-table-block' ) }
-									className={ clsx( 'ftb-border-color-control__indicator', {
-										'ftb-border-color-control__indicator--none': ! allInputValue && ! isMixed,
-										'ftb-border-color-control__indicator--mixed': isMixed,
-										'ftb-border-color-control__indicator--transparent':
-											allInputValue === 'transparent',
-									} ) }
+									value={ allInputValue }
 									onClick={ () => handleOnPickerOpen( undefined ) }
-								>
-									{ isMixed ? (
-										__( 'Mixed', 'flexible-table-block' )
-									) : (
-										<ColorIndicator colorValue={ allInputValue || '' } />
-									) }
-								</Button>
+									isNone={ ! allInputValue && ! isMixed }
+									isTransparent={ allInputValue === 'transparent' }
+									isMixed={ isMixed }
+								/>
 								{ isPickerOpen && ! pickerIndex && (
 									<Popover
 										className="ftb-border-color-control__popover"
@@ -168,17 +159,13 @@ export default function BorderColorControl( {
 							SIDE_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-color-control__controls-row" key={ index }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
-									<Button
+									<ColorIndicatorButton
 										label={ item.label }
-										className={ clsx( 'ftb-border-color-control__indicator', {
-											'ftb-border-color-control__indicator--none': ! values[ item.value ],
-											'ftb-border-color-control__indicator--transparent':
-												values[ item.value ] === 'transparent',
-										} ) }
+										value={ values[ item.value ] }
 										onClick={ () => handleOnPickerOpen( index ) }
-									>
-										<ColorIndicator colorValue={ values[ item.value ] || '' } />
-									</Button>
+										isNone={ ! values[ item.value ] }
+										isTransparent={ values[ item.value ] === 'transparent' }
+									/>
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover
 											className="ftb-border-color-control__popover"
