@@ -245,7 +245,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 													} );
 												} }
 												size="__unstable-large"
-												__unstableInputWidth="100px"
+												__unstableInputWidth="110px"
 											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">

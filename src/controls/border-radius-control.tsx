@@ -15,6 +15,8 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
+	__experimentalGrid as Grid,
+	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
@@ -151,42 +153,49 @@ export default function BorderRadiusControl( {
 						</Button>
 					</FlexItem>
 				</Flex>
-				<div className="ftb-border-radius-control__header-control">
-					<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
-					{ isLinked && (
-						<UnitControl
-							hideLabelFromVision
-							label={ __( 'All', 'flexible-table-block' ) }
-							placeholder={ allInputPlaceholder }
-							onChange={ handleOnChangeAll }
-							value={ allInputValue }
-							units={ borderRadiusUnits }
-							min={ 0 }
-							size="__unstable-large"
-						/>
-					) }
+				<HStack alignment="center" justify="space-between" style={ { minHeight: '40px' } }>
+					<HStack justify="start">
+						<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
+						{ isLinked && (
+							<div>
+								<UnitControl
+									hideLabelFromVision
+									label={ __( 'All', 'flexible-table-block' ) }
+									placeholder={ allInputPlaceholder }
+									onChange={ handleOnChangeAll }
+									value={ allInputValue }
+									units={ borderRadiusUnits }
+									min={ 0 }
+									size="__unstable-large"
+									__unstableInputWidth="110px"
+								/>
+							</div>
+						) }
+					</HStack>
 					<Button
 						label={ linkedLabel }
 						onClick={ toggleLinked }
 						icon={ isLinked ? link : linkOff }
 						size="small"
 					/>
-				</div>
+				</HStack>
 				{ ! isLinked && (
-					<div className="ftb-border-radius-control__input-controls">
+					<Grid gap={ 2 }>
 						{ CORNER_CONTROLS.map( ( item ) => (
-							<UnitControl
-								key={ item.value }
-								aria-label={ item.label }
-								value={ values[ item.value as ValuesKey ] }
-								units={ borderRadiusUnits }
-								min={ 0 }
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-								size="__unstable-large"
-							/>
+							<div key={ item.value }>
+								<UnitControl
+									aria-label={ item.label }
+									value={ values[ item.value as ValuesKey ] }
+									units={ borderRadiusUnits }
+									min={ 0 }
+									onFocus={ () => handleOnFocus( item.value ) }
+									onChange={ ( value ) => handleOnChange( value, item.value ) }
+									size="__unstable-large"
+									style={ { marginBottom: 0 } }
+								/>
+							</div>
 						) ) }
-					</div>
+					</Grid>
 				) }
 			</VStack>
 		</BaseControl>
