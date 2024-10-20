@@ -13,6 +13,7 @@ import { useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
+	Flex,
 	Notice,
 	Modal,
 	Popover,
@@ -24,6 +25,7 @@ import {
 	__experimentalSpacer as Spacer,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
+	__experimentalHeading as Heading,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -193,9 +195,9 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 			onRequestClose={ () => setIsSettingModalOpen( false ) }
 		>
 			{ isWaiting && (
-				<div className="ftb-global-setting-modal__loading">
+				<HStack justify="center" className="ftb-global-setting-modal__loading">
 					<Spinner />
-				</div>
+				</HStack>
 			) }
 			<TabPanel
 				className="ftb-global-setting-modal__tab-panel"
@@ -220,12 +222,18 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 				] }
 			>
 				{ ( { name } ) => (
-					<>
+					<Spacer marginBottom={ 22 }>
 						{ name === 'table' && (
-							<>
-								<h2>{ __( 'Default table styles', 'flexible-table-block' ) }</h2>
-								<div className="ftb-global-setting-modal__styles">
-									<div className="ftb-global-setting-modal__styles-item">
+							<VStack spacing={ 4 }>
+								<Heading level={ 5 }>
+									{ __( 'Default table styles', 'flexible-table-block' ) }
+								</Heading>
+								<Flex wrap align="stretch">
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<UnitControl
 											label={ __( 'Table width', 'flexible-table-block' ) }
 											units={ tableWidthUnits }
@@ -243,8 +251,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 											size="__unstable-large"
 											__unstableInputWidth="110px"
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<UnitControl
 											label={ __( 'Table max width', 'flexible-table-block' ) }
 											units={ tableWidthUnits }
@@ -262,8 +274,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 											size="__unstable-large"
 											__unstableInputWidth="110px"
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ToggleGroupControl
 											__nextHasNoMarginBottom
 											label={ __( 'Cell borders', 'flexible-table-block' ) }
@@ -302,11 +318,17 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												/>
 											) ) }
 										</ToggleGroupControl>
-									</div>
-								</div>
-								<h2>{ __( 'Default striped table styles', 'flexible-table-block' ) }</h2>
-								<div className="ftb-global-setting-modal__styles">
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+								</Flex>
+								<Heading level={ 5 }>
+									{ __( 'Default striped table styles', 'flexible-table-block' ) }
+								</Heading>
+								<Flex wrap align="stretch">
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ColorControl
 											label={ __(
 												'Striped style background color ( odd rows )',
@@ -323,8 +345,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ColorControl
 											label={ __(
 												'Striped style background color ( even rows )',
@@ -341,15 +367,21 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-								</div>
-							</>
+									</Spacer>
+								</Flex>
+							</VStack>
 						) }
 						{ name === 'cell' && (
-							<>
-								<h2>{ __( 'Default cell styles', 'flexible-table-block' ) }</h2>
-								<div className="ftb-global-setting-modal__styles">
-									<div className="ftb-global-setting-modal__styles-item">
+							<VStack spacing={ 4 }>
+								<Heading level={ 5 }>
+									{ __( 'Default cell styles', 'flexible-table-block' ) }
+								</Heading>
+								<Flex wrap align="stretch">
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ColorControl
 											label={ createInterpolateElement(
 												__( 'Cell text color ( <code>th</code> tag )', 'flexible-table-block' ),
@@ -366,8 +398,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ColorControl
 											label={ createInterpolateElement(
 												__( 'Cell text color ( <code>td</code> tag )', 'flexible-table-block' ),
@@ -384,8 +420,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ColorControl
 											label={ createInterpolateElement(
 												__(
@@ -405,8 +445,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ColorControl
 											label={ createInterpolateElement(
 												__(
@@ -426,8 +470,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<PaddingControl
 											label={ __( 'Cell padding', 'flexible-table-block' ) }
 											values={ currentOptions?.block_style.cell_padding || {} }
@@ -441,8 +489,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<BorderWidthControl
 											label={ __( 'Cell border width', 'flexible-table-block' ) }
 											values={ { top: currentOptions.block_style?.cell_border_width } }
@@ -458,8 +510,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<BorderStyleControl
 											label={ __( 'Cell border style', 'flexible-table-block' ) }
 											values={ { top: currentOptions.block_style?.cell_border_style } }
@@ -479,8 +535,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ColorControl
 											label={ __( 'Cell border color', 'flexible-table-block' ) }
 											value={ currentOptions.block_style?.cell_border_color }
@@ -494,8 +554,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												} );
 											} }
 										/>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ToggleGroupControl
 											__nextHasNoMarginBottom
 											label={ __( 'Cell text alignment', 'flexible-table-block' ) }
@@ -527,8 +591,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												/>
 											) ) }
 										</ToggleGroupControl>
-									</div>
-									<div className="ftb-global-setting-modal__styles-item">
+									</Spacer>
+									<Spacer
+										padding={ 2 }
+										marginBottom={ 0 }
+										className="ftb-global-setting-modal__styles-item"
+									>
 										<ToggleGroupControl
 											__nextHasNoMarginBottom
 											label={ __( 'Cell vertical alignment', 'flexible-table-block' ) }
@@ -560,13 +628,15 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 												/>
 											) ) }
 										</ToggleGroupControl>
-									</div>
-								</div>
-							</>
+									</Spacer>
+								</Flex>
+							</VStack>
 						) }
 						{ name === 'responsive' && (
-							<>
-								<h2>{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }</h2>
+							<VStack spacing={ 4 }>
+								<Heading level={ 5 }>
+									{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
+								</Heading>
 								<RangeControl
 									id="flexible-table-block-global-breakpoint"
 									help={ __(
@@ -592,10 +662,10 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									__next40pxDefaultSize
 									__nextHasNoMarginBottom
 								/>
-							</>
+							</VStack>
 						) }
 						{ name === 'options' && (
-							<>
+							<VStack spacing={ 4 }>
 								<ToggleControl
 									label={ __( 'Show section labels', 'flexible-table-block' ) }
 									help={ __(
@@ -712,9 +782,9 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										__nextHasNoMarginBottom
 									/>
 								) }
-							</>
+							</VStack>
 						) }
-					</>
+					</Spacer>
 				) }
 			</TabPanel>
 			{ noticeInfo?.status && noticeInfo?.message && (
@@ -729,7 +799,12 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 					{ noticeInfo.message }
 				</Notice>
 			) }
-			<div className="ftb-global-setting-modal__buttons">
+			<Spacer
+				as={ HStack }
+				marginBottom={ 0 }
+				paddingX={ 6 }
+				className="ftb-global-setting-modal__buttons"
+			>
 				<Button
 					variant="primary"
 					disabled={ isWaiting }
@@ -770,7 +845,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 						</Popover>
 					) }
 				</Button>
-			</div>
+			</Spacer>
 		</Modal>
 	);
 }
