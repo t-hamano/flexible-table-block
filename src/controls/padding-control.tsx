@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -37,7 +36,6 @@ type Props = {
 	id: string;
 	label: string;
 	help?: string;
-	className?: string;
 	onChange: ( event: any ) => void;
 	values: {
 		top?: Property.PaddingTop;
@@ -55,7 +53,6 @@ export default function PaddingControl( {
 	id,
 	label = __( 'Padding', 'flexible-table-block' ),
 	help,
-	className,
 	onChange,
 	values: valuesProp,
 	allowSides = true,
@@ -80,8 +77,6 @@ export default function PaddingControl( {
 
 	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
-
-	const classNames: string = clsx( 'ftb-padding-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -114,7 +109,7 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl id={ id } className={ classNames } help={ help }>
+		<BaseControl id={ id } className="ftb-padding-control" help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-padding-control__header">
 					<Text id={ headingId }>{ label }</Text>
