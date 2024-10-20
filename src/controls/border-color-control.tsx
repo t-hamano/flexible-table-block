@@ -32,7 +32,6 @@ type Props = {
 	id: string;
 	label: string;
 	help?: string;
-	className?: string;
 	onChange: ( event: any ) => void;
 	values: {
 		top?: Property.BorderTopColor;
@@ -55,7 +54,6 @@ export default function BorderColorControl( {
 	id,
 	label = __( 'Border color', 'flexible-table-block' ),
 	help,
-	className,
 	onChange,
 	values: valuesProp,
 	allowSides = true,
@@ -89,8 +87,6 @@ export default function BorderColorControl( {
 		: __( 'Link sides', 'flexible-table-block' );
 
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
-
-	const classNames: string = clsx( 'ftb-border-color-control', className );
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
@@ -126,7 +122,7 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl id={ id } className={ classNames } help={ help }>
+		<BaseControl id={ id } className="ftb-border-color-control" help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-color-control__header">
 					<Text id={ headingId }>{ label }</Text>

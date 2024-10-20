@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -37,7 +36,6 @@ type Props = {
 	id: string;
 	label: string;
 	help?: string;
-	className?: string;
 	onChange: ( event: any ) => void;
 	values: {
 		topLeft?: Property.BorderTopLeftRadius;
@@ -56,7 +54,6 @@ export default function BorderRadiusControl( {
 	id,
 	label = __( 'Border radius', 'flexible-table-block' ),
 	help,
-	className,
 	onChange,
 	values: valuesProp,
 	allowSides = true,
@@ -88,8 +85,6 @@ export default function BorderRadiusControl( {
 
 	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.topLeft;
-
-	const classNames: string = clsx( 'ftb-border-radius-control', className );
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -147,7 +142,7 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl id={ id } className={ classNames } help={ help }>
+		<BaseControl id={ id } className="ftb-border-radius-control" help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-radius-control__header">
 					<Text id={ headingId }>{ label }</Text>
