@@ -16,6 +16,7 @@ import {
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
+import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -33,7 +34,6 @@ const DEFAULT_VALUES = {
 };
 
 type Props = {
-	id: string;
 	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
@@ -51,7 +51,6 @@ type ValuesKey = keyof typeof DEFAULT_VALUES;
 type MaxBorderWidthKey = keyof typeof MAX_BORDER_WIDTH;
 
 export default function BorderWidthControl( {
-	id,
 	label = __( 'Border width', 'flexible-table-block' ),
 	help,
 	onChange,
@@ -63,6 +62,8 @@ export default function BorderWidthControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
+	const instanceId = useInstanceId( BorderWidthControl, 'ftb-border-width-control' );
+	const headingId: string = `${ instanceId }-heading`;
 
 	const isMixed: boolean =
 		allowSides &&
@@ -72,8 +73,6 @@ export default function BorderWidthControl( {
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const [ side, setSide ] = useState< SideValue | undefined >( undefined );
-
-	const headingId: string = `${ id }-heading`;
 
 	const linkedLabel: string = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
@@ -136,7 +135,7 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl id={ id } className="ftb-border-width-control" help={ help }>
+		<BaseControl className="ftb-border-width-control" help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-width-control__header">
 					<Text id={ headingId }>{ label }</Text>

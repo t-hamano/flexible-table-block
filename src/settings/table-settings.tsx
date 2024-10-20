@@ -423,7 +423,6 @@ export default function TableSettings( {
 			</BaseControl>
 			<hr />
 			<PaddingControl
-				id="flexible-table-block-table-padding"
 				label={ __( 'Table padding', 'flexible-table-block' ) }
 				help={ __(
 					'Table padding is only enabled when "Cell Borders" is set to "Separate".',
@@ -434,13 +433,11 @@ export default function TableSettings( {
 			/>
 			<hr />
 			<BorderRadiusControl
-				id="flexible-table-block-table-border-radius"
 				label={ __( 'Table border radius', 'flexible-table-block' ) }
 				values={ pickBorderRadius( tableStylesObj ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
-				id="flexible-table-block-table-border-width"
 				label={ __( 'Table border width', 'flexible-table-block' ) }
 				help={ __(
 					'Table border width is only enabled when "Cell Borders" is set to "Separate".',
@@ -450,13 +447,11 @@ export default function TableSettings( {
 				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
-				id="flexible-table-block-table-border-style"
 				label={ __( 'Table border style', 'flexible-table-block' ) }
 				values={ pickBorderStyle( tableStylesObj ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
-				id="flexible-table-block-table-border-color"
 				label={ __( 'Table border color', 'flexible-table-block' ) }
 				values={ pickBorderColor( tableStylesObj ) }
 				onChange={ onChangeBorderColor }
@@ -480,7 +475,6 @@ export default function TableSettings( {
 			</ToggleGroupControl>
 			{ 'separate' === tableStylesObj?.borderCollapse && (
 				<BorderSpacingControl
-					id="flexible-table-block-table-border-spacing"
 					label={ __( 'Border spacing', 'flexible-table-block' ) }
 					values={ pickBorderSpacing( tableStylesObj ) }
 					onChange={ onChangeBorderSpacing }
