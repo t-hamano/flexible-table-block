@@ -39,7 +39,6 @@ type Props = {
 		bottom?: Property.BorderBottomColor;
 		left?: Property.BorderLeftColor;
 	};
-	allowSides?: boolean;
 	hasIndicator?: boolean;
 };
 
@@ -56,7 +55,6 @@ export default function BorderColorControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	allowSides = true,
 	hasIndicator = true,
 }: Props ) {
 	const values = {
@@ -64,9 +62,11 @@ export default function BorderColorControl( {
 		...valuesProp,
 	};
 
-	const isMixed: boolean =
-		allowSides &&
-		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
+	const isMixed: boolean = ! (
+		values.top === values.right &&
+		values.top === values.bottom &&
+		values.top === values.left
+	);
 
 	const colors = useSelect( ( select ) => {
 		const settings = select(
@@ -132,7 +132,7 @@ export default function BorderColorControl( {
 				</div>
 				<div className="ftb-border-color-control__controls">
 					<div className="ftb-border-color-control__controls-inner">
-						{ ( isLinked || ! allowSides ) && (
+						{ isLinked && (
 							<div className="ftb-border-color-control__controls-row">
 								{ hasIndicator && <SideIndicatorControl /> }
 								<Button
@@ -166,7 +166,6 @@ export default function BorderColorControl( {
 							</div>
 						) }
 						{ ! isLinked &&
-							allowSides &&
 							SIDE_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-color-control__controls-row" key={ index }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
@@ -196,15 +195,13 @@ export default function BorderColorControl( {
 								</div>
 							) ) }
 					</div>
-					{ allowSides && (
-						<Button
-							className="ftb-border-color-control__header-linked-button"
-							label={ linkedLabel }
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							size="small"
-						/>
-					) }
+					<Button
+						className="ftb-border-color-control__header-linked-button"
+						label={ linkedLabel }
+						onClick={ toggleLinked }
+						icon={ isLinked ? link : linkOff }
+						size="small"
+					/>
 				</div>
 			</div>
 		</BaseControl>

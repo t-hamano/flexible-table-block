@@ -43,7 +43,6 @@ type Props = {
 		bottomRight?: Property.BorderBottomRightRadius;
 		bottomLeft?: Property.BorderBottomLeftRadius;
 	};
-	allowSides?: boolean;
 	hasIndicator?: boolean;
 };
 
@@ -56,7 +55,6 @@ export default function BorderRadiusControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	allowSides = true,
 	hasIndicator = true,
 }: Props ) {
 	const values = {
@@ -64,13 +62,11 @@ export default function BorderRadiusControl( {
 		...valuesProp,
 	};
 
-	const isMixed: boolean =
-		allowSides &&
-		! (
-			values.topLeft === values.topRight &&
-			values.topLeft === values.bottomRight &&
-			values.topLeft === values.bottomLeft
-		);
+	const isMixed: boolean = ! (
+		values.topLeft === values.topRight &&
+		values.topLeft === values.bottomRight &&
+		values.topLeft === values.bottomLeft
+	);
 
 	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
 

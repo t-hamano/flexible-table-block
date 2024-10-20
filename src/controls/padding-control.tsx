@@ -43,7 +43,6 @@ type Props = {
 		bottom?: Property.PaddingBottom;
 		left?: Property.PaddingLeft;
 	};
-	allowSides?: boolean;
 	hasIndicator?: boolean;
 };
 
@@ -55,14 +54,15 @@ export default function PaddingControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	allowSides = true,
 	hasIndicator = true,
 }: Props ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 
-	const isMixed: boolean =
-		allowSides &&
-		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
+	const isMixed: boolean = ! (
+		values.top === values.right &&
+		values.top === values.bottom &&
+		values.top === values.left
+	);
 
 	const paddingUnits = useCustomUnits( { availableUnits: PADDING_UNITS } );
 
@@ -121,7 +121,7 @@ export default function PaddingControl( {
 					{ hasIndicator && (
 						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
 					) }
-					{ ( isLinked || ! allowSides ) && (
+					{ isLinked && (
 						<UnitControl
 							placeholder={ allInputPlaceholder }
 							aria-label={ __( 'All', 'flexible-table-block' ) }
@@ -131,17 +131,15 @@ export default function PaddingControl( {
 							size="__unstable-large"
 						/>
 					) }
-					{ allowSides && (
-						<Button
-							className="ftb-padding-control__header-linked-button"
-							label={ linkedLabel }
-							onClick={ toggleLinked }
-							icon={ isLinked ? link : linkOff }
-							size="small"
-						/>
-					) }
+					<Button
+						className="ftb-padding-control__header-linked-button"
+						label={ linkedLabel }
+						onClick={ toggleLinked }
+						icon={ isLinked ? link : linkOff }
+						size="small"
+					/>
 				</div>
-				{ ! isLinked && allowSides && (
+				{ ! isLinked && (
 					<div className="ftb-padding-control__input-controls">
 						{ SIDE_CONTROLS.map( ( item ) => (
 							<UnitControl
