@@ -37,7 +37,6 @@ type Props = {
 	className?: string;
 	onChange: ( event: any ) => void;
 	values: typeof DEFAULT_VALUES;
-	allowSides?: boolean;
 	hasIndicator?: boolean;
 };
 
@@ -51,7 +50,6 @@ export default function BorderSpacingControl( {
 	className,
 	onChange,
 	values: valuesProp,
-	allowSides = true,
 	hasIndicator = true,
 }: Props ) {
 	const values = {
@@ -59,7 +57,7 @@ export default function BorderSpacingControl( {
 		...valuesProp,
 	};
 
-	const isMixed: boolean = allowSides && ! ( values.horizontal === values.vertical );
+	const isMixed: boolean = ! ( values.horizontal === values.vertical );
 
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
@@ -134,7 +132,7 @@ export default function BorderSpacingControl( {
 				</div>
 				<div className="ftb-border-spacing-control__controls">
 					<div className="ftb-border-spacing-control__controls-inner">
-						{ ( isLinked || ! allowSides ) && (
+						{ isLinked && (
 							<div className="ftb-border-spacing-control__controls-row">
 								{ hasIndicator && <DirectionIndicatorControl /> }
 								<UnitControl
@@ -148,7 +146,6 @@ export default function BorderSpacingControl( {
 							</div>
 						) }
 						{ ! isLinked &&
-							allowSides &&
 							DIRECTION_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-spacing-control__controls-row" key={ index }>
 									{ hasIndicator && <DirectionIndicatorControl directions={ [ item.value ] } /> }
@@ -163,15 +160,13 @@ export default function BorderSpacingControl( {
 								</div>
 							) ) }
 					</div>
-					{ allowSides && (
-						<Button
-							className="ftb-border-spacing-control__header-linked-button"
-							label={ linkedLabel }
-							icon={ isLinked ? link : linkOff }
-							onClick={ toggleLinked }
-							size="small"
-						/>
-					) }
+					<Button
+						className="ftb-border-spacing-control__header-linked-button"
+						label={ linkedLabel }
+						icon={ isLinked ? link : linkOff }
+						onClick={ toggleLinked }
+						size="small"
+					/>
 				</div>
 			</div>
 		</BaseControl>
