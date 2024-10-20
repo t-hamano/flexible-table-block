@@ -244,7 +244,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					__nextHasNoMarginBottom
 				>
 					<TextControl
-						className="ftb-is-next-40px-default-size"
 						label={ __( 'Cell line height', 'flexible-table-block' ) }
 						value={ cellStylesObj?.lineHeight || '' }
 						autoComplete="off"
@@ -253,6 +252,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						min={ 0 }
 						onChange={ onChangeLineHeight }
 						__nextHasNoMarginBottom
+						__next40pxDefaultSize
 					/>
 				</BaseControl>
 			</div>
@@ -395,20 +395,19 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				) ) }
 			</ToggleGroupControl>
 			<TextControl
-				className="ftb-is-next-40px-default-size"
 				label={ __( 'Cell CSS class(es)', 'flexible-table-block' ) }
 				autoComplete="off"
 				value={ targetCell.className || '' }
 				onChange={ onChangeClass }
 				help={ __( 'Separate multiple classes with spaces.', 'flexible-table-block' ) }
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 			/>
 			{ selectedCellTags.length === 1 && (
 				<>
 					<hr />
 					{ selectedCellTags.includes( 'th' ) && (
 						<TextControl
-							className="ftb-is-next-40px-default-size"
 							label={ createInterpolateElement(
 								__( '<code>id</code> attribute', 'flexible-table-block' ),
 								{ code: <code /> }
@@ -417,10 +416,10 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							value={ targetCell.id || '' }
 							onChange={ onChangeId }
 							__nextHasNoMarginBottom
+							__next40pxDefaultSize
 						/>
 					) }
 					<TextControl
-						className="ftb-is-next-40px-default-size"
 						label={ createInterpolateElement(
 							__( '<code>headers</code> attribute', 'flexible-table-block' ),
 							{ code: <code /> }
@@ -429,6 +428,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						value={ targetCell.headers || '' }
 						onChange={ onChangeHeaders }
 						__nextHasNoMarginBottom
+						__next40pxDefaultSize
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
 						<BaseControl id="flexible-table-block-cell-scope" __nextHasNoMarginBottom>
