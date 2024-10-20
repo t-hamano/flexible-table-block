@@ -77,7 +77,7 @@ export default function ColorControl( {
 						</Button>
 					</div>
 					<ColorIndicatorButton
-						label={ __( 'All', 'flexible-table-block' ) }
+						label={ __( 'Color', 'flexible-table-block' ) }
 						value={ value }
 						onClick={ handleOnPickerOpen }
 						isNone={ ! value }
