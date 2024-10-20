@@ -135,7 +135,7 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-radius-control" help={ help }>
+		<BaseControl className="ftb-border-radius-control" help={ help } __nextHasNoMarginBottom>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-radius-control__header">
 					<Text id={ headingId }>{ label }</Text>

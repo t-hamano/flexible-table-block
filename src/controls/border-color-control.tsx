@@ -119,7 +119,7 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-color-control" help={ help }>
+		<BaseControl className="ftb-border-color-control" help={ help } __nextHasNoMarginBottom>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-color-control__header">
 					<Text id={ headingId }>{ label }</Text>

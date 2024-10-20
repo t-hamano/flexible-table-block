@@ -155,11 +155,13 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
 						onChange={ onToggleHeaderSection }
+						__nextHasNoMarginBottom
 					/>
 					<ToggleControl
 						label={ __( 'Footer section', 'flexible-table-block' ) }
 						checked={ !! footerSection }
 						onChange={ onToggleFooterSection }
+						__nextHasNoMarginBottom
 					/>
 				</div>
 				<div className="ftb-placeholder__row">
@@ -171,6 +173,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						max={ MAX_PREVIEW_TABLE_COL }
 						value={ colCount || '' }
 						onChange={ onChangeColumnCount }
+						__nextHasNoMarginBottom
 					/>
 					<TextControl
 						className="ftb-is-next-40px-default-size"
@@ -180,6 +183,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						max={ MAX_PREVIEW_TABLE_ROW }
 						value={ rowCount || '' }
 						onChange={ onChangeRowCount }
+						__nextHasNoMarginBottom
 					/>
 					<Button
 						variant="primary"

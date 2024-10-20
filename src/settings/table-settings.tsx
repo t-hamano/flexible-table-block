@@ -232,17 +232,20 @@ export default function TableSettings( {
 				label={ __( 'Header section', 'flexible-table-block' ) }
 				checked={ !! ( head && head.length ) }
 				onChange={ onToggleHeaderSection }
+				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
 				label={ __( 'Footer section', 'flexible-table-block' ) }
 				checked={ !! ( foot && foot.length ) }
 				onChange={ onToggleFooterSection }
+				__nextHasNoMarginBottom
 			/>
 			<hr />
 			<ToggleControl
 				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
 				checked={ !! hasFixedLayout }
 				onChange={ onChangeHasFixedLayout }
+				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
 				label={ __( 'Scroll on desktop view', 'flexible-table-block' ) }
@@ -257,6 +260,7 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeIsScrollOnPc }
+				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
 				label={ __( 'Scroll on mobile view', 'flexible-table-block' ) }
@@ -271,6 +275,7 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeIsScrollOnMobile }
+				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
 				label={ __( 'Stack on mobile', 'flexible-table-block' ) }
@@ -285,6 +290,7 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeIsStackedOnMobile }
+				__nextHasNoMarginBottom
 			/>
 			<SelectControl
 				label={ __( 'Fixed control', 'flexible-table-block' ) }
@@ -302,12 +308,14 @@ export default function TableSettings( {
 				}
 				onChange={ onChangeSticky }
 				size="__unstable-large"
+				__nextHasNoMarginBottom
 			/>
 			<hr />
 			<BaseControl
 				id="flexible-table-block-table-width"
 				label={ __( 'Table width', 'flexible-table-block' ) }
 				className="ftb-width-control"
+				__nextHasNoMarginBottom
 			>
 				<UnitControl
 					id="flexible-table-block-table-width"
@@ -350,6 +358,7 @@ export default function TableSettings( {
 				id="flexible-table-block-table-max-width"
 				label={ __( 'Table max width', 'flexible-table-block' ) }
 				className="ftb-width-control"
+				__nextHasNoMarginBottom
 			>
 				<UnitControl
 					id="flexible-table-block-table-max-width"
@@ -392,6 +401,7 @@ export default function TableSettings( {
 				id="flexible-table-block-table-min-width"
 				label={ __( 'Table min width', 'flexible-table-block' ) }
 				className="ftb-width-control"
+				__nextHasNoMarginBottom
 			>
 				<UnitControl
 					id="flexible-table-block-table-min-width"
