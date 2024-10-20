@@ -425,18 +425,6 @@
 	text-transform: uppercase;
 }
 
-.ftb-base-control-row {
-	display: flex;
-
-	.components-base-control__field {
-		margin-bottom: 0;
-	}
-
-	> *:first-child {
-		margin-right: 16px;
-	}
-}
-
 .ftb-percent-group {
 	margin-top: -8px;
 
