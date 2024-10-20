@@ -11,6 +11,7 @@ import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
 import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/components';
+import { isAppleOS } from '@wordpress/keycodes';
 
 /**
  * Internal dependencies
@@ -97,10 +98,15 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 		>
 			<legend className="components-placeholder__instructions">
 				{ createInterpolateElement(
-					__(
-						'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
-						'flexible-table-block'
-					),
+					isAppleOS()
+						? __(
+								'Hint: Hold <code>Command</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
+								'flexible-table-block'
+						  )
+						: __(
+								'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
+								'flexible-table-block'
+						  ),
 					{ code: <code /> }
 				) }
 			</legend>

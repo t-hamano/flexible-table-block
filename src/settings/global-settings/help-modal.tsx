@@ -15,6 +15,7 @@ import {
 	__experimentalText as Text,
 	__experimentalHeading as Heading,
 } from '@wordpress/components';
+import { isAppleOS } from '@wordpress/keycodes';
 
 type Props = {
 	setIsHelpModalOpen: Dispatch< SetStateAction< boolean > >;
@@ -43,10 +44,15 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					<Heading level={ 5 }>{ __( 'Select multiple cells', 'flexible-table-block' ) }</Heading>
 					<Text as="p">
 						{ createInterpolateElement(
-							__(
-								'Hold <code>Ctrl</code> key to select multiple cells or hold <code>Shift</code> key to select the range. Selecting multiple cells is used to merge cells or to change styles of multiple cells.',
-								'flexible-table-block'
-							),
+							isAppleOS()
+								? __(
+										'Hold <code>Command</code> key to select multiple cells. Hold <code>Shift</code> key to select the range. Selecting multiple cells is used to merge cells or to change styles of multiple cells.',
+										'flexible-table-block'
+								  )
+								: __(
+										'Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select the range. Selecting multiple cells is used to merge cells or to change styles of multiple cells.',
+										'flexible-table-block'
+								  ),
 							{ code: <code /> }
 						) }
 					</Text>
