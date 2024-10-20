@@ -313,7 +313,7 @@ const v1 = {
 			[ `is-sticky-${ sticky }` ]: sticky,
 		} );
 
-		const hasCaption: boolean = ! RichText.isEmpty( caption );
+		const hasCaption: boolean = ! RichText.isEmpty( caption || '' );
 
 		const Section = ( { type, rows }: { type: SectionName; rows: Row[] } ) => {
 			if ( ! rows.length ) {
@@ -352,7 +352,7 @@ const v1 = {
 		};
 
 		const Caption = () => (
-			<RichText.Content tagName="figcaption" value={ caption } style={ captionStylesObj } />
+			<RichText.Content tagName="figcaption" value={ caption || '' } style={ captionStylesObj } />
 		);
 
 		return (
