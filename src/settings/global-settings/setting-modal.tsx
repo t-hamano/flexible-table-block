@@ -31,6 +31,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
+import { desktop, mobile } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -643,8 +644,8 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 										'Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.',
 										'flexible-table-block'
 									) }
-									beforeIcon="smartphone"
-									afterIcon="desktop"
+									beforeIcon={ mobile }
+									afterIcon={ desktop }
 									min={ MIN_RESPONSIVE_BREAKPOINT }
 									max={ MAX_RESPONSIVE_BREAKPOINT }
 									value={
