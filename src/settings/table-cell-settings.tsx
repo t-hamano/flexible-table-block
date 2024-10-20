@@ -324,7 +324,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					>
 						{ __( 'Cell alignment', 'flexible-table-block' ) }
 					</span>
-					<div className="ftb-base-control-field-row">
+					<Flex style={ { marginBottom: '-16px' } } justify="start" align="start">
 						<ToggleGroupControl
 							hideLabelFromVision
 							__nextHasNoMarginBottom
@@ -359,7 +359,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 								/>
 							) ) }
 						</ToggleGroupControl>
-					</div>
+					</Flex>
 				</div>
 			</BaseControl>
 			<hr />
