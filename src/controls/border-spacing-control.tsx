@@ -128,7 +128,7 @@ export default function BorderSpacingControl( {
 				</Flex>
 				<div className="ftb-border-spacing-control__controls">
 					<div className="ftb-border-spacing-control__controls-inner">
-						{ isLinked && (
+						{ isLinked ? (
 							<div className="ftb-border-spacing-control__controls-row">
 								<DirectionIndicatorControl />
 								<UnitControl
@@ -140,8 +140,7 @@ export default function BorderSpacingControl( {
 									size="__unstable-large"
 								/>
 							</div>
-						) }
-						{ ! isLinked &&
+						) : (
 							DIRECTION_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-spacing-control__controls-row" key={ index }>
 									<DirectionIndicatorControl directions={ [ item.value ] } />
@@ -154,7 +153,8 @@ export default function BorderSpacingControl( {
 										size="__unstable-large"
 									/>
 								</div>
-							) ) }
+							) )
+						) }
 					</div>
 					<Button
 						className="ftb-border-spacing-control__header-linked-button"

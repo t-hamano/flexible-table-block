@@ -137,7 +137,7 @@ export default function BorderColorControl( {
 				</Flex>
 				<div className="ftb-border-color-control__controls">
 					<div className="ftb-border-color-control__controls-inner">
-						{ isLinked && (
+						{ isLinked ? (
 							<div className="ftb-border-color-control__controls-row">
 								<SideIndicatorControl />
 								<ColorIndicatorButton
@@ -165,8 +165,7 @@ export default function BorderColorControl( {
 									</Popover>
 								) }
 							</div>
-						) }
-						{ ! isLinked &&
+						) : (
 							SIDE_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-color-control__controls-row" key={ index }>
 									<SideIndicatorControl sides={ [ item.value ] } />
@@ -194,7 +193,8 @@ export default function BorderColorControl( {
 										</Popover>
 									) }
 								</div>
-							) ) }
+							) )
+						) }
 					</div>
 					<Button
 						className="ftb-border-color-control__header-linked-button"

@@ -132,7 +132,7 @@ export default function BorderStyleControl( {
 				</Flex>
 				<div className="ftb-border-style-control__button-controls">
 					<div className="ftb-border-style-control__button-controls-inner">
-						{ isLinked && (
+						{ isLinked ? (
 							<div className="ftb-border-style-control__button-controls-row">
 								{ hasIndicator && <SideIndicatorControl /> }
 								<ToggleGroupControl
@@ -153,8 +153,7 @@ export default function BorderStyleControl( {
 									) ) }
 								</ToggleGroupControl>
 							</div>
-						) }
-						{ ! isLinked &&
+						) : (
 							SIDE_CONTROLS.map( ( item ) => (
 								<div className="ftb-border-style-control__button-controls-row" key={ item.value }>
 									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
@@ -176,7 +175,8 @@ export default function BorderStyleControl( {
 										) ) }
 									</ToggleGroupControl>
 								</div>
-							) ) }
+							) )
+						) }
 					</div>
 					{ allowSides && (
 						<Button
