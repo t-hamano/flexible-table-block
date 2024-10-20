@@ -10,7 +10,6 @@ import type { Dispatch, SetStateAction } from 'react';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import {
-	BaseControl,
 	Button,
 	ButtonGroup,
 	Flex,
@@ -311,125 +310,107 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 			/>
 			<hr />
-			<BaseControl
-				id="flexible-table-block-table-width"
+			<UnitControl
 				label={ __( 'Table width', 'flexible-table-block' ) }
-				className="ftb-width-control"
-				__nextHasNoMarginBottom
+				value={ tableStylesObj?.width }
+				units={ tableWidthUnits }
+				disabled={ tableStylesObj?.width === 'auto' }
+				min={ 0 }
+				onChange={ onChangeWidth }
+				size="__unstable-large"
+				__unstableInputWidth="calc(50% - 8px)"
+			/>
+			<ButtonGroup
+				aria-label={ __( 'Table percentage width', 'flexible-table-block' ) }
+				className="ftb-percent-group"
 			>
-				<UnitControl
-					id="flexible-table-block-table-width"
-					value={ tableStylesObj?.width }
-					units={ tableWidthUnits }
-					disabled={ tableStylesObj?.width === 'auto' }
-					min={ 0 }
-					onChange={ onChangeWidth }
-					size="__unstable-large"
-				/>
-				<ButtonGroup
-					aria-label={ __( 'Table percentage width', 'flexible-table-block' ) }
-					className="ftb-percent-group"
+				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+					const isPressed = tableStylesObj?.width === `${ perWidth }%`;
+					return (
+						<Button
+							key={ perWidth }
+							variant={ isPressed ? 'primary' : undefined }
+							onClick={ () =>
+								onChangeWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
+							}
+							size="small"
+						>
+							{ `${ perWidth }%` }
+						</Button>
+					);
+				} ) }
+				<Button
+					variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
+					onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? '' : 'auto' ) }
+					size="small"
 				>
-					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = tableStylesObj?.width === `${ perWidth }%`;
-						return (
-							<Button
-								key={ perWidth }
-								variant={ isPressed ? 'primary' : undefined }
-								onClick={ () =>
-									onChangeWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
-								}
-								size="small"
-							>
-								{ `${ perWidth }%` }
-							</Button>
-						);
-					} ) }
-					<Button
-						variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
-						onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? '' : 'auto' ) }
-						size="small"
-					>
-						{ __( 'auto', 'flexible-table-block' ) }
-					</Button>
-				</ButtonGroup>
-			</BaseControl>
-			<BaseControl
-				id="flexible-table-block-table-max-width"
+					{ __( 'auto', 'flexible-table-block' ) }
+				</Button>
+			</ButtonGroup>
+			<UnitControl
 				label={ __( 'Table max width', 'flexible-table-block' ) }
-				className="ftb-width-control"
-				__nextHasNoMarginBottom
+				value={ tableStylesObj?.maxWidth }
+				units={ tableWidthUnits }
+				disabled={ tableStylesObj?.maxWidth === 'none' }
+				min={ 0 }
+				onChange={ onChangeMaxWidth }
+				size="__unstable-large"
+				__unstableInputWidth="calc(50% - 8px)"
+			/>
+			<ButtonGroup
+				aria-label={ __( 'Table percentage max width', 'flexible-table-block' ) }
+				className="ftb-percent-group"
 			>
-				<UnitControl
-					id="flexible-table-block-table-max-width"
-					value={ tableStylesObj?.maxWidth }
-					units={ tableWidthUnits }
-					disabled={ tableStylesObj?.maxWidth === 'none' }
-					min={ 0 }
-					onChange={ onChangeMaxWidth }
-					size="__unstable-large"
-				/>
-				<ButtonGroup
-					aria-label={ __( 'Table percentage max width', 'flexible-table-block' ) }
-					className="ftb-percent-group"
+				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+					const isPressed = tableStylesObj?.maxWidth === `${ perWidth }%`;
+					return (
+						<Button
+							key={ perWidth }
+							variant={ isPressed ? 'primary' : undefined }
+							onClick={ () =>
+								onChangeMaxWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
+							}
+							size="small"
+						>
+							{ `${ perWidth }%` }
+						</Button>
+					);
+				} ) }
+				<Button
+					variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
+					onClick={ () => onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? '' : 'none' ) }
+					size="small"
 				>
-					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = tableStylesObj?.maxWidth === `${ perWidth }%`;
-						return (
-							<Button
-								key={ perWidth }
-								variant={ isPressed ? 'primary' : undefined }
-								onClick={ () =>
-									onChangeMaxWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
-								}
-								size="small"
-							>
-								{ `${ perWidth }%` }
-							</Button>
-						);
-					} ) }
-					<Button
-						variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
-						onClick={ () => onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? '' : 'none' ) }
-						size="small"
-					>
-						{ _x( 'none', 'width', 'flexible-table-block' ) }
-					</Button>
-				</ButtonGroup>
-			</BaseControl>
-			<BaseControl
-				id="flexible-table-block-table-min-width"
+					{ _x( 'none', 'width', 'flexible-table-block' ) }
+				</Button>
+			</ButtonGroup>
+			<UnitControl
 				label={ __( 'Table min width', 'flexible-table-block' ) }
-				className="ftb-width-control"
-				__nextHasNoMarginBottom
+				value={ tableStylesObj?.minWidth }
+				units={ tableWidthUnits }
+				min={ 0 }
+				onChange={ onChangeMinWidth }
+				size="__unstable-large"
+				__unstableInputWidth="calc(50% - 8px)"
+			/>
+			<ButtonGroup
+				aria-label={ __( 'Table percentage min width', 'flexible-table-block' ) }
+				className="ftb-percent-group"
 			>
-				<UnitControl
-					id="flexible-table-block-table-min-width"
-					value={ tableStylesObj?.minWidth }
-					units={ tableWidthUnits }
-					min={ 0 }
-					onChange={ onChangeMinWidth }
-					size="__unstable-large"
-				/>
-				<ButtonGroup
-					aria-label={ __( 'Table percentage min width', 'flexible-table-block' ) }
-					className="ftb-percent-group"
-				>
-					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = tableStylesObj?.minWidth === `${ perWidth }%`;
-						return (
-							<Button
-								key={ perWidth }
-								variant={ isPressed ? 'primary' : undefined }
-								onClick={ () => onChangeMinWidth( isPressed ? '' : `${ perWidth }%` ) }
-								size="small"
-							>
-								{ `${ perWidth }%` }
-							</Button>
-						);
-					} ) }
-				</ButtonGroup>
-			</BaseControl>
+				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+					const isPressed = tableStylesObj?.minWidth === `${ perWidth }%`;
+					return (
+						<Button
+							key={ perWidth }
+							variant={ isPressed ? 'primary' : undefined }
+							onClick={ () => onChangeMinWidth( isPressed ? '' : `${ perWidth }%` ) }
+							size="small"
+						>
+							{ `${ perWidth }%` }
+						</Button>
+					);
+				} ) }
+			</ButtonGroup>
 			<hr />
 			<PaddingControl
 				label={ __( 'Table padding', 'flexible-table-block' ) }

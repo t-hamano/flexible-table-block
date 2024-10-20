@@ -12,7 +12,6 @@ import { createInterpolateElement, useState } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
-	BaseControl,
 	Button,
 	Notice,
 	Modal,
@@ -229,54 +228,42 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									<h2>{ __( 'Default table styles', 'flexible-table-block' ) }</h2>
 									<div className="ftb-global-setting-modal__styles">
 										<div className="ftb-global-setting-modal__styles-item">
-											<BaseControl
-												id="flexible-table-block-global-table-width"
+											<UnitControl
 												label={ __( 'Table width', 'flexible-table-block' ) }
-												className="ftb-width-control"
-												__nextHasNoMarginBottom
-											>
-												<UnitControl
-													id="flexible-table-block-global-table-width"
-													units={ tableWidthUnits }
-													value={ currentOptions.block_style?.table_width }
-													min={ 0 }
-													onChange={ ( value ) => {
-														setCurrentOptions( {
-															...currentOptions,
-															block_style: {
-																...currentOptions.block_style,
-																table_width: sanitizeUnitValue( value ),
-															},
-														} );
-													} }
-													size="__unstable-large"
-												/>
-											</BaseControl>
+												units={ tableWidthUnits }
+												value={ currentOptions.block_style?.table_width }
+												min={ 0 }
+												onChange={ ( value ) => {
+													setCurrentOptions( {
+														...currentOptions,
+														block_style: {
+															...currentOptions.block_style,
+															table_width: sanitizeUnitValue( value ),
+														},
+													} );
+												} }
+												size="__unstable-large"
+												__unstableInputWidth="100px"
+											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
-											<BaseControl
-												id="flexible-table-block-global-table-max-width"
+											<UnitControl
 												label={ __( 'Table max width', 'flexible-table-block' ) }
-												className="ftb-width-control"
-												__nextHasNoMarginBottom
-											>
-												<UnitControl
-													id="flexible-table-block-global-table-max-width"
-													units={ tableWidthUnits }
-													value={ currentOptions.block_style?.table_max_width }
-													min={ 0 }
-													onChange={ ( value ) => {
-														setCurrentOptions( {
-															...currentOptions,
-															block_style: {
-																...currentOptions.block_style,
-																table_max_width: sanitizeUnitValue( value ),
-															},
-														} );
-													} }
-													size="__unstable-large"
-												/>
-											</BaseControl>
+												units={ tableWidthUnits }
+												value={ currentOptions.block_style?.table_max_width }
+												min={ 0 }
+												onChange={ ( value ) => {
+													setCurrentOptions( {
+														...currentOptions,
+														block_style: {
+															...currentOptions.block_style,
+															table_max_width: sanitizeUnitValue( value ),
+														},
+													} );
+												} }
+												size="__unstable-large"
+												__unstableInputWidth="100px"
+											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ToggleGroupControl

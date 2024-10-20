@@ -8,7 +8,6 @@ import type { Property, Properties } from 'csstype';
  */
 import { __ } from '@wordpress/i18n';
 import {
-	BaseControl,
 	Button,
 	Flex,
 	TextControl,
@@ -106,38 +105,25 @@ export default function TableCaptionSettings( {
 				</Button>
 			</Spacer>
 			<div className="ftb-base-control-row">
-				<BaseControl
-					id="flexible-table-block-caption-font-size"
+				<UnitControl
 					label={ __( 'Caption font size', 'flexible-table-block' ) }
-					className="ftb-font-size-control"
+					value={ captionStylesObj?.fontSize }
+					units={ fontSizeUnits }
+					min={ 0 }
+					onChange={ onChangeFontSize }
+					size="__unstable-large"
+				/>
+				<TextControl
+					label={ __( 'Caption line height', 'flexible-table-block' ) }
+					autoComplete="off"
+					onChange={ onChangeLineHeight }
+					step={ 0.1 }
+					type="number"
+					value={ captionStylesObj?.lineHeight || '' }
+					min={ 0 }
 					__nextHasNoMarginBottom
-				>
-					<UnitControl
-						id="flexible-table-block-caption-font-size"
-						value={ captionStylesObj?.fontSize }
-						units={ fontSizeUnits }
-						min={ 0 }
-						onChange={ onChangeFontSize }
-						size="__unstable-large"
-					/>
-				</BaseControl>
-				<BaseControl
-					id="flexible-table-block-caption-line-height"
-					className="ftb-line-height-control"
-					__nextHasNoMarginBottom
-				>
-					<TextControl
-						label={ __( 'Caption line height', 'flexible-table-block' ) }
-						autoComplete="off"
-						onChange={ onChangeLineHeight }
-						step={ 0.1 }
-						type="number"
-						value={ captionStylesObj?.lineHeight || '' }
-						min={ 0 }
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-					/>
-				</BaseControl>
+					__next40pxDefaultSize
+				/>
 			</div>
 			<PaddingControl
 				label={ __( 'Caption padding', 'flexible-table-block' ) }
