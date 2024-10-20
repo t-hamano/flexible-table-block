@@ -366,14 +366,6 @@
 	}
 }
 
-// TODO: Fix that cursor does not change when mouseover RichText
-// in the Site Editor. This seems to be a bug in the core and will
-// be removed as soon as it is fixed in the core.
-// See: https://github.com/WordPress/gutenberg/issues/53374
-.is-outline-mode .wp-block-flexible-table-block-table.is-selected .rich-text {
-	cursor: initial;
-}
-
 // Setting Component Styles
 .ftb-button-group {
 	display: block;
@@ -402,5 +394,23 @@
 
 	&:has(+ .components-base-control) {
 		margin-bottom: 16px;
+	}
+}
+
+// Backwards compatible styles for WordPress 6.6 / 6.5
+// See: https://github.com/WordPress/gutenberg/issues/53374
+.is-outline-mode .wp-block-flexible-table-block-table.is-selected .rich-text {
+	cursor: initial;
+}
+
+// Backwards compatible styles for WordPress 6.5
+.ftb-placeholder {
+
+	.components-placeholder__instructions {
+		margin-bottom: 0;
+	}
+
+	.components-placeholder__fieldset {
+		gap: 16px;
 	}
 }
