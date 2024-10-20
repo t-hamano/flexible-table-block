@@ -16,6 +16,7 @@ import {
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalText as Text,
 } from '@wordpress/components';
+import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -31,7 +32,6 @@ const DEFAULT_VALUES = {
 };
 
 type Props = {
-	id: string;
 	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
@@ -48,7 +48,6 @@ type Props = {
 type ValuesKey = keyof typeof DEFAULT_VALUES;
 
 export default function BorderStyleControl( {
-	id,
 	label = __( 'Border style', 'flexible-table-block' ),
 	help,
 	onChange,
@@ -60,13 +59,14 @@ export default function BorderStyleControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
+	const instanceId = useInstanceId( BorderStyleControl, 'ftb-border-style-control' );
+	const headingId: string = `${ instanceId }-heading`;
 
 	const isMixed: boolean =
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
-	const headingId = `${ id }-heading`;
 
 	const controlLabel: string =
 		isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label;
@@ -114,7 +114,7 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl id={ id } className="ftb-border-style-control" help={ help }>
+		<BaseControl className="ftb-border-style-control" help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-style-control__header">
 					<Text id={ headingId }>{ controlLabel }</Text>

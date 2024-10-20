@@ -16,6 +16,7 @@ import {
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
+import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -33,7 +34,6 @@ const DEFAULT_VALUES = {
 };
 
 type Props = {
-	id: string;
 	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
@@ -50,7 +50,6 @@ type ValuesKey = keyof typeof DEFAULT_VALUES;
 type MaxBorderRadiusKey = keyof typeof MAX_BORDER_RADIUS;
 
 export default function BorderRadiusControl( {
-	id,
 	label = __( 'Border radius', 'flexible-table-block' ),
 	help,
 	onChange,
@@ -61,6 +60,8 @@ export default function BorderRadiusControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
+	const instanceId = useInstanceId( BorderRadiusControl, 'ftb-border-radius-contro' );
+	const headingId: string = `${ instanceId }-heading`;
 
 	const isMixed: boolean = ! (
 		values.topLeft === values.topRight &&
@@ -72,8 +73,6 @@ export default function BorderRadiusControl( {
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
 	const [ corner, setCorner ] = useState< CornerValue | undefined >( undefined );
-
-	const headingId: string = `${ id }-heading`;
 
 	const linkedLabel: string = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
@@ -138,7 +137,7 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl id={ id } className="ftb-border-radius-control" help={ help }>
+		<BaseControl className="ftb-border-radius-control" help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-radius-control__header">
 					<Text id={ headingId }>{ label }</Text>

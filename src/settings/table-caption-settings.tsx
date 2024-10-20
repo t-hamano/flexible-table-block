@@ -138,7 +138,6 @@ export default function TableCaptionSettings( {
 				</BaseControl>
 			</div>
 			<PaddingControl
-				id="flexible-table-block-caption-padding"
 				label={ __( 'Caption padding', 'flexible-table-block' ) }
 				values={ pickPadding( captionStylesObj ) }
 				onChange={ onChangePadding }

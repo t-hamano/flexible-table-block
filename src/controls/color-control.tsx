@@ -21,9 +21,9 @@ import {
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { useInstanceId } from '@wordpress/compose';
 
 type Props = {
-	id: string;
 	label: string | ReactElement;
 	help?: string;
 	onChange: ( event: any ) => void;
@@ -36,13 +36,15 @@ type Props = {
 };
 
 export default function ColorControl( {
-	id,
 	label = __( 'Color', 'flexible-table-block' ),
 	help,
 	onChange,
 	colors: colorsProp = [],
 	value,
 }: Props ) {
+	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
+	const headingId: string = `${ instanceId }-heading`;
+
 	const colors = useSelect( ( select ) => {
 		const settings = select(
 			blockEditorStore
@@ -52,8 +54,6 @@ export default function ColorControl( {
 	}, [] );
 
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
-
-	const headingId: string = `${ id }-heading`;
 
 	const handleOnReset = () => onChange( undefined );
 
@@ -65,7 +65,7 @@ export default function ColorControl( {
 
 	return (
 		<SlotFillProvider>
-			<BaseControl id={ id } className="ftb-color-control" help={ help }>
+			<BaseControl className="ftb-color-control" help={ help }>
 				<div aria-labelledby={ headingId } role="region">
 					<div className="ftb-color-control__header">
 						<Text id={ headingId }>{ label }</Text>

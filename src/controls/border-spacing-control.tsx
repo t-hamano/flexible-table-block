@@ -11,6 +11,7 @@ import {
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
+import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -26,7 +27,6 @@ const DEFAULT_VALUES = {
 };
 
 type Props = {
-	id: string;
 	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
@@ -38,7 +38,6 @@ type ValuesKey = keyof typeof DEFAULT_VALUES;
 type MaxBorderSpacingKey = keyof typeof MAX_BORDER_SPACING;
 
 export default function BorderSpacingControl( {
-	id,
 	label = __( 'Border spacing', 'flexible-table-block' ),
 	help,
 	onChange,
@@ -49,14 +48,14 @@ export default function BorderSpacingControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
+	const instanceId = useInstanceId( BorderSpacingControl, 'ftb-border-spacing-control' );
+	const headingId: string = `${ instanceId }-heading`;
 
 	const isMixed: boolean = ! ( values.horizontal === values.vertical );
 
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState< boolean >( true );
-
-	const headingId: string = `${ id }-heading`;
 
 	const linkedLabel: string = isLinked
 		? __( 'Unlink directions', 'flexible-table-block' )
@@ -113,7 +112,7 @@ export default function BorderSpacingControl( {
 	};
 
 	return (
-		<BaseControl id={ id } className="ftb-border-spacing-control" help={ help }>
+		<BaseControl className="ftb-border-spacing-control" help={ help }>
 			<div aria-labelledby={ headingId } role="region">
 				<div className="ftb-border-spacing-control__header">
 					<Text id={ headingId }>{ label }</Text>
