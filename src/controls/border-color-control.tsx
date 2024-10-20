@@ -149,7 +149,7 @@ export default function BorderColorControl( {
 								isMixed={ isMixed }
 							/>
 							{ isPickerOpen && ! pickerIndex && (
-								<Popover onClose={ handleOnPickerClose }>
+								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
 									<Spacer padding={ 4 }>
 										<ColorPalette
 											colors={ colors }
@@ -173,7 +173,12 @@ export default function BorderColorControl( {
 										isTransparent={ values[ item.value ] === 'transparent' }
 									/>
 									{ isPickerOpen && pickerIndex === index && (
-										<Popover onClose={ handleOnPickerClose }>
+										<Popover
+											placement="left-start"
+											shift
+											offset={ 36 }
+											onClose={ handleOnPickerClose }
+										>
 											<Spacer padding={ 4 } marginBottom={ 0 }>
 												<ColorPalette
 													colors={ colors }

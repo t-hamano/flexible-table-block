@@ -18,7 +18,6 @@ import {
 	FlexItem,
 	Popover,
 	ColorPalette,
-	SlotFillProvider,
 	__experimentalSpacer as Spacer,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
@@ -72,41 +71,39 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<SlotFillProvider>
-			<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
-				<VStack aria-labelledby={ headingId } role="region">
-					<Flex>
-						<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
-							{ label }
-						</Text>
-						<FlexItem>
-							<Button variant="secondary" onClick={ handleOnReset } size="small">
-								{ __( 'Reset', 'flexible-table-block' ) }
-							</Button>
-						</FlexItem>
-					</Flex>
-					<ColorIndicatorButton
-						label={ __( 'Color', 'flexible-table-block' ) }
-						value={ value }
-						onClick={ handleOnPickerOpen }
-						isNone={ ! value }
-						isTransparent={ value === 'transparent' }
-					/>
-				</VStack>
-				{ isPickerOpen && (
-					<Popover onClose={ handleOnPickerClose }>
-						<Spacer padding={ 4 } marginBottom={ 0 }>
-							<ColorPalette
-								colors={ [ ...colors, ...colorsProp ] }
-								value={ value || '' }
-								onChange={ handleOnChange }
-							/>
-						</Spacer>
-					</Popover>
-				) }
-				{ /* @ts-ignore Slot is not currently typed on Popover */ }
-				<Popover.Slot />
-			</BaseControl>
-		</SlotFillProvider>
+		<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
+			<VStack aria-labelledby={ headingId } role="region">
+				<Flex>
+					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+						{ label }
+					</Text>
+					<FlexItem>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
+				<ColorIndicatorButton
+					label={ __( 'Color', 'flexible-table-block' ) }
+					value={ value }
+					onClick={ handleOnPickerOpen }
+					isNone={ ! value }
+					isTransparent={ value === 'transparent' }
+				/>
+			</VStack>
+			{ isPickerOpen && (
+				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
+					<Spacer padding={ 4 } marginBottom={ 0 }>
+						<ColorPalette
+							colors={ [ ...colors, ...colorsProp ] }
+							value={ value || '' }
+							onChange={ handleOnChange }
+						/>
+					</Spacer>
+				</Popover>
+			) }
+			{ /* @ts-ignore Slot is not currently typed on Popover */ }
+			<Popover.Slot />
+		</BaseControl>
 	);
 }
