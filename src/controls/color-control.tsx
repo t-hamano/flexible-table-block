@@ -88,7 +88,7 @@ export default function ColorControl( {
 						</FlexItem>
 					</Flex>
 					<ColorIndicatorButton
-						label={ __( 'All', 'flexible-table-block' ) }
+						label={ __( 'Color', 'flexible-table-block' ) }
 						value={ value }
 						onClick={ handleOnPickerOpen }
 						isNone={ ! value }

@@ -24,7 +24,7 @@ async function applyCellStyles( page, pageUtils ) {
 	const cellTextColorId = await page.getByText( 'Cell text color' ).getAttribute( 'id' );
 	await page
 		.locator( `[aria-labelledby="${ cellTextColorId }"]` )
-		.getByRole( 'button', { name: 'All' } )
+		.getByRole( 'button', { name: 'Color' } )
 		.click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '111111' );
@@ -34,7 +34,7 @@ async function applyCellStyles( page, pageUtils ) {
 		.getAttribute( 'id' );
 	await page
 		.locator( `[aria-labelledby="${ cellBackgroundColorId }"]` )
-		.getByRole( 'button', { name: 'All' } )
+		.getByRole( 'button', { name: 'Color' } )
 		.click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '333333' );

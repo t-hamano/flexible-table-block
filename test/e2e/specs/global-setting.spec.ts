@@ -49,7 +49,7 @@ test.describe( 'Global Setting', () => {
 		for ( let i = 0; i < tableColors.length; i++ ) {
 			await page
 				.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } )
-				.getByRole( 'button', { name: 'All' } )
+				.getByRole( 'button', { name: 'Color' } )
 				.nth( i )
 				.click();
 			await pageUtils.pressKeys( 'Enter' );
@@ -69,7 +69,7 @@ test.describe( 'Global Setting', () => {
 		for ( let i = 0; i < cellColors.length; i++ ) {
 			await page
 				.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } )
-				.getByRole( 'button', { name: 'All' } )
+				.getByRole( 'button', { name: 'Color' } )
 				.nth( i )
 				.click();
 			await pageUtils.pressKeys( 'Enter' );
@@ -82,7 +82,7 @@ test.describe( 'Global Setting', () => {
 		await page.getByRole( 'spinbutton', { name: 'Right' } ).fill( '2' );
 		await page.getByRole( 'spinbutton', { name: 'Bottom' } ).fill( '3' );
 		await page.getByRole( 'spinbutton', { name: 'Left' } ).fill( '4' );
-		// Change cell border with.
+		// Change cell border width.
 		await page.getByRole( 'spinbutton', { name: 'All' } ).fill( '2' );
 		// Change cell border style.
 		await page.getByRole( 'button', { name: 'Dotted' } ).click();
