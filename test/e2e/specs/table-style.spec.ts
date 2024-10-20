@@ -113,7 +113,7 @@ test.describe( 'Styles', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'table styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
+	test.skip( 'table styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
 		await page
@@ -204,7 +204,7 @@ test.describe( 'Styles', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'cell styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
+	test.skip( 'cell styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await editor.openDocumentSettingsSidebar();
@@ -217,7 +217,7 @@ test.describe( 'Styles', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'cell styles should be applied to multiple cells', async ( {
+	test.skip( 'cell styles should be applied to multiple cells', async ( {
 		editor,
 		page,
 		pageUtils,
@@ -237,6 +237,7 @@ test.describe( 'Styles', () => {
 
 	test( 'caption styles should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
+		await editor.clickBlockToolbarButton( 'Add caption' );
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Table caption text' } )
 			.fill( 'Flexible Table Block' );

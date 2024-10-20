@@ -63,7 +63,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const {
 		attributes,
 		setAttributes,
-		isSelected,
+		isSelected: isSingleSelected,
 		// @ts-ignore: `insertBlocksAfter` prop is not exist at @types
 		insertBlocksAfter,
 	} = props;
@@ -83,11 +83,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 	// Release cell selection.
 	useEffect( () => {
-		if ( ! isSelected ) {
+		if ( ! isSingleSelected ) {
 			setSelectedCells( undefined );
 			setSelectedLine( undefined );
 		}
-	}, [ isSelected ] );
+	}, [ isSingleSelected ] );
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable: VTable = toVirtualTable( attributes );
@@ -265,7 +265,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const tableProps = {
 		attributes,
 		setAttributes,
-		isSelected,
+		isSelected: isSingleSelected,
 		options,
 		vTable,
 		tableStylesObj,
@@ -303,6 +303,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		setSelectedLine,
 		setSelectedCells,
 		captionStylesObj,
+		isSelected: isSingleSelected,
 	};
 
 	const tableCaptionSettingProps = {

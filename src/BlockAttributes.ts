@@ -63,7 +63,7 @@ export interface BlockAttributes extends TableAttributes {
 	tableStyles?: string;
 	captionStyles?: string;
 	captionSide: CaptionSideValue;
-	caption: string;
+	caption?: string;
 	style: NestedObject;
 }
 

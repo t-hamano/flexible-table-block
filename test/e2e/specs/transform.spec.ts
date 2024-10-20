@@ -326,6 +326,7 @@ test.describe( 'Transform from flexible table block', () => {
 	} ) => {
 		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
+		await editor.clickBlockToolbarButton( 'Add caption' );
 		await editor.canvas.getByRole( 'textbox', { name: 'Table caption text' } ).click();
 		await page.keyboard.type( 'Flexible' );
 		await pageUtils.pressKeys( 'shift+Enter' );
@@ -348,13 +349,14 @@ test.describe( 'Transform from flexible table block', () => {
 		expect( await editor.getEditedPostContent() ).toBe( expected );
 	} );
 
-	test( 'should be transformed to core table block width no option caption text', async ( {
+	test( 'should be transformed to core table block with no option caption text', async ( {
 		editor,
 		page,
 		fsbUtils,
 	} ) => {
 		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
+		await editor.clickBlockToolbarButton( 'Add caption' );
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Table caption text' } )
 			.fill( 'Flexible Table Block' );
