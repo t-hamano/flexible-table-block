@@ -142,7 +142,7 @@ export default function BorderRadiusControl( {
 
 	return (
 		<BaseControl className="ftb-border-radius-control" help={ help } __nextHasNoMarginBottom>
-			<VStack aria-labelledby={ headingId } role="region">
+			<VStack aria-labelledby={ headingId } role="group">
 				<Flex>
 					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
 						{ label }

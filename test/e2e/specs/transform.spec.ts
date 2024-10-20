@@ -150,7 +150,10 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'button', { name: 'Table settings' } ).click();
 		await page.getByRole( 'checkbox', { name: 'Scroll on desktop view' } ).uncheck();
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '500' );
-		await page.fill( '.ftb-padding-control__header-control input', '1' );
+		await page
+			.getByRole( 'group', { name: 'Table padding' } )
+			.getByRole( 'spinbutton', { name: 'All' } )
+			.fill( '1' );
 		await page.getByRole( 'button', { name: 'Solid' } ).click();
 		await page.getByRole( 'button', { name: 'Separate' } ).click();
 		await editor.transformBlockTo( 'core/table' );
@@ -224,7 +227,10 @@ test.describe( 'Transform from flexible table block', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
 		await page.getByRole( 'spinbutton', { name: 'Cell font size' } ).fill( '20' );
-		await page.fill( '.ftb-padding-control__header-control input', '1' );
+		await page
+			.getByRole( 'group', { name: 'Cell padding' } )
+			.getByRole( 'spinbutton', { name: 'All' } )
+			.fill( '1' );
 		await page.getByRole( 'button', { name: 'Solid' } ).click();
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await editor.transformBlockTo( 'core/table' );
@@ -359,7 +365,10 @@ test.describe( 'Transform from flexible table block', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Caption settings', exact: true } ).click();
 		await page.getByRole( 'spinbutton', { name: 'Caption font size' } ).fill( '20' );
-		await page.fill( '.ftb-padding-control__header-control input', '20' );
+		await page
+			.getByRole( 'group', { name: 'Caption padding' } )
+			.getByRole( 'spinbutton', { name: 'All' } )
+			.fill( '1' );
 		await page.getByRole( 'radio', { name: 'Top' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 

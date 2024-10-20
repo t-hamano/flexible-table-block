@@ -322,7 +322,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			/>
 			<hr />
 			<BaseControl id="flexible-table-block-cell-text-align" __nextHasNoMarginBottom>
-				<div aria-labelledby="flexible-table-block-cell-text-align-heading" role="region">
+				<div aria-labelledby="flexible-table-block-cell-text-align-heading" role="group">
 					<span
 						id="flexible-table-block-cell-text-align-heading"
 						className="ftb-base-control-label"
@@ -417,7 +417,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
 						<BaseControl id="flexible-table-block-cell-scope" __nextHasNoMarginBottom>
-							<div aria-labelledby="flexible-table-block-cell-scope-heading" role="region">
+							<div aria-labelledby="flexible-table-block-cell-scope-heading" role="group">
 								<span
 									id="flexible-table-block-cell-scope-heading"
 									className="ftb-base-control-label"
