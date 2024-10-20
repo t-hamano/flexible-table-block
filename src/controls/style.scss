@@ -1,7 +1,6 @@
 // Linked button common styles.
 .ftb-border-radius-control__header-linked-button,
 .ftb-border-width-control__header-linked-button,
-.ftb-border-style-control__header-linked-button,
 .ftb-padding-control__header-linked-button,
 .ftb-color-control__header-linked-button {
 
@@ -92,26 +91,6 @@
 			grid-row: 2;
 			grid-column: 1;
 		}
-	}
-}
-
-// Button controls styles.
-.ftb-border-style-control__button-controls {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-
-	.ftb-border-style-control__header-linked-button {
-		margin-top: 6px;
-	}
-}
-
-.ftb-border-style-control__button-controls-row {
-	display: flex;
-	align-items: center;
-
-	&:not(:first-child) {
-		padding-top: 8px;
 	}
 }
 
