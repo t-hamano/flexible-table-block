@@ -31,7 +31,6 @@ type Props = {
 	help?: string;
 	onChange: ( event: any ) => void;
 	values: typeof DEFAULT_VALUES;
-	hasIndicator?: boolean;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -42,7 +41,6 @@ export default function BorderSpacingControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	hasIndicator = true,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -124,7 +122,7 @@ export default function BorderSpacingControl( {
 					<div className="ftb-border-spacing-control__controls-inner">
 						{ isLinked && (
 							<div className="ftb-border-spacing-control__controls-row">
-								{ hasIndicator && <DirectionIndicatorControl /> }
+								<DirectionIndicatorControl />
 								<UnitControl
 									aria-label={ __( 'All', 'flexible-table-block' ) }
 									value={ allInputValue }
@@ -138,7 +136,7 @@ export default function BorderSpacingControl( {
 						{ ! isLinked &&
 							DIRECTION_CONTROLS.map( ( item, index ) => (
 								<div className="ftb-border-spacing-control__controls-row" key={ index }>
-									{ hasIndicator && <DirectionIndicatorControl directions={ [ item.value ] } /> }
+									<DirectionIndicatorControl directions={ [ item.value ] } />
 									<UnitControl
 										key={ item.value }
 										aria-label={ item.label }

@@ -43,7 +43,6 @@ type Props = {
 		bottomRight?: Property.BorderBottomRightRadius;
 		bottomLeft?: Property.BorderBottomLeftRadius;
 	};
-	hasIndicator?: boolean;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -54,7 +53,6 @@ export default function BorderRadiusControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	hasIndicator = true,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -146,9 +144,7 @@ export default function BorderRadiusControl( {
 					</Button>
 				</div>
 				<div className="ftb-border-radius-control__header-control">
-					{ hasIndicator && (
-						<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
-					) }
+					<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
 					{ isLinked && (
 						<UnitControl
 							hideLabelFromVision

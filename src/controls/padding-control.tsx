@@ -43,7 +43,6 @@ type Props = {
 		bottom?: Property.PaddingBottom;
 		left?: Property.PaddingLeft;
 	};
-	hasIndicator?: boolean;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -53,7 +52,6 @@ export default function PaddingControl( {
 	help,
 	onChange,
 	values: valuesProp,
-	hasIndicator = true,
 }: Props ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 	const instanceId = useInstanceId( PaddingControl, 'ftb-padding-control' );
@@ -117,9 +115,7 @@ export default function PaddingControl( {
 					</Button>
 				</div>
 				<div className="ftb-padding-control__header-control">
-					{ hasIndicator && (
-						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-					) }
+					<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
 					{ isLinked && (
 						<UnitControl
 							placeholder={ allInputPlaceholder }
