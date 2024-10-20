@@ -46,7 +46,7 @@ export default function ColorControl( {
 	value,
 }: Props ) {
 	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
-	const headingId: string = `${ instanceId }-heading`;
+	const headingId = `${ instanceId }-heading`;
 
 	const colors = useSelect( ( select ) => {
 		const settings = select(

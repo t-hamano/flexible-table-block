@@ -55,9 +55,9 @@ export default function PaddingControl( {
 }: Props ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 	const instanceId = useInstanceId( PaddingControl, 'ftb-padding-control' );
-	const headingId: string = `${ instanceId }-heading`;
+	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean = ! (
+	const isMixed = ! (
 		values.top === values.right &&
 		values.top === values.bottom &&
 		values.top === values.left

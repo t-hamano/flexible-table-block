@@ -58,9 +58,9 @@ export default function BorderColorControl( {
 		...valuesProp,
 	};
 	const instanceId = useInstanceId( BorderColorControl, 'ftb-border-color-control' );
-	const headingId: string = `${ instanceId }-heading`;
+	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean = ! (
+	const isMixed = ! (
 		values.top === values.right &&
 		values.top === values.bottom &&
 		values.top === values.left

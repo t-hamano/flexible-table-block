@@ -59,9 +59,9 @@ export default function BorderRadiusControl( {
 		...valuesProp,
 	};
 	const instanceId = useInstanceId( BorderRadiusControl, 'ftb-border-radius-contro' );
-	const headingId: string = `${ instanceId }-heading`;
+	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean = ! (
+	const isMixed = ! (
 		values.topLeft === values.topRight &&
 		values.topLeft === values.bottomRight &&
 		values.topLeft === values.bottomLeft

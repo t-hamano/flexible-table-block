@@ -63,9 +63,9 @@ export default function BorderWidthControl( {
 		...valuesProp,
 	};
 	const instanceId = useInstanceId( BorderWidthControl, 'ftb-border-width-control' );
-	const headingId: string = `${ instanceId }-heading`;
+	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean =
+	const isMixed =
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 

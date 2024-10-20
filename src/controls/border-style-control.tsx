@@ -60,9 +60,9 @@ export default function BorderStyleControl( {
 		...valuesProp,
 	};
 	const instanceId = useInstanceId( BorderStyleControl, 'ftb-border-style-control' );
-	const headingId: string = `${ instanceId }-heading`;
+	const headingId = `${ instanceId }-heading`;
 
-	const isMixed: boolean =
+	const isMixed =
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
