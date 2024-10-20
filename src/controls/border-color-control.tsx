@@ -15,6 +15,10 @@ import {
 	Button,
 	Popover,
 	ColorPalette,
+	Flex,
+	FlexBlock,
+	FlexItem,
+	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 	__experimentalText as Text,
 } from '@wordpress/components';
@@ -120,13 +124,17 @@ export default function BorderColorControl( {
 
 	return (
 		<BaseControl className="ftb-border-color-control" help={ help } __nextHasNoMarginBottom>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-border-color-control__header">
-					<Text id={ headingId }>{ label }</Text>
-					<Button variant="secondary" onClick={ handleOnReset } size="small">
-						{ __( 'Reset', 'flexible-table-block' ) }
-					</Button>
-				</div>
+			<VStack aria-labelledby={ headingId } role="region">
+				<Flex>
+					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+						{ label }
+					</Text>
+					<FlexItem>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
 				<div className="ftb-border-color-control__controls">
 					<div className="ftb-border-color-control__controls-inner">
 						{ isLinked && (
@@ -186,7 +194,7 @@ export default function BorderColorControl( {
 						size="small"
 					/>
 				</div>
-			</div>
+			</VStack>
 		</BaseControl>
 	);
 }

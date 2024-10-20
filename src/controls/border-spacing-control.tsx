@@ -7,6 +7,10 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
+	Flex,
+	FlexBlock,
+	FlexItem,
+	__experimentalVStack as VStack,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -111,13 +115,17 @@ export default function BorderSpacingControl( {
 
 	return (
 		<BaseControl className="ftb-border-spacing-control" help={ help } __nextHasNoMarginBottom>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-border-spacing-control__header">
-					<Text id={ headingId }>{ label }</Text>
-					<Button variant="secondary" onClick={ handleOnReset } size="small">
-						{ __( 'Reset', 'flexible-table-block' ) }
-					</Button>
-				</div>
+			<VStack aria-labelledby={ headingId } role="region">
+				<Flex>
+					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+						{ label }
+					</Text>
+					<FlexItem>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
 				<div className="ftb-border-spacing-control__controls">
 					<div className="ftb-border-spacing-control__controls-inner">
 						{ isLinked && (
@@ -156,7 +164,7 @@ export default function BorderSpacingControl( {
 						size="small"
 					/>
 				</div>
-			</div>
+			</VStack>
 		</BaseControl>
 	);
 }

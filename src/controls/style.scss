@@ -1,25 +1,3 @@
-// Header common styles.
-.ftb-border-radius-control__header,
-.ftb-border-width-control__header,
-.ftb-border-style-control__header,
-.ftb-border-spacing-control__header,
-.ftb-border-color-control__header,
-.ftb-padding-control__header,
-.ftb-color-control__header {
-	display: flex;
-	gap: 8px;
-	align-items: center;
-	justify-content: space-between;
-	padding-bottom: 8px;
-
-	.components-text {
-		font-size: 11px;
-		font-weight: 500;
-		line-height: 1.4;
-		text-transform: uppercase;
-	}
-}
-
 // Linked button common styles.
 .ftb-border-radius-control__header-linked-button,
 .ftb-border-width-control__header-linked-button,
@@ -41,7 +19,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	min-height: 40px;
+	min-height: 40px !important;
 
 	.components-unit-control-wrapper {
 		max-width: 104px;

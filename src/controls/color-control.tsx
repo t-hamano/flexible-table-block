@@ -13,9 +13,13 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
+	Flex,
+	FlexBlock,
+	FlexItem,
 	Popover,
 	ColorPalette,
 	SlotFillProvider,
+	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 	__experimentalText as Text,
 } from '@wordpress/components';
@@ -70,13 +74,17 @@ export default function ColorControl( {
 	return (
 		<SlotFillProvider>
 			<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
-				<div aria-labelledby={ headingId } role="region">
-					<div className="ftb-color-control__header">
-						<Text id={ headingId }>{ label }</Text>
-						<Button variant="secondary" onClick={ handleOnReset } size="small">
-							{ __( 'Reset', 'flexible-table-block' ) }
-						</Button>
-					</div>
+				<VStack aria-labelledby={ headingId } role="region">
+					<Flex>
+						<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+							{ label }
+						</Text>
+						<FlexItem>
+							<Button variant="secondary" onClick={ handleOnReset } size="small">
+								{ __( 'Reset', 'flexible-table-block' ) }
+							</Button>
+						</FlexItem>
+					</Flex>
 					<ColorIndicatorButton
 						label={ __( 'Color', 'flexible-table-block' ) }
 						value={ value }
@@ -95,7 +103,7 @@ export default function ColorControl( {
 							</Spacer>
 						</Popover>
 					) }
-				</div>
+				</VStack>
 				{ /* @ts-ignore Slot is not currently typed on Popover */ }
 				<Popover.Slot />
 			</BaseControl>

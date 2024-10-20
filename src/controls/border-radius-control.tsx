@@ -12,6 +12,10 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
+	Flex,
+	FlexBlock,
+	FlexItem,
+	__experimentalVStack as VStack,
 	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -136,13 +140,17 @@ export default function BorderRadiusControl( {
 
 	return (
 		<BaseControl className="ftb-border-radius-control" help={ help } __nextHasNoMarginBottom>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-border-radius-control__header">
-					<Text id={ headingId }>{ label }</Text>
-					<Button variant="secondary" onClick={ handleOnReset } size="small">
-						{ __( 'Reset', 'flexible-table-block' ) }
-					</Button>
-				</div>
+			<VStack aria-labelledby={ headingId } role="region">
+				<Flex>
+					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+						{ label }
+					</Text>
+					<FlexItem>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
 				<div className="ftb-border-radius-control__header-control">
 					<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
 					{ isLinked && (
@@ -181,7 +189,7 @@ export default function BorderRadiusControl( {
 						) ) }
 					</div>
 				) }
-			</div>
+			</VStack>
 		</BaseControl>
 	);
 }

@@ -12,8 +12,12 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
+	Flex,
+	FlexBlock,
+	FlexItem,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
+	__experimentalVStack as VStack,
 	__experimentalText as Text,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
@@ -115,13 +119,17 @@ export default function BorderStyleControl( {
 
 	return (
 		<BaseControl className="ftb-border-style-control" help={ help } __nextHasNoMarginBottom>
-			<div aria-labelledby={ headingId } role="region">
-				<div className="ftb-border-style-control__header">
-					<Text id={ headingId }>{ controlLabel }</Text>
-					<Button variant="secondary" onClick={ handleOnReset } size="small">
-						{ __( 'Reset', 'flexible-table-block' ) }
-					</Button>
-				</div>
+			<VStack aria-labelledby={ headingId } role="region">
+				<Flex>
+					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
+						{ controlLabel }
+					</Text>
+					<FlexItem>
+						<Button variant="secondary" onClick={ handleOnReset } size="small">
+							{ __( 'Reset', 'flexible-table-block' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
 				<div className="ftb-border-style-control__button-controls">
 					<div className="ftb-border-style-control__button-controls-inner">
 						{ isLinked && (
@@ -180,7 +188,7 @@ export default function BorderStyleControl( {
 						/>
 					) }
 				</div>
-			</div>
+			</VStack>
 		</BaseControl>
 	);
 }
