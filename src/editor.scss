@@ -446,24 +446,9 @@
 }
 
 .ftb-percent-group {
-	margin-top: 8px;
-}
+	margin-top: -8px;
 
-.ftb-font-size-control,
-.ftb-width-control {
-
-	.components-input-control.components-input-control {
-		max-width: 100px;
-		margin-bottom: 0;
+	&:has(+ .components-base-control) {
+		margin-bottom: 16px;
 	}
-}
-
-.ftb-width-control .components-unit-control .components-unit-control__select {
-	background-color: transparent;
-	background-image: none;
-}
-
-.ftb-line-height-control .components-text-control__input {
-	display: block;
-	max-width: 72px;
 }

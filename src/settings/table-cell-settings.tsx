@@ -223,73 +223,53 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				</Button>
 			</Spacer>
 			<div className="ftb-base-control-row">
-				<BaseControl
-					id="flexible-table-block-cell-font-size"
-					label={ __( 'Cell font size', 'flexible-table-block' ) }
-					className="ftb-font-size-control"
-					__nextHasNoMarginBottom
-				>
-					<UnitControl
-						id="flexible-table-block-cell-font-size"
-						value={ cellStylesObj?.fontSize }
-						units={ fontSizeUnits }
-						min={ 0 }
-						onChange={ onChangeFontSize }
-						size="__unstable-large"
-					/>
-				</BaseControl>
-				<BaseControl
-					id="flexible-table-block-cell-line-height"
-					className="ftb-line-height-control"
-					__nextHasNoMarginBottom
-				>
-					<TextControl
-						label={ __( 'Cell line height', 'flexible-table-block' ) }
-						value={ cellStylesObj?.lineHeight || '' }
-						autoComplete="off"
-						type="number"
-						step={ 0.1 }
-						min={ 0 }
-						onChange={ onChangeLineHeight }
-						__nextHasNoMarginBottom
-						__next40pxDefaultSize
-					/>
-				</BaseControl>
-			</div>
-			<BaseControl
-				id="flexible-table-block-cell-width"
-				label={ __( 'Cell width', 'flexible-table-block' ) }
-				className="ftb-width-control"
-				__nextHasNoMarginBottom
-			>
 				<UnitControl
-					id="flexible-table-block-cell-width"
-					aria-label={ __( 'Cell width', 'flexible-table-block' ) }
-					value={ cellStylesObj?.width }
-					units={ cellWidthUnits }
+					label={ __( 'Cell font size', 'flexible-table-block' ) }
+					value={ cellStylesObj?.fontSize }
+					units={ fontSizeUnits }
 					min={ 0 }
-					onChange={ onChangeWidth }
+					onChange={ onChangeFontSize }
 					size="__unstable-large"
 				/>
-				<ButtonGroup
-					aria-label={ __( 'Cell percentage width', 'flexible-table-block' ) }
-					className="ftb-percent-group"
-				>
-					{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-						const isPressed = cellStylesObj?.width === `${ perWidth }%`;
-						return (
-							<Button
-								key={ perWidth }
-								variant={ isPressed ? 'primary' : undefined }
-								onClick={ () => onChangeWidth( isPressed ? '' : `${ perWidth }%` ) }
-								size="small"
-							>
-								{ `${ perWidth }%` }
-							</Button>
-						);
-					} ) }
-				</ButtonGroup>
-			</BaseControl>
+				<TextControl
+					label={ __( 'Cell line height', 'flexible-table-block' ) }
+					value={ cellStylesObj?.lineHeight || '' }
+					autoComplete="off"
+					type="number"
+					step={ 0.1 }
+					min={ 0 }
+					onChange={ onChangeLineHeight }
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+				/>
+			</div>
+			<UnitControl
+				label={ __( 'Cell width', 'flexible-table-block' ) }
+				value={ cellStylesObj?.width }
+				units={ cellWidthUnits }
+				min={ 0 }
+				onChange={ onChangeWidth }
+				size="__unstable-large"
+				__unstableInputWidth="calc(50% - 8px)"
+			/>
+			<ButtonGroup
+				aria-label={ __( 'Cell percentage width', 'flexible-table-block' ) }
+				className="ftb-percent-group"
+			>
+				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+					const isPressed = cellStylesObj?.width === `${ perWidth }%`;
+					return (
+						<Button
+							key={ perWidth }
+							variant={ isPressed ? 'primary' : undefined }
+							onClick={ () => onChangeWidth( isPressed ? '' : `${ perWidth }%` ) }
+							size="small"
+						>
+							{ `${ perWidth }%` }
+						</Button>
+					);
+				} ) }
+			</ButtonGroup>
 			<hr />
 			<ColorControl
 				label={ __( 'Cell text color', 'flexible-table-block' ) }
