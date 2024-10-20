@@ -21,19 +21,15 @@ async function applyCellStyles( page, pageUtils ) {
 	await page.getByRole( 'spinbutton', { name: 'Cell width' } ).fill( '100' );
 
 	// Text Color, Background Color styles.
-	const cellTextColorId = await page.getByText( 'Cell text color' ).getAttribute( 'id' );
 	await page
-		.locator( `[aria-labelledby="${ cellTextColorId }"]` )
+		.getByRole( 'group', { name: 'Cell text color' } )
 		.getByRole( 'button', { name: 'Color' } )
 		.click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '111111' );
 	await pageUtils.pressKeys( 'Escape', { times: 2 } );
-	const cellBackgroundColorId = await page
-		.getByText( 'Cell background color' )
-		.getAttribute( 'id' );
 	await page
-		.locator( `[aria-labelledby="${ cellBackgroundColorId }"]` )
+		.getByRole( 'group', { name: 'Cell background color' } )
 		.getByRole( 'button', { name: 'Color' } )
 		.click();
 	await pageUtils.pressKeys( 'Enter' );
@@ -42,27 +38,27 @@ async function applyCellStyles( page, pageUtils ) {
 	// Padding, Border Radius, Border Width styles.
 	const styles = [
 		{
-			selector: 'padding',
+			group: 'Cell padding',
 			labels: [ 'Top', 'Right', 'Bottom', 'Left' ],
 		},
 		{
-			selector: 'border-radius',
+			group: 'Cell border radius',
 			labels: [ 'Top left', 'Top right', 'Bottom right', 'Bottom left' ],
 		},
 		{
-			selector: 'border-width',
+			group: 'Cell border width',
 			labels: [ 'Top', 'Right', 'Bottom', 'Left' ],
 		},
 	];
 	for ( let i = 0; i < styles.length; i++ ) {
-		const { selector, labels } = styles[ i ];
+		const { group, labels } = styles[ i ];
 		await page
-			.locator( `.ftb-${ selector }-control__header-control` )
+			.getByRole( 'group', { name: group } )
 			.getByRole( 'button', { name: 'Unlink sides' } )
 			.click();
 		for ( let j = 0; j < labels.length; j++ ) {
 			await page
-				.locator( `.ftb-${ selector }-control__input-controls` )
+				.getByRole( 'group', { name: group } )
 				.getByRole( 'spinbutton', { name: labels[ j ] } )
 				.fill( ( j + 1 ).toString() );
 		}
@@ -70,7 +66,7 @@ async function applyCellStyles( page, pageUtils ) {
 
 	// Boder Style styles.
 	await page
-		.locator( '.ftb-border-style-control__button-controls' )
+		.getByRole( 'group', { name: 'Cell border style' } )
 		.getByRole( 'button', { name: 'Unlink sides' } )
 		.click();
 	await page.getByRole( 'button', { name: 'Solid' } ).nth( 0 ).click();
@@ -80,7 +76,7 @@ async function applyCellStyles( page, pageUtils ) {
 
 	// Border Color styles.
 	await page
-		.locator( '.ftb-border-color-control__controls' )
+		.getByRole( 'group', { name: 'Cell border color' } )
 		.getByRole( 'button', { name: 'Unlink sides' } )
 		.click();
 	const colors = [
@@ -91,7 +87,7 @@ async function applyCellStyles( page, pageUtils ) {
 	];
 	for ( let i = 0; i < colors.length; i++ ) {
 		await page
-			.locator( '.ftb-border-color-control__controls' )
+			.getByRole( 'group', { name: 'Cell border color' } )
 			.getByRole( 'button', { name: colors[ i ].label } )
 			.click();
 		await pageUtils.pressKeys( 'Enter' );
@@ -143,27 +139,27 @@ test.describe( 'Styles', () => {
 		// Padding, Border Radius, Border Width styles.
 		const styles = [
 			{
-				selector: 'padding',
+				group: 'Table padding',
 				labels: [ 'Top', 'Right', 'Bottom', 'Left' ],
 			},
 			{
-				selector: 'border-radius',
+				group: 'Table border radius',
 				labels: [ 'Top left', 'Top right', 'Bottom right', 'Bottom left' ],
 			},
 			{
-				selector: 'border-width',
+				group: 'Table border width',
 				labels: [ 'Top', 'Right', 'Bottom', 'Left' ],
 			},
 		];
 		for ( let i = 0; i < styles.length; i++ ) {
-			const { selector, labels } = styles[ i ];
+			const { group, labels } = styles[ i ];
 			await page
-				.locator( `.ftb-${ selector }-control__header-control` )
+				.getByRole( 'group', { name: group } )
 				.getByRole( 'button', { name: 'Unlink sides' } )
 				.click();
 			for ( let j = 0; j < labels.length; j++ ) {
 				await page
-					.locator( `.ftb-${ selector }-control__input-controls` )
+					.getByRole( 'group', { name: group } )
 					.getByRole( 'spinbutton', { name: labels[ j ] } )
 					.fill( ( j + 1 ).toString() );
 			}
@@ -171,7 +167,7 @@ test.describe( 'Styles', () => {
 
 		// Boder Style styles.
 		await page
-			.locator( '.ftb-border-style-control__button-controls' )
+			.getByRole( 'group', { name: 'Table border style' } )
 			.getByRole( 'button', { name: 'Unlink sides' } )
 			.click();
 		await page.getByRole( 'button', { name: 'Solid' } ).nth( 0 ).click();
@@ -181,7 +177,7 @@ test.describe( 'Styles', () => {
 
 		// Border Color styles.
 		await page
-			.locator( '.ftb-border-color-control__controls' )
+			.getByRole( 'group', { name: 'Table border color' } )
 			.getByRole( 'button', { name: 'Unlink sides' } )
 			.click();
 		const colors = [
@@ -192,7 +188,7 @@ test.describe( 'Styles', () => {
 		];
 		for ( let i = 0; i < colors.length; i++ ) {
 			await page
-				.locator( '.ftb-border-color-control__controls' )
+				.getByRole( 'group', { name: 'Table border color' } )
 				.getByRole( 'button', { name: colors[ i ].label } )
 				.click();
 			await pageUtils.pressKeys( 'Enter' );

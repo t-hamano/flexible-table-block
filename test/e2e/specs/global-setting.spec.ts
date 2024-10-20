@@ -35,7 +35,7 @@ test.describe( 'Global Setting', () => {
 		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
 			'Global setting restored.'
 		);
-		await page.locator( '.ftb-global-setting-modal__notice ' ).getByRole( 'button' ).click();
+		await page.locator( '.ftb-global-setting-modal__notice' ).getByRole( 'button' ).click();
 		// Change table width.
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '90' );
 		// Change table max width.
@@ -43,17 +43,17 @@ test.describe( 'Global Setting', () => {
 		await page.getByRole( 'button', { name: 'Separate' } ).click();
 		// Change striped colors.
 		const tableColors = [
-			{ color: '111111', selector: 'odd' },
-			{ color: '222222', selector: 'even' },
+			{ color: '111111', label: 'Striped style background color ( odd rows )' },
+			{ color: '222222', label: 'Striped style background color ( even rows )' },
 		];
 		for ( let i = 0; i < tableColors.length; i++ ) {
+			const { color, label } = tableColors[ i ];
 			await page
-				.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } )
+				.getByRole( 'group', { name: label } )
 				.getByRole( 'button', { name: 'Color' } )
-				.nth( i )
 				.click();
 			await pageUtils.pressKeys( 'Enter' );
-			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( tableColors[ i ].color );
+			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
 			await pageUtils.pressKeys( 'Escape', { times: 2 } );
 		}
 		// Apply cell styles.
