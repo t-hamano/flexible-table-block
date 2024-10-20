@@ -10,9 +10,9 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
-	__experimentalText as Text,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
+	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -127,9 +127,9 @@ export default function BorderSpacingControl( {
 						</Button>
 					</FlexItem>
 				</Flex>
-				<HStack>
+				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
-						<HStack>
+						<HStack justify="start">
 							<DirectionIndicatorControl />
 							<UnitControl
 								aria-label={ __( 'All', 'flexible-table-block' ) }
@@ -138,12 +138,13 @@ export default function BorderSpacingControl( {
 								placeholder={ allInputPlaceholder }
 								onChange={ handleOnChangeAll }
 								size="__unstable-large"
+								__unstableInputWidth="100px"
 							/>
 						</HStack>
 					) : (
 						<VStack spacing={ 1 }>
-							{ DIRECTION_CONTROLS.map( ( item, index ) => (
-								<HStack key={ index }>
+							{ DIRECTION_CONTROLS.map( ( item ) => (
+								<HStack justify="start" key={ item.value }>
 									<DirectionIndicatorControl directions={ [ item.value ] } />
 									<UnitControl
 										key={ item.value }
@@ -152,6 +153,7 @@ export default function BorderSpacingControl( {
 										units={ borderSpacingUnits }
 										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										size="__unstable-large"
+										__unstableInputWidth="100px"
 									/>
 								</HStack>
 							) ) }
@@ -162,6 +164,7 @@ export default function BorderSpacingControl( {
 						icon={ isLinked ? link : linkOff }
 						onClick={ toggleLinked }
 						size="small"
+						style={ { marginTop: '8px' } }
 					/>
 				</HStack>
 			</VStack>
