@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 6.5
-Tested up to: 6.6
-Stable tag: 3.3.0
+Tested up to: 6.7
+Stable tag: 3.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,15 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.4.0 =
+* Tested to WordPress 6.7
+* Drop support for WordPress 6.4
+* Add: Caption toolbar button
+* Enhancement: Update icons
+* Enhancement: Improve accessibility
+* Enhancement: Improve hint text
+* Enhancement: Add box-sizing
 
 = 3.3.0 =
 * Tested to WordPress 6.6
