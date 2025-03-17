@@ -86,10 +86,6 @@ test.describe( 'Transform from flexible table block', () => {
 			.fill( 'Flexible Table Block' );
 		await editor.transformBlockTo( 'core/table' );
 
-		const expected = `<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`;
-
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -111,10 +107,6 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'button', { name: 'Table settings' } ).click();
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'core/table' );
-
-		const expected = `<!-- wp:table {"hasFixedLayout":false} -->
-<figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`;
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -141,10 +133,6 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'button', { name: 'Separate' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		const expected = `<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`;
-
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -169,10 +157,6 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.clickBlockToolbarButton( 'Edit table' );
 		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		await editor.transformBlockTo( 'core/table' );
-
-		const expected = `<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`;
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -202,10 +186,6 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		const expected = `<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`;
-
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -227,11 +207,6 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
 		await page.getByRole( 'button', { name: 'row', exact: true } ).click();
 		await editor.transformBlockTo( 'core/table' );
-
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = `<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`;
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -256,11 +231,6 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = `<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td></tr></tfoot></table></figure>
-<!-- /wp:table -->`;
-
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
@@ -279,10 +249,6 @@ test.describe( 'Transform from flexible table block', () => {
 		await pageUtils.pressKeys( 'shift+Enter' );
 		await page.keyboard.type( 'Block' );
 		await editor.transformBlockTo( 'core/table' );
-
-		const expected = `<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
-<!-- /wp:table -->`;
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -310,10 +276,6 @@ test.describe( 'Transform from flexible table block', () => {
 			.fill( '1' );
 		await page.getByRole( 'radio', { name: 'Top' } ).click();
 		await editor.transformBlockTo( 'core/table' );
-
-		const expected = `<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
-<!-- /wp:table -->`;
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
