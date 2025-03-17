@@ -90,7 +90,7 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'should be transformed to core table block with no Fixed width table cells option', async ( {
@@ -116,7 +116,7 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'should be transformed to core table block with no style and class table', async ( {
@@ -145,7 +145,7 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'should be transformed to core table block with rowspan / colspan cells', async ( {
@@ -174,7 +174,7 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'should be transformed to core table block with no style and class cells', async ( {
@@ -206,7 +206,7 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'should be transformed to core table block with no unnecessary attributes cells', async ( {
@@ -233,7 +233,7 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'should be transformed to core table block with appropriate tag cells', async ( {
@@ -261,7 +261,7 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td></tr></tfoot></table></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'should be transformed to core table block keeping caption text', async ( {
@@ -284,7 +284,7 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test( 'should be transformed to core table block with no option caption text', async ( {
@@ -315,6 +315,6 @@ test.describe( 'Transform from flexible table block', () => {
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`;
 
-		expect( await editor.getEditedPostContent() ).toBe( expected );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 } );
