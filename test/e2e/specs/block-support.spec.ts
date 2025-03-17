@@ -57,7 +57,7 @@ test.describe( 'Block Support', () => {
 
 		// Change font appearance.
 		await page
-			.getByRole( [ '6-5', '6-6' ].includes( wpVersion ) ? 'button' : 'combobox', {
+			.getByRole( [ '6-6' ].includes( wpVersion ) ? 'button' : 'combobox', {
 				name: 'Appearance',
 			} )
 			.click();
@@ -91,7 +91,7 @@ test.describe( 'Block Support', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		// Show custom controls.
-		if ( [ '6-5', '6-6' ].includes( wpVersion ) ) {
+		if ( [ '6-6' ].includes( wpVersion ) ) {
 			await page.getByRole( 'button', { name: 'Margin options' } ).click();
 			await page
 				.getByRole( 'menu', { name: 'Margin options' } )
