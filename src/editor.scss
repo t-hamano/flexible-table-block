@@ -1,5 +1,5 @@
-@import "settings/global-settings/style";
-@import "controls/style";
+@use "settings/global-settings/style" as globalSettings;
+@use "controls/style" as controls;
 
 .editor-styles-wrapper .wp-block-flexible-table-block-table {
 	box-sizing: border-box;
