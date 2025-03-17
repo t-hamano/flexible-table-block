@@ -58,6 +58,7 @@ test.describe( 'Flexible table cell', () => {
 		pageUtils,
 		fsbUtils,
 	} ) => {
+		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Link' );
 		await pageUtils.pressKeys( 'primary+a' );
@@ -72,7 +73,11 @@ test.describe( 'Flexible table cell', () => {
 		// Edit the link.
 		await pageUtils.pressKeys( 'Tab' );
 		await pageUtils.pressKeys( 'Enter' );
-		await page.getByRole( 'combobox', { name: 'Link' } ).fill( '#anchor-updated' );
+		await page
+			.getByRole( 'combobox', {
+				name: [ '6-6', '6-7' ].includes( wpVersion ) ? 'Link' : 'Search or type URL',
+			} )
+			.fill( '#anchor-updated' );
 		await pageUtils.pressKeys( 'Enter' );
 
 		// Toggle "Open in new tab".
