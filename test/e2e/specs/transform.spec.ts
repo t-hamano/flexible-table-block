@@ -79,7 +79,6 @@ test.describe( 'Transform from flexible table block', () => {
 		editor,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock( { col: 3, row: 6 } );
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
@@ -87,14 +86,7 @@ test.describe( 'Transform from flexible table block', () => {
 			.fill( 'Flexible Table Block' );
 		await editor.transformBlockTo( 'core/table' );
 
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table {"hasFixedLayout":true} -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table -->
+		const expected = `<!-- wp:table -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
@@ -106,7 +98,6 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock( { col: 6, row: 3 } );
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
@@ -121,14 +112,7 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'core/table' );
 
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table -->
-<figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table {"hasFixedLayout":false} -->
+		const expected = `<!-- wp:table {"hasFixedLayout":false} -->
 <figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
@@ -140,7 +124,6 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock( { col: 6, row: 3 } );
 		await editor.openDocumentSettingsSidebar();
 		await page
@@ -158,14 +141,7 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'button', { name: 'Separate' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table {"hasFixedLayout":true} -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table -->
+		const expected = `<!-- wp:table -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
@@ -177,7 +153,6 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
@@ -195,14 +170,7 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table {"hasFixedLayout":true} -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table -->
+		const expected = `<!-- wp:table -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
@@ -214,7 +182,6 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
@@ -235,14 +202,7 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table {"hasFixedLayout":true} -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table -->
+		const expected = `<!-- wp:table -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
@@ -254,7 +214,6 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await editor.openDocumentSettingsSidebar();
@@ -270,13 +229,7 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table {"hasFixedLayout":true} -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table -->
+		const expected = `<!-- wp:table -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`;
 
@@ -288,7 +241,6 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
 		await editor.canvas.getByRole( 'textbox', { name: 'Header cell text' } ).nth( 0 ).click();
 		await editor.openDocumentSettingsSidebar();
@@ -305,13 +257,7 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.transformBlockTo( 'core/table' );
 
 		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table {"hasFixedLayout":true} -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td></tr></tfoot></table></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table -->
+		const expected = `<!-- wp:table -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td></tr></tfoot></table></figure>
 <!-- /wp:table -->`;
 
@@ -324,7 +270,6 @@ test.describe( 'Transform from flexible table block', () => {
 		pageUtils,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.clickBlockToolbarButton( 'Add caption' );
 		await editor.canvas.getByRole( 'textbox', { name: 'Table caption text' } ).click();
@@ -335,14 +280,7 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.keyboard.type( 'Block' );
 		await editor.transformBlockTo( 'core/table' );
 
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table {"hasFixedLayout":true} -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table -->
+		const expected = `<!-- wp:table -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
 <!-- /wp:table -->`;
 
@@ -354,7 +292,6 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.clickBlockToolbarButton( 'Add caption' );
 		await editor.canvas
@@ -374,14 +311,7 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'Top' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default.
-		const expected = [ '6-5' ].includes( wpVersion )
-			? // WP 6.5
-			  `<!-- wp:table {"hasFixedLayout":true} -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
-<!-- /wp:table -->`
-			: // WP 6.6, WP 6.7
-			  `<!-- wp:table -->
+		const expected = `<!-- wp:table -->
 <figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
 <!-- /wp:table -->`;
 

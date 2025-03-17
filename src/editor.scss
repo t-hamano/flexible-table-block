@@ -397,20 +397,8 @@
 	}
 }
 
-// Backwards compatible styles for WordPress 6.6 / 6.5
+// Backwards compatible styles for WordPress 6.6
 // See: https://github.com/WordPress/gutenberg/issues/53374
 .is-outline-mode .wp-block-flexible-table-block-table.is-selected .rich-text {
 	cursor: initial;
-}
-
-// Backwards compatible styles for WordPress 6.5
-.ftb-placeholder {
-
-	.components-placeholder__instructions {
-		margin-bottom: 0;
-	}
-
-	.components-placeholder__fieldset {
-		gap: 16px;
-	}
 }
