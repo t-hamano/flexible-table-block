@@ -113,7 +113,7 @@ test.describe( 'Styles', () => {
 		await admin.createNewPost();
 	} );
 
-	test.skip( 'table styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
+	test( 'table styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
 		await page
@@ -204,7 +204,7 @@ test.describe( 'Styles', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test.skip( 'cell styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
+	test( 'cell styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await editor.openDocumentSettingsSidebar();
@@ -217,7 +217,7 @@ test.describe( 'Styles', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test.skip( 'cell styles should be applied to multiple cells', async ( {
+	test( 'cell styles should be applied to multiple cells', async ( {
 		editor,
 		page,
 		pageUtils,
