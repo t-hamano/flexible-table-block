@@ -22,6 +22,7 @@ import {
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
+	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
 
 /**
@@ -67,6 +68,8 @@ import type {
 	BlockAttributes,
 } from '../BlockAttributes';
 
+const PERCENTAGE_WIDTHS = [ 25, 50, 75, 100 ];
+
 type Props = {
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
 	vTable: VTable;
@@ -99,6 +102,9 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	}, [] );
 
 	const cellStylesObj = convertToObject( targetCell.styles );
+	const [ parsedWidthQuantity, parsedWidthUnit ] = parseQuantityAndUnitFromRawValue(
+		cellStylesObj?.width
+	);
 
 	const updateCellsState = ( state: {
 		styles?: any;
@@ -269,10 +275,16 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				hideLabelFromVision
 				label={ __( 'Cell percentage width', 'flexible-table-block' ) }
 				isBlock
-				value={ cellStylesObj?.width }
+				value={
+					parsedWidthQuantity &&
+					PERCENTAGE_WIDTHS.includes( parsedWidthQuantity ) &&
+					parsedWidthUnit === '%'
+						? cellStylesObj?.width
+						: undefined
+				}
 				onChange={ ( value ) => onChangeWidth( value as Property.Width ) }
 			>
-				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
 					return (
 						<ToggleGroupControlOption
 							key={ perWidth }
