@@ -333,6 +333,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						<ToggleGroupControl
 							hideLabelFromVision
 							__nextHasNoMarginBottom
+							__next40pxDefaultSize
 							label={ __( 'Text alignment', 'flexible-table-block' ) }
 							value={ cellStylesObj?.textAlign }
 							isDeselectable
@@ -350,6 +351,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						<ToggleGroupControl
 							hideLabelFromVision
 							__nextHasNoMarginBottom
+							__next40pxDefaultSize
 							label={ __( 'Vertical alignment', 'flexible-table-block' ) }
 							value={ cellStylesObj?.verticalAlign }
 							isDeselectable
@@ -370,6 +372,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			<hr />
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 				label={ __( 'Cell tag', 'flexible-table-block' ) }
 				value={ targetCell.tag }
 				isBlock

@@ -449,6 +449,7 @@ export default function TableSettings( {
 			<hr />
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 				label={ __( 'Cell borders', 'flexible-table-block' ) }
 				value={ tableStylesObj?.borderCollapse }
 				isDeselectable

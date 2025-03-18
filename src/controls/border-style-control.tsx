@@ -137,6 +137,7 @@ export default function BorderStyleControl( {
 							<ToggleGroupControl
 								hideLabelFromVision
 								__nextHasNoMarginBottom
+								__next40pxDefaultSize
 								label={ label }
 								value={ allInputValue }
 								isDeselectable
@@ -160,6 +161,7 @@ export default function BorderStyleControl( {
 									<ToggleGroupControl
 										hideLabelFromVision
 										__nextHasNoMarginBottom
+										__next40pxDefaultSize
 										label={ item.label }
 										value={ values[ item.value as ValuesKey ] }
 										isDeselectable
