@@ -105,7 +105,7 @@ test.describe( 'Block Support', () => {
 				.click();
 		} else if ( wpVersion === '6-7' ) {
 			// WP 6.7
-			await page.getByRole( 'button', { name: 'Unlink margin' } ).click();
+			await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
 		} else {
 			// WP 6.8
 			await page.getByRole( 'button', { name: 'Unlink' } ).click();
