@@ -16,6 +16,9 @@ class Enqueue {
 		// Register block.
 		add_action( 'init', array( $this, 'register_block' ) );
 
+		// Filter block type args.
+		add_filter( 'register_block_type_args', array( $this, 'register_block_type_args' ), 10, 2 );
+
 		// Enqueue front-end scripts.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -30,6 +33,39 @@ class Enqueue {
 	 */
 	public function register_block() {
 		register_block_type( FTB_PATH . '/build' );
+	}
+
+	/**
+	 * Filter block type args
+	 */
+	public function register_block_type_args( $args, $name ) {
+
+		if ( 'flexible-table-block/table' !== $name ) {
+			return $args;
+		}
+
+		if ( is_wp_version_compatible( '6.7' ) ) {
+			return $args;
+		}
+
+		// Backwards compatible for WordPress 6.6. The `role` attribute is not yet available.
+		if ( version_compare( get_bloginfo( 'version' ), '6.7', '>=' ) ) {
+			if ( isset( $args['attributes']['caption']['role'] ) ) {
+				unset( $args['attributes']['caption']['role'] );
+				$args['attributes']['caption']['__experimentalRole'] = 'content';
+			}
+		}
+
+		$sections = array( 'head', 'body', 'foot' );
+
+		foreach ( $sections as $section ) {
+			if ( isset( $args['attributes'][ $section ]['query']['cells']['query']['content']['role'] ) ) {
+				unset( $args['attributes'][ $section ]['query']['cells']['query']['content']['role'] );
+				$args['attributes'][ $section ]['query']['cells']['query']['content']['__experimentalRole'] = 'content';
+			}
+		}
+
+		return $args;
 	}
 
 	/**

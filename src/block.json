@@ -43,7 +43,7 @@
 			"type": "string",
 			"source": "html",
 			"selector": "figcaption",
-			"__experimentalRole": "content"
+			"role": "content"
 		},
 		"captionStyles": {
 			"type": "string",
@@ -66,7 +66,7 @@
 						"content": {
 							"type": "string",
 							"source": "html",
-							"__experimentalRole": "content"
+							"role": "content"
 						},
 						"styles": {
 							"type": "string",
@@ -127,7 +127,7 @@
 						"content": {
 							"type": "string",
 							"source": "html",
-							"__experimentalRole": "content"
+							"role": "content"
 						},
 						"styles": {
 							"type": "string",
@@ -188,7 +188,7 @@
 						"content": {
 							"type": "string",
 							"source": "html",
-							"__experimentalRole": "content"
+							"role": "content"
 						},
 						"styles": {
 							"type": "string",
