@@ -11,14 +11,15 @@ import { __, _x, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import {
 	Button,
-	ButtonGroup,
 	Flex,
 	SelectControl,
 	ToggleControl,
+	__experimentalHStack as HStack,
 	__experimentalSpacer as Spacer,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
 
@@ -66,7 +67,6 @@ import {
 	updateBorderColor,
 	updateBorderSpacing,
 } from '../utils/style-updater';
-import { sanitizeUnitValue } from '../utils/helper';
 import type { StickyValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
 
@@ -310,107 +310,115 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 			/>
 			<hr />
-			<UnitControl
-				label={ __( 'Table width', 'flexible-table-block' ) }
+			<HStack alignment="start">
+				<UnitControl
+					label={ __( 'Table width', 'flexible-table-block' ) }
+					value={ tableStylesObj?.width }
+					units={ tableWidthUnits }
+					disabled={ tableStylesObj?.width === 'auto' }
+					min={ 0 }
+					onChange={ onChangeWidth }
+					size="__unstable-large"
+					__unstableInputWidth="calc(50% - 8px)"
+				/>
+				<Button variant="secondary" size="small" onClick={ () => onChangeWidth( undefined ) }>
+					{ __( 'Reset', 'flexible-table-block' ) }
+				</Button>
+			</HStack>
+			<ToggleGroupControl
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
+				hideLabelFromVision
+				label={ __( 'Table percentage width', 'flexible-table-block' ) }
+				isBlock
 				value={ tableStylesObj?.width }
-				units={ tableWidthUnits }
-				disabled={ tableStylesObj?.width === 'auto' }
-				min={ 0 }
-				onChange={ onChangeWidth }
-				size="__unstable-large"
-				__unstableInputWidth="calc(50% - 8px)"
-			/>
-			<ButtonGroup
-				aria-label={ __( 'Table percentage width', 'flexible-table-block' ) }
-				className="ftb-percent-group"
+				onChange={ ( value ) => onChangeWidth( value as Property.Width ) }
 			>
 				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-					const isPressed = tableStylesObj?.width === `${ perWidth }%`;
 					return (
-						<Button
+						<ToggleGroupControlOption
 							key={ perWidth }
-							variant={ isPressed ? 'primary' : undefined }
-							onClick={ () =>
-								onChangeWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
-							}
-							size="small"
-						>
-							{ `${ perWidth }%` }
-						</Button>
+							label={ `${ perWidth }%` }
+							value={ `${ perWidth }%` }
+						/>
 					);
 				} ) }
-				<Button
-					variant={ tableStylesObj?.width === 'auto' ? 'primary' : undefined }
-					onClick={ () => onChangeWidth( tableStylesObj?.width === 'auto' ? '' : 'auto' ) }
-					size="small"
-				>
-					{ __( 'auto', 'flexible-table-block' ) }
+				<ToggleGroupControlOption
+					label={ _x( 'auto', 'width', 'flexible-table-block' ) }
+					value="auto"
+				/>
+			</ToggleGroupControl>
+			<HStack alignment="start">
+				<UnitControl
+					label={ __( 'Table max width', 'flexible-table-block' ) }
+					value={ tableStylesObj?.maxWidth }
+					units={ tableWidthUnits }
+					disabled={ tableStylesObj?.maxWidth === 'none' }
+					min={ 0 }
+					onChange={ onChangeMaxWidth }
+					size="__unstable-large"
+					__unstableInputWidth="calc(50% - 8px)"
+				/>
+				<Button variant="secondary" size="small" onClick={ () => onChangeMaxWidth( undefined ) }>
+					{ __( 'Reset', 'flexible-table-block' ) }
 				</Button>
-			</ButtonGroup>
-			<UnitControl
-				label={ __( 'Table max width', 'flexible-table-block' ) }
+			</HStack>
+			<ToggleGroupControl
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
+				hideLabelFromVision
+				label={ __( 'Table percentage max width', 'flexible-table-block' ) }
+				isBlock
 				value={ tableStylesObj?.maxWidth }
-				units={ tableWidthUnits }
-				disabled={ tableStylesObj?.maxWidth === 'none' }
-				min={ 0 }
-				onChange={ onChangeMaxWidth }
-				size="__unstable-large"
-				__unstableInputWidth="calc(50% - 8px)"
-			/>
-			<ButtonGroup
-				aria-label={ __( 'Table percentage max width', 'flexible-table-block' ) }
-				className="ftb-percent-group"
+				onChange={ ( value ) => onChangeMaxWidth( value as Property.MaxWidth ) }
 			>
 				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-					const isPressed = tableStylesObj?.maxWidth === `${ perWidth }%`;
 					return (
-						<Button
+						<ToggleGroupControlOption
 							key={ perWidth }
-							variant={ isPressed ? 'primary' : undefined }
-							onClick={ () =>
-								onChangeMaxWidth( isPressed ? '' : sanitizeUnitValue( `${ perWidth }%` ) )
-							}
-							size="small"
-						>
-							{ `${ perWidth }%` }
-						</Button>
+							label={ `${ perWidth }%` }
+							value={ `${ perWidth }%` }
+						/>
 					);
 				} ) }
-				<Button
-					variant={ tableStylesObj?.maxWidth === 'none' ? 'primary' : undefined }
-					onClick={ () => onChangeMaxWidth( tableStylesObj?.maxWidth === 'none' ? '' : 'none' ) }
-					size="small"
-				>
-					{ _x( 'none', 'width', 'flexible-table-block' ) }
+				<ToggleGroupControlOption
+					label={ _x( 'none', 'width', 'flexible-table-block' ) }
+					value="none"
+				/>
+			</ToggleGroupControl>
+			<HStack alignment="start">
+				<UnitControl
+					label={ __( 'Table min width', 'flexible-table-block' ) }
+					value={ tableStylesObj?.minWidth }
+					units={ tableWidthUnits }
+					min={ 0 }
+					onChange={ onChangeMinWidth }
+					size="__unstable-large"
+					__unstableInputWidth="calc(50% - 8px)"
+				/>
+				<Button variant="secondary" size="small" onClick={ () => onChangeMinWidth( undefined ) }>
+					{ __( 'Reset', 'flexible-table-block' ) }
 				</Button>
-			</ButtonGroup>
-			<UnitControl
-				label={ __( 'Table min width', 'flexible-table-block' ) }
+			</HStack>
+			<ToggleGroupControl
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
+				hideLabelFromVision
+				label={ __( 'Table percentage min width', 'flexible-table-block' ) }
+				isBlock
 				value={ tableStylesObj?.minWidth }
-				units={ tableWidthUnits }
-				min={ 0 }
-				onChange={ onChangeMinWidth }
-				size="__unstable-large"
-				__unstableInputWidth="calc(50% - 8px)"
-			/>
-			<ButtonGroup
-				aria-label={ __( 'Table percentage min width', 'flexible-table-block' ) }
-				className="ftb-percent-group"
+				onChange={ ( value ) => onChangeMinWidth( value as Property.MinWidth ) }
 			>
 				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-					const isPressed = tableStylesObj?.minWidth === `${ perWidth }%`;
 					return (
-						<Button
+						<ToggleGroupControlOption
 							key={ perWidth }
-							variant={ isPressed ? 'primary' : undefined }
-							onClick={ () => onChangeMinWidth( isPressed ? '' : `${ perWidth }%` ) }
-							size="small"
-						>
-							{ `${ perWidth }%` }
-						</Button>
+							label={ `${ perWidth }%` }
+							value={ `${ perWidth }%` }
+						/>
 					);
 				} ) }
-			</ButtonGroup>
+			</ToggleGroupControl>
 			<hr />
 			<PaddingControl
 				label={ __( 'Table padding', 'flexible-table-block' ) }
@@ -449,6 +457,7 @@ export default function TableSettings( {
 			<hr />
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 				label={ __( 'Cell borders', 'flexible-table-block' ) }
 				value={ tableStylesObj?.borderCollapse }
 				isDeselectable

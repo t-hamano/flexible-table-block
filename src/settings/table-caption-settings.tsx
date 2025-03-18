@@ -137,6 +137,7 @@ export default function TableCaptionSettings( {
 			/>
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 				label={ __( 'Caption position', 'flexible-table-block' ) }
 				value={ captionSide }
 				isBlock
@@ -148,6 +149,7 @@ export default function TableCaptionSettings( {
 			</ToggleGroupControl>
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 				label={ __( 'Caption text alignment', 'flexible-table-block' ) }
 				value={ captionStylesObj?.textAlign }
 				isDeselectable

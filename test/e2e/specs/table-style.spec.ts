@@ -105,7 +105,7 @@ async function applyCellStyles( page, pageUtils ) {
 	// id, headers, scope getBlockAttributes.
 	await page.getByRole( 'textbox', { name: 'id attribute' } ).fill( 'id' );
 	await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
-	await page.getByRole( 'button', { name: 'row', exact: true } ).click();
+	await page.getByRole( 'combobox', { name: 'scope attribute' } ).selectOption( 'row' );
 }
 
 test.describe( 'Styles', () => {
