@@ -21,6 +21,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
+	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
 
 /**
@@ -70,6 +71,8 @@ import {
 import type { StickyValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
 
+const PERCENTAGE_WIDTHS = [ 25, 50, 75, 100 ];
+
 type Props = {
 	attributes: BlockAttributes;
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
@@ -96,6 +99,16 @@ export default function TableSettings( {
 	}, [] );
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
+
+	const [ parsedWidthQuantity, parsedWidthUnit ] = parseQuantityAndUnitFromRawValue(
+		tableStylesObj?.width
+	);
+	const [ parsedMaxWidthQuantity, parsedMaxWidthUnit ] = parseQuantityAndUnitFromRawValue(
+		tableStylesObj?.maxWidth
+	);
+	const [ parsedMinWidthQuantity, parsedMinWidthUnit ] = parseQuantityAndUnitFromRawValue(
+		tableStylesObj?.minWidth
+	);
 
 	const onChangeHasFixedLayout = () => {
 		setAttributes( { hasFixedLayout: ! hasFixedLayout } );
@@ -331,10 +344,17 @@ export default function TableSettings( {
 				hideLabelFromVision
 				label={ __( 'Table percentage width', 'flexible-table-block' ) }
 				isBlock
-				value={ tableStylesObj?.width }
+				value={
+					tableStylesObj?.width === 'auto' ||
+					( parsedWidthQuantity &&
+						PERCENTAGE_WIDTHS.includes( parsedWidthQuantity ) &&
+						parsedWidthUnit === '%' )
+						? tableStylesObj?.width
+						: undefined
+				}
 				onChange={ ( value ) => onChangeWidth( value as Property.Width ) }
 			>
-				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
 					return (
 						<ToggleGroupControlOption
 							key={ perWidth }
@@ -369,10 +389,17 @@ export default function TableSettings( {
 				hideLabelFromVision
 				label={ __( 'Table percentage max width', 'flexible-table-block' ) }
 				isBlock
-				value={ tableStylesObj?.maxWidth }
+				value={
+					tableStylesObj?.maxWidth === 'none' ||
+					( parsedMaxWidthQuantity &&
+						PERCENTAGE_WIDTHS.includes( parsedMaxWidthQuantity ) &&
+						parsedMaxWidthUnit === '%' )
+						? tableStylesObj?.maxWidth
+						: undefined
+				}
 				onChange={ ( value ) => onChangeMaxWidth( value as Property.MaxWidth ) }
 			>
-				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
 					return (
 						<ToggleGroupControlOption
 							key={ perWidth }
@@ -406,10 +433,16 @@ export default function TableSettings( {
 				hideLabelFromVision
 				label={ __( 'Table percentage min width', 'flexible-table-block' ) }
 				isBlock
-				value={ tableStylesObj?.minWidth }
+				value={
+					parsedMinWidthQuantity &&
+					PERCENTAGE_WIDTHS.includes( parsedMinWidthQuantity ) &&
+					parsedMinWidthUnit === '%'
+						? tableStylesObj?.minWidth
+						: undefined
+				}
 				onChange={ ( value ) => onChangeMinWidth( value as Property.MinWidth ) }
 			>
-				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
+				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
 					return (
 						<ToggleGroupControlOption
 							key={ perWidth }
