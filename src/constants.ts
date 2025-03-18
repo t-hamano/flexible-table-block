@@ -200,6 +200,10 @@ export const CELL_TAG_CONTROLS = [
 
 export const CELL_SCOPE_CONTROLS = [
 	{
+		label: _x( 'none', 'Cell scope control', 'flexible-table-block' ),
+		value: 'none',
+	},
+	{
 		label: __( 'row', 'flexible-table-block' ),
 		value: 'row',
 	},

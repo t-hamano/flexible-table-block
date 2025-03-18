@@ -11,10 +11,11 @@ import { createInterpolateElement } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	ButtonGroup,
 	Flex,
 	FlexBlock,
+	SelectControl,
 	TextControl,
+	__experimentalHStack as HStack,
 	__experimentalSpacer as Spacer,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -185,7 +186,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	};
 
 	const onChangeScope = ( value: CellScopeValue ) => {
-		updateCellsState( { scope: value === targetCell.scope ? undefined : value } );
+		updateCellsState( { scope: 'none' === value ? undefined : value } );
 	};
 
 	const onResetCellSettings = () => {
@@ -248,33 +249,39 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					/>
 				</FlexBlock>
 			</Spacer>
-			<UnitControl
-				label={ __( 'Cell width', 'flexible-table-block' ) }
+			<HStack alignment="start">
+				<UnitControl
+					label={ __( 'Cell width', 'flexible-table-block' ) }
+					value={ cellStylesObj?.width }
+					units={ cellWidthUnits }
+					min={ 0 }
+					onChange={ onChangeWidth }
+					size="__unstable-large"
+					__unstableInputWidth="calc(50% - 8px)"
+				/>
+				<Button variant="secondary" size="small" onClick={ () => onChangeWidth( undefined ) }>
+					{ __( 'Reset', 'flexible-table-block' ) }
+				</Button>
+			</HStack>
+			<ToggleGroupControl
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
+				hideLabelFromVision
+				label={ __( 'Cell percentage width', 'flexible-table-block' ) }
+				isBlock
 				value={ cellStylesObj?.width }
-				units={ cellWidthUnits }
-				min={ 0 }
-				onChange={ onChangeWidth }
-				size="__unstable-large"
-				__unstableInputWidth="calc(50% - 8px)"
-			/>
-			<ButtonGroup
-				aria-label={ __( 'Cell percentage width', 'flexible-table-block' ) }
-				className="ftb-percent-group"
+				onChange={ ( value ) => onChangeWidth( value as Property.Width ) }
 			>
 				{ [ 25, 50, 75, 100 ].map( ( perWidth ) => {
-					const isPressed = cellStylesObj?.width === `${ perWidth }%`;
 					return (
-						<Button
+						<ToggleGroupControlOption
 							key={ perWidth }
-							variant={ isPressed ? 'primary' : undefined }
-							onClick={ () => onChangeWidth( isPressed ? '' : `${ perWidth }%` ) }
-							size="small"
-						>
-							{ `${ perWidth }%` }
-						</Button>
+							label={ `${ perWidth }%` }
+							value={ `${ perWidth }%` }
+						/>
 					);
 				} ) }
-			</ButtonGroup>
+			</ToggleGroupControl>
 			<hr />
 			<ColorControl
 				label={ __( 'Cell text color', 'flexible-table-block' ) }
@@ -419,33 +426,19 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						__next40pxDefaultSize
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
-						<BaseControl id="flexible-table-block-cell-scope" __nextHasNoMarginBottom>
-							<div aria-labelledby="flexible-table-block-cell-scope-heading" role="group">
-								<span
-									id="flexible-table-block-cell-scope-heading"
-									className="ftb-base-control-label"
-								>
-									{ createInterpolateElement(
-										__( '<code>scope</code> attribute', 'flexible-table-block' ),
-										{ code: <code /> }
-									) }
-								</span>
-								<ButtonGroup className="ftb-button-group">
-									{ CELL_SCOPE_CONTROLS.map( ( { label, value } ) => {
-										return (
-											<Button
-												key={ value }
-												variant={ value === targetCell.scope ? 'primary' : 'secondary' }
-												onClick={ () => onChangeScope( value ) }
-												size="small"
-											>
-												{ label }
-											</Button>
-										);
-									} ) }
-								</ButtonGroup>
-							</div>
-						</BaseControl>
+						<SelectControl
+							label={ createInterpolateElement(
+								__( '<code>scope</code> attribute', 'flexible-table-block' ),
+								{ code: <code /> }
+							) }
+							value={ targetCell.scope }
+							options={ CELL_SCOPE_CONTROLS.map( ( { label, value } ) => {
+								return { label, value };
+							} ) }
+							onChange={ ( value ) => onChangeScope( value as CellScopeValue ) }
+							size="__unstable-large"
+							__nextHasNoMarginBottom
+						/>
 					) }
 				</>
 			) }
