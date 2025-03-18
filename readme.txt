@@ -4,7 +4,7 @@ Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 6.6
 Tested up to: 6.7
-Stable tag: 3.4.0
+Stable tag: 3.5.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,11 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.5.0 =
+* Tested to WordPress 6.8
+* Drop support for WP 6.5
+* Enhancement: Replace deprecated UI with recommended UI
 
 = 3.4.0 =
 * Tested to WordPress 6.7
