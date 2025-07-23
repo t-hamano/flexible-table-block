@@ -14,6 +14,8 @@
  * @package Flexible_Table_Block
  * @author Aki Hamano
  * @license GPL-2.0+
+ *
+ * Test comment for GitHub Copilot username verification.
  */
 
 defined( 'ABSPATH' ) || exit;
