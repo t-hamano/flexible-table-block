@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import valueParser from 'postcss-value-parser';
 import type { PropertyValue } from 'csstype';
 
 const DEFAULT_PRECISION: number = 4;
@@ -38,18 +39,21 @@ export function cleanEmptyObject( object: {} ): {} | undefined {
  * @param cssValue CSS value.
  * @return Array with four values.
  */
-export function parseCssValue( cssValue: string ): FourCssValues {
-	const cssValues: string[] = cssValue.split( ' ' ).map( ( value: string ) => value.toLowerCase() );
+export function parseCssValue( cssValue = '' ): FourCssValues {
+	const parsedValues = valueParser( cssValue )
+		.nodes.filter( ( node ) => node.type !== 'space' )
+		.map( ( node ) => ( node.type === 'function' ? valueParser.stringify( node ) : node.value ) )
+		.slice( 0, 4 );
 
-	switch ( cssValues.length ) {
+	switch ( parsedValues.length ) {
 		case 1:
-			return [ cssValues[ 0 ], cssValues[ 0 ], cssValues[ 0 ], cssValues[ 0 ] ];
+			return [ parsedValues[ 0 ], parsedValues[ 0 ], parsedValues[ 0 ], parsedValues[ 0 ] ];
 		case 2:
-			return [ cssValues[ 0 ], cssValues[ 1 ], cssValues[ 0 ], cssValues[ 1 ] ];
+			return [ parsedValues[ 0 ], parsedValues[ 1 ], parsedValues[ 0 ], parsedValues[ 1 ] ];
 		case 3:
-			return [ cssValues[ 0 ], cssValues[ 1 ], cssValues[ 2 ], cssValues[ 1 ] ];
+			return [ parsedValues[ 0 ], parsedValues[ 1 ], parsedValues[ 2 ], parsedValues[ 1 ] ];
 		case 4:
-			return [ cssValues[ 0 ], cssValues[ 1 ], cssValues[ 2 ], cssValues[ 3 ] ];
+			return [ parsedValues[ 0 ], parsedValues[ 1 ], parsedValues[ 2 ], parsedValues[ 3 ] ];
 		default:
 			return [ '', '', '', '' ];
 	}

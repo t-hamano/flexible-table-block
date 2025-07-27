@@ -25,7 +25,8 @@
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
 		"@emotion/styled": "^11.14.1",
-		"@wordpress/icons": "^10.27.0"
+		"@wordpress/icons": "^10.27.0",
+		"postcss-value-parser": "4.2.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^30.0.0",
