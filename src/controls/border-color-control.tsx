@@ -15,9 +15,6 @@ import {
 	Button,
 	Popover,
 	ColorPalette,
-	Flex,
-	FlexBlock,
-	FlexItem,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
@@ -92,11 +89,6 @@ export default function BorderColorControl( {
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
-	const handleOnReset = () => {
-		setIsLinked( true );
-		onChange( DEFAULT_VALUES );
-	};
-
 	const handleOnChangeAll = ( inputValue: string | undefined ) => {
 		onChange( {
 			top: inputValue,
@@ -126,16 +118,9 @@ export default function BorderColorControl( {
 	return (
 		<BaseControl className="ftb-border-color-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="group">
-				<Flex>
-					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
-						{ label }
-					</Text>
-					<FlexItem>
-						<Button variant="secondary" onClick={ handleOnReset } size="small">
-							{ __( 'Reset', 'flexible-table-block' ) }
-						</Button>
-					</FlexItem>
-				</Flex>
+				<Text id={ headingId } upperCase size="11" weight="500">
+					{ label }
+				</Text>
 				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
 						<HStack spacing={ 3 } justify="start">

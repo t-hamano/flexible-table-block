@@ -12,10 +12,6 @@ import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import {
 	BaseControl,
-	Button,
-	Flex,
-	FlexBlock,
-	FlexItem,
 	Popover,
 	ColorPalette,
 	__experimentalVStack as VStack,
@@ -62,8 +58,6 @@ export default function ColorControl( {
 
 	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
 
-	const handleOnReset = () => onChange( undefined );
-
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
 
 	const handleOnPickerOpen = () => setIsPickerOpen( true );
@@ -73,16 +67,9 @@ export default function ColorControl( {
 	return (
 		<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="group">
-				<Flex>
-					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
-						{ label }
-					</Text>
-					<FlexItem>
-						<Button variant="secondary" onClick={ handleOnReset } size="small">
-							{ __( 'Reset', 'flexible-table-block' ) }
-						</Button>
-					</FlexItem>
-				</Flex>
+				<Text id={ headingId } upperCase size="11" weight="500">
+					{ label }
+				</Text>
 				<ColorIndicatorButton
 					label={ __( 'Color', 'flexible-table-block' ) }
 					value={ value }

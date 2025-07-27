@@ -7,9 +7,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Flex,
-	FlexBlock,
-	FlexItem,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
 	__experimentalText as Text,
@@ -71,11 +68,6 @@ export default function BorderSpacingControl( {
 		setIsLinked( ! isLinked );
 	};
 
-	const handleOnReset = () => {
-		setIsLinked( true );
-		onChange( DEFAULT_VALUES );
-	};
-
 	const handleOnChangeAll = ( inputValue: string | undefined ) => {
 		if ( inputValue ) {
 			const [ , unit ] = parseUnit( inputValue );
@@ -117,16 +109,9 @@ export default function BorderSpacingControl( {
 	return (
 		<BaseControl className="ftb-border-spacing-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="group">
-				<Flex>
-					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
-						{ label }
-					</Text>
-					<FlexItem>
-						<Button variant="secondary" onClick={ handleOnReset } size="small">
-							{ __( 'Reset', 'flexible-table-block' ) }
-						</Button>
-					</FlexItem>
-				</Flex>
+				<Text id={ headingId } upperCase size="11" weight="500">
+					{ label }
+				</Text>
 				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
 						<HStack justify="start">

@@ -12,9 +12,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Flex,
-	FlexBlock,
-	FlexItem,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalHStack as HStack,
@@ -81,11 +78,6 @@ export default function BorderStyleControl( {
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
-	const handleOnReset = () => {
-		setIsLinked( true );
-		onChange( DEFAULT_VALUES );
-	};
-
 	const handleOnClickAll = ( value: string | number | undefined ) => {
 		const newValue =
 			value === values.top &&
@@ -118,18 +110,11 @@ export default function BorderStyleControl( {
 	return (
 		<BaseControl className="ftb-border-style-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="group">
-				<Flex>
-					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
-						{ isMixed && isLinked
-							? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
-							: label }
-					</Text>
-					<FlexItem>
-						<Button variant="secondary" onClick={ handleOnReset } size="small">
-							{ __( 'Reset', 'flexible-table-block' ) }
-						</Button>
-					</FlexItem>
-				</Flex>
+				<Text id={ headingId } upperCase size="11" weight="500">
+					{ isMixed && isLinked
+						? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
+						: label }
+				</Text>
 				<HStack alignment="start" justify="space-between">
 					{ isLinked ? (
 						<HStack spacing={ 2 } justify="start">

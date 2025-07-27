@@ -12,9 +12,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Flex,
-	FlexBlock,
-	FlexItem,
 	__experimentalGrid as Grid,
 	__experimentalHStack as HStack,
 	__experimentalVStack as VStack,
@@ -86,12 +83,6 @@ export default function PaddingControl( {
 		setSide( undefined );
 	};
 
-	const handleOnReset = () => {
-		setIsLinked( true );
-		setSide( undefined );
-		onChange( DEFAULT_VALUES );
-	};
-
 	const handleOnFocus = ( focusSide: SideValue ) => setSide( focusSide );
 
 	const handleOnChangeAll = ( inputValue: string | undefined ) => {
@@ -114,16 +105,9 @@ export default function PaddingControl( {
 	return (
 		<BaseControl className="ftb-padding-control" help={ help } __nextHasNoMarginBottom>
 			<VStack aria-labelledby={ headingId } role="group">
-				<Flex>
-					<Text id={ headingId } upperCase size="11" weight="500" as={ FlexBlock }>
-						{ label }
-					</Text>
-					<FlexItem>
-						<Button variant="secondary" onClick={ handleOnReset } size="small">
-							{ __( 'Reset', 'flexible-table-block' ) }
-						</Button>
-					</FlexItem>
-				</Flex>
+				<Text id={ headingId } upperCase size="11" weight="500">
+					{ label }
+				</Text>
 				<HStack alignment="center" justify="space-between" style={ { minHeight: '40px' } }>
 					<HStack justify="start">
 						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />

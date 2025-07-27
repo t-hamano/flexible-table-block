@@ -14,7 +14,6 @@ import {
 	Flex,
 	SelectControl,
 	ToggleControl,
-	__experimentalHStack as HStack,
 	__experimentalSpacer as Spacer,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -323,21 +322,16 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 			/>
 			<hr />
-			<HStack alignment="start">
-				<UnitControl
-					label={ __( 'Table width', 'flexible-table-block' ) }
-					value={ tableStylesObj?.width }
-					units={ tableWidthUnits }
-					disabled={ tableStylesObj?.width === 'auto' }
-					min={ 0 }
-					onChange={ onChangeWidth }
-					size="__unstable-large"
-					__unstableInputWidth="calc(50% - 8px)"
-				/>
-				<Button variant="secondary" size="small" onClick={ () => onChangeWidth( undefined ) }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</HStack>
+			<UnitControl
+				label={ __( 'Table width', 'flexible-table-block' ) }
+				value={ tableStylesObj?.width }
+				units={ tableWidthUnits }
+				disabled={ tableStylesObj?.width === 'auto' }
+				min={ 0 }
+				onChange={ onChangeWidth }
+				size="__unstable-large"
+				__unstableInputWidth="50%"
+			/>
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
@@ -368,21 +362,16 @@ export default function TableSettings( {
 					value="auto"
 				/>
 			</ToggleGroupControl>
-			<HStack alignment="start">
-				<UnitControl
-					label={ __( 'Table max width', 'flexible-table-block' ) }
-					value={ tableStylesObj?.maxWidth }
-					units={ tableWidthUnits }
-					disabled={ tableStylesObj?.maxWidth === 'none' }
-					min={ 0 }
-					onChange={ onChangeMaxWidth }
-					size="__unstable-large"
-					__unstableInputWidth="calc(50% - 8px)"
-				/>
-				<Button variant="secondary" size="small" onClick={ () => onChangeMaxWidth( undefined ) }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</HStack>
+			<UnitControl
+				label={ __( 'Table max width', 'flexible-table-block' ) }
+				value={ tableStylesObj?.maxWidth }
+				units={ tableWidthUnits }
+				disabled={ tableStylesObj?.maxWidth === 'none' }
+				min={ 0 }
+				onChange={ onChangeMaxWidth }
+				size="__unstable-large"
+				__unstableInputWidth="50%"
+			/>
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
@@ -413,20 +402,15 @@ export default function TableSettings( {
 					value="none"
 				/>
 			</ToggleGroupControl>
-			<HStack alignment="start">
-				<UnitControl
-					label={ __( 'Table min width', 'flexible-table-block' ) }
-					value={ tableStylesObj?.minWidth }
-					units={ tableWidthUnits }
-					min={ 0 }
-					onChange={ onChangeMinWidth }
-					size="__unstable-large"
-					__unstableInputWidth="calc(50% - 8px)"
-				/>
-				<Button variant="secondary" size="small" onClick={ () => onChangeMinWidth( undefined ) }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</HStack>
+			<UnitControl
+				label={ __( 'Table min width', 'flexible-table-block' ) }
+				value={ tableStylesObj?.minWidth }
+				units={ tableWidthUnits }
+				min={ 0 }
+				onChange={ onChangeMinWidth }
+				size="__unstable-large"
+				__unstableInputWidth="50%"
+			/>
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
