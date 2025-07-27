@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import clsx from 'clsx';
 import type { PropertyValue } from 'csstype';
 
 /**
@@ -45,6 +46,7 @@ type Props = {
 	};
 	allowSides?: boolean;
 	hasIndicator?: boolean;
+	className?: string;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -56,6 +58,7 @@ export default function BorderStyleControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
+	className,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -108,7 +111,11 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-style-control" help={ help } __nextHasNoMarginBottom>
+		<BaseControl
+			className={ clsx( 'ftb-border-style-control', className ) }
+			help={ help }
+			__nextHasNoMarginBottom
+		>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ isMixed && isLinked

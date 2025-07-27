@@ -234,18 +234,20 @@ export default function TableSettings( {
 
 	return (
 		<>
-			<Spacer marginBottom="4" as={ Flex } justify="end">
+			<Spacer marginBottom="4" as={ Flex } justify="end" className="ftb-table-settings-clear">
 				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear table settings', 'flexible-table-block' ) }
 				</Button>
 			</Spacer>
 			<ToggleControl
+				className="ftb-table-settings-header"
 				label={ __( 'Header section', 'flexible-table-block' ) }
 				checked={ !! ( head && head.length ) }
 				onChange={ onToggleHeaderSection }
 				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
+				className="ftb-table-settings-footer"
 				label={ __( 'Footer section', 'flexible-table-block' ) }
 				checked={ !! ( foot && foot.length ) }
 				onChange={ onToggleFooterSection }
@@ -253,14 +255,15 @@ export default function TableSettings( {
 			/>
 			<hr />
 			<ToggleControl
+				className="ftb-table-settings-fixed-width"
 				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
 				checked={ !! hasFixedLayout }
 				onChange={ onChangeHasFixedLayout }
 				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
+				className="ftb-table-settings-scroll-on-desktop"
 				label={ __( 'Scroll on desktop view', 'flexible-table-block' ) }
-				className="ftb-toggle-control"
 				checked={ !! isScrollOnPc }
 				help={
 					options.breakpoint &&
@@ -274,8 +277,8 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
+				className="ftb-table-settings-scroll-on-mobile"
 				label={ __( 'Scroll on mobile view', 'flexible-table-block' ) }
-				className="ftb-toggle-control"
 				checked={ !! isScrollOnMobile }
 				help={
 					options.breakpoint &&
@@ -289,8 +292,8 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
+				className="ftb-table-settings-stack-on-mobile"
 				label={ __( 'Stack on mobile', 'flexible-table-block' ) }
-				className="ftb-toggle-control"
 				checked={ !! isStackedOnMobile }
 				help={
 					options.breakpoint &&
@@ -304,6 +307,7 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 			/>
 			<SelectControl
+				className="ftb-table-settings-fixed-control"
 				label={ __( 'Fixed control', 'flexible-table-block' ) }
 				value={ sticky }
 				options={ STICKY_CONTROLS.map( ( { label, value } ) => {
@@ -323,6 +327,7 @@ export default function TableSettings( {
 			/>
 			<hr />
 			<UnitControl
+				className="ftb-table-settings-width"
 				label={ __( 'Table width', 'flexible-table-block' ) }
 				value={ tableStylesObj?.width }
 				units={ tableWidthUnits }
@@ -336,6 +341,7 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				hideLabelFromVision
+				className="ftb-table-settings-percentage-width"
 				label={ __( 'Table percentage width', 'flexible-table-block' ) }
 				isBlock
 				value={
@@ -363,6 +369,7 @@ export default function TableSettings( {
 				/>
 			</ToggleGroupControl>
 			<UnitControl
+				className="ftb-table-settings-max-width"
 				label={ __( 'Table max width', 'flexible-table-block' ) }
 				value={ tableStylesObj?.maxWidth }
 				units={ tableWidthUnits }
@@ -376,6 +383,7 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				hideLabelFromVision
+				className="ftb-table-settings-percentage-max-width"
 				label={ __( 'Table percentage max width', 'flexible-table-block' ) }
 				isBlock
 				value={
@@ -403,6 +411,7 @@ export default function TableSettings( {
 				/>
 			</ToggleGroupControl>
 			<UnitControl
+				className="ftb-table-settings-min-width"
 				label={ __( 'Table min width', 'flexible-table-block' ) }
 				value={ tableStylesObj?.minWidth }
 				units={ tableWidthUnits }
@@ -415,6 +424,7 @@ export default function TableSettings( {
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				hideLabelFromVision
+				className="ftb-table-settings-percentage-min-width"
 				label={ __( 'Table percentage min width', 'flexible-table-block' ) }
 				isBlock
 				value={
@@ -438,6 +448,7 @@ export default function TableSettings( {
 			</ToggleGroupControl>
 			<hr />
 			<PaddingControl
+				className="ftb-table-settings-padding"
 				label={ __( 'Table padding', 'flexible-table-block' ) }
 				help={ __(
 					'Table padding is only enabled when "Cell Borders" is set to "Separate".',
@@ -448,11 +459,13 @@ export default function TableSettings( {
 			/>
 			<hr />
 			<BorderRadiusControl
+				className="ftb-table-settings-border-radius"
 				label={ __( 'Table border radius', 'flexible-table-block' ) }
 				values={ pickBorderRadius( tableStylesObj ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
+				className="ftb-table-settings-border-width"
 				label={ __( 'Table border width', 'flexible-table-block' ) }
 				help={ __(
 					'Table border width is only enabled when "Cell Borders" is set to "Separate".',
@@ -462,11 +475,13 @@ export default function TableSettings( {
 				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
+				className="ftb-table-settings-border-style"
 				label={ __( 'Table border style', 'flexible-table-block' ) }
 				values={ pickBorderStyle( tableStylesObj ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
+				className="ftb-table-settings-border-color"
 				label={ __( 'Table border color', 'flexible-table-block' ) }
 				values={ pickBorderColor( tableStylesObj ) }
 				onChange={ onChangeBorderColor }
@@ -475,6 +490,7 @@ export default function TableSettings( {
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
+				className="ftb-table-settings-cell-borders"
 				label={ __( 'Cell borders', 'flexible-table-block' ) }
 				value={ tableStylesObj?.borderCollapse }
 				isDeselectable

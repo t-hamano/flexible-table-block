@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -41,6 +42,7 @@ type Props = {
 		bottom?: Property.BorderBottomColor;
 		left?: Property.BorderLeftColor;
 	};
+	className?: string;
 };
 
 const DEFAULT_VALUES = {
@@ -55,6 +57,7 @@ export default function BorderColorControl( {
 	help,
 	onChange,
 	values: valuesProp,
+	className,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -116,7 +119,11 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-color-control" help={ help } __nextHasNoMarginBottom>
+		<BaseControl
+			className={ clsx( 'ftb-border-color-control', className ) }
+			help={ help }
+			__nextHasNoMarginBottom
+		>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ label }

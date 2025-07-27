@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -48,6 +49,7 @@ type Props = {
 	};
 	allowSides?: boolean;
 	hasIndicator?: boolean;
+	className?: string;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -60,6 +62,7 @@ export default function BorderWidthControl( {
 	values: valuesProp,
 	allowSides = true,
 	hasIndicator = true,
+	className,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -132,7 +135,11 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-width-control" help={ help } __nextHasNoMarginBottom>
+		<BaseControl
+			className={ clsx( 'ftb-border-width-control', className ) }
+			help={ help }
+			__nextHasNoMarginBottom
+		>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ label }

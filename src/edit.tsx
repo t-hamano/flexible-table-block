@@ -347,17 +347,23 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 						<PanelBody
 							title={ __( 'Table settings', 'flexible-table-block' ) }
 							initialOpen={ false }
+							className="flexible-table-block-table-settings-panel"
 						>
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
 						{ selectedCells && !! selectedCells.length && (
-							<PanelBody title={ tableCellSettingsLabel } initialOpen={ false }>
+							<PanelBody
+								title={ tableCellSettingsLabel }
+								initialOpen={ false }
+								className="flexible-table-block-table-cell-settings-panel"
+							>
 								<TableCellSettings { ...tableCellSettingsProps } />
 							</PanelBody>
 						) }
 						<PanelBody
 							title={ __( 'Caption settings', 'flexible-table-block' ) }
 							initialOpen={ false }
+							className="flexible-table-block-table-caption-settings-panel"
 						>
 							<TableCaptionSettings { ...tableCaptionSettingProps } />
 						</PanelBody>

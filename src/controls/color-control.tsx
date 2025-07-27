@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 import type { ReactElement } from 'react';
 
@@ -36,6 +37,7 @@ type Props = {
 		color: Property.Color;
 	}[];
 	value: Property.Color | undefined;
+	className?: string;
 };
 
 export default function ColorControl( {
@@ -44,6 +46,7 @@ export default function ColorControl( {
 	onChange,
 	colors: colorsProp = [],
 	value,
+	className,
 }: Props ) {
 	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
 	const headingId = `${ instanceId }-heading`;
@@ -65,7 +68,11 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<BaseControl className="ftb-color-control" help={ help } __nextHasNoMarginBottom>
+		<BaseControl
+			className={ clsx( 'ftb-color-control', className ) }
+			help={ help }
+			__nextHasNoMarginBottom
+		>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ label }
