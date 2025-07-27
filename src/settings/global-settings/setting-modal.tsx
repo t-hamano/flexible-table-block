@@ -194,6 +194,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 			title={ __( 'Flexible Table Block Global setting', 'flexible-table-block' ) }
 			className="ftb-global-setting-modal"
 			onRequestClose={ () => setIsSettingModalOpen( false ) }
+			size="large"
 		>
 			{ isWaiting && (
 				<HStack justify="center" className="ftb-global-setting-modal__loading">

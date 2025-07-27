@@ -1,12 +1,7 @@
 .ftb-global-setting-modal {
 
 	@media (min-width: 600px) {
-		width: calc(100% - 32px);
 		height: calc(100% - 120px);
-	}
-
-	@media (min-width: 782px) {
-		width: 750px;
 	}
 
 	@media (min-width: 960px) {
