@@ -491,7 +491,7 @@ export default function Table( {
 												{ rowIndex === 0 && vColIndex === 0 && (
 													<Button
 														className={ clsx( 'ftb-row-before-inserter', {
-															'ftb-row-before-inserter--has-prev-section': sectionIndex > 0,
+															'has-prev-section': sectionIndex > 0,
 														} ) }
 														label={ __( 'Insert row before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
@@ -527,11 +527,11 @@ export default function Table( {
 															selectedLine.sectionName === sectionName &&
 															selectedLine.rowIndex === rowIndex && (
 																<Button
-																	className="ftb-row-deleter"
+																	className="ftb-row-remover"
 																	label={ __( 'Delete row', 'flexible-table-block' ) }
 																	tabIndex={ options.focus_control_button ? 0 : -1 }
+																	size="compact"
 																	icon={ trash }
-																	iconSize={ 20 }
 																	onClick={ ( event: MouseEvent ) => {
 																		onDeleteRow( sectionName, rowIndex );
 																		event.stopPropagation();
@@ -560,7 +560,7 @@ export default function Table( {
 															label={ __( 'Select column', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronDown }
-															iconSize={ 18 }
+															iconSize={ 16 }
 															variant={
 																isColumnSelected && selectedLine.vColIndex === vColIndex
 																	? 'primary'
@@ -573,11 +573,11 @@ export default function Table( {
 														/>
 														{ isColumnSelected && selectedLine.vColIndex === vColIndex && (
 															<Button
-																className="ftb-column-deleter"
+																className="ftb-column-remover"
 																label={ __( 'Delete column', 'flexible-table-block' ) }
 																tabIndex={ options.focus_control_button ? 0 : -1 }
+																size="compact"
 																icon={ trash }
-																iconSize={ 20 }
 																onClick={ ( event: MouseEvent ) => {
 																	onDeleteColumn( vColIndex );
 																	event.stopPropagation();
@@ -589,7 +589,7 @@ export default function Table( {
 												{ vColIndex === 0 && (
 													<Button
 														className={ clsx( 'ftb-row-after-inserter', {
-															'ftb-row-after-inserter--has-next-section':
+															'has-next-section':
 																sectionIndex < Object.keys( filteredVTable ).length - 1 &&
 																rowIndex + rowSpan - 1 === filteredVTable[ sectionName ].length - 1,
 														} ) }

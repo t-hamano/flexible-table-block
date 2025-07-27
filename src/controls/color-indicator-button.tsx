@@ -40,7 +40,10 @@ export default function ColorIndicatorButton( {
 			{ isMixed ? (
 				__( 'Mixed', 'flexible-table-block' )
 			) : (
-				<ColorIndicator colorValue={ value || '' } />
+				<ColorIndicator
+					colorValue={ value || '' }
+					className="ftb-color-indicator-button__indicator"
+				/>
 			) }
 		</Button>
 	);

@@ -1,7 +1,12 @@
+@use "~@wordpress/base-styles/colors" as colors;
+@use "~@wordpress/base-styles/variables" as variables;
+
+$vertical-tabs-width: 160px;
+
 .ftb-global-setting-modal {
 
 	@media (min-width: 600px) {
-		height: calc(100% - 120px);
+		height: calc(100% - variables.$grid-unit-80 * 2); // 100% - 160px
 	}
 
 	@media (min-width: 960px) {
@@ -13,15 +18,15 @@
 
 	.components-tab-panel__tabs {
 		position: absolute;
-		top: 84px;
-		left: 16px;
+		top: variables.$grid-unit-80 + variables.$grid-unit-15;
+		left: variables.$grid-unit-20;
 		flex-flow: column;
-		width: 170px;
+		width: $vertical-tabs-width;
 
 		@media screen and (max-width: 782px) {
 			position: static;
 			width: 100%;
-			margin-bottom: 24px;
+			margin-bottom: variables.$grid-unit-30;
 		}
 	}
 
@@ -36,7 +41,7 @@
 		}
 
 		&.is-active {
-			background: #f0f0f0;
+			background: colors.$gray-100;
 
 			&::after {
 				content: none;
@@ -45,8 +50,8 @@
 	}
 
 	.components-tab-panel__tab-content {
-		padding-left: 24px;
-		margin-left: 170px;
+		padding-left: variables.$grid-unit-30;
+		margin-left: $vertical-tabs-width;
 
 		@media screen and (max-width: 782px) {
 			padding-left: 0;
@@ -56,8 +61,8 @@
 }
 
 .ftb-global-setting-modal__styles-item {
-	width: calc(50% - 4px);
-	border: 1px var(--wp-admin-theme-color) solid;
+	width: calc(50% - variables.$grid-unit-05);
+	border: variables.$border-width var(--wp-admin-theme-color) solid;
 
 	@media screen and (max-width: 782px) {
 		width: 100%;
@@ -68,8 +73,8 @@
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	height: 56px;
-	background: #fff;
+	height: variables.$grid-unit-70;
+	background: colors.$white;
 	z-index: 2;
 }
 
@@ -79,9 +84,9 @@
 
 .ftb-global-setting-modal__notice {
 	position: absolute !important;
-	right: 24px;
-	bottom: 56px;
-	left: 24px;
+	right: variables.$grid-unit-30;
+	bottom: variables.$grid-unit-70;
+	left: variables.$grid-unit-30;
 	z-index: 6;
 }
 
@@ -92,5 +97,5 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba(0, 0, 0, 0.2);
+	background: rgba(colors.$black, 0.2);
 }
