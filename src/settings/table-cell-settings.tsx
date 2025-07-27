@@ -334,54 +334,49 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />
-			<BaseControl id="flexible-table-block-cell-text-align" __nextHasNoMarginBottom>
-				<div aria-labelledby="flexible-table-block-cell-text-align-heading" role="group">
-					<span
-						id="flexible-table-block-cell-text-align-heading"
-						className="ftb-base-control-label"
+			<fieldset>
+				<BaseControl.VisualLabel as="legend" className="ftb-base-control-label">
+					{ __( 'Cell alignment', 'flexible-table-block' ) }
+				</BaseControl.VisualLabel>
+				<Flex style={ { marginBottom: '-16px' } } justify="start" align="start">
+					<ToggleGroupControl
+						hideLabelFromVision
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						label={ __( 'Text alignment', 'flexible-table-block' ) }
+						value={ cellStylesObj?.textAlign }
+						isDeselectable
+						onChange={ onChangeTextAlign }
 					>
-						{ __( 'Cell alignment', 'flexible-table-block' ) }
-					</span>
-					<Flex style={ { marginBottom: '-16px' } } justify="start" align="start">
-						<ToggleGroupControl
-							hideLabelFromVision
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							label={ __( 'Text alignment', 'flexible-table-block' ) }
-							value={ cellStylesObj?.textAlign }
-							isDeselectable
-							onChange={ onChangeTextAlign }
-						>
-							{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
-								<ToggleGroupControlOptionIcon
-									key={ value }
-									value={ value }
-									icon={ icon }
-									label={ label }
-								/>
-							) ) }
-						</ToggleGroupControl>
-						<ToggleGroupControl
-							hideLabelFromVision
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							label={ __( 'Vertical alignment', 'flexible-table-block' ) }
-							value={ cellStylesObj?.verticalAlign }
-							isDeselectable
-							onChange={ onChangeVerticalAlign }
-						>
-							{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
-								<ToggleGroupControlOptionIcon
-									key={ value }
-									value={ value }
-									icon={ icon }
-									label={ label }
-								/>
-							) ) }
-						</ToggleGroupControl>
-					</Flex>
-				</div>
-			</BaseControl>
+						{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
+							<ToggleGroupControlOptionIcon
+								key={ value }
+								value={ value }
+								icon={ icon }
+								label={ label }
+							/>
+						) ) }
+					</ToggleGroupControl>
+					<ToggleGroupControl
+						hideLabelFromVision
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						label={ __( 'Vertical alignment', 'flexible-table-block' ) }
+						value={ cellStylesObj?.verticalAlign }
+						isDeselectable
+						onChange={ onChangeVerticalAlign }
+					>
+						{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
+							<ToggleGroupControlOptionIcon
+								key={ value }
+								value={ value }
+								icon={ icon }
+								label={ label }
+							/>
+						) ) }
+					</ToggleGroupControl>
+				</Flex>
+			</fieldset>
 			<hr />
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
