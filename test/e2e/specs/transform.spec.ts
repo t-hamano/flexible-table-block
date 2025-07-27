@@ -29,10 +29,7 @@ test.describe( 'Transform from core table block', () => {
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
 			.fill( 'Core Table Block' );
-
-		// Starting with WP 6.6, "Fixed width table cells" is enabled by default, so this option must be explicitly disabled.
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
-
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
@@ -47,10 +44,7 @@ test.describe( 'Transform from core table block', () => {
 		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'checkbox', { name: 'Header section' } ).check();
 		await page.getByRole( 'checkbox', { name: 'Footer section' } ).check();
-
-		// Starting with WP 6.6, Fixed width table cells is enabled by default, so this option must be explicitly disabled.
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
-
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
