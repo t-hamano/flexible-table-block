@@ -24,20 +24,20 @@
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
-		"@emotion/styled": "^11.14.0",
-		"@wordpress/icons": "^10.24.0"
+		"@emotion/styled": "^11.14.1",
+		"@wordpress/icons": "^10.27.0"
 	},
 	"devDependencies": {
-		"@types/jest": "^29.5.14",
-		"@types/wordpress__block-editor": "^11.5.16",
-		"@wordpress/api-fetch": "7.24.0",
-		"@wordpress/env": "^10.24.0",
-		"@wordpress/eslint-plugin": "22.10.0",
-		"@wordpress/notices": "5.24.0",
-		"@wordpress/scripts": "^30.17.0",
+		"@types/jest": "^30.0.0",
+		"@types/wordpress__block-editor": "^11.5.17",
+		"@wordpress/api-fetch": "7.27.0",
+		"@wordpress/env": "^10.27.0",
+		"@wordpress/eslint-plugin": "22.13.0",
+		"@wordpress/notices": "5.27.0",
+		"@wordpress/scripts": "^30.20.0",
 		"clsx": "2.1.1",
 		"husky": "^9.1.7",
-		"lint-staged": "16.1.0",
+		"lint-staged": "16.1.2",
 		"prettier": "npm:wp-prettier@3.0.3",
 		"typescript": "^5.8.3"
 	},
