@@ -5,21 +5,54 @@ import { parseCssValue, parseUnit, sanitizeUnitValue, toInteger } from '../helpe
 
 describe( 'helper', () => {
 	describe( 'parseCssValue', () => {
-		it( 'should return array with four values', () => {
+		it( 'should return array with four empty strings if falsy value is provided', () => {
+			expect( parseCssValue( undefined ) ).toStrictEqual( [ '', '', '', '' ] );
 			expect( parseCssValue( '' ) ).toStrictEqual( [ '', '', '', '' ] );
+		} );
+		it( 'should handle one value', () => {
 			expect( parseCssValue( '10px' ) ).toStrictEqual( [ '10px', '10px', '10px', '10px' ] );
+		} );
+		it( 'should handle two values', () => {
 			expect( parseCssValue( '10px 20em' ) ).toStrictEqual( [ '10px', '20em', '10px', '20em' ] );
+		} );
+		it( 'should handle three values', () => {
 			expect( parseCssValue( '10px 20em 30.11%' ) ).toStrictEqual( [
 				'10px',
 				'20em',
 				'30.11%',
 				'20em',
 			] );
-			expect( parseCssValue( '10px 20em 30.11% 40CM' ) ).toStrictEqual( [
+		} );
+		it( 'should handle four values', () => {
+			expect( parseCssValue( '10px 20em 30.11% 40cm' ) ).toStrictEqual( [
 				'10px',
 				'20em',
 				'30.11%',
 				'40cm',
+			] );
+		} );
+		it( 'should handle CSS custom property and function', () => {
+			expect(
+				parseCssValue( 'var(--color) calc(100% - 20px) color-mix(in srgb, red 50%)' )
+			).toStrictEqual( [
+				'var(--color)',
+				'calc(100% - 20px)',
+				'color-mix(in srgb, red 50%)',
+				'calc(100% - 20px)',
+			] );
+		} );
+		it( 'should handle extra spaces and formatting', () => {
+			expect( parseCssValue( '  10px  ' ) ).toStrictEqual( [ '10px', '10px', '10px', '10px' ] );
+			expect( parseCssValue( '10px   20px' ) ).toStrictEqual( [ '10px', '20px', '10px', '20px' ] );
+			expect( parseCssValue( ' 1px  2px  3px ' ) ).toStrictEqual( [ '1px', '2px', '3px', '2px' ] );
+		} );
+
+		it( 'should handle excessive values', () => {
+			expect( parseCssValue( '1px 2px 3px 4px 5px 6px' ) ).toStrictEqual( [
+				'1px',
+				'2px',
+				'3px',
+				'4px',
 			] );
 		} );
 	} );
