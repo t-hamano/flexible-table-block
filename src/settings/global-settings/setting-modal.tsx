@@ -642,7 +642,6 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
 								</Heading>
 								<RangeControl
-									id="flexible-table-block-global-breakpoint"
 									help={ __(
 										'Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.',
 										'flexible-table-block'
