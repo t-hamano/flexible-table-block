@@ -25,8 +25,8 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 	return (
 		<Modal
 			title={ __( 'Flexible Table Block help', 'flexible-table-block' ) }
-			className="ftb-global-help-modal"
 			onRequestClose={ () => setIsHelpModalOpen( false ) }
+			size="medium"
 		>
 			<VStack spacing={ 4 }>
 				<VStack>
