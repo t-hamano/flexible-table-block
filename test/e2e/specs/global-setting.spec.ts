@@ -28,7 +28,8 @@ test.describe( 'Global Setting', () => {
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the global setting.
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'button', { name: 'Global setting' } ).click();
+		await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+		await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
 		// Restore settings.
 		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
 		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();

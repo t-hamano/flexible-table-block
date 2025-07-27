@@ -22,7 +22,8 @@ test.describe( 'Flexible table cell', () => {
 	test( 'allows cell movement with tab key.', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'button', { name: 'Global setting' } ).click();
+		await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+		await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
 
 		// Restore settings.
 		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
