@@ -335,7 +335,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			/>
 			<hr />
 			<fieldset>
-				<BaseControl.VisualLabel as="legend" className="ftb-base-control-label">
+				<BaseControl.VisualLabel as="legend">
 					{ __( 'Cell alignment', 'flexible-table-block' ) }
 				</BaseControl.VisualLabel>
 				<Flex style={ { marginBottom: '-16px' } } justify="start" align="start">
