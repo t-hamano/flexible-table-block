@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -46,6 +47,7 @@ type Props = {
 		bottomRight?: Property.BorderBottomRightRadius;
 		bottomLeft?: Property.BorderBottomLeftRadius;
 	};
+	className?: string;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -56,6 +58,7 @@ export default function BorderRadiusControl( {
 	help,
 	onChange,
 	values: valuesProp,
+	className,
 }: Props ) {
 	const values = {
 		...DEFAULT_VALUES,
@@ -132,7 +135,11 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-radius-control" help={ help } __nextHasNoMarginBottom>
+		<BaseControl
+			className={ clsx( 'ftb-border-radius-control', className ) }
+			help={ help }
+			__nextHasNoMarginBottom
+		>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ label }

@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -46,6 +47,7 @@ type Props = {
 		bottom?: Property.PaddingBottom;
 		left?: Property.PaddingLeft;
 	};
+	className?: string;
 };
 
 type ValuesKey = keyof typeof DEFAULT_VALUES;
@@ -55,6 +57,7 @@ export default function PaddingControl( {
 	help,
 	onChange,
 	values: valuesProp,
+	className,
 }: Props ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
 	const instanceId = useInstanceId( PaddingControl, 'ftb-padding-control' );
@@ -103,7 +106,11 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-padding-control" help={ help } __nextHasNoMarginBottom>
+		<BaseControl
+			className={ clsx( 'ftb-padding-control', className ) }
+			help={ help }
+			__nextHasNoMarginBottom
+		>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ label }

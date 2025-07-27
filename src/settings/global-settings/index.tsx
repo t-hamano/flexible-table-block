@@ -45,7 +45,11 @@ export default function GlobalSettings() {
 
 	return (
 		<>
-			<PanelBody title={ __( 'Global setting', 'flexible-table-block' ) } initialOpen={ false }>
+			<PanelBody
+				title={ __( 'Global setting', 'flexible-table-block' ) }
+				initialOpen={ false }
+				className="flexible-table-block-global-setting-panel"
+			>
 				<HStack>
 					{ ! isGlobalSettingLoaded && <Spinner /> }
 					{ isGlobalSettingLoaded && showGlobalSetting && (

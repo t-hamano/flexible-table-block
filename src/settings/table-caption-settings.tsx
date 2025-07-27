@@ -100,13 +100,18 @@ export default function TableCaptionSettings( {
 
 	return (
 		<>
-			<Spacer marginBottom="4" as={ Flex } justify="end">
+			<Spacer
+				marginBottom="4"
+				as={ Flex }
+				justify="end"
+				className="ftb-table-caption-settings-clear"
+			>
 				<Button variant="link" isDestructive onClick={ onResetSettings }>
 					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
 			</Spacer>
 			<Spacer marginBottom="4" as={ Flex } align="end">
-				<FlexBlock>
+				<FlexBlock className="ftb-table-caption-settings-font-size">
 					<UnitControl
 						label={ __( 'Caption font size', 'flexible-table-block' ) }
 						value={ captionStylesObj?.fontSize }
@@ -116,7 +121,7 @@ export default function TableCaptionSettings( {
 						size="__unstable-large"
 					/>
 				</FlexBlock>
-				<FlexBlock>
+				<FlexBlock className="ftb-table-caption-settings-line-height">
 					<TextControl
 						label={ __( 'Caption line height', 'flexible-table-block' ) }
 						autoComplete="off"
@@ -131,6 +136,7 @@ export default function TableCaptionSettings( {
 				</FlexBlock>
 			</Spacer>
 			<PaddingControl
+				className="ftb-table-caption-settings-padding"
 				label={ __( 'Caption padding', 'flexible-table-block' ) }
 				values={ pickPadding( captionStylesObj ) }
 				onChange={ onChangePadding }
@@ -138,6 +144,7 @@ export default function TableCaptionSettings( {
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
+				className="ftb-table-caption-settings-position"
 				label={ __( 'Caption position', 'flexible-table-block' ) }
 				value={ captionSide }
 				isBlock
@@ -150,6 +157,7 @@ export default function TableCaptionSettings( {
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
+				className="ftb-table-caption-settings-text-alignment"
 				label={ __( 'Caption text alignment', 'flexible-table-block' ) }
 				value={ captionStylesObj?.textAlign }
 				isDeselectable
