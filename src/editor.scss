@@ -365,18 +365,3 @@
 		}
 	}
 }
-
-// Setting Component Styles
-.ftb-button-group {
-	display: block;
-
-	.components-button {
-		vertical-align: top;
-
-		&.components-button.is-small {
-			width: auto;
-			min-width: auto;
-			padding: 6px;
-		}
-	}
-}
