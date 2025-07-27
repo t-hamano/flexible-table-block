@@ -15,7 +15,6 @@ import {
 	FlexBlock,
 	SelectControl,
 	TextControl,
-	__experimentalHStack as HStack,
 	__experimentalSpacer as Spacer,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -255,20 +254,15 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					/>
 				</FlexBlock>
 			</Spacer>
-			<HStack alignment="start">
-				<UnitControl
-					label={ __( 'Cell width', 'flexible-table-block' ) }
-					value={ cellStylesObj?.width }
-					units={ cellWidthUnits }
-					min={ 0 }
-					onChange={ onChangeWidth }
-					size="__unstable-large"
-					__unstableInputWidth="calc(50% - 8px)"
-				/>
-				<Button variant="secondary" size="small" onClick={ () => onChangeWidth( undefined ) }>
-					{ __( 'Reset', 'flexible-table-block' ) }
-				</Button>
-			</HStack>
+			<UnitControl
+				label={ __( 'Cell width', 'flexible-table-block' ) }
+				value={ cellStylesObj?.width }
+				units={ cellWidthUnits }
+				min={ 0 }
+				onChange={ onChangeWidth }
+				size="__unstable-large"
+				__unstableInputWidth="calc(50% - 8px)"
+			/>
 			<ToggleGroupControl
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
