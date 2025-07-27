@@ -388,9 +388,3 @@
 	font-weight: 500;
 	text-transform: uppercase;
 }
-
-// Backwards compatible styles for WordPress 6.6
-// See: https://github.com/WordPress/gutenberg/issues/53374
-.is-outline-mode .wp-block-flexible-table-block-table.is-selected .rich-text {
-	cursor: initial;
-}

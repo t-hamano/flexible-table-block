@@ -48,9 +48,11 @@ test.describe( 'Block Support', () => {
 		}
 		await page.getByRole( 'button', { name: 'Typography options' } ).click();
 		// Change font family.
-		if ( [ '6-6', '6-7' ].includes( wpVersion ) ) {
+		if ( wpVersion === '6-7' ) {
+			// WordPress 6.7
 			await page.getByRole( 'combobox', { name: 'Font' } ).selectOption( 'System Sans-serif' );
 		} else {
+			// WordPress 6.8 or higher
 			await page.getByRole( 'combobox', { name: 'Font' } ).click();
 			await page.getByRole( 'option', { name: 'System Sans-serif' } ).click();
 		}
@@ -62,7 +64,7 @@ test.describe( 'Block Support', () => {
 
 		// Change font appearance.
 		await page
-			.getByRole( wpVersion === '6-6' ? 'button' : 'combobox', {
+			.getByRole( 'combobox', {
 				name: 'Appearance',
 			} )
 			.click();
@@ -96,18 +98,11 @@ test.describe( 'Block Support', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		// Show custom controls.
-		if ( wpVersion === '6-6' ) {
-			// WP 6.6
-			await page.getByRole( 'button', { name: 'Margin options' } ).click();
-			await page
-				.getByRole( 'menu', { name: 'Margin options' } )
-				.getByRole( 'menuitemradio', { name: 'Custom' } )
-				.click();
-		} else if ( wpVersion === '6-7' ) {
-			// WP 6.7
+		if ( wpVersion === '6-7' ) {
+			// WordPress 6.7
 			await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
 		} else {
-			// WP 6.8
+			// WordPress 6.8 or higher
 			await page.getByRole( 'button', { name: 'Unlink' } ).click();
 		}
 		// Change margin values.
