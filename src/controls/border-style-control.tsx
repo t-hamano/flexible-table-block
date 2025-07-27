@@ -74,7 +74,7 @@ export default function BorderStyleControl( {
 		? __( 'Unlink sides', 'flexible-table-block' )
 		: __( 'Link sides', 'flexible-table-block' );
 
-	const allInputValue: string | 0 = isMixed ? '' : values.top;
+	const allInputValue: string | undefined = isMixed ? undefined : values.top || undefined;
 
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
@@ -148,7 +148,7 @@ export default function BorderStyleControl( {
 										__nextHasNoMarginBottom
 										__next40pxDefaultSize
 										label={ item.label }
-										value={ values[ item.value as ValuesKey ] }
+										value={ values[ item.value as ValuesKey ] || undefined }
 										isDeselectable
 										onChange={ ( value ) => handleOnClick( value, item.value as ValuesKey ) }
 									>
