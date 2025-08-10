@@ -113,12 +113,12 @@ export const borderDotted = (
 
 export const borderDashed = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M4,11.2h4v1.5h-4v-1.5ZM16,11.2h4v1.5h-4v-1.5ZM10,11.2h4v1.5h-4v-1.5Z" />
+		<Path d="M4 11.25H8V12.75H4V11.25ZM16 11.25H20V12.75H16V11.25ZM10 11.25H14V12.75H10V11.25Z" />
 	</SVG>
 );
 
 export const borderDouble = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M4,9.2h16v1.5H4v-1.5ZM4,13.2h16v1.5H4v-1.5Z" />
+		<Path d="M4 9.5H20V11H4V9.5ZM4 13H20V14.5H4V13Z" />
 	</SVG>
 );
