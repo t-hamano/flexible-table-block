@@ -10,61 +10,6 @@ export const blockIcon = (
 	</SVG>
 );
 
-export const alignTop = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M9 20h6V9H9v11zM4 4v1.5h16V4H4z" />
-	</SVG>
-);
-
-export const alignMiddle = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M20 11h-5V4H9v7H4v1.5h5V20h6v-7.5h5z" />
-	</SVG>
-);
-
-export const alignBottom = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M15 4H9v11h6V4zM4 18.5V20h16v-1.5H4z" />
-	</SVG>
-);
-
-export const tableRowBefore = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M21 5c0-1.1-.9-2-2-2H5c-1 0-1.9.8-2 1.8V19.2c.1.9.9 1.7 1.8 1.8H19c1.1 0 2-.9 2-2V5ZM4.5 14V5c0-.3.2-.5.5-.5h14c.3 0 .5.2.5.5v9h-15Zm4 5.5H5c-.3 0-.5-.2-.5-.5v-3.5h4v4Zm5.5 0h-4v-4h4v4Zm5.5-.5c0 .3-.2.5-.5.5h-3.5v-4h4V19Z" />
-		<Path d="M11.2 10h-3V8.5h3v-3h1.5v3h3V10h-3v3h-1.5v-3Z" />
-	</SVG>
-);
-
-export const tableRowAfter = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M19 3H4.8c-.9.1-1.7.9-1.8 1.8V19.2c.1 1 1 1.8 2 1.8h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm-9 1.5h4v4h-4v-4ZM4.5 5c0-.3.2-.5.5-.5h3.5v4h-4V5Zm15 14c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5v-9h15v9Zm0-10.5h-4v-4H19c.3 0 .5.2.5.5v3.5Zm-8.3 10h1.5v-3h3V14h-3v-3h-1.5v3h-3v1.5h3v3Z" />
-	</SVG>
-);
-
-export const tableColumnBefore = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1 .8 1.9 1.8 2H19.2c.9-.1 1.7-.9 1.8-1.8V5c0-1.1-.9-2-2-2Zm-5 16.5H5c-.3 0-.5-.2-.5-.5V5c0-.3.2-.5.5-.5h9v15Zm5.5-.5c0 .3-.2.5-.5.5h-3.5v-4h4V19Zm0-5h-4v-4h4v4Zm0-5.5h-4v-4H19c.3 0 .5.2.5.5v3.5Zm-11 7.3H10v-3h3v-1.5h-3v-3H8.5v3h-3v1.5h3v3Z" />
-	</SVG>
-);
-
-export const tableColumnAfter = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M19 3H5c-1.1 0-2 .9-2 2v14.2c.1.9.9 1.7 1.8 1.8H19.2c1-.1 1.8-1 1.8-2V5c0-1.1-.9-2-2-2ZM8.5 19.5H5c-.3 0-.5-.2-.5-.5v-3.5h4v4Zm0-5.5h-4v-4h4v4Zm0-5.5h-4V5c0-.3.2-.5.5-.5h3.5v4Zm11 10.5c0 .3-.2.5-.5.5h-9v-15h9c.3 0 .5.2.5.5v14Zm-4-10.8H14v3h-3v1.5h3v3h1.5v-3h3v-1.5h-3v-3Z" />
-	</SVG>
-);
-
-export const tableRowDelete = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M19 3H4.8c-.9.1-1.7.9-1.8 1.8V19.2c.1 1 1 1.8 2 1.8h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm.5 16c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5v-9h15v9Zm0-10.5h-15V5c0-.3.2-.5.5-.5h14c.3 0 .5.2.5.5v3.5Zm-9.6 9.4 2.1-2.1 2.1 2.1 1.1-1.1-2.1-2.1 2.1-2.1-1.1-1.1-2.1 2.1-2.1-2.1-1.1 1.1 2.1 2.1-2.1 2.1 1.1 1.1Z" />
-	</SVG>
-);
-
-export const tableColumnDelete = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<Path d="M19 3H5c-1.1 0-2 .9-2 2v14.2c.1.9.9 1.7 1.8 1.8H19.2c1-.1 1.8-1 1.8-2V5c0-1.1-.9-2-2-2ZM8.5 19.5H5c-.3 0-.5-.2-.5-.5V5c0-.3.2-.5.5-.5h3.5v15Zm11-.5c0 .3-.2.5-.5.5h-9v-15h9c.3 0 .5.2.5.5v14ZM16.9 8.8l-2.1 2.1-2.1-2.1-1.1 1.1 2.1 2.1-2.1 2.1 1.1 1.1 2.1-2.1 2.1 2.1 1.1-1.1-2.1-2.1L18 9.9l-1.1-1.1Z" />
-	</SVG>
-);
-
 export const tableMergeCell = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		<Path d="M11 5C11 4 10 3 9.00003 3H5.00003C3.98623 3 2.99293 4.01901 3.00003 5V19C2.99293 19.981 3.98623 21 5.00003 21H9.00003C10 21 11 20 11 19V15H9.50003V19C9.50003 19.3 9.30003 19.5 9.00003 19.5H5.00003C4.70003 19.5 4.50003 19.3 4.50003 19V12.75H8.30003L6.50003 14.5L7.50003 15.5L11 12L7.50003 8.5L6.50003 9.5L8.30003 11.25H4.50003V5C4.50003 4.7 4.70003 4.5 5.00003 4.5H9.00003C9.30003 4.5 9.50003 4.7 9.50003 5V9H11V5ZM21 5C21 4 20 3 19 3H15C13.9862 3 12.9929 4.01902 13 5V9H14.5V5C14.5 4.7 14.7 4.5 15 4.5H19C19.3 4.5 19.5 4.7 19.5 5V11.25H15.75L17.5 9.5L16.5 8.5L13 12L16.5 15.5L17.5 14.5L15.75 12.75H19.5V15.875V18.5L19 19H15.0012L14.5 18.5V15H13V19C12.9929 19.981 13.9874 21 15.0012 21H19C20 21 21 20 21 19V5Z" />
@@ -99,7 +44,7 @@ export const borderCollapse = (
 
 export const borderSolid = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-		<path d="M4,11.2h16v1.5H4v-1.5Z" />
+		<Path d="M4,11.2h16v1.5H4v-1.5Z" />
 	</SVG>
 );
 

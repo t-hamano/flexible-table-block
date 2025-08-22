@@ -6,6 +6,9 @@ import {
 	justifyLeft,
 	justifyCenter,
 	justifyRight,
+	justifyTop,
+	justifyCenterVertical,
+	justifyBottom,
 	alignLeft,
 	alignCenter,
 	alignRight,
@@ -15,9 +18,6 @@ import {
  * Internal dependencies
  */
 import {
-	alignTop,
-	alignMiddle,
-	alignBottom,
 	borderSolid,
 	borderDotted,
 	borderDashed,
@@ -156,17 +156,17 @@ export const TEXT_ALIGNMENT_CONTROLS = [
 
 export const VERTICAL_ALIGNMENT_CONTROLS = [
 	{
-		icon: alignTop,
+		icon: justifyTop,
 		label: __( 'Align top', 'flexible-table-block' ),
 		value: 'top',
 	},
 	{
-		icon: alignMiddle,
+		icon: justifyCenterVertical,
 		label: __( 'Align middle', 'flexible-table-block' ),
 		value: 'middle',
 	},
 	{
-		icon: alignBottom,
+		icon: justifyBottom,
 		label: __( 'Align bottom', 'flexible-table-block' ),
 		value: 'bottom',
 	},

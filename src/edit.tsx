@@ -18,7 +18,16 @@ import {
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
-import { blockTable, justifyLeft } from '@wordpress/icons';
+import {
+	blockTable,
+	justifyLeft,
+	tableRowAfter,
+	tableRowBefore,
+	tableColumnBefore,
+	tableColumnAfter,
+	tableColumnDelete,
+	tableRowDelete,
+} from '@wordpress/icons';
 import { store as noticesStore } from '@wordpress/notices';
 import type { BlockEditProps } from '@wordpress/blocks';
 
@@ -47,16 +56,7 @@ import {
 	type VSelectedCells,
 } from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
-import {
-	tableRowAfter,
-	tableRowBefore,
-	tableColumnBefore,
-	tableColumnAfter,
-	tableColumnDelete,
-	tableRowDelete,
-	tableMergeCell,
-	tableSplitCell,
-} from './icons';
+import { tableMergeCell, tableSplitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
 
 function TableEdit( props: BlockEditProps< BlockAttributes > ) {
