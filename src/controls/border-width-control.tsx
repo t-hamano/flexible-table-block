@@ -146,9 +146,7 @@ export default function BorderWidthControl( {
 				</Text>
 				<HStack alignment="center" justify="space-between" style={ { minHeight: '40px' } }>
 					<HStack justify="start">
-						{ hasIndicator && (
-							<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
-						) }
+						{ hasIndicator && <SideIndicatorControl side={ side } /> }
 						{ ( isLinked || ! allowSides ) && (
 							<div>
 								<UnitControl

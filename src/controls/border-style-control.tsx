@@ -149,7 +149,7 @@ export default function BorderStyleControl( {
 						<VStack spacing={ 1 }>
 							{ SIDE_CONTROLS.map( ( item ) => (
 								<HStack spacing={ 2 } justify="start" key={ item.value }>
-									{ hasIndicator && <SideIndicatorControl sides={ [ item.value ] } /> }
+									{ hasIndicator && <SideIndicatorControl side={ item.value } /> }
 									<ToggleGroupControl
 										hideLabelFromVision
 										__nextHasNoMarginBottom

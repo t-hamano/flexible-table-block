@@ -156,7 +156,7 @@ export default function BorderColorControl( {
 						<VStack>
 							{ SIDE_CONTROLS.map( ( item, index ) => (
 								<HStack spacing={ 3 } justify="start" key={ item.value }>
-									<SideIndicatorControl sides={ [ item.value ] } />
+									<SideIndicatorControl side={ item.value } />
 									<ColorIndicatorButton
 										label={ item.label }
 										value={ values[ item.value ] }

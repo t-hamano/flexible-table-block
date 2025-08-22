@@ -130,7 +130,7 @@ export default function BorderSpacingControl( {
 						<VStack spacing={ 1 }>
 							{ DIRECTION_CONTROLS.map( ( item ) => (
 								<HStack justify="start" key={ item.value }>
-									<DirectionIndicatorControl directions={ [ item.value ] } />
+									<DirectionIndicatorControl direction={ item.value } />
 									<UnitControl
 										key={ item.value }
 										aria-label={ item.label }

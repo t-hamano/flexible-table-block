@@ -10,15 +10,6 @@ export const ViewBox = styled.span`
 	height: 24px;
 `;
 
-const Side = styled.span< { isFocused: boolean } >`
-	background-color: currentColor;
-	box-sizing: border-box;
-	display: block;
-	pointer-events: none;
-	position: absolute;
-	${ ( { isFocused } ) => ! isFocused && css( { opacity: 0.3 } ) }
-`;
-
 const Corner = styled.span< { isFocused: boolean } >`
 	box-sizing: border-box;
 	display: block;
@@ -27,37 +18,6 @@ const Corner = styled.span< { isFocused: boolean } >`
 	width: 8px;
 	height: 8px;
 	${ ( { isFocused } ) => ! isFocused && css( { opacity: 0.3 } ) }
-`;
-
-export const TopStroke = styled( Side )`
-	top: 3px;
-	right: 6px;
-	left: 6px;
-	height: 2px;
-`;
-
-export const RightStroke = styled( Side )`
-	top: 6px;
-	right: 3px;
-	bottom: 6px;
-	width: 2px;
-	background-color: currentColor;
-`;
-
-export const BottomStroke = styled( Side )`
-	right: 6px;
-	bottom: 3px;
-	left: 6px;
-	height: 2px;
-	background-color: currentColor;
-`;
-
-export const LeftStroke = styled( Side )`
-	top: 6px;
-	bottom: 6px;
-	left: 3px;
-	width: 2px;
-	background-color: currentColor;
 `;
 
 export const TopLeftStroke = styled( Corner )`
