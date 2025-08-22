@@ -1,12 +1,22 @@
 /**
+ * WordPress dependencies
+ */
+import {
+	Icon,
+	sidesAll,
+	sidesBottom,
+	sidesLeft,
+	sidesRight,
+	sidesTop,
+	sidesHorizontal,
+	sidesVertical,
+} from '@wordpress/icons';
+
+/**
  * Internal dependencies
  */
 import {
 	ViewBox,
-	TopStroke,
-	RightStroke,
-	BottomStroke,
-	LeftStroke,
 	TopLeftStroke,
 	TopRightStroke,
 	BottomRightStroke,
@@ -14,20 +24,20 @@ import {
 } from './styles';
 import type { SideValue, CornerValue, DirectionValue } from '../BlockAttributes';
 
-export function SideIndicatorControl( { sides }: { sides?: SideValue[] } ) {
-	const top: boolean = ! sides || sides.includes( 'top' );
-	const right: boolean = ! sides || sides.includes( 'right' );
-	const bottom: boolean = ! sides || sides.includes( 'bottom' );
-	const left: boolean = ! sides || sides.includes( 'left' );
-
-	return (
-		<ViewBox>
-			<TopStroke isFocused={ top } />
-			<RightStroke isFocused={ right } />
-			<BottomStroke isFocused={ bottom } />
-			<LeftStroke isFocused={ left } />
-		</ViewBox>
-	);
+export function SideIndicatorControl( { side }: { side?: SideValue } ) {
+	if ( side === 'top' ) {
+		return <Icon icon={ sidesTop } />;
+	}
+	if ( side === 'right' ) {
+		return <Icon icon={ sidesRight } />;
+	}
+	if ( side === 'bottom' ) {
+		return <Icon icon={ sidesBottom } />;
+	}
+	if ( side === 'left' ) {
+		return <Icon icon={ sidesLeft } />;
+	}
+	return <Icon icon={ sidesAll } />;
 }
 
 export function CornerIndicatorControl( { corners }: { corners?: CornerValue[] } ) {
@@ -46,16 +56,12 @@ export function CornerIndicatorControl( { corners }: { corners?: CornerValue[] }
 	);
 }
 
-export function DirectionIndicatorControl( { directions }: { directions?: DirectionValue[] } ) {
-	const horizontal = ! directions || directions.includes( 'horizontal' );
-	const vertical = ! directions || directions.includes( 'vertical' );
-
-	return (
-		<ViewBox>
-			<TopStroke isFocused={ vertical } />
-			<RightStroke isFocused={ horizontal } />
-			<BottomStroke isFocused={ vertical } />
-			<LeftStroke isFocused={ horizontal } />
-		</ViewBox>
-	);
+export function DirectionIndicatorControl( { direction }: { direction?: DirectionValue } ) {
+	if ( direction === 'horizontal' ) {
+		return <Icon icon={ sidesHorizontal } />;
+	}
+	if ( direction === 'vertical' ) {
+		return <Icon icon={ sidesVertical } />;
+	}
+	return <Icon icon={ sidesAll } />;
 }

@@ -117,7 +117,7 @@ export default function PaddingControl( {
 				</Text>
 				<HStack alignment="center" justify="space-between" style={ { minHeight: '40px' } }>
 					<HStack justify="start">
-						<SideIndicatorControl sides={ side === undefined ? undefined : [ side ] } />
+						<SideIndicatorControl side={ side } />
 						{ isLinked && (
 							<div>
 								<UnitControl
