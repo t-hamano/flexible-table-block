@@ -15,14 +15,14 @@ import {
 /**
  * Internal dependencies
  */
-import {
-	ViewBox,
-	TopLeftStroke,
-	TopRightStroke,
-	BottomRightStroke,
-	BottomLeftStroke,
-} from './styles';
 import type { SideValue, CornerValue, DirectionValue } from '../BlockAttributes';
+import {
+	cornerTopLeft,
+	cornerTopRight,
+	cornerBottomRight,
+	cornerBottomLeft,
+	cornerAll,
+} from '../icons';
 
 export function SideIndicatorControl( { side }: { side?: SideValue } ) {
 	if ( side === 'top' ) {
@@ -40,20 +40,20 @@ export function SideIndicatorControl( { side }: { side?: SideValue } ) {
 	return <Icon icon={ sidesAll } />;
 }
 
-export function CornerIndicatorControl( { corners }: { corners?: CornerValue[] } ) {
-	const topLeft = ! corners || corners.includes( 'topLeft' );
-	const topRight = ! corners || corners.includes( 'topRight' );
-	const bottomRight = ! corners || corners.includes( 'bottomRight' );
-	const bottomLeft = ! corners || corners.includes( 'bottomLeft' );
-
-	return (
-		<ViewBox>
-			<TopLeftStroke isFocused={ topLeft } />
-			<TopRightStroke isFocused={ topRight } />
-			<BottomRightStroke isFocused={ bottomRight } />
-			<BottomLeftStroke isFocused={ bottomLeft } />
-		</ViewBox>
-	);
+export function CornerIndicatorControl( { corner }: { corner?: CornerValue } ) {
+	if ( corner === 'topLeft' ) {
+		return <Icon icon={ cornerTopLeft } />;
+	}
+	if ( corner === 'topRight' ) {
+		return <Icon icon={ cornerTopRight } />;
+	}
+	if ( corner === 'bottomRight' ) {
+		return <Icon icon={ cornerBottomRight } />;
+	}
+	if ( corner === 'bottomLeft' ) {
+		return <Icon icon={ cornerBottomLeft } />;
+	}
+	return <Icon icon={ cornerAll } />;
 }
 
 export function DirectionIndicatorControl( { direction }: { direction?: DirectionValue } ) {

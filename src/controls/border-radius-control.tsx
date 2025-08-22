@@ -146,7 +146,7 @@ export default function BorderRadiusControl( {
 				</Text>
 				<HStack alignment="center" justify="space-between" style={ { minHeight: '40px' } }>
 					<HStack justify="start">
-						<CornerIndicatorControl corners={ corner === undefined ? undefined : [ corner ] } />
+						<CornerIndicatorControl corner={ corner } />
 						{ isLinked && (
 							<div>
 								<UnitControl
