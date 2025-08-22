@@ -242,12 +242,12 @@ export const CORNER_CONTROLS = [
 		value: 'topRight',
 	},
 	{
-		label: __( 'Bottom right', 'flexible-table-block' ),
-		value: 'bottomRight',
-	},
-	{
 		label: __( 'Bottom left', 'flexible-table-block' ),
 		value: 'bottomLeft',
+	},
+	{
+		label: __( 'Bottom right', 'flexible-table-block' ),
+		value: 'bottomRight',
 	},
 ] as const;
 
