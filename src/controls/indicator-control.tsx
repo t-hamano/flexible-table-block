@@ -3,6 +3,11 @@
  */
 import {
 	Icon,
+	cornerTopLeft,
+	cornerTopRight,
+	cornerBottomRight,
+	cornerBottomLeft,
+	cornerAll,
 	sidesAll,
 	sidesBottom,
 	sidesLeft,
@@ -16,13 +21,6 @@ import {
  * Internal dependencies
  */
 import type { SideValue, CornerValue, DirectionValue } from '../BlockAttributes';
-import {
-	cornerTopLeft,
-	cornerTopRight,
-	cornerBottomRight,
-	cornerBottomLeft,
-	cornerAll,
-} from '../icons';
 
 export function SideIndicatorControl( { side }: { side?: SideValue } ) {
 	if ( side === 'top' ) {
