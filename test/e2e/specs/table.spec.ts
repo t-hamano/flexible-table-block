@@ -130,6 +130,9 @@ test.describe( 'Flexible table', () => {
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			await editor.canvas.getByRole( 'button', { name: 'Select row' } ).nth( 2 ).click();
 			await editor.canvas.getByRole( 'button', { name: 'Delete row' } ).click();
+			await expect(
+				editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 )
+			).toBeFocused();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 
@@ -147,6 +150,9 @@ test.describe( 'Flexible table', () => {
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
 			await editor.canvas.getByRole( 'button', { name: 'Delete column' } ).click();
+			await expect(
+				editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 )
+			).toBeFocused();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 
