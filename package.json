@@ -24,23 +24,23 @@
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
-		"@wordpress/icons": "^10.27.0",
+		"@wordpress/icons": "^10.30.0",
 		"postcss-value-parser": "4.2.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^30.0.0",
 		"@types/wordpress__block-editor": "^11.5.17",
-		"@wordpress/api-fetch": "7.27.0",
-		"@wordpress/base-styles": "6.3.0",
-		"@wordpress/env": "^10.27.0",
-		"@wordpress/eslint-plugin": "22.13.0",
-		"@wordpress/notices": "5.27.0",
-		"@wordpress/scripts": "^30.20.0",
+		"@wordpress/api-fetch": "7.30.0",
+		"@wordpress/base-styles": "6.6.0",
+		"@wordpress/env": "^10.30.0",
+		"@wordpress/eslint-plugin": "22.16.0",
+		"@wordpress/notices": "5.30.0",
+		"@wordpress/scripts": "^30.23.0",
 		"clsx": "2.1.1",
 		"husky": "^9.1.7",
-		"lint-staged": "16.1.2",
+		"lint-staged": "16.1.6",
 		"prettier": "npm:wp-prettier@3.0.3",
-		"typescript": "^5.8.3"
+		"typescript": "^5.9.2"
 	},
 	"scripts": {
 		"wp-env": "wp-env",
