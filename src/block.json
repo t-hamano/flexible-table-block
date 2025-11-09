@@ -253,7 +253,7 @@
 			"__experimentalFontWeight": true,
 			"__experimentalLetterSpacing": true,
 			"__experimentalDefaultControls": {
-				"fontSize": false
+				"fontSize": true
 			}
 		},
 		"spacing": {

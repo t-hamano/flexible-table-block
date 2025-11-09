@@ -38,10 +38,10 @@ test.describe( 'Block Support', () => {
 			.click();
 		// Show all typography controls.
 		await page.getByRole( 'button', { name: 'Typography options' } ).click();
-		for ( let i = 0; i < 6; i++ ) {
+		for ( let i = 0; i < 5; i++ ) {
 			await page
 				.getByRole( 'menu', { name: 'Typography options' } )
-				.getByRole( 'menuitemcheckbox' )
+				.getByRole( 'menuitemcheckbox', { disabled: false } )
 				.nth( i )
 				.click();
 		}
@@ -93,7 +93,7 @@ test.describe( 'Block Support', () => {
 		await page.getByRole( 'button', { name: 'Unlink' } ).click();
 		// Change margin values.
 		for ( let i = 0; i < 4; i++ ) {
-			await page.getByRole( 'button', { name: 'Set custom size' } ).nth( 0 ).click();
+			await page.getByRole( 'button', { name: 'Set custom size' } ).nth( 1 ).click();
 		}
 		await page.getByRole( 'spinbutton', { name: 'Top margin' } ).fill( '10' );
 		await page.getByRole( 'spinbutton', { name: 'Right margin' } ).fill( '20' );
