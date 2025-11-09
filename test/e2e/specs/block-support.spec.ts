@@ -29,7 +29,6 @@ test.describe( 'Block Support', () => {
 		pageUtils,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the sidebar.
 		await editor.openDocumentSettingsSidebar();
@@ -48,14 +47,8 @@ test.describe( 'Block Support', () => {
 		}
 		await page.getByRole( 'button', { name: 'Typography options' } ).click();
 		// Change font family.
-		if ( wpVersion === '6-7' ) {
-			// WordPress 6.7
-			await page.getByRole( 'combobox', { name: 'Font' } ).selectOption( 'System Sans-serif' );
-		} else {
-			// WordPress 6.8 or higher
-			await page.getByRole( 'combobox', { name: 'Font' } ).click();
-			await page.getByRole( 'option', { name: 'System Sans-serif' } ).click();
-		}
+		await page.getByRole( 'combobox', { name: 'Font' } ).click();
+		await page.getByRole( 'option', { name: 'System Sans-serif' } ).click();
 		// Change font size.
 		await page
 			.getByRole( 'radiogroup', { name: 'Font size' } )
@@ -82,7 +75,6 @@ test.describe( 'Block Support', () => {
 	} );
 
 	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the sidebar.
 		await editor.openDocumentSettingsSidebar();
@@ -98,13 +90,7 @@ test.describe( 'Block Support', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		// Show custom controls.
-		if ( wpVersion === '6-7' ) {
-			// WordPress 6.7
-			await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
-		} else {
-			// WordPress 6.8 or higher
-			await page.getByRole( 'button', { name: 'Unlink' } ).click();
-		}
+		await page.getByRole( 'button', { name: 'Unlink' } ).click();
 		// Change margin values.
 		for ( let i = 0; i < 4; i++ ) {
 			await page.getByRole( 'button', { name: 'Set custom size' } ).nth( 0 ).click();
