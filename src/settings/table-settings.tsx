@@ -29,6 +29,7 @@ import {
 import {
 	STORE_NAME,
 	TABLE_WIDTH_UNITS,
+	TABLE_HEIGHT_UNITS,
 	BORDER_COLLAPSE_CONTROLS,
 	STICKY_CONTROLS,
 } from '../constants';
@@ -98,6 +99,7 @@ export default function TableSettings( {
 	}, [] );
 
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
+	const tableHeightUnits = useCustomUnits( { availableUnits: TABLE_HEIGHT_UNITS } );
 
 	const [ parsedWidthQuantity, parsedWidthUnit ] = parseQuantityAndUnitFromRawValue(
 		tableStylesObj?.width
@@ -168,6 +170,14 @@ export default function TableSettings( {
 		const newStylesObj = {
 			...tableStylesObj,
 			minWidth: value,
+		};
+		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
+	};
+
+	const onChangeMinHeight = ( value: Property.MinHeight | undefined ) => {
+		const newStylesObj = {
+			...tableStylesObj,
+			minHeight: value,
 		};
 		setAttributes( { tableStyles: convertToInline( newStylesObj ) } );
 	};
@@ -446,6 +456,16 @@ export default function TableSettings( {
 					);
 				} ) }
 			</ToggleGroupControl>
+			<UnitControl
+				className="ftb-table-settings-min-height"
+				label={ __( 'Table min height', 'flexible-table-block' ) }
+				value={ tableStylesObj?.minHeight }
+				units={ tableHeightUnits }
+				min={ 0 }
+				onChange={ onChangeMinHeight }
+				size="__unstable-large"
+				__unstableInputWidth="50%"
+			/>
 			<hr />
 			<PaddingControl
 				className="ftb-table-settings-padding"

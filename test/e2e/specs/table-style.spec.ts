@@ -136,6 +136,8 @@ test.describe( 'Styles', () => {
 		// Change table max width.
 		await page.getByRole( 'spinbutton', { name: 'Table max width' } ).fill( '600' );
 		await page.getByRole( 'spinbutton', { name: 'Table min width' } ).fill( '400' );
+		// Change table min height.
+		await page.getByRole( 'spinbutton', { name: 'Table min height' } ).fill( '300' );
 		// Padding, Border Radius, Border Width styles.
 		const styles = [
 			{
