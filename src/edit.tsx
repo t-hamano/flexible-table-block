@@ -17,7 +17,7 @@ import {
 	// @ts-ignore: has no exported member
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
-import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
+import { ToolbarDropdownMenu, PanelBody, __experimentalText as Text } from '@wordpress/components';
 import {
 	blockTable,
 	justifyLeft,
@@ -351,15 +351,17 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 						>
 							<TableSettings { ...tableSettingsProps } />
 						</PanelBody>
-						{ selectedCells && !! selectedCells.length && (
-							<PanelBody
-								title={ tableCellSettingsLabel }
-								initialOpen={ false }
-								className="flexible-table-block-table-cell-settings-panel"
-							>
+						<PanelBody
+							title={ tableCellSettingsLabel }
+							initialOpen={ false }
+							className="flexible-table-block-table-cell-settings-panel"
+						>
+							{ selectedCells && !! selectedCells.length ? (
 								<TableCellSettings { ...tableCellSettingsProps } />
-							</PanelBody>
-						) }
+							) : (
+								<Text>{ __( 'No cells selected.', 'flexible-table-block' ) }</Text>
+							) }
+						</PanelBody>
 						<PanelBody
 							title={ __( 'Caption settings', 'flexible-table-block' ) }
 							initialOpen={ false }
