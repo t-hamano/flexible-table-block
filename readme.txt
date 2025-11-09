@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 6.8
-Tested up to: 6.7
-Stable tag: 3.5.0
+Tested up to: 6.9
+Stable tag: 3.6.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,22 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.6.0 =
+* Tested to WordPress 6.9
+* Drop support for WP 6.6 and 6.7
+* Enhancement: Remove reset buttons
+* Enhancement: Improve accessibility of cell alignment setting
+* Enhancement: Parse CSS values more accurately
+* Enhancement: Add CSS classes to panels and sections
+* Enhancement: Update icons
+* Enhancement: Focus  first cell when inserting or deleting row or column
+* Enhancement: Show message when no cells selected
+* Enhancement: Add table min height setting
+* Enhancement: Make font size setting default control
+* Fix: Clearing table settings does not change the "Fixed width table cells" setting to the default
+* Fix: Deselection is not working correctly in border style control
+* Fix: Input field order in border radius control
 
 = 3.5.0 =
 * Tested to WordPress 6.8

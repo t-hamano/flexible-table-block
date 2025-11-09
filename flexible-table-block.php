@@ -4,7 +4,7 @@
  * Description: Easily create flexible configuration tables.
  * Requires at least: 6.8
  * Requires PHP: 8.0
- * Version: 3.5.0
+ * Version: 3.6.0
  * Author: Aki Hamano
  * Author URI: https://github.com/t-hamano
  * License: GPL2 or later

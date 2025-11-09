@@ -1,6 +1,6 @@
 {
 	"name": "flexible-table-block",
-	"version": "3.5.0",
+	"version": "3.6.0",
 	"description": "The custom block plugin for the WordPress block editor that allows you to create tables with flexible configurations.",
 	"author": "Aki Hamano",
 	"license": "GPL-2.0-or-later",
