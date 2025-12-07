@@ -31,6 +31,12 @@ jobs:
             wp: WordPress#6.9
           - php: '8.4'
             wp: WordPress#6.8.3
+
+          - php: '8.5'
+            wp: WordPress
+          - php: '8.5'
+            wp: WordPress#6.9
+
     name: PHP ${{ matrix.php }} / ${{ matrix.wp }} Test
 
     steps:
