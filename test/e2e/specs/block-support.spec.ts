@@ -74,7 +74,7 @@ test.describe( 'Block Support', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test.only( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
+	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
 		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the sidebar.
