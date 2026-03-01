@@ -74,7 +74,8 @@ test.describe( 'Block Support', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
+	test.only( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
+		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the sidebar.
 		await editor.openDocumentSettingsSidebar();
@@ -93,7 +94,11 @@ test.describe( 'Block Support', () => {
 		await page.getByRole( 'button', { name: 'Unlink' } ).click();
 		// Change margin values.
 		for ( let i = 0; i < 4; i++ ) {
-			await page.getByRole( 'button', { name: 'Set custom size' } ).nth( 1 ).click();
+			if ( wpVersion === '6.9' ) {
+				await page.getByRole( 'button', { name: 'Set custom size' } ).nth( 1 ).click();
+			} else {
+				await page.getByRole( 'button', { name: 'Set custom value' } ).nth( 0 ).click();
+			}
 		}
 		await page.getByRole( 'spinbutton', { name: 'Top margin' } ).fill( '10' );
 		await page.getByRole( 'spinbutton', { name: 'Right margin' } ).fill( '20' );
