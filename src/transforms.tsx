@@ -6,7 +6,7 @@ import { createBlock, type TransformBlock } from '@wordpress/blocks';
 /**
  * Internal dependencies
  */
-import { splitMergedCell, toVirtualRows, toVirtualTable, type VCell } from './utils/table-state';
+import { toVirtualTable } from './utils/table-state';
 import { normalizeRowColSpan } from './utils/helper';
 import type { BlockAttributes, CoreTableCell, CoreTableBlockAttributes } from './BlockAttributes';
 
@@ -63,20 +63,7 @@ const transforms: Transforms = {
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
 				// Create virtual object array with the cells placed in positions based on how they actually look.
-				let vTable = toVirtualTable( attributes );
-
-				// Find rowspan & colspan cells.
-				const vRows = toVirtualRows( vTable );
-				const rowColSpanCells = vRows
-					.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
-					.filter( ( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1 );
-
-				// Split the found rowspan and colspan cells If the core table block doesn't support it.
-				if ( rowColSpanCells.length ) {
-					rowColSpanCells.forEach( ( cell ) => {
-						vTable = splitMergedCell( vTable, cell );
-					} );
-				}
+				const vTable = toVirtualTable( attributes );
 
 				// Convert to core table block attributes.
 				const sectionAttributes = Object.entries( vTable ).reduce(
