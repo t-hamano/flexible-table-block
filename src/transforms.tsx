@@ -1,8 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { createBlock, store as blocksStore, type TransformBlock } from '@wordpress/blocks';
-import { select } from '@wordpress/data';
+import { createBlock, type TransformBlock } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
@@ -63,16 +62,6 @@ const transforms: Transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
-				// Check if the core table block supports rowspan and colspan.
-				const {
-					// @ts-ignore
-					getBlockType,
-				} = select( blocksStore );
-				const blockType = getBlockType( 'core/table' );
-				const hasRowColSpanSupport =
-					!! blockType.attributes.head.query.cells.query.rowspan &&
-					!! blockType.attributes.head.query.cells.query.colspan;
-
 				// Create virtual object array with the cells placed in positions based on how they actually look.
 				let vTable = toVirtualTable( attributes );
 
@@ -83,7 +72,7 @@ const transforms: Transforms = {
 					.filter( ( { rowSpan, colSpan } ) => rowSpan > 1 || colSpan > 1 );
 
 				// Split the found rowspan and colspan cells If the core table block doesn't support it.
-				if ( rowColSpanCells.length && ! hasRowColSpanSupport ) {
+				if ( rowColSpanCells.length ) {
 					rowColSpanCells.forEach( ( cell ) => {
 						vTable = splitMergedCell( vTable, cell );
 					} );
@@ -104,8 +93,8 @@ const transforms: Transforms = {
 								.map( ( cell ) => ( {
 									content: cell.content,
 									tag: 'head' === cell.sectionName ? 'th' : 'td',
-									rowspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.rowSpan ) : undefined,
-									colspan: hasRowColSpanSupport ? normalizeRowColSpan( cell.colSpan ) : undefined,
+									rowspan: normalizeRowColSpan( cell.rowSpan ),
+									colspan: normalizeRowColSpan( cell.colSpan ),
 								} ) ),
 						} ) );
 						coreTableAttributes[ sectionName ] = newSection;
