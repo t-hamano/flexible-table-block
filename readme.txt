@@ -54,7 +54,7 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 * Enhancement: Parse CSS values more accurately
 * Enhancement: Add CSS classes to panels and sections
 * Enhancement: Update icons
-* Enhancement: Focus  first cell when inserting or deleting row or column
+* Enhancement: Focus first cell when inserting or deleting row or column
 * Enhancement: Show message when no cells selected
 * Enhancement: Add table min height setting
 * Enhancement: Make font size setting default control
