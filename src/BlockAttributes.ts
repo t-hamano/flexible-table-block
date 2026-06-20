@@ -64,7 +64,7 @@ export type BlockAttributes = TableAttributes & {
 	captionStyles?: string;
 	captionSide: CaptionSideValue;
 	caption?: string;
-	style: NestedObject;
+	style?: NestedObject;
 };
 
 // Core Table Block attributes
