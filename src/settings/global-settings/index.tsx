@@ -6,7 +6,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 // @ts-ignore: has no exported member
 import { store as coreStore } from '@wordpress/core-data';
-import { Button, PanelBody, Spinner, __experimentalHStack as HStack } from '@wordpress/components';
+import { Button, Spinner, __experimentalHStack as HStack } from '@wordpress/components';
 import { help } from '@wordpress/icons';
 
 /**
@@ -45,31 +45,21 @@ export default function GlobalSettings() {
 
 	return (
 		<>
-			<PanelBody
-				title={ __( 'Global setting', 'flexible-table-block' ) }
-				initialOpen={ false }
-				className="flexible-table-block-global-setting-panel"
-			>
-				<HStack>
-					{ ! isGlobalSettingLoaded && <Spinner /> }
-					{ isGlobalSettingLoaded && showGlobalSetting && (
-						<Button
-							variant="primary"
-							onClick={ () => setIsSettingModalOpen( true ) }
-							size="compact"
-						>
-							{ __( 'Edit global setting', 'flexible-table-block' ) }
-						</Button>
-					) }
-					<Button
-						icon={ help }
-						variant="link"
-						onClick={ () => setIsHelpModalOpen( true ) }
-						label={ __( 'Help', 'flexible-table-block' ) }
-						size="compact"
-					/>
-				</HStack>
-			</PanelBody>
+			<HStack>
+				{ ! isGlobalSettingLoaded && <Spinner /> }
+				{ isGlobalSettingLoaded && showGlobalSetting && (
+					<Button variant="primary" onClick={ () => setIsSettingModalOpen( true ) } size="compact">
+						{ __( 'Edit global setting', 'flexible-table-block' ) }
+					</Button>
+				) }
+				<Button
+					icon={ help }
+					variant="link"
+					onClick={ () => setIsHelpModalOpen( true ) }
+					label={ __( 'Help', 'flexible-table-block' ) }
+					size="compact"
+				/>
+			</HStack>
 			{ isHelpModalOpen && <HelpModal { ...{ setIsHelpModalOpen } } /> }
 			{ options && isSettingModalOpen && ( isAdministrator || options?.show_global_setting ) && (
 				<SettingModal

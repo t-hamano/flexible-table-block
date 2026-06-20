@@ -37,7 +37,7 @@ import type { BlockEditProps } from '@wordpress/blocks';
 import './editor.scss';
 import { CONTENT_JUSTIFY_CONTROLS } from './constants';
 import { STORE_NAME, type StoreOptions } from './store';
-import { TableSettings, TableCaptionSettings, TableCellSettings } from './settings';
+import { TableSettings, TableCaptionSettings, TableCellSettings, GlobalSettings } from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
 import {
 	insertRow,
@@ -344,6 +344,12 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 						</>
 					) }
 					<InspectorControls>
+						<PanelBody
+							title={ __( 'Global setting', 'flexible-table-block' ) }
+							initialOpen={ false }
+						>
+							<GlobalSettings />
+						</PanelBody>
 						<PanelBody
 							title={ __( 'Table settings', 'flexible-table-block' ) }
 							initialOpen={ false }
