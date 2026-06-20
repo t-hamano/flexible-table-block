@@ -53,7 +53,7 @@ export interface Cell {
 }
 
 // Block attributes
-export interface BlockAttributes extends TableAttributes {
+export type BlockAttributes = TableAttributes & {
 	contentJustification: ContentJustifyValue | undefined;
 	hasFixedLayout: boolean;
 	isScrollOnPc: boolean;
@@ -65,10 +65,10 @@ export interface BlockAttributes extends TableAttributes {
 	captionSide: CaptionSideValue;
 	caption?: string;
 	style: NestedObject;
-}
+};
 
 // Core Table Block attributes
-export interface CoreTableBlockAttributes {
+export type CoreTableBlockAttributes = {
 	head: {
 		cells: CoreTableCell[];
 	}[];
@@ -81,7 +81,7 @@ export interface CoreTableBlockAttributes {
 	hasFixedLayout: boolean;
 	caption: string;
 	style: NestedObject;
-}
+};
 
 export interface CoreTableCell {
 	content: string;

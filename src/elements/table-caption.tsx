@@ -9,7 +9,7 @@ import type { Dispatch, SetStateAction } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { BlockControls, RichText } from '@wordpress/block-editor';
-import { createBlock, type BlockInstance } from '@wordpress/blocks';
+import { createBlock, type Block } from '@wordpress/blocks';
 import { ToolbarButton } from '@wordpress/components';
 import { caption as captionIcon } from '@wordpress/icons';
 import { useState, useEffect, useCallback } from '@wordpress/element';
@@ -24,7 +24,7 @@ import type { VSelectedCells, VSelectedLine } from '../utils/table-state';
 type Props = {
 	attributes: BlockAttributes;
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
-	insertBlocksAfter: ( blocks: BlockInstance[] ) => void;
+	insertBlocksAfter: ( blocks: Block[] ) => void;
 	setSelectedLine: Dispatch< SetStateAction< VSelectedLine > >;
 	setSelectedCells: Dispatch< SetStateAction< VSelectedCells > >;
 	captionStylesObj: Properties;

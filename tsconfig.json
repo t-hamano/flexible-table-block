@@ -8,10 +8,6 @@
 		"module": "esnext",
 		"lib": [ "dom", "esnext" ],
 		"composite": true,
-		"baseUrl": ".",
-		"paths": {
-			"@/*": [ "./src/*" ]
-		},
 		"noEmit": true,
 		"strict": true,
 		"noUnusedLocals": true,
@@ -19,10 +15,10 @@
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"verbatimModuleSyntax": true,
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
-		"typeRoots": [ "./node_modules/@types" ],
+		"types": [ "jest", "node" ],
 		"skipLibCheck": true
 	},
 	"include": [ "src/**/*", "src/**/*.json" ],
