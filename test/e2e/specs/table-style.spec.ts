@@ -1,20 +1,26 @@
 /**
+ * External dependencies
+ */
+import type { Page } from '@playwright/test';
+
+/**
  * WordPress dependencies
  */
-const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
+import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
+import type { PageUtils } from '@wordpress/e2e-test-utils-playwright';
 
 /**
  * Internal dependencies
  */
 import FlexibleTableBlockUtils from '../util';
 
-test.use( {
+const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
 	fsbUtils: async ( { page, editor }, use ) => {
 		await use( new FlexibleTableBlockUtils( { page, editor } ) );
 	},
 } );
 
-async function applyCellStyles( page, pageUtils ) {
+async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	// Font Size, Line Hiehgt, Width styles.
 	await page.getByRole( 'spinbutton', { name: 'Cell font size' } ).fill( '20' );
 	await page.getByRole( 'spinbutton', { name: 'Cell line height' } ).fill( '2' );

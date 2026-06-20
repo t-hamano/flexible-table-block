@@ -1,14 +1,14 @@
 /**
  * WordPress dependencies
  */
-const { test, expect } = require( '@wordpress/e2e-test-utils-playwright' );
+import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
 
 /**
  * Internal dependencies
  */
 import FlexibleTableBlockUtils from '../util';
 
-test.use( {
+const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
 	fsbUtils: async ( { page, editor }, use ) => {
 		await use( new FlexibleTableBlockUtils( { page, editor } ) );
 	},

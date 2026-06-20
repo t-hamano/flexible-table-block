@@ -12,7 +12,7 @@ export default class FlexibleTableBlockUtils {
 	editor: Editor;
 	page: Page;
 
-	constructor( { page, editor } ) {
+	constructor( { page, editor }: { page: Page; editor: Editor } ) {
 		this.editor = editor;
 		this.page = page;
 	}
