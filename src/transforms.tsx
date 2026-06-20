@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { createBlock, type TransformBlock } from '@wordpress/blocks';
+import { createBlock, type BlockTransform } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
@@ -11,8 +11,8 @@ import { normalizeRowColSpan } from './utils/helper';
 import type { BlockAttributes, CoreTableCell, CoreTableBlockAttributes } from './BlockAttributes';
 
 interface Transforms {
-	readonly from: ReadonlyArray< TransformBlock< CoreTableBlockAttributes > >;
-	readonly to: ReadonlyArray< TransformBlock< BlockAttributes > >;
+	readonly from: ReadonlyArray< BlockTransform< CoreTableBlockAttributes > >;
+	readonly to: ReadonlyArray< BlockTransform< BlockAttributes > >;
 }
 
 const transforms: Transforms = {
@@ -21,7 +21,8 @@ const transforms: Transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
-				const { hasFixedLayout, head, body, foot, caption, style } = attributes;
+				const { hasFixedLayout, head, body, foot, caption, style } =
+					attributes as CoreTableBlockAttributes;
 
 				// Mapping rowspan and colspan properties.
 				const convertedSections = ( section: { cells: CoreTableCell[] }[] ) => {
@@ -62,8 +63,10 @@ const transforms: Transforms = {
 			type: 'block',
 			blocks: [ 'core/table' ],
 			transform: ( attributes ) => {
+				const blockAttributes = attributes as BlockAttributes;
+
 				// Create virtual object array with the cells placed in positions based on how they actually look.
-				const vTable = toVirtualTable( attributes );
+				const vTable = toVirtualTable( blockAttributes );
 
 				// Convert to core table block attributes.
 				const sectionAttributes = Object.entries( vTable ).reduce(
@@ -92,9 +95,9 @@ const transforms: Transforms = {
 
 				return createBlock( 'core/table', {
 					...sectionAttributes,
-					hasFixedLayout: attributes.hasFixedLayout,
-					caption: attributes.caption,
-					style: attributes.style,
+					hasFixedLayout: blockAttributes.hasFixedLayout,
+					caption: blockAttributes.caption,
+					style: blockAttributes.style,
 				} );
 			},
 		},

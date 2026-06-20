@@ -55,7 +55,6 @@ import {
 } from '../../controls';
 import { sanitizeUnitValue, cleanEmptyObject } from '../../utils/helper';
 import type { ApiResponse, StoreOptions } from '../../store';
-import type { NoticeProps } from '@wordpress/components/build-types/notice/types';
 
 type Props = {
 	options: StoreOptions;
@@ -64,7 +63,9 @@ type Props = {
 };
 
 interface NoticeInfo {
-	status?: NoticeProps[ 'status' ];
+	// Mirrors the `status` prop of `@wordpress/components` Notice, whose type is
+	// not exposed through the package's `exports` map.
+	status?: 'warning' | 'success' | 'error' | 'info';
 	message?: string;
 }
 

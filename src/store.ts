@@ -9,7 +9,6 @@ import type { Property } from 'csstype';
  */
 import apiFetch from '@wordpress/api-fetch';
 import { createReduxStore, register } from '@wordpress/data';
-import type { NoticeProps } from '@wordpress/components/build-types/notice/types';
 
 /**
  * Internal dependencies
@@ -17,15 +16,15 @@ import type { NoticeProps } from '@wordpress/components/build-types/notice/types
 import { STORE_NAME, REST_API_ROUTE } from './constants';
 
 export interface ApiResponse {
-	status?: NoticeProps[ 'status' ];
+	// Mirrors the `status` prop of `@wordpress/components` Notice, whose type is
+	// not exposed through the package's `exports` map.
+	status?: 'warning' | 'success' | 'error' | 'info';
 	message?: string;
 	options?: StoreOptions;
-	// eslint-disable-next-line camelcase
 	block_css?: string;
 }
 
 export interface StoreOptions {
-	/* eslint-disable camelcase */
 	show_label_on_section: boolean;
 	show_control_button: boolean;
 	focus_control_button: boolean;
@@ -56,7 +55,6 @@ export interface StoreOptions {
 		cell_text_align?: string;
 		cell_vertical_align?: string;
 	};
-	/* eslint-enable camelcase */
 }
 
 const DEFAULT_STATE = {
