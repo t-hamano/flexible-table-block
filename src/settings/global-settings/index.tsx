@@ -27,7 +27,7 @@ export default function GlobalSettings() {
 	);
 
 	const isAdministrator: boolean = useSelect(
-		( select ) => select( coreStore ).canUser( 'create', 'users' ),
+		( select ) => !! select( coreStore ).canUser( 'create', 'users' ),
 		[]
 	);
 
