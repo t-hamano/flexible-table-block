@@ -265,6 +265,12 @@
 		},
 		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
 	},
+	"styles": [
+		{
+			"name": "stripes",
+			"label": "Stripes"
+		}
+	],
 	"editorScript": "flexible-table-block-editor",
 	"editorStyle": "flexible-table-block-editor",
 	"style": "flexible-table-block"

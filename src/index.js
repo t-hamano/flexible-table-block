@@ -28,11 +28,5 @@ const config = {
 	edit,
 	save,
 	deprecated,
-	styles: [
-		{
-			name: 'stripes',
-			label: __( 'Stripes', 'flexible-table-block' ),
-		},
-	],
 };
 registerBlockType( metadata.name, config );
