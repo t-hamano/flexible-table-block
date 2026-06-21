@@ -7,7 +7,7 @@ import type { Properties } from 'csstype';
  * Internal dependencies
  */
 import { cleanEmptyObject, sanitizeUnitValue } from './helper';
-import type { CornerProps, DirectionProps } from './style-picker';
+import type { CornerProps, CrossProps, DirectionProps } from './style-picker';
 
 function getCssPropertyWithFourDirection(
 	property: keyof Properties,
@@ -231,7 +231,7 @@ export function updateBorderColor(
  */
 export function updateBorderSpacing(
 	styles: Properties,
-	values: { horizontal?: string; vertical?: string } | undefined
+	values: Partial< CrossProps > | undefined
 ): Properties {
 	if ( ! values ) {
 		return styles;

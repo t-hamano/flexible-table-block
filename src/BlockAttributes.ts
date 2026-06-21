@@ -68,16 +68,7 @@ export type BlockAttributes = TableAttributes & {
 };
 
 // Core Table Block attributes
-export type CoreTableBlockAttributes = {
-	head: {
-		cells: CoreTableCell[];
-	}[];
-	body: {
-		cells: CoreTableCell[];
-	}[];
-	foot: {
-		cells: CoreTableCell[];
-	}[];
+export type CoreTableBlockAttributes = Record< SectionName, { cells: CoreTableCell[] }[] > & {
 	hasFixedLayout: boolean;
 	caption: string;
 	style: NestedObject;

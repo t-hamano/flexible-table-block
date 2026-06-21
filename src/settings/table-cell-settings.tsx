@@ -48,6 +48,7 @@ import {
 	updateCells,
 	type VTable,
 	type VSelectedCells,
+	type CellState,
 } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
@@ -105,14 +106,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 		cellStylesObj?.width
 	);
 
-	const updateCellsState = ( state: {
-		styles?: any;
-		tag?: CellTagValue;
-		className?: string;
-		id?: string;
-		headers?: string;
-		scope?: CellScopeValue;
-	} ) => {
+	const updateCellsState = ( state: CellState ) => {
 		const newVTable = updateCells( vTable, state, selectedCells );
 		setAttributes( toTableAttributes( newVTable ) );
 	};

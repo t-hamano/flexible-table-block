@@ -51,6 +51,16 @@ export type VSelectedLine =
 // Virtual table selected cells state
 export type VSelectedCells = VCell[] | undefined;
 
+// Cell state to update
+export interface CellState {
+	styles?: any;
+	tag?: CellTagValue;
+	className?: string;
+	id?: string;
+	headers?: string;
+	scope?: CellScopeValue;
+}
+
 // Minimum / maximum row / column virtual indexes on virtual table
 interface VRangeIndexes {
 	minRowIndex: number;
@@ -643,14 +653,7 @@ export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
  */
 export function updateCells(
 	vTable: VTable,
-	cellState: {
-		styles?: any;
-		tag?: CellTagValue;
-		className?: string;
-		id?: string;
-		headers?: string;
-		scope?: CellScopeValue;
-	},
+	cellState: CellState,
 	selectedCells: VCell[]
 ): VTable {
 	return Object.entries( vTable ).reduce(
