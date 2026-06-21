@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 // @ts-ignore: has no exported member
 import { store as coreStore } from '@wordpress/core-data';
@@ -18,36 +18,28 @@ import SettingModal from './setting-modal';
 import type { StoreOptions } from '../../store';
 
 export default function GlobalSettings() {
-	const storeOptions: StoreOptions = useSelect(
-		( select ) =>
-			select( STORE_NAME )
+	const { options, isAdministrator, hasResolved } = useSelect( ( select ) => {
+		return {
+			// @ts-ignore
+			options: select( STORE_NAME ).getOptions() as StoreOptions,
+			isAdministrator: !! select( coreStore ).canUser( 'create', 'users' ),
+			hasResolved:
 				// @ts-ignore
-				.getOptions(),
-		[]
-	);
-
-	const isAdministrator = useSelect(
-		( select ) => !! select( coreStore ).canUser( 'create', 'users' ),
-		[]
-	);
+				select( STORE_NAME ).hasFinishedResolution( 'getOptions' ) &&
+				select( coreStore ).hasFinishedResolution( 'canUser', [ 'create', 'users' ] ),
+		};
+	}, [] );
 
 	const [ isSettingModalOpen, setIsSettingModalOpen ] = useState( false );
 	const [ isHelpModalOpen, setIsHelpModalOpen ] = useState( false );
-	const [ options, setOptions ] = useState< StoreOptions >();
 
-	// Set options to state.
-	useEffect( () => {
-		setOptions( storeOptions );
-	}, [ storeOptions ] );
-
-	const isGlobalSettingLoaded = isAdministrator !== undefined && options !== undefined;
 	const showGlobalSetting = isAdministrator || options?.show_global_setting;
 
 	return (
 		<>
 			<HStack>
-				{ ! isGlobalSettingLoaded && <Spinner /> }
-				{ isGlobalSettingLoaded && showGlobalSetting && (
+				{ ! hasResolved && <Spinner /> }
+				{ hasResolved && showGlobalSetting && (
 					<Button variant="primary" onClick={ () => setIsSettingModalOpen( true ) } size="compact">
 						{ __( 'Edit global setting', 'flexible-table-block' ) }
 					</Button>
