@@ -58,7 +58,7 @@ import type { ApiResponse, StoreOptions } from '../../store';
 
 type Props = {
 	options: StoreOptions;
-	isAdministrator: boolean;
+	canManageOptions: boolean;
 	setIsSettingModalOpen: Dispatch< SetStateAction< boolean > >;
 };
 
@@ -69,7 +69,11 @@ interface NoticeInfo {
 	message?: string;
 }
 
-export default function SettingModal( { options, isAdministrator, setIsSettingModalOpen }: Props ) {
+export default function SettingModal( {
+	options,
+	canManageOptions,
+	setIsSettingModalOpen,
+}: Props ) {
 	const [ noticeInfo, setNoticeInfo ] = useState< NoticeInfo | undefined >( undefined );
 	const [ isResetPopup, setIsResetPopup ] = useState( false );
 	const [ isWaiting, setIsWaiting ] = useState( false );
@@ -767,7 +771,7 @@ export default function SettingModal( { options, isAdministrator, setIsSettingMo
 									} }
 									__nextHasNoMarginBottom
 								/>
-								{ isAdministrator && (
+								{ canManageOptions && (
 									<ToggleControl
 										label={ __(
 											'Show Global setting button to non-administrative users',

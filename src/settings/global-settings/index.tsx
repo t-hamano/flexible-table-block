@@ -18,22 +18,28 @@ import SettingModal from './setting-modal';
 import type { StoreOptions } from '../../store';
 
 export default function GlobalSettings() {
-	const { options, isAdministrator, hasResolved } = useSelect( ( select ) => {
+	const { options, canManageOptions, hasResolved } = useSelect( ( select ) => {
 		return {
 			// @ts-ignore
 			options: select( STORE_NAME ).getOptions() as StoreOptions,
-			isAdministrator: !! select( coreStore ).canUser( 'create', 'users' ),
+			canManageOptions: !! select( coreStore ).canUser( 'update', {
+				kind: 'root',
+				name: 'site',
+			} ),
 			hasResolved:
 				// @ts-ignore
 				select( STORE_NAME ).hasFinishedResolution( 'getOptions' ) &&
-				select( coreStore ).hasFinishedResolution( 'canUser', [ 'create', 'users' ] ),
+				select( coreStore ).hasFinishedResolution( 'canUser', [
+					'update',
+					{ kind: 'root', name: 'site' },
+				] ),
 		};
 	}, [] );
 
 	const [ isSettingModalOpen, setIsSettingModalOpen ] = useState( false );
 	const [ isHelpModalOpen, setIsHelpModalOpen ] = useState( false );
 
-	const showGlobalSetting = isAdministrator || options?.show_global_setting;
+	const showGlobalSetting = canManageOptions || options?.show_global_setting;
 
 	return (
 		<>
@@ -53,11 +59,11 @@ export default function GlobalSettings() {
 				/>
 			</HStack>
 			{ isHelpModalOpen && <HelpModal { ...{ setIsHelpModalOpen } } /> }
-			{ options && isSettingModalOpen && ( isAdministrator || options?.show_global_setting ) && (
+			{ options && isSettingModalOpen && ( canManageOptions || options?.show_global_setting ) && (
 				<SettingModal
 					{ ...{
 						options,
-						isAdministrator,
+						canManageOptions,
 						setIsSettingModalOpen,
 					} }
 				/>
