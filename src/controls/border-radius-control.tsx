@@ -75,14 +75,14 @@ export default function BorderRadiusControl( {
 
 	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
 
-	const [ isLinked, setIsLinked ] = useState< boolean >( true );
+	const [ isLinked, setIsLinked ] = useState( true );
 	const [ corner, setCorner ] = useState< CornerValue | undefined >( undefined );
 
-	const linkedLabel: string = isLinked
+	const linkedLabel = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
 		: __( 'Link sides', 'flexible-table-block' );
 
-	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
+	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.topLeft;
 
 	const toggleLinked = () => {

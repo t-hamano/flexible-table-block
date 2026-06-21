@@ -80,11 +80,11 @@ export default function BorderColorControl( {
 		return settings?.colors ?? [];
 	}, [] );
 
-	const [ isLinked, setIsLinked ] = useState< boolean >( true );
-	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
+	const [ isLinked, setIsLinked ] = useState( true );
+	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
 	const [ pickerIndex, setPickerIndex ] = useState< number | undefined >( undefined );
 
-	const linkedLabel: string = isLinked
+	const linkedLabel = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
 		: __( 'Link sides', 'flexible-table-block' );
 

@@ -77,14 +77,14 @@ export default function BorderWidthControl( {
 
 	const borderWidthUnits = useCustomUnits( { availableUnits: BORDER_WIDTH_UNITS } );
 
-	const [ isLinked, setIsLinked ] = useState< boolean >( true );
+	const [ isLinked, setIsLinked ] = useState( true );
 	const [ side, setSide ] = useState< SideValue | undefined >( undefined );
 
-	const linkedLabel: string = isLinked
+	const linkedLabel = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
 		: __( 'Link sides', 'flexible-table-block' );
 
-	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
+	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
 	const toggleLinked = () => {

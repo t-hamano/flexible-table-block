@@ -40,18 +40,15 @@ export function convertToObject( inlineStyles: string | undefined ): Properties 
  * @return Inline CSS styles
  */
 export function convertToInline( stylesObj: Properties ): string {
-	const lines: string[] = Object.keys( stylesObj ).reduce< string[] >(
-		( result: string[], key: string ) => {
-			const property = key.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
-			const value = stylesObj[ key as keyof Properties ];
+	const lines = Object.keys( stylesObj ).reduce< string[] >( ( result, key ) => {
+		const property = key.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
+		const value = stylesObj[ key as keyof Properties ];
 
-			if ( value !== undefined && ( typeof value === 'string' || value === 0 ) ) {
-				result.push( `${ property }:${ value };` );
-			}
-			return result;
-		},
-		[] as string[]
-	);
+		if ( value !== undefined && ( typeof value === 'string' || value === 0 ) ) {
+			result.push( `${ property }:${ value };` );
+		}
+		return result;
+	}, [] );
 
 	return lines.join( '' );
 }

@@ -2,7 +2,6 @@
  * External dependencies
  */
 import clsx from 'clsx';
-import type { Properties } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -288,14 +287,14 @@ const v1 = {
 			captionStyles,
 		} = attributes;
 
-		const isEmpty: boolean = ! head.length && ! body.length && ! foot.length;
+		const isEmpty = ! head.length && ! body.length && ! foot.length;
 
 		if ( isEmpty ) {
 			return null;
 		}
 
-		const tableStylesObj: Properties = convertToObject( tableStyles );
-		const captionStylesObj: Properties = convertToObject( captionStyles );
+		const tableStylesObj = convertToObject( tableStyles );
+		const captionStylesObj = convertToObject( captionStyles );
 
 		const colorProps = getColorClassesAndStyles( attributes );
 
@@ -307,13 +306,13 @@ const v1 = {
 			} ),
 		} );
 
-		const tableClasses: string = clsx( colorProps.className, {
+		const tableClasses = clsx( colorProps.className, {
 			'has-fixed-layout': hasFixedLayout,
 			'is-stacked-on-mobile': isStackedOnMobile,
 			[ `is-sticky-${ sticky }` ]: sticky,
 		} );
 
-		const hasCaption: boolean = ! RichText.isEmpty( caption || '' );
+		const hasCaption = ! RichText.isEmpty( caption || '' );
 
 		const Section = ( { type, rows }: { type: SectionName; rows: Row[] } ) => {
 			if ( ! rows.length ) {

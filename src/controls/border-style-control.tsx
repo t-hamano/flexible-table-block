@@ -71,9 +71,9 @@ export default function BorderStyleControl( {
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
-	const [ isLinked, setIsLinked ] = useState< boolean >( true );
+	const [ isLinked, setIsLinked ] = useState( true );
 
-	const linkedLabel: string = isLinked
+	const linkedLabel = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
 		: __( 'Link sides', 'flexible-table-block' );
 

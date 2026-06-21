@@ -87,16 +87,16 @@ export default function Table( {
 
 	const colorProps = useColorProps( attributes );
 
-	const [ isSelectMode, setIsSelectMode ] = useState< boolean >( false );
+	const [ isSelectMode, setIsSelectMode ] = useState( false );
 
 	// Manage rendering status as state since some processing may be performed before rendering components.
-	const [ isReady, setIdReady ] = useState< boolean >( false );
+	const [ isReady, setIdReady ] = useState( false );
 	useEffect( () => setIdReady( true ), [] );
 
 	const tableRef = useRef( null );
 	const { createWarningNotice } = useDispatch( noticesStore );
 
-	let isTabMove: boolean = false;
+	let isTabMove = false;
 
 	const isRowSelected = selectedLine && 'sectionName' in selectedLine && 'rowIndex' in selectedLine;
 	const isColumnSelected = selectedLine && 'vColIndex' in selectedLine;

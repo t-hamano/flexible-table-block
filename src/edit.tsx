@@ -2,7 +2,6 @@
  * External dependencies
  */
 import clsx from 'clsx';
-import type { Properties } from 'csstype';
 
 /**
  * WordPress dependencies
@@ -71,8 +70,8 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const [ selectedCells, setSelectedCells ] = useState< VSelectedCells >( undefined );
 	const [ selectedLine, setSelectedLine ] = useState< VSelectedLine >( undefined );
 
-	const tableStylesObj: Properties = convertToObject( tableStyles );
-	const captionStylesObj: Properties = convertToObject( captionStyles );
+	const tableStylesObj = convertToObject( tableStyles );
+	const captionStylesObj = convertToObject( captionStyles );
 	const options = useSelect( ( select ) => {
 		const { getOptions }: { getOptions: () => StoreOptions } = select( STORE_NAME );
 		return getOptions();
@@ -247,7 +246,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		},
 	];
 
-	const isEmpty: boolean = ! [ 'head', 'body', 'foot' ].filter(
+	const isEmpty = ! [ 'head', 'body', 'foot' ].filter(
 		( sectionName ) => ! isEmptySection( vTable[ sectionName as SectionName ] )
 	).length;
 
@@ -291,7 +290,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		selectedCells,
 	};
 
-	const tableCellSettingsLabel: string =
+	const tableCellSettingsLabel =
 		selectedCells && selectedCells.length > 1
 			? __( 'Multi cells settings', 'flexible-table-block' )
 			: __( 'Cell settings', 'flexible-table-block' );

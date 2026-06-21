@@ -55,13 +55,13 @@ export default function BorderSpacingControl( {
 
 	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
 
-	const [ isLinked, setIsLinked ] = useState< boolean >( true );
+	const [ isLinked, setIsLinked ] = useState( true );
 
-	const linkedLabel: string = isLinked
+	const linkedLabel = isLinked
 		? __( 'Unlink directions', 'flexible-table-block' )
 		: __( 'Link directions', 'flexible-table-block' );
 
-	const allInputPlaceholder: string = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
+	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
 	const allInputValue: string | 0 = isMixed ? '' : values.horizontal;
 
 	const toggleLinked = () => {

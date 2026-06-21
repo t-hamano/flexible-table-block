@@ -26,13 +26,13 @@ export default function GlobalSettings() {
 		[]
 	);
 
-	const isAdministrator: boolean = useSelect(
+	const isAdministrator = useSelect(
 		( select ) => !! select( coreStore ).canUser( 'create', 'users' ),
 		[]
 	);
 
-	const [ isSettingModalOpen, setIsSettingModalOpen ] = useState< boolean >( false );
-	const [ isHelpModalOpen, setIsHelpModalOpen ] = useState< boolean >( false );
+	const [ isSettingModalOpen, setIsSettingModalOpen ] = useState( false );
+	const [ isHelpModalOpen, setIsHelpModalOpen ] = useState( false );
 	const [ options, setOptions ] = useState< StoreOptions >();
 
 	// Set options to state.

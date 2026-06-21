@@ -71,8 +71,8 @@ interface NoticeInfo {
 
 export default function SettingModal( { options, isAdministrator, setIsSettingModalOpen }: Props ) {
 	const [ noticeInfo, setNoticeInfo ] = useState< NoticeInfo | undefined >( undefined );
-	const [ isResetPopup, setIsResetPopup ] = useState< boolean >( false );
-	const [ isWaiting, setIsWaiting ] = useState< boolean >( false );
+	const [ isResetPopup, setIsResetPopup ] = useState( false );
+	const [ isWaiting, setIsWaiting ] = useState( false );
 	const [ currentOptions, setCurrentOptions ] = useState< StoreOptions >( options );
 
 	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );

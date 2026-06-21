@@ -59,7 +59,7 @@ export default function ColorControl( {
 		return settings?.colors ?? [];
 	}, [] );
 
-	const [ isPickerOpen, setIsPickerOpen ] = useState< boolean >( false );
+	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
 
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
 
