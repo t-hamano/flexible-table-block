@@ -45,7 +45,7 @@ class Api {
 						if ( $show_global_setting ) {
 							return current_user_can( 'edit_posts' );
 						} else {
-							return current_user_can( 'administrator' );
+							return current_user_can( 'manage_options' );
 						}
 					},
 				),
@@ -58,7 +58,7 @@ class Api {
 						if ( $show_global_setting ) {
 							return current_user_can( 'edit_posts' );
 						} else {
-							return current_user_can( 'administrator' );
+							return current_user_can( 'manage_options' );
 						}
 					},
 				),
