@@ -167,11 +167,11 @@ class Helper {
 	 * @return string
 	 */
 	public static function get_padding_styles( $values ) {
-		if ( gettype( $values ) === 'string' ) {
+		if ( is_string( $values ) ) {
 			return "padding:{$values};";
 		}
 
-		if ( gettype( $values ) !== 'array' ) {
+		if ( ! is_array( $values ) ) {
 			return null;
 		}
 
