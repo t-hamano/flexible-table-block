@@ -76,11 +76,11 @@ export function sanitizeUnitValue(
 	const value = String( initialValue ).trim();
 	let num = parseFloat( value );
 
-	if ( isNaN( num ) ) {
+	if ( Number.isNaN( num ) || num < 0 ) {
 		return '';
-	} else if ( num < 0 ) {
-		return '';
-	} else if ( num === 0 ) {
+	}
+
+	if ( num === 0 ) {
 		return '0';
 	}
 
@@ -111,7 +111,7 @@ export function parseUnit( initialValue: string ): [ number, string ] {
 	const value = String( initialValue ).trim();
 	const num = parseFloat( value );
 
-	if ( isNaN( num ) ) {
+	if ( Number.isNaN( num ) ) {
 		return [ 0, '' ];
 	}
 
@@ -129,7 +129,7 @@ export function toInteger( value: number | string | undefined, defaultValue = 0 
 
 	const converted = parseInt( String( value ), 10 );
 
-	if ( isNaN( converted ) ) {
+	if ( Number.isNaN( converted ) ) {
 		return defaultValue;
 	}
 

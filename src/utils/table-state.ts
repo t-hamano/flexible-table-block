@@ -131,7 +131,7 @@ export function insertRow(
 		cells: Array.from( { length: newRowColCount } ).map( ( _, vColIndex ): VCell => {
 			// Find the cell with rowspan that covers the cell in the inserted row.
 			const rowSpanCells = vRows
-				.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
+				.flatMap( ( row ) => row.cells )
 				.filter(
 					( cell: VCell ) =>
 						cell.sectionName === sectionName &&
@@ -214,7 +214,7 @@ export function deleteRow(
 	if ( rowSpanCellsCount ) {
 		for ( let i = 0; i < rowSpanCellsCount; i++ ) {
 			const vMergedCells = vTable[ sectionName ]
-				.reduce( ( cells: VCell[], row: VRow ) => cells.concat( row.cells ), [] )
+				.flatMap( ( row ) => row.cells )
 				.filter( ( cell: VCell ) => cell.rowSpan > 1 && cell.rowIndex === rowIndex );
 
 			if ( vMergedCells.length ) {
@@ -313,7 +313,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 					if ( cVColIndex === vColIndex ) {
 						// Whether the cell to be inserted is a virtual cell filled with colSpan.
 						const colSpanCells = vRows
-							.reduce( ( colSpancells: VCell[], row ) => colSpancells.concat( row.cells ), [] )
+							.flatMap( ( row ) => row.cells )
 							.filter(
 								( colSpancell: VCell ) =>
 									colSpancell.sectionName === sectionName &&
@@ -379,7 +379,7 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 	const vRows = toVirtualRows( vTable );
 
 	const colSpanCells = vRows
-		.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
+		.flatMap( ( row ) => row.cells )
 		.filter( ( cell: VCell ) => cell.colSpan > 1 && cell.vColIndex === vColIndex );
 
 	// Split the found colspan cells.
@@ -468,7 +468,7 @@ export function mergeCells(
 	if ( rowColSpanCellsCount ) {
 		for ( let i = 0; i < rowColSpanCellsCount; i++ ) {
 			const vMergedCells = vTable[ sectionName as SectionName ]
-				.reduce( ( cells: VCell[], row ) => cells.concat( row.cells ), [] )
+				.flatMap( ( row ) => row.cells )
 				.filter(
 					( cell: VCell ) =>
 						( cell.rowSpan > 1 || cell.colSpan > 1 ) &&
@@ -486,7 +486,7 @@ export function mergeCells(
 
 	// Merge the contents of the cells to be merged.
 	const mergedCellsContent = vTable[ sectionName as SectionName ]
-		.reduce( ( cells: VCell[], row: VRow ) => cells.concat( row.cells ), [] )
+		.flatMap( ( row ) => row.cells )
 		.reduce( ( result: string[], cell: VCell ) => {
 			if (
 				cell.rowIndex >= minRowIndex &&
@@ -985,7 +985,7 @@ export function isRectangleSelected( selectedCells: VSelectedCells ): boolean {
 	} );
 
 	// Whether all cells in the matrix are filled (whether cell merging is possible).
-	return vRange.reduce( ( cells, row ) => cells.concat( row ), [] ).every( ( cell ) => cell );
+	return vRange.flat().every( ( cell ) => cell );
 }
 
 /**
@@ -1022,7 +1022,7 @@ export function toRectangledSelectedCells(
 	const colCount = currentSection[ 0 ].cells.length;
 
 	const VCells = currentSection
-		.reduce( ( cells: VCell[], row: VRow ) => cells.concat( row.cells ), [] )
+		.flatMap( ( row ) => row.cells )
 		.map( ( cell: VCell ) => {
 			if ( cell.rowIndex === fromCell.rowIndex && cell.vColIndex === fromCell.vColIndex ) {
 				cell.isFirstSelected = true;

@@ -74,7 +74,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 
 	const onChangeColumnCount = ( value: string ) => {
 		const parsedValue = parseInt( value, 10 );
-		if ( isNaN( parsedValue ) ) {
+		if ( Number.isNaN( parsedValue ) ) {
 			setColCount( undefined );
 		} else {
 			setColCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_COL, parsedValue ) ) );
@@ -82,8 +82,8 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 	};
 
 	const onChangeRowCount = ( value: string ) => {
-		const parsedValue = parseInt( value );
-		if ( isNaN( parsedValue ) ) {
+		const parsedValue = parseInt( value, 10 );
+		if ( Number.isNaN( parsedValue ) ) {
 			setRowCount( undefined );
 		} else {
 			setRowCount( Math.max( 1, Math.min( MAX_PREVIEW_TABLE_ROW, parsedValue ) ) );

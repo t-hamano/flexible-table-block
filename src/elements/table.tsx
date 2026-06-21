@@ -154,9 +154,7 @@ export default function Table( {
 
 	const onSelectSectionCells = ( sectionName: SectionName ) => {
 		setSelectedCells(
-			vTable[ sectionName ].reduce( ( cells: VCell[], row ) => {
-				return cells.concat( row.cells.filter( ( cell ) => ! cell.isHidden ) );
-			}, [] )
+			vTable[ sectionName ].flatMap( ( row ) => row.cells.filter( ( cell ) => ! cell.isHidden ) )
 		);
 		setSelectedLine( undefined );
 	};
@@ -172,11 +170,9 @@ export default function Table( {
 		} else {
 			setSelectedLine( { sectionName, rowIndex } );
 			setSelectedCells(
-				vTable[ sectionName ].reduce( ( cells: VCell[], row ) => {
-					return cells.concat(
-						row.cells.filter( ( cell ) => cell.rowIndex === rowIndex && ! cell.isHidden )
-					);
-				}, [] )
+				vTable[ sectionName ].flatMap( ( row ) =>
+					row.cells.filter( ( cell ) => cell.rowIndex === rowIndex && ! cell.isHidden )
+				)
 			);
 		}
 	};
@@ -189,12 +185,8 @@ export default function Table( {
 			const vRows = toVirtualRows( vTable );
 
 			setSelectedCells(
-				vRows.reduce(
-					( cells: VCell[], row ) =>
-						cells.concat(
-							row.cells.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isHidden )
-						),
-					[]
+				vRows.flatMap( ( row ) =>
+					row.cells.filter( ( cell ) => cell.vColIndex === vColIndex && ! cell.isHidden )
 				)
 			);
 

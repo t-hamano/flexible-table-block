@@ -21,7 +21,7 @@ export function convertToObject( inlineStyles: string | undefined ): Properties 
 			style
 				.split( ':' )[ 0 ]
 				.trim()
-				.replace( /-./g, ( c ) => c.substr( 1 ).toUpperCase() ),
+				.replace( /-./g, ( c ) => c.slice( 1 ).toUpperCase() ),
 			style.split( ':' )[ 1 ].trim(),
 		] )
 		.reduce(
