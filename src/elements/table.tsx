@@ -194,20 +194,6 @@ export default function Table( {
 		}
 	};
 
-	const focusFirstCell = () => {
-		if ( ! tableRef.current ) {
-			return;
-		}
-		const tableElement: HTMLTableElement = tableRef.current;
-		const firstTabbableElement = tableElement.querySelector(
-			`th > [contenteditable="true"], td > [contenteditable="true"]`
-		);
-		if ( ! firstTabbableElement ) {
-			return;
-		}
-		( firstTabbableElement as HTMLElement ).focus();
-	};
-
 	const onChangeCellContent = ( content: string, targetCell: VCell ) => {
 		// If inline highlight is applied to the RichText, this process is performed before rendering the component, causing a warning error.
 		// Therefore, nothing is performed if the component has not yet been rendered.
@@ -505,7 +491,6 @@ export default function Table( {
 														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex );
-															focusFirstCell();
 															event.stopPropagation();
 														} }
 													/>
@@ -541,7 +526,6 @@ export default function Table( {
 																	icon={ trash }
 																	onClick={ ( event: MouseEvent ) => {
 																		onDeleteRow( sectionName, rowIndex );
-																		focusFirstCell();
 																		event.stopPropagation();
 																	} }
 																/>
@@ -557,7 +541,6 @@ export default function Table( {
 														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertColumn( cell, 0 );
-															focusFirstCell();
 															event.stopPropagation();
 														} }
 													/>
@@ -589,7 +572,6 @@ export default function Table( {
 																icon={ trash }
 																onClick={ ( event: MouseEvent ) => {
 																	onDeleteColumn( vColIndex );
-																	focusFirstCell();
 																	event.stopPropagation();
 																} }
 															/>
@@ -609,7 +591,6 @@ export default function Table( {
 														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex + rowSpan );
-															focusFirstCell();
 															event.stopPropagation();
 														} }
 													/>
@@ -642,7 +623,6 @@ export default function Table( {
 													iconSize={ 18 }
 													onClick={ ( event: MouseEvent ) => {
 														onInsertColumn( cell, 1 );
-														focusFirstCell();
 														event.stopPropagation();
 													} }
 												/>
