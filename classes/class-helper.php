@@ -40,39 +40,39 @@ class Helper {
 
 			switch ( $key ) {
 				case 'table_width':
-					$styles[ "{$selector} > table" ] .= "width:{$value};";
+					$styles[ "{$selector} > table" ] .= self::sanitize_css_declaration( 'width', $value );
 					break;
 				case 'table_max_width':
-					$styles[ "{$selector} > table" ] .= "max-width:{$value};";
+					$styles[ "{$selector} > table" ] .= self::sanitize_css_declaration( 'max-width', $value );
 					break;
 				case 'table_border_collapse':
-					$styles[ "{$selector} > table" ] .= "border-collapse:{$value};";
+					$styles[ "{$selector} > table" ] .= self::sanitize_css_declaration( 'border-collapse', $value );
 					break;
 				case 'row_odd_color':
-					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(odd) th" ] .= "background-color:{$value};";
-					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(odd) td" ] .= "background-color:{$value};";
+					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(odd) th" ] .= self::sanitize_css_declaration( 'background-color', $value );
+					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(odd) td" ] .= self::sanitize_css_declaration( 'background-color', $value );
 					break;
 				case 'row_even_color':
-					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(even) th" ] .= "background-color:{$value};";
-					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(even) td" ] .= "background-color:{$value};";
+					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(even) th" ] .= self::sanitize_css_declaration( 'background-color', $value );
+					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(even) td" ] .= self::sanitize_css_declaration( 'background-color', $value );
 					break;
 				case 'cell_text_align':
-					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "text-align:{$value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= self::sanitize_css_declaration( 'text-align', $value );
 					break;
 				case 'cell_vertical_align':
-					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "vertical-align:{$value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= self::sanitize_css_declaration( 'vertical-align', $value );
 					break;
 				case 'cell_text_color_th':
-					$styles[ "{$selector} > table tr th" ] .= "color:{$value};";
+					$styles[ "{$selector} > table tr th" ] .= self::sanitize_css_declaration( 'color', $value );
 					break;
 				case 'cell_text_color_td':
-					$styles[ "{$selector} > table tr td" ] .= "color:{$value};";
+					$styles[ "{$selector} > table tr td" ] .= self::sanitize_css_declaration( 'color', $value );
 					break;
 				case 'cell_background_color_th':
-					$styles[ "{$selector} > table tr th" ] .= "background-color:{$value};";
+					$styles[ "{$selector} > table tr th" ] .= self::sanitize_css_declaration( 'background-color', $value );
 					break;
 				case 'cell_background_color_td':
-					$styles[ "{$selector} > table tr td" ] .= "background-color:{$value};";
+					$styles[ "{$selector} > table tr td" ] .= self::sanitize_css_declaration( 'background-color', $value );
 					break;
 				case 'cell_padding':
 					$padding_styles = self::get_padding_styles( $value );
@@ -81,13 +81,13 @@ class Helper {
 					}
 					break;
 				case 'cell_border_width':
-					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "border-width:{$value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= self::sanitize_css_declaration( 'border-width', $value );
 					break;
 				case 'cell_border_style':
-					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "border-style:{$value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= self::sanitize_css_declaration( 'border-style', $value );
 					break;
 				case 'cell_border_color':
-					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= "border-color:{$value};";
+					$styles[ "{$selector} > table tr th, {$selector} > table tr td" ] .= self::sanitize_css_declaration( 'border-color', $value );
 					break;
 			}
 		}
@@ -142,6 +142,64 @@ class Helper {
 	}
 
 	/**
+	 * Build a safe `property:value;` CSS declaration from an untrusted value.
+	 *
+	 * @param string $property CSS property name.
+	 * @param mixed  $value    CSS value.
+	 * @return string Declaration ending with `;`, or empty string if rejected.
+	 */
+	public static function sanitize_css_declaration( $property, $value ) {
+		if ( ! is_string( $value ) || '' === trim( $value ) ) {
+			return '';
+		}
+
+		// safecss_filter_attr() does not remove these; reject to stay inside the
+		// surrounding <style> element.
+		if ( false !== strpos( $value, '<' ) || false !== strpos( $value, '>' ) ) {
+			return '';
+		}
+
+		add_filter( 'safecss_filter_attr_allow_css', array( __CLASS__, 'allow_color_functions' ), 10, 2 );
+		$filtered = safecss_filter_attr( "{$property}: {$value}" );
+		remove_filter( 'safecss_filter_attr_allow_css', array( __CLASS__, 'allow_color_functions' ), 10 );
+
+		// Dropped entirely when the property is not allow-listed or the value is
+		// considered unsafe.
+		if ( '' === $filtered ) {
+			return '';
+		}
+
+		return $filtered . ';';
+	}
+
+	/**
+	 * Re-allow CSS color functions in safecss_filter_attr().
+	 *
+	 * @param bool   $allow_css       Default decision from core.
+	 * @param string $css_test_string Normalized value under test.
+	 * @return bool Whether the value is safe.
+	 */
+	public static function allow_color_functions( $allow_css, $css_test_string ) {
+		if ( $allow_css ) {
+			return $allow_css;
+		}
+
+		$stripped = preg_replace(
+			'/\b(?:rgba|rgb|hsla|hsl|hwb|oklab|oklch|lab|lch|color-mix|color)(\((?:[^()]|(?1))*\))/i',
+			'',
+			$css_test_string
+		);
+
+		if ( ! is_string( $stripped ) ) {
+			return $allow_css;
+		}
+
+		// Allow only when no dangerous chars (`\ ( & = }`) or comments remain,
+		// the same check core uses in safecss_filter_attr().
+		return ! preg_match( '%[\\\(&=}]|/\*%', $stripped );
+	}
+
+	/**
 	 * Minify CSS
 	 *
 	 * @return string
@@ -168,7 +226,8 @@ class Helper {
 	 */
 	public static function get_padding_styles( $values ) {
 		if ( is_string( $values ) ) {
-			return "padding:{$values};";
+			$declaration = self::sanitize_css_declaration( 'padding', $values );
+			return '' === $declaration ? null : $declaration;
 		}
 
 		if ( ! is_array( $values ) ) {
@@ -185,7 +244,8 @@ class Helper {
 
 		if ( '' !== $values['top'] && '' !== $values['right'] && '' !== $values['bottom'] && '' !== $values['left'] ) {
 			$padding_value = self::get_shorhand_css_value( $values['top'], $values['right'], $values['bottom'], $values['left'] );
-			return "padding:{$padding_value};";
+			$declaration   = self::sanitize_css_declaration( 'padding', $padding_value );
+			return '' === $declaration ? null : $declaration;
 		}
 
 		$styles = null;
@@ -194,8 +254,7 @@ class Helper {
 			if ( '' === $values[ $side ] ) {
 				continue;
 			}
-
-			$styles .= "padding-{$side}:{$values[ $side ]};";
+			$styles .= self::sanitize_css_declaration( "padding-{$side}", $values[ $side ] );
 		}
 
 		return $styles;
