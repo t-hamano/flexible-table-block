@@ -40,7 +40,7 @@ class Api {
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'update_options' ),
 					'permission_callback' => function () {
-						$show_global_setting = get_option( FTB_OPTION_PREFIX . '_show_global_setting', Settings::OPTIONS['show_global_setting']['default'] );
+						$show_global_setting = get_option( Option::OPTION_NAMES['show_global_setting'], Settings::OPTIONS['show_global_setting']['default'] );
 
 						if ( $show_global_setting ) {
 							return current_user_can( 'edit_posts' );
@@ -53,7 +53,7 @@ class Api {
 					'methods'             => 'DELETE',
 					'callback'            => array( $this, 'delete_options' ),
 					'permission_callback' => function () {
-						$show_global_setting = get_option( FTB_OPTION_PREFIX . '_show_global_setting', Settings::OPTIONS['show_global_setting']['default'] );
+						$show_global_setting = get_option( Option::OPTION_NAMES['show_global_setting'], Settings::OPTIONS['show_global_setting']['default'] );
 
 						if ( $show_global_setting ) {
 							return current_user_can( 'edit_posts' );
@@ -122,7 +122,7 @@ class Api {
 					)
 				);
 			} else {
-				update_option( FTB_OPTION_PREFIX . '_' . $key, $value );
+				update_option( Option::OPTION_NAMES[ $key ], $value );
 			}
 		}
 
@@ -142,7 +142,7 @@ class Api {
 	 */
 	public function delete_options() {
 		foreach ( Settings::OPTIONS as $key => $value ) {
-			delete_option( FTB_OPTION_PREFIX . '_' . $key );
+			delete_option( Option::OPTION_NAMES[ $key ] );
 		}
 
 		return rest_ensure_response(

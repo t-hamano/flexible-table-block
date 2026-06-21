@@ -93,7 +93,7 @@ class Settings {
 		$options = array();
 
 		foreach ( self::OPTIONS as $key => $value ) {
-			$options[ $key ] = get_option( FTB_OPTION_PREFIX . '_' . $key, self::OPTIONS[ $key ]['default'] );
+			$options[ $key ] = get_option( Option::OPTION_NAMES[ $key ], self::OPTIONS[ $key ]['default'] );
 
 			if ( 'boolean' === self::OPTIONS[ $key ]['type'] ) {
 				$options[ $key ] = (bool) $options[ $key ];

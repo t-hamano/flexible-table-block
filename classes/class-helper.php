@@ -30,7 +30,7 @@ class Helper {
 			"{$selector} > table tr th, {$selector} table > tr td" => '',
 		);
 
-		$option = get_option( FTB_OPTION_PREFIX . '_block_style', Settings::OPTIONS['block_style']['default'] );
+		$option = get_option( Option::OPTION_NAMES['block_style'], Settings::OPTIONS['block_style']['default'] );
 
 		// Genelate styles based on Global setting.
 		foreach ( $option as $key => $value ) {
@@ -110,7 +110,7 @@ class Helper {
 	 */
 	public static function get_responsive_css( $prefix = '' ) {
 		$selector   = "{$prefix}." . FTB_BLOCK_CLASS;
-		$breakpoint = get_option( FTB_OPTION_PREFIX . '_breakpoint', Settings::OPTIONS['breakpoint']['default'] );
+		$breakpoint = get_option( Option::OPTION_NAMES['breakpoint'], Settings::OPTIONS['breakpoint']['default'] );
 		$max_width  = $breakpoint;
 		$min_width  = $max_width + 1;
 
