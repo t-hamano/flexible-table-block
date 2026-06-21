@@ -59,7 +59,7 @@ export default function GlobalSettings() {
 				/>
 			</HStack>
 			{ isHelpModalOpen && <HelpModal { ...{ setIsHelpModalOpen } } /> }
-			{ options && isSettingModalOpen && ( canManageOptions || options?.show_global_setting ) && (
+			{ isSettingModalOpen && (
 				<SettingModal
 					{ ...{
 						options,
