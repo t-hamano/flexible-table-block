@@ -44,7 +44,7 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 
 = 3.7.0 =
 * Tested to WordPress 7.0
-* Drop support for WP 6.9
+* Drop support for WP 6.8
 
 = 3.6.0 =
 * Tested to WordPress 6.9
