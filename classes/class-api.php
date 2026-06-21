@@ -53,13 +53,7 @@ class Api {
 					'methods'             => 'DELETE',
 					'callback'            => array( $this, 'delete_options' ),
 					'permission_callback' => function () {
-						$show_global_setting = get_option( Option::OPTION_NAMES['show_global_setting'], Settings::OPTIONS['show_global_setting']['default'] );
-
-						if ( $show_global_setting ) {
-							return current_user_can( 'edit_posts' );
-						} else {
-							return current_user_can( 'manage_options' );
-						}
+						return current_user_can( 'manage_options' );
 					},
 				),
 			)

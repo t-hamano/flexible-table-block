@@ -822,38 +822,40 @@ export default function SettingModal( {
 				>
 					{ __( 'Save settings', 'flexible-table-block' ) }
 				</Button>
-				<Button
-					isDestructive
-					disabled={ isWaiting }
-					onClick={ () => setIsResetPopup( ! isResetPopup ) }
-					__next40pxDefaultSize
-				>
-					{ __( 'Restore default settings', 'flexible-table-block' ) }
-					{ isResetPopup && (
-						<Popover
-							className="ftb-global-setting-modal__confirm-popover"
-							focusOnMount="firstElement"
-							placement="top"
-							onClose={ () => setIsResetPopup( false ) }
-						>
-							<Spacer as={ VStack } marginBottom={ 0 } padding={ 2 } spacing={ 4 }>
-								<Text as="p">{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
-								<HStack>
-									<Button isDestructive onClick={ handleResetOptions } size="compact">
-										{ __( 'Restore', 'flexible-table-block' ) }
-									</Button>
-									<Button
-										variant="secondary"
-										onClick={ () => setIsResetPopup( false ) }
-										size="compact"
-									>
-										{ __( 'Cancel', 'flexible-table-block' ) }
-									</Button>
-								</HStack>
-							</Spacer>
-						</Popover>
-					) }
-				</Button>
+				{ canManageOptions && (
+					<Button
+						isDestructive
+						disabled={ isWaiting }
+						onClick={ () => setIsResetPopup( ! isResetPopup ) }
+						__next40pxDefaultSize
+					>
+						{ __( 'Restore default settings', 'flexible-table-block' ) }
+						{ isResetPopup && (
+							<Popover
+								className="ftb-global-setting-modal__confirm-popover"
+								focusOnMount="firstElement"
+								placement="top"
+								onClose={ () => setIsResetPopup( false ) }
+							>
+								<Spacer as={ VStack } marginBottom={ 0 } padding={ 2 } spacing={ 4 }>
+									<Text as="p">{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
+									<HStack>
+										<Button isDestructive onClick={ handleResetOptions } size="compact">
+											{ __( 'Restore', 'flexible-table-block' ) }
+										</Button>
+										<Button
+											variant="secondary"
+											onClick={ () => setIsResetPopup( false ) }
+											size="compact"
+										>
+											{ __( 'Cancel', 'flexible-table-block' ) }
+										</Button>
+									</HStack>
+								</Spacer>
+							</Popover>
+						) }
+					</Button>
+				) }
 			</Spacer>
 		</Modal>
 	);
