@@ -4,7 +4,7 @@ Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 6.9
 Tested up to: 7.0
-Stable tag: 3.7.0
+Stable tag: 3.8.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,11 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.8.0 =
+* Security: Sanitize CSS values in global style settings
+* Fix: Improve permission checks for global settings
+* a11y: Revert focusing first cell when inserting or deleting row or column
 
 = 3.7.0 =
 * Tested to WordPress 7.0
