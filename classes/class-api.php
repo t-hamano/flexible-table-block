@@ -94,12 +94,31 @@ class Api {
 					continue;
 				}
 
+				$default = Settings::OPTIONS[ $key ]['default'];
+
+				// Keep only known keys; values are validated at output time.
 				$new_value = array();
 				foreach ( $value as $array_key => $array_value ) {
-					if ( isset( Settings::OPTIONS[ $key ]['default'][ $array_key ] ) ) {
+					if ( ! array_key_exists( $array_key, $default ) ) {
+						continue;
+					}
+
+					if ( is_array( $array_value ) ) {
+						// Nested values such as cell_padding.
+						$sub_default = is_array( $default[ $array_key ] ) ? $default[ $array_key ] : array();
+						$sub_value   = array();
+						foreach ( $array_value as $sub_key => $sub_item ) {
+							if ( array_key_exists( $sub_key, $sub_default ) ) {
+								$sub_value[ $sub_key ] = $sub_item;
+							}
+						}
+						$new_value[ $array_key ] = $sub_value;
+					} else {
 						$new_value[ $array_key ] = $array_value;
 					}
 				}
+
+				$value = $new_value;
 			}
 
 			if ( isset( Settings::OPTIONS[ $key ]['range'] ) ) {
