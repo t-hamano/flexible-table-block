@@ -12,6 +12,8 @@ module.exports = configs.map( ( config ) => ( {
 		plugin.constructor.name === 'DependencyExtractionWebpackPlugin'
 			? new DependencyExtractionWebpackPlugin( {
 					// Bundle @wordpress/theme instead of externalizing it.
+					// TODO: Remove once DependencyExtractionWebpackPlugin bundles
+					// the @wordpress/theme package by default.
 					requestToExternal: ( request ) => ( request === '@wordpress/theme' ? null : undefined ),
 			  } )
 			: plugin
