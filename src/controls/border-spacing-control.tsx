@@ -107,7 +107,7 @@ export default function BorderSpacingControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-spacing-control" help={ help } __nextHasNoMarginBottom>
+		<BaseControl className="ftb-border-spacing-control" help={ help }>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ label }

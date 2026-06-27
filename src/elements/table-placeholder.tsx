@@ -176,13 +176,11 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
 						onChange={ onToggleHeaderSection }
-						__nextHasNoMarginBottom
 					/>
 					<ToggleControl
 						label={ __( 'Footer section', 'flexible-table-block' ) }
 						checked={ !! footerSection }
 						onChange={ onToggleFooterSection }
-						__nextHasNoMarginBottom
 					/>
 				</HStack>
 				<HStack wrap alignment="end" justify="start">
@@ -194,7 +192,6 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						max={ MAX_PREVIEW_TABLE_COL }
 						value={ colCount || '' }
 						onChange={ onChangeColumnCount }
-						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					<TextControl
@@ -205,7 +202,6 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						max={ MAX_PREVIEW_TABLE_ROW }
 						value={ rowCount || '' }
 						onChange={ onChangeRowCount }
-						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					<Button

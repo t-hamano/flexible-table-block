@@ -130,7 +130,6 @@ export default function TableCaptionSettings( {
 						type="number"
 						value={ captionStylesObj?.lineHeight || '' }
 						min={ 0 }
-						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 				</FlexBlock>
@@ -142,7 +141,6 @@ export default function TableCaptionSettings( {
 				onChange={ onChangePadding }
 			/>
 			<ToggleGroupControl
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				className="ftb-table-caption-settings-position"
 				label={ __( 'Caption position', 'flexible-table-block' ) }
@@ -155,7 +153,6 @@ export default function TableCaptionSettings( {
 				) ) }
 			</ToggleGroupControl>
 			<ToggleGroupControl
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				className="ftb-table-caption-settings-text-alignment"
 				label={ __( 'Caption text alignment', 'flexible-table-block' ) }

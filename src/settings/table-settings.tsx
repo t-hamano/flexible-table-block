@@ -254,14 +254,12 @@ export default function TableSettings( {
 				label={ __( 'Header section', 'flexible-table-block' ) }
 				checked={ !! ( head && head.length ) }
 				onChange={ onToggleHeaderSection }
-				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
 				className="ftb-table-settings-footer"
 				label={ __( 'Footer section', 'flexible-table-block' ) }
 				checked={ !! ( foot && foot.length ) }
 				onChange={ onToggleFooterSection }
-				__nextHasNoMarginBottom
 			/>
 			<hr />
 			<ToggleControl
@@ -269,7 +267,6 @@ export default function TableSettings( {
 				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
 				checked={ !! hasFixedLayout }
 				onChange={ onChangeHasFixedLayout }
-				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
 				className="ftb-table-settings-scroll-on-desktop"
@@ -284,7 +281,6 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeIsScrollOnPc }
-				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
 				className="ftb-table-settings-scroll-on-mobile"
@@ -299,7 +295,6 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeIsScrollOnMobile }
-				__nextHasNoMarginBottom
 			/>
 			<ToggleControl
 				className="ftb-table-settings-stack-on-mobile"
@@ -314,7 +309,6 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeIsStackedOnMobile }
-				__nextHasNoMarginBottom
 			/>
 			<SelectControl
 				className="ftb-table-settings-fixed-control"
@@ -333,7 +327,6 @@ export default function TableSettings( {
 				}
 				onChange={ onChangeSticky }
 				size="__unstable-large"
-				__nextHasNoMarginBottom
 			/>
 			<hr />
 			<UnitControl
@@ -348,7 +341,6 @@ export default function TableSettings( {
 				__unstableInputWidth="50%"
 			/>
 			<ToggleGroupControl
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				hideLabelFromVision
 				className="ftb-table-settings-percentage-width"
@@ -390,7 +382,6 @@ export default function TableSettings( {
 				__unstableInputWidth="50%"
 			/>
 			<ToggleGroupControl
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				hideLabelFromVision
 				className="ftb-table-settings-percentage-max-width"
@@ -431,7 +422,6 @@ export default function TableSettings( {
 				__unstableInputWidth="50%"
 			/>
 			<ToggleGroupControl
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				hideLabelFromVision
 				className="ftb-table-settings-percentage-min-width"
@@ -508,7 +498,6 @@ export default function TableSettings( {
 			/>
 			<hr />
 			<ToggleGroupControl
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				className="ftb-table-settings-cell-borders"
 				label={ __( 'Cell borders', 'flexible-table-block' ) }

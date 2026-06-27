@@ -243,7 +243,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						step={ 0.1 }
 						min={ 0 }
 						onChange={ onChangeLineHeight }
-						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 				</FlexBlock>
@@ -260,7 +259,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			/>
 			<ToggleGroupControl
 				className="ftb-table-cell-settings-percentage-width"
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				hideLabelFromVision
 				label={ __( 'Cell percentage width', 'flexible-table-block' ) }
@@ -344,7 +342,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				<Flex style={ { marginBottom: '-16px' } } justify="start" align="start">
 					<ToggleGroupControl
 						hideLabelFromVision
-						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 						label={ __( 'Text alignment', 'flexible-table-block' ) }
 						value={ cellStylesObj?.textAlign }
@@ -362,7 +359,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					</ToggleGroupControl>
 					<ToggleGroupControl
 						hideLabelFromVision
-						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 						label={ __( 'Vertical alignment', 'flexible-table-block' ) }
 						value={ cellStylesObj?.verticalAlign }
@@ -383,7 +379,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			<hr />
 			<ToggleGroupControl
 				className="ftb-table-cell-settings-tag"
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 				label={ __( 'Cell tag', 'flexible-table-block' ) }
 				value={ targetCell.tag }
@@ -401,7 +396,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				value={ targetCell.className || '' }
 				onChange={ onChangeClass }
 				help={ __( 'Separate multiple classes with spaces.', 'flexible-table-block' ) }
-				__nextHasNoMarginBottom
 				__next40pxDefaultSize
 			/>
 			{ selectedCellTags.length === 1 && (
@@ -417,7 +411,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							autoComplete="off"
 							value={ targetCell.id || '' }
 							onChange={ onChangeId }
-							__nextHasNoMarginBottom
 							__next40pxDefaultSize
 						/>
 					) }
@@ -430,7 +423,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						autoComplete="off"
 						value={ targetCell.headers || '' }
 						onChange={ onChangeHeaders }
-						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
@@ -446,7 +438,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							} ) }
 							onChange={ ( value ) => onChangeScope( value as CellScopeValue ) }
 							size="__unstable-large"
-							__nextHasNoMarginBottom
 						/>
 					) }
 				</>

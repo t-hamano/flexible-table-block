@@ -135,11 +135,7 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl
-			className={ clsx( 'ftb-border-width-control', className ) }
-			help={ help }
-			__nextHasNoMarginBottom
-		>
+		<BaseControl className={ clsx( 'ftb-border-width-control', className ) } help={ help }>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ label }

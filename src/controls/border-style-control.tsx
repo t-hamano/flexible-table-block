@@ -111,11 +111,7 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl
-			className={ clsx( 'ftb-border-style-control', className ) }
-			help={ help }
-			__nextHasNoMarginBottom
-		>
+		<BaseControl className={ clsx( 'ftb-border-style-control', className ) } help={ help }>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ isMixed && isLinked
@@ -128,7 +124,6 @@ export default function BorderStyleControl( {
 							{ hasIndicator && <SideIndicatorControl /> }
 							<ToggleGroupControl
 								hideLabelFromVision
-								__nextHasNoMarginBottom
 								__next40pxDefaultSize
 								label={ label }
 								value={ allInputValue }
@@ -152,7 +147,6 @@ export default function BorderStyleControl( {
 									{ hasIndicator && <SideIndicatorControl side={ item.value } /> }
 									<ToggleGroupControl
 										hideLabelFromVision
-										__nextHasNoMarginBottom
 										__next40pxDefaultSize
 										label={ item.label }
 										value={ values[ item.value as ValuesKey ] || undefined }
