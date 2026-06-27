@@ -288,7 +288,6 @@ export default function SettingModal( {
 										className="ftb-global-setting-modal__styles-item"
 									>
 										<ToggleGroupControl
-											__nextHasNoMarginBottom
 											__next40pxDefaultSize
 											label={ __( 'Cell borders', 'flexible-table-block' ) }
 											value={ currentOptions.block_style?.table_border_collapse }
@@ -569,7 +568,6 @@ export default function SettingModal( {
 										className="ftb-global-setting-modal__styles-item"
 									>
 										<ToggleGroupControl
-											__nextHasNoMarginBottom
 											__next40pxDefaultSize
 											label={ __( 'Cell text alignment', 'flexible-table-block' ) }
 											value={ currentOptions.block_style?.cell_text_align }
@@ -607,7 +605,6 @@ export default function SettingModal( {
 										className="ftb-global-setting-modal__styles-item"
 									>
 										<ToggleGroupControl
-											__nextHasNoMarginBottom
 											__next40pxDefaultSize
 											label={ __( 'Cell vertical alignment', 'flexible-table-block' ) }
 											value={ currentOptions.block_style?.cell_vertical_align }
@@ -669,7 +666,6 @@ export default function SettingModal( {
 										} );
 									} }
 									__next40pxDefaultSize
-									__nextHasNoMarginBottom
 								/>
 							</VStack>
 						) }
@@ -688,7 +684,6 @@ export default function SettingModal( {
 											show_label_on_section: value,
 										} );
 									} }
-									__nextHasNoMarginBottom
 								/>
 								<ToggleControl
 									label={ __( 'Show control buttons', 'flexible-table-block' ) }
@@ -703,7 +698,6 @@ export default function SettingModal( {
 											show_control_button: value,
 										} );
 									} }
-									__nextHasNoMarginBottom
 								/>
 								{ ( currentOptions.show_label_on_section ||
 									currentOptions.show_control_button ) && (
@@ -723,7 +717,6 @@ export default function SettingModal( {
 												focus_control_button: value,
 											} );
 										} }
-										__nextHasNoMarginBottom
 									/>
 								) }
 								<ToggleControl
@@ -739,7 +732,6 @@ export default function SettingModal( {
 											show_dot_on_th: value,
 										} );
 									} }
-									__nextHasNoMarginBottom
 								/>
 								<ToggleControl
 									label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
@@ -754,7 +746,6 @@ export default function SettingModal( {
 											tab_move: value,
 										} );
 									} }
-									__nextHasNoMarginBottom
 								/>
 								<ToggleControl
 									label={ __( 'Keep all contents when merging cells', 'flexible-table-block' ) }
@@ -769,7 +760,6 @@ export default function SettingModal( {
 											merge_content: value,
 										} );
 									} }
-									__nextHasNoMarginBottom
 								/>
 								{ canManageOptions && (
 									<ToggleControl
@@ -788,7 +778,6 @@ export default function SettingModal( {
 												show_global_setting: value,
 											} );
 										} }
-										__nextHasNoMarginBottom
 									/>
 								) }
 							</VStack>

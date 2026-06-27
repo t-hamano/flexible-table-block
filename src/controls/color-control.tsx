@@ -68,11 +68,7 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<BaseControl
-			className={ clsx( 'ftb-color-control', className ) }
-			help={ help }
-			__nextHasNoMarginBottom
-		>
+		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
 			<VStack aria-labelledby={ headingId } role="group">
 				<Text id={ headingId } upperCase size="11" weight="500">
 					{ label }
