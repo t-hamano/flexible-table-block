@@ -10,16 +10,8 @@ import type { FormEvent } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
-import {
-	Button,
-	Placeholder,
-	TextControl,
-	ToggleControl,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-	__experimentalSpacer as Spacer,
-	__experimentalText as Text,
-} from '@wordpress/components';
+import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/components';
+import { Stack, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
 /**
@@ -119,15 +111,22 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 					{ code: <code /> }
 				) }
 			</div>
-			<Spacer
-				as={ VStack }
+			<Stack
+				direction="column"
+				align="center"
+				justify="center"
+				gap="sm"
 				className="ftb-placeholder__table-wrap"
-				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
-				alignment="center"
-				padding={ 4 }
-				marginBottom={ 0 }
+				style={ {
+					minHeight: MIN_PREVIEW_TABLE_HEIGHT,
+					padding: 'var(--wpds-dimension-padding-lg)',
+				} }
 			>
-				<Text align="center" isBlock weight="500">
+				<Text
+					variant="body-md"
+					render={ <div /> }
+					style={ { textAlign: 'center', fontWeight: 500 } }
+				>
 					{ __( 'Preview', 'flexible-table-block' ) }
 				</Text>
 				{ rowCount && colCount && (
@@ -169,9 +168,9 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						) }
 					</table>
 				) }
-			</Spacer>
-			<VStack as="form" onSubmit={ onCreateTable }>
-				<HStack wrap justify="start">
+			</Stack>
+			<Stack render={ <form /> } direction="column" gap="sm" onSubmit={ onCreateTable }>
+				<Stack wrap="wrap" align="center" justify="start" gap="sm">
 					<ToggleControl
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
@@ -182,8 +181,8 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						checked={ !! footerSection }
 						onChange={ onToggleFooterSection }
 					/>
-				</HStack>
-				<HStack wrap alignment="end" justify="start">
+				</Stack>
+				<Stack wrap="wrap" align="end" justify="start" gap="sm">
 					<TextControl
 						label={ __( 'Column count', 'flexible-table-block' ) }
 						className="ftb-placeholder__input"
@@ -212,8 +211,8 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 					>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
-				</HStack>
-			</VStack>
+				</Stack>
+			</Stack>
 		</Placeholder>
 	);
 }

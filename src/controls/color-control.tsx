@@ -10,15 +10,8 @@ import type { ReactElement } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-import { useState } from '@wordpress/element';
-import {
-	BaseControl,
-	Popover,
-	ColorPalette,
-	__experimentalVStack as VStack,
-	__experimentalSpacer as Spacer,
-	__experimentalText as Text,
-} from '@wordpress/components';
+import { BaseControl, ColorPalette } from '@wordpress/components';
+import { Stack, Text, Popover, getWpCompatOverlaySlot } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -59,39 +52,37 @@ export default function ColorControl( {
 		return settings?.colors ?? [];
 	}, [] );
 
-	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
-
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
-
-	const handleOnPickerOpen = () => setIsPickerOpen( true );
-
-	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
 		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
-			<VStack aria-labelledby={ headingId } role="group">
-				<Text id={ headingId } upperCase size="11" weight="500">
+			<Stack direction="column" gap="sm" aria-labelledby={ headingId } role="group">
+				<Text variant="heading-sm" id={ headingId }>
 					{ label }
 				</Text>
-				<ColorIndicatorButton
-					label={ __( 'Color', 'flexible-table-block' ) }
-					value={ value }
-					onClick={ handleOnPickerOpen }
-					isNone={ ! value }
-					isTransparent={ value === 'transparent' }
-				/>
-			</VStack>
-			{ isPickerOpen && (
-				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-					<Spacer padding={ 4 } marginBottom={ 0 }>
+				<Popover.Root>
+					<Popover.Trigger
+						render={
+							<ColorIndicatorButton
+								label={ __( 'Color', 'flexible-table-block' ) }
+								value={ value }
+								isNone={ ! value }
+								isTransparent={ value === 'transparent' }
+							/>
+						}
+					/>
+					<Popover.Popup
+						portal={ <Popover.Portal container={ getWpCompatOverlaySlot() } /> }
+						positioner={ <Popover.Positioner side="left" align="start" sideOffset={ 36 } /> }
+					>
 						<ColorPalette
 							colors={ [ ...colors, ...colorsProp ] }
 							value={ value || '' }
 							onChange={ handleOnChange }
 						/>
-					</Spacer>
-				</Popover>
-			) }
+					</Popover.Popup>
+				</Popover.Root>
+			</Stack>
 		</BaseControl>
 	);
 }

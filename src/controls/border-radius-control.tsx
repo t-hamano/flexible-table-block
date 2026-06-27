@@ -14,12 +14,10 @@ import {
 	BaseControl,
 	Button,
 	__experimentalGrid as Grid,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
+import { Stack, Text } from '@wordpress/ui';
 import { useInstanceId } from '@wordpress/compose';
 
 /**
@@ -136,12 +134,12 @@ export default function BorderRadiusControl( {
 
 	return (
 		<BaseControl className={ clsx( 'ftb-border-radius-control', className ) } help={ help }>
-			<VStack aria-labelledby={ headingId } role="group">
-				<Text id={ headingId } upperCase size="11" weight="500">
+			<Stack direction="column" gap="sm" aria-labelledby={ headingId } role="group">
+				<Text variant="heading-sm" id={ headingId }>
 					{ label }
 				</Text>
-				<HStack alignment="center" justify="space-between" style={ { minHeight: '40px' } }>
-					<HStack justify="start">
+				<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
+					<Stack align="center" justify="start" gap="sm">
 						<CornerIndicatorControl corner={ corner } />
 						{ isLinked && (
 							<div>
@@ -158,14 +156,14 @@ export default function BorderRadiusControl( {
 								/>
 							</div>
 						) }
-					</HStack>
+					</Stack>
 					<Button
 						label={ linkedLabel }
 						onClick={ toggleLinked }
 						icon={ isLinked ? link : linkOff }
 						size="small"
 					/>
-				</HStack>
+				</Stack>
 				{ ! isLinked && (
 					<Grid gap={ 2 }>
 						{ CORNER_CONTROLS.map( ( item ) => (
@@ -184,7 +182,7 @@ export default function BorderRadiusControl( {
 						) ) }
 					</Grid>
 				) }
-			</VStack>
+			</Stack>
 		</BaseControl>
 	);
 }

@@ -11,10 +11,8 @@ import { __, _x, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import {
 	Button,
-	Flex,
 	SelectControl,
 	ToggleControl,
-	__experimentalSpacer as Spacer,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -22,6 +20,7 @@ import {
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -244,11 +243,17 @@ export default function TableSettings( {
 
 	return (
 		<>
-			<Spacer marginBottom="4" as={ Flex } justify="end" className="ftb-table-settings-clear">
+			<Stack
+				align="center"
+				justify="end"
+				gap="sm"
+				className="ftb-table-settings-clear"
+				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
+			>
 				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear table settings', 'flexible-table-block' ) }
 				</Button>
-			</Spacer>
+			</Stack>
 			<ToggleControl
 				className="ftb-table-settings-header"
 				label={ __( 'Header section', 'flexible-table-block' ) }

@@ -15,48 +15,33 @@ $vertical-tabs-width: 160px;
 }
 
 .ftb-global-setting-modal__tab-panel {
+	display: flex;
+	align-items: flex-start;
 
-	.components-tab-panel__tabs {
-		position: absolute;
-		top: variables.$grid-unit-80 + variables.$grid-unit-15;
-		left: variables.$grid-unit-20;
-		flex-flow: column;
-		width: $vertical-tabs-width;
-
-		@media screen and (max-width: 782px) {
-			position: static;
-			width: 100%;
-			margin-bottom: variables.$grid-unit-30;
-		}
+	@media screen and (max-width: 782px) {
+		display: block;
 	}
+}
 
-	.components-tab-panel__tabs-item {
+.ftb-global-setting-modal__tab-list {
+	flex: 0 0 $vertical-tabs-width;
+	width: $vertical-tabs-width;
 
-		&:focus {
-			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
-		}
-
-		&:focus-visible::before {
-			content: none;
-		}
-
-		&.is-active {
-			background: colors.$gray-100;
-
-			&::after {
-				content: none;
-			}
-		}
+	@media screen and (max-width: 782px) {
+		width: 100%;
+		margin-bottom: variables.$grid-unit-30;
 	}
+}
 
-	.components-tab-panel__tab-content {
-		padding-left: variables.$grid-unit-30;
-		margin-left: $vertical-tabs-width;
+.ftb-global-setting-modal__tab-content {
+	flex: 1;
+	min-width: 0;
+	padding-left: variables.$grid-unit-30;
+	// Clear the absolutely positioned buttons bar at the bottom of the modal.
+	padding-bottom: variables.$grid-unit-70 + variables.$grid-unit-40;
 
-		@media screen and (max-width: 782px) {
-			padding-left: 0;
-			margin-left: 0;
-		}
+	@media screen and (max-width: 782px) {
+		padding-left: 0;
 	}
 }
 
