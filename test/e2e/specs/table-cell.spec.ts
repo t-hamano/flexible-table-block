@@ -85,8 +85,7 @@ test.describe( 'Flexible table cell', () => {
 			.getByRole( 'button', { name: 'Advanced' } )
 			.click();
 		await page.getByRole( 'checkbox', { name: 'Open in new tab' } ).click();
-		// The button text is "Apply" in WordPress 6.9 and later, and "Save" in earlier versions.
-		await page.getByRole( 'button', { name: /^(Save|Apply)$/, exact: true } ).click();
+		await page.getByRole( 'button', { name: 'Apply', exact: true } ).click();
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
