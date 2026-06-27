@@ -11,7 +11,7 @@ import type { ReactElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { BaseControl, ColorPalette } from '@wordpress/components';
-import { Stack, Text, Popover, getWpCompatOverlaySlot } from '@wordpress/ui';
+import { Stack, Text, Popover, VisuallyHidden, getWpCompatOverlaySlot } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -75,6 +75,7 @@ export default function ColorControl( {
 						portal={ <Popover.Portal container={ getWpCompatOverlaySlot() } /> }
 						positioner={ <Popover.Positioner side="left" align="start" sideOffset={ 36 } /> }
 					>
+						<VisuallyHidden render={ <Popover.Title /> }>{ label }</VisuallyHidden>
 						<ColorPalette
 							colors={ [ ...colors, ...colorsProp ] }
 							value={ value || '' }

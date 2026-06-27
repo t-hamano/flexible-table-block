@@ -12,7 +12,7 @@ import { link, linkOff } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { BaseControl, Button, ColorPalette } from '@wordpress/components';
-import { Stack, Text, Popover, getWpCompatOverlaySlot } from '@wordpress/ui';
+import { Stack, Text, Popover, VisuallyHidden, getWpCompatOverlaySlot } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -124,6 +124,9 @@ export default function BorderColorControl( {
 									portal={ <Popover.Portal container={ getWpCompatOverlaySlot() } /> }
 									positioner={ <Popover.Positioner side="left" align="start" sideOffset={ 36 } /> }
 								>
+									<VisuallyHidden render={ <Popover.Title /> }>
+										{ __( 'All', 'flexible-table-block' ) }
+									</VisuallyHidden>
 									<ColorPalette
 										colors={ colors }
 										value={ allInputValue || '' }
@@ -154,6 +157,7 @@ export default function BorderColorControl( {
 												<Popover.Positioner side="left" align="start" sideOffset={ 36 } />
 											}
 										>
+											<VisuallyHidden render={ <Popover.Title /> }>{ item.label }</VisuallyHidden>
 											<ColorPalette
 												colors={ colors }
 												value={ values[ item.value ] || '' }

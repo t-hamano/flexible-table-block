@@ -23,7 +23,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Stack, Text, Notice, Popover, Tabs, getWpCompatOverlaySlot } from '@wordpress/ui';
+import { Stack, Notice, Popover, Tabs, getWpCompatOverlaySlot } from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -799,7 +799,7 @@ export default function SettingModal( {
 							positioner={ <Popover.Positioner side="top" /> }
 						>
 							<Stack direction="column" gap="lg">
-								<Text render={ <p /> }>{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
+								<Popover.Title>{ __( 'Are you sure?', 'flexible-table-block' ) }</Popover.Title>
 								<Stack align="center" justify="space-between" gap="sm">
 									<Button isDestructive onClick={ handleResetOptions } size="compact">
 										{ __( 'Restore', 'flexible-table-block' ) }
