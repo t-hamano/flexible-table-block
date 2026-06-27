@@ -46,12 +46,8 @@ $vertical-tabs-width: 160px;
 }
 
 .ftb-global-setting-modal__styles-item {
-	width: calc(50% - variables.$grid-unit-05);
+	padding: variables.$grid-unit-10;
 	border: variables.$border-width var(--wp-admin-theme-color) solid;
-
-	@media screen and (max-width: 782px) {
-		width: 100%;
-	}
 }
 
 .ftb-global-setting-modal__buttons {

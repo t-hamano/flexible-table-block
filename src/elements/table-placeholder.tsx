@@ -119,7 +119,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 				className="ftb-placeholder__table-wrap"
 				style={ {
 					minHeight: MIN_PREVIEW_TABLE_HEIGHT,
-					padding: 'var(--wpds-dimension-padding-lg)',
+					padding: '16px',
 				} }
 			>
 				<Text

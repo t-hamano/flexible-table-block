@@ -13,6 +13,7 @@ import { useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
+	__experimentalGrid as Grid,
 	Modal,
 	Spinner,
 	RangeControl,
@@ -220,12 +221,8 @@ export default function SettingModal( {
 				<Tabs.Panel value="table" className="ftb-global-setting-modal__tab-content">
 					<Stack direction="column" gap="lg">
 						<Heading level={ 5 }>{ __( 'Default table styles', 'flexible-table-block' ) }</Heading>
-						<Stack wrap="wrap" align="stretch" justify="space-between" gap="sm">
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+							<div className="ftb-global-setting-modal__styles-item">
 								<UnitControl
 									label={ __( 'Table width', 'flexible-table-block' ) }
 									units={ tableWidthUnits }
@@ -243,12 +240,8 @@ export default function SettingModal( {
 									size="__unstable-large"
 									__unstableInputWidth="100px"
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<UnitControl
 									label={ __( 'Table max width', 'flexible-table-block' ) }
 									units={ tableWidthUnits }
@@ -266,12 +259,8 @@ export default function SettingModal( {
 									size="__unstable-large"
 									__unstableInputWidth="100px"
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ToggleGroupControl
 									__next40pxDefaultSize
 									label={ __( 'Cell borders', 'flexible-table-block' ) }
@@ -310,17 +299,13 @@ export default function SettingModal( {
 										/>
 									) ) }
 								</ToggleGroupControl>
-							</Stack>
-						</Stack>
+							</div>
+						</Grid>
 						<Heading level={ 5 }>
 							{ __( 'Default striped table styles', 'flexible-table-block' ) }
 						</Heading>
-						<Stack wrap="wrap" align="stretch" justify="space-between" gap="sm">
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __(
 										'Striped style background color ( odd rows )',
@@ -337,12 +322,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __(
 										'Striped style background color ( even rows )',
@@ -359,19 +340,15 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-						</Stack>
+							</div>
+						</Grid>
 					</Stack>
 				</Tabs.Panel>
 				<Tabs.Panel value="cell" className="ftb-global-setting-modal__tab-content">
 					<Stack direction="column" gap="lg">
 						<Heading level={ 5 }>{ __( 'Default cell styles', 'flexible-table-block' ) }</Heading>
-						<Stack wrap="wrap" align="stretch" justify="space-between" gap="sm">
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ createInterpolateElement(
 										__( 'Cell text color ( <code>th</code> tag )', 'flexible-table-block' ),
@@ -388,12 +365,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ createInterpolateElement(
 										__( 'Cell text color ( <code>td</code> tag )', 'flexible-table-block' ),
@@ -410,12 +383,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ createInterpolateElement(
 										__( 'Cell background color ( <code>th</code> tag )', 'flexible-table-block' ),
@@ -432,12 +401,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ createInterpolateElement(
 										__( 'Cell background color ( <code>td</code> tag )', 'flexible-table-block' ),
@@ -454,12 +419,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<PaddingControl
 									label={ __( 'Cell padding', 'flexible-table-block' ) }
 									values={ currentOptions?.block_style.cell_padding || {} }
@@ -473,12 +434,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<BorderWidthControl
 									label={ __( 'Cell border width', 'flexible-table-block' ) }
 									values={ { top: currentOptions.block_style?.cell_border_width } }
@@ -494,12 +451,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<BorderStyleControl
 									label={ __( 'Cell border style', 'flexible-table-block' ) }
 									values={ { top: currentOptions.block_style?.cell_border_style } }
@@ -519,12 +472,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __( 'Cell border color', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_border_color }
@@ -538,12 +487,8 @@ export default function SettingModal( {
 										} );
 									} }
 								/>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ToggleGroupControl
 									__next40pxDefaultSize
 									label={ __( 'Cell text alignment', 'flexible-table-block' ) }
@@ -573,12 +518,8 @@ export default function SettingModal( {
 										/>
 									) ) }
 								</ToggleGroupControl>
-							</Stack>
-							<Stack
-								direction="column"
-								className="ftb-global-setting-modal__styles-item"
-								style={ { padding: 'var(--wpds-dimension-padding-sm)' } }
-							>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
 								<ToggleGroupControl
 									__next40pxDefaultSize
 									label={ __( 'Cell vertical alignment', 'flexible-table-block' ) }
@@ -610,8 +551,8 @@ export default function SettingModal( {
 										/>
 									) ) }
 								</ToggleGroupControl>
-							</Stack>
-						</Stack>
+							</div>
+						</Grid>
 					</Stack>
 				</Tabs.Panel>
 				<Tabs.Panel value="responsive" className="ftb-global-setting-modal__tab-content">
@@ -774,7 +715,7 @@ export default function SettingModal( {
 				justify="space-between"
 				gap="sm"
 				className="ftb-global-setting-modal__buttons"
-				style={ { paddingInline: 'var(--wpds-dimension-padding-2xl)' } }
+				style={ { paddingInline: '24px' } }
 			>
 				<Button
 					variant="primary"

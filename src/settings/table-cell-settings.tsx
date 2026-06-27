@@ -221,18 +221,13 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				justify="end"
 				gap="sm"
 				className="ftb-table-cell-settings-clear"
-				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
+				style={ { marginBottom: '16px' } }
 			>
 				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
 					{ __( 'Clear cell settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>
-			<Stack
-				align="center"
-				justify="space-between"
-				gap="sm"
-				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
-			>
+			<Stack align="center" justify="space-between" gap="sm" style={ { marginBottom: '16px' } }>
 				<div className="ftb-table-cell-settings-font-size" style={ { flex: 1 } }>
 					<UnitControl
 						label={ __( 'Cell font size', 'flexible-table-block' ) }

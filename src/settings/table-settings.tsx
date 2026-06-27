@@ -248,7 +248,7 @@ export default function TableSettings( {
 				justify="end"
 				gap="sm"
 				className="ftb-table-settings-clear"
-				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
+				style={ { marginBottom: '16px' } }
 			>
 				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear table settings', 'flexible-table-block' ) }
