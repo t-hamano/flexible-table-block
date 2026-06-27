@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Flexible Table Block
  * Description: Easily create flexible configuration tables.
- * Requires at least: 6.9
+ * Requires at least: 7.0
  * Requires PHP: 8.0
  * Version: 3.8.0
  * Author: Aki Hamano
