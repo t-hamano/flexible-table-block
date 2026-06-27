@@ -10,8 +10,14 @@ import type { ReactElement } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-import { BaseControl, ColorPalette } from '@wordpress/components';
-import { Stack, Text, Popover, VisuallyHidden, getWpCompatOverlaySlot } from '@wordpress/ui';
+import { useState } from '@wordpress/element';
+import {
+	BaseControl,
+	Popover,
+	ColorPalette,
+	__experimentalSpacer as Spacer,
+} from '@wordpress/components';
+import { Stack, Text } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -52,7 +58,13 @@ export default function ColorControl( {
 		return settings?.colors ?? [];
 	}, [] );
 
+	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
+
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
+
+	const handleOnPickerOpen = () => setIsPickerOpen( true );
+
+	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
 		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
@@ -60,30 +72,25 @@ export default function ColorControl( {
 				<Text variant="heading-sm" id={ headingId }>
 					{ label }
 				</Text>
-				<Popover.Root>
-					<Popover.Trigger
-						render={
-							<ColorIndicatorButton
-								label={ __( 'Color', 'flexible-table-block' ) }
-								value={ value }
-								isNone={ ! value }
-								isTransparent={ value === 'transparent' }
-							/>
-						}
-					/>
-					<Popover.Popup
-						portal={ <Popover.Portal container={ getWpCompatOverlaySlot() } /> }
-						positioner={ <Popover.Positioner side="left" align="start" sideOffset={ 36 } /> }
-					>
-						<VisuallyHidden render={ <Popover.Title /> }>{ label }</VisuallyHidden>
+				<ColorIndicatorButton
+					label={ __( 'Color', 'flexible-table-block' ) }
+					value={ value }
+					onClick={ handleOnPickerOpen }
+					isNone={ ! value }
+					isTransparent={ value === 'transparent' }
+				/>
+			</Stack>
+			{ isPickerOpen && (
+				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
+					<Spacer padding={ 4 } marginBottom={ 0 }>
 						<ColorPalette
 							colors={ [ ...colors, ...colorsProp ] }
 							value={ value || '' }
 							onChange={ handleOnChange }
 						/>
-					</Popover.Popup>
-				</Popover.Root>
-			</Stack>
+					</Spacer>
+				</Popover>
+			) }
 		</BaseControl>
 	);
 }

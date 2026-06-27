@@ -13,6 +13,7 @@ import { useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
+	Popover,
 	__experimentalGrid as Grid,
 	Modal,
 	Spinner,
@@ -24,7 +25,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Stack, Notice, Popover, Tabs, getWpCompatOverlaySlot } from '@wordpress/ui';
+import { Stack, Text, Notice, Tabs } from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -726,36 +727,38 @@ export default function SettingModal( {
 					{ __( 'Save settings', 'flexible-table-block' ) }
 				</Button>
 				{ canManageOptions && (
-					<Popover.Root open={ isResetPopup } onOpenChange={ setIsResetPopup }>
-						<Popover.Trigger
-							render={
-								<Button isDestructive disabled={ isWaiting } __next40pxDefaultSize>
-									{ __( 'Restore default settings', 'flexible-table-block' ) }
-								</Button>
-							}
-						/>
-						<Popover.Popup
-							className="ftb-global-setting-modal__confirm-popover"
-							portal={ <Popover.Portal container={ getWpCompatOverlaySlot() } /> }
-							positioner={ <Popover.Positioner side="top" /> }
-						>
-							<Stack direction="column" gap="lg">
-								<Popover.Title>{ __( 'Are you sure?', 'flexible-table-block' ) }</Popover.Title>
-								<Stack align="center" justify="space-between" gap="sm">
-									<Button isDestructive onClick={ handleResetOptions } size="compact">
-										{ __( 'Restore', 'flexible-table-block' ) }
-									</Button>
-									<Button
-										variant="secondary"
-										onClick={ () => setIsResetPopup( false ) }
-										size="compact"
-									>
-										{ __( 'Cancel', 'flexible-table-block' ) }
-									</Button>
+					<Button
+						isDestructive
+						disabled={ isWaiting }
+						onClick={ () => setIsResetPopup( ! isResetPopup ) }
+						__next40pxDefaultSize
+					>
+						{ __( 'Restore default settings', 'flexible-table-block' ) }
+						{ isResetPopup && (
+							<Popover
+								className="ftb-global-setting-modal__confirm-popover"
+								focusOnMount="firstElement"
+								placement="top"
+								onClose={ () => setIsResetPopup( false ) }
+							>
+								<Stack direction="column" gap="lg" style={ { padding: '8px' } }>
+									<Text render={ <p /> }>{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
+									<Stack align="center" justify="space-between" gap="sm">
+										<Button isDestructive onClick={ handleResetOptions } size="compact">
+											{ __( 'Restore', 'flexible-table-block' ) }
+										</Button>
+										<Button
+											variant="secondary"
+											onClick={ () => setIsResetPopup( false ) }
+											size="compact"
+										>
+											{ __( 'Cancel', 'flexible-table-block' ) }
+										</Button>
+									</Stack>
 								</Stack>
-							</Stack>
-						</Popover.Popup>
-					</Popover.Root>
+							</Popover>
+						) }
+					</Button>
 				) }
 			</Stack>
 		</Modal>

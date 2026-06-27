@@ -11,8 +11,14 @@ import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import { BaseControl, Button, ColorPalette } from '@wordpress/components';
-import { Stack, Text, Popover, VisuallyHidden, getWpCompatOverlaySlot } from '@wordpress/ui';
+import {
+	BaseControl,
+	Button,
+	Popover,
+	ColorPalette,
+	__experimentalSpacer as Spacer,
+} from '@wordpress/components';
+import { Stack, Text } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -73,6 +79,8 @@ export default function BorderColorControl( {
 	}, [] );
 
 	const [ isLinked, setIsLinked ] = useState( true );
+	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
+	const [ pickerIndex, setPickerIndex ] = useState< number | undefined >( undefined );
 
 	const linkedLabel = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
@@ -98,6 +106,16 @@ export default function BorderColorControl( {
 		} );
 	};
 
+	const handleOnPickerOpen = ( targetPickerIndex: number | undefined ) => {
+		setIsPickerOpen( true );
+		setPickerIndex( targetPickerIndex );
+	};
+
+	const handleOnPickerClose = () => {
+		setIsPickerOpen( false );
+		setPickerIndex( undefined );
+	};
+
 	return (
 		<BaseControl className={ clsx( 'ftb-border-color-control', className ) } help={ help }>
 			<Stack direction="column" gap="sm" aria-labelledby={ headingId } role="group">
@@ -108,63 +126,54 @@ export default function BorderColorControl( {
 					{ isLinked ? (
 						<Stack align="center" justify="start" gap="md">
 							<SideIndicatorControl />
-							<Popover.Root>
-								<Popover.Trigger
-									render={
-										<ColorIndicatorButton
-											label={ __( 'All', 'flexible-table-block' ) }
-											value={ allInputValue }
-											isNone={ ! allInputValue && ! isMixed }
-											isTransparent={ allInputValue === 'transparent' }
-											isMixed={ isMixed }
+							<ColorIndicatorButton
+								label={ __( 'All', 'flexible-table-block' ) }
+								value={ allInputValue }
+								onClick={ () => handleOnPickerOpen( undefined ) }
+								isNone={ ! allInputValue && ! isMixed }
+								isTransparent={ allInputValue === 'transparent' }
+								isMixed={ isMixed }
+							/>
+							{ isPickerOpen && ! pickerIndex && (
+								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
+									<Spacer padding={ 4 } marginBottom={ 0 }>
+										<ColorPalette
+											colors={ colors }
+											value={ allInputValue || '' }
+											onChange={ handleOnChangeAll }
 										/>
-									}
-								/>
-								<Popover.Popup
-									portal={ <Popover.Portal container={ getWpCompatOverlaySlot() } /> }
-									positioner={ <Popover.Positioner side="left" align="start" sideOffset={ 36 } /> }
-								>
-									<VisuallyHidden render={ <Popover.Title /> }>
-										{ __( 'All', 'flexible-table-block' ) }
-									</VisuallyHidden>
-									<ColorPalette
-										colors={ colors }
-										value={ allInputValue || '' }
-										onChange={ handleOnChangeAll }
-									/>
-								</Popover.Popup>
-							</Popover.Root>
+									</Spacer>
+								</Popover>
+							) }
 						</Stack>
 					) : (
 						<Stack direction="column" gap="sm">
-							{ SIDE_CONTROLS.map( ( item ) => (
+							{ SIDE_CONTROLS.map( ( item, index ) => (
 								<Stack align="center" justify="start" gap="md" key={ item.value }>
 									<SideIndicatorControl side={ item.value } />
-									<Popover.Root>
-										<Popover.Trigger
-											render={
-												<ColorIndicatorButton
-													label={ item.label }
-													value={ values[ item.value ] }
-													isNone={ ! values[ item.value ] }
-													isTransparent={ values[ item.value ] === 'transparent' }
-												/>
-											}
-										/>
-										<Popover.Popup
-											portal={ <Popover.Portal container={ getWpCompatOverlaySlot() } /> }
-											positioner={
-												<Popover.Positioner side="left" align="start" sideOffset={ 36 } />
-											}
+									<ColorIndicatorButton
+										label={ item.label }
+										value={ values[ item.value ] }
+										onClick={ () => handleOnPickerOpen( index ) }
+										isNone={ ! values[ item.value ] }
+										isTransparent={ values[ item.value ] === 'transparent' }
+									/>
+									{ isPickerOpen && pickerIndex === index && (
+										<Popover
+											placement="left-start"
+											shift
+											offset={ 36 }
+											onClose={ handleOnPickerClose }
 										>
-											<VisuallyHidden render={ <Popover.Title /> }>{ item.label }</VisuallyHidden>
-											<ColorPalette
-												colors={ colors }
-												value={ values[ item.value ] || '' }
-												onChange={ ( value ) => handleOnChange( value, item.value ) }
-											/>
-										</Popover.Popup>
-									</Popover.Root>
+											<Spacer padding={ 4 } marginBottom={ 0 }>
+												<ColorPalette
+													colors={ colors }
+													value={ values[ item.value ] || '' }
+													onChange={ ( value ) => handleOnChange( value, item.value ) }
+												/>
+											</Spacer>
+										</Popover>
+									) }
 								</Stack>
 							) ) }
 						</Stack>
