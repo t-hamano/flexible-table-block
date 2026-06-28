@@ -15,10 +15,9 @@ import {
 	BaseControl,
 	Popover,
 	ColorPalette,
-	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
-	__experimentalText as Text,
 } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -49,7 +48,6 @@ export default function ColorControl( {
 	className,
 }: Props ) {
 	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
-	const headingId = `${ instanceId }-heading`;
 
 	const colors = useSelect( ( select ) => {
 		const settings = select(
@@ -68,11 +66,13 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
-			<VStack aria-labelledby={ headingId } role="group">
-				<Text id={ headingId } upperCase size="11" weight="500">
-					{ label }
-				</Text>
+		<BaseControl
+			className={ clsx( 'ftb-color-control', className ) }
+			help={ help }
+			id={ instanceId }
+			label={ label }
+		>
+			<Stack direction="column" gap="sm" role="group" id={ instanceId }>
 				<ColorIndicatorButton
 					label={ __( 'Color', 'flexible-table-block' ) }
 					value={ value }
@@ -80,7 +80,7 @@ export default function ColorControl( {
 					isNone={ ! value }
 					isTransparent={ value === 'transparent' }
 				/>
-			</VStack>
+			</Stack>
 			{ isPickerOpen && (
 				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
 					<Spacer padding={ 4 } marginBottom={ 0 }>

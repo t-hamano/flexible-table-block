@@ -9,8 +9,6 @@ import type { Property, Properties } from 'csstype';
 import { __ } from '@wordpress/i18n';
 import {
 	Button,
-	Flex,
-	FlexBlock,
 	TextControl,
 	__experimentalSpacer as Spacer,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -19,6 +17,7 @@ import {
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -102,16 +101,18 @@ export default function TableCaptionSettings( {
 		<>
 			<Spacer
 				marginBottom="4"
-				as={ Flex }
-				justify="end"
+				as={ Stack }
+				align="center"
+				justify="flex-end"
+				gap="sm"
 				className="ftb-table-caption-settings-clear"
 			>
 				<Button variant="link" isDestructive onClick={ onResetSettings }>
 					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
 			</Spacer>
-			<Spacer marginBottom="4" as={ Flex } align="end">
-				<FlexBlock className="ftb-table-caption-settings-font-size">
+			<Spacer marginBottom="4" as={ Stack } align="flex-end" justify="space-between" gap="sm">
+				<div className="ftb-table-caption-settings-font-size" style={ { flex: 1 } }>
 					<UnitControl
 						label={ __( 'Caption font size', 'flexible-table-block' ) }
 						value={ captionStylesObj?.fontSize }
@@ -120,8 +121,8 @@ export default function TableCaptionSettings( {
 						onChange={ onChangeFontSize }
 						size="__unstable-large"
 					/>
-				</FlexBlock>
-				<FlexBlock className="ftb-table-caption-settings-line-height">
+				</div>
+				<div className="ftb-table-caption-settings-line-height" style={ { flex: 1 } }>
 					<TextControl
 						label={ __( 'Caption line height', 'flexible-table-block' ) }
 						autoComplete="off"
@@ -132,7 +133,7 @@ export default function TableCaptionSettings( {
 						min={ 0 }
 						__next40pxDefaultSize
 					/>
-				</FlexBlock>
+				</div>
 			</Spacer>
 			<PaddingControl
 				className="ftb-table-caption-settings-padding"

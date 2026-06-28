@@ -15,11 +15,9 @@ import {
 	Placeholder,
 	TextControl,
 	ToggleControl,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
-	__experimentalText as Text,
 } from '@wordpress/components';
+import { Stack, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
 /**
@@ -120,14 +118,17 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 				) }
 			</div>
 			<Spacer
-				as={ VStack }
+				as={ Stack }
+				direction="column"
 				className="ftb-placeholder__table-wrap"
 				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
-				alignment="center"
+				align="center"
+				justify="center"
+				gap="sm"
 				padding={ 4 }
 				marginBottom={ 0 }
 			>
-				<Text align="center" isBlock weight="500">
+				<Text style={ { display: 'block', textAlign: 'center', fontWeight: 500 } }>
 					{ __( 'Preview', 'flexible-table-block' ) }
 				</Text>
 				{ rowCount && colCount && (
@@ -170,8 +171,8 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 					</table>
 				) }
 			</Spacer>
-			<VStack as="form" onSubmit={ onCreateTable }>
-				<HStack wrap justify="start">
+			<Stack direction="column" render={ <form /> } gap="sm" onSubmit={ onCreateTable }>
+				<Stack wrap="wrap" align="center" gap="sm">
 					<ToggleControl
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
@@ -182,8 +183,8 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						checked={ !! footerSection }
 						onChange={ onToggleFooterSection }
 					/>
-				</HStack>
-				<HStack wrap alignment="end" justify="start">
+				</Stack>
+				<Stack wrap="wrap" align="flex-end" gap="sm">
 					<TextControl
 						label={ __( 'Column count', 'flexible-table-block' ) }
 						className="ftb-placeholder__input"
@@ -212,8 +213,8 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 					>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
-				</HStack>
-			</VStack>
+				</Stack>
+			</Stack>
 		</Placeholder>
 	);
 }

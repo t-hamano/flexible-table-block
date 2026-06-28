@@ -16,11 +16,9 @@ import {
 	Button,
 	Popover,
 	ColorPalette,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
-	__experimentalText as Text,
 } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -64,7 +62,6 @@ export default function BorderColorControl( {
 		...valuesProp,
 	};
 	const instanceId = useInstanceId( BorderColorControl, 'ftb-border-color-control' );
-	const headingId = `${ instanceId }-heading`;
 
 	const isMixed = ! (
 		values.top === values.right &&
@@ -119,75 +116,75 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl className={ clsx( 'ftb-border-color-control', className ) } help={ help }>
-			<VStack aria-labelledby={ headingId } role="group">
-				<Text id={ headingId } upperCase size="11" weight="500">
-					{ label }
-				</Text>
-				<HStack alignment="start" justify="space-between">
-					{ isLinked ? (
-						<HStack spacing={ 3 } justify="start">
-							<SideIndicatorControl />
-							<ColorIndicatorButton
-								label={ __( 'All', 'flexible-table-block' ) }
-								value={ allInputValue }
-								onClick={ () => handleOnPickerOpen( undefined ) }
-								isNone={ ! allInputValue && ! isMixed }
-								isTransparent={ allInputValue === 'transparent' }
-								isMixed={ isMixed }
-							/>
-							{ isPickerOpen && ! pickerIndex && (
-								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-									<Spacer padding={ 4 } marginBottom={ 0 }>
-										<ColorPalette
-											colors={ colors }
-											value={ allInputValue || '' }
-											onChange={ handleOnChangeAll }
-										/>
-									</Spacer>
-								</Popover>
-							) }
-						</HStack>
-					) : (
-						<VStack>
-							{ SIDE_CONTROLS.map( ( item, index ) => (
-								<HStack spacing={ 3 } justify="start" key={ item.value }>
-									<SideIndicatorControl side={ item.value } />
-									<ColorIndicatorButton
-										label={ item.label }
-										value={ values[ item.value ] }
-										onClick={ () => handleOnPickerOpen( index ) }
-										isNone={ ! values[ item.value ] }
-										isTransparent={ values[ item.value ] === 'transparent' }
+		<BaseControl
+			className={ clsx( 'ftb-border-color-control', className ) }
+			help={ help }
+			id={ instanceId }
+			label={ label }
+		>
+			<Stack align="flex-start" justify="space-between" gap="sm" role="group" id={ instanceId }>
+				{ isLinked ? (
+					<Stack align="center" gap="md">
+						<SideIndicatorControl />
+						<ColorIndicatorButton
+							label={ __( 'All', 'flexible-table-block' ) }
+							value={ allInputValue }
+							onClick={ () => handleOnPickerOpen( undefined ) }
+							isNone={ ! allInputValue && ! isMixed }
+							isTransparent={ allInputValue === 'transparent' }
+							isMixed={ isMixed }
+						/>
+						{ isPickerOpen && ! pickerIndex && (
+							<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
+								<Spacer padding={ 4 } marginBottom={ 0 }>
+									<ColorPalette
+										colors={ colors }
+										value={ allInputValue || '' }
+										onChange={ handleOnChangeAll }
 									/>
-									{ isPickerOpen && pickerIndex === index && (
-										<Popover
-											placement="left-start"
-											shift
-											offset={ 36 }
-											onClose={ handleOnPickerClose }
-										>
-											<Spacer padding={ 4 } marginBottom={ 0 }>
-												<ColorPalette
-													colors={ colors }
-													value={ values[ item.value ] || '' }
-													onChange={ ( value ) => handleOnChange( value, item.value ) }
-												/>
-											</Spacer>
-										</Popover>
-									) }
-								</HStack>
-							) ) }
-						</VStack>
-					) }
-					<Button
-						label={ linkedLabel }
-						onClick={ toggleLinked }
-						icon={ isLinked ? link : linkOff }
-						size="small"
-					/>
-				</HStack>
-			</VStack>
+								</Spacer>
+							</Popover>
+						) }
+					</Stack>
+				) : (
+					<Stack direction="column" gap="sm">
+						{ SIDE_CONTROLS.map( ( item, index ) => (
+							<Stack align="center" gap="md" key={ item.value }>
+								<SideIndicatorControl side={ item.value } />
+								<ColorIndicatorButton
+									label={ item.label }
+									value={ values[ item.value ] }
+									onClick={ () => handleOnPickerOpen( index ) }
+									isNone={ ! values[ item.value ] }
+									isTransparent={ values[ item.value ] === 'transparent' }
+								/>
+								{ isPickerOpen && pickerIndex === index && (
+									<Popover
+										placement="left-start"
+										shift
+										offset={ 36 }
+										onClose={ handleOnPickerClose }
+									>
+										<Spacer padding={ 4 } marginBottom={ 0 }>
+											<ColorPalette
+												colors={ colors }
+												value={ values[ item.value ] || '' }
+												onChange={ ( value ) => handleOnChange( value, item.value ) }
+											/>
+										</Spacer>
+									</Popover>
+								) }
+							</Stack>
+						) ) }
+					</Stack>
+				) }
+				<Button
+					label={ linkedLabel }
+					onClick={ toggleLinked }
+					icon={ isLinked ? link : linkOff }
+					size="small"
+				/>
+			</Stack>
 		</BaseControl>
 	);
 }

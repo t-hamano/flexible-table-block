@@ -7,12 +7,10 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-	__experimentalText as Text,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 import { useInstanceId } from '@wordpress/compose';
 
 /**
@@ -49,7 +47,6 @@ export default function BorderSpacingControl( {
 		...valuesProp,
 	};
 	const instanceId = useInstanceId( BorderSpacingControl, 'ftb-border-spacing-control' );
-	const headingId = `${ instanceId }-heading`;
 
 	const isMixed = ! ( values.horizontal === values.vertical );
 
@@ -107,14 +104,16 @@ export default function BorderSpacingControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-spacing-control" help={ help }>
-			<VStack aria-labelledby={ headingId } role="group">
-				<Text id={ headingId } upperCase size="11" weight="500">
-					{ label }
-				</Text>
-				<HStack alignment="start" justify="space-between">
+		<BaseControl
+			className="ftb-border-spacing-control"
+			help={ help }
+			id={ instanceId }
+			label={ label }
+		>
+			<Stack direction="column" gap="sm" role="group" id={ instanceId }>
+				<Stack align="flex-start" justify="space-between" gap="sm">
 					{ isLinked ? (
-						<HStack justify="start">
+						<Stack align="center" gap="sm">
 							<DirectionIndicatorControl />
 							<UnitControl
 								aria-label={ __( 'All', 'flexible-table-block' ) }
@@ -125,11 +124,11 @@ export default function BorderSpacingControl( {
 								size="__unstable-large"
 								__unstableInputWidth="100px"
 							/>
-						</HStack>
+						</Stack>
 					) : (
-						<VStack spacing={ 1 }>
+						<Stack direction="column" gap="xs">
 							{ DIRECTION_CONTROLS.map( ( item ) => (
-								<HStack justify="start" key={ item.value }>
+								<Stack align="center" gap="sm" key={ item.value }>
 									<DirectionIndicatorControl direction={ item.value } />
 									<UnitControl
 										key={ item.value }
@@ -140,9 +139,9 @@ export default function BorderSpacingControl( {
 										size="__unstable-large"
 										__unstableInputWidth="100px"
 									/>
-								</HStack>
+								</Stack>
 							) ) }
-						</VStack>
+						</Stack>
 					) }
 					<Button
 						label={ linkedLabel }
@@ -151,8 +150,8 @@ export default function BorderSpacingControl( {
 						size="small"
 						style={ { marginTop: '8px' } }
 					/>
-				</HStack>
-			</VStack>
+				</Stack>
+			</Stack>
 		</BaseControl>
 	);
 }

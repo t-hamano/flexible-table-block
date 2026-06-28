@@ -8,13 +8,8 @@ import type { Dispatch, SetStateAction } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { createInterpolateElement } from '@wordpress/element';
-import {
-	Modal,
-	ExternalLink,
-	__experimentalVStack as VStack,
-	__experimentalText as Text,
-	__experimentalHeading as Heading,
-} from '@wordpress/components';
+import { Modal, __experimentalHeading as Heading } from '@wordpress/components';
+import { Stack, Text, Link } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
 type Props = {
@@ -28,21 +23,21 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 			onRequestClose={ () => setIsHelpModalOpen( false ) }
 			size="medium"
 		>
-			<VStack spacing={ 4 }>
-				<VStack>
+			<Stack direction="column" gap="lg">
+				<Stack direction="column" gap="sm">
 					<Heading level={ 5 }>
 						{ __( 'About default table style', 'flexible-table-block' ) }
 					</Heading>
-					<Text as="p">
+					<Text render={ <p /> }>
 						{ __(
 							'Flexible Table Block is a block that allows you to create tables in various styles. First of all, it is recommended to set the default style of the table from "Global Setting".',
 							'flexible-table-block'
 						) }
 					</Text>
-				</VStack>
-				<VStack>
+				</Stack>
+				<Stack direction="column" gap="sm">
 					<Heading level={ 5 }>{ __( 'Select multiple cells', 'flexible-table-block' ) }</Heading>
-					<Text as="p">
+					<Text render={ <p /> }>
 						{ createInterpolateElement(
 							isAppleOS()
 								? __(
@@ -56,19 +51,19 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 							{ code: <code /> }
 						) }
 					</Text>
-				</VStack>
-				<VStack>
+				</Stack>
+				<Stack direction="column" gap="sm">
 					<Heading level={ 5 }>{ __( 'About scroll table', 'flexible-table-block' ) }</Heading>
-					<Text as="p">
+					<Text render={ <p /> }>
 						{ __(
 							'If table scrolling is enabled, set "Table Width" or "Table Min Width" larger than the content width.',
 							'flexible-table-block'
 						) }
 					</Text>
-				</VStack>
-				<VStack>
+				</Stack>
+				<Stack direction="column" gap="sm">
 					<Heading level={ 5 }>{ __( 'About accessibility', 'flexible-table-block' ) }</Heading>
-					<Text as="p">
+					<Text render={ <p /> }>
 						{ createInterpolateElement(
 							__(
 								'You can tell screenreaders exactly by properly defining <code>id</code>, <code>headers</code>, and <code>scope</code> attributes for each cell.',
@@ -77,7 +72,7 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 							{ code: <code /> }
 						) }
 					</Text>
-					<Text as="p">
+					<Text render={ <p /> }>
 						{ createInterpolateElement(
 							__(
 								'Refer to <Link>this page</Link> for the specifications of each attribute.',
@@ -85,8 +80,8 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 							),
 							{
 								Link: (
-									// @ts-ignore
-									<ExternalLink
+									<Link
+										openInNewTab
 										href={ __(
 											'https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Advanced',
 											'flexible-table-block'
@@ -96,8 +91,8 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 							}
 						) }
 					</Text>
-				</VStack>
-			</VStack>
+				</Stack>
+			</Stack>
 		</Modal>
 	);
 }

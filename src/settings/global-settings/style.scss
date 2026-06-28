@@ -1,8 +1,6 @@
 @use "~@wordpress/base-styles/colors" as colors;
 @use "~@wordpress/base-styles/variables" as variables;
 
-$vertical-tabs-width: 160px;
-
 .ftb-global-setting-modal {
 
 	@media (min-width: 600px) {
@@ -12,67 +10,50 @@ $vertical-tabs-width: 160px;
 	@media (min-width: 960px) {
 		height: 75%;
 	}
+
+	.components-modal__content {
+		margin-bottom: variables.$grid-unit-70;
+	}
 }
 
 .ftb-global-setting-modal__tab-panel {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: variables.$grid-unit-30;
 
-	.components-tab-panel__tabs {
-		position: absolute;
-		top: variables.$grid-unit-80 + variables.$grid-unit-15;
-		left: variables.$grid-unit-20;
-		flex-flow: column;
-		width: $vertical-tabs-width;
+	@media screen and (max-width: 782px) {
+		flex-direction: column;
+	}
+
+	[role="tablist"] {
+		width: 190px;
+		position: sticky;
+		top: 0;
+		background: colors.$white;
+		z-index: 1;
 
 		@media screen and (max-width: 782px) {
-			position: static;
 			width: 100%;
-			margin-bottom: variables.$grid-unit-30;
 		}
 	}
 
-	.components-tab-panel__tabs-item {
-
-		&:focus {
-			box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
-		}
-
-		&:focus-visible::before {
-			content: none;
-		}
-
-		&.is-active {
-			background: colors.$gray-100;
-
-			&::after {
-				content: none;
-			}
-		}
-	}
-
-	.components-tab-panel__tab-content {
-		padding-left: variables.$grid-unit-30;
-		margin-left: $vertical-tabs-width;
-
-		@media screen and (max-width: 782px) {
-			padding-left: 0;
-			margin-left: 0;
-		}
+	[role="tabpanel"] {
+		flex: 1;
+		width: 100%;
 	}
 }
 
 .ftb-global-setting-modal__styles-item {
-	width: calc(50% - variables.$grid-unit-05);
 	border: variables.$border-width var(--wp-admin-theme-color) solid;
-
-	@media screen and (max-width: 782px) {
-		width: 100%;
-	}
+	padding: variables.$grid-unit-10;
 }
 
 .ftb-global-setting-modal__buttons {
 	position: absolute;
 	bottom: 0;
 	left: 0;
+	width: 100%;
 	height: variables.$grid-unit-70;
 	background: colors.$white;
 	z-index: 2;

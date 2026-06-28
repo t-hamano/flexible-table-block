@@ -16,7 +16,8 @@ import {
 	// @ts-ignore: has no exported member
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
-import { ToolbarDropdownMenu, PanelBody, __experimentalText as Text } from '@wordpress/components';
+import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
+import { Text } from '@wordpress/ui';
 import {
 	blockTable,
 	justifyLeft,
