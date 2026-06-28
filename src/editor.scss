@@ -281,11 +281,9 @@ $row-column-inserter-dot-size: 6px;
 		justify-content: center;
 		min-width: 0;
 		padding: 0;
-		color: colors.$gray-900;
-		background: colors.$gray-200;
 
-		svg {
-			margin-right: 0;
+		&:not(.is-pressed) {
+			background: colors.$gray-200;
 		}
 	}
 
