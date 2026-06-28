@@ -130,6 +130,7 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-placeholder__table-wrap {
 		width: 100%;
+		padding: variables.$grid-unit-20;
 		background-color: colors.$gray-100;
 		box-sizing: border-box;
 	}

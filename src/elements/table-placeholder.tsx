@@ -10,13 +10,7 @@ import type { FormEvent } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
-import {
-	Button,
-	Placeholder,
-	TextControl,
-	ToggleControl,
-	__experimentalSpacer as Spacer,
-} from '@wordpress/components';
+import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/components';
 import { Stack, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
@@ -117,16 +111,19 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 					{ code: <code /> }
 				) }
 			</div>
-			<Spacer
-				as={ Stack }
+			<Stack
 				direction="column"
 				className="ftb-placeholder__table-wrap"
-				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
 				align="center"
 				justify="center"
 				gap="sm"
-				padding={ 4 }
-				marginBottom={ 0 }
+				style={ {
+					minHeight: MIN_PREVIEW_TABLE_HEIGHT,
+					//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 6.9
+					//  and below, so each Stack sets `display: flex` inline as a fallback.
+					//  TODO: Remove once the minimum supported WordPress version is 7.1+.
+					display: 'flex',
+				} }
 			>
 				<Text style={ { display: 'block', textAlign: 'center', fontWeight: 500 } }>
 					{ __( 'Preview', 'flexible-table-block' ) }
@@ -170,9 +167,23 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						) }
 					</table>
 				) }
-			</Spacer>
-			<Stack direction="column" render={ <form /> } gap="sm" onSubmit={ onCreateTable }>
-				<Stack wrap="wrap" align="center" gap="sm">
+			</Stack>
+			<Stack
+				direction="column"
+				render={ <form /> }
+				gap="sm"
+				onSubmit={ onCreateTable }
+				//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 6.9
+				//  and below, so each Stack sets `display: flex` inline as a fallback.
+				//  TODO: Remove once the minimum supported WordPress version is 7.1+.
+				style={ { display: 'flex' } }
+			>
+				{ /*
+				 * `@wordpress/ui` styles aren't loaded into the editor iframe on WP 6.9
+				 * and below, so each Stack sets `display: flex` inline as a fallback.
+				 * TODO: Remove once the minimum supported WordPress version is 7.1+.
+				 */ }
+				<Stack wrap="wrap" align="center" gap="sm" style={ { display: 'flex' } }>
 					<ToggleControl
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
@@ -184,7 +195,16 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						onChange={ onToggleFooterSection }
 					/>
 				</Stack>
-				<Stack wrap="wrap" align="flex-end" gap="sm">
+
+				<Stack
+					wrap="wrap"
+					align="flex-end"
+					gap="sm"
+					//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 6.9
+					//  and below, so each Stack sets `display: flex` inline as a fallback.
+					//  TODO: Remove once the minimum supported WordPress version is 7.1+.
+					style={ { display: 'flex' } }
+				>
 					<TextControl
 						label={ __( 'Column count', 'flexible-table-block' ) }
 						className="ftb-placeholder__input"
