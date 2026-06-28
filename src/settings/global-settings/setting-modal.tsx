@@ -13,24 +13,20 @@ import { useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
-	Flex,
 	Notice,
 	Modal,
 	Popover,
-	TabPanel,
 	Spinner,
 	RangeControl,
 	ToggleControl,
-	__experimentalText as Text,
-	__experimentalSpacer as Spacer,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
+	__experimentalGrid as Grid,
 	__experimentalHeading as Heading,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
+import { Stack, Tabs, Text } from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -202,589 +198,503 @@ export default function SettingModal( {
 			size="large"
 		>
 			{ isWaiting && (
-				<HStack justify="center" className="ftb-global-setting-modal__loading">
+				<Stack align="center" justify="center" className="ftb-global-setting-modal__loading">
 					<Spinner />
-				</HStack>
+				</Stack>
 			) }
-			<TabPanel
+			<Tabs.Root
 				className="ftb-global-setting-modal__tab-panel"
 				orientation="vertical"
-				tabs={ [
-					{
-						name: 'table',
-						title: __( 'Table styles', 'flexible-table-block' ),
-					},
-					{
-						name: 'cell',
-						title: __( 'Cell styles', 'flexible-table-block' ),
-					},
-					{
-						name: 'responsive',
-						title: __( 'Responsive setting', 'flexible-table-block' ),
-					},
-					{
-						name: 'options',
-						title: __( 'Editor options', 'flexible-table-block' ),
-					},
-				] }
+				defaultValue="table"
 			>
-				{ ( { name } ) => (
-					<Spacer marginBottom={ 22 }>
-						{ name === 'table' && (
-							<VStack spacing={ 4 }>
-								<Heading level={ 5 }>
-									{ __( 'Default table styles', 'flexible-table-block' ) }
-								</Heading>
-								<Flex wrap align="stretch">
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<UnitControl
-											label={ __( 'Table width', 'flexible-table-block' ) }
-											units={ tableWidthUnits }
-											value={ currentOptions.block_style?.table_width }
-											min={ 0 }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														table_width: sanitizeUnitValue( value ),
-													},
-												} );
-											} }
-											size="__unstable-large"
-											__unstableInputWidth="100px"
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<UnitControl
-											label={ __( 'Table max width', 'flexible-table-block' ) }
-											units={ tableWidthUnits }
-											value={ currentOptions.block_style?.table_max_width }
-											min={ 0 }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														table_max_width: sanitizeUnitValue( value ),
-													},
-												} );
-											} }
-											size="__unstable-large"
-											__unstableInputWidth="100px"
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ToggleGroupControl
-											__next40pxDefaultSize
-											label={ __( 'Cell borders', 'flexible-table-block' ) }
-											value={ currentOptions.block_style?.table_border_collapse }
-											isDeselectable
-											onChange={ ( value ) => {
-												const isAllowedValue = (
-													_value: any
-												): _value is Properties[ 'borderCollapse' ] => {
-													return (
-														! value ||
-														BORDER_COLLAPSE_CONTROLS.some( ( control ) => control.value === _value )
-													);
-												};
-												if ( isAllowedValue( value ) ) {
-													const newValue =
-														currentOptions?.block_style?.table_border_collapse === value
-															? undefined
-															: value;
-													setCurrentOptions( {
-														...currentOptions,
-														block_style: {
-															...currentOptions.block_style,
-															table_border_collapse: newValue,
-														},
-													} );
-												}
-											} }
-										>
-											{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => (
-												<ToggleGroupControlOptionIcon
-													key={ value }
-													value={ value }
-													icon={ icon }
-													label={ label }
-												/>
-											) ) }
-										</ToggleGroupControl>
-									</Spacer>
-								</Flex>
-								<Heading level={ 5 }>
-									{ __( 'Default striped table styles', 'flexible-table-block' ) }
-								</Heading>
-								<Flex wrap align="stretch">
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ColorControl
-											label={ __(
-												'Striped style background color ( odd rows )',
-												'flexible-table-block'
-											) }
-											value={ currentOptions.block_style?.row_odd_color }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														row_odd_color: value,
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ColorControl
-											label={ __(
-												'Striped style background color ( even rows )',
-												'flexible-table-block'
-											) }
-											value={ currentOptions.block_style?.row_even_color }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														row_even_color: value,
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-								</Flex>
-							</VStack>
-						) }
-						{ name === 'cell' && (
-							<VStack spacing={ 4 }>
-								<Heading level={ 5 }>
-									{ __( 'Default cell styles', 'flexible-table-block' ) }
-								</Heading>
-								<Flex wrap align="stretch">
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ColorControl
-											label={ createInterpolateElement(
-												__( 'Cell text color ( <code>th</code> tag )', 'flexible-table-block' ),
-												{ code: <code /> }
-											) }
-											value={ currentOptions.block_style?.cell_text_color_th }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_text_color_th: value,
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ColorControl
-											label={ createInterpolateElement(
-												__( 'Cell text color ( <code>td</code> tag )', 'flexible-table-block' ),
-												{ code: <code /> }
-											) }
-											value={ currentOptions.block_style?.cell_text_color_td }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_text_color_td: value,
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ColorControl
-											label={ createInterpolateElement(
-												__(
-													'Cell background color ( <code>th</code> tag )',
-													'flexible-table-block'
-												),
-												{ code: <code /> }
-											) }
-											value={ currentOptions.block_style?.cell_background_color_th }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_background_color_th: value,
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ColorControl
-											label={ createInterpolateElement(
-												__(
-													'Cell background color ( <code>td</code> tag )',
-													'flexible-table-block'
-												),
-												{ code: <code /> }
-											) }
-											value={ currentOptions.block_style?.cell_background_color_td }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_background_color_td: value,
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<PaddingControl
-											label={ __( 'Cell padding', 'flexible-table-block' ) }
-											values={ currentOptions?.block_style.cell_padding || {} }
-											onChange={ ( values ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_padding: cleanEmptyObject( values ),
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<BorderWidthControl
-											label={ __( 'Cell border width', 'flexible-table-block' ) }
-											values={ { top: currentOptions.block_style?.cell_border_width } }
-											allowSides={ false }
-											hasIndicator={ false }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_border_width: sanitizeUnitValue( value.top ),
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<BorderStyleControl
-											label={ __( 'Cell border style', 'flexible-table-block' ) }
-											values={ { top: currentOptions.block_style?.cell_border_style } }
-											allowSides={ false }
-											hasIndicator={ false }
-											onChange={ ( value ) => {
-												const newValue =
-													currentOptions?.block_style?.cell_border_style === value.top
-														? undefined
-														: value.top;
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_border_style: newValue,
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ColorControl
-											label={ __( 'Cell border color', 'flexible-table-block' ) }
-											value={ currentOptions.block_style?.cell_border_color }
-											onChange={ ( value ) => {
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_border_color: value,
-													},
-												} );
-											} }
-										/>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ToggleGroupControl
-											__next40pxDefaultSize
-											label={ __( 'Cell text alignment', 'flexible-table-block' ) }
-											value={ currentOptions.block_style?.cell_text_align }
-											isDeselectable
-											onChange={ ( value ) => {
-												if ( typeof value !== 'string' && value !== undefined ) {
-													return;
-												}
-												const newValue =
-													currentOptions?.block_style?.cell_text_align === value
-														? undefined
-														: value;
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_text_align: newValue,
-													},
-												} );
-											} }
-										>
-											{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
-												<ToggleGroupControlOptionIcon
-													key={ value }
-													value={ value }
-													icon={ icon }
-													label={ label }
-												/>
-											) ) }
-										</ToggleGroupControl>
-									</Spacer>
-									<Spacer
-										padding={ 2 }
-										marginBottom={ 0 }
-										className="ftb-global-setting-modal__styles-item"
-									>
-										<ToggleGroupControl
-											__next40pxDefaultSize
-											label={ __( 'Cell vertical alignment', 'flexible-table-block' ) }
-											value={ currentOptions.block_style?.cell_vertical_align }
-											isDeselectable
-											onChange={ ( value ) => {
-												if ( typeof value !== 'string' && value !== undefined ) {
-													return;
-												}
-												const newValue =
-													currentOptions?.block_style?.cell_vertical_align === value
-														? undefined
-														: value;
-												setCurrentOptions( {
-													...currentOptions,
-													block_style: {
-														...currentOptions.block_style,
-														cell_vertical_align: newValue,
-													},
-												} );
-											} }
-										>
-											{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
-												<ToggleGroupControlOptionIcon
-													key={ value }
-													value={ value }
-													icon={ icon }
-													label={ label }
-												/>
-											) ) }
-										</ToggleGroupControl>
-									</Spacer>
-								</Flex>
-							</VStack>
-						) }
-						{ name === 'responsive' && (
-							<VStack spacing={ 4 }>
-								<Heading level={ 5 }>
-									{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
-								</Heading>
-								<RangeControl
-									help={ __(
-										'Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.',
-										'flexible-table-block'
-									) }
-									beforeIcon={ mobile }
-									afterIcon={ desktop }
-									min={ MIN_RESPONSIVE_BREAKPOINT }
-									max={ MAX_RESPONSIVE_BREAKPOINT }
-									value={
-										currentOptions.breakpoint
-											? Number( currentOptions.breakpoint )
-											: DEFAULT_RESPONSIVE_BREAKPOINT
-									}
-									allowReset
+				<Tabs.List>
+					<Tabs.Tab value="table">{ __( 'Table styles', 'flexible-table-block' ) }</Tabs.Tab>
+					<Tabs.Tab value="cell">{ __( 'Cell styles', 'flexible-table-block' ) }</Tabs.Tab>
+					<Tabs.Tab value="responsive">
+						{ __( 'Responsive setting', 'flexible-table-block' ) }
+					</Tabs.Tab>
+					<Tabs.Tab value="options">{ __( 'Editor options', 'flexible-table-block' ) }</Tabs.Tab>
+				</Tabs.List>
+				<Tabs.Panel value="table">
+					<Stack direction="column" gap="lg">
+						<Heading level={ 5 }>{ __( 'Default table styles', 'flexible-table-block' ) }</Heading>
+						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+							<div className="ftb-global-setting-modal__styles-item">
+								<UnitControl
+									label={ __( 'Table width', 'flexible-table-block' ) }
+									units={ tableWidthUnits }
+									value={ currentOptions.block_style?.table_width }
+									min={ 0 }
 									onChange={ ( value ) => {
 										setCurrentOptions( {
 											...currentOptions,
-											breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
+											block_style: {
+												...currentOptions.block_style,
+												table_width: sanitizeUnitValue( value ),
+											},
 										} );
 									} }
+									size="__unstable-large"
+									__unstableInputWidth="100px"
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<UnitControl
+									label={ __( 'Table max width', 'flexible-table-block' ) }
+									units={ tableWidthUnits }
+									value={ currentOptions.block_style?.table_max_width }
+									min={ 0 }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												table_max_width: sanitizeUnitValue( value ),
+											},
+										} );
+									} }
+									size="__unstable-large"
+									__unstableInputWidth="100px"
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ToggleGroupControl
 									__next40pxDefaultSize
-								/>
-							</VStack>
-						) }
-						{ name === 'options' && (
-							<VStack spacing={ 4 }>
-								<ToggleControl
-									label={ __( 'Show section labels', 'flexible-table-block' ) }
-									help={ __(
-										'Show section labels in the upper left corner of the table header, table body, and table footer sections.',
-										'flexible-table-block'
-									) }
-									checked={ !! currentOptions.show_label_on_section }
+									label={ __( 'Cell borders', 'flexible-table-block' ) }
+									value={ currentOptions.block_style?.table_border_collapse }
+									isDeselectable
 									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											show_label_on_section: value,
-										} );
-									} }
-								/>
-								<ToggleControl
-									label={ __( 'Show control buttons', 'flexible-table-block' ) }
-									help={ __(
-										'Show insert row/column and select row/column buttons.',
-										'flexible-table-block'
-									) }
-									checked={ !! currentOptions.show_control_button }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											show_control_button: value,
-										} );
-									} }
-								/>
-								{ ( currentOptions.show_label_on_section ||
-									currentOptions.show_control_button ) && (
-									<ToggleControl
-										label={ __(
-											'Focus on the control button with the cursor movement keys',
-											'flexible-table-block'
-										) }
-										help={ __(
-											'Focus insert/select buttons, select row/column buttons, and section labels with the cursor movement keys.',
-											'flexible-table-block'
-										) }
-										checked={ !! currentOptions.focus_control_button }
-										onChange={ ( value ) => {
+										const isAllowedValue = (
+											_value: any
+										): _value is Properties[ 'borderCollapse' ] => {
+											return (
+												! value ||
+												BORDER_COLLAPSE_CONTROLS.some( ( control ) => control.value === _value )
+											);
+										};
+										if ( isAllowedValue( value ) ) {
+											const newValue =
+												currentOptions?.block_style?.table_border_collapse === value
+													? undefined
+													: value;
 											setCurrentOptions( {
 												...currentOptions,
-												focus_control_button: value,
+												block_style: {
+													...currentOptions.block_style,
+													table_border_collapse: newValue,
+												},
 											} );
-										} }
-									/>
+										}
+									} }
+								>
+									{ BORDER_COLLAPSE_CONTROLS.map( ( { icon, label, value } ) => (
+										<ToggleGroupControlOptionIcon
+											key={ value }
+											value={ value }
+											icon={ icon }
+											label={ label }
+										/>
+									) ) }
+								</ToggleGroupControl>
+							</div>
+						</Grid>
+						<Heading level={ 5 }>
+							{ __( 'Default striped table styles', 'flexible-table-block' ) }
+						</Heading>
+						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ColorControl
+									label={ __(
+										'Striped style background color ( odd rows )',
+										'flexible-table-block'
+									) }
+									value={ currentOptions.block_style?.row_odd_color }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												row_odd_color: value,
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ColorControl
+									label={ __(
+										'Striped style background color ( even rows )',
+										'flexible-table-block'
+									) }
+									value={ currentOptions.block_style?.row_even_color }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												row_even_color: value,
+											},
+										} );
+									} }
+								/>
+							</div>
+						</Grid>
+					</Stack>
+				</Tabs.Panel>
+				<Tabs.Panel value="cell">
+					<Stack direction="column" gap="lg">
+						<Heading level={ 5 }>{ __( 'Default cell styles', 'flexible-table-block' ) }</Heading>
+						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ColorControl
+									label={ createInterpolateElement(
+										__( 'Cell text color ( <code>th</code> tag )', 'flexible-table-block' ),
+										{ code: <code /> }
+									) }
+									value={ currentOptions.block_style?.cell_text_color_th }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_text_color_th: value,
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ColorControl
+									label={ createInterpolateElement(
+										__( 'Cell text color ( <code>td</code> tag )', 'flexible-table-block' ),
+										{ code: <code /> }
+									) }
+									value={ currentOptions.block_style?.cell_text_color_td }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_text_color_td: value,
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ColorControl
+									label={ createInterpolateElement(
+										__( 'Cell background color ( <code>th</code> tag )', 'flexible-table-block' ),
+										{ code: <code /> }
+									) }
+									value={ currentOptions.block_style?.cell_background_color_th }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_background_color_th: value,
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ColorControl
+									label={ createInterpolateElement(
+										__( 'Cell background color ( <code>td</code> tag )', 'flexible-table-block' ),
+										{ code: <code /> }
+									) }
+									value={ currentOptions.block_style?.cell_background_color_td }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_background_color_td: value,
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<PaddingControl
+									label={ __( 'Cell padding', 'flexible-table-block' ) }
+									values={ currentOptions?.block_style.cell_padding || {} }
+									onChange={ ( values ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_padding: cleanEmptyObject( values ),
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<BorderWidthControl
+									label={ __( 'Cell border width', 'flexible-table-block' ) }
+									values={ { top: currentOptions.block_style?.cell_border_width } }
+									allowSides={ false }
+									hasIndicator={ false }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_border_width: sanitizeUnitValue( value.top ),
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<BorderStyleControl
+									label={ __( 'Cell border style', 'flexible-table-block' ) }
+									values={ { top: currentOptions.block_style?.cell_border_style } }
+									allowSides={ false }
+									hasIndicator={ false }
+									onChange={ ( value ) => {
+										const newValue =
+											currentOptions?.block_style?.cell_border_style === value.top
+												? undefined
+												: value.top;
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_border_style: newValue,
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ColorControl
+									label={ __( 'Cell border color', 'flexible-table-block' ) }
+									value={ currentOptions.block_style?.cell_border_color }
+									onChange={ ( value ) => {
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_border_color: value,
+											},
+										} );
+									} }
+								/>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ToggleGroupControl
+									__next40pxDefaultSize
+									label={ __( 'Cell text alignment', 'flexible-table-block' ) }
+									value={ currentOptions.block_style?.cell_text_align }
+									isDeselectable
+									onChange={ ( value ) => {
+										if ( typeof value !== 'string' && value !== undefined ) {
+											return;
+										}
+										const newValue =
+											currentOptions?.block_style?.cell_text_align === value ? undefined : value;
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_text_align: newValue,
+											},
+										} );
+									} }
+								>
+									{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
+										<ToggleGroupControlOptionIcon
+											key={ value }
+											value={ value }
+											icon={ icon }
+											label={ label }
+										/>
+									) ) }
+								</ToggleGroupControl>
+							</div>
+							<div className="ftb-global-setting-modal__styles-item">
+								<ToggleGroupControl
+									__next40pxDefaultSize
+									label={ __( 'Cell vertical alignment', 'flexible-table-block' ) }
+									value={ currentOptions.block_style?.cell_vertical_align }
+									isDeselectable
+									onChange={ ( value ) => {
+										if ( typeof value !== 'string' && value !== undefined ) {
+											return;
+										}
+										const newValue =
+											currentOptions?.block_style?.cell_vertical_align === value
+												? undefined
+												: value;
+										setCurrentOptions( {
+											...currentOptions,
+											block_style: {
+												...currentOptions.block_style,
+												cell_vertical_align: newValue,
+											},
+										} );
+									} }
+								>
+									{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
+										<ToggleGroupControlOptionIcon
+											key={ value }
+											value={ value }
+											icon={ icon }
+											label={ label }
+										/>
+									) ) }
+								</ToggleGroupControl>
+							</div>
+						</Grid>
+					</Stack>
+				</Tabs.Panel>
+				<Tabs.Panel value="responsive">
+					<Stack direction="column" gap="lg">
+						<Heading level={ 5 }>
+							{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
+						</Heading>
+						<RangeControl
+							help={ __(
+								'Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.',
+								'flexible-table-block'
+							) }
+							beforeIcon={ mobile }
+							afterIcon={ desktop }
+							min={ MIN_RESPONSIVE_BREAKPOINT }
+							max={ MAX_RESPONSIVE_BREAKPOINT }
+							value={
+								currentOptions.breakpoint
+									? Number( currentOptions.breakpoint )
+									: DEFAULT_RESPONSIVE_BREAKPOINT
+							}
+							allowReset
+							onChange={ ( value ) => {
+								setCurrentOptions( {
+									...currentOptions,
+									breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
+								} );
+							} }
+							__next40pxDefaultSize
+						/>
+					</Stack>
+				</Tabs.Panel>
+				<Tabs.Panel value="options">
+					<Stack direction="column" gap="lg">
+						<ToggleControl
+							label={ __( 'Show section labels', 'flexible-table-block' ) }
+							help={ __(
+								'Show section labels in the upper left corner of the table header, table body, and table footer sections.',
+								'flexible-table-block'
+							) }
+							checked={ !! currentOptions.show_label_on_section }
+							onChange={ ( value ) => {
+								setCurrentOptions( {
+									...currentOptions,
+									show_label_on_section: value,
+								} );
+							} }
+						/>
+						<ToggleControl
+							label={ __( 'Show control buttons', 'flexible-table-block' ) }
+							help={ __(
+								'Show insert row/column and select row/column buttons.',
+								'flexible-table-block'
+							) }
+							checked={ !! currentOptions.show_control_button }
+							onChange={ ( value ) => {
+								setCurrentOptions( {
+									...currentOptions,
+									show_control_button: value,
+								} );
+							} }
+						/>
+						{ ( currentOptions.show_label_on_section || currentOptions.show_control_button ) && (
+							<ToggleControl
+								label={ __(
+									'Focus on the control button with the cursor movement keys',
+									'flexible-table-block'
 								) }
-								<ToggleControl
-									label={ __( 'Show dot on th tag', 'flexible-table-block' ) }
-									help={ __(
-										'Show a small dot in the upper right corner of a cell when the cell is th element.',
-										'flexible-table-block'
-									) }
-									checked={ !! currentOptions.show_dot_on_th }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											show_dot_on_th: value,
-										} );
-									} }
-								/>
-								<ToggleControl
-									label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
-									help={ __(
-										'Pressing the tab key moves the focus to the next cell. Holding down the shift key moves the focus to the previous cell.',
-										'flexible-table-block'
-									) }
-									checked={ !! currentOptions.tab_move }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											tab_move: value,
-										} );
-									} }
-								/>
-								<ToggleControl
-									label={ __( 'Keep all contents when merging cells', 'flexible-table-block' ) }
-									help={ __(
-										'If turned off, only the contents of the first cell will remain when the cells are merged.',
-										'flexible-table-block'
-									) }
-									checked={ !! currentOptions.merge_content }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											merge_content: value,
-										} );
-									} }
-								/>
-								{ canManageOptions && (
-									<ToggleControl
-										label={ __(
-											'Show Global setting button to non-administrative users',
-											'flexible-table-block'
-										) }
-										help={ __(
-											'By turning it on, you can prevent non-administrative users from changing Global setting.',
-											'flexible-table-block'
-										) }
-										checked={ !! currentOptions.show_global_setting }
-										onChange={ ( value ) => {
-											setCurrentOptions( {
-												...currentOptions,
-												show_global_setting: value,
-											} );
-										} }
-									/>
+								help={ __(
+									'Focus insert/select buttons, select row/column buttons, and section labels with the cursor movement keys.',
+									'flexible-table-block'
 								) }
-							</VStack>
+								checked={ !! currentOptions.focus_control_button }
+								onChange={ ( value ) => {
+									setCurrentOptions( {
+										...currentOptions,
+										focus_control_button: value,
+									} );
+								} }
+							/>
 						) }
-					</Spacer>
-				) }
-			</TabPanel>
+						<ToggleControl
+							label={ __( 'Show dot on th tag', 'flexible-table-block' ) }
+							help={ __(
+								'Show a small dot in the upper right corner of a cell when the cell is th element.',
+								'flexible-table-block'
+							) }
+							checked={ !! currentOptions.show_dot_on_th }
+							onChange={ ( value ) => {
+								setCurrentOptions( {
+									...currentOptions,
+									show_dot_on_th: value,
+								} );
+							} }
+						/>
+						<ToggleControl
+							label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
+							help={ __(
+								'Pressing the tab key moves the focus to the next cell. Holding down the shift key moves the focus to the previous cell.',
+								'flexible-table-block'
+							) }
+							checked={ !! currentOptions.tab_move }
+							onChange={ ( value ) => {
+								setCurrentOptions( {
+									...currentOptions,
+									tab_move: value,
+								} );
+							} }
+						/>
+						<ToggleControl
+							label={ __( 'Keep all contents when merging cells', 'flexible-table-block' ) }
+							help={ __(
+								'If turned off, only the contents of the first cell will remain when the cells are merged.',
+								'flexible-table-block'
+							) }
+							checked={ !! currentOptions.merge_content }
+							onChange={ ( value ) => {
+								setCurrentOptions( {
+									...currentOptions,
+									merge_content: value,
+								} );
+							} }
+						/>
+						{ canManageOptions && (
+							<ToggleControl
+								label={ __(
+									'Show Global setting button to non-administrative users',
+									'flexible-table-block'
+								) }
+								help={ __(
+									'By turning it on, you can prevent non-administrative users from changing Global setting.',
+									'flexible-table-block'
+								) }
+								checked={ !! currentOptions.show_global_setting }
+								onChange={ ( value ) => {
+									setCurrentOptions( {
+										...currentOptions,
+										show_global_setting: value,
+									} );
+								} }
+							/>
+						) }
+					</Stack>
+				</Tabs.Panel>
+			</Tabs.Root>
 			{ noticeInfo?.status && noticeInfo?.message && (
 				<Notice
 					className="ftb-global-setting-modal__notice"
@@ -797,10 +707,10 @@ export default function SettingModal( {
 					{ noticeInfo.message }
 				</Notice>
 			) }
-			<Spacer
-				as={ HStack }
-				marginBottom={ 0 }
-				paddingX={ 6 }
+			<Stack
+				align="center"
+				justify="space-between"
+				gap="sm"
 				className="ftb-global-setting-modal__buttons"
 			>
 				<Button
@@ -826,9 +736,9 @@ export default function SettingModal( {
 								placement="top"
 								onClose={ () => setIsResetPopup( false ) }
 							>
-								<Spacer as={ VStack } marginBottom={ 0 } padding={ 2 } spacing={ 4 }>
-									<Text as="p">{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
-									<HStack>
+								<Stack direction="column" gap="lg" style={ { padding: '8px' } }>
+									<Text render={ <p /> }>{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
+									<Stack align="center" justify="space-between" gap="sm">
 										<Button isDestructive onClick={ handleResetOptions } size="compact">
 											{ __( 'Restore', 'flexible-table-block' ) }
 										</Button>
@@ -839,13 +749,13 @@ export default function SettingModal( {
 										>
 											{ __( 'Cancel', 'flexible-table-block' ) }
 										</Button>
-									</HStack>
-								</Spacer>
+									</Stack>
+								</Stack>
 							</Popover>
 						) }
 					</Button>
 				) }
-			</Spacer>
+			</Stack>
 		</Modal>
 	);
 }

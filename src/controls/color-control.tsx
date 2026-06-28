@@ -11,14 +11,8 @@ import type { ReactElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import {
-	BaseControl,
-	Popover,
-	ColorPalette,
-	__experimentalVStack as VStack,
-	__experimentalSpacer as Spacer,
-	__experimentalText as Text,
-} from '@wordpress/components';
+import { BaseControl, Popover, ColorPalette } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -49,7 +43,6 @@ export default function ColorControl( {
 	className,
 }: Props ) {
 	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
-	const headingId = `${ instanceId }-heading`;
 
 	const colors = useSelect( ( select ) => {
 		const settings = select(
@@ -69,10 +62,8 @@ export default function ColorControl( {
 
 	return (
 		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
-			<VStack aria-labelledby={ headingId } role="group">
-				<Text id={ headingId } upperCase size="11" weight="500">
-					{ label }
-				</Text>
+			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
+				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
 				<ColorIndicatorButton
 					label={ __( 'Color', 'flexible-table-block' ) }
 					value={ value }
@@ -80,16 +71,16 @@ export default function ColorControl( {
 					isNone={ ! value }
 					isTransparent={ value === 'transparent' }
 				/>
-			</VStack>
+			</Stack>
 			{ isPickerOpen && (
 				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-					<Spacer padding={ 4 } marginBottom={ 0 }>
+					<div style={ { padding: '16px' } }>
 						<ColorPalette
 							colors={ [ ...colors, ...colorsProp ] }
 							value={ value || '' }
 							onChange={ handleOnChange }
 						/>
-					</Spacer>
+					</div>
 				</Popover>
 			) }
 		</BaseControl>

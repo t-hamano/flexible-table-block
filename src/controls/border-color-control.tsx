@@ -11,16 +11,8 @@ import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import {
-	BaseControl,
-	Button,
-	Popover,
-	ColorPalette,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-	__experimentalSpacer as Spacer,
-	__experimentalText as Text,
-} from '@wordpress/components';
+import { BaseControl, Button, Popover, ColorPalette } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 
@@ -64,7 +56,6 @@ export default function BorderColorControl( {
 		...valuesProp,
 	};
 	const instanceId = useInstanceId( BorderColorControl, 'ftb-border-color-control' );
-	const headingId = `${ instanceId }-heading`;
 
 	const isMixed = ! (
 		values.top === values.right &&
@@ -120,13 +111,11 @@ export default function BorderColorControl( {
 
 	return (
 		<BaseControl className={ clsx( 'ftb-border-color-control', className ) } help={ help }>
-			<VStack aria-labelledby={ headingId } role="group">
-				<Text id={ headingId } upperCase size="11" weight="500">
-					{ label }
-				</Text>
-				<HStack alignment="start" justify="space-between">
+			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
+				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
+				<Stack align="flex-start" justify="space-between" gap="sm">
 					{ isLinked ? (
-						<HStack spacing={ 3 } justify="start">
+						<Stack align="center" gap="md">
 							<SideIndicatorControl />
 							<ColorIndicatorButton
 								label={ __( 'All', 'flexible-table-block' ) }
@@ -138,20 +127,20 @@ export default function BorderColorControl( {
 							/>
 							{ isPickerOpen && ! pickerIndex && (
 								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-									<Spacer padding={ 4 } marginBottom={ 0 }>
+									<div style={ { padding: '16px' } }>
 										<ColorPalette
 											colors={ colors }
 											value={ allInputValue || '' }
 											onChange={ handleOnChangeAll }
 										/>
-									</Spacer>
+									</div>
 								</Popover>
 							) }
-						</HStack>
+						</Stack>
 					) : (
-						<VStack>
+						<Stack direction="column" gap="sm">
 							{ SIDE_CONTROLS.map( ( item, index ) => (
-								<HStack spacing={ 3 } justify="start" key={ item.value }>
+								<Stack align="center" gap="md" key={ item.value }>
 									<SideIndicatorControl side={ item.value } />
 									<ColorIndicatorButton
 										label={ item.label }
@@ -167,18 +156,18 @@ export default function BorderColorControl( {
 											offset={ 36 }
 											onClose={ handleOnPickerClose }
 										>
-											<Spacer padding={ 4 } marginBottom={ 0 }>
+											<div style={ { padding: '16px' } }>
 												<ColorPalette
 													colors={ colors }
 													value={ values[ item.value ] || '' }
 													onChange={ ( value ) => handleOnChange( value, item.value ) }
 												/>
-											</Spacer>
+											</div>
 										</Popover>
 									) }
-								</HStack>
+								</Stack>
 							) ) }
-						</VStack>
+						</Stack>
 					) }
 					<Button
 						label={ linkedLabel }
@@ -186,8 +175,8 @@ export default function BorderColorControl( {
 						icon={ isLinked ? link : linkOff }
 						size="small"
 					/>
-				</HStack>
-			</VStack>
+				</Stack>
+			</Stack>
 		</BaseControl>
 	);
 }

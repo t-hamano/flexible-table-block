@@ -11,11 +11,8 @@ import { createInterpolateElement } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	Flex,
-	FlexBlock,
 	SelectControl,
 	TextControl,
-	__experimentalSpacer as Spacer,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
@@ -23,6 +20,7 @@ import {
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -218,13 +216,18 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 
 	return (
 		<>
-			<Spacer marginBottom="4" as={ Flex } justify="end" className="ftb-table-cell-settings-clear">
+			<Stack
+				align="center"
+				justify="flex-end"
+				className="ftb-table-cell-settings-clear"
+				style={ { marginBottom: '16px' } }
+			>
 				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
 					{ __( 'Clear cell settings', 'flexible-table-block' ) }
 				</Button>
-			</Spacer>
-			<Spacer marginBottom="4" as={ Flex }>
-				<FlexBlock className="ftb-table-cell-settings-font-size">
+			</Stack>
+			<Stack align="center" justify="space-between" gap="sm" style={ { marginBottom: '16px' } }>
+				<div className="ftb-table-cell-settings-font-size" style={ { flex: 1 } }>
 					<UnitControl
 						label={ __( 'Cell font size', 'flexible-table-block' ) }
 						value={ cellStylesObj?.fontSize }
@@ -233,8 +236,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						onChange={ onChangeFontSize }
 						size="__unstable-large"
 					/>
-				</FlexBlock>
-				<FlexBlock className="ftb-table-cell-settings-line-height">
+				</div>
+				<div className="ftb-table-cell-settings-line-height" style={ { flex: 1 } }>
 					<TextControl
 						label={ __( 'Cell line height', 'flexible-table-block' ) }
 						value={ cellStylesObj?.lineHeight || '' }
@@ -245,8 +248,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						onChange={ onChangeLineHeight }
 						__next40pxDefaultSize
 					/>
-				</FlexBlock>
-			</Spacer>
+				</div>
+			</Stack>
 			<UnitControl
 				className="ftb-table-cell-settings-width"
 				label={ __( 'Cell width', 'flexible-table-block' ) }
@@ -339,7 +342,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				<BaseControl.VisualLabel as="legend">
 					{ __( 'Cell alignment', 'flexible-table-block' ) }
 				</BaseControl.VisualLabel>
-				<Flex style={ { marginBottom: '-16px' } } justify="start" align="start">
+				<Stack align="flex-start" gap="sm" style={ { marginBottom: '-16px' } }>
 					<ToggleGroupControl
 						hideLabelFromVision
 						__next40pxDefaultSize
@@ -374,7 +377,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							/>
 						) ) }
 					</ToggleGroupControl>
-				</Flex>
+				</Stack>
 			</fieldset>
 			<hr />
 			<ToggleGroupControl

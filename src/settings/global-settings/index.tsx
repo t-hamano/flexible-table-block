@@ -6,7 +6,8 @@ import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 // @ts-ignore: has no exported member
 import { store as coreStore } from '@wordpress/core-data';
-import { Button, Spinner, __experimentalHStack as HStack } from '@wordpress/components';
+import { Button, Spinner } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
 import { help } from '@wordpress/icons';
 
 /**
@@ -43,7 +44,7 @@ export default function GlobalSettings() {
 
 	return (
 		<>
-			<HStack>
+			<Stack align="center" justify="space-between" gap="sm">
 				{ ! hasResolved && <Spinner /> }
 				{ hasResolved && showGlobalSetting && (
 					<Button variant="primary" onClick={ () => setIsSettingModalOpen( true ) } size="compact">
@@ -57,7 +58,7 @@ export default function GlobalSettings() {
 					label={ __( 'Help', 'flexible-table-block' ) }
 					size="compact"
 				/>
-			</HStack>
+			</Stack>
 			{ isHelpModalOpen && <HelpModal { ...{ setIsHelpModalOpen } } /> }
 			{ isSettingModalOpen && (
 				<SettingModal

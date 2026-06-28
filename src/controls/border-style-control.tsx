@@ -15,11 +15,9 @@ import {
 	Button,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-	__experimentalText as Text,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
+import { Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -65,7 +63,6 @@ export default function BorderStyleControl( {
 		...valuesProp,
 	};
 	const instanceId = useInstanceId( BorderStyleControl, 'ftb-border-style-control' );
-	const headingId = `${ instanceId }-heading`;
 
 	const isMixed =
 		allowSides &&
@@ -112,15 +109,15 @@ export default function BorderStyleControl( {
 
 	return (
 		<BaseControl className={ clsx( 'ftb-border-style-control', className ) } help={ help }>
-			<VStack aria-labelledby={ headingId } role="group">
-				<Text id={ headingId } upperCase size="11" weight="500">
+			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
+				<BaseControl.VisualLabel id={ instanceId }>
 					{ isMixed && isLinked
 						? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
 						: label }
-				</Text>
-				<HStack alignment="start" justify="space-between">
+				</BaseControl.VisualLabel>
+				<Stack align="flex-start" justify="space-between" gap="sm">
 					{ isLinked ? (
-						<HStack spacing={ 2 } justify="start">
+						<Stack align="center" gap="sm">
 							{ hasIndicator && <SideIndicatorControl /> }
 							<ToggleGroupControl
 								hideLabelFromVision
@@ -139,11 +136,11 @@ export default function BorderStyleControl( {
 									/>
 								) ) }
 							</ToggleGroupControl>
-						</HStack>
+						</Stack>
 					) : (
-						<VStack spacing={ 1 }>
+						<Stack direction="column" gap="xs">
 							{ SIDE_CONTROLS.map( ( item ) => (
-								<HStack spacing={ 2 } justify="start" key={ item.value }>
+								<Stack align="center" gap="sm" key={ item.value }>
 									{ hasIndicator && <SideIndicatorControl side={ item.value } /> }
 									<ToggleGroupControl
 										hideLabelFromVision
@@ -162,9 +159,9 @@ export default function BorderStyleControl( {
 											/>
 										) ) }
 									</ToggleGroupControl>
-								</HStack>
+								</Stack>
 							) ) }
-						</VStack>
+						</Stack>
 					) }
 					{ allowSides && (
 						<Button
@@ -175,8 +172,8 @@ export default function BorderStyleControl( {
 							style={ { marginTop: '6px' } }
 						/>
 					) }
-				</HStack>
-			</VStack>
+				</Stack>
+			</Stack>
 		</BaseControl>
 	);
 }
