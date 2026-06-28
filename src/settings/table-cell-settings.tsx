@@ -13,7 +13,6 @@ import {
 	Button,
 	SelectControl,
 	TextControl,
-	__experimentalSpacer as Spacer,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
@@ -217,19 +216,18 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 
 	return (
 		<>
-			<Spacer
-				marginBottom="4"
-				as={ Stack }
+			<Stack
 				align="center"
 				justify="flex-end"
 				gap="sm"
 				className="ftb-table-cell-settings-clear"
+				style={ { marginBottom: '16px' } }
 			>
 				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
 					{ __( 'Clear cell settings', 'flexible-table-block' ) }
 				</Button>
-			</Spacer>
-			<Spacer marginBottom="4" as={ Stack } align="center" justify="space-between" gap="sm">
+			</Stack>
+			<Stack align="center" justify="space-between" gap="sm" style={ { marginBottom: '16px' } }>
 				<div className="ftb-table-cell-settings-font-size" style={ { flex: 1 } }>
 					<UnitControl
 						label={ __( 'Cell font size', 'flexible-table-block' ) }
@@ -252,7 +250,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						__next40pxDefaultSize
 					/>
 				</div>
-			</Spacer>
+			</Stack>
 			<UnitControl
 				className="ftb-table-cell-settings-width"
 				label={ __( 'Cell width', 'flexible-table-block' ) }

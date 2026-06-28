@@ -11,12 +11,7 @@ import type { ReactElement } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import {
-	BaseControl,
-	Popover,
-	ColorPalette,
-	__experimentalSpacer as Spacer,
-} from '@wordpress/components';
+import { BaseControl, Popover, ColorPalette } from '@wordpress/components';
 import { Stack } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
@@ -79,13 +74,13 @@ export default function ColorControl( {
 			</Stack>
 			{ isPickerOpen && (
 				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-					<Spacer padding={ 4 } marginBottom={ 0 }>
+					<div style={ { padding: '16px' } }>
 						<ColorPalette
 							colors={ [ ...colors, ...colorsProp ] }
 							value={ value || '' }
 							onChange={ handleOnChange }
 						/>
-					</Spacer>
+					</div>
 				</Popover>
 			) }
 		</BaseControl>

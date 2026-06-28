@@ -10,7 +10,6 @@ import { __ } from '@wordpress/i18n';
 import {
 	Button,
 	TextControl,
-	__experimentalSpacer as Spacer,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
@@ -99,19 +98,18 @@ export default function TableCaptionSettings( {
 
 	return (
 		<>
-			<Spacer
-				marginBottom="4"
-				as={ Stack }
+			<Stack
 				align="center"
 				justify="flex-end"
 				gap="sm"
 				className="ftb-table-caption-settings-clear"
+				style={ { marginBottom: '16px' } }
 			>
 				<Button variant="link" isDestructive onClick={ onResetSettings }>
 					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
-			</Spacer>
-			<Spacer marginBottom="4" as={ Stack } align="flex-end" justify="space-between" gap="sm">
+			</Stack>
+			<Stack align="flex-end" justify="space-between" gap="sm" style={ { marginBottom: '16px' } }>
 				<div className="ftb-table-caption-settings-font-size" style={ { flex: 1 } }>
 					<UnitControl
 						label={ __( 'Caption font size', 'flexible-table-block' ) }
@@ -134,7 +132,7 @@ export default function TableCaptionSettings( {
 						__next40pxDefaultSize
 					/>
 				</div>
-			</Spacer>
+			</Stack>
 			<PaddingControl
 				className="ftb-table-caption-settings-padding"
 				label={ __( 'Caption padding', 'flexible-table-block' ) }

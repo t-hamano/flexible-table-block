@@ -20,7 +20,6 @@ import {
 	RangeControl,
 	ToggleControl,
 	__experimentalGrid as Grid,
-	__experimentalSpacer as Spacer,
 	__experimentalHeading as Heading,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -713,13 +712,10 @@ export default function SettingModal( {
 					{ noticeInfo.message }
 				</Notice>
 			) }
-			<Spacer
-				as={ Stack }
+			<Stack
 				align="center"
 				justify="space-between"
 				gap="sm"
-				marginBottom={ 0 }
-				paddingX={ 6 }
 				className="ftb-global-setting-modal__buttons"
 			>
 				<Button
@@ -745,7 +741,7 @@ export default function SettingModal( {
 								placement="top"
 								onClose={ () => setIsResetPopup( false ) }
 							>
-								<Spacer as={ Stack } direction="column" gap="lg" marginBottom={ 0 } padding={ 2 }>
+								<Stack direction="column" gap="lg" style={ { padding: '8px' } }>
 									<Text render={ <p /> }>{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
 									<Stack align="center" justify="space-between" gap="sm">
 										<Button isDestructive onClick={ handleResetOptions } size="compact">
@@ -759,12 +755,12 @@ export default function SettingModal( {
 											{ __( 'Cancel', 'flexible-table-block' ) }
 										</Button>
 									</Stack>
-								</Spacer>
+								</Stack>
 							</Popover>
 						) }
 					</Button>
 				) }
-			</Spacer>
+			</Stack>
 		</Modal>
 	);
 }

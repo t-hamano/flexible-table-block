@@ -11,13 +11,7 @@ import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import {
-	BaseControl,
-	Button,
-	Popover,
-	ColorPalette,
-	__experimentalSpacer as Spacer,
-} from '@wordpress/components';
+import { BaseControl, Button, Popover, ColorPalette } from '@wordpress/components';
 import { Stack } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
@@ -133,13 +127,13 @@ export default function BorderColorControl( {
 							/>
 							{ isPickerOpen && ! pickerIndex && (
 								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-									<Spacer padding={ 4 } marginBottom={ 0 }>
+									<div style={ { padding: '16px' } }>
 										<ColorPalette
 											colors={ colors }
 											value={ allInputValue || '' }
 											onChange={ handleOnChangeAll }
 										/>
-									</Spacer>
+									</div>
 								</Popover>
 							) }
 						</Stack>
@@ -162,13 +156,13 @@ export default function BorderColorControl( {
 											offset={ 36 }
 											onClose={ handleOnPickerClose }
 										>
-											<Spacer padding={ 4 } marginBottom={ 0 }>
+											<div style={ { padding: '16px' } }>
 												<ColorPalette
 													colors={ colors }
 													value={ values[ item.value ] || '' }
 													onChange={ ( value ) => handleOnChange( value, item.value ) }
 												/>
-											</Spacer>
+											</div>
 										</Popover>
 									) }
 								</Stack>

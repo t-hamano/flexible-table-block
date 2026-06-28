@@ -13,7 +13,6 @@ import {
 	Button,
 	SelectControl,
 	ToggleControl,
-	__experimentalSpacer as Spacer,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -244,18 +243,17 @@ export default function TableSettings( {
 
 	return (
 		<>
-			<Spacer
-				marginBottom="4"
-				as={ Stack }
+			<Stack
 				align="center"
 				justify="flex-end"
 				gap="sm"
 				className="ftb-table-settings-clear"
+				style={ { marginBottom: '16px' } }
 			>
 				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
 					{ __( 'Clear table settings', 'flexible-table-block' ) }
 				</Button>
-			</Spacer>
+			</Stack>
 			<ToggleControl
 				className="ftb-table-settings-header"
 				label={ __( 'Header section', 'flexible-table-block' ) }

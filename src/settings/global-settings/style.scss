@@ -55,6 +55,8 @@
 	left: 0;
 	width: 100%;
 	height: variables.$grid-unit-70;
+	padding-right: variables.$grid-unit-30; // 24px
+	padding-left: variables.$grid-unit-30; // 24px
 	background: colors.$white;
 	z-index: 2;
 }
