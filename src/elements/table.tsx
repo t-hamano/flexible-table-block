@@ -447,9 +447,6 @@ export default function Table( {
 								);
 
 								// Whether or not the row the current cell belongs to is selected.
-								// Coerced to a strict boolean so `aria-pressed` is always set
-								// (never `undefined`), keeping the button a toggle button so
-								// screen readers announce both pressed and unpressed states.
 								const isCurrentRowSelected = !! (
 									isRowSelected &&
 									selectedLine.sectionName === sectionName &&
