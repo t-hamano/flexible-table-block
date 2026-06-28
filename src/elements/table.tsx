@@ -519,7 +519,6 @@ export default function Table( {
 															icon={ chevronRight }
 															iconSize={ 16 }
 															aria-pressed={ isCurrentRowSelected }
-															variant={ isCurrentRowSelected ? 'primary' : undefined }
 															onClick={ ( event: MouseEvent ) => {
 																onSelectRow( sectionName, rowIndex );
 																event.stopPropagation();
@@ -562,7 +561,6 @@ export default function Table( {
 															icon={ chevronDown }
 															iconSize={ 16 }
 															aria-pressed={ isCurrentColumnSelected }
-															variant={ isCurrentColumnSelected ? 'primary' : undefined }
 															onClick={ ( event: MouseEvent ) => {
 																onSelectColumn( vColIndex );
 																event.stopPropagation();
