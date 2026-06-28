@@ -101,7 +101,6 @@ export default function TableCaptionSettings( {
 			<Stack
 				align="center"
 				justify="flex-end"
-				gap="sm"
 				className="ftb-table-caption-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>

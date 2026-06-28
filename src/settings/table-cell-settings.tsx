@@ -219,7 +219,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			<Stack
 				align="center"
 				justify="flex-end"
-				gap="sm"
 				className="ftb-table-cell-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>

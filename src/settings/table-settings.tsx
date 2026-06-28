@@ -246,7 +246,6 @@ export default function TableSettings( {
 			<Stack
 				align="center"
 				justify="flex-end"
-				gap="sm"
 				className="ftb-table-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>
