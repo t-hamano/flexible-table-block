@@ -198,12 +198,7 @@ export default function SettingModal( {
 			size="large"
 		>
 			{ isWaiting && (
-				<Stack
-					align="center"
-					justify="center"
-					gap="sm"
-					className="ftb-global-setting-modal__loading"
-				>
+				<Stack align="center" justify="center" className="ftb-global-setting-modal__loading">
 					<Spinner />
 				</Stack>
 			) }

@@ -79,8 +79,5 @@ $footer-height: variables.$grid-unit-70; // 56px
 	position: absolute;
 	inset: 0;
 	z-index: 5;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	background: rgba(colors.$black, 0.2);
 }
