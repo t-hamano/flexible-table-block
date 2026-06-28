@@ -128,7 +128,10 @@ test.describe( 'Flexible table', () => {
 			await page.keyboard.up( 'Shift' );
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
-			await editor.canvas.getByRole( 'button', { name: 'Select row' } ).nth( 2 ).click();
+			const selectRowButton = editor.canvas.getByRole( 'button', { name: 'Select row' } ).nth( 2 );
+			await expect( selectRowButton ).toHaveAttribute( 'aria-pressed', 'false' );
+			await selectRowButton.click();
+			await expect( selectRowButton ).toHaveAttribute( 'aria-pressed', 'true' );
 			await editor.canvas.getByRole( 'button', { name: 'Delete row' } ).click();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
@@ -145,7 +148,12 @@ test.describe( 'Flexible table', () => {
 			await page.keyboard.up( 'Shift' );
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
-			await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
+			const selectColumnButton = editor.canvas
+				.getByRole( 'button', { name: 'Select column' } )
+				.nth( 2 );
+			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'false' );
+			await selectColumnButton.click();
+			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'true' );
 			await editor.canvas.getByRole( 'button', { name: 'Delete column' } ).click();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );

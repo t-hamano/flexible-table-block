@@ -446,6 +446,21 @@ export default function Table( {
 										targetCell.vColIndex === vColIndex
 								);
 
+								// Whether or not the row the current cell belongs to is selected.
+								// Coerced to a strict boolean so `aria-pressed` is always set
+								// (never `undefined`), keeping the button a toggle button so
+								// screen readers announce both pressed and unpressed states.
+								const isCurrentRowSelected = !! (
+									isRowSelected &&
+									selectedLine.sectionName === sectionName &&
+									selectedLine.rowIndex === rowIndex
+								);
+
+								// Whether or not the column the current cell belongs to is selected.
+								const isCurrentColumnSelected = !! (
+									isColumnSelected && selectedLine.vColIndex === vColIndex
+								);
+
 								const cellStylesObj = convertToObject( styles );
 
 								return (
@@ -503,33 +518,26 @@ export default function Table( {
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronRight }
 															iconSize={ 16 }
-															variant={
-																isRowSelected &&
-																selectedLine.sectionName === sectionName &&
-																selectedLine.rowIndex === rowIndex
-																	? 'primary'
-																	: undefined
-															}
+															aria-pressed={ isCurrentRowSelected }
+															variant={ isCurrentRowSelected ? 'primary' : undefined }
 															onClick={ ( event: MouseEvent ) => {
 																onSelectRow( sectionName, rowIndex );
 																event.stopPropagation();
 															} }
 														/>
-														{ isRowSelected &&
-															selectedLine.sectionName === sectionName &&
-															selectedLine.rowIndex === rowIndex && (
-																<Button
-																	className="ftb-row-remover"
-																	label={ __( 'Delete row', 'flexible-table-block' ) }
-																	tabIndex={ options.focus_control_button ? 0 : -1 }
-																	size="compact"
-																	icon={ trash }
-																	onClick={ ( event: MouseEvent ) => {
-																		onDeleteRow( sectionName, rowIndex );
-																		event.stopPropagation();
-																	} }
-																/>
-															) }
+														{ isCurrentRowSelected && (
+															<Button
+																className="ftb-row-remover"
+																label={ __( 'Delete row', 'flexible-table-block' ) }
+																tabIndex={ options.focus_control_button ? 0 : -1 }
+																size="compact"
+																icon={ trash }
+																onClick={ ( event: MouseEvent ) => {
+																	onDeleteRow( sectionName, rowIndex );
+																	event.stopPropagation();
+																} }
+															/>
+														) }
 													</>
 												) }
 												{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
@@ -553,17 +561,14 @@ export default function Table( {
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronDown }
 															iconSize={ 16 }
-															variant={
-																isColumnSelected && selectedLine.vColIndex === vColIndex
-																	? 'primary'
-																	: undefined
-															}
+															aria-pressed={ isCurrentColumnSelected }
+															variant={ isCurrentColumnSelected ? 'primary' : undefined }
 															onClick={ ( event: MouseEvent ) => {
 																onSelectColumn( vColIndex );
 																event.stopPropagation();
 															} }
 														/>
-														{ isColumnSelected && selectedLine.vColIndex === vColIndex && (
+														{ isCurrentColumnSelected && (
 															<Button
 																className="ftb-column-remover"
 																label={ __( 'Delete column', 'flexible-table-block' ) }
