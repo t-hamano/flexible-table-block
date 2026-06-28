@@ -132,13 +132,9 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl
-			className={ clsx( 'ftb-border-radius-control', className ) }
-			help={ help }
-			id={ instanceId }
-			label={ label }
-		>
-			<Stack direction="column" gap="sm" role="group" id={ instanceId }>
+		<BaseControl className={ clsx( 'ftb-border-radius-control', className ) } help={ help }>
+			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
+				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
 				<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
 					<Stack align="center" gap="sm">
 						<CornerIndicatorControl corner={ corner } />

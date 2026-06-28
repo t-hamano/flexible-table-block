@@ -17,7 +17,6 @@ import {
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
 import { Stack } from '@wordpress/ui';
-import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -62,7 +61,6 @@ export default function BorderStyleControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
-	const instanceId = useInstanceId( BorderStyleControl, 'ftb-border-style-control' );
 
 	const isMixed =
 		allowSides &&
@@ -108,15 +106,13 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<BaseControl
-			className={ clsx( 'ftb-border-style-control', className ) }
-			help={ help }
-			id={ instanceId }
-			label={
-				isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label
-			}
-		>
-			<Stack direction="column" gap="sm" role="group" id={ instanceId }>
+		<BaseControl className={ clsx( 'ftb-border-style-control', className ) } help={ help }>
+			<Stack direction="column" gap="sm">
+				<BaseControl.VisualLabel>
+					{ isMixed && isLinked
+						? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }`
+						: label }
+				</BaseControl.VisualLabel>
 				<Stack align="flex-start" justify="space-between" gap="sm">
 					{ isLinked ? (
 						<Stack align="center" gap="sm">

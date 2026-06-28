@@ -66,13 +66,9 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<BaseControl
-			className={ clsx( 'ftb-color-control', className ) }
-			help={ help }
-			id={ instanceId }
-			label={ label }
-		>
-			<Stack direction="column" gap="sm" role="group" id={ instanceId }>
+		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
+			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
+				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
 				<ColorIndicatorButton
 					label={ __( 'Color', 'flexible-table-block' ) }
 					value={ value }

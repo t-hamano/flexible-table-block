@@ -104,13 +104,9 @@ export default function BorderSpacingControl( {
 	};
 
 	return (
-		<BaseControl
-			className="ftb-border-spacing-control"
-			help={ help }
-			id={ instanceId }
-			label={ label }
-		>
-			<Stack direction="column" gap="sm" role="group" id={ instanceId }>
+		<BaseControl className="ftb-border-spacing-control" help={ help }>
+			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
+				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
 				<Stack align="flex-start" justify="space-between" gap="sm">
 					{ isLinked ? (
 						<Stack align="center" gap="sm">

@@ -103,13 +103,9 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl
-			className={ clsx( 'ftb-padding-control', className ) }
-			help={ help }
-			id={ instanceId }
-			label={ label }
-		>
-			<Stack direction="column" gap="sm" role="group" id={ instanceId }>
+		<BaseControl className={ clsx( 'ftb-padding-control', className ) } help={ help }>
+			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
+				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
 				<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
 					<Stack align="center" gap="sm">
 						<SideIndicatorControl side={ side } />
