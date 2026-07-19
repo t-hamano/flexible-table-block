@@ -51,10 +51,11 @@
 		"@wordpress/notices": "5.51.0",
 		"@wordpress/scripts": "^33.0.0",
 		"clsx": "2.1.1",
+		"eslint-import-resolver-typescript": "^4.4.4",
 		"husky": "^9.1.7",
 		"lint-staged": "17.1.0",
 		"prettier": "npm:wp-prettier@3.0.3",
-		"typescript": "^7.0.2"
+		"typescript": "6.0.3"
 	},
 	"scripts": {
 		"wp-env": "wp-env",
