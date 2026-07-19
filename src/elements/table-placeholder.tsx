@@ -119,7 +119,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 				gap="sm"
 				style={ {
 					minHeight: MIN_PREVIEW_TABLE_HEIGHT,
-					//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 6.9
+					//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 7.0
 					//  and below, so each Stack sets `display: flex` inline as a fallback.
 					//  TODO: Remove once the minimum supported WordPress version is 7.1+.
 					display: 'flex',
@@ -173,13 +173,13 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 				render={ <form /> }
 				gap="sm"
 				onSubmit={ onCreateTable }
-				//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 6.9
+				//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 7.0
 				//  and below, so each Stack sets `display: flex` inline as a fallback.
 				//  TODO: Remove once the minimum supported WordPress version is 7.1+.
 				style={ { display: 'flex' } }
 			>
 				{ /*
-				 * `@wordpress/ui` styles aren't loaded into the editor iframe on WP 6.9
+				 * `@wordpress/ui` styles aren't loaded into the editor iframe on WP 7.0
 				 * and below, so each Stack sets `display: flex` inline as a fallback.
 				 * TODO: Remove once the minimum supported WordPress version is 7.1+.
 				 */ }
@@ -200,7 +200,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 					wrap="wrap"
 					align="flex-end"
 					gap="sm"
-					//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 6.9
+					//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 7.0
 					//  and below, so each Stack sets `display: flex` inline as a fallback.
 					//  TODO: Remove once the minimum supported WordPress version is 7.1+.
 					style={ { display: 'flex' } }
