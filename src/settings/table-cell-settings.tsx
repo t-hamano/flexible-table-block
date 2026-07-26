@@ -258,7 +258,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				min={ 0 }
 				onChange={ onChangeWidth }
 				size="__unstable-large"
-				__unstableInputWidth="calc(50% - 8px)"
+				__unstableInputWidth="calc(50% - 4px)"
 			/>
 			<ToggleGroupControl
 				className="ftb-table-cell-settings-percentage-width"
