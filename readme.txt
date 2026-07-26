@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 7.0
-Tested up to: 7.0
-Stable tag: 3.8.0
+Tested up to: 7.1
+Stable tag: 3.9.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,12 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 4. Responsive Support
 
 == Changelog ==
+
+= 3.9.0 =
+* Tested to WordPress 7.1
+* Drop support for WP 6.9
+* Fix: Cell width input field width
+* a11y: Announce row and column selection state to screen readers
 
 = 3.8.0 =
 * Security: Sanitize CSS values in global style settings
