@@ -91,7 +91,7 @@ test.describe( 'Flexible table cell', () => {
 		// WordPress 7.1 dropped "noreferrer" from the rel attribute of links that open in a new tab,
 		// TODO: Once the minimum supported WordPress version is bumped to 7.1, remove this branch
 		// and restore the toMatchSnapshot() assertion.
-		const rel = wpVersion === '7-1' ? 'noopener' : 'noreferrer noopener';
+		const rel = wpVersion === '7-0' ? 'noreferrer noopener' : 'noopener';
 		expect( await editor.getEditedPostContent() ).toBe( `<!-- wp:flexible-table-block/table -->
 <figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td><a href="#anchor-updated" target="_blank" rel="${ rel }">Link</a></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->` );
