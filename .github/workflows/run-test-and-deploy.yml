@@ -7,76 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - php: '8.0'
-            wp: WordPress
-          - php: '8.0'
-            wp: WordPress#7.1
-          - php: '8.0'
-            wp: WordPress#7.0.4
-
-          - php: '8.2'
-            wp: WordPress
-          - php: '8.2'
-            wp: WordPress#7.1
-          - php: '8.2'
-            wp: WordPress#7.0.4
-
-          - php: '8.4'
-            wp: WordPress
-          - php: '8.4'
-            wp: WordPress#7.1
-          - php: '8.4'
-            wp: WordPress#7.0.4
-
-          - php: '8.5'
-            wp: WordPress
-          - php: '8.5'
-            wp: WordPress#7.1
-          - php: '8.5'
-            wp: WordPress#7.0.4
-
-    name: PHP ${{ matrix.php }} / ${{ matrix.wp }} Test
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use desired version of Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-
-      - name: Npm install and build
-        run: |
-          npm ci
-          npm run build
-
-      - name: Composer install and set phpcs
-        run: |
-          composer install
-          composer phpcs
-
-      - name: Running lint check
-        run: npm run lint
-
-      - name: Running unit tests
-        run: npm run test:unit
-
-      - name: Install Playwright dependencies
-        run: npx playwright install chromium firefox webkit --with-deps
-
-      - name: Install WordPress
-        run: |
-          WP_ENV_CORE=WordPress/${{ matrix.wp }} WP_ENV_PHP_VERSION=${{ matrix.php }} npm run wp-env-test start
-          npm run wp-env-test run cli wp core version
-          npm run wp-env-test run cli wp cli info
-
-      - name: Running e2e tests
-        run: npm run test:e2e
+    uses: ./.github/workflows/test.yml
 
   deploy:
     name: Deploy to WP.org
