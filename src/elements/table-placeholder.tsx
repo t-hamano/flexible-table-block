@@ -103,11 +103,11 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						? __(
 								'Hint: Hold <code>Command</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
 								'flexible-table-block'
-							)
+						  )
 						: __(
 								'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
 								'flexible-table-block'
-							),
+						  ),
 					{ code: <code /> }
 				) }
 			</div>
