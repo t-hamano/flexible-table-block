@@ -43,11 +43,11 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 								? __(
 										'Hold <code>Command</code> key to select multiple cells. Hold <code>Shift</code> key to select the range. Selecting multiple cells is used to merge cells or to change styles of multiple cells.',
 										'flexible-table-block'
-								  )
+									)
 								: __(
 										'Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select the range. Selecting multiple cells is used to merge cells or to change styles of multiple cells.',
 										'flexible-table-block'
-								  ),
+									),
 							{ code: <code /> }
 						) }
 					</Text>

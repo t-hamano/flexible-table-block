@@ -44,9 +44,7 @@ export interface VCell extends Omit< Cell, 'rowSpan' | 'colSpan' > {
 
 // Virtual table selected line state
 export type VSelectedLine =
-	| { sectionName: SectionName; rowIndex: number }
-	| { vColIndex: number }
-	| undefined;
+	{ sectionName: SectionName; rowIndex: number } | { vColIndex: number } | undefined;
 
 // Virtual table selected cells state
 export type VSelectedCells = VCell[] | undefined;
@@ -91,23 +89,19 @@ export function createTable( {
 	footerSection: boolean;
 } ) {
 	const createSection = ( rows: number, cols: number, sectionName: SectionName ): VSection => {
-		return Array.from( { length: rows } ).map(
-			( _row, rowIndex ): VRow => ( {
-				cells: Array.from( { length: cols } ).map(
-					( _col, vColIndex ): VCell => ( {
-						content: '',
-						tag: sectionName === 'head' ? 'th' : 'td',
-						rowSpan: 1,
-						colSpan: 1,
-						sectionName,
-						rowIndex,
-						vColIndex,
-						isFirstSelected: false,
-						isHidden: false,
-					} )
-				),
-			} )
-		);
+		return Array.from( { length: rows } ).map( ( _row, rowIndex ): VRow => ( {
+			cells: Array.from( { length: cols } ).map( ( _col, vColIndex ): VCell => ( {
+				content: '',
+				tag: sectionName === 'head' ? 'th' : 'td',
+				rowSpan: 1,
+				colSpan: 1,
+				sectionName,
+				rowIndex,
+				vColIndex,
+				isFirstSelected: false,
+				isHidden: false,
+			} ) ),
+		} ) );
 	};
 
 	return {
@@ -769,25 +763,21 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 				return count + toInteger( cell.colSpan, 1 );
 			}, 0 );
 
-			const vSection = Array.from( { length: rowCount } ).map(
-				( _row, rowIndex ): VRow => ( {
-					cells: Array.from( { length: colCount } ).map(
-						( _col, vColIndex ): VCell => ( {
-							content: '',
-							tag: 'head' === sectionName ? 'th' : 'td',
-							rowSpan: 1,
-							colSpan: 1,
-							sectionName: sectionName as SectionName,
-							isHidden: false,
-							// Whether the actual cell is placed or not.
-							isFilled: false,
-							// Dummy indexes.
-							rowIndex,
-							vColIndex,
-						} )
-					),
-				} )
-			);
+			const vSection = Array.from( { length: rowCount } ).map( ( _row, rowIndex ): VRow => ( {
+				cells: Array.from( { length: colCount } ).map( ( _col, vColIndex ): VCell => ( {
+					content: '',
+					tag: 'head' === sectionName ? 'th' : 'td',
+					rowSpan: 1,
+					colSpan: 1,
+					sectionName: sectionName as SectionName,
+					isHidden: false,
+					// Whether the actual cell is placed or not.
+					isFilled: false,
+					// Dummy indexes.
+					rowIndex,
+					vColIndex,
+				} ) ),
+			} ) );
 
 			// Mapping the actual section cells on the virtual section cell.
 			section.forEach( ( row: Row, cRowIndex: number ) => {
