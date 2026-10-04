@@ -234,7 +234,6 @@ export default function SettingModal( {
 											},
 										} );
 									} }
-									size="__unstable-large"
 									__unstableInputWidth="100px"
 								/>
 							</div>
@@ -253,13 +252,11 @@ export default function SettingModal( {
 											},
 										} );
 									} }
-									size="__unstable-large"
 									__unstableInputWidth="100px"
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ToggleGroupControl
-									__next40pxDefaultSize
 									label={ __( 'Cell borders', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.table_border_collapse }
 									isDeselectable
@@ -487,7 +484,6 @@ export default function SettingModal( {
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ToggleGroupControl
-									__next40pxDefaultSize
 									label={ __( 'Cell text alignment', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_text_align }
 									isDeselectable
@@ -518,7 +514,6 @@ export default function SettingModal( {
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ToggleGroupControl
-									__next40pxDefaultSize
 									label={ __( 'Cell vertical alignment', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_vertical_align }
 									isDeselectable
@@ -578,7 +573,6 @@ export default function SettingModal( {
 									breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
 								} );
 							} }
-							__next40pxDefaultSize
 						/>
 					</Stack>
 				</Tabs.Panel>

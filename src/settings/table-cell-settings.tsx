@@ -234,7 +234,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						units={ fontSizeUnits }
 						min={ 0 }
 						onChange={ onChangeFontSize }
-						size="__unstable-large"
 					/>
 				</div>
 				<div className="ftb-table-cell-settings-line-height" style={ { flex: 1 } }>
@@ -257,12 +256,10 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				units={ cellWidthUnits }
 				min={ 0 }
 				onChange={ onChangeWidth }
-				size="__unstable-large"
 				__unstableInputWidth="calc(50% - 4px)"
 			/>
 			<ToggleGroupControl
 				className="ftb-table-cell-settings-percentage-width"
-				__next40pxDefaultSize
 				hideLabelFromVision
 				label={ __( 'Cell percentage width', 'flexible-table-block' ) }
 				isBlock
@@ -345,7 +342,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				<Stack align="flex-start" gap="sm" style={ { marginBottom: '-16px' } }>
 					<ToggleGroupControl
 						hideLabelFromVision
-						__next40pxDefaultSize
 						label={ __( 'Text alignment', 'flexible-table-block' ) }
 						value={ cellStylesObj?.textAlign }
 						isDeselectable
@@ -362,7 +358,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					</ToggleGroupControl>
 					<ToggleGroupControl
 						hideLabelFromVision
-						__next40pxDefaultSize
 						label={ __( 'Vertical alignment', 'flexible-table-block' ) }
 						value={ cellStylesObj?.verticalAlign }
 						isDeselectable
@@ -382,7 +377,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			<hr />
 			<ToggleGroupControl
 				className="ftb-table-cell-settings-tag"
-				__next40pxDefaultSize
 				label={ __( 'Cell tag', 'flexible-table-block' ) }
 				value={ targetCell.tag }
 				isBlock
@@ -440,7 +434,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 								return { label, value };
 							} ) }
 							onChange={ ( value ) => onChangeScope( value as CellScopeValue ) }
-							size="__unstable-large"
 						/>
 					) }
 				</>

@@ -148,7 +148,6 @@ export default function BorderRadiusControl( {
 									value={ allInputValue }
 									units={ borderRadiusUnits }
 									min={ 0 }
-									size="__unstable-large"
 									__unstableInputWidth="100px"
 								/>
 							</div>
@@ -172,7 +171,6 @@ export default function BorderRadiusControl( {
 									min={ 0 }
 									onFocus={ () => handleOnFocus( item.value ) }
 									onChange={ ( value ) => handleOnChange( value, item.value ) }
-									size="__unstable-large"
 									style={ { marginBottom: 0 } }
 								/>
 							</div>

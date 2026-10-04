@@ -116,7 +116,6 @@ export default function TableCaptionSettings( {
 						units={ fontSizeUnits }
 						min={ 0 }
 						onChange={ onChangeFontSize }
-						size="__unstable-large"
 					/>
 				</div>
 				<div className="ftb-table-caption-settings-line-height" style={ { flex: 1 } }>
@@ -139,7 +138,6 @@ export default function TableCaptionSettings( {
 				onChange={ onChangePadding }
 			/>
 			<ToggleGroupControl
-				__next40pxDefaultSize
 				className="ftb-table-caption-settings-position"
 				label={ __( 'Caption position', 'flexible-table-block' ) }
 				value={ captionSide }
@@ -151,7 +149,6 @@ export default function TableCaptionSettings( {
 				) ) }
 			</ToggleGroupControl>
 			<ToggleGroupControl
-				__next40pxDefaultSize
 				className="ftb-table-caption-settings-text-alignment"
 				label={ __( 'Caption text alignment', 'flexible-table-block' ) }
 				value={ captionStylesObj?.textAlign }

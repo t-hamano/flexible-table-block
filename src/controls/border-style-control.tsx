@@ -121,7 +121,6 @@ export default function BorderStyleControl( {
 							{ hasIndicator && <SideIndicatorControl /> }
 							<ToggleGroupControl
 								hideLabelFromVision
-								__next40pxDefaultSize
 								label={ label }
 								value={ allInputValue }
 								isDeselectable
@@ -144,7 +143,6 @@ export default function BorderStyleControl( {
 									{ hasIndicator && <SideIndicatorControl side={ item.value } /> }
 									<ToggleGroupControl
 										hideLabelFromVision
-										__next40pxDefaultSize
 										label={ item.label }
 										value={ values[ item.value as ValuesKey ] || undefined }
 										isDeselectable

@@ -330,7 +330,6 @@ export default function TableSettings( {
 					)
 				}
 				onChange={ onChangeSticky }
-				size="__unstable-large"
 			/>
 			<hr />
 			<UnitControl
@@ -341,11 +340,9 @@ export default function TableSettings( {
 				disabled={ tableStylesObj?.width === 'auto' }
 				min={ 0 }
 				onChange={ onChangeWidth }
-				size="__unstable-large"
 				__unstableInputWidth="50%"
 			/>
 			<ToggleGroupControl
-				__next40pxDefaultSize
 				hideLabelFromVision
 				className="ftb-table-settings-percentage-width"
 				label={ __( 'Table percentage width', 'flexible-table-block' ) }
@@ -382,11 +379,9 @@ export default function TableSettings( {
 				disabled={ tableStylesObj?.maxWidth === 'none' }
 				min={ 0 }
 				onChange={ onChangeMaxWidth }
-				size="__unstable-large"
 				__unstableInputWidth="50%"
 			/>
 			<ToggleGroupControl
-				__next40pxDefaultSize
 				hideLabelFromVision
 				className="ftb-table-settings-percentage-max-width"
 				label={ __( 'Table percentage max width', 'flexible-table-block' ) }
@@ -422,11 +417,9 @@ export default function TableSettings( {
 				units={ tableWidthUnits }
 				min={ 0 }
 				onChange={ onChangeMinWidth }
-				size="__unstable-large"
 				__unstableInputWidth="50%"
 			/>
 			<ToggleGroupControl
-				__next40pxDefaultSize
 				hideLabelFromVision
 				className="ftb-table-settings-percentage-min-width"
 				label={ __( 'Table percentage min width', 'flexible-table-block' ) }
@@ -457,7 +450,6 @@ export default function TableSettings( {
 				units={ tableHeightUnits }
 				min={ 0 }
 				onChange={ onChangeMinHeight }
-				size="__unstable-large"
 				__unstableInputWidth="50%"
 			/>
 			<hr />
@@ -502,7 +494,6 @@ export default function TableSettings( {
 			/>
 			<hr />
 			<ToggleGroupControl
-				__next40pxDefaultSize
 				className="ftb-table-settings-cell-borders"
 				label={ __( 'Cell borders', 'flexible-table-block' ) }
 				value={ tableStylesObj?.borderCollapse }
