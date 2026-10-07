@@ -117,13 +117,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 				align="center"
 				justify="center"
 				gap="sm"
-				style={ {
-					minHeight: MIN_PREVIEW_TABLE_HEIGHT,
-					//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 7.0
-					//  and below, so each Stack sets `display: flex` inline as a fallback.
-					//  TODO: Remove once the minimum supported WordPress version is 7.1+.
-					display: 'flex',
-				} }
+				style={ { minHeight: MIN_PREVIEW_TABLE_HEIGHT } }
 			>
 				<Text style={ { display: 'block', textAlign: 'center', fontWeight: 500 } }>
 					{ __( 'Preview', 'flexible-table-block' ) }
@@ -168,22 +162,8 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 					</table>
 				) }
 			</Stack>
-			<Stack
-				direction="column"
-				render={ <form /> }
-				gap="sm"
-				onSubmit={ onCreateTable }
-				//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 7.0
-				//  and below, so each Stack sets `display: flex` inline as a fallback.
-				//  TODO: Remove once the minimum supported WordPress version is 7.1+.
-				style={ { display: 'flex' } }
-			>
-				{ /*
-				 * `@wordpress/ui` styles aren't loaded into the editor iframe on WP 7.0
-				 * and below, so each Stack sets `display: flex` inline as a fallback.
-				 * TODO: Remove once the minimum supported WordPress version is 7.1+.
-				 */ }
-				<Stack wrap="wrap" align="center" gap="sm" style={ { display: 'flex' } }>
+			<Stack direction="column" render={ <form /> } gap="sm" onSubmit={ onCreateTable }>
+				<Stack wrap="wrap" align="center" gap="sm">
 					<ToggleControl
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
@@ -196,15 +176,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 					/>
 				</Stack>
 
-				<Stack
-					wrap="wrap"
-					align="flex-end"
-					gap="sm"
-					//  `@wordpress/ui` styles aren't loaded into the editor iframe on WP 7.0
-					//  and below, so each Stack sets `display: flex` inline as a fallback.
-					//  TODO: Remove once the minimum supported WordPress version is 7.1+.
-					style={ { display: 'flex' } }
-				>
+				<Stack wrap="wrap" align="flex-end" gap="sm">
 					<TextControl
 						label={ __( 'Column count', 'flexible-table-block' ) }
 						className="ftb-placeholder__input"
