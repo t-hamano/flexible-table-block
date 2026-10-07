@@ -34,10 +34,6 @@ test.describe( 'Block Support', () => {
 		// Show all typography controls.
 		await page.getByRole( 'button', { name: 'Typography options' } ).click();
 		const typographyMenu = page.getByRole( 'menu', { name: 'Typography options' } );
-		// The "Color" control is only present in the typography panel on WordPress 7.1+
-		// and is left out here.
-		// TODO: Once the minimum supported WordPress version is bumped to 7.1, add 'Color'
-		// to this list and update the snapshot.
 		for ( const control of [
 			'Font',
 			'Appearance',

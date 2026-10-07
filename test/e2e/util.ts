@@ -72,10 +72,4 @@ export default class FlexibleTableBlockUtils {
 
 		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 	}
-
-	async getWpVersion() {
-		const bodyClassNames = ( await this.page.locator( 'body' ).getAttribute( 'class' ) ) ?? '';
-		const matches = bodyClassNames.match( /branch-([0-9]*-*[0-9])/ );
-		return matches?.[ 1 ];
-	}
 }

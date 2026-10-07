@@ -59,7 +59,6 @@ test.describe( 'Flexible table cell', () => {
 		pageUtils,
 		fsbUtils,
 	} ) => {
-		const wpVersion = await fsbUtils.getWpVersion();
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).fill( 'Link' );
 		await pageUtils.pressKeys( 'primary+a' );
@@ -88,13 +87,6 @@ test.describe( 'Flexible table cell', () => {
 		await page.getByRole( 'checkbox', { name: 'Open in new tab' } ).click();
 		await page.getByRole( 'button', { name: 'Apply', exact: true } ).click();
 
-		// WordPress 7.1 dropped "noreferrer" from the rel attribute of links that open in a new tab.
-		// Note that the "branch-" body class casts the version to a float, so WordPress 7.0.x is "7".
-		// TODO: Once the minimum supported WordPress version is bumped to 7.1, remove this branch
-		// and restore the toMatchSnapshot() assertion.
-		const rel = wpVersion === '7' ? 'noreferrer noopener' : 'noopener';
-		expect( await editor.getEditedPostContent() ).toBe( `<!-- wp:flexible-table-block/table -->
-<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td><a href="#anchor-updated" target="_blank" rel="${ rel }">Link</a></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:flexible-table-block/table -->` );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 } );
