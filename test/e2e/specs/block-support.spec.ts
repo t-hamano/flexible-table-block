@@ -23,12 +23,7 @@ test.describe( 'Block Support', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'typography settings should be applied', async ( {
-		editor,
-		page,
-		pageUtils,
-		fsbUtils,
-	} ) => {
+	test( 'typography settings should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the sidebar.
 		await editor.openDocumentSettingsSidebar();
@@ -68,9 +63,10 @@ test.describe( 'Block Support', () => {
 				name: 'Appearance',
 			} )
 			.click();
-		await page.getByRole( 'listbox', { name: 'Appearance' } );
-		await pageUtils.pressKeys( 'ArrowDown', { times: 5 } );
-		await pageUtils.pressKeys( 'Enter' );
+		await page
+			.getByRole( 'listbox', { name: 'Appearance' } )
+			.getByRole( 'option', { name: 'Medium', exact: true } )
+			.click();
 		// Change line height.
 		await page.getByRole( 'spinbutton', { name: 'Line height' } ).fill( '3' );
 		// Change letter case.
