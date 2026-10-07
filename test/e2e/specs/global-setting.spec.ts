@@ -92,7 +92,6 @@ test.describe( 'Global Setting', () => {
 		await page.getByRole( 'button', { name: 'Align bottom' } ).click();
 		// Save settings.
 		await page.getByRole( 'button', { name: 'Save settings' } ).click();
-		await page.locator( '.ftb-global-setting-modal__notice' );
 		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
 			'Global setting saved.'
 		);

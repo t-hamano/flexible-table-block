@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { describe, it, expect } from 'vitest';
+
+/**
  * Internal dependencies
  */
 import { convertToInline, convertToObject } from '../style-converter';
