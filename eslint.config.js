@@ -17,6 +17,25 @@ module.exports = [
 			'@wordpress/no-unsafe-wp-apis': 'off',
 			'@wordpress/no-setting-ds-tokens': 'off',
 			'@wordpress/no-unknown-ds-tokens': 'off',
+			'@wordpress/use-import-as': [
+				'error',
+				{
+					'@wordpress/block-editor': {
+						__experimentalGetColorClassesAndStyles: 'getColorClassesAndStyles',
+						__experimentalUseColorProps: 'useColorProps',
+					},
+					'@wordpress/components': {
+						__experimentalGrid: 'Grid',
+						__experimentalHeading: 'Heading',
+						__experimentalParseQuantityAndUnitFromRawValue: 'parseQuantityAndUnitFromRawValue',
+						__experimentalToggleGroupControl: 'ToggleGroupControl',
+						__experimentalToggleGroupControlOption: 'ToggleGroupControlOption',
+						__experimentalToggleGroupControlOptionIcon: 'ToggleGroupControlOptionIcon',
+						__experimentalUnitControl: 'UnitControl',
+						__experimentalUseCustomUnits: 'useCustomUnits',
+					},
+				},
+			],
 			'@wordpress/i18n-text-domain': [
 				'error',
 				{
