@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-const jestPlugin = require( 'eslint-plugin-jest' );
-
-/**
  * WordPress dependencies
  */
 const defaultConfig = require( '@wordpress/eslint-plugin' );
@@ -42,20 +37,18 @@ module.exports = [
 			],
 		},
 	},
-	{
-		...jestPlugin.configs[ 'flat/recommended' ],
-		files: [
-			'**/test/**/*.ts',
-			'**/test/**/*.js',
-			'**/__tests__/**/*.ts',
-			'**/__tests__/**/*.js',
-			'**/*.spec.ts',
-			'**/*.spec.js',
-		],
-	},
+	...defaultConfig.configs[ 'test-unit' ].map( ( config ) => ( {
+		...config,
+		files: [ 'src/**/test/**/*.js', 'src/**/test/**/*.ts' ],
+	} ) ),
 	...defaultConfig.configs[ 'test-e2e' ].map( ( config ) => ( {
 		...config,
 		files: [ 'test/e2e/**/*.js', 'test/e2e/**/*.ts' ],
+		settings: {
+			...config.settings,
+			// Jest is no longer installed, so eslint-plugin-jest cannot detect its version.
+			jest: { version: 30 },
+		},
 		rules: {
 			...config.rules,
 			'jest/expect-expect': 'off',

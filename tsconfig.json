@@ -18,7 +18,7 @@
 		"moduleResolution": "bundler",
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
-		"types": [ "jest", "node" ],
+		"types": [ "node" ],
 		"skipLibCheck": true
 	},
 	"include": [ "src/**/*", "src/**/*.json" ],
