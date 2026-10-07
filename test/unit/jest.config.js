@@ -1,10 +1,8 @@
-/**
- * WordPress dependencies
- */
-const config = require( '@wordpress/scripts/config/jest-unit.config.js' );
-
 module.exports = {
-	...config,
 	rootDir: '../../',
-	testPathIgnorePatterns: [ '<rootDir>/test/e2e' ],
+	preset: '@wordpress/jest-preset-default',
+	transform: {
+		'\\.[jt]sx?$': [ 'babel-jest', { presets: [ '@wordpress/babel-preset-default' ] } ],
+	},
+	testPathIgnorePatterns: [ '<rootDir>/test/e2e', '/node_modules/' ],
 };

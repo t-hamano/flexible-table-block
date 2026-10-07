@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+const jestPlugin = require( 'eslint-plugin-jest' );
+
+/**
  * WordPress dependencies
  */
 const defaultConfig = require( '@wordpress/eslint-plugin' );
@@ -37,8 +42,8 @@ module.exports = [
 			],
 		},
 	},
-	...defaultConfig.configs[ 'test-unit' ].map( ( config ) => ( {
-		...config,
+	{
+		...jestPlugin.configs[ 'flat/recommended' ],
 		files: [
 			'**/test/**/*.ts',
 			'**/test/**/*.js',
@@ -47,7 +52,7 @@ module.exports = [
 			'**/*.spec.ts',
 			'**/*.spec.js',
 		],
-	} ) ),
+	},
 	...defaultConfig.configs[ 'test-e2e' ].map( ( config ) => ( {
 		...config,
 		files: [ 'test/e2e/**/*.js', 'test/e2e/**/*.ts' ],
