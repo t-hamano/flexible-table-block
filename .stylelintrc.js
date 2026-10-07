@@ -10,7 +10,6 @@ module.exports = {
 	],
 	rules: {
 		'no-descending-specificity': null,
-		'font-weight-notation': null,
 		'selector-class-pattern': null,
 		'value-keyword-case': [
 			'lower',
