@@ -41,17 +41,11 @@ module.exports = [
 		...config,
 		files: [ 'src/**/test/**/*.js', 'src/**/test/**/*.ts' ],
 	} ) ),
-	...defaultConfig.configs[ 'test-e2e' ].map( ( config ) => ( {
+	...defaultConfig.configs[ 'test-playwright' ].map( ( config ) => ( {
 		...config,
 		files: [ 'test/e2e/**/*.js', 'test/e2e/**/*.ts' ],
-		settings: {
-			...config.settings,
-			// Jest is no longer installed, so eslint-plugin-jest cannot detect its version.
-			jest: { version: 30 },
-		},
 		rules: {
 			...config.rules,
-			'jest/expect-expect': 'off',
 			'react-hooks/rules-of-hooks': 'off',
 		},
 	} ) ),

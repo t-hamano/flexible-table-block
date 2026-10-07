@@ -74,11 +74,7 @@ export default class FlexibleTableBlockUtils {
 	}
 
 	async getWpVersion() {
-		const body = await this.page.$( 'body' );
-		if ( ! body ) {
-			throw new Error( 'Could not find body element' );
-		}
-		const bodyClassNames = await ( await body.getProperty( 'className' ) ).jsonValue();
+		const bodyClassNames = ( await this.page.locator( 'body' ).getAttribute( 'class' ) ) ?? '';
 		const matches = bodyClassNames.match( /branch-([0-9]*-*[0-9])/ );
 		return matches?.[ 1 ];
 	}

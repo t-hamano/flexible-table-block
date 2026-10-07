@@ -91,7 +91,7 @@ test.describe( 'Flexible table', () => {
 			await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 0 ).click();
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			const mergeButton = page.getByRole( 'menuitem', { name: 'Merge cells' } );
-			expect( mergeButton ).toBeDisabled();
+			await expect( mergeButton ).toBeDisabled();
 		} );
 
 		test( 'allows all cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
