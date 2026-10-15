@@ -9,7 +9,7 @@ import type { Dispatch, SetStateAction } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { createInterpolateElement, useState } from '@wordpress/element';
-import { useDispatch } from '@wordpress/data';
+import { useDispatch, useRegistry } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
@@ -58,6 +58,12 @@ type Props = {
 	setIsSettingModalOpen: Dispatch< SetStateAction< boolean > >;
 };
 
+interface EditorStyle {
+	css?: string;
+	flexibleTableBlock?: boolean;
+	[ key: string ]: unknown;
+}
+
 interface NoticeInfo {
 	// Mirrors the `status` prop of `@wordpress/components` Notice, whose type is
 	// not exposed through the package's `exports` map.
@@ -76,6 +82,7 @@ export default function SettingModal( {
 	const [ currentOptions, setCurrentOptions ] = useState< StoreOptions >( options );
 
 	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
+	const registry = useRegistry();
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
 	// Force focus on the modal as it loses focus when saving or restoring settings.
@@ -86,32 +93,33 @@ export default function SettingModal( {
 		}
 	}
 
-	// Update the inline CSS.
+	// Update the block CSS in the editor styles.
 	function updateInlineCss( css: string ) {
-		// Update the inline CSS of the global document.
-		const styleSheet = document.getElementById( 'flexible-table-block-editor-inline-css' );
+		const isBlockStyle = ( style: EditorStyle ) => style.flexibleTableBlock;
+		const replaceBlockStyle = ( styles: EditorStyle[] ) =>
+			styles.map( ( style ) => ( isBlockStyle( style ) ? { ...style, css } : style ) );
 
-		if ( styleSheet ) {
-			styleSheet.textContent = css;
+		// Post editor and site editor.
+		const editorStyles: EditorStyle[] | undefined = registry
+			.select( 'core/editor' )
+			?.getEditorSettings()?.styles;
+
+		if ( editorStyles?.some( isBlockStyle ) ) {
+			registry
+				.dispatch( 'core/editor' )
+				.updateEditorSettings( { styles: replaceBlockStyle( editorStyles ) } );
+			return;
 		}
 
-		// Update the inline CSS of the iframe editor instance document.
-		const iframeEditor = document.querySelectorAll( 'iframe' );
+		// Other block editors, such as the widget editor.
+		const blockEditorStyles: EditorStyle[] | undefined = registry
+			.select( 'core/block-editor' )
+			?.getSettings()?.styles;
 
-		for ( let i = 0; i < iframeEditor.length; i++ ) {
-			const iframeWindow = iframeEditor[ i ].contentWindow;
-
-			if ( ! iframeWindow ) {
-				continue;
-			}
-
-			const iframeStyleSheet = iframeWindow.document.getElementById(
-				'flexible-table-block-editor-inline-css'
-			);
-
-			if ( iframeStyleSheet ) {
-				iframeStyleSheet.textContent = css;
-			}
+		if ( blockEditorStyles?.some( isBlockStyle ) ) {
+			registry
+				.dispatch( 'core/block-editor' )
+				.updateSettings( { styles: replaceBlockStyle( blockEditorStyles ) } );
 		}
 	}
 

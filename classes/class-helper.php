@@ -10,6 +10,15 @@ namespace Flexible_Table_Block;
 class Helper {
 
 	/**
+	 * Get minified block CSS for the block editor
+	 *
+	 * @return string
+	 */
+	public static function get_editor_block_css() {
+		return self::minify_css( self::get_block_css( '.editor-styles-wrapper ' ) );
+	}
+
+	/**
 	 * Get default block style
 	 *
 	 * @return string

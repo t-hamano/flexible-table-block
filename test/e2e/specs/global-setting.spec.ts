@@ -19,7 +19,7 @@ test.describe( 'Global Setting', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'should output inline style reflecting the settings', async ( {
+	test( 'should update editor styles reflecting the settings', async ( {
 		editor,
 		page,
 		pageUtils,
@@ -96,8 +96,11 @@ test.describe( 'Global Setting', () => {
 			'Global setting saved.'
 		);
 		const styleTagContent = await page.evaluate( () => {
-			const styleTag = document.querySelector( 'style#flexible-table-block-editor-inline-css' );
-			return styleTag ? styleTag.textContent : '';
+			const blockStyle = window.wp.data
+				.select( 'core/editor' )
+				.getEditorSettings()
+				.styles.find( ( style ) => style.flexibleTableBlock );
+			return blockStyle ? blockStyle.css : '';
 		} );
 
 		expect( styleTagContent ).toBe(
@@ -113,8 +116,11 @@ test.describe( 'Global Setting', () => {
 		await page.locator( '.ftb-global-setting-modal__notice ' ).getByRole( 'button' ).click();
 
 		const defaultStyleTagContent = await page.evaluate( () => {
-			const styleTag = document.querySelector( 'style#flexible-table-block-editor-inline-css' );
-			return styleTag ? styleTag.textContent : '';
+			const blockStyle = window.wp.data
+				.select( 'core/editor' )
+				.getEditorSettings()
+				.styles.find( ( style ) => style.flexibleTableBlock );
+			return blockStyle ? blockStyle.css : '';
 		} );
 
 		expect( defaultStyleTagContent ).toBe(

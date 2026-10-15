@@ -23,6 +23,9 @@ class Enqueue {
 		if ( is_admin() ) {
 			add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_editor_assets' ) );
 		}
+
+		// Add block CSS to the block editor styles.
+		add_filter( 'block_editor_settings_all', array( $this, 'add_editor_styles' ) );
 	}
 
 	/**
@@ -71,11 +74,26 @@ class Enqueue {
 			array(),
 			filemtime( FTB_PATH . '/build/index.css' ),
 		);
+	}
 
-		$block_css = Helper::get_block_css( '.editor-styles-wrapper ' );
-		$css       = Helper::minify_css( $block_css );
+	/**
+	 * Add block CSS to the block editor styles
+	 *
+	 * Styles passed via the editor settings are rendered inside the editor canvas,
+	 * whether it is iframed or not, and can be updated from the client side.
+	 * A non-`theme` `__unstableType` keeps them applied even if theme styles are disabled.
+	 *
+	 * @param array $settings Block editor settings.
+	 * @return array
+	 */
+	public function add_editor_styles( $settings ) {
+		$settings['styles'][] = array(
+			'css'                => Helper::get_editor_block_css(),
+			'__unstableType'     => 'plugin',
+			'flexibleTableBlock' => true,
+		);
 
-		wp_add_inline_style( 'flexible-table-block-editor', $css );
+		return $settings;
 	}
 }
 
