@@ -73,6 +73,21 @@ describe( 'style-converter', () => {
 			} );
 		} );
 
+		it( 'should keep raw url() contents as is', () => {
+			expect(
+				convertToObject( 'background:url(https://example.test/a{b/*c);color:red' )
+			).toStrictEqual( {
+				background: 'url(https://example.test/a{b/*c)',
+				color: 'red',
+			} );
+		} );
+
+		it( 'should not merge tokens separated by a comment', () => {
+			expect( convertToObject( 'font-family:foo/**/bar' ) ).toStrictEqual( {
+				fontFamily: 'foo bar',
+			} );
+		} );
+
 		it( 'should keep custom properties intact', () => {
 			expect( convertToObject( '--my-color:red' ) ).toStrictEqual( {
 				'--my-color': 'red',

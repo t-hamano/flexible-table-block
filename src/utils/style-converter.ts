@@ -6,7 +6,9 @@ import type { Properties } from 'csstype';
 /**
  * Split inline CSS styles into declarations, ignoring semicolons inside
  * brackets (e.g. `url()`), quotes, comments, or escaped with a backslash.
- * Comments are removed.
+ * Comments outside parentheses are replaced with a space. Inside parentheses,
+ * only nested parentheses and quotes are tracked, so that the raw contents
+ * of `url()` are kept as is.
  *
  * @param inlineStyles Inline CSS styles.
  * @return CSS declarations.
@@ -14,7 +16,8 @@ import type { Properties } from 'csstype';
 function splitDeclarations( inlineStyles: string ): string[] {
 	const declarations: string[] = [];
 	let current = '';
-	let depth = 0;
+	let parenDepth = 0;
+	let blockDepth = 0;
 	let quote: string | null = null;
 
 	for ( let i = 0; i < inlineStyles.length; i++ ) {
@@ -29,17 +32,24 @@ function splitDeclarations( inlineStyles: string ): string[] {
 			if ( char === quote ) {
 				quote = null;
 			}
+		} else if ( char === '"' || char === "'" ) {
+			quote = char;
+		} else if ( char === '(' ) {
+			parenDepth++;
+		} else if ( char === ')' ) {
+			parenDepth = Math.max( 0, parenDepth - 1 );
+		} else if ( parenDepth > 0 ) {
+			// Inside parentheses, other characters have no special meaning.
 		} else if ( char === '/' && inlineStyles[ i + 1 ] === '*' ) {
 			const commentEnd = inlineStyles.indexOf( '*/', i + 2 );
 			i = commentEnd === -1 ? inlineStyles.length : commentEnd + 1;
+			current += ' ';
 			continue;
-		} else if ( char === '"' || char === "'" ) {
-			quote = char;
-		} else if ( '([{'.includes( char ) ) {
-			depth++;
-		} else if ( ')]}'.includes( char ) ) {
-			depth = Math.max( 0, depth - 1 );
-		} else if ( char === ';' && depth === 0 ) {
+		} else if ( char === '{' || char === '[' ) {
+			blockDepth++;
+		} else if ( char === '}' || char === ']' ) {
+			blockDepth = Math.max( 0, blockDepth - 1 );
+		} else if ( char === ';' && blockDepth === 0 ) {
 			declarations.push( current );
 			current = '';
 			continue;
