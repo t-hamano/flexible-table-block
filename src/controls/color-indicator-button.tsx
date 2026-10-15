@@ -12,6 +12,8 @@ import { __ } from '@wordpress/i18n';
 
 type Props = {
 	label: string;
+	id?: string;
+	'aria-labelledby'?: string;
 	value?: Property.Color;
 	isNone: boolean;
 	isTransparent: boolean;
@@ -21,6 +23,8 @@ type Props = {
 
 export default function ColorIndicatorButton( {
 	label,
+	id,
+	'aria-labelledby': ariaLabelledby,
 	value,
 	isNone,
 	isTransparent,
@@ -30,6 +34,8 @@ export default function ColorIndicatorButton( {
 	return (
 		<Button
 			label={ label }
+			id={ id }
+			aria-labelledby={ ariaLabelledby }
 			className={ clsx( 'ftb-color-indicator-button', {
 				'is-none': isNone,
 				'is-mixed': isMixed,

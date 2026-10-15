@@ -63,6 +63,7 @@ export default function ColorControl( {
 				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
 				<ColorIndicatorButton
 					label={ __( 'Color', 'flexible-table-block' ) }
+					aria-labelledby={ instanceId }
 					value={ value }
 					onClick={ handleOnPickerOpen }
 					isNone={ ! value }

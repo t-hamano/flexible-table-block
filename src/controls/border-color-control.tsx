@@ -116,6 +116,8 @@ export default function BorderColorControl( {
 							<SideIndicatorControl />
 							<ColorIndicatorButton
 								label={ __( 'All', 'flexible-table-block' ) }
+								id={ `${ instanceId }-all` }
+								aria-labelledby={ `${ instanceId } ${ instanceId }-all` }
 								value={ allInputValue }
 								onClick={ () => handleOnPickerOpen( undefined ) }
 								isNone={ ! allInputValue && ! isMixed }
@@ -141,6 +143,8 @@ export default function BorderColorControl( {
 									<SideIndicatorControl side={ item.value } />
 									<ColorIndicatorButton
 										label={ item.label }
+										id={ `${ instanceId }-${ item.value }` }
+										aria-labelledby={ `${ instanceId } ${ instanceId }-${ item.value }` }
 										value={ values[ item.value ] }
 										onClick={ () => handleOnPickerOpen( index ) }
 										isNone={ ! values[ item.value ] }
