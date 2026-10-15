@@ -1,6 +1,10 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/wp-env.json",
-	"plugins": [ "." ],
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/wordpress-beta-tester.zip",
+		"https://downloads.wordpress.org/plugin/wp-downgrade.zip"
+	],
 	"testsEnvironment": false,
 	"port": 8889,
 	"phpmyadminPort": 9001,
