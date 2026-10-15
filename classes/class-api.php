@@ -67,7 +67,7 @@ class Api {
 	 */
 	public function get_options() {
 		$options              = Settings::get_options();
-		$options['block_css'] = Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) );
+		$options['block_css'] = Helper::minify_css( Helper::get_block_css() );
 		return rest_ensure_response( $options );
 	}
 
@@ -143,7 +143,7 @@ class Api {
 			array(
 				'status'    => 'success',
 				'message'   => __( 'Global setting saved.', 'flexible-table-block' ),
-				'block_css' => Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) ),
+				'block_css' => Helper::minify_css( Helper::get_block_css() ),
 			)
 		);
 	}
@@ -163,7 +163,7 @@ class Api {
 				'options'   => Settings::get_options(),
 				'status'    => 'success',
 				'message'   => __( 'Global setting restored.', 'flexible-table-block' ),
-				'block_css' => Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) ),
+				'block_css' => Helper::minify_css( Helper::get_block_css() ),
 			)
 		);
 	}

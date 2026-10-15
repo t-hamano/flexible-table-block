@@ -45,10 +45,7 @@ export default function ColorControl( {
 	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
 
 	const colors = useSelect( ( select ) => {
-		const settings = select(
-			blockEditorStore
-			// @ts-ignore
-		).getSettings();
+		const settings = select( blockEditorStore ).getSettings();
 		return settings?.colors ?? [];
 	}, [] );
 

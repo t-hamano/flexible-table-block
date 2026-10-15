@@ -579,7 +579,7 @@ export function splitMergedCells( vTable: VTable, selectedCells: VSelectedCells 
  * @param selectedCell Current selected cells.
  * @return New virtual table state.
  */
-export function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
+function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = selectedCell;
 
 	const vSection = vTable[ sectionName as SectionName ];
@@ -725,7 +725,7 @@ export function isEmptySection( section: VSection ): boolean {
  * @param selectedCells Current selected cells.
  * @return True if multiple sections are selected, false otherwise.
  */
-export function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
+function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
 	const selectedSections = selectedCells.reduce( ( result: SectionName[], selectedCell ) => {
 		if ( ! result.includes( selectedCell.sectionName as SectionName ) ) {
 			result.push( selectedCell.sectionName as SectionName );
@@ -895,7 +895,7 @@ export function toVirtualRows( vTable: VTable ): VRow[] {
  * @param selectedCells Current selected cells.
  * @return Minimum / maximum virtual indexes.
  */
-export function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes {
+function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes {
 	return selectedCells.reduce(
 		( { minRowIndex, maxRowIndex, minColIndex, maxColIndex }, cell ) => {
 			const VRowIndex = cell.rowSpan > 1 ? cell.rowIndex + cell.rowSpan - 1 : cell.rowIndex;

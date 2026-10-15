@@ -158,6 +158,18 @@ test.describe( 'Flexible table', () => {
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 
+		test( 'allows to select and deselect the first column', async ( { editor, fsbUtils } ) => {
+			await fsbUtils.createFlexibleTableBlock();
+			const selectColumnButton = editor.canvas
+				.getByRole( 'button', { name: 'Select column' } )
+				.nth( 0 );
+			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'false' );
+			await selectColumnButton.click();
+			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'true' );
+			await selectColumnButton.click();
+			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'false' );
+		} );
+
 		test( 'disallows to delete the only row in the table body', async ( {
 			editor,
 			page,
