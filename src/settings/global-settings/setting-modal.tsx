@@ -99,13 +99,20 @@ export default function SettingModal( {
 		const iframeEditor = document.querySelectorAll( 'iframe' );
 
 		for ( let i = 0; i < iframeEditor.length; i++ ) {
-			const iframeWindow = iframeEditor[ i ].contentWindow;
+			let iframeDocument: Document | null | undefined;
 
-			if ( ! iframeWindow ) {
+			// Accessing the document of a cross-origin iframe throws a `SecurityError`.
+			try {
+				iframeDocument = iframeEditor[ i ].contentWindow?.document;
+			} catch {
 				continue;
 			}
 
-			const iframeStyleSheet = iframeWindow.document.getElementById(
+			if ( ! iframeDocument ) {
+				continue;
+			}
+
+			const iframeStyleSheet = iframeDocument.getElementById(
 				'flexible-table-block-editor-inline-css'
 			);
 
@@ -119,7 +126,6 @@ export default function SettingModal( {
 	const handleUpdateOptions = () => {
 		setIsWaiting( true );
 		setNoticeInfo( undefined );
-		setStoreOptions( currentOptions );
 
 		apiFetch< ApiResponse >( {
 			path: REST_API_ROUTE,
@@ -127,31 +133,34 @@ export default function SettingModal( {
 			data: currentOptions,
 		} )
 			.then( ( response ) => {
-				focusModal();
-				setIsWaiting( false );
-
 				// Show notice message.
 				if ( response.status && response.message ) {
 					setNoticeInfo( {
-						status: response?.status,
-						message: response?.message,
+						status: response.status,
+						message: response.message,
 					} );
 				}
 
-				if ( ! response.block_css ) {
+				if ( response.status === 'error' ) {
 					return;
 				}
 
-				// Update inline CSS.
-				updateInlineCss( response.block_css );
+				// Update store options only after the options are saved.
+				setStoreOptions( currentOptions );
+
+				if ( response.block_css ) {
+					updateInlineCss( response.block_css );
+				}
 			} )
-			.catch( ( response ) => {
-				focusModal();
-				setIsWaiting( false );
+			.catch( ( error ) => {
 				setNoticeInfo( {
 					status: 'error',
-					message: response.message,
+					message: error?.message,
 				} );
+			} )
+			.finally( () => {
+				focusModal();
+				setIsWaiting( false );
 			} );
 	};
 
@@ -163,31 +172,36 @@ export default function SettingModal( {
 		apiFetch< ApiResponse >( {
 			path: REST_API_ROUTE,
 			method: 'DELETE',
-		} ).then( ( response ) => {
-			focusModal();
-			setIsWaiting( false );
+		} )
+			.then( ( response ) => {
+				// Show notice message.
+				if ( response.status && response.message ) {
+					setNoticeInfo( {
+						status: response.status,
+						message: response.message,
+					} );
+				}
 
-			// Show notice message.
-			if ( response.status && response.message ) {
+				// Update options.
+				if ( response.options ) {
+					setCurrentOptions( response.options );
+					setStoreOptions( response.options );
+				}
+
+				if ( response.block_css ) {
+					updateInlineCss( response.block_css );
+				}
+			} )
+			.catch( ( error ) => {
 				setNoticeInfo( {
-					status: response.status,
-					message: response.message,
+					status: 'error',
+					message: error?.message,
 				} );
-			}
-
-			// Update options.
-			if ( response.options ) {
-				setCurrentOptions( response.options );
-				setStoreOptions( response.options );
-			}
-
-			if ( ! response.block_css ) {
-				return;
-			}
-
-			// Update inline CSS.
-			updateInlineCss( response.block_css );
-		} );
+			} )
+			.finally( () => {
+				focusModal();
+				setIsWaiting( false );
+			} );
 	};
 
 	return (
