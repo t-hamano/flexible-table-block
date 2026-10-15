@@ -81,7 +81,7 @@ export default function TableCaptionSettings( {
 		if ( isAllowedValue( value ) ) {
 			const newStylesObj = {
 				...captionStylesObj,
-				textAlign: value === captionStylesObj.textAlign ? undefined : value,
+				textAlign: value,
 			};
 			setAttributes( {
 				captionStyles: convertToInline( newStylesObj ),
