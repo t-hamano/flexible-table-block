@@ -96,7 +96,8 @@ export default function Table( {
 	const tableRef = useRef( null );
 	const { createWarningNotice } = useDispatch( noticesStore );
 
-	let isTabMove = false;
+	// Use a ref so the flag survives re-renders and the focus handler reads the latest value.
+	const isTabMove = useRef( false );
 
 	const isRowSelected = selectedLine && 'sectionName' in selectedLine && 'rowIndex' in selectedLine;
 	const isColumnSelected = selectedLine && 'vColIndex' in selectedLine;
@@ -242,8 +243,6 @@ export default function Table( {
 				return;
 			}
 			// Focus on the next cell.
-			isTabMove = true;
-
 			const tableElement: HTMLTableElement = tableRef.current;
 			const { ownerDocument } = tableElement;
 			const { activeElement } = ownerDocument;
@@ -288,6 +287,7 @@ export default function Table( {
 
 			event.preventDefault();
 			setIsSelectMode( false );
+			isTabMove.current = true;
 			focusbleElement.focus();
 
 			// Select all text if the next cell is not empty.
@@ -601,13 +601,14 @@ export default function Table( {
 											key={ vColIndex }
 											value={ content }
 											onChange={ ( value ) => onChangeCellContent( value, cell ) }
-											{ ...( ( ! isSelectMode || isTabMove ) && {
-												onFocus: () => {
-													isTabMove = false;
-													setSelectedLine( undefined );
-													setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
-												},
-											} ) }
+											onFocus={ () => {
+												if ( isSelectMode && ! isTabMove.current ) {
+													return;
+												}
+												isTabMove.current = false;
+												setSelectedLine( undefined );
+												setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
+											} }
 											aria-label={ CELL_ARIA_LABEL[ sectionName as SectionName ] }
 										/>
 										{ isSelected &&
