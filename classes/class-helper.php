@@ -14,8 +14,9 @@ class Helper {
 	 *
 	 * @return string
 	 */
-	public static function get_block_css( $prefix = '' ) {
-		$selector = "{$prefix}." . FTB_BLOCK_CLASS;
+	public static function get_block_css() {
+		// The doubled class increases specificity. The block editor scopes this CSS by itself.
+		$selector = '.' . FTB_BLOCK_CLASS . '.' . FTB_BLOCK_CLASS;
 
 		// CSS selectors.
 		$styles = array(
