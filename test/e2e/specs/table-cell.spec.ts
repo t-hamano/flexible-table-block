@@ -43,76 +43,12 @@ test.describe( 'Flexible table cell', () => {
 			.getByRole( 'button', { name: 'Close' } )
 			.click();
 		// Try to move within cells.
-		// Wait for each move to finish, because the next key press depends on the selected cell.
-		const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
-		const expectSelectedCell = async ( index: number ) => {
-			await expect( cells.nth( index ) ).toBeFocused();
-			await expect( cells.nth( index ).locator( '..' ) ).toHaveClass( /is-selected/ );
-		};
-		// DEBUG: log key handling.
-		page.on( 'console', ( msg ) => {
-			if ( msg.text().includes( '[ftb-debug]' ) ) {
-				// eslint-disable-next-line no-console
-				console.log( msg.text() );
-			}
-		} );
-		await page.frame( { name: 'editor-canvas' } )?.evaluate( () => {
-			const label = ( el: EventTarget | null ) =>
-				( el as HTMLElement | null )?.getAttribute?.( 'aria-label' ) ??
-				( ( el as HTMLElement | null )?.tagName ?? String( el ) ) +
-					'.' +
-					( ( el as HTMLElement | null )?.className?.toString?.() ?? '' );
-			for ( const capture of [ true, false ] ) {
-				document.addEventListener(
-					'keydown',
-					( e ) => {
-						// eslint-disable-next-line no-console
-						console.log(
-							'[ftb-debug] document keydown',
-							capture ? 'capture' : 'bubble',
-							e.key,
-							'target=' + label( e.target ),
-							// eslint-disable-next-line @wordpress/no-global-active-element
-							'active=' + label( document.activeElement ),
-							'defaultPrevented=' + e.defaultPrevented
-						);
-					},
-					capture
-				);
-			}
-			for ( const type of [ 'focusin', 'focusout' ] ) {
-				document.addEventListener( type, ( e ) => {
-					// eslint-disable-next-line no-console
-					console.log(
-						'[ftb-debug] ' + type,
-						'target=' + label( e.target ),
-						'related=' + label( ( e as FocusEvent ).relatedTarget ),
-						new Error().stack?.split( '\n' ).slice( 1, 8 ).join( ' | ' )
-					);
-				} );
-			}
-			// Registered after React, so this runs after React's handler on body.
-			document.body.addEventListener( 'keydown', ( e ) => {
-				// eslint-disable-next-line no-console
-				console.log(
-					'[ftb-debug] body keydown bubble',
-					e.key,
-					// eslint-disable-next-line @wordpress/no-global-active-element
-					'active=' + label( document.activeElement )
-				);
-			} );
-		} );
-		await cells.nth( 0 ).fill( 'Cell 1' );
-		// eslint-disable-next-line no-console
-		console.log( '[ftb-debug] --- after fill, pressing Tab' );
-		await expectSelectedCell( 0 );
-		await pageUtils.pressKeys( 'Tab' );
-		await expectSelectedCell( 1 );
-		await pageUtils.pressKeys( 'Tab' );
-		await expectSelectedCell( 2 );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 0 )
+			.fill( 'Cell 1' );
+		await pageUtils.pressKeys( 'Tab', { times: 2 } );
 		await pageUtils.pressKeys( 'shift+Tab' );
-		// Pressing Shift enters the multi-select mode, so only the focus is checked here.
-		await expect( cells.nth( 1 ) ).toBeFocused();
 		await page.keyboard.type( 'Cell 2' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );

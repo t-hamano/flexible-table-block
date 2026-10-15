@@ -231,16 +231,6 @@ export default function Table( {
 	const onKeyDown = ( event: KeyboardEvent ) => {
 		const { key } = event;
 
-		const debug = ( ...args: unknown[] ) =>
-			// eslint-disable-next-line no-console
-			console.log( '[ftb-debug] ' + args.map( ( a ) => JSON.stringify( a ) ).join( ' ' ) );
-		debug( 'onKeyDown', key, {
-			tabMove: options.tab_move,
-			hasTableRef: !! tableRef.current,
-			target: ( event.target as HTMLElement )?.getAttribute?.( 'aria-label' ),
-			isSelectMode,
-		} );
-
 		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
 			// range-select mode or multi-select mode.
 			setIsSelectMode( true );
@@ -249,7 +239,6 @@ export default function Table( {
 				( event.target as HTMLElement ).closest( '.wp-block-flexible-table-block-table' ) !== null;
 
 			if ( ! isInsideTableBlock ) {
-				debug( 'return: not inside table block' );
 				return;
 			}
 			// Focus on the next cell.
@@ -258,11 +247,6 @@ export default function Table( {
 			const tableElement: HTMLTableElement = tableRef.current;
 			const { ownerDocument } = tableElement;
 			const { activeElement } = ownerDocument;
-			debug( 'handler start', {
-				active: activeElement?.getAttribute( 'aria-label' ) ?? activeElement?.className,
-				hasFocus: ownerDocument.hasFocus(),
-				anchor: ownerDocument.getSelection()?.anchorNode?.nodeName,
-			} );
 
 			const activeCell = tableElement.querySelector(
 				'th.is-selected > [contenteditable="true"], td.is-selected > [contenteditable="true"]'
@@ -271,15 +255,7 @@ export default function Table( {
 				activeElement && activeElement.closest( '.components-popover' ) !== null;
 			const hasLinkControl = !! ownerDocument.querySelector( '.block-editor-link-control' );
 
-			debug( 'state', {
-				activeCell: !! activeCell,
-				selectedTds: tableElement.querySelectorAll( '.is-selected' ).length,
-				activeElement: activeElement?.getAttribute( 'aria-label' ) ?? activeElement?.tagName,
-				isInsidePopover,
-				hasLinkControl,
-			} );
 			if ( ! activeCell || isInsidePopover || hasLinkControl ) {
-				debug( 'return: no active cell / popover / link control' );
 				return;
 			}
 
@@ -293,7 +269,6 @@ export default function Table( {
 			);
 
 			if ( activeCellIndex === -1 ) {
-				debug( 'return: active cell index -1' );
 				return;
 			}
 
@@ -313,26 +288,11 @@ export default function Table( {
 
 			event.preventDefault();
 			setIsSelectMode( false );
-			// DEBUG hypothesis: bring window focus back to the canvas first (same as Gutenberg's enterCanvas).
+			// The block editor moves focus out of the canvas iframe on Tab before this
+			// handler runs. Focus the canvas window first, because Firefox does not move
+			// window focus when focusing an element in another document.
 			ownerDocument.defaultView?.focus();
 			focusbleElement.focus();
-			const describe = () => {
-				const sel = ownerDocument.getSelection();
-				const el = ownerDocument.activeElement;
-				return {
-					active: el?.getAttribute( 'aria-label' ) ?? el?.tagName,
-					activeIsNext: el === focusbleElement,
-					nextConnected: focusbleElement.isConnected,
-					hasFocus: ownerDocument.hasFocus(),
-					anchor: sel?.anchorNode?.nodeName,
-					anchorInNext: !! sel?.anchorNode && focusbleElement.contains( sel.anchorNode ),
-					rangeCount: sel?.rangeCount,
-				};
-			};
-			debug( 'moved', { from: activeCellIndex, to: nextCellIndex, ...describe() } );
-			Promise.resolve().then( () => debug( 'after microtask', describe() ) );
-			setTimeout( () => debug( 'after timeout', describe() ), 0 );
-			ownerDocument.defaultView?.requestAnimationFrame( () => debug( 'after rAF', describe() ) );
 
 			// Select all text if the next cell is not empty.
 			const selection = ownerDocument.getSelection();
