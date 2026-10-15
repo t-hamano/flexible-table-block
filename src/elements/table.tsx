@@ -90,8 +90,8 @@ export default function Table( {
 	const [ isSelectMode, setIsSelectMode ] = useState( false );
 
 	// Manage rendering status as state since some processing may be performed before rendering components.
-	const [ isReady, setIdReady ] = useState( false );
-	useEffect( () => setIdReady( true ), [] );
+	const [ isReady, setIsReady ] = useState( false );
+	useEffect( () => setIsReady( true ), [] );
 
 	const tableRef = useRef( null );
 	const { createWarningNotice } = useDispatch( noticesStore );
@@ -178,7 +178,7 @@ export default function Table( {
 	};
 
 	const onSelectColumn = ( vColIndex: number ) => {
-		if ( isColumnSelected && selectedLine.vColIndex && selectedLine.vColIndex === vColIndex ) {
+		if ( isColumnSelected && selectedLine.vColIndex === vColIndex ) {
 			setSelectedLine( undefined );
 			setSelectedCells( undefined );
 		} else {
