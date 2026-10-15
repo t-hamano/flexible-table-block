@@ -313,6 +313,8 @@ export default function Table( {
 
 			event.preventDefault();
 			setIsSelectMode( false );
+			// DEBUG hypothesis: bring window focus back to the canvas first (same as Gutenberg's enterCanvas).
+			ownerDocument.defaultView?.focus();
 			focusbleElement.focus();
 			const describe = () => {
 				const sel = ownerDocument.getSelection();
