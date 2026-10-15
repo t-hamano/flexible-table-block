@@ -10,24 +10,13 @@ namespace Flexible_Table_Block;
 class Helper {
 
 	/**
-	 * Get minified block CSS for the block editor
-	 *
-	 * The editor scopes the CSS by itself, so no `.editor-styles-wrapper` prefix is needed.
-	 * The doubled class keeps the same specificity as on the front end.
-	 *
-	 * @return string
-	 */
-	public static function get_editor_block_css() {
-		return self::minify_css( self::get_block_css( '.' . FTB_BLOCK_CLASS ) );
-	}
-
-	/**
 	 * Get default block style
 	 *
 	 * @return string
 	 */
-	public static function get_block_css( $prefix = '' ) {
-		$selector = "{$prefix}." . FTB_BLOCK_CLASS;
+	public static function get_block_css() {
+		// The doubled class increases specificity. The block editor scopes this CSS by itself.
+		$selector = '.' . FTB_BLOCK_CLASS . '.' . FTB_BLOCK_CLASS;
 
 		// CSS selectors.
 		$styles = array(

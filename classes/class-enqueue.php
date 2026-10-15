@@ -47,7 +47,7 @@ class Enqueue {
 		);
 
 		$responsive_css = Helper::get_responsive_css();
-		$block_css      = Helper::get_block_css( '.' . FTB_BLOCK_CLASS );
+		$block_css      = Helper::get_block_css();
 		$css            = Helper::minify_css( $block_css . $responsive_css );
 
 		wp_add_inline_style( 'flexible-table-block', $css );
@@ -88,7 +88,7 @@ class Enqueue {
 	 */
 	public function add_editor_styles( $settings ) {
 		$settings['styles'][] = array(
-			'css'                => Helper::get_editor_block_css(),
+			'css'                => Helper::minify_css( Helper::get_block_css() ),
 			'__unstableType'     => 'plugin',
 			'flexibleTableBlock' => true,
 		);
