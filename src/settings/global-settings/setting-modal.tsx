@@ -97,8 +97,9 @@ export default function SettingModal( {
 	function updateInlineCss( css: string ) {
 		const isBlockStyle = ( style: EditorStyle ) => style.flexibleTableBlock;
 
-		// Update every store that holds the block CSS. The site editor syncs its own
-		// settings into `core/editor`, so updating only `core/editor` is not enough there.
+		// Update every store that holds the block CSS. The site editor passes settings built
+		// from `core/edit-site` to the editor provider, which overwrites `core/editor` settings
+		// whenever they are rebuilt (e.g. when global styles change).
 		const stores = [
 			{ name: 'core/edit-site', getter: 'getSettings', setter: 'updateSettings' },
 			{ name: 'core/editor', getter: 'getEditorSettings', setter: 'updateEditorSettings' },
