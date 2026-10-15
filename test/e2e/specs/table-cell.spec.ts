@@ -49,7 +49,9 @@ test.describe( 'Flexible table cell', () => {
 			await expect( cells.nth( index ) ).toBeFocused();
 			await expect( cells.nth( index ).locator( '..' ) ).toHaveClass( /is-selected/ );
 		};
-		await cells.nth( 0 ).fill( 'Cell 1' );
+		// Type like a user, because Tab does not move cells after fill() on Firefox.
+		await cells.nth( 0 ).click();
+		await page.keyboard.type( 'Cell 1' );
 		await expectSelectedCell( 0 );
 		await pageUtils.pressKeys( 'Tab' );
 		await expectSelectedCell( 1 );
