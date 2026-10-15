@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
-          cache: npm
+          cache: 'npm'
 
       - name: Npm install
         run: npm ci
@@ -52,7 +52,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
-          cache: npm
+          cache: 'npm'
 
       - name: Npm install
         run: npm ci
@@ -69,32 +69,32 @@ jobs:
           # so all browsers run on the latest PHP only.
           - php: '8.2'
             wp: WordPress
-            wp-label: WP trunk
+            label: WP trunk
             browsers: chromium
           - php: '8.2'
             wp: WordPress#7.1.2
-            wp-label: WP 7.1.2
+            label: WP 7.1.2
             browsers: chromium
 
           - php: '8.4'
             wp: WordPress
-            wp-label: WP trunk
+            label: WP trunk
             browsers: chromium
           - php: '8.4'
             wp: WordPress#7.1.2
-            wp-label: WP 7.1.2
+            label: WP 7.1.2
             browsers: chromium
 
           - php: '8.5'
             wp: WordPress
-            wp-label: WP trunk
+            label: WP trunk
             browsers: chromium firefox webkit
           - php: '8.5'
             wp: WordPress#7.1.2
-            wp-label: WP 7.1.2
+            label: WP 7.1.2
             browsers: chromium firefox webkit
 
-    name: E2E / PHP ${{ matrix.php }} / ${{ matrix.wp-label }}
+    name: E2E / PHP ${{ matrix.php }} / ${{ matrix.label }}
 
     steps:
       - name: Checkout
@@ -104,7 +104,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
-          cache: npm
+          cache: 'npm'
 
       - name: Npm install and build
         run: |
@@ -128,7 +128,7 @@ jobs:
 
       - name: Archive debug artifacts
         uses: actions/upload-artifact@v7
-        if: always()
+        if: failure()
         with:
           name: failures-artifacts-${{ matrix.php }}-${{ matrix.wp }}
           path: artifacts
