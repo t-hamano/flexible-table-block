@@ -116,13 +116,12 @@ export default function BorderColorControl( {
 							<SideIndicatorControl />
 							<ColorIndicatorButton
 								label={ __( 'All', 'flexible-table-block' ) }
-								id={ `${ instanceId }-all` }
-								aria-labelledby={ `${ instanceId } ${ instanceId }-all` }
 								value={ allInputValue }
 								onClick={ () => handleOnPickerOpen( undefined ) }
 								isNone={ ! allInputValue && ! isMixed }
 								isTransparent={ allInputValue === 'transparent' }
 								isMixed={ isMixed }
+								isExpanded={ isPickerOpen && pickerIndex === undefined }
 							/>
 							{ isPickerOpen && ! pickerIndex && (
 								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
@@ -143,12 +142,11 @@ export default function BorderColorControl( {
 									<SideIndicatorControl side={ item.value } />
 									<ColorIndicatorButton
 										label={ item.label }
-										id={ `${ instanceId }-${ item.value }` }
-										aria-labelledby={ `${ instanceId } ${ instanceId }-${ item.value }` }
 										value={ values[ item.value ] }
 										onClick={ () => handleOnPickerOpen( index ) }
 										isNone={ ! values[ item.value ] }
 										isTransparent={ values[ item.value ] === 'transparent' }
+										isExpanded={ isPickerOpen && pickerIndex === index }
 									/>
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover

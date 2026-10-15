@@ -59,15 +59,15 @@ export default function ColorControl( {
 
 	return (
 		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
+			<Stack direction="column" gap="sm">
 				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
 				<ColorIndicatorButton
-					label={ __( 'Color', 'flexible-table-block' ) }
 					aria-labelledby={ instanceId }
 					value={ value }
 					onClick={ handleOnPickerOpen }
 					isNone={ ! value }
 					isTransparent={ value === 'transparent' }
+					isExpanded={ isPickerOpen }
 				/>
 			</Stack>
 			{ isPickerOpen && (
