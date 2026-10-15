@@ -79,31 +79,18 @@ export default function BorderStyleControl( {
 	const toggleLinked = () => setIsLinked( ! isLinked );
 
 	const handleOnClickAll = ( value: string | number | undefined ) => {
-		const newValue =
-			value === values.top &&
-			value === values.right &&
-			value === values.bottom &&
-			value === values.left
-				? undefined
-				: value;
-
 		onChange( {
-			top: newValue,
-			right: newValue,
-			bottom: newValue,
-			left: newValue,
+			top: value,
+			right: value,
+			bottom: value,
+			left: value,
 		} );
 	};
 
 	const handleOnClick = ( value: string | number | undefined, targetSide: ValuesKey ) => {
-		const newValue =
-			values[ targetSide as ValuesKey ] && value === values[ targetSide as ValuesKey ]
-				? undefined
-				: value;
-
 		onChange( {
 			...values,
-			[ targetSide ]: newValue,
+			[ targetSide ]: value,
 		} );
 	};
 
