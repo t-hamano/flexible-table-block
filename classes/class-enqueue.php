@@ -82,15 +82,22 @@ class Enqueue {
 	 * Styles passed via the editor settings are rendered inside the editor canvas,
 	 * whether it is iframed or not, and can be updated from the client side.
 	 * A non-`theme` `__unstableType` keeps them applied even if theme styles are disabled.
+	 * The CSS is prepended so that theme and user styles still come after it, as with the
+	 * previous inline style loaded in the canvas `<head>`.
 	 *
 	 * @param array $settings Block editor settings.
 	 * @return array
 	 */
 	public function add_editor_styles( $settings ) {
-		$settings['styles'][] = array(
-			'css'                => Helper::minify_css( Helper::get_block_css() ),
-			'__unstableType'     => 'plugin',
-			'flexibleTableBlock' => true,
+		$settings['styles'] = array_merge(
+			array(
+				array(
+					'css'                => Helper::minify_css( Helper::get_block_css() ),
+					'__unstableType'     => 'plugin',
+					'flexibleTableBlock' => true,
+				),
+			),
+			$settings['styles'] ?? array()
 		);
 
 		return $settings;
