@@ -288,6 +288,10 @@ export default function Table( {
 
 			event.preventDefault();
 			setIsSelectMode( false );
+			// The block editor moves focus out of the canvas iframe on Tab before this
+			// handler runs. Focus the canvas window first, because Firefox does not move
+			// window focus when focusing an element in another document.
+			ownerDocument.defaultView?.focus();
 			focusbleElement.focus();
 
 			// Select all text if the next cell is not empty.
