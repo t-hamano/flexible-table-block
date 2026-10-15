@@ -96,30 +96,25 @@ export default function SettingModal( {
 	// Update the block CSS in the editor styles.
 	function updateInlineCss( css: string ) {
 		const isBlockStyle = ( style: EditorStyle ) => style.flexibleTableBlock;
-		const replaceBlockStyle = ( styles: EditorStyle[] ) =>
-			styles.map( ( style ) => ( isBlockStyle( style ) ? { ...style, css } : style ) );
 
-		// Post editor and site editor.
-		const editorStyles: EditorStyle[] | undefined = registry
-			.select( 'core/editor' )
-			?.getEditorSettings()?.styles;
+		// Update every store that holds the block CSS. The site editor syncs its own
+		// settings into `core/editor`, so updating only `core/editor` is not enough there.
+		const stores = [
+			{ name: 'core/edit-site', getter: 'getSettings', setter: 'updateSettings' },
+			{ name: 'core/editor', getter: 'getEditorSettings', setter: 'updateEditorSettings' },
+			{ name: 'core/block-editor', getter: 'getSettings', setter: 'updateSettings' },
+		];
 
-		if ( editorStyles?.some( isBlockStyle ) ) {
-			registry
-				.dispatch( 'core/editor' )
-				.updateEditorSettings( { styles: replaceBlockStyle( editorStyles ) } );
-			return;
-		}
+		for ( const { name, getter, setter } of stores ) {
+			const styles: EditorStyle[] | undefined = registry.select( name )?.[ getter ]?.()?.styles;
 
-		// Other block editors, such as the widget editor.
-		const blockEditorStyles: EditorStyle[] | undefined = registry
-			.select( 'core/block-editor' )
-			?.getSettings()?.styles;
+			if ( ! styles?.some( isBlockStyle ) ) {
+				continue;
+			}
 
-		if ( blockEditorStyles?.some( isBlockStyle ) ) {
-			registry
-				.dispatch( 'core/block-editor' )
-				.updateSettings( { styles: replaceBlockStyle( blockEditorStyles ) } );
+			registry.dispatch( name )[ setter ]( {
+				styles: styles.map( ( style ) => ( isBlockStyle( style ) ? { ...style, css } : style ) ),
+			} );
 		}
 	}
 
