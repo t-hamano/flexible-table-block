@@ -15,7 +15,54 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  lint-and-unit:
+    runs-on: ubuntu-latest
+    name: Build, Lint and Unit Test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use desired version of Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Npm install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Composer install
+        run: composer install
+
+      - name: Running lint check
+        run: npm run lint
+
+      - name: Running unit tests
+        run: npm run test:unit
+
+      - name: Upload build
+        uses: actions/upload-artifact@v7
+        with:
+          name: build
+          path: build
+          if-no-files-found: error
+
+  e2e:
+    needs: lint-and-unit
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -35,7 +82,7 @@ jobs:
           - php: '8.5'
             wp: WordPress#7.1.2
 
-    name: PHP ${{ matrix.php }} / ${{ matrix.wp }} Test
+    name: PHP ${{ matrix.php }} / ${{ matrix.wp }} E2E Test
 
     steps:
       - name: Checkout
@@ -45,23 +92,19 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+          cache: npm
 
-      - name: Npm install and build
-        run: |
-          npm ci
-          npm run build
+      - name: Npm install
+        run: npm ci
 
-      - name: Composer install
-        run: composer install
-
-      - name: Running lint check
-        run: npm run lint
-
-      - name: Running unit tests
-        run: npm run test:unit
+      - name: Download build
+        uses: actions/download-artifact@v8
+        with:
+          name: build
+          path: build
 
       - name: Install Playwright dependencies
-        run: npx playwright install chromium firefox webkit --with-deps
+        run: npx playwright install chromium --with-deps
 
       - name: Install WordPress
         run: |
