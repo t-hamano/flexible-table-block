@@ -401,10 +401,6 @@ export default function Table( {
 		};
 	}, {} );
 
-	if ( ! filteredVTable ) {
-		return null;
-	}
-
 	const filteredSections = Object.keys( filteredVTable ) as SectionName[];
 
 	return (
