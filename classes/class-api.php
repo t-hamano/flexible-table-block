@@ -124,19 +124,10 @@ class Api {
 			if ( isset( Settings::OPTIONS[ $key ]['range'] ) ) {
 				$min   = Settings::OPTIONS[ $key ]['range']['min'];
 				$max   = Settings::OPTIONS[ $key ]['range']['max'];
-				$value = min( max( $value, $min ), $max );
+				$value = min( max( (int) $value, $min ), $max );
 			}
 
-			if ( is_wp_error( $value ) ) {
-				return rest_ensure_response(
-					array(
-						'status'  => 'error',
-						'message' => $value->get_error_message(),
-					)
-				);
-			} else {
-				update_option( Option::OPTION_NAMES[ $key ], $value );
-			}
+			update_option( Option::OPTION_NAMES[ $key ], $value );
 		}
 
 		return rest_ensure_response(
