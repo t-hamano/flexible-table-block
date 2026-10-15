@@ -5,7 +5,8 @@ import type { Properties } from 'csstype';
 
 /**
  * Split inline CSS styles into declarations, ignoring semicolons inside
- * parentheses (e.g. `url()`) or quotes.
+ * brackets (e.g. `url()`), quotes, comments, or escaped with a backslash.
+ * Comments are removed.
  *
  * @param inlineStyles Inline CSS styles.
  * @return CSS declarations.
@@ -16,16 +17,27 @@ function splitDeclarations( inlineStyles: string ): string[] {
 	let depth = 0;
 	let quote: string | null = null;
 
-	for ( const char of inlineStyles ) {
+	for ( let i = 0; i < inlineStyles.length; i++ ) {
+		const char = inlineStyles[ i ];
+
+		if ( char === '\\' ) {
+			current += inlineStyles.slice( i, i + 2 );
+			i++;
+			continue;
+		}
 		if ( quote ) {
 			if ( char === quote ) {
 				quote = null;
 			}
+		} else if ( char === '/' && inlineStyles[ i + 1 ] === '*' ) {
+			const commentEnd = inlineStyles.indexOf( '*/', i + 2 );
+			i = commentEnd === -1 ? inlineStyles.length : commentEnd + 1;
+			continue;
 		} else if ( char === '"' || char === "'" ) {
 			quote = char;
-		} else if ( char === '(' ) {
+		} else if ( '([{'.includes( char ) ) {
 			depth++;
-		} else if ( char === ')' ) {
+		} else if ( ')]}'.includes( char ) ) {
 			depth = Math.max( 0, depth - 1 );
 		} else if ( char === ';' && depth === 0 ) {
 			declarations.push( current );

@@ -55,6 +55,24 @@ describe( 'style-converter', () => {
 			} );
 		} );
 
+		it( 'should not split on semicolons inside brackets or escaped with a backslash', () => {
+			expect(
+				convertToObject( '--theme:{a:red;b:blue};--label:one\\;two;--list:[a;b];color:black' )
+			).toStrictEqual( {
+				'--theme': '{a:red;b:blue}',
+				'--label': 'one\\;two',
+				'--list': '[a;b]',
+				color: 'black',
+			} );
+		} );
+
+		it( 'should ignore comments', () => {
+			expect( convertToObject( 'color:red;/* old; value */background:blue' ) ).toStrictEqual( {
+				color: 'red',
+				background: 'blue',
+			} );
+		} );
+
 		it( 'should keep custom properties intact', () => {
 			expect( convertToObject( '--my-color:red' ) ).toStrictEqual( {
 				'--my-color': 'red',
