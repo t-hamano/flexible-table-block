@@ -59,7 +59,9 @@ test.describe( 'Flexible table cell', () => {
 		await page.frame( { name: 'editor-canvas' } )?.evaluate( () => {
 			const label = ( el: EventTarget | null ) =>
 				( el as HTMLElement | null )?.getAttribute?.( 'aria-label' ) ??
-				( el as HTMLElement | null )?.tagName;
+				( ( el as HTMLElement | null )?.tagName ?? String( el ) ) +
+					'.' +
+					( ( el as HTMLElement | null )?.className?.toString?.() ?? '' );
 			for ( const capture of [ true, false ] ) {
 				document.addEventListener(
 					'keydown',
@@ -78,9 +80,26 @@ test.describe( 'Flexible table cell', () => {
 					capture
 				);
 			}
-			document.addEventListener( 'focusin', ( e ) => {
+			for ( const type of [ 'focusin', 'focusout' ] ) {
+				document.addEventListener( type, ( e ) => {
+					// eslint-disable-next-line no-console
+					console.log(
+						'[ftb-debug] ' + type,
+						'target=' + label( e.target ),
+						'related=' + label( ( e as FocusEvent ).relatedTarget ),
+						new Error().stack?.split( '\n' ).slice( 1, 8 ).join( ' | ' )
+					);
+				} );
+			}
+			// Registered after React, so this runs after React's handler on body.
+			document.body.addEventListener( 'keydown', ( e ) => {
 				// eslint-disable-next-line no-console
-				console.log( '[ftb-debug] focusin', label( e.target ) );
+				console.log(
+					'[ftb-debug] body keydown bubble',
+					e.key,
+					// eslint-disable-next-line @wordpress/no-global-active-element
+					'active=' + label( document.activeElement )
+				);
 			} );
 		} );
 		await cells.nth( 0 ).fill( 'Cell 1' );

@@ -230,8 +230,10 @@ export default function Table( {
 	// Also the next cell will be focused if tab key navigation is enabled.
 	const onKeyDown = ( event: KeyboardEvent ) => {
 		const { key } = event;
-		// eslint-disable-next-line no-console
-		const debug = ( ...args: unknown[] ) => console.log( '[ftb-debug]', ...args );
+
+		const debug = ( ...args: unknown[] ) =>
+			// eslint-disable-next-line no-console
+			console.log( '[ftb-debug] ' + args.map( ( a ) => JSON.stringify( a ) ).join( ' ' ) );
 		debug( 'onKeyDown', key, {
 			tabMove: options.tab_move,
 			hasTableRef: !! tableRef.current,
@@ -256,6 +258,11 @@ export default function Table( {
 			const tableElement: HTMLTableElement = tableRef.current;
 			const { ownerDocument } = tableElement;
 			const { activeElement } = ownerDocument;
+			debug( 'handler start', {
+				active: activeElement?.getAttribute( 'aria-label' ) ?? activeElement?.className,
+				hasFocus: ownerDocument.hasFocus(),
+				anchor: ownerDocument.getSelection()?.anchorNode?.nodeName,
+			} );
 
 			const activeCell = tableElement.querySelector(
 				'th.is-selected > [contenteditable="true"], td.is-selected > [contenteditable="true"]'
@@ -307,11 +314,23 @@ export default function Table( {
 			event.preventDefault();
 			setIsSelectMode( false );
 			focusbleElement.focus();
-			debug( 'moved', {
-				from: activeCellIndex,
-				to: nextCellIndex,
-				activeElementIsNext: ownerDocument.activeElement === focusbleElement,
-			} );
+			const describe = () => {
+				const sel = ownerDocument.getSelection();
+				const el = ownerDocument.activeElement;
+				return {
+					active: el?.getAttribute( 'aria-label' ) ?? el?.tagName,
+					activeIsNext: el === focusbleElement,
+					nextConnected: focusbleElement.isConnected,
+					hasFocus: ownerDocument.hasFocus(),
+					anchor: sel?.anchorNode?.nodeName,
+					anchorInNext: !! sel?.anchorNode && focusbleElement.contains( sel.anchorNode ),
+					rangeCount: sel?.rangeCount,
+				};
+			};
+			debug( 'moved', { from: activeCellIndex, to: nextCellIndex, ...describe() } );
+			Promise.resolve().then( () => debug( 'after microtask', describe() ) );
+			setTimeout( () => debug( 'after timeout', describe() ), 0 );
+			ownerDocument.defaultView?.requestAnimationFrame( () => debug( 'after rAF', describe() ) );
 
 			// Select all text if the next cell is not empty.
 			const selection = ownerDocument.getSelection();
