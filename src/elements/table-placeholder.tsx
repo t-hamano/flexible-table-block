@@ -185,7 +185,6 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						max={ MAX_PREVIEW_TABLE_COL }
 						value={ colCount || '' }
 						onChange={ onChangeColumnCount }
-						__next40pxDefaultSize
 					/>
 					<TextControl
 						label={ __( 'Row count', 'flexible-table-block' ) }
@@ -195,7 +194,6 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						max={ MAX_PREVIEW_TABLE_ROW }
 						value={ rowCount || '' }
 						onChange={ onChangeRowCount }
-						__next40pxDefaultSize
 					/>
 					<Button
 						variant="primary"

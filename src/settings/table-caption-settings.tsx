@@ -127,7 +127,6 @@ export default function TableCaptionSettings( {
 						type="number"
 						value={ captionStylesObj?.lineHeight || '' }
 						min={ 0 }
-						__next40pxDefaultSize
 					/>
 				</div>
 			</Stack>
