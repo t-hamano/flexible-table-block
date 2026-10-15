@@ -7,6 +7,10 @@ on:
       - main
   workflow_call:
 
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
   # The concurrency group contains the workflow name and the branch name for pull requests
@@ -17,6 +21,9 @@ concurrency:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 15
 
     name: Lint
 
@@ -41,6 +48,9 @@ jobs:
 
   js-unit-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 15
 
     name: JavaScript Unit Test
 
@@ -62,6 +72,9 @@ jobs:
 
   e2e-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 60
     strategy:
       matrix:
         include:
@@ -121,10 +134,9 @@ jobs:
           npm run wp-env-test run cli wp cli info
 
       - name: Running e2e tests
-        env:
-          # Browsers are already installed in the previous step.
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         run: npm run test:e2e -- $(printf -- '--project=%s ' ${{ matrix.browsers }})
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
       - name: Archive debug artifacts
         uses: actions/upload-artifact@v7
