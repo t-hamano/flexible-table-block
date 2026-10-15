@@ -126,7 +126,6 @@ export default function BorderSpacingControl( {
 								<Stack align="center" gap="sm" key={ item.value }>
 									<DirectionIndicatorControl direction={ item.value } />
 									<UnitControl
-										key={ item.value }
 										aria-label={ item.label }
 										value={ values[ item.value as ValuesKey ] }
 										units={ borderSpacingUnits }
