@@ -43,12 +43,20 @@ test.describe( 'Flexible table cell', () => {
 			.getByRole( 'button', { name: 'Close' } )
 			.click();
 		// Try to move within cells.
-		await editor.canvas
-			.getByRole( 'textbox', { name: 'Body cell text' } )
-			.nth( 0 )
-			.fill( 'Cell 1' );
-		await pageUtils.pressKeys( 'Tab', { times: 2 } );
+		// Wait for each move to finish, because the next key press depends on the selected cell.
+		const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+		const expectSelectedCell = async ( index: number ) => {
+			await expect( cells.nth( index ) ).toBeFocused();
+			await expect( cells.nth( index ).locator( '..' ) ).toHaveClass( /is-selected/ );
+		};
+		await cells.nth( 0 ).fill( 'Cell 1' );
+		await expectSelectedCell( 0 );
+		await pageUtils.pressKeys( 'Tab' );
+		await expectSelectedCell( 1 );
+		await pageUtils.pressKeys( 'Tab' );
+		await expectSelectedCell( 2 );
 		await pageUtils.pressKeys( 'shift+Tab' );
+		await expectSelectedCell( 1 );
 		await page.keyboard.type( 'Cell 2' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
