@@ -243,8 +243,6 @@ export default function Table( {
 				return;
 			}
 			// Focus on the next cell.
-			isTabMove.current = true;
-
 			const tableElement: HTMLTableElement = tableRef.current;
 			const { ownerDocument } = tableElement;
 			const { activeElement } = ownerDocument;
@@ -289,6 +287,7 @@ export default function Table( {
 
 			event.preventDefault();
 			setIsSelectMode( false );
+			isTabMove.current = true;
 			focusbleElement.focus();
 
 			// Select all text if the next cell is not empty.
