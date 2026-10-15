@@ -49,10 +49,7 @@ test.describe( 'Global Setting', () => {
 		];
 		for ( let i = 0; i < tableColors.length; i++ ) {
 			const { color, label } = tableColors[ i ];
-			await page
-				.getByRole( 'group', { name: label } )
-				.getByRole( 'button', { name: 'Color' } )
-				.click();
+			await page.getByRole( 'button', { name: label, exact: true } ).click();
 			await pageUtils.pressKeys( 'Enter' );
 			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
 			await pageUtils.pressKeys( 'Escape', { times: 2 } );
@@ -61,17 +58,16 @@ test.describe( 'Global Setting', () => {
 		await page.getByRole( 'tab', { name: 'Cell styles' } ).click();
 		// Change cell colors.
 		const cellColors = [
-			{ color: '333333', selector: 'text-color-th' },
-			{ color: '444444', selector: 'text-color-td' },
-			{ color: '555555', selector: 'background-color-th' },
-			{ color: '666666', selector: 'background-color-td' },
-			{ color: '777777', selector: 'border-color' },
+			{ color: '333333', label: 'Cell text color ( th tag )' },
+			{ color: '444444', label: 'Cell text color ( td tag )' },
+			{ color: '555555', label: 'Cell background color ( th tag )' },
+			{ color: '666666', label: 'Cell background color ( td tag )' },
+			{ color: '777777', label: 'Cell border color' },
 		];
 		for ( let i = 0; i < cellColors.length; i++ ) {
 			await page
 				.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } )
-				.getByRole( 'button', { name: 'Color' } )
-				.nth( i )
+				.getByRole( 'button', { name: cellColors[ i ].label, exact: true } )
 				.click();
 			await pageUtils.pressKeys( 'Enter' );
 			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( cellColors[ i ].color );

@@ -27,17 +27,11 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	await page.getByRole( 'spinbutton', { name: 'Cell width' } ).fill( '100' );
 
 	// Text Color, Background Color styles.
-	await page
-		.getByRole( 'group', { name: 'Cell text color' } )
-		.getByRole( 'button', { name: 'Color' } )
-		.click();
+	await page.getByRole( 'button', { name: 'Cell text color', exact: true } ).click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '111111' );
 	await pageUtils.pressKeys( 'Escape', { times: 2 } );
-	await page
-		.getByRole( 'group', { name: 'Cell background color' } )
-		.getByRole( 'button', { name: 'Color' } )
-		.click();
+	await page.getByRole( 'button', { name: 'Cell background color', exact: true } ).click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '333333' );
 

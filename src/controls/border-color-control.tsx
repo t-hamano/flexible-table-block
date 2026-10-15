@@ -78,7 +78,11 @@ export default function BorderColorControl( {
 
 	const allInputValue: string | 0 = isMixed ? '' : values.top;
 
-	const toggleLinked = () => setIsLinked( ! isLinked );
+	const toggleLinked = () => {
+		setIsLinked( ! isLinked );
+		setIsPickerOpen( false );
+		setPickerIndex( undefined );
+	};
 
 	const handleOnChangeAll = ( inputValue: string | undefined ) => {
 		onChange( {
@@ -121,8 +125,9 @@ export default function BorderColorControl( {
 								isNone={ ! allInputValue && ! isMixed }
 								isTransparent={ allInputValue === 'transparent' }
 								isMixed={ isMixed }
+								isExpanded={ isPickerOpen && pickerIndex === undefined }
 							/>
-							{ isPickerOpen && ! pickerIndex && (
+							{ isPickerOpen && pickerIndex === undefined && (
 								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
 									<div style={ { padding: '16px' } }>
 										<ColorPalette
@@ -145,6 +150,7 @@ export default function BorderColorControl( {
 										onClick={ () => handleOnPickerOpen( index ) }
 										isNone={ ! values[ item.value ] }
 										isTransparent={ values[ item.value ] === 'transparent' }
+										isExpanded={ isPickerOpen && pickerIndex === index }
 									/>
 									{ isPickerOpen && pickerIndex === index && (
 										<Popover
