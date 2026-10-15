@@ -12,10 +12,13 @@ class Helper {
 	/**
 	 * Get minified block CSS for the block editor
 	 *
+	 * The editor scopes the CSS by itself, so no `.editor-styles-wrapper` prefix is needed.
+	 * The doubled class keeps the same specificity as on the front end.
+	 *
 	 * @return string
 	 */
 	public static function get_editor_block_css() {
-		return self::minify_css( self::get_block_css( '.editor-styles-wrapper ' ) );
+		return self::minify_css( self::get_block_css( '.' . FTB_BLOCK_CLASS ) );
 	}
 
 	/**
