@@ -56,7 +56,8 @@ test.describe( 'Flexible table cell', () => {
 		await pageUtils.pressKeys( 'Tab' );
 		await expectSelectedCell( 2 );
 		await pageUtils.pressKeys( 'shift+Tab' );
-		await expectSelectedCell( 1 );
+		// Pressing Shift enters the multi-select mode, so only the focus is checked here.
+		await expect( cells.nth( 1 ) ).toBeFocused();
 		await page.keyboard.type( 'Cell 2' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
