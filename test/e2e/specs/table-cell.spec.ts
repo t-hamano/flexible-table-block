@@ -49,9 +49,43 @@ test.describe( 'Flexible table cell', () => {
 			await expect( cells.nth( index ) ).toBeFocused();
 			await expect( cells.nth( index ).locator( '..' ) ).toHaveClass( /is-selected/ );
 		};
-		// Type like a user, because Tab does not move cells after fill() on Firefox.
-		await cells.nth( 0 ).click();
-		await page.keyboard.type( 'Cell 1' );
+		// DEBUG: log key handling.
+		page.on( 'console', ( msg ) => {
+			if ( msg.text().includes( '[ftb-debug]' ) ) {
+				// eslint-disable-next-line no-console
+				console.log( msg.text() );
+			}
+		} );
+		await page.frame( { name: 'editor-canvas' } )?.evaluate( () => {
+			const label = ( el: EventTarget | null ) =>
+				( el as HTMLElement | null )?.getAttribute?.( 'aria-label' ) ??
+				( el as HTMLElement | null )?.tagName;
+			for ( const capture of [ true, false ] ) {
+				document.addEventListener(
+					'keydown',
+					( e ) => {
+						// eslint-disable-next-line no-console
+						console.log(
+							'[ftb-debug] document keydown',
+							capture ? 'capture' : 'bubble',
+							e.key,
+							'target=' + label( e.target ),
+							// eslint-disable-next-line @wordpress/no-global-active-element
+							'active=' + label( document.activeElement ),
+							'defaultPrevented=' + e.defaultPrevented
+						);
+					},
+					capture
+				);
+			}
+			document.addEventListener( 'focusin', ( e ) => {
+				// eslint-disable-next-line no-console
+				console.log( '[ftb-debug] focusin', label( e.target ) );
+			} );
+		} );
+		await cells.nth( 0 ).fill( 'Cell 1' );
+		// eslint-disable-next-line no-console
+		console.log( '[ftb-debug] --- after fill, pressing Tab' );
 		await expectSelectedCell( 0 );
 		await pageUtils.pressKeys( 'Tab' );
 		await expectSelectedCell( 1 );

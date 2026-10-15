@@ -230,6 +230,14 @@ export default function Table( {
 	// Also the next cell will be focused if tab key navigation is enabled.
 	const onKeyDown = ( event: KeyboardEvent ) => {
 		const { key } = event;
+		// eslint-disable-next-line no-console
+		const debug = ( ...args: unknown[] ) => console.log( '[ftb-debug]', ...args );
+		debug( 'onKeyDown', key, {
+			tabMove: options.tab_move,
+			hasTableRef: !! tableRef.current,
+			target: ( event.target as HTMLElement )?.getAttribute?.( 'aria-label' ),
+			isSelectMode,
+		} );
 
 		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
 			// range-select mode or multi-select mode.
@@ -239,6 +247,7 @@ export default function Table( {
 				( event.target as HTMLElement ).closest( '.wp-block-flexible-table-block-table' ) !== null;
 
 			if ( ! isInsideTableBlock ) {
+				debug( 'return: not inside table block' );
 				return;
 			}
 			// Focus on the next cell.
@@ -255,7 +264,15 @@ export default function Table( {
 				activeElement && activeElement.closest( '.components-popover' ) !== null;
 			const hasLinkControl = !! ownerDocument.querySelector( '.block-editor-link-control' );
 
+			debug( 'state', {
+				activeCell: !! activeCell,
+				selectedTds: tableElement.querySelectorAll( '.is-selected' ).length,
+				activeElement: activeElement?.getAttribute( 'aria-label' ) ?? activeElement?.tagName,
+				isInsidePopover,
+				hasLinkControl,
+			} );
 			if ( ! activeCell || isInsidePopover || hasLinkControl ) {
+				debug( 'return: no active cell / popover / link control' );
 				return;
 			}
 
@@ -269,6 +286,7 @@ export default function Table( {
 			);
 
 			if ( activeCellIndex === -1 ) {
+				debug( 'return: active cell index -1' );
 				return;
 			}
 
@@ -289,6 +307,11 @@ export default function Table( {
 			event.preventDefault();
 			setIsSelectMode( false );
 			focusbleElement.focus();
+			debug( 'moved', {
+				from: activeCellIndex,
+				to: nextCellIndex,
+				activeElementIsNext: ownerDocument.activeElement === focusbleElement,
+			} );
 
 			// Select all text if the next cell is not empty.
 			const selection = ownerDocument.getSelection();

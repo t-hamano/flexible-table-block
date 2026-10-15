@@ -134,7 +134,7 @@ jobs:
           npm run wp-env-test run cli wp cli info
 
       - name: Running e2e tests
-        run: npm run test:e2e -- $(printf -- '--project=%s ' ${{ matrix.browsers }})
+        run: npm run test:e2e -- $(printf -- '--project=%s ' ${{ matrix.browsers }}) --grep 'allows cell movement with tab key' --retries=0
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
