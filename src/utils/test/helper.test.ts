@@ -6,7 +6,13 @@ import { describe, it, expect } from 'vitest';
 /**
  * Internal dependencies
  */
-import { parseCssValue, parseUnit, sanitizeUnitValue, toInteger } from '../helper';
+import {
+	normalizeRowColSpan,
+	parseCssValue,
+	parseUnit,
+	sanitizeUnitValue,
+	toInteger,
+} from '../helper';
 
 describe( 'helper', () => {
 	describe( 'parseCssValue', () => {
@@ -138,6 +144,23 @@ describe( 'helper', () => {
 			expect( toInteger( '', 1 ) ).toStrictEqual( 1 );
 			expect( toInteger( undefined, 5 ) ).toStrictEqual( 5 );
 			expect( toInteger( 0, 5 ) ).toStrictEqual( 5 );
+		} );
+	} );
+
+	describe( 'normalizeRowColSpan', () => {
+		it( 'should return undefined for non-positive values', () => {
+			expect( normalizeRowColSpan( '0' ) ).toBeUndefined();
+			expect( normalizeRowColSpan( 0 ) ).toBeUndefined();
+			expect( normalizeRowColSpan( '-2' ) ).toBeUndefined();
+		} );
+		it( 'should return undefined for the default value or invalid values', () => {
+			expect( normalizeRowColSpan( '1' ) ).toBeUndefined();
+			expect( normalizeRowColSpan( 'abc' ) ).toBeUndefined();
+			expect( normalizeRowColSpan( undefined ) ).toBeUndefined();
+		} );
+		it( 'should return the value as a string for values greater than 1', () => {
+			expect( normalizeRowColSpan( '2' ) ).toBe( '2' );
+			expect( normalizeRowColSpan( 3 ) ).toBe( '3' );
 		} );
 	} );
 } );
