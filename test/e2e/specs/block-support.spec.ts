@@ -59,10 +59,7 @@ test.describe( 'Block Support', () => {
 				name: 'Appearance',
 			} )
 			.click();
-		await page
-			.getByRole( 'listbox', { name: 'Appearance' } )
-			.getByRole( 'option', { name: 'Medium', exact: true } )
-			.click();
+		await page.getByRole( 'option', { name: 'Medium', exact: true } ).click();
 		// Change line height.
 		await page.getByRole( 'spinbutton', { name: 'Line height' } ).fill( '3' );
 		// Change letter case.
@@ -85,7 +82,7 @@ test.describe( 'Block Support', () => {
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		await page
 			.getByRole( 'menu', { name: 'Dimensions options' } )
-			.getByRole( 'menuitemcheckbox', { name: 'Show Margin' } )
+			.getByRole( 'menuitemcheckbox', { name: 'Margin' } )
 			.click();
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		// Show custom controls.
