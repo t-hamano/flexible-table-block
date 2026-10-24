@@ -11,6 +11,7 @@ import {
 	deleteColumn,
 	deleteRow,
 	insertRow,
+	toVirtualTable,
 	type VTable,
 	type VRow,
 	type VCell,
@@ -144,6 +145,78 @@ describe( 'table-state', () => {
 				],
 				foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
 			} );
+		} );
+	} );
+
+	describe( 'toVirtualTable', () => {
+		const getSpans = ( vTable: VTable ) =>
+			vTable.body.map( ( row ) =>
+				row.cells.map( ( { rowSpan, colSpan, isHidden } ) => ( { rowSpan, colSpan, isHidden } ) )
+			);
+
+		it( 'should clamp rowspan that overflows the section', () => {
+			const vTable = toVirtualTable( {
+				head: [],
+				body: [ { cells: [ { content: '', tag: 'td', rowSpan: '2' } ] } ],
+				foot: [],
+			} );
+			expect( getSpans( vTable ) ).toStrictEqual( [
+				[ { rowSpan: 1, colSpan: 1, isHidden: false } ],
+			] );
+		} );
+
+		it( 'should clamp colspan that overflows the section', () => {
+			const vTable = toVirtualTable( {
+				head: [],
+				body: [
+					{
+						cells: [
+							{ content: '', tag: 'td' },
+							{ content: '', tag: 'td' },
+						],
+					},
+					{ cells: [ { content: '', tag: 'td', colSpan: '3' } ] },
+				],
+				foot: [],
+			} );
+			expect( getSpans( vTable ) ).toStrictEqual( [
+				[
+					{ rowSpan: 1, colSpan: 1, isHidden: false },
+					{ rowSpan: 1, colSpan: 1, isHidden: false },
+				],
+				[
+					{ rowSpan: 1, colSpan: 2, isHidden: false },
+					{ rowSpan: 1, colSpan: 1, isHidden: true },
+				],
+			] );
+		} );
+
+		it( 'should clamp rowspan and colspan that both overflow the section', () => {
+			const vTable = toVirtualTable( {
+				head: [],
+				body: [
+					{
+						cells: [
+							{ content: '', tag: 'td' },
+							{ content: '', tag: 'td', rowSpan: '3', colSpan: '2' },
+						],
+					},
+					{ cells: [ { content: '', tag: 'td' } ] },
+				],
+				foot: [],
+			} );
+			expect( getSpans( vTable ) ).toStrictEqual( [
+				[
+					{ rowSpan: 1, colSpan: 1, isHidden: false },
+					{ rowSpan: 2, colSpan: 2, isHidden: false },
+					{ rowSpan: 1, colSpan: 1, isHidden: true },
+				],
+				[
+					{ rowSpan: 1, colSpan: 1, isHidden: false },
+					{ rowSpan: 1, colSpan: 1, isHidden: true },
+					{ rowSpan: 1, colSpan: 1, isHidden: true },
+				],
+			] );
 		} );
 	} );
 } );

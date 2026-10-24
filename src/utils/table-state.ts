@@ -784,8 +784,9 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 				row.cells.forEach( ( cell ) => {
 					// Colmun index on the virtual section excluding cells already marked as "filled".
 					const vColIndex = vSection[ cRowIndex ].cells.findIndex( ( { isFilled } ) => ! isFilled );
-					const rowSpan = toInteger( cell.rowSpan, 1 );
-					const colSpan = toInteger( cell.colSpan, 1 );
+					// Clamp rowspan / colspan so that the cell does not overflow the section.
+					const rowSpan = Math.min( toInteger( cell.rowSpan, 1 ), rowCount - cRowIndex );
+					const colSpan = Math.min( toInteger( cell.colSpan, 1 ), colCount - vColIndex );
 
 					// Mark the cell as "filled" and record the position on the virtual section.
 					vSection[ cRowIndex ].cells[ vColIndex ] = {
