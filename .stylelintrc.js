@@ -1,13 +1,5 @@
 module.exports = {
-	extends: [ '@wordpress/stylelint-config/scss' ],
-	ignoreFiles: [
-		'build/**/*.css',
-		'node_modules/**/*.css',
-		'vendor/**/*.css',
-		'**/*.js',
-		'**/*.ts',
-		'**/*.tsx',
-	],
+	extends: [ '@wordpress/stylelint-config/scss-stylistic' ],
 	rules: {
 		'no-descending-specificity': null,
 		'selector-class-pattern': null,
