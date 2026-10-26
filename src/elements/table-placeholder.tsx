@@ -10,8 +10,8 @@ import type { FormEvent } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
-import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/components';
-import { Stack, Text } from '@wordpress/ui';
+import { Button, Placeholder, ToggleControl } from '@wordpress/components';
+import { InputControl, Stack, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
 /**
@@ -177,23 +177,23 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 				</Stack>
 
 				<Stack wrap="wrap" align="flex-end" gap="sm">
-					<TextControl
+					<InputControl
 						label={ __( 'Column count', 'flexible-table-block' ) }
 						className="ftb-placeholder__input"
 						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_COL }
 						value={ colCount || '' }
-						onChange={ onChangeColumnCount }
+						onValueChange={ onChangeColumnCount }
 					/>
-					<TextControl
+					<InputControl
 						label={ __( 'Row count', 'flexible-table-block' ) }
 						className="ftb-placeholder__input"
 						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_ROW }
 						value={ rowCount || '' }
-						onChange={ onChangeRowCount }
+						onValueChange={ onChangeRowCount }
 					/>
 					<Button
 						variant="primary"
