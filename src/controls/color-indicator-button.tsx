@@ -17,7 +17,6 @@ type Props = {
 	isTransparent: boolean;
 	isMixed?: boolean;
 	isExpanded?: boolean;
-	showTooltip?: boolean;
 	onClick: () => void;
 };
 
@@ -28,7 +27,6 @@ export default function ColorIndicatorButton( {
 	isTransparent,
 	isMixed = false,
 	isExpanded = false,
-	showTooltip,
 	onClick,
 }: Props ) {
 	let description: string;
@@ -45,7 +43,6 @@ export default function ColorIndicatorButton( {
 	return (
 		<Button
 			label={ label }
-			showTooltip={ showTooltip }
 			describedBy={ description }
 			aria-expanded={ isExpanded }
 			className={ clsx( 'ftb-color-indicator-button', {

@@ -59,7 +59,6 @@ export default function ColorControl( {
 				<BaseControl.VisualLabel>{ label }</BaseControl.VisualLabel>
 				<ColorIndicatorButton
 					label={ label }
-					showTooltip={ false }
 					value={ value }
 					onClick={ handleOnPickerOpen }
 					isNone={ ! value }
