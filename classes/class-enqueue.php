@@ -16,11 +16,11 @@ class Enqueue {
 		// Register block.
 		add_action( 'init', array( $this, 'register_block' ) );
 
-		// Enqueue front-end scripts.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		// Add block CSS to the front-end view style.
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_block_css_to_view_style' ) );
 
 		// Add block CSS to the block editor styles.
-		add_filter( 'block_editor_settings_all', array( $this, 'add_editor_styles' ) );
+		add_filter( 'block_editor_settings_all', array( $this, 'add_block_css_to_editor_settings' ) );
 	}
 
 	/**
@@ -31,9 +31,9 @@ class Enqueue {
 	}
 
 	/**
-	 * Enqueue front-end scripts
+	 * Add block CSS to the front-end view style
 	 */
-	public function enqueue_scripts() {
+	public function add_block_css_to_view_style() {
 		$responsive_css = Helper::get_responsive_css();
 		$block_css      = Helper::get_block_css();
 		$css            = Helper::minify_css( $block_css . $responsive_css );
@@ -53,7 +53,7 @@ class Enqueue {
 	 * @param array $settings Block editor settings.
 	 * @return array
 	 */
-	public function add_editor_styles( $settings ) {
+	public function add_block_css_to_editor_settings( $settings ) {
 		$settings['styles'] = array_merge(
 			array(
 				array(
