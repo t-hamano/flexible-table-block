@@ -23,6 +23,11 @@ define( 'FTB_NAMESPACE', 'flexible-table-block' );
 define( 'FTB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'FTB_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 
-require_once __DIR__ . '/classes/class-init.php';
+require_once __DIR__ . '/classes/class-option.php';
+require_once __DIR__ . '/classes/class-helper.php';
+require_once __DIR__ . '/classes/class-settings.php';
+require_once __DIR__ . '/classes/class-enqueue.php';
+require_once __DIR__ . '/classes/class-api.php';
 
-new Flexible_Table_Block\Init();
+new Flexible_Table_Block\Enqueue();
+new Flexible_Table_Block\Api();

@@ -103,5 +103,3 @@ class Enqueue {
 		return $settings;
 	}
 }
-
-new Enqueue();
