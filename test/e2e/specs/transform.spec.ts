@@ -29,7 +29,7 @@ test.describe( 'Transform from core table block', () => {
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
 			.fill( 'Core Table Block' );
-		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
+		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
@@ -42,9 +42,9 @@ test.describe( 'Transform from core table block', () => {
 	} ) => {
 		await fsbUtils.createCoreTableBlock();
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'switch', { name: 'Header section' } ).check();
-		await page.getByRole( 'switch', { name: 'Footer section' } ).check();
-		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
+		await page.getByRole( 'checkbox', { name: 'Header section' } ).check();
+		await page.getByRole( 'checkbox', { name: 'Footer section' } ).check();
+		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
@@ -57,7 +57,7 @@ test.describe( 'Transform from core table block', () => {
 	} ) => {
 		await fsbUtils.createCoreTableBlock( { col: 6, row: 6 } );
 		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).check();
+		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).check();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
