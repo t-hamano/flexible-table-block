@@ -211,12 +211,10 @@ export default function TableSettings( {
 			return ! value || BORDER_COLLAPSE_CONTROLS.some( ( control ) => control.value === _value );
 		};
 		if ( isAllowedValue( value ) ) {
-			const borderCollapse = tableStylesObj?.borderCollapse === value ? undefined : value;
-			const borderSpacing =
-				'separate' === borderCollapse ? tableStylesObj?.borderSpacing : undefined;
+			const borderSpacing = 'separate' === value ? tableStylesObj?.borderSpacing : undefined;
 			const newStylesObj = {
 				...tableStylesObj,
-				borderCollapse,
+				borderCollapse: value,
 				borderSpacing,
 			};
 			setAttributes( {

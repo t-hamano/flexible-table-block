@@ -281,15 +281,11 @@ export default function SettingModal( {
 											);
 										};
 										if ( isAllowedValue( value ) ) {
-											const newValue =
-												currentOptions?.block_style?.table_border_collapse === value
-													? undefined
-													: value;
 											setCurrentOptions( {
 												...currentOptions,
 												block_style: {
 													...currentOptions.block_style,
-													table_border_collapse: newValue,
+													table_border_collapse: value,
 												},
 											} );
 										}
@@ -464,15 +460,11 @@ export default function SettingModal( {
 									allowSides={ false }
 									hasIndicator={ false }
 									onChange={ ( value ) => {
-										const newValue =
-											currentOptions?.block_style?.cell_border_style === value.top
-												? undefined
-												: value.top;
 										setCurrentOptions( {
 											...currentOptions,
 											block_style: {
 												...currentOptions.block_style,
-												cell_border_style: newValue,
+												cell_border_style: value.top,
 											},
 										} );
 									} }
@@ -502,13 +494,11 @@ export default function SettingModal( {
 										if ( typeof value !== 'string' && value !== undefined ) {
 											return;
 										}
-										const newValue =
-											currentOptions?.block_style?.cell_text_align === value ? undefined : value;
 										setCurrentOptions( {
 											...currentOptions,
 											block_style: {
 												...currentOptions.block_style,
-												cell_text_align: newValue,
+												cell_text_align: value,
 											},
 										} );
 									} }
@@ -532,15 +522,11 @@ export default function SettingModal( {
 										if ( typeof value !== 'string' && value !== undefined ) {
 											return;
 										}
-										const newValue =
-											currentOptions?.block_style?.cell_vertical_align === value
-												? undefined
-												: value;
 										setCurrentOptions( {
 											...currentOptions,
 											block_style: {
 												...currentOptions.block_style,
-												cell_vertical_align: newValue,
+												cell_vertical_align: value,
 											},
 										} );
 									} }

@@ -151,13 +151,13 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 
 	const onChangeTextAlign = ( value: string | number | undefined ) => {
 		updateCellsState( {
-			styles: { textAlign: value === cellStylesObj.textAlign ? undefined : value },
+			styles: { textAlign: value },
 		} );
 	};
 
 	const onChangeVerticalAlign = ( value: string | number | undefined ) => {
 		updateCellsState( {
-			styles: { verticalAlign: value === cellStylesObj.verticalAlign ? undefined : value },
+			styles: { verticalAlign: value },
 		} );
 	};
 

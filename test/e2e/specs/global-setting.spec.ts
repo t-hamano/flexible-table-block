@@ -95,7 +95,9 @@ test.describe( 'Global Setting', () => {
 			const blockStyle = window.wp.data
 				.select( 'core/editor' )
 				.getEditorSettings()
-				.styles.find( ( style ) => style.flexibleTableBlock );
+				.styles.find(
+					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
+				);
 			return blockStyle ? blockStyle.css : '';
 		} );
 
@@ -115,7 +117,9 @@ test.describe( 'Global Setting', () => {
 			const blockStyle = window.wp.data
 				.select( 'core/editor' )
 				.getEditorSettings()
-				.styles.find( ( style ) => style.flexibleTableBlock );
+				.styles.find(
+					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
+				);
 			return blockStyle ? blockStyle.css : '';
 		} );
 
