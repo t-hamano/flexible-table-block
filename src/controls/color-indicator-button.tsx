@@ -42,6 +42,7 @@ export default function ColorIndicatorButton( {
 
 	return (
 		<Button
+			size="small"
 			label={ label }
 			describedBy={ description }
 			aria-expanded={ isExpanded }

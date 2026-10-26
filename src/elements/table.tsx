@@ -476,6 +476,7 @@ export default function Table( {
 											rowIndex === 0 &&
 											vColIndex === 0 && (
 												<Button
+													__next40pxDefaultSize
 													className="ftb-table-cell-label"
 													tabIndex={ options.focus_control_button ? 0 : -1 }
 													variant="primary"
@@ -491,6 +492,7 @@ export default function Table( {
 											<>
 												{ rowIndex === 0 && vColIndex === 0 && (
 													<Button
+														__next40pxDefaultSize
 														className={ clsx( 'ftb-row-before-inserter', {
 															'has-prev-section': sectionIndex > 0,
 														} ) }
@@ -507,6 +509,7 @@ export default function Table( {
 												{ vColIndex === 0 && (
 													<>
 														<Button
+															__next40pxDefaultSize
 															className="ftb-row-selector"
 															label={ __( 'Select row', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
@@ -535,6 +538,7 @@ export default function Table( {
 												) }
 												{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
 													<Button
+														__next40pxDefaultSize
 														className="ftb-column-before-inserter"
 														label={ __( 'Insert column before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
@@ -549,6 +553,7 @@ export default function Table( {
 												{ sectionIndex === 0 && rowIndex === 0 && (
 													<>
 														<Button
+															__next40pxDefaultSize
 															className="ftb-column-selector"
 															label={ __( 'Select column', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
@@ -577,6 +582,7 @@ export default function Table( {
 												) }
 												{ vColIndex === 0 && (
 													<Button
+														__next40pxDefaultSize
 														className={ clsx( 'ftb-row-after-inserter', {
 															'has-next-section':
 																sectionIndex < Object.keys( filteredVTable ).length - 1 &&
@@ -614,6 +620,7 @@ export default function Table( {
 											sectionIndex === 0 &&
 											rowIndex === 0 && (
 												<Button
+													__next40pxDefaultSize
 													className="ftb-column-after-inserter"
 													label={ __( 'Insert column after', 'flexible-table-block' ) }
 													tabIndex={ options.focus_control_button ? 0 : -1 }
