@@ -14,8 +14,9 @@ class Helper {
 	 *
 	 * @return string
 	 */
-	public static function get_block_css( $prefix = '' ) {
-		$selector = "{$prefix}." . FTB_BLOCK_CLASS;
+	public static function get_block_css() {
+		// The doubled class increases specificity. The block editor scopes this CSS by itself.
+		$selector = '.' . FTB_BLOCK_CLASS . '.' . FTB_BLOCK_CLASS;
 
 		// CSS selectors.
 		$styles = array(
@@ -27,7 +28,6 @@ class Helper {
 			"{$selector} > table tr th, {$selector} > table tr td" => '',
 			"{$selector} > table tr th" => '',
 			"{$selector} > table tr td" => '',
-			"{$selector} > table tr th, {$selector} table > tr td" => '',
 		);
 
 		$option = get_option( Option::OPTION_NAMES['block_style'], Settings::OPTIONS['block_style']['default'] );
@@ -243,7 +243,7 @@ class Helper {
 		$values         = array_merge( $default_values, $values );
 
 		if ( '' !== $values['top'] && '' !== $values['right'] && '' !== $values['bottom'] && '' !== $values['left'] ) {
-			$padding_value = self::get_shorhand_css_value( $values['top'], $values['right'], $values['bottom'], $values['left'] );
+			$padding_value = self::get_shorthand_css_value( $values['top'], $values['right'], $values['bottom'], $values['left'] );
 			$declaration   = self::sanitize_css_declaration( 'padding', $padding_value );
 			return '' === $declaration ? null : $declaration;
 		}
@@ -265,7 +265,7 @@ class Helper {
 	 *
 	 * @return string
 	 */
-	public static function get_shorhand_css_value( $top, $right, $bottom, $left ) {
+	public static function get_shorthand_css_value( $top, $right, $bottom, $left ) {
 		if ( $top === $right && $top === $bottom && $top === $left ) {
 			return $top;
 		}

@@ -1,26 +1,23 @@
 {
 	"compilerOptions": {
-		"allowJs": true,
-		"checkJs": false,
-		"allowSyntheticDefaultImports": true,
-		"jsx": "preserve",
 		"target": "esnext",
 		"module": "esnext",
+		"moduleResolution": "bundler",
 		"lib": [ "dom", "esnext" ],
-		"composite": true,
-		"noEmit": true,
+		"jsx": "preserve",
+		"allowJs": true,
+		"checkJs": false,
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"verbatimModuleSyntax": true,
-		"moduleResolution": "bundler",
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
-		"types": [ "node" ],
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"noEmit": true
 	},
-	"include": [ "src/**/*", "src/**/*.json" ],
+	"include": [ "src/**/*", "src/**/*.json", "test/**/*" ],
 	"exclude": [ "**/build/**" ]
 }

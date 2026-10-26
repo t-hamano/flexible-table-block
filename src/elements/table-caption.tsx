@@ -104,7 +104,7 @@ export default function TableCaption( {
 						setSelectedCells( undefined );
 					} }
 					// @ts-ignore: `__unstableOnSplitAtEnd` prop is not exist at @types
-					__unstableOnSplitAtEnd={ () => insertBlocksAfter( createBlock( 'core/paragraph' ) ) }
+					__unstableOnSplitAtEnd={ () => insertBlocksAfter( [ createBlock( 'core/paragraph' ) ] ) }
 				/>
 			) }
 		</>

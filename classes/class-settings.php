@@ -115,5 +115,3 @@ class Settings {
 		return $options;
 	}
 }
-
-new Settings();

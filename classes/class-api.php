@@ -67,7 +67,7 @@ class Api {
 	 */
 	public function get_options() {
 		$options              = Settings::get_options();
-		$options['block_css'] = Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) );
+		$options['block_css'] = Helper::minify_css( Helper::get_block_css() );
 		return rest_ensure_response( $options );
 	}
 
@@ -124,26 +124,17 @@ class Api {
 			if ( isset( Settings::OPTIONS[ $key ]['range'] ) ) {
 				$min   = Settings::OPTIONS[ $key ]['range']['min'];
 				$max   = Settings::OPTIONS[ $key ]['range']['max'];
-				$value = min( max( $value, $min ), $max );
+				$value = min( max( (int) $value, $min ), $max );
 			}
 
-			if ( is_wp_error( $value ) ) {
-				return rest_ensure_response(
-					array(
-						'status'  => 'error',
-						'message' => $value->get_error_message(),
-					)
-				);
-			} else {
-				update_option( Option::OPTION_NAMES[ $key ], $value );
-			}
+			update_option( Option::OPTION_NAMES[ $key ], $value );
 		}
 
 		return rest_ensure_response(
 			array(
 				'status'    => 'success',
 				'message'   => __( 'Global setting saved.', 'flexible-table-block' ),
-				'block_css' => Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) ),
+				'block_css' => Helper::minify_css( Helper::get_block_css() ),
 			)
 		);
 	}
@@ -163,10 +154,8 @@ class Api {
 				'options'   => Settings::get_options(),
 				'status'    => 'success',
 				'message'   => __( 'Global setting restored.', 'flexible-table-block' ),
-				'block_css' => Helper::minify_css( Helper::get_block_css( '.editor-styles-wrapper ' ) ),
+				'block_css' => Helper::minify_css( Helper::get_block_css() ),
 			)
 		);
 	}
 }
-
-new Api();

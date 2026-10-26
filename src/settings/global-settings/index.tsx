@@ -4,7 +4,6 @@
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-// @ts-ignore: has no exported member
 import { store as coreStore } from '@wordpress/core-data';
 import { Button, Spinner } from '@wordpress/components';
 import { Stack } from '@wordpress/ui';

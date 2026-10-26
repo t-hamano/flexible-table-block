@@ -9,7 +9,7 @@ import type { Dispatch, SetStateAction } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { createInterpolateElement, useState } from '@wordpress/element';
-import { useDispatch } from '@wordpress/data';
+import { useDispatch, useRegistry } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
@@ -58,6 +58,12 @@ type Props = {
 	setIsSettingModalOpen: Dispatch< SetStateAction< boolean > >;
 };
 
+interface EditorStyle {
+	css?: string;
+	flexibleTableBlock?: boolean;
+	[ key: string ]: unknown;
+}
+
 interface NoticeInfo {
 	// Mirrors the `status` prop of `@wordpress/components` Notice, whose type is
 	// not exposed through the package's `exports` map.
@@ -76,6 +82,7 @@ export default function SettingModal( {
 	const [ currentOptions, setCurrentOptions ] = useState< StoreOptions >( options );
 
 	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
+	const registry = useRegistry();
 	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
 
 	// Force focus on the modal as it loses focus when saving or restoring settings.
@@ -86,32 +93,29 @@ export default function SettingModal( {
 		}
 	}
 
-	// Update the inline CSS.
+	// Update the block CSS in the editor styles.
 	function updateInlineCss( css: string ) {
-		// Update the inline CSS of the global document.
-		const styleSheet = document.getElementById( 'flexible-table-block-editor-inline-css' );
+		const isBlockStyle = ( style: EditorStyle ) => style.flexibleTableBlock;
 
-		if ( styleSheet ) {
-			styleSheet.textContent = css;
-		}
+		// Update every store that holds the block CSS. The site editor passes settings built
+		// from `core/edit-site` to the editor provider, which overwrites `core/editor` settings
+		// whenever they are rebuilt (e.g. when global styles change).
+		const stores = [
+			{ name: 'core/edit-site', getter: 'getSettings', setter: 'updateSettings' },
+			{ name: 'core/editor', getter: 'getEditorSettings', setter: 'updateEditorSettings' },
+			{ name: 'core/block-editor', getter: 'getSettings', setter: 'updateSettings' },
+		];
 
-		// Update the inline CSS of the iframe editor instance document.
-		const iframeEditor = document.querySelectorAll( 'iframe' );
+		for ( const { name, getter, setter } of stores ) {
+			const styles: EditorStyle[] | undefined = registry.select( name )?.[ getter ]?.()?.styles;
 
-		for ( let i = 0; i < iframeEditor.length; i++ ) {
-			const iframeWindow = iframeEditor[ i ].contentWindow;
-
-			if ( ! iframeWindow ) {
+			if ( ! styles?.some( isBlockStyle ) ) {
 				continue;
 			}
 
-			const iframeStyleSheet = iframeWindow.document.getElementById(
-				'flexible-table-block-editor-inline-css'
-			);
-
-			if ( iframeStyleSheet ) {
-				iframeStyleSheet.textContent = css;
-			}
+			registry.dispatch( name )[ setter ]( {
+				styles: styles.map( ( style ) => ( isBlockStyle( style ) ? { ...style, css } : style ) ),
+			} );
 		}
 	}
 
@@ -119,7 +123,6 @@ export default function SettingModal( {
 	const handleUpdateOptions = () => {
 		setIsWaiting( true );
 		setNoticeInfo( undefined );
-		setStoreOptions( currentOptions );
 
 		apiFetch< ApiResponse >( {
 			path: REST_API_ROUTE,
@@ -127,31 +130,34 @@ export default function SettingModal( {
 			data: currentOptions,
 		} )
 			.then( ( response ) => {
-				focusModal();
-				setIsWaiting( false );
-
 				// Show notice message.
 				if ( response.status && response.message ) {
 					setNoticeInfo( {
-						status: response?.status,
-						message: response?.message,
+						status: response.status,
+						message: response.message,
 					} );
 				}
 
-				if ( ! response.block_css ) {
+				if ( response.status === 'error' ) {
 					return;
 				}
 
-				// Update inline CSS.
-				updateInlineCss( response.block_css );
+				// Update store options only after the options are saved.
+				setStoreOptions( currentOptions );
+
+				if ( response.block_css ) {
+					updateInlineCss( response.block_css );
+				}
 			} )
-			.catch( ( response ) => {
-				focusModal();
-				setIsWaiting( false );
+			.catch( ( error ) => {
 				setNoticeInfo( {
 					status: 'error',
-					message: response.message,
+					message: error?.message,
 				} );
+			} )
+			.finally( () => {
+				focusModal();
+				setIsWaiting( false );
 			} );
 	};
 
@@ -163,31 +169,36 @@ export default function SettingModal( {
 		apiFetch< ApiResponse >( {
 			path: REST_API_ROUTE,
 			method: 'DELETE',
-		} ).then( ( response ) => {
-			focusModal();
-			setIsWaiting( false );
+		} )
+			.then( ( response ) => {
+				// Show notice message.
+				if ( response.status && response.message ) {
+					setNoticeInfo( {
+						status: response.status,
+						message: response.message,
+					} );
+				}
 
-			// Show notice message.
-			if ( response.status && response.message ) {
+				// Update options.
+				if ( response.options ) {
+					setCurrentOptions( response.options );
+					setStoreOptions( response.options );
+				}
+
+				if ( response.block_css ) {
+					updateInlineCss( response.block_css );
+				}
+			} )
+			.catch( ( error ) => {
 				setNoticeInfo( {
-					status: response.status,
-					message: response.message,
+					status: 'error',
+					message: error?.message,
 				} );
-			}
-
-			// Update options.
-			if ( response.options ) {
-				setCurrentOptions( response.options );
-				setStoreOptions( response.options );
-			}
-
-			if ( ! response.block_css ) {
-				return;
-			}
-
-			// Update inline CSS.
-			updateInlineCss( response.block_css );
-		} );
+			} )
+			.finally( () => {
+				focusModal();
+				setIsWaiting( false );
+			} );
 	};
 
 	return (
@@ -270,15 +281,11 @@ export default function SettingModal( {
 											);
 										};
 										if ( isAllowedValue( value ) ) {
-											const newValue =
-												currentOptions?.block_style?.table_border_collapse === value
-													? undefined
-													: value;
 											setCurrentOptions( {
 												...currentOptions,
 												block_style: {
 													...currentOptions.block_style,
-													table_border_collapse: newValue,
+													table_border_collapse: value,
 												},
 											} );
 										}
@@ -453,15 +460,11 @@ export default function SettingModal( {
 									allowSides={ false }
 									hasIndicator={ false }
 									onChange={ ( value ) => {
-										const newValue =
-											currentOptions?.block_style?.cell_border_style === value.top
-												? undefined
-												: value.top;
 										setCurrentOptions( {
 											...currentOptions,
 											block_style: {
 												...currentOptions.block_style,
-												cell_border_style: newValue,
+												cell_border_style: value.top,
 											},
 										} );
 									} }
@@ -491,13 +494,11 @@ export default function SettingModal( {
 										if ( typeof value !== 'string' && value !== undefined ) {
 											return;
 										}
-										const newValue =
-											currentOptions?.block_style?.cell_text_align === value ? undefined : value;
 										setCurrentOptions( {
 											...currentOptions,
 											block_style: {
 												...currentOptions.block_style,
-												cell_text_align: newValue,
+												cell_text_align: value,
 											},
 										} );
 									} }
@@ -521,15 +522,11 @@ export default function SettingModal( {
 										if ( typeof value !== 'string' && value !== undefined ) {
 											return;
 										}
-										const newValue =
-											currentOptions?.block_style?.cell_vertical_align === value
-												? undefined
-												: value;
 										setCurrentOptions( {
 											...currentOptions,
 											block_style: {
 												...currentOptions.block_style,
-												cell_vertical_align: newValue,
+												cell_vertical_align: value,
 											},
 										} );
 									} }

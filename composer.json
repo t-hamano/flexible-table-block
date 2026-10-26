@@ -1,6 +1,6 @@
 {
 	"name": "t-hamano/flexible-table-block",
-	"description": "WordPress Plugin",
+	"description": "The custom block plugin for the WordPress block editor that allows you to create tables with flexible configurations.",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
@@ -18,6 +18,9 @@
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"platform": {
+			"php": "8.2"
 		}
 	}
 }

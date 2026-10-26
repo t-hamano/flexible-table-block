@@ -7,7 +7,7 @@ import type { PropertyValue } from 'csstype';
 const DEFAULT_PRECISION = 4;
 
 // Array with four values for CSS
-export type FourCssValues = [ string, string, string, string ];
+type FourCssValues = [ string, string, string, string ];
 
 // sanitizeUnitValue function option
 interface SanitizeOptions {

@@ -9,14 +9,17 @@ module.exports = [
 	},
 	...defaultConfig.configs.recommended,
 	{
+		linterOptions: {
+			reportUnusedDisableDirectives: 'error',
+		},
 		rules: {
 			'import/no-extraneous-dependencies': 'off',
 			'react/jsx-boolean-value': 'error',
 			'react/jsx-curly-brace-presence': [ 'error', { props: 'never', children: 'never' } ],
+			'jsdoc/escape-inline-tags': 'error',
+			'@wordpress/wp-global-usage': 'error',
 			'@wordpress/dependency-group': 'error',
 			'@wordpress/no-unsafe-wp-apis': 'off',
-			'@wordpress/no-setting-ds-tokens': 'off',
-			'@wordpress/no-unknown-ds-tokens': 'off',
 			'@wordpress/use-import-as': [
 				'error',
 				{
@@ -42,16 +45,28 @@ module.exports = [
 					allowedTextDomain: 'flexible-table-block',
 				},
 			],
-			'prettier/prettier': [
+		},
+	},
+	{
+		files: [ '**/*.ts', '**/*.tsx' ],
+		rules: {
+			'@typescript-eslint/consistent-type-imports': [
 				'error',
 				{
-					useTabs: true,
-					tabWidth: 2,
-					singleQuote: true,
-					printWidth: 100,
-					bracketSpacing: true,
-					parenSpacing: true,
-					bracketSameLine: false,
+					prefer: 'type-imports',
+					disallowTypeAnnotations: false,
+				},
+			],
+			'@typescript-eslint/no-restricted-imports': [
+				'error',
+				{
+					paths: [
+						{
+							name: 'react',
+							message: 'Please use React API through `@wordpress/element` instead.',
+							allowTypeImports: true,
+						},
+					],
 				},
 			],
 		},
