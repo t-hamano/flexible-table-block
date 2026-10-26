@@ -13,19 +13,17 @@ import { useDispatch, useRegistry } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
-	Notice,
 	Modal,
 	Popover,
 	Spinner,
 	RangeControl,
 	ToggleControl,
-	__experimentalHeading as Heading,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Stack, Tabs, Text } from '@wordpress/ui';
+import { Notice, Stack, Tabs, Text } from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -64,8 +62,6 @@ interface EditorStyle {
 }
 
 interface NoticeInfo {
-	// Mirrors the `status` prop of `@wordpress/components` Notice, whose type is
-	// not exposed through the package's `exports` map.
 	status?: 'warning' | 'success' | 'error' | 'info';
 	message?: string;
 }
@@ -227,7 +223,9 @@ export default function SettingModal( {
 				</Tabs.List>
 				<Tabs.Panel value="table">
 					<Stack direction="column" gap="lg">
-						<Heading level={ 5 }>{ __( 'Default table styles', 'flexible-table-block' ) }</Heading>
+						<Text variant="heading-md" render={ <h5 /> }>
+							{ __( 'Default table styles', 'flexible-table-block' ) }
+						</Text>
 						<div className="ftb-global-setting-modal__styles">
 							<div className="ftb-global-setting-modal__styles-item">
 								<UnitControl
@@ -301,9 +299,9 @@ export default function SettingModal( {
 								</ToggleGroupControl>
 							</div>
 						</div>
-						<Heading level={ 5 }>
+						<Text variant="heading-md" render={ <h5 /> }>
 							{ __( 'Default striped table styles', 'flexible-table-block' ) }
-						</Heading>
+						</Text>
 						<div className="ftb-global-setting-modal__styles">
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
@@ -346,7 +344,9 @@ export default function SettingModal( {
 				</Tabs.Panel>
 				<Tabs.Panel value="cell">
 					<Stack direction="column" gap="lg">
-						<Heading level={ 5 }>{ __( 'Default cell styles', 'flexible-table-block' ) }</Heading>
+						<Text variant="heading-md" render={ <h5 /> }>
+							{ __( 'Default cell styles', 'flexible-table-block' ) }
+						</Text>
 						<div className="ftb-global-setting-modal__styles">
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
@@ -533,9 +533,9 @@ export default function SettingModal( {
 				</Tabs.Panel>
 				<Tabs.Panel value="responsive">
 					<Stack direction="column" gap="lg">
-						<Heading level={ 5 }>
+						<Text variant="heading-md" render={ <h5 /> }>
 							{ __( 'Responsive breakpoint (px)', 'flexible-table-block' ) }
-						</Heading>
+						</Text>
 						<RangeControl
 							help={ __(
 								'Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.',
@@ -674,16 +674,15 @@ export default function SettingModal( {
 				</Tabs.Panel>
 			</Tabs.Root>
 			{ noticeInfo?.status && noticeInfo?.message && (
-				<Notice
-					className="ftb-global-setting-modal__notice"
-					status={ noticeInfo.status }
-					onRemove={ () => {
-						setNoticeInfo( undefined );
-						focusModal();
-					} }
-				>
-					{ noticeInfo.message }
-				</Notice>
+				<Notice.Root className="ftb-global-setting-modal__notice" intent={ noticeInfo.status }>
+					<Notice.Description>{ noticeInfo.message }</Notice.Description>
+					<Notice.CloseIconButton
+						onClick={ () => {
+							setNoticeInfo( undefined );
+							focusModal();
+						} }
+					/>
+				</Notice.Root>
 			) }
 			<Stack
 				align="center"
