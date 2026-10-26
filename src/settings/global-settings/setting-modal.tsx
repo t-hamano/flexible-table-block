@@ -18,7 +18,6 @@ import {
 	Popover,
 	Spinner,
 	RangeControl,
-	__experimentalGrid as Grid,
 	__experimentalHeading as Heading,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
@@ -228,7 +227,7 @@ export default function SettingModal( {
 				<Tabs.Panel value="table">
 					<Stack direction="column" gap="lg">
 						<Heading level={ 5 }>{ __( 'Default table styles', 'flexible-table-block' ) }</Heading>
-						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+						<div className="ftb-global-setting-modal__styles">
 							<div className="ftb-global-setting-modal__styles-item">
 								<UnitControl
 									label={ __( 'Table width', 'flexible-table-block' ) }
@@ -300,11 +299,11 @@ export default function SettingModal( {
 									) ) }
 								</ToggleGroupControl>
 							</div>
-						</Grid>
+						</div>
 						<Heading level={ 5 }>
 							{ __( 'Default striped table styles', 'flexible-table-block' ) }
 						</Heading>
-						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+						<div className="ftb-global-setting-modal__styles">
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __(
@@ -341,13 +340,13 @@ export default function SettingModal( {
 									} }
 								/>
 							</div>
-						</Grid>
+						</div>
 					</Stack>
 				</Tabs.Panel>
 				<Tabs.Panel value="cell">
 					<Stack direction="column" gap="lg">
 						<Heading level={ 5 }>{ __( 'Default cell styles', 'flexible-table-block' ) }</Heading>
-						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
+						<div className="ftb-global-setting-modal__styles">
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __( 'Cell text color ( th tag )', 'flexible-table-block' ) }
@@ -528,7 +527,7 @@ export default function SettingModal( {
 									) ) }
 								</ToggleGroupControl>
 							</div>
-						</Grid>
+						</div>
 					</Stack>
 				</Tabs.Panel>
 				<Tabs.Panel value="responsive">

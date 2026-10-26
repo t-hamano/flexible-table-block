@@ -13,7 +13,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	__experimentalGrid as Grid,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -130,34 +129,20 @@ export default function PaddingControl( {
 					/>
 				</Stack>
 				{ ! isLinked && (
-					<Grid gap={ 2 } columns={ 2 } rows={ 3 }>
-						{ SIDE_CONTROLS.map( ( item ) => {
-							const gridStyles = ( value: SideValue ) => {
-								if ( value === 'top' || value === 'bottom' ) {
-									return {
-										gridColumn: 'span 2',
-										margin: '0 auto',
-									};
-								}
-								if ( value === 'right' ) {
-									return { gridColumn: 2, display: 'flex', justifyContent: 'flex-end' };
-								}
-								return { gridRow: 2 };
-							};
-							return (
-								<div key={ item.value } style={ gridStyles( item.value ) }>
-									<UnitControl
-										aria-label={ item.label }
-										value={ values[ item.value as ValuesKey ] }
-										units={ paddingUnits }
-										onFocus={ () => handleOnFocus( item.value ) }
-										onChange={ ( value ) => handleOnChange( value, item.value ) }
-										__unstableInputWidth="100px"
-									/>
-								</div>
-							);
-						} ) }
-					</Grid>
+					<div className="ftb-side-controls">
+						{ SIDE_CONTROLS.map( ( item ) => (
+							<div key={ item.value } className={ `ftb-side-controls__item is-${ item.value }` }>
+								<UnitControl
+									aria-label={ item.label }
+									value={ values[ item.value as ValuesKey ] }
+									units={ paddingUnits }
+									onFocus={ () => handleOnFocus( item.value ) }
+									onChange={ ( value ) => handleOnChange( value, item.value ) }
+									__unstableInputWidth="100px"
+								/>
+							</div>
+						) ) }
+					</div>
 				) }
 			</Stack>
 		</BaseControl>
