@@ -8,7 +8,7 @@ import type { Dispatch, SetStateAction } from 'react';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { createInterpolateElement, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { useDispatch, useRegistry } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
@@ -351,10 +351,7 @@ export default function SettingModal( {
 						<Grid columns={ [ 1, 2 ] } gap={ 2 }>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
-									label={ createInterpolateElement(
-										__( 'Cell text color ( <code>th</code> tag )', 'flexible-table-block' ),
-										{ code: <code /> }
-									) }
+									label={ __( 'Cell text color ( th tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_text_color_th }
 									onChange={ ( value ) => {
 										setCurrentOptions( {
@@ -369,10 +366,7 @@ export default function SettingModal( {
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
-									label={ createInterpolateElement(
-										__( 'Cell text color ( <code>td</code> tag )', 'flexible-table-block' ),
-										{ code: <code /> }
-									) }
+									label={ __( 'Cell text color ( td tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_text_color_td }
 									onChange={ ( value ) => {
 										setCurrentOptions( {
@@ -387,10 +381,7 @@ export default function SettingModal( {
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
-									label={ createInterpolateElement(
-										__( 'Cell background color ( <code>th</code> tag )', 'flexible-table-block' ),
-										{ code: <code /> }
-									) }
+									label={ __( 'Cell background color ( th tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_background_color_th }
 									onChange={ ( value ) => {
 										setCurrentOptions( {
@@ -405,10 +396,7 @@ export default function SettingModal( {
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
-									label={ createInterpolateElement(
-										__( 'Cell background color ( <code>td</code> tag )', 'flexible-table-block' ),
-										{ code: <code /> }
-									) }
+									label={ __( 'Cell background color ( td tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_background_color_td }
 									onChange={ ( value ) => {
 										setCurrentOptions( {

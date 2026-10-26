@@ -16,6 +16,7 @@ type Props = {
 	isNone: boolean;
 	isTransparent: boolean;
 	isMixed?: boolean;
+	isExpanded?: boolean;
 	onClick: () => void;
 };
 
@@ -25,11 +26,25 @@ export default function ColorIndicatorButton( {
 	isNone,
 	isTransparent,
 	isMixed = false,
+	isExpanded = false,
 	onClick,
 }: Props ) {
+	let description: string;
+	if ( isMixed ) {
+		description = __( 'Mixed', 'flexible-table-block' );
+	} else if ( isNone ) {
+		description = __( 'No color selected', 'flexible-table-block' );
+	} else if ( isTransparent ) {
+		description = __( 'Transparent', 'flexible-table-block' );
+	} else {
+		description = value || '';
+	}
+
 	return (
 		<Button
 			label={ label }
+			describedBy={ description }
+			aria-expanded={ isExpanded }
 			className={ clsx( 'ftb-color-indicator-button', {
 				'is-none': isNone,
 				'is-mixed': isMixed,
