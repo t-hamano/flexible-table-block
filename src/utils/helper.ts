@@ -149,5 +149,5 @@ export function normalizeRowColSpan( rowColSpan: any ) {
 	if ( ! Number.isInteger( parsedValue ) ) {
 		return undefined;
 	}
-	return parsedValue < 0 || parsedValue === 1 ? undefined : parsedValue.toString();
+	return parsedValue <= 1 ? undefined : parsedValue.toString();
 }
