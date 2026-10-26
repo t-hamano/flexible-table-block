@@ -3,11 +3,5 @@ module.exports = {
 	rules: {
 		'no-descending-specificity': null,
 		'selector-class-pattern': null,
-		'value-keyword-case': [
-			'lower',
-			{
-				camelCaseSvgKeywords: true,
-			},
-		],
 	},
 };
