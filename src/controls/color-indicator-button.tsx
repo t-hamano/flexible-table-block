@@ -10,25 +10,25 @@ import type { Property } from 'csstype';
 import { Button, ColorIndicator } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-type Props = (
-	{ label: string; 'aria-labelledby'?: never } | { label?: never; 'aria-labelledby': string }
-) & {
+type Props = {
+	label: string;
 	value?: Property.Color;
 	isNone: boolean;
 	isTransparent: boolean;
 	isMixed?: boolean;
 	isExpanded?: boolean;
+	showTooltip?: boolean;
 	onClick: () => void;
 };
 
 export default function ColorIndicatorButton( {
 	label,
-	'aria-labelledby': ariaLabelledby,
 	value,
 	isNone,
 	isTransparent,
 	isMixed = false,
 	isExpanded = false,
+	showTooltip,
 	onClick,
 }: Props ) {
 	let description: string;
@@ -45,7 +45,7 @@ export default function ColorIndicatorButton( {
 	return (
 		<Button
 			label={ label }
-			aria-labelledby={ ariaLabelledby }
+			showTooltip={ showTooltip }
 			describedBy={ description }
 			aria-expanded={ isExpanded }
 			className={ clsx( 'ftb-color-indicator-button', {

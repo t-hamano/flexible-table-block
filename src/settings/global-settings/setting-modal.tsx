@@ -355,6 +355,7 @@ export default function SettingModal( {
 										__( 'Cell text color ( <code>th</code> tag )', 'flexible-table-block' ),
 										{ code: <code /> }
 									) }
+									buttonLabel={ __( 'Cell text color ( th tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_text_color_th }
 									onChange={ ( value ) => {
 										setCurrentOptions( {
@@ -373,6 +374,7 @@ export default function SettingModal( {
 										__( 'Cell text color ( <code>td</code> tag )', 'flexible-table-block' ),
 										{ code: <code /> }
 									) }
+									buttonLabel={ __( 'Cell text color ( td tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_text_color_td }
 									onChange={ ( value ) => {
 										setCurrentOptions( {
@@ -391,6 +393,7 @@ export default function SettingModal( {
 										__( 'Cell background color ( <code>th</code> tag )', 'flexible-table-block' ),
 										{ code: <code /> }
 									) }
+									buttonLabel={ __( 'Cell background color ( th tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_background_color_th }
 									onChange={ ( value ) => {
 										setCurrentOptions( {
@@ -409,6 +412,7 @@ export default function SettingModal( {
 										__( 'Cell background color ( <code>td</code> tag )', 'flexible-table-block' ),
 										{ code: <code /> }
 									) }
+									buttonLabel={ __( 'Cell background color ( td tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_background_color_td }
 									onChange={ ( value ) => {
 										setCurrentOptions( {

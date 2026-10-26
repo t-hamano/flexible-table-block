@@ -14,15 +14,15 @@ import { useState } from '@wordpress/element';
 import { BaseControl, Popover, ColorPalette } from '@wordpress/components';
 import { Stack } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
-import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
  */
 import ColorIndicatorButton from './color-indicator-button';
 
-type Props = {
-	label: string | ReactElement;
+type Props = (
+	{ label?: string; buttonLabel?: string } | { label: ReactElement; buttonLabel: string }
+) & {
 	help?: string;
 	onChange: ( event: any ) => void;
 	colors?: {
@@ -36,14 +36,13 @@ type Props = {
 
 export default function ColorControl( {
 	label = __( 'Color', 'flexible-table-block' ),
+	buttonLabel,
 	help,
 	onChange,
 	colors: colorsProp = [],
 	value,
 	className,
 }: Props ) {
-	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
-
 	const colors = useSelect( ( select ) => {
 		const settings = select( blockEditorStore ).getSettings();
 		return settings?.colors ?? [];
@@ -60,9 +59,10 @@ export default function ColorControl( {
 	return (
 		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
 			<Stack direction="column" gap="sm">
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
+				<BaseControl.VisualLabel>{ label }</BaseControl.VisualLabel>
 				<ColorIndicatorButton
-					aria-labelledby={ instanceId }
+					label={ buttonLabel ?? ( label as string ) }
+					showTooltip={ false }
 					value={ value }
 					onClick={ handleOnPickerOpen }
 					isNone={ ! value }
