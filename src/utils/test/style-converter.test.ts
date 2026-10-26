@@ -82,9 +82,9 @@ describe( 'style-converter', () => {
 			} );
 		} );
 
-		it( 'should not merge tokens separated by a comment', () => {
+		it( 'should keep comments inside values as is', () => {
 			expect( convertToObject( 'font-family:foo/**/bar' ) ).toStrictEqual( {
-				fontFamily: 'foo bar',
+				fontFamily: 'foo/**/bar',
 			} );
 		} );
 
@@ -148,6 +148,7 @@ describe( 'style-converter', () => {
 			'-webkit-box-shadow:none;',
 			'-ms-transform:none;',
 			'border-top-left-radius:4px;color:red;',
+			'font-family:foo/**/bar;',
 		] )( 'should preserve %s', ( inline ) => {
 			expect( convertToInline( convertToObject( inline ) ) ).toBe( inline );
 		} );

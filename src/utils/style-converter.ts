@@ -6,7 +6,8 @@ import type { Properties } from 'csstype';
 /**
  * Split inline CSS styles into declarations, ignoring semicolons inside
  * brackets (e.g. `url()`), quotes, comments, or escaped with a backslash.
- * Comments outside parentheses are replaced with a space. Inside parentheses,
+ * Comments before the property name are removed, and comments in the value
+ * are kept as is so that saved markup round-trips. Inside parentheses,
  * only nested parentheses and quotes are tracked, so that the raw contents
  * of `url()` are kept as is.
  *
@@ -18,6 +19,7 @@ function splitDeclarations( inlineStyles: string ): string[] {
 	let current = '';
 	let parenDepth = 0;
 	let blockDepth = 0;
+	let hasColon = false;
 	let quote: string | null = null;
 
 	for ( let i = 0; i < inlineStyles.length; i++ ) {
@@ -42,9 +44,14 @@ function splitDeclarations( inlineStyles: string ): string[] {
 			// Inside parentheses, other characters have no special meaning.
 		} else if ( char === '/' && inlineStyles[ i + 1 ] === '*' ) {
 			const commentEnd = inlineStyles.indexOf( '*/', i + 2 );
-			i = commentEnd === -1 ? inlineStyles.length : commentEnd + 1;
-			current += ' ';
+			const end = commentEnd === -1 ? inlineStyles.length : commentEnd + 2;
+			if ( hasColon ) {
+				current += inlineStyles.slice( i, end );
+			}
+			i = end - 1;
 			continue;
+		} else if ( char === ':' ) {
+			hasColon = true;
 		} else if ( char === '{' || char === '[' ) {
 			blockDepth++;
 		} else if ( char === '}' || char === ']' ) {
@@ -52,6 +59,7 @@ function splitDeclarations( inlineStyles: string ): string[] {
 		} else if ( char === ';' && blockDepth === 0 ) {
 			declarations.push( current );
 			current = '';
+			hasColon = false;
 			continue;
 		}
 		current += char;
