@@ -199,6 +199,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						variant="primary"
 						type="submit"
 						disabled={ ! rowCount || ! colCount }
+						accessibleWhenDisabled
 						__next40pxDefaultSize
 					>
 						{ __( 'Create Table', 'flexible-table-block' ) }

@@ -13,7 +13,6 @@ import {
 	InspectorControls,
 	BlockControls,
 	useBlockProps,
-	// @ts-ignore: has no exported member
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
@@ -64,7 +63,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		attributes,
 		setAttributes,
 		isSelected: isSingleSelected,
-		// @ts-ignore: `insertBlocksAfter` prop is not exist at @types
+		// @ts-expect-error `insertBlocksAfter` is missing from the type definitions.
 		insertBlocksAfter,
 	} = props;
 	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
@@ -127,7 +126,6 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 			vTable.body.length === 1 &&
 			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
 		) {
-			// @ts-ignore
 			createWarningNotice(
 				__( 'The table body must have one or more rows.', 'flexible-table-block' ),
 				{

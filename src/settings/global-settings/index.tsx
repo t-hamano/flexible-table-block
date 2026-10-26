@@ -20,14 +20,14 @@ import type { StoreOptions } from '../../store';
 export default function GlobalSettings() {
 	const { options, canManageOptions, hasResolved } = useSelect( ( select ) => {
 		return {
-			// @ts-ignore
+			// @ts-expect-error Selectors of a store accessed by name are not typed.
 			options: select( STORE_NAME ).getOptions() as StoreOptions,
 			canManageOptions: !! select( coreStore ).canUser( 'update', {
 				kind: 'root',
 				name: 'site',
 			} ),
 			hasResolved:
-				// @ts-ignore
+				// @ts-expect-error Selectors of a store accessed by name are not typed.
 				select( STORE_NAME ).hasFinishedResolution( 'getOptions' ) &&
 				select( coreStore ).hasFinishedResolution( 'canUser', [
 					'update',
