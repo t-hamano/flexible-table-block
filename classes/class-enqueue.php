@@ -19,11 +19,6 @@ class Enqueue {
 		// Enqueue front-end scripts.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		// Enqueue block-editor assets.
-		if ( is_admin() ) {
-			add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_editor_assets' ) );
-		}
-
 		// Add block CSS to the block editor styles.
 		add_filter( 'block_editor_settings_all', array( $this, 'add_editor_styles' ) );
 	}
@@ -39,41 +34,11 @@ class Enqueue {
 	 * Enqueue front-end scripts
 	 */
 	public function enqueue_scripts() {
-		wp_register_style(
-			'flexible-table-block',
-			FTB_URL . '/build/style-index.css',
-			array(),
-			filemtime( FTB_PATH . '/build/style-index.css' ),
-		);
-
 		$responsive_css = Helper::get_responsive_css();
 		$block_css      = Helper::get_block_css();
 		$css            = Helper::minify_css( $block_css . $responsive_css );
 
-		wp_add_inline_style( 'flexible-table-block', $css );
-	}
-
-	/**
-	 * Enqueue block-editor assets
-	 */
-	public function enqueue_block_editor_assets() {
-		$asset_file = include FTB_PATH . '/build/index.asset.php';
-
-		wp_register_script(
-			'flexible-table-block-editor',
-			FTB_URL . '/build/index.js',
-			$asset_file['dependencies'],
-			filemtime( FTB_PATH . '/build/index.js' ),
-		);
-
-		wp_set_script_translations( 'flexible-table-block-editor', FTB_NAMESPACE );
-
-		wp_register_style(
-			'flexible-table-block-editor',
-			FTB_URL . '/build/index.css',
-			array(),
-			filemtime( FTB_PATH . '/build/index.css' ),
-		);
+		wp_add_inline_style( generate_block_asset_handle( 'flexible-table-block/table', 'viewStyle' ), $css );
 	}
 
 	/**
