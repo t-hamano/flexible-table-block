@@ -29,6 +29,7 @@ export default function ColorIndicatorButton( {
 }: Props ) {
 	return (
 		<Button
+			__next40pxDefaultSize
 			label={ label }
 			className={ clsx( 'ftb-color-indicator-button', {
 				'is-none': isNone,

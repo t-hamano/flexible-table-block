@@ -2,7 +2,9 @@
 @use "~@wordpress/base-styles/variables" as variables;
 
 // Color indicator button styles.
-.ftb-color-indicator-button {
+// Includes `.components-button` to override the height of the 40px
+// default size.
+.components-button.ftb-color-indicator-button {
 	position: relative;
 	justify-content: center;
 	height: variables.$button-size-small;
