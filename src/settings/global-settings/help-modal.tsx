@@ -8,7 +8,7 @@ import type { Dispatch, SetStateAction } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { createInterpolateElement } from '@wordpress/element';
-import { Modal, __experimentalHeading as Heading } from '@wordpress/components';
+import { Modal } from '@wordpress/components';
 import { Stack, Text, Link } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
@@ -25,9 +25,9 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 		>
 			<Stack direction="column" gap="lg">
 				<Stack direction="column" gap="sm">
-					<Heading level={ 5 }>
+					<Text variant="heading-md" render={ <h5 /> }>
 						{ __( 'About default table style', 'flexible-table-block' ) }
-					</Heading>
+					</Text>
 					<Text render={ <p /> }>
 						{ __(
 							'Flexible Table Block is a block that allows you to create tables in various styles. First of all, it is recommended to set the default style of the table from "Global Setting".',
@@ -36,7 +36,9 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					</Text>
 				</Stack>
 				<Stack direction="column" gap="sm">
-					<Heading level={ 5 }>{ __( 'Select multiple cells', 'flexible-table-block' ) }</Heading>
+					<Text variant="heading-md" render={ <h5 /> }>
+						{ __( 'Select multiple cells', 'flexible-table-block' ) }
+					</Text>
 					<Text render={ <p /> }>
 						{ createInterpolateElement(
 							isAppleOS()
@@ -53,7 +55,9 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					</Text>
 				</Stack>
 				<Stack direction="column" gap="sm">
-					<Heading level={ 5 }>{ __( 'About scroll table', 'flexible-table-block' ) }</Heading>
+					<Text variant="heading-md" render={ <h5 /> }>
+						{ __( 'About scroll table', 'flexible-table-block' ) }
+					</Text>
 					<Text render={ <p /> }>
 						{ __(
 							'If table scrolling is enabled, set "Table Width" or "Table Min Width" larger than the content width.',
@@ -62,7 +66,9 @@ export default function HelpModal( { setIsHelpModalOpen }: Props ) {
 					</Text>
 				</Stack>
 				<Stack direction="column" gap="sm">
-					<Heading level={ 5 }>{ __( 'About accessibility', 'flexible-table-block' ) }</Heading>
+					<Text variant="heading-md" render={ <h5 /> }>
+						{ __( 'About accessibility', 'flexible-table-block' ) }
+					</Text>
 					<Text render={ <p /> }>
 						{ createInterpolateElement(
 							__(
