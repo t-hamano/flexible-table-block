@@ -1,33 +1,235 @@
 /**
  * Internal dependencies
  */
-import metadata from './block.json';
 import save from './save';
-
-/**
- * Remove the `role` key from attribute definitions, including nested query attributes.
- *
- * @param value Attribute definitions.
- * @return Attribute definitions without `role`.
- */
-function omitRole( value: unknown ): unknown {
-	if ( Array.isArray( value ) ) {
-		return value.map( omitRole );
-	}
-	if ( value && typeof value === 'object' ) {
-		return Object.fromEntries(
-			Object.entries( value )
-				.filter( ( [ key ] ) => key !== 'role' )
-				.map( ( [ key, childValue ] ) => [ key, omitRole( childValue ) ] )
-		);
-	}
-	return value;
-}
 
 // To fix a problem with link colors not being applied
 const v1 = {
-	// Same as the current attributes, but without `role: "content"`.
-	attributes: omitRole( metadata.attributes ),
+	attributes: {
+		contentJustification: {
+			type: 'string',
+		},
+		hasFixedLayout: {
+			type: 'boolean',
+			default: true,
+		},
+		isScrollOnPc: {
+			type: 'boolean',
+			default: false,
+		},
+		isScrollOnMobile: {
+			type: 'boolean',
+			default: false,
+		},
+		isStackedOnMobile: {
+			type: 'boolean',
+			default: false,
+		},
+		sticky: {
+			type: 'string',
+		},
+		tableStyles: {
+			type: 'string',
+			source: 'attribute',
+			selector: 'table',
+			attribute: 'style',
+		},
+		captionSide: {
+			type: 'string',
+			default: 'bottom',
+		},
+		caption: {
+			type: 'string',
+			source: 'html',
+			selector: 'figcaption',
+		},
+		captionStyles: {
+			type: 'string',
+			source: 'attribute',
+			selector: 'figcaption',
+			attribute: 'style',
+		},
+		head: {
+			type: 'array',
+			default: [],
+			source: 'query',
+			selector: 'thead tr',
+			query: {
+				cells: {
+					type: 'array',
+					default: [],
+					source: 'query',
+					selector: 'td,th',
+					query: {
+						content: {
+							type: 'string',
+							source: 'html',
+						},
+						styles: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'style',
+						},
+						tag: {
+							type: 'string',
+							default: 'td',
+							source: 'tag',
+						},
+						className: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'class',
+						},
+						id: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'id',
+						},
+						headers: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'headers',
+						},
+						scope: {
+							enum: [ 'row', 'col', 'rowgroup', 'colgroup' ],
+							source: 'attribute',
+							attribute: 'scope',
+						},
+						rowSpan: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'rowspan',
+						},
+						colSpan: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'colspan',
+						},
+					},
+				},
+			},
+		},
+		body: {
+			type: 'array',
+			default: [],
+			source: 'query',
+			selector: 'tbody tr',
+			query: {
+				cells: {
+					type: 'array',
+					default: [],
+					source: 'query',
+					selector: 'td,th',
+					query: {
+						content: {
+							type: 'string',
+							source: 'html',
+						},
+						styles: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'style',
+						},
+						tag: {
+							type: 'string',
+							default: 'td',
+							source: 'tag',
+						},
+						className: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'class',
+						},
+						id: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'id',
+						},
+						headers: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'headers',
+						},
+						scope: {
+							enum: [ 'row', 'col', 'rowgroup', 'colgroup' ],
+							source: 'attribute',
+							attribute: 'scope',
+						},
+						rowSpan: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'rowspan',
+						},
+						colSpan: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'colspan',
+						},
+					},
+				},
+			},
+		},
+		foot: {
+			type: 'array',
+			default: [],
+			source: 'query',
+			selector: 'tfoot tr',
+			query: {
+				cells: {
+					type: 'array',
+					default: [],
+					source: 'query',
+					selector: 'td,th',
+					query: {
+						content: {
+							type: 'string',
+							source: 'html',
+						},
+						styles: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'style',
+						},
+						tag: {
+							type: 'string',
+							default: 'td',
+							source: 'tag',
+						},
+						className: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'class',
+						},
+						id: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'id',
+						},
+						headers: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'headers',
+						},
+						scope: {
+							enum: [ 'row', 'col', 'rowgroup', 'colgroup' ],
+							source: 'attribute',
+							attribute: 'scope',
+						},
+						rowSpan: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'rowspan',
+						},
+						colSpan: {
+							type: 'string',
+							source: 'attribute',
+							attribute: 'colspan',
+						},
+					},
+				},
+			},
+		},
+	},
 	supports: {
 		anchor: true,
 		align: [ 'left', 'right', 'wide', 'full' ],
