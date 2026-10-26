@@ -53,7 +53,7 @@ export default function ColorIndicatorButton( {
 			onClick={ onClick }
 		>
 			{ isMixed ? (
-				<span aria-hidden="true">{ __( 'Mixed', 'flexible-table-block' ) }</span>
+				__( 'Mixed', 'flexible-table-block' )
 			) : (
 				<ColorIndicator
 					colorValue={ value || '' }
