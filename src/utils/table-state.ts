@@ -307,7 +307,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 							colSpan: 1,
 							sectionName: cell.sectionName,
 							rowIndex: cell.rowIndex,
-							vColIndex: vColIndex + 1,
+							vColIndex,
 							isHidden: false,
 						} );
 						return newCells;
@@ -582,7 +582,10 @@ export function splitMergedCells( vTable: VTable, selectedCells: VSelectedCells 
 function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 	const { sectionName, rowIndex, vColIndex, rowSpan, colSpan } = selectedCell;
 
-	const vSection = vTable[ sectionName as SectionName ];
+	// Copy the section and rows so that the original virtual table is not mutated.
+	const vSection = vTable[ sectionName as SectionName ].map( ( row ) => ( {
+		cells: [ ...row.cells ],
+	} ) );
 
 	// Split the selected cells and map them on the virtual section.
 	vSection[ rowIndex ].cells[ vColIndex ] = {
@@ -617,7 +620,7 @@ function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 						...vSection[ rowIndex ].cells[ vColIndex ],
 						content: '',
 						rowIndex: rowIndex + i,
-						vColIndex: vColIndex + i,
+						vColIndex: vColIndex + j,
 						isHidden: false,
 					};
 				}
