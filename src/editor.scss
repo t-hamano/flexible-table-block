@@ -231,20 +231,6 @@ $row-column-inserter-dot-size: 6px;
 			border-radius: variables.$radius-round;
 			transform: translate(-50%, -50%);
 		}
-
-		&:hover,
-		&:focus {
-			color: colors.$white;
-			background: var(--wp-admin-theme-color);
-
-			&::before {
-				content: none;
-			}
-
-			&:active {
-				color: colors.$white;
-			}
-		}
 	}
 
 	.ftb-row-before-inserter {
@@ -275,16 +261,32 @@ $row-column-inserter-dot-size: 6px;
 		right: math.div($row-column-inserter-button-size, 2) * -1; // -10px
 	}
 
+	.ftb-row-before-inserter:hover,
+	.ftb-row-before-inserter:focus,
+	.ftb-row-after-inserter:hover,
+	.ftb-row-after-inserter:focus,
+	.ftb-column-before-inserter:hover,
+	.ftb-column-before-inserter:focus,
+	.ftb-column-after-inserter:hover,
+	.ftb-column-after-inserter:focus {
+		color: colors.$white;
+		background: var(--wp-admin-theme-color);
+
+		&::before {
+			content: none;
+		}
+
+		&:active {
+			color: colors.$white;
+		}
+	}
+
 	.ftb-row-selector,
 	.ftb-column-selector {
 		position: absolute;
 		justify-content: center;
 		min-width: 0;
 		padding: 0;
-
-		&:not(.is-pressed) {
-			background: colors.$gray-200;
-		}
 	}
 
 	.ftb-row-selector {
@@ -301,6 +303,11 @@ $row-column-inserter-dot-size: 6px;
 		width: calc(100% - 2px);
 		height: $row-column-selector-size;
 		border-radius: variables.$radius-small variables.$radius-small 0 0;
+	}
+
+	.ftb-row-selector:not(.is-pressed),
+	.ftb-column-selector:not(.is-pressed) {
+		background: colors.$gray-200;
 	}
 
 	.ftb-row-remover,
