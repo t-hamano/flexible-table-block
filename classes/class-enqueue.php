@@ -38,7 +38,7 @@ class Enqueue {
 		$block_css      = Helper::get_block_css();
 		$css            = Helper::minify_css( $block_css . $responsive_css );
 
-		wp_add_inline_style( generate_block_asset_handle( 'flexible-table-block/table', 'style' ), $css );
+		wp_add_inline_style( generate_block_asset_handle( 'flexible-table-block/table', 'viewStyle' ), $css );
 	}
 
 	/**
