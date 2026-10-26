@@ -13,7 +13,6 @@ import { useState } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
-	__experimentalGrid as Grid,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
@@ -161,7 +160,7 @@ export default function BorderRadiusControl( {
 					/>
 				</Stack>
 				{ ! isLinked && (
-					<Grid gap={ 2 }>
+					<div className="ftb-corner-controls">
 						{ CORNER_CONTROLS.map( ( item ) => (
 							<div key={ item.value }>
 								<UnitControl
@@ -175,7 +174,7 @@ export default function BorderRadiusControl( {
 								/>
 							</div>
 						) ) }
-					</Grid>
+					</div>
 				) }
 			</Stack>
 		</BaseControl>
