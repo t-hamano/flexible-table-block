@@ -3,7 +3,6 @@
  */
 import clsx from 'clsx';
 import type { Property } from 'csstype';
-import type { ReactElement } from 'react';
 
 /**
  * WordPress dependencies
@@ -20,9 +19,8 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
  */
 import ColorIndicatorButton from './color-indicator-button';
 
-type Props = (
-	{ label?: string; buttonLabel?: string } | { label: ReactElement; buttonLabel: string }
-) & {
+type Props = {
+	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
 	colors?: {
@@ -36,7 +34,6 @@ type Props = (
 
 export default function ColorControl( {
 	label = __( 'Color', 'flexible-table-block' ),
-	buttonLabel,
 	help,
 	onChange,
 	colors: colorsProp = [],
@@ -61,7 +58,7 @@ export default function ColorControl( {
 			<Stack direction="column" gap="sm">
 				<BaseControl.VisualLabel>{ label }</BaseControl.VisualLabel>
 				<ColorIndicatorButton
-					label={ buttonLabel ?? ( label as string ) }
+					label={ label }
 					showTooltip={ false }
 					value={ value }
 					onClick={ handleOnPickerOpen }
