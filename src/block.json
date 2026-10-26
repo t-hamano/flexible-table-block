@@ -266,8 +266,10 @@
 			"__experimentalDefaultControls": {
 				"margin": false
 			}
-		},
-		"__experimentalSelector": ".wp-block-flexible-table-block-table > table"
+		}
+	},
+	"selectors": {
+		"root": ".wp-block-flexible-table-block-table > table"
 	},
 	"styles": [
 		{

@@ -64,10 +64,7 @@ export default function BorderColorControl( {
 	);
 
 	const colors = useSelect( ( select ) => {
-		const settings = select(
-			blockEditorStore
-			// @ts-ignore
-		).getSettings();
+		const settings = select( blockEditorStore ).getSettings();
 		return settings?.colors ?? [];
 	}, [] );
 

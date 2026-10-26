@@ -90,8 +90,8 @@ export default function Table( {
 	const [ isSelectMode, setIsSelectMode ] = useState( false );
 
 	// Manage rendering status as state since some processing may be performed before rendering components.
-	const [ isReady, setIdReady ] = useState( false );
-	useEffect( () => setIdReady( true ), [] );
+	const [ isReady, setIsReady ] = useState( false );
+	useEffect( () => setIsReady( true ), [] );
 
 	const tableRef = useRef( null );
 	const { createWarningNotice } = useDispatch( noticesStore );
@@ -179,7 +179,7 @@ export default function Table( {
 	};
 
 	const onSelectColumn = ( vColIndex: number ) => {
-		if ( isColumnSelected && selectedLine.vColIndex && selectedLine.vColIndex === vColIndex ) {
+		if ( isColumnSelected && selectedLine.vColIndex === vColIndex ) {
 			setSelectedLine( undefined );
 			setSelectedCells( undefined );
 		} else {
@@ -288,6 +288,10 @@ export default function Table( {
 			event.preventDefault();
 			setIsSelectMode( false );
 			isTabMove.current = true;
+			// The block editor moves focus out of the canvas iframe on Tab before this
+			// handler runs. Focus the canvas window first, because Firefox does not move
+			// window focus when focusing an element in another document.
+			ownerDocument.defaultView?.focus();
 			focusbleElement.focus();
 
 			// Select all text if the next cell is not empty.
@@ -400,10 +404,6 @@ export default function Table( {
 			} ) ),
 		};
 	}, {} );
-
-	if ( ! filteredVTable ) {
-		return null;
-	}
 
 	const filteredSections = Object.keys( filteredVTable ) as SectionName[];
 

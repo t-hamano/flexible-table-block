@@ -151,13 +151,13 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 
 	const onChangeTextAlign = ( value: string | number | undefined ) => {
 		updateCellsState( {
-			styles: { textAlign: value === cellStylesObj.textAlign ? undefined : value },
+			styles: { textAlign: value },
 		} );
 	};
 
 	const onChangeVerticalAlign = ( value: string | number | undefined ) => {
 		updateCellsState( {
-			styles: { verticalAlign: value === cellStylesObj.verticalAlign ? undefined : value },
+			styles: { verticalAlign: value },
 		} );
 	};
 
@@ -245,7 +245,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						step={ 0.1 }
 						min={ 0 }
 						onChange={ onChangeLineHeight }
-						__next40pxDefaultSize
 					/>
 				</div>
 			</Stack>
@@ -393,7 +392,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				value={ targetCell.className || '' }
 				onChange={ onChangeClass }
 				help={ __( 'Separate multiple classes with spaces.', 'flexible-table-block' ) }
-				__next40pxDefaultSize
 			/>
 			{ selectedCellTags.length === 1 && (
 				<>
@@ -408,7 +406,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 							autoComplete="off"
 							value={ targetCell.id || '' }
 							onChange={ onChangeId }
-							__next40pxDefaultSize
 						/>
 					) }
 					<TextControl
@@ -420,7 +417,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						autoComplete="off"
 						value={ targetCell.headers || '' }
 						onChange={ onChangeHeaders }
-						__next40pxDefaultSize
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
 						<SelectControl

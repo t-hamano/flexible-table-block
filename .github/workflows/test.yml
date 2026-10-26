@@ -7,6 +7,10 @@ on:
       - main
   workflow_call:
 
+# Disable permissions for all available scopes by default.
+# Any needed permissions should be configured at the job level.
+permissions: {}
+
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
   # The concurrency group contains the workflow name and the branch name for pull requests
@@ -15,27 +19,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - php: '8.2'
-            wp: WordPress
-          - php: '8.2'
-            wp: WordPress#7.1.2
+    permissions:
+      contents: read
+    timeout-minutes: 15
 
-          - php: '8.4'
-            wp: WordPress
-          - php: '8.4'
-            wp: WordPress#7.1.2
-
-          - php: '8.5'
-            wp: WordPress
-          - php: '8.5'
-            wp: WordPress#7.1.2
-
-    name: PHP ${{ matrix.php }} / ${{ matrix.wp }} Test
+    name: Lint
 
     steps:
       - name: Checkout
@@ -45,25 +35,97 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Npm install
+        run: npm ci
+
+      - name: Composer install
+        run: composer install
+
+      - name: Running lint check
+        run: npm run lint
+
+  js-unit-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 15
+
+    name: JavaScript Unit Test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use desired version of Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Npm install
+        run: npm ci
+
+      - name: Running JavaScript unit tests
+        run: npm run test:unit
+
+  e2e-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        include:
+          # Browser differences only depend on the WordPress version,
+          # so all browsers run on the latest PHP only.
+          - php: '8.2'
+            wp: WordPress
+            label: WP trunk
+            browsers: chromium
+          - php: '8.2'
+            wp: WordPress#7.1.3
+            label: WP 7.1.3
+            browsers: chromium
+
+          - php: '8.4'
+            wp: WordPress
+            label: WP trunk
+            browsers: chromium
+          - php: '8.4'
+            wp: WordPress#7.1.3
+            label: WP 7.1.3
+            browsers: chromium
+
+          - php: '8.5'
+            wp: WordPress
+            label: WP trunk
+            browsers: chromium firefox webkit
+          - php: '8.5'
+            wp: WordPress#7.1.3
+            label: WP 7.1.3
+            browsers: chromium firefox webkit
+
+    name: E2E / PHP ${{ matrix.php }} / ${{ matrix.label }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use desired version of Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
 
       - name: Npm install and build
         run: |
           npm ci
           npm run build
 
-      - name: Composer install and set phpcs
-        run: |
-          composer install
-          composer phpcs
-
-      - name: Running lint check
-        run: npm run lint
-
-      - name: Running unit tests
-        run: npm run test:unit
-
       - name: Install Playwright dependencies
-        run: npx playwright install chromium firefox webkit --with-deps
+        run: npx playwright install ${{ matrix.browsers }} --with-deps
 
       - name: Install WordPress
         run: |
@@ -72,11 +134,13 @@ jobs:
           npm run wp-env-test run cli wp cli info
 
       - name: Running e2e tests
-        run: npm run test:e2e
+        run: npm run test:e2e -- $(printf -- '--project=%s ' ${{ matrix.browsers }})
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
       - name: Archive debug artifacts
         uses: actions/upload-artifact@v7
-        if: always()
+        if: failure()
         with:
           name: failures-artifacts-${{ matrix.php }}-${{ matrix.wp }}
           path: artifacts

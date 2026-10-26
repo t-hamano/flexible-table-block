@@ -81,7 +81,7 @@ export default function TableCaptionSettings( {
 		if ( isAllowedValue( value ) ) {
 			const newStylesObj = {
 				...captionStylesObj,
-				textAlign: value === captionStylesObj.textAlign ? undefined : value,
+				textAlign: value,
 			};
 			setAttributes( {
 				captionStyles: convertToInline( newStylesObj ),
@@ -127,7 +127,6 @@ export default function TableCaptionSettings( {
 						type="number"
 						value={ captionStylesObj?.lineHeight || '' }
 						min={ 0 }
-						__next40pxDefaultSize
 					/>
 				</div>
 			</Stack>

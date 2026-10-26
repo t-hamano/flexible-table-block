@@ -19,7 +19,7 @@ test.describe( 'Global Setting', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'should output inline style reflecting the settings', async ( {
+	test( 'should update editor styles reflecting the settings', async ( {
 		editor,
 		page,
 		pageUtils,
@@ -96,12 +96,17 @@ test.describe( 'Global Setting', () => {
 			'Global setting saved.'
 		);
 		const styleTagContent = await page.evaluate( () => {
-			const styleTag = document.querySelector( 'style#flexible-table-block-editor-inline-css' );
-			return styleTag ? styleTag.textContent : '';
+			const blockStyle = window.wp.data
+				.select( 'core/editor' )
+				.getEditorSettings()
+				.styles.find(
+					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
+				);
+			return blockStyle ? blockStyle.css : '';
 		} );
 
 		expect( styleTagContent ).toBe(
-			`.editor-styles-wrapper .wp-block-flexible-table-block-table>table{width:90%;max-width:110%;border-collapse:separate;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th,.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th{color:#333333;background-color:#555555;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{color:#444444;background-color:#666666;}`
+			`.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table{width:90%;max-width:110%;border-collapse:separate;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th,.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th{color:#333333;background-color:#555555;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{color:#444444;background-color:#666666;}`
 		);
 
 		// Restore settings.
@@ -113,12 +118,17 @@ test.describe( 'Global Setting', () => {
 		await page.locator( '.ftb-global-setting-modal__notice ' ).getByRole( 'button' ).click();
 
 		const defaultStyleTagContent = await page.evaluate( () => {
-			const styleTag = document.querySelector( 'style#flexible-table-block-editor-inline-css' );
-			return styleTag ? styleTag.textContent : '';
+			const blockStyle = window.wp.data
+				.select( 'core/editor' )
+				.getEditorSettings()
+				.styles.find(
+					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
+				);
+			return blockStyle ? blockStyle.css : '';
 		} );
 
 		expect( defaultStyleTagContent ).toBe(
-			`.editor-styles-wrapper .wp-block-flexible-table-block-table>table{width:100%;max-width:100%;border-collapse:collapse;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#ffffff;}.editor-styles-wrapper .wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th,.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr th{background-color:#f0f0f1;}.editor-styles-wrapper .wp-block-flexible-table-block-table>table tr td{background-color:#ffffff;}`
+			`.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table{width:100%;max-width:100%;border-collapse:collapse;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#ffffff;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th,.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{background-color:#ffffff;}`
 		);
 	} );
 } );
