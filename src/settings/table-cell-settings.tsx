@@ -12,7 +12,6 @@ import {
 	BaseControl,
 	Button,
 	SelectControl,
-	TextControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
@@ -20,7 +19,7 @@ import {
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
+import { InputControl, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -237,14 +236,14 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					/>
 				</div>
 				<div className="ftb-table-cell-settings-line-height" style={ { flex: 1 } }>
-					<TextControl
+					<InputControl
 						label={ __( 'Cell line height', 'flexible-table-block' ) }
 						value={ cellStylesObj?.lineHeight || '' }
 						autoComplete="off"
 						type="number"
 						step={ 0.1 }
 						min={ 0 }
-						onChange={ onChangeLineHeight }
+						onValueChange={ onChangeLineHeight }
 					/>
 				</div>
 			</Stack>
@@ -385,38 +384,32 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					<ToggleGroupControlOption key={ value } value={ value } label={ label } />
 				) ) }
 			</ToggleGroupControl>
-			<TextControl
+			<InputControl
 				className="ftb-table-cell-settings-custom-class"
 				label={ __( 'Cell CSS class(es)', 'flexible-table-block' ) }
 				autoComplete="off"
 				value={ targetCell.className || '' }
-				onChange={ onChangeClass }
-				help={ __( 'Separate multiple classes with spaces.', 'flexible-table-block' ) }
+				onValueChange={ onChangeClass }
+				description={ __( 'Separate multiple classes with spaces.', 'flexible-table-block' ) }
 			/>
 			{ selectedCellTags.length === 1 && (
 				<>
 					<hr />
 					{ selectedCellTags.includes( 'th' ) && (
-						<TextControl
+						<InputControl
 							className="ftb-table-cell-settings-id"
-							label={ createInterpolateElement(
-								__( '<code>id</code> attribute', 'flexible-table-block' ),
-								{ code: <code /> }
-							) }
+							label={ __( 'id attribute', 'flexible-table-block' ) }
 							autoComplete="off"
 							value={ targetCell.id || '' }
-							onChange={ onChangeId }
+							onValueChange={ onChangeId }
 						/>
 					) }
-					<TextControl
+					<InputControl
 						className="ftb-table-cell-settings-headers"
-						label={ createInterpolateElement(
-							__( '<code>headers</code> attribute', 'flexible-table-block' ),
-							{ code: <code /> }
-						) }
+						label={ __( 'headers attribute', 'flexible-table-block' ) }
 						autoComplete="off"
 						value={ targetCell.headers || '' }
-						onChange={ onChangeHeaders }
+						onValueChange={ onChangeHeaders }
 					/>
 					{ selectedCellTags.includes( 'th' ) && (
 						<SelectControl
