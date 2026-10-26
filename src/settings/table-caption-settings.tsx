@@ -9,14 +9,13 @@ import type { Property, Properties } from 'csstype';
 import { __ } from '@wordpress/i18n';
 import {
 	Button,
-	TextControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
+import { InputControl, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -119,10 +118,10 @@ export default function TableCaptionSettings( {
 					/>
 				</div>
 				<div className="ftb-table-caption-settings-line-height" style={ { flex: 1 } }>
-					<TextControl
+					<InputControl
 						label={ __( 'Caption line height', 'flexible-table-block' ) }
 						autoComplete="off"
-						onChange={ onChangeLineHeight }
+						onValueChange={ onChangeLineHeight }
 						step={ 0.1 }
 						type="number"
 						value={ captionStylesObj?.lineHeight || '' }
