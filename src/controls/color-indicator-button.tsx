@@ -7,13 +7,12 @@ import type { Property } from 'csstype';
 /**
  * WordPress dependencies
  */
-import { Button, ColorIndicator, VisuallyHidden } from '@wordpress/components';
-import { useInstanceId } from '@wordpress/compose';
+import { Button, ColorIndicator } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-type Props = {
-	label?: string;
-	'aria-labelledby'?: string;
+type Props = (
+	{ label: string; 'aria-labelledby'?: never } | { label?: never; 'aria-labelledby': string }
+) & {
 	value?: Property.Color;
 	isNone: boolean;
 	isTransparent: boolean;
@@ -32,11 +31,6 @@ export default function ColorIndicatorButton( {
 	isExpanded = false,
 	onClick,
 }: Props ) {
-	const descriptionId = useInstanceId(
-		ColorIndicatorButton,
-		'ftb-color-indicator-button__description'
-	);
-
 	let description: string;
 	if ( isMixed ) {
 		description = __( 'Mixed', 'flexible-table-block' );
@@ -49,29 +43,26 @@ export default function ColorIndicatorButton( {
 	}
 
 	return (
-		<>
-			<Button
-				label={ label }
-				aria-labelledby={ ariaLabelledby }
-				aria-describedby={ descriptionId }
-				aria-expanded={ isExpanded }
-				className={ clsx( 'ftb-color-indicator-button', {
-					'is-none': isNone,
-					'is-mixed': isMixed,
-					'is-transparent': isTransparent,
-				} ) }
-				onClick={ onClick }
-			>
-				{ isMixed ? (
-					<span aria-hidden="true">{ __( 'Mixed', 'flexible-table-block' ) }</span>
-				) : (
-					<ColorIndicator
-						colorValue={ value || '' }
-						className="ftb-color-indicator-button__indicator"
-					/>
-				) }
-			</Button>
-			<VisuallyHidden id={ descriptionId }>{ description }</VisuallyHidden>
-		</>
+		<Button
+			label={ label }
+			aria-labelledby={ ariaLabelledby }
+			describedBy={ description }
+			aria-expanded={ isExpanded }
+			className={ clsx( 'ftb-color-indicator-button', {
+				'is-none': isNone,
+				'is-mixed': isMixed,
+				'is-transparent': isTransparent,
+			} ) }
+			onClick={ onClick }
+		>
+			{ isMixed ? (
+				<span aria-hidden="true">{ __( 'Mixed', 'flexible-table-block' ) }</span>
+			) : (
+				<ColorIndicator
+					colorValue={ value || '' }
+					className="ftb-color-indicator-button__indicator"
+				/>
+			) }
+		</Button>
 	);
 }
