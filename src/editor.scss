@@ -206,6 +206,34 @@ $row-column-inserter-dot-size: 6px;
 		border-radius: 0;
 	}
 
+	.ftb-row-before-inserter {
+		top: math.div($row-column-inserter-button-size, 2) * -1; // -9px
+		left: variables.$grid-unit-50 * -1; // -40px;
+
+		&.has-prev-section {
+			top: 0;
+		}
+	}
+
+	.ftb-row-after-inserter {
+		bottom: math.div($row-column-inserter-button-size, 2) * -1;
+		left: variables.$grid-unit-50 * -1; // -40px;
+
+		&.has-next-section {
+			bottom: 0;
+		}
+	}
+
+	.ftb-column-before-inserter {
+		top: variables.$grid-unit-50 * -1; // -40px
+		left: math.div($row-column-inserter-button-size, 2) * -1; // -10px
+	}
+
+	.ftb-column-after-inserter {
+		top: variables.$grid-unit-50 * -1; // -40px
+		right: math.div($row-column-inserter-button-size, 2) * -1; // -10px
+	}
+
 	.ftb-row-before-inserter,
 	.ftb-row-after-inserter,
 	.ftb-column-before-inserter,
@@ -247,46 +275,6 @@ $row-column-inserter-dot-size: 6px;
 		}
 	}
 
-	.ftb-row-before-inserter {
-		top: math.div($row-column-inserter-button-size, 2) * -1; // -9px
-		left: variables.$grid-unit-50 * -1; // -40px;
-
-		&.has-prev-section {
-			top: 0;
-		}
-	}
-
-	.ftb-row-after-inserter {
-		bottom: math.div($row-column-inserter-button-size, 2) * -1;
-		left: variables.$grid-unit-50 * -1; // -40px;
-
-		&.has-next-section {
-			bottom: 0;
-		}
-	}
-
-	.ftb-column-before-inserter {
-		top: variables.$grid-unit-50 * -1; // -40px
-		left: math.div($row-column-inserter-button-size, 2) * -1; // -10px
-	}
-
-	.ftb-column-after-inserter {
-		top: variables.$grid-unit-50 * -1; // -40px
-		right: math.div($row-column-inserter-button-size, 2) * -1; // -10px
-	}
-
-	.ftb-row-selector,
-	.ftb-column-selector {
-		position: absolute;
-		justify-content: center;
-		min-width: 0;
-		padding: 0;
-
-		&:not(.is-pressed) {
-			background: colors.$gray-200;
-		}
-	}
-
 	.ftb-row-selector {
 		top: 1px;
 		left: ($row-column-selector-size + 2) * -1;
@@ -301,6 +289,18 @@ $row-column-inserter-dot-size: 6px;
 		width: calc(100% - 2px);
 		height: $row-column-selector-size;
 		border-radius: variables.$radius-small variables.$radius-small 0 0;
+	}
+
+	.ftb-row-selector,
+	.ftb-column-selector {
+		position: absolute;
+		justify-content: center;
+		min-width: 0;
+		padding: 0;
+
+		&:not(.is-pressed) {
+			background: colors.$gray-200;
+		}
 	}
 
 	.ftb-row-remover,
