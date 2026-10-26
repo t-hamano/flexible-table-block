@@ -13,9 +13,6 @@ class Init {
 	 * Constructor
 	 */
 	public function __construct() {
-		// Load translated strings.
-		load_plugin_textdomain( FTB_NAMESPACE );
-
 		// Load classes.
 		$this->load_classes();
 	}
