@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import {
 	RichText,
 	useBlockProps,
-	// @ts-ignore: has no exported member
+	// @ts-expect-error Not exported in the type definitions.
 	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,
 } from '@wordpress/block-editor';
 import type { BlockSaveProps } from '@wordpress/blocks';

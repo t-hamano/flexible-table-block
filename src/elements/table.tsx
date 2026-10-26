@@ -12,7 +12,7 @@ import { __ } from '@wordpress/i18n';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import {
 	RichText,
-	// @ts-ignore: has no exported member
+	// @ts-expect-error Not exported in the type definitions.
 	__experimentalUseColorProps as useColorProps,
 } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
@@ -116,7 +116,6 @@ export default function Table( {
 			vTable.body.length === 1 &&
 			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
 		) {
-			// @ts-ignore
 			createWarningNotice(
 				__( 'The table body must have one or more rows.', 'flexible-table-block' ),
 				{
@@ -344,7 +343,6 @@ export default function Table( {
 				}
 
 				if ( fromCell.sectionName !== sectionName ) {
-					// @ts-ignore
 					createWarningNotice(
 						__( 'Cannot select range cells from difference sections.', 'flexible-table-block' ),
 						{
@@ -368,7 +366,6 @@ export default function Table( {
 			} );
 
 			if ( newSelectedCells.length && sectionName !== newSelectedCells[ 0 ].sectionName ) {
-				// @ts-ignore
 				createWarningNotice(
 					__( 'Cannot select multi cells from difference sections.', 'flexible-table-block' ),
 					{

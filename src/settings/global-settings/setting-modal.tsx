@@ -707,6 +707,7 @@ export default function SettingModal( {
 				<Button
 					variant="primary"
 					disabled={ isWaiting }
+					accessibleWhenDisabled
 					onClick={ handleUpdateOptions }
 					__next40pxDefaultSize
 				>
@@ -716,6 +717,7 @@ export default function SettingModal( {
 					<Button
 						isDestructive
 						disabled={ isWaiting }
+						accessibleWhenDisabled
 						onClick={ () => setIsResetPopup( ! isResetPopup ) }
 						__next40pxDefaultSize
 					>
