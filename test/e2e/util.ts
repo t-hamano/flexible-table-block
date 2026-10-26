@@ -31,10 +31,10 @@ export default class FlexibleTableBlockUtils {
 		await this.editor.insertBlock( { name: 'flexible-table-block/table' } );
 
 		if ( header ) {
-			await this.editor.canvas.getByRole( 'checkbox', { name: 'Header section' } ).check();
+			await this.editor.canvas.getByRole( 'switch', { name: 'Header section' } ).check();
 		}
 		if ( footer ) {
-			await this.editor.canvas.getByRole( 'checkbox', { name: 'Footer section' } ).check();
+			await this.editor.canvas.getByRole( 'switch', { name: 'Footer section' } ).check();
 		}
 		if ( col ) {
 			await this.editor.canvas

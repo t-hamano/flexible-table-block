@@ -10,8 +10,8 @@ import type { FormEvent } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
-import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/components';
-import { Stack, Text } from '@wordpress/ui';
+import { Button, Placeholder, TextControl } from '@wordpress/components';
+import { Stack, SwitchControl, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
 /**
@@ -164,15 +164,15 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			</Stack>
 			<Stack direction="column" render={ <form /> } gap="sm" onSubmit={ onCreateTable }>
 				<Stack wrap="wrap" align="center" gap="sm">
-					<ToggleControl
+					<SwitchControl
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
-						onChange={ onToggleHeaderSection }
+						onCheckedChange={ onToggleHeaderSection }
 					/>
-					<ToggleControl
+					<SwitchControl
 						label={ __( 'Footer section', 'flexible-table-block' ) }
 						checked={ !! footerSection }
-						onChange={ onToggleFooterSection }
+						onCheckedChange={ onToggleFooterSection }
 					/>
 				</Stack>
 

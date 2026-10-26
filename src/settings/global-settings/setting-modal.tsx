@@ -18,7 +18,6 @@ import {
 	Popover,
 	Spinner,
 	RangeControl,
-	ToggleControl,
 	__experimentalGrid as Grid,
 	__experimentalHeading as Heading,
 	__experimentalUnitControl as UnitControl,
@@ -26,7 +25,7 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Stack, Tabs, Text } from '@wordpress/ui';
+import { Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -563,28 +562,28 @@ export default function SettingModal( {
 				</Tabs.Panel>
 				<Tabs.Panel value="options">
 					<Stack direction="column" gap="lg">
-						<ToggleControl
+						<SwitchControl
 							label={ __( 'Show section labels', 'flexible-table-block' ) }
-							help={ __(
+							description={ __(
 								'Show section labels in the upper left corner of the table header, table body, and table footer sections.',
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.show_label_on_section }
-							onChange={ ( value ) => {
+							onCheckedChange={ ( value ) => {
 								setCurrentOptions( {
 									...currentOptions,
 									show_label_on_section: value,
 								} );
 							} }
 						/>
-						<ToggleControl
+						<SwitchControl
 							label={ __( 'Show control buttons', 'flexible-table-block' ) }
-							help={ __(
+							description={ __(
 								'Show insert row/column and select row/column buttons.',
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.show_control_button }
-							onChange={ ( value ) => {
+							onCheckedChange={ ( value ) => {
 								setCurrentOptions( {
 									...currentOptions,
 									show_control_button: value,
@@ -592,17 +591,17 @@ export default function SettingModal( {
 							} }
 						/>
 						{ ( currentOptions.show_label_on_section || currentOptions.show_control_button ) && (
-							<ToggleControl
+							<SwitchControl
 								label={ __(
 									'Focus on the control button with the cursor movement keys',
 									'flexible-table-block'
 								) }
-								help={ __(
+								description={ __(
 									'Focus insert/select buttons, select row/column buttons, and section labels with the cursor movement keys.',
 									'flexible-table-block'
 								) }
 								checked={ !! currentOptions.focus_control_button }
-								onChange={ ( value ) => {
+								onCheckedChange={ ( value ) => {
 									setCurrentOptions( {
 										...currentOptions,
 										focus_control_button: value,
@@ -610,42 +609,42 @@ export default function SettingModal( {
 								} }
 							/>
 						) }
-						<ToggleControl
+						<SwitchControl
 							label={ __( 'Show dot on th tag', 'flexible-table-block' ) }
-							help={ __(
+							description={ __(
 								'Show a small dot in the upper right corner of a cell when the cell is th element.',
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.show_dot_on_th }
-							onChange={ ( value ) => {
+							onCheckedChange={ ( value ) => {
 								setCurrentOptions( {
 									...currentOptions,
 									show_dot_on_th: value,
 								} );
 							} }
 						/>
-						<ToggleControl
+						<SwitchControl
 							label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
-							help={ __(
+							description={ __(
 								'Pressing the tab key moves the focus to the next cell. Holding down the shift key moves the focus to the previous cell.',
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.tab_move }
-							onChange={ ( value ) => {
+							onCheckedChange={ ( value ) => {
 								setCurrentOptions( {
 									...currentOptions,
 									tab_move: value,
 								} );
 							} }
 						/>
-						<ToggleControl
+						<SwitchControl
 							label={ __( 'Keep all contents when merging cells', 'flexible-table-block' ) }
-							help={ __(
+							description={ __(
 								'If turned off, only the contents of the first cell will remain when the cells are merged.',
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.merge_content }
-							onChange={ ( value ) => {
+							onCheckedChange={ ( value ) => {
 								setCurrentOptions( {
 									...currentOptions,
 									merge_content: value,
@@ -653,17 +652,17 @@ export default function SettingModal( {
 							} }
 						/>
 						{ canManageOptions && (
-							<ToggleControl
+							<SwitchControl
 								label={ __(
 									'Show Global setting button to non-administrative users',
 									'flexible-table-block'
 								) }
-								help={ __(
+								description={ __(
 									'By turning it on, you can prevent non-administrative users from changing Global setting.',
 									'flexible-table-block'
 								) }
 								checked={ !! currentOptions.show_global_setting }
-								onChange={ ( value ) => {
+								onCheckedChange={ ( value ) => {
 									setCurrentOptions( {
 										...currentOptions,
 										show_global_setting: value,

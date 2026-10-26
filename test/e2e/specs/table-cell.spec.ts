@@ -35,7 +35,7 @@ test.describe( 'Flexible table cell', () => {
 
 		// Update Editor Option.
 		await page.getByRole( 'tab', { name: 'Editor options' } ).click();
-		await page.getByRole( 'checkbox', { name: 'Use the tab key to move cells' } ).check();
+		await page.getByRole( 'switch', { name: 'Use the tab key to move cells' } ).check();
 		await page.getByRole( 'button', { name: 'Save settings' } ).click();
 		await page.locator( '.ftb-global-setting-modal__notice' ).getByRole( 'button' ).click();
 		await page
