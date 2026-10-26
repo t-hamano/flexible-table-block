@@ -10,7 +10,9 @@ import {
 	createTable,
 	deleteColumn,
 	deleteRow,
+	insertColumn,
 	insertRow,
+	splitMergedCells,
 	toVirtualTable,
 	type VTable,
 	type VRow,
@@ -42,6 +44,15 @@ const getRow = (
 			};
 		} ),
 	};
+};
+
+const deepFreeze = < T >( object: T ): T => {
+	Object.values( object as object ).forEach( ( value ) => {
+		if ( value && typeof value === 'object' ) {
+			deepFreeze( value );
+		}
+	} );
+	return Object.freeze( object );
 };
 
 const table: VTable = {
@@ -145,6 +156,54 @@ describe( 'table-state', () => {
 				],
 				foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
 			} );
+		} );
+	} );
+
+	describe( 'insertColumn', () => {
+		it( 'should give the correct virtual column index to the cell inserted after the last column', () => {
+			const vTable = deepFreeze( {
+				head: [],
+				body: [ getRow( 1, 'body', 0, 'td', 'body-0' ) ],
+				foot: [],
+			} );
+			const newVTable = insertColumn( vTable, { vColIndex: 1 } );
+			expect( newVTable.body[ 0 ].cells.map( ( cell ) => cell.vColIndex ) ).toStrictEqual( [
+				0, 1,
+			] );
+		} );
+	} );
+
+	describe( 'splitMergedCells', () => {
+		const vTable = deepFreeze(
+			toVirtualTable( {
+				head: [],
+				body: [
+					{
+						cells: [ { content: 'merged', tag: 'td', rowSpan: '2', colSpan: '3' } ],
+					},
+					{ cells: [] },
+				],
+				foot: [],
+			} )
+		);
+
+		it( 'should split the merged cell with the correct indexes', () => {
+			const newVTable = splitMergedCells( vTable, [ vTable.body[ 0 ].cells[ 0 ] ] );
+			newVTable.body.forEach( ( row, rowIndex ) => {
+				row.cells.forEach( ( cell, vColIndex ) => {
+					expect( cell ).toMatchObject( {
+						rowIndex,
+						vColIndex,
+						rowSpan: 1,
+						colSpan: 1,
+						isHidden: false,
+					} );
+				} );
+			} );
+		} );
+
+		it( 'should not mutate the original virtual table', () => {
+			expect( () => splitMergedCells( vTable, [ vTable.body[ 0 ].cells[ 0 ] ] ) ).not.toThrow();
 		} );
 	} );
 
