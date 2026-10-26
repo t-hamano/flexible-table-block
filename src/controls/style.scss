@@ -84,3 +84,20 @@
 	grid-template-columns: repeat(2, 1fr);
 	gap: variables.$grid-unit-10;
 }
+
+// Keep the spacing that `BaseControl` had in the block inspector.
+.block-editor-block-inspector {
+
+	.ftb-border-color-control,
+	.ftb-border-radius-control,
+	.ftb-border-spacing-control,
+	.ftb-border-style-control,
+	.ftb-border-width-control,
+	.ftb-color-control,
+	.ftb-padding-control {
+
+		&:where(:not(:last-child)) {
+			margin-bottom: variables.$grid-unit-20;
+		}
+	}
+}

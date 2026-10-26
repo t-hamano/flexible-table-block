@@ -10,8 +10,8 @@ import type { Property } from 'csstype';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import { BaseControl, Popover, ColorPalette } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
+import { Popover, ColorPalette } from '@wordpress/components';
+import { Field } from '@wordpress/ui';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
@@ -54,18 +54,16 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm">
-				<BaseControl.VisualLabel>{ label }</BaseControl.VisualLabel>
-				<ColorIndicatorButton
-					label={ label }
-					value={ value }
-					onClick={ handleOnPickerOpen }
-					isNone={ ! value }
-					isTransparent={ value === 'transparent' }
-					isExpanded={ isPickerOpen }
-				/>
-			</Stack>
+		<Field.Root className={ clsx( 'ftb-color-control', className ) }>
+			<Field.VisualLabel>{ label }</Field.VisualLabel>
+			<ColorIndicatorButton
+				label={ label }
+				value={ value }
+				onClick={ handleOnPickerOpen }
+				isNone={ ! value }
+				isTransparent={ value === 'transparent' }
+				isExpanded={ isPickerOpen }
+			/>
 			{ isPickerOpen && (
 				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
 					<div style={ { padding: '16px' } }>
@@ -77,6 +75,7 @@ export default function ColorControl( {
 					</div>
 				</Popover>
 			) }
-		</BaseControl>
+			{ help && <Field.Description>{ help }</Field.Description> }
+		</Field.Root>
 	);
 }
