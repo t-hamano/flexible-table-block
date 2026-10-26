@@ -6,11 +6,6 @@
 	position: relative;
 	justify-content: center;
 
-	// Doubled to override the height of the 40px default size of the Button.
-	&.ftb-color-indicator-button {
-		height: variables.$button-size-small;
-	}
-
 	.ftb-color-indicator-button__indicator {
 		position: relative;
 		flex: 1;
