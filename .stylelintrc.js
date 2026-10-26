@@ -8,11 +8,5 @@ module.exports = {
 					'Selector should use lowercase class segments separated with hyphens, double hyphens, or double underscores (selector-class-pattern)',
 			},
 		],
-		'value-keyword-case': [
-			'lower',
-			{
-				camelCaseSvgKeywords: true,
-			},
-		],
 	},
 };
