@@ -123,10 +123,10 @@ test.describe( 'Styles', () => {
 		await page.getByRole( 'button', { name: 'Table settings' } ).click();
 
 		// Toggle settings.
-		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
-		await page.getByRole( 'checkbox', { name: 'Scroll on desktop view' } ).check();
-		await page.getByRole( 'checkbox', { name: 'Scroll on mobile view' } ).check();
-		await page.getByRole( 'checkbox', { name: 'Stack on mobile' } ).check();
+		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
+		await page.getByRole( 'switch', { name: 'Scroll on desktop view' } ).check();
+		await page.getByRole( 'switch', { name: 'Scroll on mobile view' } ).check();
+		await page.getByRole( 'switch', { name: 'Stack on mobile' } ).check();
 		await page
 			.getByRole( 'combobox', { name: 'Fixed control' } )
 			.selectOption( 'Fixed first column' );

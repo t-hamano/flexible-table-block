@@ -12,7 +12,6 @@ import { useSelect } from '@wordpress/data';
 import {
 	Button,
 	SelectControl,
-	ToggleControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -20,7 +19,7 @@ import {
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
+import { Stack, SwitchControl } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -251,67 +250,74 @@ export default function TableSettings( {
 					{ __( 'Clear table settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>
-			<ToggleControl
-				className="ftb-table-settings-header"
-				label={ __( 'Header section', 'flexible-table-block' ) }
-				checked={ !! ( head && head.length ) }
-				onChange={ onToggleHeaderSection }
-			/>
-			<ToggleControl
-				className="ftb-table-settings-footer"
-				label={ __( 'Footer section', 'flexible-table-block' ) }
-				checked={ !! ( foot && foot.length ) }
-				onChange={ onToggleFooterSection }
-			/>
+			<Stack direction="column" gap="lg" style={ { marginBottom: '16px' } }>
+				<SwitchControl
+					className="ftb-table-settings-header"
+					label={ __( 'Header section', 'flexible-table-block' ) }
+					checked={ !! ( head && head.length ) }
+					onCheckedChange={ onToggleHeaderSection }
+				/>
+				<SwitchControl
+					className="ftb-table-settings-footer"
+					label={ __( 'Footer section', 'flexible-table-block' ) }
+					checked={ !! ( foot && foot.length ) }
+					onCheckedChange={ onToggleFooterSection }
+				/>
+			</Stack>
 			<hr />
-			<ToggleControl
-				className="ftb-table-settings-fixed-width"
-				label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
-				checked={ !! hasFixedLayout }
-				onChange={ onChangeHasFixedLayout }
-			/>
-			<ToggleControl
-				className="ftb-table-settings-scroll-on-desktop"
-				label={ __( 'Scroll on desktop view', 'flexible-table-block' ) }
-				checked={ !! isScrollOnPc }
-				help={
-					options.breakpoint &&
-					sprintf(
-						/* translators: %d is replaced with the number of breakpoint. */
-						__( 'When the screen width is %dpx or more.', 'flexible-table-block' ),
-						Math.abs( options.breakpoint ) + 1
-					)
-				}
-				onChange={ onChangeIsScrollOnPc }
-			/>
-			<ToggleControl
-				className="ftb-table-settings-scroll-on-mobile"
-				label={ __( 'Scroll on mobile view', 'flexible-table-block' ) }
-				checked={ !! isScrollOnMobile }
-				help={
-					options.breakpoint &&
-					sprintf(
-						/* translators: %d is replaced with the number of breakpoint. */
-						__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
+			<Stack direction="column" gap="lg" style={ { marginBottom: '16px' } }>
+				<SwitchControl
+					className="ftb-table-settings-fixed-width"
+					label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
+					checked={ !! hasFixedLayout }
+					onCheckedChange={ onChangeHasFixedLayout }
+				/>
+				<SwitchControl
+					className="ftb-table-settings-scroll-on-desktop"
+					label={ __( 'Scroll on desktop view', 'flexible-table-block' ) }
+					checked={ !! isScrollOnPc }
+					description={
 						options.breakpoint
-					)
-				}
-				onChange={ onChangeIsScrollOnMobile }
-			/>
-			<ToggleControl
-				className="ftb-table-settings-stack-on-mobile"
-				label={ __( 'Stack on mobile', 'flexible-table-block' ) }
-				checked={ !! isStackedOnMobile }
-				help={
-					options.breakpoint &&
-					sprintf(
-						/* translators: %d is replaced with the number of breakpoint. */
-						__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
+							? sprintf(
+									/* translators: %d is replaced with the number of breakpoint. */
+									__( 'When the screen width is %dpx or more.', 'flexible-table-block' ),
+									Math.abs( options.breakpoint ) + 1
+								)
+							: undefined
+					}
+					onCheckedChange={ onChangeIsScrollOnPc }
+				/>
+				<SwitchControl
+					className="ftb-table-settings-scroll-on-mobile"
+					label={ __( 'Scroll on mobile view', 'flexible-table-block' ) }
+					checked={ !! isScrollOnMobile }
+					description={
 						options.breakpoint
-					)
-				}
-				onChange={ onChangeIsStackedOnMobile }
-			/>
+							? sprintf(
+									/* translators: %d is replaced with the number of breakpoint. */
+									__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
+									options.breakpoint
+								)
+							: undefined
+					}
+					onCheckedChange={ onChangeIsScrollOnMobile }
+				/>
+				<SwitchControl
+					className="ftb-table-settings-stack-on-mobile"
+					label={ __( 'Stack on mobile', 'flexible-table-block' ) }
+					checked={ !! isStackedOnMobile }
+					description={
+						options.breakpoint
+							? sprintf(
+									/* translators: %d is replaced with the number of breakpoint. */
+									__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
+									options.breakpoint
+								)
+							: undefined
+					}
+					onCheckedChange={ onChangeIsStackedOnMobile }
+				/>
+			</Stack>
 			<SelectControl
 				className="ftb-table-settings-fixed-control"
 				label={ __( 'Fixed control', 'flexible-table-block' ) }

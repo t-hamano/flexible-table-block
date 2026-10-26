@@ -99,7 +99,7 @@ test.describe( 'Transform from flexible table block', () => {
 			.getByRole( 'tab', { name: 'Settings' } )
 			.click();
 		await page.getByRole( 'button', { name: 'Table settings' } ).click();
-		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
+		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'core/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
@@ -117,7 +117,7 @@ test.describe( 'Transform from flexible table block', () => {
 			.getByRole( 'tab', { name: 'Settings' } )
 			.click();
 		await page.getByRole( 'button', { name: 'Table settings' } ).click();
-		await page.getByRole( 'checkbox', { name: 'Scroll on desktop view' } ).uncheck();
+		await page.getByRole( 'switch', { name: 'Scroll on desktop view' } ).uncheck();
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '500' );
 		await page
 			.getByRole( 'group', { name: 'Table padding' } )
