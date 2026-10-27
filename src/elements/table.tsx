@@ -97,7 +97,7 @@ export default function Table( {
 	const { createWarningNotice } = useDispatch( noticesStore );
 
 	// Use a ref so the flag survives re-renders and the focus handler reads the latest value.
-	const isTabMove = useRef( false );
+	const isTabMoveRef = useRef( false );
 
 	const isRowSelected = selectedLine && 'sectionName' in selectedLine && 'rowIndex' in selectedLine;
 	const isColumnSelected = selectedLine && 'vColIndex' in selectedLine;
@@ -286,7 +286,7 @@ export default function Table( {
 
 			event.preventDefault();
 			setIsSelectMode( false );
-			isTabMove.current = true;
+			isTabMoveRef.current = true;
 			// The block editor moves focus out of the canvas iframe on Tab before this
 			// handler runs. Focus the canvas window first, because Firefox does not move
 			// window focus when focusing an element in another document.
@@ -605,10 +605,10 @@ export default function Table( {
 											value={ content }
 											onChange={ ( value ) => onChangeCellContent( value, cell ) }
 											onFocus={ () => {
-												if ( isSelectMode && ! isTabMove.current ) {
+												if ( isSelectMode && ! isTabMoveRef.current ) {
 													return;
 												}
-												isTabMove.current = false;
+												isTabMoveRef.current = false;
 												setSelectedLine( undefined );
 												setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
 											} }
