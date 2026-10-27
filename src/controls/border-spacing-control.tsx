@@ -5,13 +5,11 @@ import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import {
-	BaseControl,
 	Button,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { useInstanceId } from '@wordpress/compose';
+import { Fieldset, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -46,7 +44,6 @@ export default function BorderSpacingControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
-	const instanceId = useInstanceId( BorderSpacingControl, 'ftb-border-spacing-control' );
 
 	const isMixed = ! ( values.horizontal === values.vertical );
 
@@ -104,47 +101,46 @@ export default function BorderSpacingControl( {
 	};
 
 	return (
-		<BaseControl className="ftb-border-spacing-control" help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<Stack align="flex-start" justify="space-between" gap="sm">
-					{ isLinked ? (
-						<Stack align="center" gap="sm">
-							<DirectionIndicatorControl />
-							<UnitControl
-								aria-label={ __( 'All', 'flexible-table-block' ) }
-								value={ allInputValue }
-								units={ borderSpacingUnits }
-								placeholder={ allInputPlaceholder }
-								onChange={ handleOnChangeAll }
-								__unstableInputWidth="100px"
-							/>
-						</Stack>
-					) : (
-						<Stack direction="column" gap="xs">
-							{ DIRECTION_CONTROLS.map( ( item ) => (
-								<Stack align="center" gap="sm" key={ item.value }>
-									<DirectionIndicatorControl direction={ item.value } />
-									<UnitControl
-										aria-label={ item.label }
-										value={ values[ item.value as ValuesKey ] }
-										units={ borderSpacingUnits }
-										onChange={ ( value ) => handleOnChange( value, item.value ) }
-										__unstableInputWidth="100px"
-									/>
-								</Stack>
-							) ) }
-						</Stack>
-					) }
-					<Button
-						label={ linkedLabel }
-						icon={ isLinked ? link : linkOff }
-						onClick={ toggleLinked }
-						size="small"
-						style={ { marginTop: '8px' } }
-					/>
-				</Stack>
+		<Fieldset.Root className="ftb-border-spacing-control">
+			<Fieldset.Legend>{ label }</Fieldset.Legend>
+			<Stack align="flex-start" justify="space-between" gap="sm">
+				{ isLinked ? (
+					<Stack align="center" gap="sm">
+						<DirectionIndicatorControl />
+						<UnitControl
+							aria-label={ __( 'All', 'flexible-table-block' ) }
+							value={ allInputValue }
+							units={ borderSpacingUnits }
+							placeholder={ allInputPlaceholder }
+							onChange={ handleOnChangeAll }
+							__unstableInputWidth="100px"
+						/>
+					</Stack>
+				) : (
+					<Stack direction="column" gap="xs">
+						{ DIRECTION_CONTROLS.map( ( item ) => (
+							<Stack align="center" gap="sm" key={ item.value }>
+								<DirectionIndicatorControl direction={ item.value } />
+								<UnitControl
+									aria-label={ item.label }
+									value={ values[ item.value as ValuesKey ] }
+									units={ borderSpacingUnits }
+									onChange={ ( value ) => handleOnChange( value, item.value ) }
+									__unstableInputWidth="100px"
+								/>
+							</Stack>
+						) ) }
+					</Stack>
+				) }
+				<Button
+					label={ linkedLabel }
+					icon={ isLinked ? link : linkOff }
+					onClick={ toggleLinked }
+					size="small"
+					style={ { marginTop: '8px' } }
+				/>
 			</Stack>
-		</BaseControl>
+			{ help && <Fieldset.Description>{ help }</Fieldset.Description> }
+		</Fieldset.Root>
 	);
 }
