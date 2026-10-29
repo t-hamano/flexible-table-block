@@ -97,6 +97,9 @@
 		"*.scss": [
 			"wp-scripts lint-style"
 		],
+		"*.php": [
+			"vendor/bin/phpcs"
+		],
 		"*.md": [
 			"wp-scripts lint-md-docs"
 		],
