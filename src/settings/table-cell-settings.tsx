@@ -390,35 +390,37 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			{ selectedCellTags.length === 1 && (
 				<>
 					<hr />
-					{ selectedCellTags.includes( 'th' ) && (
+					<Stack direction="column" gap="lg">
+						{ selectedCellTags.includes( 'th' ) && (
+							<InputControl
+								className="ftb-table-cell-settings-id"
+								label={ __( 'id attribute', 'flexible-table-block' ) }
+								autoComplete="off"
+								value={ targetCell.id || '' }
+								onValueChange={ onChangeId }
+							/>
+						) }
 						<InputControl
-							className="ftb-table-cell-settings-id"
-							label={ __( 'id attribute', 'flexible-table-block' ) }
+							className="ftb-table-cell-settings-headers"
+							label={ __( 'headers attribute', 'flexible-table-block' ) }
 							autoComplete="off"
-							value={ targetCell.id || '' }
-							onValueChange={ onChangeId }
+							value={ targetCell.headers || '' }
+							onValueChange={ onChangeHeaders }
 						/>
-					) }
-					<InputControl
-						className="ftb-table-cell-settings-headers"
-						label={ __( 'headers attribute', 'flexible-table-block' ) }
-						autoComplete="off"
-						value={ targetCell.headers || '' }
-						onValueChange={ onChangeHeaders }
-					/>
-					{ selectedCellTags.includes( 'th' ) && (
-						<SelectControl
-							className="ftb-table-cell-settings-scope"
-							label={ __( 'scope attribute', 'flexible-table-block' ) }
-							items={ [ ...CELL_SCOPE_CONTROLS ] }
-							value={
-								CELL_SCOPE_CONTROLS.find(
-									( control ) => control.value === ( targetCell.scope ?? 'none' )
-								) ?? null
-							}
-							onValueChange={ ( item ) => onChangeScope( item?.value as CellScopeValue ) }
-						/>
-					) }
+						{ selectedCellTags.includes( 'th' ) && (
+							<SelectControl
+								className="ftb-table-cell-settings-scope"
+								label={ __( 'scope attribute', 'flexible-table-block' ) }
+								items={ [ ...CELL_SCOPE_CONTROLS ] }
+								value={
+									CELL_SCOPE_CONTROLS.find(
+										( control ) => control.value === ( targetCell.scope ?? 'none' )
+									) ?? null
+								}
+								onValueChange={ ( item ) => onChangeScope( item?.value as CellScopeValue ) }
+							/>
+						) }
+					</Stack>
 				</>
 			) }
 		</>
