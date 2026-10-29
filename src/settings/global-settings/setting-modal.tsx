@@ -13,13 +13,14 @@ import { useDispatch, useRegistry } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Modal,
+	Popover,
 	RangeControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Button, Notice, Popover, Spinner, Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
+import { Button, Notice, Spinner, Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -690,36 +691,37 @@ export default function SettingModal( {
 					{ __( 'Save settings', 'flexible-table-block' ) }
 				</Button>
 				{ canManageOptions && (
-					<Popover.Root open={ isResetPopup } onOpenChange={ setIsResetPopup }>
-						<Popover.Trigger render={ <Button variant="outline" disabled={ isWaiting } /> }>
-							{ __( 'Restore default settings', 'flexible-table-block' ) }
-						</Popover.Trigger>
-						<Popover.Popup
-							className="ftb-global-setting-modal__confirm-popover"
-							positioner={ <Popover.Positioner side="top" /> }
-						>
-							<Stack direction="column" gap="lg">
-								<Popover.Description>
-									{ __( 'Are you sure?', 'flexible-table-block' ) }
-								</Popover.Description>
-								<Stack align="center" justify="space-between" gap="sm">
-									<Button
-										className="ftb-global-setting-modal__restore-button"
-										size="compact"
-										onClick={ () => {
-											setIsResetPopup( false );
-											handleResetOptions();
-										} }
-									>
-										{ __( 'Restore', 'flexible-table-block' ) }
-									</Button>
-									<Popover.Close render={ <Button size="compact" variant="outline" /> }>
-										{ __( 'Cancel', 'flexible-table-block' ) }
-									</Popover.Close>
+					<Button
+						variant="outline"
+						disabled={ isWaiting }
+						onClick={ () => setIsResetPopup( ! isResetPopup ) }
+					>
+						{ __( 'Restore default settings', 'flexible-table-block' ) }
+						{ isResetPopup && (
+							<Popover
+								className="ftb-global-setting-modal__confirm-popover"
+								focusOnMount="firstElement"
+								placement="top"
+								onClose={ () => setIsResetPopup( false ) }
+							>
+								<Stack direction="column" gap="lg" style={ { padding: '8px' } }>
+									<Text render={ <p /> }>{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
+									<Stack align="center" justify="space-between" gap="sm">
+										<Button onClick={ handleResetOptions } size="compact">
+											{ __( 'Restore', 'flexible-table-block' ) }
+										</Button>
+										<Button
+											variant="outline"
+											onClick={ () => setIsResetPopup( false ) }
+											size="compact"
+										>
+											{ __( 'Cancel', 'flexible-table-block' ) }
+										</Button>
+									</Stack>
 								</Stack>
-							</Stack>
-						</Popover.Popup>
-					</Popover.Root>
+							</Popover>
+						) }
+					</Button>
 				) }
 			</Stack>
 		</Modal>
