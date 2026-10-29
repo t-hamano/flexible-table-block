@@ -14,7 +14,12 @@ test.describe( 'Block Support', () => {
 
 	test( 'typography settings should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.openBlockSidebar( { tab: 'Styles' } );
+		// Open the sidebar.
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Styles' } )
+			.click();
 		// Show all typography controls.
 		await page.getByRole( 'button', { name: 'Typography options' } ).click();
 		const typographyMenu = page.getByRole( 'menu', { name: 'Typography options' } );
@@ -56,7 +61,12 @@ test.describe( 'Block Support', () => {
 
 	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.openBlockSidebar( { tab: 'Styles' } );
+		// Open the sidebar.
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Styles' } )
+			.click();
 		// Show margin control.
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		await page

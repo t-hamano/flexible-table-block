@@ -20,33 +20,56 @@ test.describe( 'Flexible table', () => {
 
 	test( 'should be inserted', async ( { editor, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.getBodyCell( 0 ).fill( 'Flexible Table Block' );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 0 )
+			.fill( 'Flexible Table Block' );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
 	test.describe( 'Merging and Splitting Cells', () => {
-		test( 'allows cells side by side to be merge', async ( { editor, fsbUtils } ) => {
+		test( 'allows cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-			await fsbUtils.mergeBodyCells( 0, 1 );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+			await page.keyboard.down( 'Shift' );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 1 ).click();
+			await page.keyboard.up( 'Shift' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 
-		test( 'allows cells in a vertical line to be merge', async ( { editor, fsbUtils } ) => {
+		test( 'allows cells in a vertical line to be merge', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-			await fsbUtils.mergeBodyCells( 0, 5 );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+			await page.keyboard.down( 'Shift' );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 5 ).click();
+			await page.keyboard.up( 'Shift' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 
-		test( 'allows cells to be merge', async ( { editor, fsbUtils } ) => {
+		test( 'allows cells to be merge', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-			await fsbUtils.mergeBodyCells( 0, 8 );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+			await page.keyboard.down( 'Shift' );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 8 ).click();
+			await page.keyboard.up( 'Shift' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 
-		test( 'allows merged cells to be split', async ( { editor, fsbUtils } ) => {
+		test( 'allows merged cells to be split', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-			await fsbUtils.mergeBodyCells( 0, 8 );
-			await fsbUtils.getBodyCell( 0 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+			await page.keyboard.down( 'Shift' );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 8 ).click();
+			await page.keyboard.up( 'Shift' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await fsbUtils.clickEditTableMenuItem( 'Split merged cells' );
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
@@ -77,10 +100,16 @@ test.describe( 'Flexible table', () => {
 	test.describe( 'Deleting Rows and Columns', () => {
 		test( 'allows to delete rows even if they contain merged cells', async ( {
 			editor,
+			page,
 			fsbUtils,
 		} ) => {
 			await fsbUtils.createFlexibleTableBlock( { col: 10, row: 10 } );
-			await fsbUtils.mergeBodyCells( 11, 44 );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 11 ).click();
+			await page.keyboard.down( 'Shift' );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 44 ).click();
+			await page.keyboard.up( 'Shift' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			const selectRowButton = editor.canvas.getByRole( 'button', { name: 'Select row' } ).nth( 2 );
 			await expect( selectRowButton ).toHaveAttribute( 'aria-pressed', 'false' );
 			await selectRowButton.click();
@@ -91,10 +120,16 @@ test.describe( 'Flexible table', () => {
 
 		test( 'allows to delete column even if they contain merged cells.', async ( {
 			editor,
+			page,
 			fsbUtils,
 		} ) => {
 			await fsbUtils.createFlexibleTableBlock( { col: 10, row: 10 } );
-			await fsbUtils.mergeBodyCells( 11, 44 );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 11 ).click();
+			await page.keyboard.down( 'Shift' );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 44 ).click();
+			await page.keyboard.up( 'Shift' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			const selectColumnButton = editor.canvas
 				.getByRole( 'button', { name: 'Select column' } )
 				.nth( 2 );
@@ -131,7 +166,7 @@ test.describe( 'Flexible table', () => {
 			await expect( snackbar ).toHaveText( 'The table body must have one or more rows.' );
 			await snackbar.click();
 			await expect( snackbar ).toBeHidden();
-			await fsbUtils.getBodyCell( 0 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await fsbUtils.clickEditTableMenuItem( 'Delete row' );
 			await expect(
 				page.getByRole( 'button', {
@@ -148,7 +183,7 @@ test.describe( 'Flexible table', () => {
 			fsbUtils,
 		} ) => {
 			await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
-			await fsbUtils.getBodyCell( 0 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
 			await editor.canvas.getByRole( 'textbox', { name: 'Header cell text' } ).nth( 0 ).click();
 
@@ -165,7 +200,7 @@ test.describe( 'Flexible table', () => {
 			fsbUtils,
 		} ) => {
 			await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
-			await fsbUtils.getBodyCell( 0 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Control' );
 			await editor.canvas.getByRole( 'textbox', { name: 'Header cell text' } ).nth( 0 ).click();
 			await expect(

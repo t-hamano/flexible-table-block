@@ -14,7 +14,10 @@ test.describe( 'Transform from core table block', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createCoreTableBlock();
-		await fsbUtils.getBodyCell( 0 ).fill( 'Core Table Block' );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 0 )
+			.fill( 'Core Table Block' );
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
@@ -60,7 +63,10 @@ test.describe( 'Transform from flexible table block', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 3, row: 6 } );
-		await fsbUtils.getBodyCell( 3 ).fill( 'Flexible Table Block' );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 3 )
+			.fill( 'Flexible Table Block' );
 		await editor.transformBlockTo( 'core/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
@@ -72,8 +78,16 @@ test.describe( 'Transform from flexible table block', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 6, row: 3 } );
-		await fsbUtils.getBodyCell( 0 ).fill( 'Flexible Table Block' );
-		await fsbUtils.openBlockSidebar( { panel: 'Table settings' } );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 0 )
+			.fill( 'Flexible Table Block' );
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Table settings' } ).click();
 		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'core/table' );
 
@@ -86,7 +100,12 @@ test.describe( 'Transform from flexible table block', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 6, row: 3 } );
-		await fsbUtils.openBlockSidebar( { panel: 'Table settings' } );
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Table settings' } ).click();
 		await page.getByRole( 'switch', { name: 'Scroll on desktop view' } ).uncheck();
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '500' );
 		await page
@@ -102,12 +121,24 @@ test.describe( 'Transform from flexible table block', () => {
 
 	test( 'should be transformed to core table block with rowspan / colspan cells', async ( {
 		editor,
+		page,
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-		await fsbUtils.getBodyCell( 0 ).fill( 'Cell 1' );
-		await fsbUtils.getBodyCell( 1 ).fill( 'Cell 2' );
-		await fsbUtils.mergeBodyCells( 0, 1 );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 0 )
+			.fill( 'Cell 1' );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 1 )
+			.fill( 'Cell 2' );
+		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+		await page.keyboard.down( 'Shift' );
+		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 1 ).click();
+		await page.keyboard.up( 'Shift' );
+		await editor.clickBlockToolbarButton( 'Edit table' );
+		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
@@ -119,8 +150,16 @@ test.describe( 'Transform from flexible table block', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.getBodyCell( 0 ).fill( 'Flexible Table Block' );
-		await fsbUtils.openBlockSidebar( { panel: 'Cell settings' } );
+		await editor.canvas
+			.getByRole( 'textbox', { name: 'Body cell text' } )
+			.nth( 0 )
+			.fill( 'Flexible Table Block' );
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
 		await page.getByRole( 'spinbutton', { name: 'Cell font size' } ).fill( '20' );
 		await page
 			.getByRole( 'group', { name: 'Cell padding' } )
@@ -139,8 +178,13 @@ test.describe( 'Transform from flexible table block', () => {
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.getBodyCell( 0 ).click();
-		await fsbUtils.openBlockSidebar( { panel: 'Cell settings' } );
+		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await page.getByRole( 'textbox', { name: 'id attribute' } ).fill( 'id' );
 		await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
@@ -157,9 +201,14 @@ test.describe( 'Transform from flexible table block', () => {
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
 		await editor.canvas.getByRole( 'textbox', { name: 'Header cell text' } ).nth( 0 ).click();
-		await fsbUtils.openBlockSidebar( { panel: 'Cell settings' } );
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
 		await page.getByRole( 'radio', { name: 'TD' } ).click();
-		await fsbUtils.getBodyCell( 0 ).click();
+		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await editor.canvas.getByRole( 'textbox', { name: 'Footer cell text' } ).nth( 0 ).click();
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
@@ -197,7 +246,12 @@ test.describe( 'Transform from flexible table block', () => {
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Table caption text' } )
 			.fill( 'Flexible Table Block' );
-		await fsbUtils.openBlockSidebar( { panel: 'Caption settings' } );
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Caption settings', exact: true } ).click();
 		await page.getByRole( 'spinbutton', { name: 'Caption font size' } ).fill( '20' );
 		await page
 			.getByRole( 'group', { name: 'Caption padding' } )

@@ -110,7 +110,12 @@ test.describe( 'Styles', () => {
 
 	test( 'table styles should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.openBlockSidebar( { panel: 'Table settings' } );
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Table settings' } ).click();
 
 		// Toggle settings.
 		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
@@ -203,8 +208,13 @@ test.describe( 'Styles', () => {
 
 	test( 'cell styles should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.getBodyCell( 0 ).click();
-		await fsbUtils.openBlockSidebar( { panel: 'Cell settings' } );
+		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
 		await applyCellStyles( page, fsbUtils );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -212,7 +222,12 @@ test.describe( 'Styles', () => {
 	test( 'cell styles should be applied to multiple cells', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
 		await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
-		await fsbUtils.openBlockSidebar( { panel: 'Multi cells settings' } );
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Multi cells settings' } ).click();
 		await applyCellStyles( page, fsbUtils );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
@@ -223,7 +238,12 @@ test.describe( 'Styles', () => {
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Table caption text' } )
 			.fill( 'Flexible Table Block' );
-		await fsbUtils.openBlockSidebar( { panel: 'Caption settings' } );
+		await editor.openDocumentSettingsSidebar();
+		await page
+			.getByRole( 'region', { name: 'Editor settings' } )
+			.getByRole( 'tab', { name: 'Settings' } )
+			.click();
+		await page.getByRole( 'button', { name: 'Caption settings' } ).click();
 		await page.getByRole( 'spinbutton', { name: 'Caption font size' } ).fill( '20' );
 		await page.getByRole( 'spinbutton', { name: 'Caption line height' } ).fill( '2' );
 		await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
