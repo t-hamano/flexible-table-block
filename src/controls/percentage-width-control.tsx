@@ -13,8 +13,8 @@ type Props = {
 	label: string;
 	value: string | number | undefined;
 	onChange: ( value: string ) => void;
-	// An additional keyword option, such as `auto` or `none`.
-	keywordOption?: {
+	// An additional option after the percentages, such as `auto` or `none`.
+	additionalOption?: {
 		label: string;
 		value: string;
 	};
@@ -25,13 +25,13 @@ export default function PercentageWidthControl( {
 	label,
 	value,
 	onChange,
-	keywordOption,
+	additionalOption,
 	className,
 }: Props ) {
 	const [ parsedQuantity, parsedUnit ] = parseQuantityAndUnitFromRawValue( value );
 
 	const isSelectable =
-		( keywordOption && value === keywordOption.value ) ||
+		( additionalOption && value === additionalOption.value ) ||
 		( parsedQuantity && PERCENTAGE_WIDTHS.includes( parsedQuantity ) && parsedUnit === '%' );
 
 	return (
@@ -50,8 +50,11 @@ export default function PercentageWidthControl( {
 					value={ `${ perWidth }%` }
 				/>
 			) ) }
-			{ keywordOption && (
-				<ToggleGroupControlOption label={ keywordOption.label } value={ keywordOption.value } />
+			{ additionalOption && (
+				<ToggleGroupControlOption
+					label={ additionalOption.label }
+					value={ additionalOption.value }
+				/>
 			) }
 		</ToggleGroupControl>
 	);

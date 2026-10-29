@@ -330,7 +330,7 @@ export default function TableSettings( {
 				className="ftb-table-settings-percentage-width"
 				label={ __( 'Table percentage width', 'flexible-table-block' ) }
 				value={ tableStylesObj?.width }
-				keywordOption={ {
+				additionalOption={ {
 					label: _x( 'auto', 'width', 'flexible-table-block' ),
 					value: 'auto',
 				} }
@@ -350,7 +350,7 @@ export default function TableSettings( {
 				className="ftb-table-settings-percentage-max-width"
 				label={ __( 'Table percentage max width', 'flexible-table-block' ) }
 				value={ tableStylesObj?.maxWidth }
-				keywordOption={ {
+				additionalOption={ {
 					label: _x( 'none', 'width', 'flexible-table-block' ),
 					value: 'none',
 				} }
