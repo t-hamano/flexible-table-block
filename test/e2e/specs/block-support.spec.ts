@@ -1,18 +1,7 @@
 /**
- * WordPress dependencies
- */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
-
-/**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 test.describe( 'Block Support', () => {
 	test.beforeAll( async ( { requestUtils } ) => {
@@ -25,12 +14,7 @@ test.describe( 'Block Support', () => {
 
 	test( 'typography settings should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		// Open the sidebar.
-		await editor.openDocumentSettingsSidebar();
-		await page
-			.getByRole( 'region', { name: 'Editor settings' } )
-			.getByRole( 'tab', { name: 'Styles' } )
-			.click();
+		await fsbUtils.openBlockSidebar( { tab: 'Styles' } );
 		// Show all typography controls.
 		await page.getByRole( 'button', { name: 'Typography options' } ).click();
 		const typographyMenu = page.getByRole( 'menu', { name: 'Typography options' } );
@@ -72,12 +56,7 @@ test.describe( 'Block Support', () => {
 
 	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		// Open the sidebar.
-		await editor.openDocumentSettingsSidebar();
-		await page
-			.getByRole( 'region', { name: 'Editor settings' } )
-			.getByRole( 'tab', { name: 'Styles' } )
-			.click();
+		await fsbUtils.openBlockSidebar( { tab: 'Styles' } );
 		// Show margin control.
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		await page
@@ -87,10 +66,13 @@ test.describe( 'Block Support', () => {
 		await page.getByRole( 'button', { name: 'Dimensions options' } ).click();
 		// Show custom controls.
 		await page.getByRole( 'button', { name: 'Unlink' } ).click();
-		// Change margin values.
+		// Switch each side to a custom value. The buttons share the same label, and each one
+		// is replaced by an input once clicked, so always pick the first remaining one.
+		const customValueButtons = page.getByRole( 'button', { name: 'Set custom value' } );
 		for ( let i = 0; i < 4; i++ ) {
-			await page.getByRole( 'button', { name: 'Set custom value' } ).nth( 0 ).click();
+			await customValueButtons.first().click();
 		}
+		await expect( customValueButtons ).toHaveCount( 0 );
 		await page.getByRole( 'spinbutton', { name: 'Top margin' } ).fill( '10' );
 		await page.getByRole( 'spinbutton', { name: 'Right margin' } ).fill( '20' );
 		await page.getByRole( 'spinbutton', { name: 'Bottom margin' } ).fill( '30' );

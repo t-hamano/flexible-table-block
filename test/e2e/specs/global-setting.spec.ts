@@ -1,42 +1,18 @@
 /**
- * WordPress dependencies
- */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
-
-/**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 test.describe( 'Global Setting', () => {
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
 	} );
 
-	test( 'should update editor styles reflecting the settings', async ( {
-		editor,
-		page,
-		pageUtils,
-		fsbUtils,
-	} ) => {
+	test( 'should update editor styles reflecting the settings', async ( { page, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		// Open the global setting.
-		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
-		await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
-		// Restore settings.
-		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
-		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
-			'Global setting restored.'
-		);
-		await page.locator( '.ftb-global-setting-modal__notice' ).getByRole( 'button' ).click();
+		await fsbUtils.openGlobalSetting();
+		await fsbUtils.restoreGlobalSetting();
+		const modal = fsbUtils.getGlobalSettingModal();
 		// Change table width.
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '90' );
 		// Change table max width.
@@ -47,12 +23,8 @@ test.describe( 'Global Setting', () => {
 			{ color: '111111', label: 'Striped style background color ( odd rows )' },
 			{ color: '222222', label: 'Striped style background color ( even rows )' },
 		];
-		for ( let i = 0; i < tableColors.length; i++ ) {
-			const { color, label } = tableColors[ i ];
-			await page.getByRole( 'button', { name: label, exact: true } ).click();
-			await pageUtils.pressKeys( 'Enter' );
-			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
-			await pageUtils.pressKeys( 'Escape', { times: 2 } );
+		for ( const { color, label } of tableColors ) {
+			await fsbUtils.pickColor( modal.getByRole( 'button', { name: label, exact: true } ), color );
 		}
 		// Apply cell styles.
 		await page.getByRole( 'tab', { name: 'Cell styles' } ).click();
@@ -64,14 +36,8 @@ test.describe( 'Global Setting', () => {
 			{ color: '666666', label: 'Cell background color ( td tag )' },
 			{ color: '777777', label: 'Cell border color' },
 		];
-		for ( let i = 0; i < cellColors.length; i++ ) {
-			await page
-				.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } )
-				.getByRole( 'button', { name: cellColors[ i ].label, exact: true } )
-				.click();
-			await pageUtils.pressKeys( 'Enter' );
-			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( cellColors[ i ].color );
-			await pageUtils.pressKeys( 'Escape', { times: 2 } );
+		for ( const { color, label } of cellColors ) {
+			await fsbUtils.pickColor( modal.getByRole( 'button', { name: label, exact: true } ), color );
 		}
 		// Change cell padding.
 		await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
@@ -87,44 +53,34 @@ test.describe( 'Global Setting', () => {
 		await page.getByRole( 'button', { name: 'Align center' } ).click();
 		await page.getByRole( 'button', { name: 'Align bottom' } ).click();
 		// Save settings.
-		await page.getByRole( 'button', { name: 'Save settings' } ).click();
-		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
-			'Global setting saved.'
-		);
-		const styleTagContent = await page.evaluate( () => {
-			const blockStyle = window.wp.data
-				.select( 'core/editor' )
-				.getEditorSettings()
-				.styles.find(
-					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
-				);
-			return blockStyle ? blockStyle.css : '';
-		} );
+		await fsbUtils.saveGlobalSetting();
 
-		expect( styleTagContent ).toBe(
-			`.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table{width:90%;max-width:110%;border-collapse:separate;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th,.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th{color:#333333;background-color:#555555;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{color:#444444;background-color:#666666;}`
-		);
+		const selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
+		const savedRules = [
+			`${ selector }>table{width:90%;max-width:110%;border-collapse:separate;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}`,
+			`${ selector }>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}`,
+			`${ selector }>table tr th{color:#333333;background-color:#555555;}`,
+			`${ selector }>table tr td{color:#444444;background-color:#666666;}`,
+		];
+		for ( const rule of savedRules ) {
+			await expect.poll( () => fsbUtils.getGlobalSettingCss() ).toContain( rule );
+		}
 
 		// Restore settings.
-		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
-		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
-			'Global setting restored.'
-		);
-		await page.locator( '.ftb-global-setting-modal__notice ' ).getByRole( 'button' ).click();
+		await fsbUtils.restoreGlobalSetting();
 
-		const defaultStyleTagContent = await page.evaluate( () => {
-			const blockStyle = window.wp.data
-				.select( 'core/editor' )
-				.getEditorSettings()
-				.styles.find(
-					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
-				);
-			return blockStyle ? blockStyle.css : '';
-		} );
-
-		expect( defaultStyleTagContent ).toBe(
-			`.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table{width:100%;max-width:100%;border-collapse:collapse;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#ffffff;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th,.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{background-color:#ffffff;}`
-		);
+		const defaultRules = [
+			`${ selector }>table{width:100%;max-width:100%;border-collapse:collapse;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}`,
+			`${ selector }>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}`,
+			`${ selector }>table tr th{background-color:#f0f0f1;}`,
+			`${ selector }>table tr td{background-color:#ffffff;}`,
+		];
+		for ( const rule of defaultRules ) {
+			await expect.poll( () => fsbUtils.getGlobalSettingCss() ).toContain( rule );
+		}
 	} );
 } );
