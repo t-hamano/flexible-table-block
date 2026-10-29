@@ -15,8 +15,8 @@ import {
 	useBlockProps,
 	useBlockEditingMode,
 } from '@wordpress/block-editor';
-import { ToolbarButton, PanelBody } from '@wordpress/components';
-import { Menu, Text } from '@wordpress/ui';
+import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
+import { Text } from '@wordpress/ui';
 import {
 	blockTable,
 	justifyLeft,
@@ -322,57 +322,22 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 					{ ! isContentOnlyMode && (
 						<>
 							<BlockControls group="block">
-								<Menu.Root>
-									<Menu.Trigger
-										render={
-											<ToolbarButton
-												label={ __( 'Change table justification', 'flexible-table-block' ) }
-												icon={
-													( contentJustification &&
-														TableJustifyControls.find(
-															( control ) => control.value === contentJustification
-														)?.icon ) ||
-													justifyLeft
-												}
-											/>
-										}
-									/>
-									<Menu.Popup>
-										{ TableJustifyControls.map( ( control ) => (
-											<Menu.CheckboxItem
-												key={ control.value }
-												prefix={ <Menu.PrefixIcon icon={ control.icon } /> }
-												checked={ control.isActive }
-												closeOnClick
-												onCheckedChange={ control.onClick }
-											>
-												<Menu.ItemLabel>{ control.title }</Menu.ItemLabel>
-											</Menu.CheckboxItem>
-										) ) }
-									</Menu.Popup>
-								</Menu.Root>
-								<Menu.Root>
-									<Menu.Trigger
-										render={
-											<ToolbarButton
-												label={ __( 'Edit table', 'flexible-table-block' ) }
-												icon={ blockTable }
-											/>
-										}
-									/>
-									<Menu.Popup>
-										{ TableEditControls.map( ( control ) => (
-											<Menu.Item
-												key={ control.title }
-												prefix={ <Menu.PrefixIcon icon={ control.icon } /> }
-												disabled={ control.isDisabled }
-												onClick={ control.onClick }
-											>
-												<Menu.ItemLabel>{ control.title }</Menu.ItemLabel>
-											</Menu.Item>
-										) ) }
-									</Menu.Popup>
-								</Menu.Root>
+								<ToolbarDropdownMenu
+									label={ __( 'Change table justification', 'flexible-table-block' ) }
+									icon={
+										( contentJustification &&
+											TableJustifyControls.find(
+												( control ) => control.value === contentJustification
+											)?.icon ) ||
+										justifyLeft
+									}
+									controls={ TableJustifyControls }
+								/>
+								<ToolbarDropdownMenu
+									label={ __( 'Edit table', 'flexible-table-block' ) }
+									icon={ blockTable }
+									controls={ TableEditControls }
+								/>
 							</BlockControls>
 						</>
 					) }
