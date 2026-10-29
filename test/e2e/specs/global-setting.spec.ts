@@ -58,9 +58,11 @@ test.describe( 'Global Setting', () => {
 		const selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
 		const savedRules = [
 			`${ selector }>table{width:90%;max-width:110%;border-collapse:separate;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}`,
 			`${ selector }.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}`,
 			`${ selector }.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}`,
-			`${ selector }>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}`,
+			`${ selector }>table tr th,${ selector }>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}`,
 			`${ selector }>table tr th{color:#333333;background-color:#555555;}`,
 			`${ selector }>table tr td{color:#444444;background-color:#666666;}`,
 		];
@@ -73,9 +75,11 @@ test.describe( 'Global Setting', () => {
 
 		const defaultRules = [
 			`${ selector }>table{width:100%;max-width:100%;border-collapse:collapse;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(odd) th{background-color:#f0f0f1;}`,
 			`${ selector }.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(even) th{background-color:#ffffff;}`,
 			`${ selector }.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}`,
-			`${ selector }>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}`,
+			`${ selector }>table tr th,${ selector }>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}`,
 			`${ selector }>table tr th{background-color:#f0f0f1;}`,
 			`${ selector }>table tr td{background-color:#ffffff;}`,
 		];
