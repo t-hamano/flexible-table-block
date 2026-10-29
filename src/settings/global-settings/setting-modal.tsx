@@ -21,7 +21,15 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Notice, Spinner, Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
+import {
+	Button as UIButton,
+	Notice,
+	Spinner,
+	Stack,
+	SwitchControl,
+	Tabs,
+	Text,
+} from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -688,15 +696,9 @@ export default function SettingModal( {
 				gap="sm"
 				className="ftb-global-setting-modal__buttons"
 			>
-				<Button
-					variant="primary"
-					disabled={ isWaiting }
-					accessibleWhenDisabled
-					onClick={ handleUpdateOptions }
-					__next40pxDefaultSize
-				>
+				<UIButton disabled={ isWaiting } onClick={ handleUpdateOptions }>
 					{ __( 'Save settings', 'flexible-table-block' ) }
-				</Button>
+				</UIButton>
 				{ canManageOptions && (
 					<Button
 						isDestructive
