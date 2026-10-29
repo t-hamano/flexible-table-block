@@ -14,7 +14,7 @@ import { Fieldset, Stack } from '@wordpress/ui';
 /**
  * Internal dependencies
  */
-import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING, DIRECTION_CONTROLS } from '../constants';
+import { BORDER_UNITS, MAX_BORDER_SPACING, DIRECTION_CONTROLS } from '../constants';
 import { DirectionIndicatorControl } from './indicator-control';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
 import type { DirectionValue } from '../BlockAttributes';
@@ -47,7 +47,7 @@ export default function BorderSpacingControl( {
 
 	const isMixed = ! ( values.horizontal === values.vertical );
 
-	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
+	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 

@@ -8,16 +8,14 @@ import type { Property } from 'csstype';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import { Popover, ColorPalette } from '@wordpress/components';
 import { Field } from '@wordpress/ui';
-import { store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import ColorIndicatorButton from './color-indicator-button';
+import ColorPalettePopover from './color-palette-popover';
 
 type Props = {
 	label: string;
@@ -40,11 +38,6 @@ export default function ColorControl( {
 	value,
 	className,
 }: Props ) {
-	const colors = useSelect( ( select ) => {
-		const settings = select( blockEditorStore ).getSettings();
-		return settings?.colors ?? [];
-	}, [] );
-
 	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
 
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
@@ -65,15 +58,12 @@ export default function ColorControl( {
 				isExpanded={ isPickerOpen }
 			/>
 			{ isPickerOpen && (
-				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-					<div style={ { padding: '16px' } }>
-						<ColorPalette
-							colors={ [ ...colors, ...colorsProp ] }
-							value={ value || '' }
-							onChange={ handleOnChange }
-						/>
-					</div>
-				</Popover>
+				<ColorPalettePopover
+					value={ value }
+					colors={ colorsProp }
+					onChange={ handleOnChange }
+					onClose={ handleOnPickerClose }
+				/>
 			) }
 			{ help && <Field.Description>{ help }</Field.Description> }
 		</Field.Root>
