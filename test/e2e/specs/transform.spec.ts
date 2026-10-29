@@ -199,7 +199,8 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await page.getByRole( 'textbox', { name: 'id attribute' } ).fill( 'id' );
 		await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
-		await page.getByRole( 'combobox', { name: 'scope attribute' } ).selectOption( 'row' );
+		await page.getByRole( 'combobox', { name: 'scope attribute' } ).click();
+		await page.getByRole( 'option', { name: 'row', exact: true } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
