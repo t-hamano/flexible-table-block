@@ -6,15 +6,28 @@
 use Flexible_Table_Block\Helper;
 use Flexible_Table_Block\Option;
 
+/**
+ * Tests for the Helper class.
+ */
 class Test_Helper extends WP_UnitTestCase {
 
 	/**
+	 * Tests that unsafe or unsupported CSS declarations are rejected.
+	 *
 	 * @dataProvider data_sanitize_css_declaration_rejects
+	 *
+	 * @param string $property CSS property name.
+	 * @param mixed  $value    CSS property value.
 	 */
 	public function test_sanitize_css_declaration_rejects( $property, $value ) {
 		$this->assertSame( '', Helper::sanitize_css_declaration( $property, $value ) );
 	}
 
+	/**
+	 * Data provider for test_sanitize_css_declaration_rejects().
+	 *
+	 * @return array[]
+	 */
 	public function data_sanitize_css_declaration_rejects() {
 		return array(
 			'null'                   => array( 'color', null ),
@@ -39,12 +52,23 @@ class Test_Helper extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests that valid CSS declarations are kept.
+	 *
 	 * @dataProvider data_sanitize_css_declaration_allows
+	 *
+	 * @param string $property CSS property name.
+	 * @param string $value    CSS property value.
+	 * @param string $expected Expected CSS declaration.
 	 */
 	public function test_sanitize_css_declaration_allows( $property, $value, $expected ) {
 		$this->assertSame( $expected, Helper::sanitize_css_declaration( $property, $value ) );
 	}
 
+	/**
+	 * Data provider for test_sanitize_css_declaration_allows().
+	 *
+	 * @return array[]
+	 */
 	public function data_sanitize_css_declaration_allows() {
 		return array(
 			'keyword'      => array( 'border-collapse', 'collapse', 'border-collapse: collapse;' ),
@@ -69,6 +93,9 @@ class Test_Helper extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Tests that the temporary color function filter is removed after sanitizing.
+	 */
 	public function test_sanitize_css_declaration_removes_filter() {
 		Helper::sanitize_css_declaration( 'color', 'rgb(0 0 0)' );
 
@@ -76,17 +103,30 @@ class Test_Helper extends WP_UnitTestCase {
 		$this->assertSame( '', safecss_filter_attr( 'color: rgb(0 0 0)' ) );
 	}
 
+	/**
+	 * Tests that a value already allowed by core stays allowed.
+	 */
 	public function test_allow_color_functions_keeps_core_decision() {
 		$this->assertTrue( Helper::allow_color_functions( true, 'url(x)' ) );
 	}
 
 	/**
+	 * Tests whether CSS color functions are allowed.
+	 *
 	 * @dataProvider data_allow_color_functions
+	 *
+	 * @param string $css_test_string CSS string tested by core.
+	 * @param bool   $expected        Whether the string should be allowed.
 	 */
 	public function test_allow_color_functions( $css_test_string, $expected ) {
 		$this->assertSame( $expected, Helper::allow_color_functions( false, $css_test_string ) );
 	}
 
+	/**
+	 * Data provider for test_allow_color_functions().
+	 *
+	 * @return array[]
+	 */
 	public function data_allow_color_functions() {
 		return array(
 			'rgb()'                  => array( 'color:rgb(0 0 0)', true ),
@@ -103,12 +143,22 @@ class Test_Helper extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests that four side values are combined into a shorthand value.
+	 *
 	 * @dataProvider data_get_shorthand_css_value
+	 *
+	 * @param string[] $values   Top, right, bottom and left values.
+	 * @param string   $expected Expected shorthand value.
 	 */
 	public function test_get_shorthand_css_value( $values, $expected ) {
 		$this->assertSame( $expected, Helper::get_shorthand_css_value( ...$values ) );
 	}
 
+	/**
+	 * Data provider for test_get_shorthand_css_value().
+	 *
+	 * @return array[]
+	 */
 	public function data_get_shorthand_css_value() {
 		return array(
 			'all equal'               => array( array( '1px', '1px', '1px', '1px' ), '1px' ),
@@ -120,12 +170,22 @@ class Test_Helper extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests the generated padding declarations.
+	 *
 	 * @dataProvider data_get_padding_styles
+	 *
+	 * @param mixed       $values   Padding value or values for each side.
+	 * @param string|null $expected Expected padding declarations.
 	 */
 	public function test_get_padding_styles( $values, $expected ) {
 		$this->assertSame( $expected, Helper::get_padding_styles( $values ) );
 	}
 
+	/**
+	 * Data provider for test_get_padding_styles().
+	 *
+	 * @return array[]
+	 */
 	public function data_get_padding_styles() {
 		return array(
 			'string'              => array( '1em', 'padding: 1em;' ),
@@ -187,12 +247,22 @@ class Test_Helper extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests CSS minification.
+	 *
 	 * @dataProvider data_minify_css
+	 *
+	 * @param string $css      CSS to minify.
+	 * @param string $expected Expected minified CSS.
 	 */
 	public function test_minify_css( $css, $expected ) {
 		$this->assertSame( $expected, Helper::minify_css( $css ) );
 	}
 
+	/**
+	 * Data provider for test_minify_css().
+	 *
+	 * @return array[]
+	 */
 	public function data_minify_css() {
 		return array(
 			'whitespace'        => array( ".a  .b {\n\tcolor : red ;\n\twidth: 100% ;\n}\n", '.a .b{color:red;width:100%;}' ),
@@ -206,6 +276,9 @@ class Test_Helper extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Tests the block CSS generated from the default options.
+	 */
 	public function test_get_block_css_with_default_option() {
 		$selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
 		$expected = "{$selector} > table { width: 100%;max-width: 100%;border-collapse: collapse; }"
@@ -220,6 +293,9 @@ class Test_Helper extends WP_UnitTestCase {
 		$this->assertSame( $expected, Helper::get_block_css() );
 	}
 
+	/**
+	 * Tests the block CSS generated from customized options.
+	 */
 	public function test_get_block_css_with_custom_option() {
 		update_option(
 			Option::OPTION_NAMES['block_style'],
@@ -248,6 +324,9 @@ class Test_Helper extends WP_UnitTestCase {
 		$this->assertSame( $expected, Helper::get_block_css() );
 	}
 
+	/**
+	 * Tests that unsafe option values are dropped from the block CSS.
+	 */
 	public function test_get_block_css_drops_unsafe_values() {
 		update_option(
 			Option::OPTION_NAMES['block_style'],
@@ -266,6 +345,9 @@ class Test_Helper extends WP_UnitTestCase {
 		$this->assertSame( $expected, Helper::get_block_css() );
 	}
 
+	/**
+	 * Tests that empty options generate no block CSS.
+	 */
 	public function test_get_block_css_with_empty_option() {
 		update_option( Option::OPTION_NAMES['block_style'], array() );
 
