@@ -14,7 +14,6 @@ import {
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
-	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
 import { Fieldset, InputControl, SelectControl, Stack } from '@wordpress/ui';
 
@@ -22,8 +21,7 @@ import { Fieldset, InputControl, SelectControl, Stack } from '@wordpress/ui';
  * Internal dependencies
  */
 import {
-	FONT_SIZE_UNITS,
-	CELL_WIDTH_UNITS,
+	SIZE_UNITS,
 	CELL_TAG_CONTROLS,
 	CELL_SCOPE_CONTROLS,
 	TEXT_ALIGNMENT_CONTROLS,
@@ -36,6 +34,7 @@ import {
 	BorderColorControl,
 	PaddingControl,
 	ColorControl,
+	PercentageWidthControl,
 } from '../controls';
 import {
 	toTableAttributes,
@@ -62,8 +61,6 @@ import type {
 	BlockAttributes,
 } from '../BlockAttributes';
 
-const PERCENTAGE_WIDTHS = [ 25, 50, 75, 100 ];
-
 type Props = {
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
 	vTable: VTable;
@@ -71,8 +68,7 @@ type Props = {
 };
 
 export default function TableCellSettings( { setAttributes, vTable, selectedCells = [] }: Props ) {
-	const cellWidthUnits = useCustomUnits( { availableUnits: CELL_WIDTH_UNITS } );
-	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
+	const sizeUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
 
 	if ( ! selectedCells.length ) {
 		return null;
@@ -96,9 +92,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	}, [] );
 
 	const cellStylesObj = convertToObject( targetCell.styles );
-	const [ parsedWidthQuantity, parsedWidthUnit ] = parseQuantityAndUnitFromRawValue(
-		cellStylesObj?.width
-	);
 
 	const updateCellsState = ( state: CellState ) => {
 		const newVTable = updateCells( vTable, state, selectedCells );
@@ -227,7 +220,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					<UnitControl
 						label={ __( 'Cell font size', 'flexible-table-block' ) }
 						value={ cellStylesObj?.fontSize }
-						units={ fontSizeUnits }
+						units={ sizeUnits }
 						min={ 0 }
 						onChange={ onChangeFontSize }
 					/>
@@ -248,35 +241,17 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				className="ftb-table-cell-settings-width"
 				label={ __( 'Cell width', 'flexible-table-block' ) }
 				value={ cellStylesObj?.width }
-				units={ cellWidthUnits }
+				units={ sizeUnits }
 				min={ 0 }
 				onChange={ onChangeWidth }
 				__unstableInputWidth="calc(50% - 4px)"
 			/>
-			<ToggleGroupControl
+			<PercentageWidthControl
 				className="ftb-table-cell-settings-percentage-width"
-				hideLabelFromVision
 				label={ __( 'Cell percentage width', 'flexible-table-block' ) }
-				isBlock
-				value={
-					parsedWidthQuantity &&
-					PERCENTAGE_WIDTHS.includes( parsedWidthQuantity ) &&
-					parsedWidthUnit === '%'
-						? cellStylesObj?.width
-						: undefined
-				}
-				onChange={ ( value ) => onChangeWidth( value as Property.Width ) }
-			>
-				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
-					return (
-						<ToggleGroupControlOption
-							key={ perWidth }
-							label={ `${ perWidth }%` }
-							value={ `${ perWidth }%` }
-						/>
-					);
-				} ) }
-			</ToggleGroupControl>
+				value={ cellStylesObj?.width }
+				onChange={ onChangeWidth }
+			/>
 			<hr />
 			<ColorControl
 				className="ftb-table-cell-settings-text-color"

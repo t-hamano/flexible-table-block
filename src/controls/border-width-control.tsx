@@ -20,7 +20,7 @@ import { Fieldset, Stack } from '@wordpress/ui';
 /**
  * Internal dependencies
  */
-import { BORDER_WIDTH_UNITS, MAX_BORDER_WIDTH, SIDE_CONTROLS } from '../constants';
+import { BORDER_UNITS, MAX_BORDER_WIDTH, SIDE_CONTROLS } from '../constants';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
 import { SideIndicatorControl } from './indicator-control';
 import type { SideValue } from '../BlockAttributes';
@@ -68,7 +68,7 @@ export default function BorderWidthControl( {
 		allowSides &&
 		! ( values.top === values.right && values.top === values.bottom && values.top === values.left );
 
-	const borderWidthUnits = useCustomUnits( { availableUnits: BORDER_WIDTH_UNITS } );
+	const borderWidthUnits = useCustomUnits( { availableUnits: BORDER_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ side, setSide ] = useState< SideValue | undefined >( undefined );

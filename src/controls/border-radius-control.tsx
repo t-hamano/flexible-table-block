@@ -20,7 +20,7 @@ import { Fieldset, Stack } from '@wordpress/ui';
 /**
  * Internal dependencies
  */
-import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS, CORNER_CONTROLS } from '../constants';
+import { BORDER_UNITS, MAX_BORDER_RADIUS, CORNER_CONTROLS } from '../constants';
 import { CornerIndicatorControl } from './indicator-control';
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
 import type { CornerValue } from '../BlockAttributes';
@@ -66,7 +66,7 @@ export default function BorderRadiusControl( {
 		values.topLeft === values.bottomLeft
 	);
 
-	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
+	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_UNITS } );
 
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ corner, setCorner ] = useState< CornerValue | undefined >( undefined );

@@ -20,7 +20,7 @@ import { InputControl, Stack } from '@wordpress/ui';
 /**
  * Internal dependencies
  */
-import { FONT_SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS, CAPTION_SIDE_CONTROLS } from '../constants';
+import { SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS, CAPTION_SIDE_CONTROLS } from '../constants';
 import { PaddingControl } from '../controls';
 import { convertToInline } from '../utils/style-converter';
 import { pickPadding, type DirectionProps } from '../utils/style-picker';
@@ -41,7 +41,7 @@ export default function TableCaptionSettings( {
 }: Props ) {
 	const { captionSide } = attributes;
 
-	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
+	const fontSizeUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
 
 	const onChangeFontSize = ( value: Property.FontSize | undefined ) => {
 		const newStylesObj = {

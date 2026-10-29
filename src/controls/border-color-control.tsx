@@ -9,16 +9,15 @@ import type { Property } from 'csstype';
  */
 import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
-import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import { Button, Popover, ColorPalette } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { Fieldset, Stack } from '@wordpress/ui';
-import { store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import ColorIndicatorButton from './color-indicator-button';
+import ColorPalettePopover from './color-palette-popover';
 import { SideIndicatorControl } from './indicator-control';
 import { SIDE_CONTROLS } from '../constants';
 import type { SideValue } from '../BlockAttributes';
@@ -61,11 +60,6 @@ export default function BorderColorControl( {
 		values.top === values.left
 	);
 
-	const colors = useSelect( ( select ) => {
-		const settings = select( blockEditorStore ).getSettings();
-		return settings?.colors ?? [];
-	}, [] );
-
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
 	const [ pickerIndex, setPickerIndex ] = useState< number | undefined >( undefined );
@@ -74,7 +68,7 @@ export default function BorderColorControl( {
 		? __( 'Unlink sides', 'flexible-table-block' )
 		: __( 'Link sides', 'flexible-table-block' );
 
-	const allInputValue: string | 0 = isMixed ? '' : values.top;
+	const allInputValue: string = isMixed ? '' : values.top;
 
 	const toggleLinked = () => {
 		setIsLinked( ! isLinked );
@@ -125,15 +119,11 @@ export default function BorderColorControl( {
 							isExpanded={ isPickerOpen && pickerIndex === undefined }
 						/>
 						{ isPickerOpen && pickerIndex === undefined && (
-							<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-								<div style={ { padding: '16px' } }>
-									<ColorPalette
-										colors={ colors }
-										value={ allInputValue || '' }
-										onChange={ handleOnChangeAll }
-									/>
-								</div>
-							</Popover>
+							<ColorPalettePopover
+								value={ allInputValue }
+								onChange={ handleOnChangeAll }
+								onClose={ handleOnPickerClose }
+							/>
 						) }
 					</Stack>
 				) : (
@@ -150,20 +140,11 @@ export default function BorderColorControl( {
 									isExpanded={ isPickerOpen && pickerIndex === index }
 								/>
 								{ isPickerOpen && pickerIndex === index && (
-									<Popover
-										placement="left-start"
-										shift
-										offset={ 36 }
+									<ColorPalettePopover
+										value={ values[ item.value ] }
+										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										onClose={ handleOnPickerClose }
-									>
-										<div style={ { padding: '16px' } }>
-											<ColorPalette
-												colors={ colors }
-												value={ values[ item.value ] || '' }
-												onChange={ ( value ) => handleOnChange( value, item.value ) }
-											/>
-										</div>
-									</Popover>
+									/>
 								) }
 							</Stack>
 						) ) }
