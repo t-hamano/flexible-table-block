@@ -264,7 +264,7 @@ export default function TableSettings( {
 				/>
 			</Stack>
 			<hr />
-			<Stack direction="column" gap="lg" style={ { marginBottom: '16px' } }>
+			<Stack direction="column" gap="lg">
 				<SwitchControl
 					className="ftb-table-settings-fixed-width"
 					label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
@@ -316,24 +316,24 @@ export default function TableSettings( {
 					}
 					onCheckedChange={ onChangeIsStackedOnMobile }
 				/>
+				<SelectControl
+					className="ftb-table-settings-fixed-control"
+					label={ __( 'Fixed control', 'flexible-table-block' ) }
+					items={ [ ...STICKY_CONTROLS ] }
+					value={
+						STICKY_CONTROLS.find( ( control ) => control.value === ( sticky ?? 'none' ) ) ?? null
+					}
+					description={
+						isStackedOnMobile && sticky
+							? __(
+									'Fixed control is only enabled for desktop view because "Stack on mobile" is enabled.',
+									'flexible-table-block'
+								)
+							: undefined
+					}
+					onValueChange={ ( item ) => onChangeSticky( item?.value ) }
+				/>
 			</Stack>
-			<SelectControl
-				className="ftb-table-settings-fixed-control"
-				label={ __( 'Fixed control', 'flexible-table-block' ) }
-				items={ [ ...STICKY_CONTROLS ] }
-				value={
-					STICKY_CONTROLS.find( ( control ) => control.value === ( sticky ?? 'none' ) ) ?? null
-				}
-				description={
-					isStackedOnMobile && sticky
-						? __(
-								'Fixed control is only enabled for desktop view because "Stack on mobile" is enabled.',
-								'flexible-table-block'
-							)
-						: undefined
-				}
-				onValueChange={ ( item ) => onChangeSticky( item?.value ) }
-			/>
 			<hr />
 			<UnitControl
 				className="ftb-table-settings-width"
