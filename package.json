@@ -74,6 +74,7 @@
 		"lint:pkg-json": "wp-scripts lint-pkg-json",
 		"format": "wp-scripts format",
 		"test:unit": "wp-scripts test-unit-js --config test/unit/vitest.config.mjs",
+		"fixtures:regenerate": "node test/integration/regenerate-fixtures.mjs",
 		"test:e2e": "wp-scripts test-playwright --wp-env-config=.wp-env.test.json",
 		"test:e2e:debug": "wp-scripts test-playwright --wp-env-config=.wp-env.test.json --debug",
 		"prepare": "husky"
