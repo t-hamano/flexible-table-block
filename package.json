@@ -85,6 +85,7 @@
 		"fixtures:regenerate": "npm run fixtures:clean && npm run fixtures:generate",
 		"test:e2e": "wp-scripts test-playwright --wp-env-config=.wp-env.test.json",
 		"test:e2e:debug": "wp-scripts test-playwright --wp-env-config=.wp-env.test.json --debug",
+		"test:php": "wp-env --config .wp-env.test.json run cli --env-cwd=wp-content/plugins/flexible-table-block vendor/bin/phpunit",
 		"prepare": "husky"
 	},
 	"lint-staged": {
