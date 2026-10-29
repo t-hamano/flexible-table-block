@@ -9,7 +9,6 @@ import type { Property } from 'csstype';
 import { __ } from '@wordpress/i18n';
 import { createInterpolateElement } from '@wordpress/element';
 import {
-	BaseControl,
 	Button,
 	SelectControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -19,7 +18,7 @@ import {
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { InputControl, Stack } from '@wordpress/ui';
+import { Fieldset, InputControl, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -333,10 +332,8 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />
-			<fieldset className="ftb-table-cell-settings-alignment">
-				<BaseControl.VisualLabel as="legend">
-					{ __( 'Cell alignment', 'flexible-table-block' ) }
-				</BaseControl.VisualLabel>
+			<Fieldset.Root className="ftb-table-cell-settings-alignment">
+				<Fieldset.Legend>{ __( 'Cell alignment', 'flexible-table-block' ) }</Fieldset.Legend>
 				<Stack align="flex-start" gap="sm" style={ { marginBottom: '-16px' } }>
 					<ToggleGroupControl
 						hideLabelFromVision
@@ -371,7 +368,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 						) ) }
 					</ToggleGroupControl>
 				</Stack>
-			</fieldset>
+			</Fieldset.Root>
 			<hr />
 			<ToggleGroupControl
 				className="ftb-table-cell-settings-tag"

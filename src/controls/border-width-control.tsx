@@ -11,13 +11,11 @@ import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import {
-	BaseControl,
 	Button,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { useInstanceId } from '@wordpress/compose';
+import { Fieldset, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -65,7 +63,6 @@ export default function BorderWidthControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
-	const instanceId = useInstanceId( BorderWidthControl, 'ftb-border-width-control' );
 
 	const isMixed =
 		allowSides &&
@@ -131,51 +128,50 @@ export default function BorderWidthControl( {
 	};
 
 	return (
-		<BaseControl className={ clsx( 'ftb-border-width-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
-					<Stack align="center" gap="sm">
-						{ hasIndicator && <SideIndicatorControl side={ side } /> }
-						{ ( isLinked || ! allowSides ) && (
-							<div>
-								<UnitControl
-									aria-label={ __( 'All', 'flexible-table-block' ) }
-									value={ allInputValue }
-									units={ borderWidthUnits }
-									placeholder={ allInputPlaceholder }
-									onChange={ handleOnChangeAll }
-									__unstableInputWidth="100px"
-								/>
-							</div>
-						) }
-					</Stack>
-					{ allowSides && (
-						<Button
-							label={ linkedLabel }
-							icon={ isLinked ? link : linkOff }
-							onClick={ toggleLinked }
-							size="small"
-						/>
+		<Fieldset.Root className={ clsx( 'ftb-border-width-control', className ) }>
+			<Fieldset.Legend>{ label }</Fieldset.Legend>
+			<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
+				<Stack align="center" gap="sm">
+					{ hasIndicator && <SideIndicatorControl side={ side } /> }
+					{ ( isLinked || ! allowSides ) && (
+						<div>
+							<UnitControl
+								aria-label={ __( 'All', 'flexible-table-block' ) }
+								value={ allInputValue }
+								units={ borderWidthUnits }
+								placeholder={ allInputPlaceholder }
+								onChange={ handleOnChangeAll }
+								__unstableInputWidth="100px"
+							/>
+						</div>
 					) }
 				</Stack>
-				{ ! isLinked && allowSides && (
-					<div className="ftb-side-controls">
-						{ SIDE_CONTROLS.map( ( item ) => (
-							<div key={ item.value } className={ `ftb-side-controls__item is-${ item.value }` }>
-								<UnitControl
-									aria-label={ item.label }
-									value={ values[ item.value as ValuesKey ] }
-									units={ borderWidthUnits }
-									onFocus={ () => handleOnFocus( item.value ) }
-									onChange={ ( value ) => handleOnChange( value, item.value ) }
-									__unstableInputWidth="100px"
-								/>
-							</div>
-						) ) }
-					</div>
+				{ allowSides && (
+					<Button
+						label={ linkedLabel }
+						icon={ isLinked ? link : linkOff }
+						onClick={ toggleLinked }
+						size="small"
+					/>
 				) }
 			</Stack>
-		</BaseControl>
+			{ ! isLinked && allowSides && (
+				<div className="ftb-side-controls">
+					{ SIDE_CONTROLS.map( ( item ) => (
+						<div key={ item.value } className={ `ftb-side-controls__item is-${ item.value }` }>
+							<UnitControl
+								aria-label={ item.label }
+								value={ values[ item.value as ValuesKey ] }
+								units={ borderWidthUnits }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
+								__unstableInputWidth="100px"
+							/>
+						</div>
+					) ) }
+				</div>
+			) }
+			{ help && <Fieldset.Description>{ help }</Fieldset.Description> }
+		</Fieldset.Root>
 	);
 }

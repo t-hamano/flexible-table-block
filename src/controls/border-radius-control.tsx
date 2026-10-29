@@ -11,13 +11,11 @@ import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import {
-	BaseControl,
 	Button,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { useInstanceId } from '@wordpress/compose';
+import { Fieldset, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -61,7 +59,6 @@ export default function BorderRadiusControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
-	const instanceId = useInstanceId( BorderRadiusControl, 'ftb-border-radius-control' );
 
 	const isMixed = ! (
 		values.topLeft === values.topRight &&
@@ -131,52 +128,51 @@ export default function BorderRadiusControl( {
 	};
 
 	return (
-		<BaseControl className={ clsx( 'ftb-border-radius-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
-					<Stack align="center" gap="sm">
-						<CornerIndicatorControl corner={ corner } />
-						{ isLinked && (
-							<div>
-								<UnitControl
-									hideLabelFromVision
-									label={ __( 'All', 'flexible-table-block' ) }
-									placeholder={ allInputPlaceholder }
-									onChange={ handleOnChangeAll }
-									value={ allInputValue }
-									units={ borderRadiusUnits }
-									min={ 0 }
-									__unstableInputWidth="100px"
-								/>
-							</div>
-						) }
-					</Stack>
-					<Button
-						label={ linkedLabel }
-						onClick={ toggleLinked }
-						icon={ isLinked ? link : linkOff }
-						size="small"
-					/>
+		<Fieldset.Root className={ clsx( 'ftb-border-radius-control', className ) }>
+			<Fieldset.Legend>{ label }</Fieldset.Legend>
+			<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
+				<Stack align="center" gap="sm">
+					<CornerIndicatorControl corner={ corner } />
+					{ isLinked && (
+						<div>
+							<UnitControl
+								hideLabelFromVision
+								label={ __( 'All', 'flexible-table-block' ) }
+								placeholder={ allInputPlaceholder }
+								onChange={ handleOnChangeAll }
+								value={ allInputValue }
+								units={ borderRadiusUnits }
+								min={ 0 }
+								__unstableInputWidth="100px"
+							/>
+						</div>
+					) }
 				</Stack>
-				{ ! isLinked && (
-					<div className="ftb-corner-controls">
-						{ CORNER_CONTROLS.map( ( item ) => (
-							<div key={ item.value }>
-								<UnitControl
-									aria-label={ item.label }
-									value={ values[ item.value as ValuesKey ] }
-									units={ borderRadiusUnits }
-									min={ 0 }
-									onFocus={ () => handleOnFocus( item.value ) }
-									onChange={ ( value ) => handleOnChange( value, item.value ) }
-									style={ { marginBottom: 0 } }
-								/>
-							</div>
-						) ) }
-					</div>
-				) }
+				<Button
+					label={ linkedLabel }
+					onClick={ toggleLinked }
+					icon={ isLinked ? link : linkOff }
+					size="small"
+				/>
 			</Stack>
-		</BaseControl>
+			{ ! isLinked && (
+				<div className="ftb-corner-controls">
+					{ CORNER_CONTROLS.map( ( item ) => (
+						<div key={ item.value }>
+							<UnitControl
+								aria-label={ item.label }
+								value={ values[ item.value as ValuesKey ] }
+								units={ borderRadiusUnits }
+								min={ 0 }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
+								style={ { marginBottom: 0 } }
+							/>
+						</div>
+					) ) }
+				</div>
+			) }
+			{ help && <Fieldset.Description>{ help }</Fieldset.Description> }
+		</Fieldset.Root>
 	);
 }

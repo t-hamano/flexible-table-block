@@ -11,13 +11,11 @@ import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import {
-	BaseControl,
 	Button,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { useInstanceId } from '@wordpress/compose';
+import { Fieldset, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -57,7 +55,6 @@ export default function PaddingControl( {
 	className,
 }: Props ) {
 	const values = { ...DEFAULT_VALUES, ...valuesProp };
-	const instanceId = useInstanceId( PaddingControl, 'ftb-padding-control' );
 
 	const isMixed = ! (
 		values.top === values.right &&
@@ -102,49 +99,48 @@ export default function PaddingControl( {
 	};
 
 	return (
-		<BaseControl className={ clsx( 'ftb-padding-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
-					<Stack align="center" gap="sm">
-						<SideIndicatorControl side={ side } />
-						{ isLinked && (
-							<div>
-								<UnitControl
-									placeholder={ allInputPlaceholder }
-									aria-label={ __( 'All', 'flexible-table-block' ) }
-									onChange={ handleOnChangeAll }
-									value={ allInputValue }
-									units={ paddingUnits }
-									__unstableInputWidth="100px"
-								/>
-							</div>
-						) }
-					</Stack>
-					<Button
-						label={ linkedLabel }
-						onClick={ toggleLinked }
-						icon={ isLinked ? link : linkOff }
-						size="small"
-					/>
+		<Fieldset.Root className={ clsx( 'ftb-padding-control', className ) }>
+			<Fieldset.Legend>{ label }</Fieldset.Legend>
+			<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
+				<Stack align="center" gap="sm">
+					<SideIndicatorControl side={ side } />
+					{ isLinked && (
+						<div>
+							<UnitControl
+								placeholder={ allInputPlaceholder }
+								aria-label={ __( 'All', 'flexible-table-block' ) }
+								onChange={ handleOnChangeAll }
+								value={ allInputValue }
+								units={ paddingUnits }
+								__unstableInputWidth="100px"
+							/>
+						</div>
+					) }
 				</Stack>
-				{ ! isLinked && (
-					<div className="ftb-side-controls">
-						{ SIDE_CONTROLS.map( ( item ) => (
-							<div key={ item.value } className={ `ftb-side-controls__item is-${ item.value }` }>
-								<UnitControl
-									aria-label={ item.label }
-									value={ values[ item.value as ValuesKey ] }
-									units={ paddingUnits }
-									onFocus={ () => handleOnFocus( item.value ) }
-									onChange={ ( value ) => handleOnChange( value, item.value ) }
-									__unstableInputWidth="100px"
-								/>
-							</div>
-						) ) }
-					</div>
-				) }
+				<Button
+					label={ linkedLabel }
+					onClick={ toggleLinked }
+					icon={ isLinked ? link : linkOff }
+					size="small"
+				/>
 			</Stack>
-		</BaseControl>
+			{ ! isLinked && (
+				<div className="ftb-side-controls">
+					{ SIDE_CONTROLS.map( ( item ) => (
+						<div key={ item.value } className={ `ftb-side-controls__item is-${ item.value }` }>
+							<UnitControl
+								aria-label={ item.label }
+								value={ values[ item.value as ValuesKey ] }
+								units={ paddingUnits }
+								onFocus={ () => handleOnFocus( item.value ) }
+								onChange={ ( value ) => handleOnChange( value, item.value ) }
+								__unstableInputWidth="100px"
+							/>
+						</div>
+					) ) }
+				</div>
+			) }
+			{ help && <Fieldset.Description>{ help }</Fieldset.Description> }
+		</Fieldset.Root>
 	);
 }
