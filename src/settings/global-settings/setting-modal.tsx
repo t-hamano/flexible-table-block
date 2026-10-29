@@ -15,14 +15,13 @@ import {
 	Button,
 	Modal,
 	Popover,
-	Spinner,
 	RangeControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Notice, Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
+import { Notice, Spinner, Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**

@@ -11,7 +11,6 @@ import { __, _x, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import {
 	Button,
-	SelectControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
@@ -19,7 +18,7 @@ import {
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { Stack, SwitchControl } from '@wordpress/ui';
+import { SelectControl, Stack, SwitchControl } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -125,7 +124,7 @@ export default function TableSettings( {
 		setAttributes( { isScrollOnMobile: ! isScrollOnMobile } );
 	};
 
-	const onChangeSticky = ( value: string ) => {
+	const onChangeSticky = ( value?: string | null ) => {
 		const isAllowedValue = ( _value: any ): _value is StickyValue => {
 			return ! value || STICKY_CONTROLS.some( ( control ) => control.value === _value );
 		};
@@ -321,19 +320,19 @@ export default function TableSettings( {
 			<SelectControl
 				className="ftb-table-settings-fixed-control"
 				label={ __( 'Fixed control', 'flexible-table-block' ) }
-				value={ sticky }
-				options={ STICKY_CONTROLS.map( ( { label, value } ) => {
-					return { label, value };
-				} ) }
-				help={
-					isStackedOnMobile &&
-					sticky &&
-					__(
-						'Fixed control is only enabled for desktop view because "Stack on mobile" is enabled.',
-						'flexible-table-block'
-					)
+				items={ [ ...STICKY_CONTROLS ] }
+				value={
+					STICKY_CONTROLS.find( ( control ) => control.value === ( sticky ?? 'none' ) ) ?? null
 				}
-				onChange={ onChangeSticky }
+				description={
+					isStackedOnMobile && sticky
+						? __(
+								'Fixed control is only enabled for desktop view because "Stack on mobile" is enabled.',
+								'flexible-table-block'
+							)
+						: undefined
+				}
+				onValueChange={ ( item ) => onChangeSticky( item?.value ) }
 			/>
 			<hr />
 			<UnitControl

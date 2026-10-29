@@ -7,10 +7,8 @@ import type { Property } from 'csstype';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { createInterpolateElement } from '@wordpress/element';
 import {
 	Button,
-	SelectControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
@@ -18,7 +16,7 @@ import {
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { Fieldset, InputControl, Stack } from '@wordpress/ui';
+import { Fieldset, InputControl, SelectControl, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -411,15 +409,14 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					{ selectedCellTags.includes( 'th' ) && (
 						<SelectControl
 							className="ftb-table-cell-settings-scope"
-							label={ createInterpolateElement(
-								__( '<code>scope</code> attribute', 'flexible-table-block' ),
-								{ code: <code /> }
-							) }
-							value={ targetCell.scope }
-							options={ CELL_SCOPE_CONTROLS.map( ( { label, value } ) => {
-								return { label, value };
-							} ) }
-							onChange={ ( value ) => onChangeScope( value as CellScopeValue ) }
+							label={ __( 'scope attribute', 'flexible-table-block' ) }
+							items={ [ ...CELL_SCOPE_CONTROLS ] }
+							value={
+								CELL_SCOPE_CONTROLS.find(
+									( control ) => control.value === ( targetCell.scope ?? 'none' )
+								) ?? null
+							}
+							onValueChange={ ( item ) => onChangeScope( item?.value as CellScopeValue ) }
 						/>
 					) }
 				</>
