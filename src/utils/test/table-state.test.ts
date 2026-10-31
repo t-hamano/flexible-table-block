@@ -1134,10 +1134,12 @@ describe( 'table-state', () => {
 				],
 				true
 			);
-			// Merged cells repeat the same name, and "merged" joins the contents of the four cells.
+			// Merged cells repeat the same name, and joined contents are shown on separate lines.
 			// | head-0   | head-1   | head-2   |
-			// | merged   | merged   | body-0-2 |
-			// | merged   | merged   | body-1-2 |
+			// | body-0-0 | body-0-0 | body-0-2 |
+			// | body-0-1 | body-0-1 |          |
+			// | body-1-0 | body-1-0 | body-1-2 |
+			// | body-1-1 | body-1-1 |          |
 			// | body-2-0 | body-2-1 | body-2-2 |
 			// | foot-0   | foot-1   | foot-2   |
 			expect( toTableAttributes( newVTable ) ).toEqual( {
@@ -1193,11 +1195,11 @@ describe( 'table-state', () => {
 				[ vTable.body[ 0 ].cells[ 0 ], vTable.body[ 2 ].cells[ 0 ], vTable.body[ 2 ].cells[ 1 ] ],
 				true
 			);
-			// Merged cells repeat the same name, and "merged" joins the contents of the three cells.
+			// Merged cells repeat the same name, and joined contents are shown on separate lines.
 			// | head-0   | head-1   | head-2   |
-			// | merged   | merged   | body-0-2 |
-			// | merged   | merged   | body-1-2 |
-			// | merged   | merged   | body-2-2 |
+			// | body-0-0 | body-0-0 | body-0-2 |
+			// | body-2-0 | body-2-0 | body-1-2 |
+			// | body-2-1 | body-2-1 | body-2-2 |
 			// | foot-0   | foot-1   | foot-2   |
 			expect( toTableAttributes( newVTable ) ).toEqual( {
 				head: [
@@ -1364,9 +1366,12 @@ describe( 'table-state', () => {
 				true
 			);
 			const newVTable = splitMergedCells( mergedVTable, [ mergedVTable.body[ 0 ].cells[ 0 ] ] );
-			// "merged" joins the contents of the four cells.
+			// Joined contents are shown on separate lines.
 			// | head-0   | head-1   | head-2   |
-			// | merged   |          | body-0-2 |
+			// | body-0-0 |          | body-0-2 |
+			// | body-0-1 |          |          |
+			// | body-1-0 |          |          |
+			// | body-1-1 |          |          |
 			// |          |          | body-1-2 |
 			// | body-2-0 | body-2-1 | body-2-2 |
 			// | foot-0   | foot-1   | foot-2   |
