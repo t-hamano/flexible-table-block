@@ -13,9 +13,6 @@ import type { Editor } from '@wordpress/e2e-test-utils-playwright';
  */
 import { test, expect } from '../util';
 
-const BLOCK_CLASS = 'wp-block-flexible-table-block-table';
-const INLINE_CSS_SELECTOR = 'style#flexible-table-block-table-view-style-inline-css';
-
 /**
  * Publishes the current post and visits it on the front end.
  *
@@ -87,7 +84,7 @@ test.describe( 'Front end', () => {
 		} );
 		await visitPublishedPost( { editor, page } );
 
-		const selector = `.${ BLOCK_CLASS }.${ BLOCK_CLASS }`;
+		const selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
 		const expectedRules = [
 			`${ selector }>table{width:90%;max-width:110%;border-collapse:separate;}`,
 			`${ selector }.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}`,
@@ -98,11 +95,13 @@ test.describe( 'Front end', () => {
 			`${ selector }>table tr th{color:#333333;background-color:#555555;}`,
 			`${ selector }>table tr td{color:#444444;background-color:#666666;}`,
 		];
-		const inlineCss = await page.locator( INLINE_CSS_SELECTOR ).textContent();
+		const inlineCss = await page
+			.locator( 'style#flexible-table-block-table-view-style-inline-css' )
+			.textContent();
 		expect( inlineCss ).toContain( expectedRules.join( '' ) );
 
 		// The CSS should actually be applied to the block.
-		const table = page.locator( `.${ BLOCK_CLASS } > table` );
+		const table = page.locator( '.wp-block-flexible-table-block-table > table' );
 		await expect( table ).toHaveCSS( 'border-collapse', 'separate' );
 		const th = table.locator( 'th' ).first();
 		await expect( th ).toHaveCSS( 'color', 'rgb(51, 51, 51)' );
@@ -184,13 +183,19 @@ test.describe( 'Front end', () => {
 		} );
 		await visitPublishedPost( { editor, page } );
 
-		const inlineCss = await page.locator( INLINE_CSS_SELECTOR ).textContent();
+		const inlineCss = await page
+			.locator( 'style#flexible-table-block-table-view-style-inline-css' )
+			.textContent();
 		expect( inlineCss ).toContain( '@media screen and (min-width:601px){' );
 		expect( inlineCss ).toContain( '@media screen and (max-width:600px){' );
 
-		const scrollOnPc = page.locator( `.${ BLOCK_CLASS }.is-scroll-on-pc` );
-		const scrollOnMobile = page.locator( `.${ BLOCK_CLASS }.is-scroll-on-mobile` );
-		const stackedCell = page.locator( `.${ BLOCK_CLASS } table.is-stacked-on-mobile td` ).first();
+		const scrollOnPc = page.locator( '.wp-block-flexible-table-block-table.is-scroll-on-pc' );
+		const scrollOnMobile = page.locator(
+			'.wp-block-flexible-table-block-table.is-scroll-on-mobile'
+		);
+		const stackedCell = page
+			.locator( '.wp-block-flexible-table-block-table table.is-stacked-on-mobile td' )
+			.first();
 
 		// Wider than the breakpoint, but narrower than the default breakpoint (768px).
 		await page.setViewportSize( { width: 700, height: 800 } );
