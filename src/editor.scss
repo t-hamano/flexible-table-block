@@ -199,14 +199,10 @@ $row-column-inserter-dot-size: 6px;
 		top: 0;
 		left: 0;
 		z-index: 1;
-		min-width: 0;
-		height: auto;
 		min-height: 0;
 		padding: 0 variables.$grid-unit-05;
 		font-size: variables.$font-size-x-small;
 		line-height: variables.$font-line-height-x-small;
-		border: 0;
-		border-radius: 0;
 	}
 
 	.ftb-row-before-inserter {
