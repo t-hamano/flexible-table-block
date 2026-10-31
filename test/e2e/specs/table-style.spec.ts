@@ -61,18 +61,22 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	// Boder Style styles.
 	const cellBorderStyle = page.getByRole( 'group', { name: 'Cell border style' } );
 	await cellBorderStyle.getByRole( 'button', { name: 'Unlink sides' } ).click();
-	const cellBorderStyles = [
-		{ side: 'Top', style: 'Solid' },
-		{ side: 'Right', style: 'Dotted' },
-		{ side: 'Bottom', style: 'Dashed' },
-		{ side: 'Left', style: 'Double' },
-	];
-	for ( const { side, style } of cellBorderStyles ) {
-		await cellBorderStyle
-			.getByRole( 'group', { name: side, exact: true } )
-			.getByRole( 'button', { name: style, exact: true } )
-			.click();
-	}
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Top', exact: true } )
+		.getByRole( 'button', { name: 'Solid', exact: true } )
+		.click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Right', exact: true } )
+		.getByRole( 'button', { name: 'Dotted', exact: true } )
+		.click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Bottom', exact: true } )
+		.getByRole( 'button', { name: 'Dashed', exact: true } )
+		.click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Left', exact: true } )
+		.getByRole( 'button', { name: 'Double', exact: true } )
+		.click();
 
 	// Border Color styles.
 	await page
@@ -170,18 +174,22 @@ test.describe( 'Styles', () => {
 		// Boder Style styles.
 		const tableBorderStyle = page.getByRole( 'group', { name: 'Table border style' } );
 		await tableBorderStyle.getByRole( 'button', { name: 'Unlink sides' } ).click();
-		const tableBorderStyles = [
-			{ side: 'Top', style: 'Solid' },
-			{ side: 'Right', style: 'Dotted' },
-			{ side: 'Bottom', style: 'Dashed' },
-			{ side: 'Left', style: 'Double' },
-		];
-		for ( const { side, style } of tableBorderStyles ) {
-			await tableBorderStyle
-				.getByRole( 'group', { name: side, exact: true } )
-				.getByRole( 'button', { name: style, exact: true } )
-				.click();
-		}
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Top', exact: true } )
+			.getByRole( 'button', { name: 'Solid', exact: true } )
+			.click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Right', exact: true } )
+			.getByRole( 'button', { name: 'Dotted', exact: true } )
+			.click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Bottom', exact: true } )
+			.getByRole( 'button', { name: 'Dashed', exact: true } )
+			.click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Left', exact: true } )
+			.getByRole( 'button', { name: 'Double', exact: true } )
+			.click();
 
 		// Border Color styles.
 		await page
