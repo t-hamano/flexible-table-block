@@ -1,0 +1,207 @@
+/**
+ * Internal dependencies
+ */
+import { test, expect } from '../util';
+
+const BLOCK_CLASS = 'wp-block-flexible-table-block-table';
+const INLINE_CSS_SELECTOR = 'style#flexible-table-block-table-view-style-inline-css';
+// A past date keeps the post from being scheduled.
+const PUBLISHED_DATE = '2000-01-01T00:00:00';
+
+/**
+ * Returns the serialized markup of a block with a header row and two body rows.
+ *
+ * @param {Object}   options               Options.
+ * @param {Object}   options.attributes    Block attributes in the block comment.
+ * @param {string[]} options.figureClasses Extra classes for the `figure` element.
+ * @param {string[]} options.tableClasses  Extra classes for the `table` element.
+ */
+function getBlockMarkup( {
+	attributes = {},
+	figureClasses = [],
+	tableClasses = [],
+}: {
+	attributes?: Record< string, unknown >;
+	figureClasses?: string[];
+	tableClasses?: string[];
+} = {} ) {
+	const comment = Object.keys( attributes ).length ? ` ${ JSON.stringify( attributes ) }` : '';
+	const figureClass = [ BLOCK_CLASS, ...figureClasses ].join( ' ' );
+	const tableClass = [ 'has-fixed-layout', ...tableClasses ].join( ' ' );
+	return [
+		`<!-- wp:flexible-table-block/table${ comment } -->`,
+		`<figure class="${ figureClass }"><table class="${ tableClass }">`,
+		'<thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>',
+		'<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr><tr><td>Cell 3</td><td>Cell 4</td></tr></tbody>',
+		'</table></figure>',
+		'<!-- /wp:flexible-table-block/table -->',
+	].join( '' );
+}
+
+test.describe( 'Front end', () => {
+	test.afterEach( async ( { requestUtils } ) => {
+		// Restore the default settings.
+		await requestUtils.rest( {
+			method: 'DELETE',
+			path: '/flexible-table-block/v1/options',
+		} );
+		await requestUtils.deleteAllPosts();
+	} );
+
+	test( 'should output block CSS reflecting the global settings', async ( {
+		page,
+		requestUtils,
+	} ) => {
+		await requestUtils.rest( {
+			method: 'POST',
+			path: '/flexible-table-block/v1/options',
+			data: {
+				block_style: {
+					table_width: '90%',
+					table_max_width: '110%',
+					table_border_collapse: 'separate',
+					row_odd_color: '#111111',
+					row_even_color: '#222222',
+					cell_text_color_th: '#333333',
+					cell_text_color_td: '#444444',
+					cell_background_color_th: '#555555',
+					cell_background_color_td: '#666666',
+					cell_padding: { top: '1em', right: '2em', bottom: '3em', left: '4em' },
+					cell_border_width: '2px',
+					cell_border_style: 'dotted',
+					cell_border_color: '#777777',
+					cell_text_align: 'center',
+					cell_vertical_align: 'bottom',
+				},
+			},
+		} );
+		const post = await requestUtils.createPost( {
+			title: 'Global setting',
+			content: getBlockMarkup(),
+			status: 'publish',
+			date_gmt: PUBLISHED_DATE,
+		} );
+		await page.goto( post.link );
+
+		const selector = `.${ BLOCK_CLASS }.${ BLOCK_CLASS }`;
+		const expectedRules = [
+			`${ selector }>table{width:90%;max-width:110%;border-collapse:separate;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}`,
+			`${ selector }.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}`,
+			`${ selector }>table tr th,${ selector }>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}`,
+			`${ selector }>table tr th{color:#333333;background-color:#555555;}`,
+			`${ selector }>table tr td{color:#444444;background-color:#666666;}`,
+		];
+		const inlineCss = await page.locator( INLINE_CSS_SELECTOR ).textContent();
+		expect( inlineCss ).toContain( expectedRules.join( '' ) );
+
+		// The CSS should actually be applied to the block.
+		const table = page.locator( `.${ BLOCK_CLASS } > table` );
+		await expect( table ).toHaveCSS( 'border-collapse', 'separate' );
+		const th = table.locator( 'th' ).first();
+		await expect( th ).toHaveCSS( 'color', 'rgb(51, 51, 51)' );
+		await expect( th ).toHaveCSS( 'background-color', 'rgb(85, 85, 85)' );
+		const td = table.locator( 'td' ).first();
+		await expect( td ).toHaveCSS( 'color', 'rgb(68, 68, 68)' );
+		await expect( td ).toHaveCSS( 'background-color', 'rgb(102, 102, 102)' );
+		await expect( td ).toHaveCSS( 'border-top-style', 'dotted' );
+		await expect( td ).toHaveCSS( 'border-top-color', 'rgb(119, 119, 119)' );
+		await expect( td ).toHaveCSS( 'text-align', 'center' );
+		await expect( td ).toHaveCSS( 'vertical-align', 'bottom' );
+	} );
+
+	test( 'should output responsive CSS reflecting the breakpoint option', async ( {
+		page,
+		requestUtils,
+	} ) => {
+		await requestUtils.rest( {
+			method: 'POST',
+			path: '/flexible-table-block/v1/options',
+			data: { breakpoint: 600 },
+		} );
+		const post = await requestUtils.createPost( {
+			title: 'Breakpoint',
+			content: [
+				getBlockMarkup( {
+					attributes: { isScrollOnPc: true },
+					figureClasses: [ 'is-scroll-on-pc' ],
+				} ),
+				getBlockMarkup( {
+					attributes: { isScrollOnMobile: true },
+					figureClasses: [ 'is-scroll-on-mobile' ],
+				} ),
+				getBlockMarkup( {
+					attributes: { isStackedOnMobile: true },
+					tableClasses: [ 'is-stacked-on-mobile' ],
+				} ),
+			].join( '\n\n' ),
+			status: 'publish',
+			date_gmt: PUBLISHED_DATE,
+		} );
+		await page.goto( post.link );
+
+		const inlineCss = await page.locator( INLINE_CSS_SELECTOR ).textContent();
+		expect( inlineCss ).toContain( '@media screen and (min-width:601px){' );
+		expect( inlineCss ).toContain( '@media screen and (max-width:600px){' );
+
+		const scrollOnPc = page.locator( `.${ BLOCK_CLASS }.is-scroll-on-pc` );
+		const scrollOnMobile = page.locator( `.${ BLOCK_CLASS }.is-scroll-on-mobile` );
+		const stackedCell = page.locator( `.${ BLOCK_CLASS } table.is-stacked-on-mobile td` ).first();
+
+		// Wider than the breakpoint, but narrower than the default breakpoint (768px).
+		await page.setViewportSize( { width: 700, height: 800 } );
+		await expect( scrollOnPc ).toHaveCSS( 'overflow-x', 'scroll' );
+		await expect( scrollOnMobile ).not.toHaveCSS( 'overflow-x', 'scroll' );
+		await expect( stackedCell ).toHaveCSS( 'display', 'table-cell' );
+
+		// Narrower than the breakpoint.
+		await page.setViewportSize( { width: 500, height: 800 } );
+		await expect( scrollOnPc ).not.toHaveCSS( 'overflow-x', 'scroll' );
+		await expect( scrollOnMobile ).toHaveCSS( 'overflow-x', 'scroll' );
+		await expect( stackedCell ).toHaveCSS( 'display', 'block' );
+	} );
+
+	test( 'should make the header and the first column sticky', async ( { page, requestUtils } ) => {
+		const post = await requestUtils.createPost( {
+			title: 'Sticky',
+			content: [
+				getBlockMarkup( {
+					attributes: { sticky: 'header' },
+					tableClasses: [ 'is-sticky-header' ],
+				} ),
+				getBlockMarkup( {
+					attributes: { sticky: 'first-column' },
+					tableClasses: [ 'is-sticky-first-column' ],
+				} ),
+				getBlockMarkup( {
+					attributes: { isStackedOnMobile: true, sticky: 'header' },
+					tableClasses: [ 'is-stacked-on-mobile', 'is-sticky-header' ],
+				} ),
+			].join( '\n\n' ),
+			status: 'publish',
+			date_gmt: PUBLISHED_DATE,
+		} );
+		await page.goto( post.link );
+
+		// Sticky header.
+		await expect(
+			page.locator( 'table.is-sticky-header:not(.is-stacked-on-mobile) thead' )
+		).toHaveCSS( 'position', 'sticky' );
+
+		// Sticky first column.
+		const firstColumnRows = page.locator( 'table.is-sticky-first-column tr' );
+		await expect( firstColumnRows ).toHaveCount( 3 );
+		for ( const row of await firstColumnRows.all() ) {
+			await expect( row.locator( 'th, td' ).first() ).toHaveCSS( 'position', 'sticky' );
+			await expect( row.locator( 'th, td' ).nth( 1 ) ).toHaveCSS( 'position', 'static' );
+		}
+
+		// The header should not be sticky when the table is stacked on mobile.
+		await expect( page.locator( 'table.is-sticky-header.is-stacked-on-mobile thead' ) ).toHaveCSS(
+			'position',
+			'static'
+		);
+	} );
+} );
