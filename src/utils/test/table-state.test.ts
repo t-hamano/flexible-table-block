@@ -47,15 +47,6 @@ const getRow = (
 	};
 };
 
-const deepFreeze = < T >( object: T ): T => {
-	Object.values( object as object ).forEach( ( value ) => {
-		if ( value && typeof value === 'object' ) {
-			deepFreeze( value );
-		}
-	} );
-	return Object.freeze( object );
-};
-
 // | head   | head   | head   |
 // | body-0 | body-0 | body-0 |
 // | body-1 | body-1 | body-1 |
@@ -766,13 +757,11 @@ describe( 'table-state', () => {
 
 	describe( 'insertColumn', () => {
 		it( 'should give the correct virtual column index to the cell inserted after the last column', () => {
-			const vTable = deepFreeze(
-				toVirtualTable( {
-					head: [],
-					body: [ { cells: [ { content: 'body-0', tag: 'td' } ] } ],
-					foot: [],
-				} )
-			);
+			const vTable = toVirtualTable( {
+				head: [],
+				body: [ { cells: [ { content: 'body-0', tag: 'td' } ] } ],
+				foot: [],
+			} );
 			const newVTable = insertColumn( vTable, { vColIndex: 1 } );
 			// | body-0 |        |
 			expect( newVTable.body[ 0 ].cells.map( ( cell ) => cell.vColIndex ) ).toStrictEqual( [
@@ -886,7 +875,9 @@ describe( 'table-state', () => {
 	} );
 
 	describe( 'splitMergedCells', () => {
-		const vTable = deepFreeze(
+		// | merged | merged | merged |
+		// | merged | merged | merged |
+		const createSplitTargetVTable = () =>
 			toVirtualTable( {
 				head: [],
 				body: [
@@ -896,10 +887,10 @@ describe( 'table-state', () => {
 					{ cells: [] },
 				],
 				foot: [],
-			} )
-		);
+			} );
 
 		it( 'should split the merged cell with the correct indexes', () => {
+			const vTable = createSplitTargetVTable();
 			const newVTable = splitMergedCells( vTable, [ vTable.body[ 0 ].cells[ 0 ] ] );
 			newVTable.body.forEach( ( row, rowIndex ) => {
 				row.cells.forEach( ( cell, vColIndex ) => {
@@ -915,7 +906,10 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should not mutate the original virtual table', () => {
-			expect( () => splitMergedCells( vTable, [ vTable.body[ 0 ].cells[ 0 ] ] ) ).not.toThrow();
+			const vTable = createSplitTargetVTable();
+			const original = structuredClone( vTable );
+			splitMergedCells( vTable, [ vTable.body[ 0 ].cells[ 0 ] ] );
+			expect( vTable ).toStrictEqual( original );
 		} );
 	} );
 
