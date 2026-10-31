@@ -87,37 +87,7 @@ test.describe( 'Transform from core table block', () => {
 		} );
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
-		expect( await editor.getBlocks() ).toMatchObject( [
-			{
-				name: 'flexible-table-block/table',
-				attributes: {
-					head: [
-						{
-							cells: [
-								{ content: 'Header 1', tag: 'th', colSpan: '2' },
-								{ content: 'Header 3', tag: 'th' },
-							],
-						},
-					],
-					body: [
-						{
-							cells: [
-								{ content: 'Cell 1', tag: 'td', rowSpan: '2' },
-								{ content: 'Cell 2', tag: 'td' },
-								{ content: 'Cell 3', tag: 'td' },
-							],
-						},
-						{
-							cells: [
-								{ content: 'Cell 4', tag: 'td' },
-								{ content: 'Cell 5', tag: 'td' },
-							],
-						},
-					],
-					caption: 'Table <strong>caption</strong>',
-				},
-			},
-		] );
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 } );
 
