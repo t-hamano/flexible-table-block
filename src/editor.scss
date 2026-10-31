@@ -199,11 +199,10 @@ $row-column-inserter-dot-size: 6px;
 		top: 0;
 		left: 0;
 		z-index: 1;
-		height: auto;
+		min-height: 0;
 		padding: 0 variables.$grid-unit-05;
 		font-size: variables.$font-size-x-small;
 		line-height: variables.$font-line-height-x-small;
-		border-radius: 0;
 	}
 
 	.ftb-row-before-inserter {
@@ -239,13 +238,21 @@ $row-column-inserter-dot-size: 6px;
 	.ftb-column-before-inserter,
 	.ftb-column-after-inserter {
 		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: $row-column-inserter-button-size;
-		min-width: 0;
 		height: $row-column-inserter-button-size;
-		padding: 0;
 		color: transparent;
+		cursor: pointer;
 		background: transparent;
 		border-radius: variables.$radius-round;
+
+		svg {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+		}
 
 		&::before {
 			position: absolute;
@@ -294,24 +301,35 @@ $row-column-inserter-dot-size: 6px;
 	.ftb-row-selector,
 	.ftb-column-selector {
 		position: absolute;
-		justify-content: center;
 		min-width: 0;
-		padding: 0;
+		min-height: 0;
 
-		&:not(.is-pressed) {
-			background: colors.$gray-200;
+		&:focus {
+			z-index: 1;
+		}
+
+		&:not([aria-pressed="true"]) {
+			--wp-ui-button-background-color: #{colors.$gray-200};
+			--wp-ui-button-background-color-active: #{colors.$gray-300};
+		}
+
+		svg {
+			width: 16px;
+			height: 16px;
+			margin: 0;
 		}
 	}
 
 	.ftb-row-remover,
 	.ftb-column-remover {
+		--wp-ui-button-background-color: #{colors.$white};
+		--wp-ui-button-border-color: #{colors.$gray-900};
+		--wp-ui-button-border-color-active: #{colors.$gray-900};
+
 		position: absolute;
 		z-index: 1;
-		min-width: 0;
-		padding: 0;
-		background: colors.$white;
 		border-radius: variables.$radius-small;
-		box-shadow: 0 0 0 variables.$border-width colors.$gray-900, variables.$elevation-x-small;
+		box-shadow: variables.$elevation-x-small;
 	}
 
 	.ftb-row-remover {
