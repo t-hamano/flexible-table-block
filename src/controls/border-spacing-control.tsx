@@ -2,146 +2,38 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { link, linkOff } from '@wordpress/icons';
-import { useState } from '@wordpress/element';
-import {
-	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits,
-} from '@wordpress/components';
-import { Fieldset, IconButton, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
  */
 import { BORDER_UNITS, MAX_BORDER_SPACING, DIRECTION_CONTROLS } from '../constants';
+import LinkedUnitControl from './linked-unit-control';
 import { DirectionIndicatorControl } from './indicator-control';
-import { parseUnit, sanitizeUnitValue } from '../utils/helper';
-import type { DirectionValue } from '../BlockAttributes';
-
-const DEFAULT_VALUES = {
-	horizontal: '',
-	vertical: '',
-};
 
 type Props = {
 	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
+	values: {
+		horizontal?: string;
+		vertical?: string;
+	};
 };
-
-type ValuesKey = keyof typeof DEFAULT_VALUES;
-type MaxBorderSpacingKey = keyof typeof MAX_BORDER_SPACING;
 
 export default function BorderSpacingControl( {
 	label = __( 'Border spacing', 'flexible-table-block' ),
-	help,
-	onChange,
-	values: valuesProp,
+	...props
 }: Props ) {
-	const values = {
-		...DEFAULT_VALUES,
-		...valuesProp,
-	};
-
-	const isMixed = ! ( values.horizontal === values.vertical );
-
-	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_UNITS } );
-
-	const [ isLinked, setIsLinked ] = useState( true );
-
-	const linkedLabel = isLinked
-		? __( 'Unlink directions', 'flexible-table-block' )
-		: __( 'Link directions', 'flexible-table-block' );
-
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
-	const allInputValue: string | 0 = isMixed ? '' : values.horizontal;
-
-	const toggleLinked = () => {
-		setIsLinked( ! isLinked );
-	};
-
-	const handleOnChangeAll = ( inputValue: string | undefined ) => {
-		if ( inputValue ) {
-			const [ , unit ] = parseUnit( inputValue );
-			const sanitizedValue = sanitizeUnitValue( inputValue, {
-				maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
-			} );
-
-			onChange( {
-				horizontal: sanitizedValue,
-				vertical: sanitizedValue,
-			} );
-		} else {
-			onChange( {
-				horizontal: undefined,
-				vertical: undefined,
-			} );
-		}
-	};
-
-	const handleOnChange = ( inputValue: string | undefined, targetDirection: DirectionValue ) => {
-		if ( inputValue ) {
-			const [ , unit ] = parseUnit( inputValue );
-			const sanitizedValue = sanitizeUnitValue( inputValue, {
-				maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
-			} );
-
-			onChange( {
-				...values,
-				[ targetDirection ]: sanitizedValue,
-			} );
-		} else {
-			onChange( {
-				...values,
-				[ targetDirection ]: undefined,
-			} );
-		}
-	};
-
 	return (
-		<Fieldset.Root className="ftb-border-spacing-control">
-			<Fieldset.Legend>{ label }</Fieldset.Legend>
-			<Stack align="flex-start" justify="space-between" gap="sm">
-				{ isLinked ? (
-					<Stack align="center" gap="sm">
-						<DirectionIndicatorControl />
-						<UnitControl
-							aria-label={ __( 'All', 'flexible-table-block' ) }
-							value={ allInputValue }
-							units={ borderSpacingUnits }
-							placeholder={ allInputPlaceholder }
-							onChange={ handleOnChangeAll }
-							__unstableInputWidth="100px"
-						/>
-					</Stack>
-				) : (
-					<Stack direction="column" gap="xs">
-						{ DIRECTION_CONTROLS.map( ( item ) => (
-							<Stack align="center" gap="sm" key={ item.value }>
-								<DirectionIndicatorControl direction={ item.value } />
-								<UnitControl
-									aria-label={ item.label }
-									value={ values[ item.value as ValuesKey ] }
-									units={ borderSpacingUnits }
-									onChange={ ( value ) => handleOnChange( value, item.value ) }
-									__unstableInputWidth="100px"
-								/>
-							</Stack>
-						) ) }
-					</Stack>
-				) }
-				<IconButton
-					label={ linkedLabel }
-					icon={ isLinked ? link : linkOff }
-					onClick={ toggleLinked }
-					variant="minimal"
-					tone="neutral"
-					size="small"
-					style={ { marginTop: '8px' } }
-				/>
-			</Stack>
-			{ help && <Fieldset.Description>{ help }</Fieldset.Description> }
-		</Fieldset.Root>
+		<LinkedUnitControl
+			{ ...props }
+			label={ label }
+			className="ftb-border-spacing-control"
+			items={ DIRECTION_CONTROLS }
+			layout="directions"
+			availableUnits={ BORDER_UNITS }
+			maxValues={ MAX_BORDER_SPACING }
+			indicator={ ( direction ) => <DirectionIndicatorControl direction={ direction } /> }
+		/>
 	);
 }

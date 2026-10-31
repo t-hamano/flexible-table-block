@@ -8,28 +8,13 @@ import type { Property } from 'csstype';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { link, linkOff } from '@wordpress/icons';
-import { useState } from '@wordpress/element';
-import {
-	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits,
-} from '@wordpress/components';
-import { Fieldset, IconButton, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
  */
 import { BORDER_UNITS, MAX_BORDER_RADIUS, CORNER_CONTROLS } from '../constants';
+import LinkedUnitControl from './linked-unit-control';
 import { CornerIndicatorControl } from './indicator-control';
-import { parseUnit, sanitizeUnitValue } from '../utils/helper';
-import type { CornerValue } from '../BlockAttributes';
-
-const DEFAULT_VALUES = {
-	topLeft: '',
-	topRight: '',
-	bottomRight: '',
-	bottomLeft: '',
-};
 
 type Props = {
 	label: string;
@@ -44,136 +29,21 @@ type Props = {
 	className?: string;
 };
 
-type ValuesKey = keyof typeof DEFAULT_VALUES;
-type MaxBorderRadiusKey = keyof typeof MAX_BORDER_RADIUS;
-
 export default function BorderRadiusControl( {
 	label = __( 'Border radius', 'flexible-table-block' ),
-	help,
-	onChange,
-	values: valuesProp,
 	className,
+	...props
 }: Props ) {
-	const values = {
-		...DEFAULT_VALUES,
-		...valuesProp,
-	};
-
-	const isMixed = ! (
-		values.topLeft === values.topRight &&
-		values.topLeft === values.bottomRight &&
-		values.topLeft === values.bottomLeft
-	);
-
-	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_UNITS } );
-
-	const [ isLinked, setIsLinked ] = useState( true );
-	const [ corner, setCorner ] = useState< CornerValue | undefined >( undefined );
-
-	const linkedLabel = isLinked
-		? __( 'Unlink sides', 'flexible-table-block' )
-		: __( 'Link sides', 'flexible-table-block' );
-
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
-	const allInputValue: string | 0 = isMixed ? '' : values.topLeft;
-
-	const toggleLinked = () => {
-		setIsLinked( ! isLinked );
-		setCorner( undefined );
-	};
-
-	const handleOnFocus = ( focusCorner: CornerValue ) => setCorner( focusCorner );
-
-	const handleOnChangeAll = ( inputValue: string | undefined ) => {
-		if ( inputValue ) {
-			const [ , unit ] = parseUnit( inputValue );
-			const sanitizedValue = sanitizeUnitValue( inputValue, {
-				maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
-			} );
-
-			onChange( {
-				topLeft: sanitizedValue,
-				topRight: sanitizedValue,
-				bottomRight: sanitizedValue,
-				bottomLeft: sanitizedValue,
-			} );
-		} else {
-			onChange( {
-				topLeft: undefined,
-				topRight: undefined,
-				bottomRight: undefined,
-				bottomLeft: undefined,
-			} );
-		}
-	};
-
-	const handleOnChange = ( inputValue: string | undefined, targetCorner: CornerValue ) => {
-		if ( inputValue ) {
-			const [ , unit ] = parseUnit( inputValue );
-			const sanitizedValue = sanitizeUnitValue( inputValue, {
-				maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
-			} );
-
-			onChange( {
-				...values,
-				[ targetCorner ]: sanitizedValue,
-			} );
-		} else {
-			onChange( {
-				...values,
-				[ targetCorner ]: undefined,
-			} );
-		}
-	};
-
 	return (
-		<Fieldset.Root className={ clsx( 'ftb-border-radius-control', className ) }>
-			<Fieldset.Legend>{ label }</Fieldset.Legend>
-			<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
-				<Stack align="center" gap="sm">
-					<CornerIndicatorControl corner={ corner } />
-					{ isLinked && (
-						<div>
-							<UnitControl
-								hideLabelFromVision
-								label={ __( 'All', 'flexible-table-block' ) }
-								placeholder={ allInputPlaceholder }
-								onChange={ handleOnChangeAll }
-								value={ allInputValue }
-								units={ borderRadiusUnits }
-								min={ 0 }
-								__unstableInputWidth="100px"
-							/>
-						</div>
-					) }
-				</Stack>
-				<IconButton
-					label={ linkedLabel }
-					onClick={ toggleLinked }
-					icon={ isLinked ? link : linkOff }
-					variant="minimal"
-					tone="neutral"
-					size="small"
-				/>
-			</Stack>
-			{ ! isLinked && (
-				<div className="ftb-corner-controls">
-					{ CORNER_CONTROLS.map( ( item ) => (
-						<div key={ item.value }>
-							<UnitControl
-								aria-label={ item.label }
-								value={ values[ item.value as ValuesKey ] }
-								units={ borderRadiusUnits }
-								min={ 0 }
-								onFocus={ () => handleOnFocus( item.value ) }
-								onChange={ ( value ) => handleOnChange( value, item.value ) }
-								style={ { marginBottom: 0 } }
-							/>
-						</div>
-					) ) }
-				</div>
-			) }
-			{ help && <Fieldset.Description>{ help }</Fieldset.Description> }
-		</Fieldset.Root>
+		<LinkedUnitControl
+			{ ...props }
+			label={ label }
+			className={ clsx( 'ftb-border-radius-control', className ) }
+			items={ CORNER_CONTROLS }
+			layout="corners"
+			availableUnits={ BORDER_UNITS }
+			maxValues={ MAX_BORDER_RADIUS }
+			indicator={ ( corner ) => <CornerIndicatorControl corner={ corner } /> }
+		/>
 	);
 }
