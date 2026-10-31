@@ -6,7 +6,7 @@ import type { Properties } from 'csstype';
 /**
  * Internal dependencies
  */
-import { cleanEmptyObject, sanitizeUnitValue } from './helper';
+import { cleanEmptyObject } from './helper';
 import type { CornerProps, CrossProps, DirectionProps } from './style-picker';
 
 function getCssPropertyWithFourDirection(
