@@ -775,11 +775,16 @@ export function toVirtualRows( vTable: VTable ): VRow[] {
  * @return Minimum / maximum virtual indexes.
  */
 function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes {
+	// Spans below 1 (e.g. a negative rowspan in the saved markup) are treated as 1.
 	return {
 		minRowIndex: Math.min( ...selectedCells.map( ( cell ) => cell.rowIndex ) ),
-		maxRowIndex: Math.max( ...selectedCells.map( ( cell ) => cell.rowIndex + cell.rowSpan - 1 ) ),
+		maxRowIndex: Math.max(
+			...selectedCells.map( ( cell ) => cell.rowIndex + Math.max( cell.rowSpan, 1 ) - 1 )
+		),
 		minColIndex: Math.min( ...selectedCells.map( ( cell ) => cell.vColIndex ) ),
-		maxColIndex: Math.max( ...selectedCells.map( ( cell ) => cell.vColIndex + cell.colSpan - 1 ) ),
+		maxColIndex: Math.max(
+			...selectedCells.map( ( cell ) => cell.vColIndex + Math.max( cell.colSpan, 1 ) - 1 )
+		),
 	};
 }
 
@@ -821,8 +826,9 @@ export function isRectangleSelected( selectedCells: VSelectedCells ): boolean {
 	// Map the selected cells to the matrix (mark the cell as "true").
 	selectedCells.forEach( ( cell: VCell ) => {
 		if ( cell.rowIndex in vRange && cell.vColIndex in vRange[ cell.rowIndex ] ) {
-			for ( let i = 0; i < cell.rowSpan; i++ ) {
-				for ( let j = 0; j < cell.colSpan; j++ ) {
+			// Spans below 1 are treated as 1 so that the cell itself is always marked.
+			for ( let i = 0; i < Math.max( cell.rowSpan, 1 ); i++ ) {
+				for ( let j = 0; j < Math.max( cell.colSpan, 1 ); j++ ) {
 					vRange[ cell.rowIndex + i ][ cell.vColIndex + j ] = true;
 				}
 			}
