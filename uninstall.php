@@ -7,8 +7,8 @@
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-require_once __DIR__ . '/classes/class-option.php';
+require_once __DIR__ . '/classes/class-settings.php';
 
-foreach ( Flexible_Table_Block\Option::OPTION_NAMES as $option_name ) {
-	delete_option( $option_name );
+foreach ( array_keys( Flexible_Table_Block\Settings::OPTIONS ) as $key ) {
+	delete_option( Flexible_Table_Block\Settings::OPTION_PREFIX . $key );
 }
