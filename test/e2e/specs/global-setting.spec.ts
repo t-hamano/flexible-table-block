@@ -1,12 +1,7 @@
 /**
- * External dependencies
- */
-import type { Page } from '@playwright/test';
-
-/**
  * WordPress dependencies
  */
-import type { Editor, RequestUtils } from '@wordpress/e2e-test-utils-playwright';
+import type { RequestUtils } from '@wordpress/e2e-test-utils-playwright';
 
 /**
  * Internal dependencies
@@ -259,7 +254,14 @@ test.describe( 'Global Setting', () => {
 		} );
 
 		test.describe( 'Keep all contents when merging cells', () => {
-			async function mergeFirstTwoCells( { editor, page }: { editor: Editor; page: Page } ) {
+			test( 'should keep only the first cell content when disabled', async ( {
+				admin,
+				editor,
+				page,
+				fsbUtils,
+			} ) => {
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
 				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
 				await cells.nth( 0 ).fill( 'Cell 1' );
 				await cells.nth( 1 ).fill( 'Cell 2' );
@@ -269,17 +271,6 @@ test.describe( 'Global Setting', () => {
 				await page.keyboard.up( 'Shift' );
 				await editor.clickBlockToolbarButton( 'Edit table' );
 				await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
-			}
-
-			test( 'should keep only the first cell content when disabled', async ( {
-				admin,
-				editor,
-				page,
-				fsbUtils,
-			} ) => {
-				await admin.createNewPost();
-				await fsbUtils.createFlexibleTableBlock();
-				await mergeFirstTwoCells( { editor, page } );
 				expect( await editor.getEditedPostContent() ).toContain( '<td colspan="2">Cell 1</td>' );
 			} );
 
@@ -293,7 +284,15 @@ test.describe( 'Global Setting', () => {
 				await updateOptions( requestUtils, { merge_content: true } );
 				await admin.createNewPost();
 				await fsbUtils.createFlexibleTableBlock();
-				await mergeFirstTwoCells( { editor, page } );
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).fill( 'Cell 1' );
+				await cells.nth( 1 ).fill( 'Cell 2' );
+				await cells.nth( 0 ).click();
+				await page.keyboard.down( 'Shift' );
+				await cells.nth( 1 ).click();
+				await page.keyboard.up( 'Shift' );
+				await editor.clickBlockToolbarButton( 'Edit table' );
+				await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 				expect( await editor.getEditedPostContent() ).toContain(
 					'<td colspan="2">Cell 1<br>Cell 2</td>'
 				);
