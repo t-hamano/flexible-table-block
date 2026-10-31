@@ -7,11 +7,8 @@
 	justify-content: center;
 
 	.ftb-color-indicator-button__indicator {
-		position: relative;
 		flex: 1;
 		height: 100%;
-		margin: 0;
-		border-radius: variables.$radius-round;
 	}
 
 	&:not(.is-mixed) {
