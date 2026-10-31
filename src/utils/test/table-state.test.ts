@@ -61,7 +61,7 @@ const deepFreeze = < T >( object: T ): T => {
 // | body-1 | body-1 | body-1 |
 // | body-2 | body-2 | body-2 |
 // | foot   | foot   | foot   |
-const table: VTable = {
+const createVTable = (): VTable => ( {
 	head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
 	body: [
 		getRow( 3, 'body', 0, 'td', 'body-0' ),
@@ -69,7 +69,7 @@ const table: VTable = {
 		getRow( 3, 'body', 2, 'td', 'body-2' ),
 	],
 	foot: [ getRow( 3, 'foot', 0, 'td', 'foot' ) ],
-};
+} );
 
 // Merged cells repeat the same letter.
 // | A | A | B |
@@ -136,7 +136,7 @@ describe( 'table-state', () => {
 			// | body-1 | body-1 | body-1 |
 			// | body-2 | body-2 | body-2 |
 			// | foot   | foot   | foot   |
-			expect( insertRow( { ...table }, { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
+			expect( insertRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
 				head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
 				body: [
 					getRow( 3, 'body', 0, 'td', 'body-0' ),
@@ -152,7 +152,7 @@ describe( 'table-state', () => {
 			// | body-2 | body-2 | body-2 |
 			// |        |        |        |
 			// | foot   | foot   | foot   |
-			expect( insertRow( { ...table }, { sectionName: 'body', rowIndex: 3 } ) ).toStrictEqual( {
+			expect( insertRow( createVTable(), { sectionName: 'body', rowIndex: 3 } ) ).toStrictEqual( {
 				head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
 				body: [
 					getRow( 3, 'body', 0, 'td', 'body-0' ),
@@ -231,7 +231,7 @@ describe( 'table-state', () => {
 			// | body-1 | body-1 | body-1 |
 			// | body-2 | body-2 | body-2 |
 			// | foot   | foot   | foot   |
-			expect( deleteRow( { ...table }, { sectionName: 'body', rowIndex: 0 } ) ).toStrictEqual( {
+			expect( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 0 } ) ).toStrictEqual( {
 				head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
 				body: [ getRow( 3, 'body', 0, 'td', 'body-1' ), getRow( 3, 'body', 1, 'td', 'body-2' ) ],
 				foot: [ getRow( 3, 'foot', 0, 'td', 'foot' ) ],
@@ -240,7 +240,7 @@ describe( 'table-state', () => {
 			// | body-0 | body-0 | body-0 |
 			// | body-2 | body-2 | body-2 |
 			// | foot   | foot   | foot   |
-			expect( deleteRow( { ...table }, { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
+			expect( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
 				head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
 				body: [ getRow( 3, 'body', 0, 'td', 'body-0' ), getRow( 3, 'body', 1, 'td', 'body-2' ) ],
 				foot: [ getRow( 3, 'foot', 0, 'td', 'foot' ) ],
@@ -302,7 +302,7 @@ describe( 'table-state', () => {
 			// | body-1 | body-1 |
 			// | body-2 | body-2 |
 			// | foot   | foot   |
-			expect( deleteColumn( { ...table }, { vColIndex: 0 } ) ).toStrictEqual( {
+			expect( deleteColumn( createVTable(), { vColIndex: 0 } ) ).toStrictEqual( {
 				head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
 				body: [
 					getRow( 2, 'body', 0, 'td', 'body-0' ),
@@ -316,7 +316,7 @@ describe( 'table-state', () => {
 			// | body-1 | body-1 |
 			// | body-2 | body-2 |
 			// | foot   | foot   |
-			expect( deleteColumn( { ...table }, { vColIndex: 2 } ) ).toStrictEqual( {
+			expect( deleteColumn( createVTable(), { vColIndex: 2 } ) ).toStrictEqual( {
 				head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
 				body: [
 					getRow( 2, 'body', 0, 'td', 'body-0' ),
