@@ -210,7 +210,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				className="ftb-table-cell-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>
-				<Button variant="minimal" size="compact" onClick={ onResetCellSettings }>
+				<Button variant="minimal" size="small" onClick={ onResetCellSettings }>
 					{ __( 'Clear cell settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>

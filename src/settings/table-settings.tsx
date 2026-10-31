@@ -223,7 +223,7 @@ export default function TableSettings( {
 				className="ftb-table-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>
-				<Button variant="minimal" size="compact" onClick={ onResetTableSettings }>
+				<Button variant="minimal" size="small" onClick={ onResetTableSettings }>
 					{ __( 'Clear table settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>

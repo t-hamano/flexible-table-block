@@ -102,7 +102,7 @@ export default function TableCaptionSettings( {
 				className="ftb-table-caption-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>
-				<Button variant="minimal" size="compact" onClick={ onResetSettings }>
+				<Button variant="minimal" size="small" onClick={ onResetSettings }>
 					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>
