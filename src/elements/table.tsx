@@ -15,7 +15,7 @@ import {
 	// @ts-expect-error Not exported in the type definitions.
 	__experimentalUseColorProps as useColorProps,
 } from '@wordpress/block-editor';
-import { Button } from '@wordpress/components';
+import { Button, IconButton } from '@wordpress/ui';
 import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
 import { store as noticesStore } from '@wordpress/notices';
 import { useDispatch } from '@wordpress/data';
@@ -476,10 +476,9 @@ export default function Table( {
 											rowIndex === 0 &&
 											vColIndex === 0 && (
 												<Button
-													__next40pxDefaultSize
 													className="ftb-table-cell-label"
 													tabIndex={ options.focus_control_button ? 0 : -1 }
-													variant="primary"
+													size="small"
 													onClick={ ( event: MouseEvent ) => {
 														onSelectSectionCells( sectionName );
 														event.stopPropagation();
@@ -491,15 +490,14 @@ export default function Table( {
 										{ isSelected && ! isContentOnlyMode && options.show_control_button && (
 											<>
 												{ rowIndex === 0 && vColIndex === 0 && (
-													<Button
-														__next40pxDefaultSize
+													<IconButton
+														variant="unstyled"
 														className={ clsx( 'ftb-row-before-inserter', {
 															'has-prev-section': sectionIndex > 0,
 														} ) }
 														label={ __( 'Insert row before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
-														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex );
 															event.stopPropagation();
@@ -508,13 +506,14 @@ export default function Table( {
 												) }
 												{ vColIndex === 0 && (
 													<>
-														<Button
-															__next40pxDefaultSize
+														<IconButton
+															variant="minimal"
+															tone="neutral"
+															size="small"
 															className="ftb-row-selector"
 															label={ __( 'Select row', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronRight }
-															iconSize={ 16 }
 															aria-pressed={ isCurrentRowSelected }
 															onClick={ ( event: MouseEvent ) => {
 																onSelectRow( sectionName, rowIndex );
@@ -522,7 +521,9 @@ export default function Table( {
 															} }
 														/>
 														{ isCurrentRowSelected && (
-															<Button
+															<IconButton
+																variant="minimal"
+																tone="neutral"
 																className="ftb-row-remover"
 																label={ __( 'Delete row', 'flexible-table-block' ) }
 																tabIndex={ options.focus_control_button ? 0 : -1 }
@@ -537,13 +538,12 @@ export default function Table( {
 													</>
 												) }
 												{ sectionIndex === 0 && rowIndex === 0 && vColIndex === 0 && (
-													<Button
-														__next40pxDefaultSize
+													<IconButton
+														variant="unstyled"
 														className="ftb-column-before-inserter"
 														label={ __( 'Insert column before', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
-														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertColumn( cell, 0 );
 															event.stopPropagation();
@@ -552,13 +552,14 @@ export default function Table( {
 												) }
 												{ sectionIndex === 0 && rowIndex === 0 && (
 													<>
-														<Button
-															__next40pxDefaultSize
+														<IconButton
+															variant="minimal"
+															tone="neutral"
+															size="small"
 															className="ftb-column-selector"
 															label={ __( 'Select column', 'flexible-table-block' ) }
 															tabIndex={ options.focus_control_button ? 0 : -1 }
 															icon={ chevronDown }
-															iconSize={ 16 }
 															aria-pressed={ isCurrentColumnSelected }
 															onClick={ ( event: MouseEvent ) => {
 																onSelectColumn( vColIndex );
@@ -566,7 +567,9 @@ export default function Table( {
 															} }
 														/>
 														{ isCurrentColumnSelected && (
-															<Button
+															<IconButton
+																variant="minimal"
+																tone="neutral"
 																className="ftb-column-remover"
 																label={ __( 'Delete column', 'flexible-table-block' ) }
 																tabIndex={ options.focus_control_button ? 0 : -1 }
@@ -581,8 +584,8 @@ export default function Table( {
 													</>
 												) }
 												{ vColIndex === 0 && (
-													<Button
-														__next40pxDefaultSize
+													<IconButton
+														variant="unstyled"
 														className={ clsx( 'ftb-row-after-inserter', {
 															'has-next-section':
 																sectionIndex < Object.keys( filteredVTable ).length - 1 &&
@@ -591,7 +594,6 @@ export default function Table( {
 														label={ __( 'Insert row after', 'flexible-table-block' ) }
 														tabIndex={ options.focus_control_button ? 0 : -1 }
 														icon={ plus }
-														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
 															onInsertRow( sectionName, rowIndex + rowSpan );
 															event.stopPropagation();
@@ -619,13 +621,12 @@ export default function Table( {
 											options.show_control_button &&
 											sectionIndex === 0 &&
 											rowIndex === 0 && (
-												<Button
-													__next40pxDefaultSize
+												<IconButton
+													variant="unstyled"
 													className="ftb-column-after-inserter"
 													label={ __( 'Insert column after', 'flexible-table-block' ) }
 													tabIndex={ options.focus_control_button ? 0 : -1 }
 													icon={ plus }
-													iconSize={ 18 }
 													onClick={ ( event: MouseEvent ) => {
 														onInsertColumn( cell, 1 );
 														event.stopPropagation();
