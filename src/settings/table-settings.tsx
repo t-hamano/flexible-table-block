@@ -21,7 +21,7 @@ import { SelectControl, Stack, SwitchControl } from '@wordpress/ui';
 /**
  * Internal dependencies
  */
-import { STORE_NAME, SIZE_UNITS, BORDER_COLLAPSE_CONTROLS, STICKY_CONTROLS } from '../constants';
+import { SIZE_UNITS, BORDER_COLLAPSE_CONTROLS, STICKY_CONTROLS } from '../constants';
 import {
 	BorderRadiusControl,
 	BorderWidthControl,
@@ -59,7 +59,7 @@ import {
 	updateBorderSpacing,
 } from '../utils/style-updater';
 import type { StickyValue, BlockAttributes } from '../BlockAttributes';
-import type { StoreOptions } from '../store';
+import { store as ftbStore } from '../store';
 
 type Props = {
 	attributes: BlockAttributes;
@@ -82,8 +82,7 @@ export default function TableSettings( {
 		attributes;
 
 	const options = useSelect( ( select ) => {
-		const { getOptions }: { getOptions: () => StoreOptions } = select( STORE_NAME );
-		return getOptions();
+		return select( ftbStore ).getOptions();
 	}, [] );
 
 	const sizeUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );

@@ -35,7 +35,7 @@ import type { BlockEditProps } from '@wordpress/blocks';
  */
 import './editor.scss';
 import { CONTENT_JUSTIFY_CONTROLS } from './constants';
-import { STORE_NAME, type StoreOptions } from './store';
+import { store as ftbStore } from './store';
 import { TableSettings, TableCaptionSettings, TableCellSettings, GlobalSettings } from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
 import {
@@ -73,8 +73,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	const tableStylesObj = convertToObject( tableStyles );
 	const captionStylesObj = convertToObject( captionStyles );
 	const options = useSelect( ( select ) => {
-		const { getOptions }: { getOptions: () => StoreOptions } = select( STORE_NAME );
-		return getOptions();
+		return select( ftbStore ).getOptions();
 	}, [] );
 	const { createWarningNotice } = useDispatch( noticesStore );
 	const blockEditingMode = useBlockEditingMode();
