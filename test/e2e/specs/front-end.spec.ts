@@ -77,8 +77,18 @@ test.describe( 'Front end', () => {
 					},
 				],
 				body: [
-					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
-					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td' },
+							{ content: 'Cell 2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 3', tag: 'td' },
+							{ content: 'Cell 4', tag: 'td' },
+						],
+					},
 				],
 			},
 		} );
@@ -140,8 +150,18 @@ test.describe( 'Front end', () => {
 					},
 				],
 				body: [
-					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
-					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td' },
+							{ content: 'Cell 2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 3', tag: 'td' },
+							{ content: 'Cell 4', tag: 'td' },
+						],
+					},
 				],
 			},
 		} );
@@ -158,8 +178,18 @@ test.describe( 'Front end', () => {
 					},
 				],
 				body: [
-					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
-					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td' },
+							{ content: 'Cell 2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 3', tag: 'td' },
+							{ content: 'Cell 4', tag: 'td' },
+						],
+					},
 				],
 			},
 		} );
@@ -176,8 +206,18 @@ test.describe( 'Front end', () => {
 					},
 				],
 				body: [
-					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
-					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td' },
+							{ content: 'Cell 2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 3', tag: 'td' },
+							{ content: 'Cell 4', tag: 'td' },
+						],
+					},
 				],
 			},
 		} );
@@ -225,8 +265,18 @@ test.describe( 'Front end', () => {
 					},
 				],
 				body: [
-					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
-					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td' },
+							{ content: 'Cell 2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 3', tag: 'td' },
+							{ content: 'Cell 4', tag: 'td' },
+						],
+					},
 				],
 			},
 		} );
@@ -243,8 +293,18 @@ test.describe( 'Front end', () => {
 					},
 				],
 				body: [
-					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
-					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td' },
+							{ content: 'Cell 2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 3', tag: 'td' },
+							{ content: 'Cell 4', tag: 'td' },
+						],
+					},
 				],
 			},
 		} );
@@ -262,8 +322,18 @@ test.describe( 'Front end', () => {
 					},
 				],
 				body: [
-					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
-					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td' },
+							{ content: 'Cell 2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 3', tag: 'td' },
+							{ content: 'Cell 4', tag: 'td' },
+						],
+					},
 				],
 			},
 		} );
