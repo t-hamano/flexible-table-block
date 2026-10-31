@@ -12,14 +12,6 @@ import { createVTable } from './fixtures';
 
 type Cell = { content: string; tag: CellTagValue; rowSpan?: string; colSpan?: string };
 
-// Creates a virtual table with only a body section.
-const createBodyVTable = ( rows: Cell[][] ): VTable =>
-	toVirtualTable( {
-		head: [],
-		body: rows.map( ( cells ) => ( { cells } ) ),
-		foot: [],
-	} );
-
 const td = ( content: string, span: { rowSpan?: number; colSpan?: number } = {} ): Cell => ( {
 	content,
 	tag: 'td',
@@ -62,11 +54,15 @@ describe( 'toRectangledSelectedCells', () => {
 		// | A | B | C |
 		// | D | E | F |
 		// | G | H | I |
-		const vTable = createBodyVTable( [
-			[ td( 'A' ), td( 'B' ), td( 'C' ) ],
-			[ td( 'D' ), td( 'E' ), td( 'F' ) ],
-			[ td( 'G' ), td( 'H' ), td( 'I' ) ],
-		] );
+		const vTable = toVirtualTable( {
+			head: [],
+			body: [
+				{ cells: [ td( 'A' ), td( 'B' ), td( 'C' ) ] },
+				{ cells: [ td( 'D' ), td( 'E' ), td( 'F' ) ] },
+				{ cells: [ td( 'G' ), td( 'H' ), td( 'I' ) ] },
+			],
+			foot: [],
+		} );
 		expect( select( vTable, 'E', 'I' ) ).toStrictEqual( [ 'E', 'F', 'H', 'I' ] );
 		expect( select( vTable, 'I', 'E' ) ).toStrictEqual( [ 'E', 'F', 'H', 'I' ] );
 	} );
@@ -85,10 +81,14 @@ describe( 'toRectangledSelectedCells', () => {
 	it( 'should expand to the left when a merged cell crosses the left edge', () => {
 		// | A     A | B |
 		// | C | D   | E |
-		const vTable = createBodyVTable( [
-			[ td( 'A', { colSpan: 2 } ), td( 'B' ) ],
-			[ td( 'C' ), td( 'D' ), td( 'E' ) ],
-		] );
+		const vTable = toVirtualTable( {
+			head: [],
+			body: [
+				{ cells: [ td( 'A', { colSpan: 2 } ), td( 'B' ) ] },
+				{ cells: [ td( 'C' ), td( 'D' ), td( 'E' ) ] },
+			],
+			foot: [],
+		} );
 		expect( select( vTable, 'D', 'B' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E' ] );
 		expect( select( vTable, 'B', 'D' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E' ] );
 	} );
@@ -96,10 +96,14 @@ describe( 'toRectangledSelectedCells', () => {
 	it( 'should expand to the right when a merged cell crosses the right edge', () => {
 		// | A | B     B |
 		// | C | D | E   |
-		const vTable = createBodyVTable( [
-			[ td( 'A' ), td( 'B', { colSpan: 2 } ) ],
-			[ td( 'C' ), td( 'D' ), td( 'E' ) ],
-		] );
+		const vTable = toVirtualTable( {
+			head: [],
+			body: [
+				{ cells: [ td( 'A' ), td( 'B', { colSpan: 2 } ) ] },
+				{ cells: [ td( 'C' ), td( 'D' ), td( 'E' ) ] },
+			],
+			foot: [],
+		} );
 		expect( select( vTable, 'D', 'A' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E' ] );
 		expect( select( vTable, 'A', 'D' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E' ] );
 	} );
@@ -108,11 +112,15 @@ describe( 'toRectangledSelectedCells', () => {
 		// | A | B |
 		// | C | B |
 		// | D | E |
-		const vTable = createBodyVTable( [
-			[ td( 'A' ), td( 'B', { rowSpan: 2 } ) ],
-			[ td( 'C' ) ],
-			[ td( 'D' ), td( 'E' ) ],
-		] );
+		const vTable = toVirtualTable( {
+			head: [],
+			body: [
+				{ cells: [ td( 'A' ), td( 'B', { rowSpan: 2 } ) ] },
+				{ cells: [ td( 'C' ) ] },
+				{ cells: [ td( 'D' ), td( 'E' ) ] },
+			],
+			foot: [],
+		} );
 		expect( select( vTable, 'C', 'E' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E' ] );
 		expect( select( vTable, 'E', 'C' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E' ] );
 	} );
@@ -121,11 +129,15 @@ describe( 'toRectangledSelectedCells', () => {
 		// | A | B |
 		// | C | D |
 		// | C | E |
-		const vTable = createBodyVTable( [
-			[ td( 'A' ), td( 'B' ) ],
-			[ td( 'C', { rowSpan: 2 } ), td( 'D' ) ],
-			[ td( 'E' ) ],
-		] );
+		const vTable = toVirtualTable( {
+			head: [],
+			body: [
+				{ cells: [ td( 'A' ), td( 'B' ) ] },
+				{ cells: [ td( 'C', { rowSpan: 2 } ), td( 'D' ) ] },
+				{ cells: [ td( 'E' ) ] },
+			],
+			foot: [],
+		} );
 		expect( select( vTable, 'A', 'D' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E' ] );
 		expect( select( vTable, 'D', 'A' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E' ] );
 	} );
@@ -135,11 +147,15 @@ describe( 'toRectangledSelectedCells', () => {
 		// | C | D | E   |
 		// | F | G | E   |
 		// Selecting A to D pulls in B (right), and then E, which crosses the new bottom edge.
-		const vTable = createBodyVTable( [
-			[ td( 'A' ), td( 'B', { colSpan: 2 } ) ],
-			[ td( 'C' ), td( 'D' ), td( 'E', { rowSpan: 2 } ) ],
-			[ td( 'F' ), td( 'G' ) ],
-		] );
+		const vTable = toVirtualTable( {
+			head: [],
+			body: [
+				{ cells: [ td( 'A' ), td( 'B', { colSpan: 2 } ) ] },
+				{ cells: [ td( 'C' ), td( 'D' ), td( 'E', { rowSpan: 2 } ) ] },
+				{ cells: [ td( 'F' ), td( 'G' ) ] },
+			],
+			foot: [],
+		} );
 		expect( select( vTable, 'A', 'D' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ] );
 	} );
 } );
