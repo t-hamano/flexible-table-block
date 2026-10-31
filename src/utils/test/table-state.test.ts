@@ -140,49 +140,50 @@ const createMergedVTable = () =>
 		],
 	} );
 
-// Every section mixes rowspan and colspan cells.
-// body (4x4), merged cells repeat the same letter:
-// | A | A | B | C |
-// | A | A | D | C |
-// | E | E | F | C |
-// | G | H | I | I |
+// Every section mixes rowspan and colspan cells. Merged cells repeat the same name.
+// | head-0   | head-0   | head-0   | head-3   |
+// | body-0-0 | body-0-0 | body-0-2 | body-0-3 |
+// | body-0-0 | body-0-0 | body-1-2 | body-0-3 |
+// | body-2-0 | body-2-0 | body-2-2 | body-0-3 |
+// | body-3-0 | body-3-1 | body-3-2 | body-3-2 |
+// | foot-0   | foot-1   | foot-1   | foot-1   |
 const mixedSpanAttributes: TableAttributes = {
 	head: [
 		{
 			cells: [
-				{ content: 'h-0', tag: 'th', colSpan: '3', scope: 'colgroup' },
-				{ content: 'h-1', tag: 'th', id: 'head-id' },
+				{ content: 'head-0', tag: 'th', colSpan: '3', scope: 'colgroup' },
+				{ content: 'head-3', tag: 'th', id: 'head-id' },
 			],
 		},
 	],
 	body: [
 		{
 			cells: [
-				{ content: 'A', tag: 'td', rowSpan: '2', colSpan: '2', styles: 'color:red;' },
-				{ content: 'B', tag: 'th', scope: 'row' },
-				{ content: 'C', tag: 'td', rowSpan: '3', className: 'is-c' },
+				{ content: 'body-0-0', tag: 'td', rowSpan: '2', colSpan: '2', styles: 'color:red;' },
+				{ content: 'body-0-2', tag: 'th', scope: 'row' },
+				{ content: 'body-0-3', tag: 'td', rowSpan: '3', className: 'is-merged' },
 			],
 		},
-		{ cells: [ { content: 'D', tag: 'td', headers: 'head-id' } ] },
+		{ cells: [ { content: 'body-1-2', tag: 'td', headers: 'head-id' } ] },
 		{
 			cells: [
-				{ content: 'E', tag: 'td', colSpan: '2' },
-				{ content: 'F', tag: 'td' },
+				{ content: 'body-2-0', tag: 'td', colSpan: '2' },
+				{ content: 'body-2-2', tag: 'td' },
 			],
 		},
 		{
 			cells: [
-				{ content: 'G', tag: 'td' },
-				{ content: 'H', tag: 'td' },
-				{ content: 'I', tag: 'td', colSpan: '2' },
+				{ content: 'body-3-0', tag: 'td' },
+				{ content: 'body-3-1', tag: 'td' },
+				{ content: 'body-3-2', tag: 'td', colSpan: '2' },
 			],
 		},
 	],
 	foot: [
 		{
 			cells: [
-				{ content: 'f-0', tag: 'td' },
-				{ content: 'f-1', tag: 'td', colSpan: '3' },
+				{ content: 'foot-0', tag: 'td' },
+				{ content: 'foot-1', tag: 'td', colSpan: '3' },
 			],
 		},
 	],
@@ -191,6 +192,9 @@ const mixedSpanAttributes: TableAttributes = {
 describe( 'table-state', () => {
 	describe( 'createTable', () => {
 		it( 'should create the right virtual table', () => {
+			// |   |   |   |
+			// |   |   |   |
+			// |   |   |   |
 			expect(
 				createTable( { rowCount: 3, colCount: 3, headerSection: false, footerSection: false } )
 			).toStrictEqual( {
@@ -205,6 +209,11 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should create virtual table with head and foot', () => {
+			// |   |   |   | (head)
+			// |   |   |   |
+			// |   |   |   |
+			// |   |   |   |
+			// |   |   |   | (foot)
 			expect(
 				createTable( { rowCount: 3, colCount: 3, headerSection: true, footerSection: true } )
 			).toStrictEqual( {
@@ -816,6 +825,122 @@ describe( 'table-state', () => {
 	} );
 
 	describe( 'insertColumn', () => {
+		it( 'should insert a column between columns', () => {
+			// Insert a column between the first and second columns.
+			const newVTable = insertColumn( createVTable(), { vColIndex: 1 } );
+			// | head-0   |          | head-1   | head-2   |
+			// | body-0-0 |          | body-0-1 | body-0-2 |
+			// | body-1-0 |          | body-1-1 | body-1-2 |
+			// | body-2-0 |          | body-2-1 | body-2-2 |
+			// | foot-0   |          | foot-1   | foot-2   |
+			expect( toTableAttributes( newVTable ) ).toEqual( {
+				head: [
+					{
+						cells: [
+							{ content: 'head-0', tag: 'th' },
+							{ content: '', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{
+						cells: [
+							{ content: 'body-0-0', tag: 'td' },
+							{ content: '', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td' },
+							{ content: 'body-0-2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-1-0', tag: 'td' },
+							{ content: '', tag: 'td' },
+							{ content: 'body-1-1', tag: 'td' },
+							{ content: 'body-1-2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-2-0', tag: 'td' },
+							{ content: '', tag: 'td' },
+							{ content: 'body-2-1', tag: 'td' },
+							{ content: 'body-2-2', tag: 'td' },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'foot-0', tag: 'td' },
+							{ content: '', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
+						],
+					},
+				],
+			} );
+		} );
+
+		it( 'should insert a column after the last column', () => {
+			// Insert a column after the last column.
+			const newVTable = insertColumn( createVTable(), { vColIndex: 3 } );
+			// | head-0   | head-1   | head-2   |          |
+			// | body-0-0 | body-0-1 | body-0-2 |          |
+			// | body-1-0 | body-1-1 | body-1-2 |          |
+			// | body-2-0 | body-2-1 | body-2-2 |          |
+			// | foot-0   | foot-1   | foot-2   |          |
+			expect( toTableAttributes( newVTable ) ).toEqual( {
+				head: [
+					{
+						cells: [
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
+							{ content: '', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{
+						cells: [
+							{ content: 'body-0-0', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td' },
+							{ content: 'body-0-2', tag: 'td' },
+							{ content: '', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-1-0', tag: 'td' },
+							{ content: 'body-1-1', tag: 'td' },
+							{ content: 'body-1-2', tag: 'td' },
+							{ content: '', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-2-0', tag: 'td' },
+							{ content: 'body-2-1', tag: 'td' },
+							{ content: 'body-2-2', tag: 'td' },
+							{ content: '', tag: 'td' },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
+							{ content: '', tag: 'td' },
+						],
+					},
+				],
+			} );
+		} );
+
 		it( 'should give the correct virtual column index to the cell inserted after the last column', () => {
 			const vTable = toVirtualTable( {
 				head: [],
@@ -936,39 +1061,54 @@ describe( 'table-state', () => {
 	} );
 
 	describe( 'splitMergedCells', () => {
-		// | merged | merged | merged |
-		// | merged | merged | merged |
-		const createSplitTargetVTable = () =>
+		// Merged cells repeat the same name.
+		// | body-0-0 | body-0-0 | body-0-0 |
+		// | body-0-0 | body-0-0 | body-0-0 |
+		const createFullyMergedVTable = () =>
 			toVirtualTable( {
 				head: [],
 				body: [
-					{
-						cells: [ { content: 'merged', tag: 'td', rowSpan: '2', colSpan: '3' } ],
-					},
+					{ cells: [ { content: 'body-0-0', tag: 'td', rowSpan: '2', colSpan: '3' } ] },
 					{ cells: [] },
 				],
 				foot: [],
 			} );
 
 		it( 'should split the merged cell with the correct indexes', () => {
-			const vTable = createSplitTargetVTable();
+			const vTable = createFullyMergedVTable();
+			// Split the merged cell.
 			const newVTable = splitMergedCells( vTable, [ vTable.body[ 0 ].cells[ 0 ] ] );
-			newVTable.body.forEach( ( row, rowIndex ) => {
-				row.cells.forEach( ( cell, vColIndex ) => {
-					expect( cell ).toMatchObject( {
-						rowIndex,
-						vColIndex,
-						rowSpan: 1,
-						colSpan: 1,
-						isHidden: false,
-					} );
-				} );
-			} );
+			// | body-0-0 |          |          |
+			// |          |          |          |
+			expect( newVTable.body ).toMatchObject( [
+				{
+					cells: [
+						{
+							content: 'body-0-0',
+							rowIndex: 0,
+							vColIndex: 0,
+							rowSpan: 1,
+							colSpan: 1,
+							isHidden: false,
+						},
+						{ content: '', rowIndex: 0, vColIndex: 1, rowSpan: 1, colSpan: 1, isHidden: false },
+						{ content: '', rowIndex: 0, vColIndex: 2, rowSpan: 1, colSpan: 1, isHidden: false },
+					],
+				},
+				{
+					cells: [
+						{ content: '', rowIndex: 1, vColIndex: 0, rowSpan: 1, colSpan: 1, isHidden: false },
+						{ content: '', rowIndex: 1, vColIndex: 1, rowSpan: 1, colSpan: 1, isHidden: false },
+						{ content: '', rowIndex: 1, vColIndex: 2, rowSpan: 1, colSpan: 1, isHidden: false },
+					],
+				},
+			] );
 		} );
 
 		it( 'should not mutate the original virtual table', () => {
-			const vTable = createSplitTargetVTable();
+			const vTable = createFullyMergedVTable();
 			const original = structuredClone( vTable );
+			// Split the merged cell and check that the input is left untouched.
 			splitMergedCells( vTable, [ vTable.body[ 0 ].cells[ 0 ] ] );
 			expect( vTable ).toStrictEqual( original );
 		} );
@@ -976,122 +1116,146 @@ describe( 'table-state', () => {
 
 	describe( 'toVirtualTable', () => {
 		it( 'should clamp rowspan that overflows the section', () => {
+			// Convert a table whose rowspan is larger than the number of rows.
 			const vTable = toVirtualTable( {
 				head: [],
-				body: [ { cells: [ { content: '', tag: 'td', rowSpan: '2' } ] } ],
+				body: [ { cells: [ { content: 'body-0-0', tag: 'td', rowSpan: '2' } ] } ],
 				foot: [],
 			} );
+			// | body-0-0 |
 			expect( vTable.body ).toMatchObject( [
-				{ cells: [ { rowSpan: 1, colSpan: 1, isHidden: false } ] },
+				{ cells: [ { content: 'body-0-0', rowSpan: 1, colSpan: 1, isHidden: false } ] },
 			] );
 		} );
 
 		it( 'should clamp colspan that overflows the section', () => {
+			// Convert a table whose colspan is larger than the number of columns.
 			const vTable = toVirtualTable( {
 				head: [],
 				body: [
 					{
 						cells: [
-							{ content: '', tag: 'td' },
-							{ content: '', tag: 'td' },
+							{ content: 'body-0-0', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td' },
 						],
 					},
-					{ cells: [ { content: '', tag: 'td', colSpan: '3' } ] },
+					{ cells: [ { content: 'body-1-0', tag: 'td', colSpan: '3' } ] },
 				],
 				foot: [],
 			} );
+			// Merged cells repeat the same name, and the repeated ones are hidden cells.
+			// | body-0-0 | body-0-1 |
+			// | body-1-0 | body-1-0 |
 			expect( vTable.body ).toMatchObject( [
 				{
 					cells: [
-						{ rowSpan: 1, colSpan: 1, isHidden: false },
-						{ rowSpan: 1, colSpan: 1, isHidden: false },
+						{ content: 'body-0-0', rowSpan: 1, colSpan: 1, isHidden: false },
+						{ content: 'body-0-1', rowSpan: 1, colSpan: 1, isHidden: false },
 					],
 				},
 				{
 					cells: [
-						{ rowSpan: 1, colSpan: 2, isHidden: false },
-						{ rowSpan: 1, colSpan: 1, isHidden: true },
+						{ content: 'body-1-0', rowSpan: 1, colSpan: 2, isHidden: false },
+						{ isHidden: true },
 					],
 				},
 			] );
 		} );
 
 		it( 'should clamp rowspan and colspan that both overflow the section', () => {
+			// Convert a table whose rowspan and colspan are both larger than the section.
 			const vTable = toVirtualTable( {
 				head: [],
 				body: [
 					{
 						cells: [
-							{ content: '', tag: 'td' },
-							{ content: '', tag: 'td', rowSpan: '3', colSpan: '2' },
+							{ content: 'body-0-0', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td', rowSpan: '3', colSpan: '2' },
 						],
 					},
-					{ cells: [ { content: '', tag: 'td' } ] },
+					{ cells: [ { content: 'body-1-0', tag: 'td' } ] },
 				],
 				foot: [],
 			} );
+			// Merged cells repeat the same name, and the repeated ones are hidden cells.
+			// | body-0-0 | body-0-1 | body-0-1 |
+			// | body-1-0 | body-0-1 | body-0-1 |
 			expect( vTable.body ).toMatchObject( [
 				{
 					cells: [
-						{ rowSpan: 1, colSpan: 1, isHidden: false },
-						{ rowSpan: 2, colSpan: 2, isHidden: false },
-						{ rowSpan: 1, colSpan: 1, isHidden: true },
+						{ content: 'body-0-0', rowSpan: 1, colSpan: 1, isHidden: false },
+						{ content: 'body-0-1', rowSpan: 2, colSpan: 2, isHidden: false },
+						{ isHidden: true },
 					],
 				},
 				{
 					cells: [
-						{ rowSpan: 1, colSpan: 1, isHidden: false },
-						{ rowSpan: 1, colSpan: 1, isHidden: true },
-						{ rowSpan: 1, colSpan: 1, isHidden: true },
+						{ content: 'body-1-0', rowSpan: 1, colSpan: 1, isHidden: false },
+						{ isHidden: true },
+						{ isHidden: true },
 					],
 				},
 			] );
 		} );
 
 		it( 'should place cells and hidden cells at the right virtual positions', () => {
+			// Convert the block attributes into a virtual table.
 			const vTable = toVirtualTable( mixedSpanAttributes );
-			// Hidden cells are the virtual cells covered by a merged cell.
+			// Merged cells repeat the same name, and the repeated ones are hidden cells.
+			// | head-0   | head-0   | head-0   | head-3   |
+			// | body-0-0 | body-0-0 | body-0-2 | body-0-3 |
+			// | body-0-0 | body-0-0 | body-1-2 | body-0-3 |
+			// | body-2-0 | body-2-0 | body-2-2 | body-0-3 |
+			// | body-3-0 | body-3-1 | body-3-2 | body-3-2 |
+			// | foot-0   | foot-1   | foot-1   | foot-1   |
 			expect( vTable ).toMatchObject( {
 				head: [
 					{
 						cells: [
-							{ content: 'h-0', rowSpan: 1, colSpan: 3, isHidden: false },
+							{ content: 'head-0', rowSpan: 1, colSpan: 3, isHidden: false },
 							{ isHidden: true },
 							{ isHidden: true },
-							{ content: 'h-1', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'head-3', rowSpan: 1, colSpan: 1, isHidden: false },
 						],
 					},
 				],
 				body: [
 					{
 						cells: [
-							{ content: 'A', rowSpan: 2, colSpan: 2, isHidden: false },
+							{ content: 'body-0-0', rowSpan: 2, colSpan: 2, isHidden: false },
 							{ isHidden: true },
-							{ content: 'B', rowSpan: 1, colSpan: 1, isHidden: false },
-							{ content: 'C', rowSpan: 3, colSpan: 1, isHidden: false },
+							{ content: 'body-0-2', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'body-0-3', rowSpan: 3, colSpan: 1, isHidden: false },
 						],
 					},
 					{
 						cells: [
 							{ isHidden: true },
 							{ isHidden: true },
-							{ content: 'D', rowSpan: 1, colSpan: 1, isHidden: false, rowIndex: 1, vColIndex: 2 },
+							{
+								content: 'body-1-2',
+								rowSpan: 1,
+								colSpan: 1,
+								isHidden: false,
+								rowIndex: 1,
+								vColIndex: 2,
+							},
 							{ isHidden: true },
 						],
 					},
 					{
 						cells: [
-							{ content: 'E', rowSpan: 1, colSpan: 2, isHidden: false },
+							{ content: 'body-2-0', rowSpan: 1, colSpan: 2, isHidden: false },
 							{ isHidden: true },
-							{ content: 'F', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'body-2-2', rowSpan: 1, colSpan: 1, isHidden: false },
 							{ isHidden: true },
 						],
 					},
 					{
 						cells: [
-							{ content: 'G', rowSpan: 1, colSpan: 1, isHidden: false },
-							{ content: 'H', rowSpan: 1, colSpan: 1, isHidden: false },
-							{ content: 'I', rowSpan: 1, colSpan: 2, isHidden: false },
+							{ content: 'body-3-0', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'body-3-1', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'body-3-2', rowSpan: 1, colSpan: 2, isHidden: false },
 							{ isHidden: true },
 						],
 					},
@@ -1099,8 +1263,8 @@ describe( 'table-state', () => {
 				foot: [
 					{
 						cells: [
-							{ content: 'f-0', rowSpan: 1, colSpan: 1, isHidden: false },
-							{ content: 'f-1', rowSpan: 1, colSpan: 3, isHidden: false },
+							{ content: 'foot-0', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'foot-1', rowSpan: 1, colSpan: 3, isHidden: false },
 							{ isHidden: true },
 							{ isHidden: true },
 						],
@@ -1112,6 +1276,7 @@ describe( 'table-state', () => {
 
 	describe( 'toVirtualTable / toTableAttributes round-trip', () => {
 		it( 'should restore the original table attributes and be stable when converted repeatedly', () => {
+			// Convert to a virtual table and back, twice.
 			const once = toTableAttributes( toVirtualTable( mixedSpanAttributes ) );
 			const twice = toTableAttributes( toVirtualTable( once ) );
 			expect( once ).toEqual( mixedSpanAttributes );
