@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest';
  * Internal dependencies
  */
 import {
+	cleanEmptyObject,
 	normalizeRowColSpan,
 	parseCssValue,
 	parseUnit,
@@ -15,6 +16,37 @@ import {
 } from '../helper';
 
 describe( 'helper', () => {
+	describe( 'cleanEmptyObject', () => {
+		it( 'should remove undefined values and nested objects that become empty', () => {
+			expect(
+				cleanEmptyObject( {
+					color: 'red',
+					width: undefined,
+					border: { top: undefined, bottom: { width: undefined } },
+					padding: { top: '1px', left: undefined },
+				} )
+			).toStrictEqual( { color: 'red', padding: { top: '1px' } } );
+		} );
+
+		it( 'should return undefined when nothing is left', () => {
+			expect( cleanEmptyObject( {} ) ).toBeUndefined();
+			expect( cleanEmptyObject( { width: undefined, border: { top: {} } } ) ).toBeUndefined();
+		} );
+
+		it( 'should keep falsy values other than undefined', () => {
+			expect(
+				cleanEmptyObject( { content: '', count: 0, enabled: false, value: null } )
+			).toStrictEqual( { content: '', count: 0, enabled: false, value: null } );
+		} );
+
+		it( 'should keep arrays as they are', () => {
+			expect( cleanEmptyObject( { empty: [], items: [ undefined, {} ] } ) ).toStrictEqual( {
+				empty: [],
+				items: [ undefined, {} ],
+			} );
+		} );
+	} );
+
 	describe( 'parseCssValue', () => {
 		it( 'should return array with four empty strings if falsy value is provided', () => {
 			expect( parseCssValue( undefined ) ).toStrictEqual( [ '', '', '', '' ] );
