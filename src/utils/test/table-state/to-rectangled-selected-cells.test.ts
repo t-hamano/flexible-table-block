@@ -176,5 +176,6 @@ describe( 'toRectangledSelectedCells', () => {
 			foot: [],
 		} );
 		expect( select( vTable, 'A', 'D' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ] );
+		expect( select( vTable, 'D', 'A' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ] );
 	} );
 } );
