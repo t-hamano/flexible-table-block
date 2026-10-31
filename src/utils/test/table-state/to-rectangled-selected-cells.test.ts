@@ -8,7 +8,6 @@ import { describe, it, expect } from 'vitest';
  */
 import { toRectangledSelectedCells, toVirtualTable, type VTable } from '../../table-state';
 import type { CellTagValue } from '../../../BlockAttributes';
-import { createVTable } from './fixtures';
 
 type Cell = { content: string; tag: CellTagValue; rowSpan?: string; colSpan?: string };
 
@@ -42,11 +41,24 @@ const select = ( vTable: VTable, from: string, to: string ) =>
 // In the table diagrams below, merged cells repeat the same name.
 describe( 'toRectangledSelectedCells', () => {
 	it( 'should return an empty array when the cells are in different sections', () => {
-		const vTable = createVTable();
+		// | A | B | (head)
+		// | C | D |
+		const vTable = toVirtualTable( {
+			head: [
+				{
+					cells: [
+						{ content: 'A', tag: 'th' },
+						{ content: 'B', tag: 'th' },
+					],
+				},
+			],
+			body: [ { cells: [ td( 'C' ), td( 'D' ) ] } ],
+			foot: [],
+		} );
 		expect(
 			toRectangledSelectedCells( vTable, {
 				fromCell: vTable.head[ 0 ].cells[ 0 ],
-				toCell: vTable.body[ 0 ].cells[ 0 ],
+				toCell: getCell( vTable, 'D' ),
 			} )
 		).toStrictEqual( [] );
 	} );
@@ -69,14 +81,20 @@ describe( 'toRectangledSelectedCells', () => {
 	} );
 
 	it( 'should mark the first selected cell', () => {
-		const vTable = createVTable();
+		// | A | B |
+		// | C | D |
+		const vTable = toVirtualTable( {
+			head: [],
+			body: [ { cells: [ td( 'A' ), td( 'B' ) ] }, { cells: [ td( 'C' ), td( 'D' ) ] } ],
+			foot: [],
+		} );
 		const cells = toRectangledSelectedCells( vTable, {
-			fromCell: vTable.body[ 1 ].cells[ 1 ],
-			toCell: vTable.body[ 0 ].cells[ 0 ],
+			fromCell: getCell( vTable, 'D' ),
+			toCell: getCell( vTable, 'A' ),
 		} );
 		expect(
 			cells.filter( ( cell ) => cell.isFirstSelected ).map( ( cell ) => cell.content )
-		).toStrictEqual( [ 'body-1-1' ] );
+		).toStrictEqual( [ 'D' ] );
 	} );
 
 	it( 'should expand to the left when a merged cell crosses the left edge', () => {
