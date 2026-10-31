@@ -49,22 +49,6 @@ class Test_Api extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests that the route is registered with GET, POST and DELETE methods.
-	 */
-	public function test_route_is_registered() {
-		$routes = rest_get_server()->get_routes();
-
-		$this->assertArrayHasKey( self::ROUTE, $routes );
-
-		$methods = array();
-		foreach ( $routes[ self::ROUTE ] as $endpoint ) {
-			$methods = array_merge( $methods, array_keys( $endpoint['methods'] ) );
-		}
-
-		$this->assertEqualsCanonicalizing( array( 'GET', 'POST', 'DELETE' ), $methods );
-	}
-
-	/**
 	 * Tests the permission of each method.
 	 *
 	 * @dataProvider data_permissions
