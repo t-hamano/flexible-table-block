@@ -23,6 +23,7 @@ eslint.config.js
 package-lock.json
 package.json
 phpcs.xml.dist
+phpunit.xml.dist
 playwright.config.js
 README.md
 tsconfig.json
