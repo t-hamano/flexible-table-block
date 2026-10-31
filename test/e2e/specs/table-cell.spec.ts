@@ -8,6 +8,14 @@ test.describe( 'Flexible table cell', () => {
 		await admin.createNewPost();
 	} );
 
+	test.afterEach( async ( { requestUtils } ) => {
+		// Restore the default settings.
+		await requestUtils.rest( {
+			method: 'DELETE',
+			path: '/flexible-table-block/v1/options',
+		} );
+	} );
+
 	test( 'allows cell movement with tab key.', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		// Open the global setting.

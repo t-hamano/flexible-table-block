@@ -4,12 +4,25 @@
 import { test, expect } from '../util';
 
 test.describe( 'Block Support', () => {
+	let previousTheme: string | undefined;
+
 	test.beforeAll( async ( { requestUtils } ) => {
+		const themes = await requestUtils.rest< { stylesheet: string }[] >( {
+			path: '/wp/v2/themes',
+			params: { status: 'active' },
+		} );
+		previousTheme = themes[ 0 ]?.stylesheet;
 		await requestUtils.activateTheme( 'twentytwentyfour' );
 	} );
 
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
+	} );
+
+	test.afterAll( async ( { requestUtils } ) => {
+		if ( previousTheme ) {
+			await requestUtils.activateTheme( previousTheme );
+		}
 	} );
 
 	test( 'typography settings should be applied', async ( { editor, page, fsbUtils } ) => {
