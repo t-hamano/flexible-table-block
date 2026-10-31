@@ -352,13 +352,17 @@ test.describe( 'Global Setting', () => {
 			await fsbUtils.createFlexibleTableBlock();
 			await editor.openDocumentSettingsSidebar();
 			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
-			// Wait until the user capability is resolved before checking that the button is hidden.
+			// Wait until the options and the user capability are resolved before checking that the button is hidden.
 			await expect
 				.poll( () =>
-					page.evaluate( () =>
-						window.wp.data
-							.select( 'core' )
-							.hasFinishedResolution( 'canUser', [ 'update', { kind: 'root', name: 'site' } ] )
+					page.evaluate(
+						() =>
+							window.wp.data
+								.select( 'flexible-table-block' )
+								.hasFinishedResolution( 'getOptions' ) &&
+							window.wp.data
+								.select( 'core' )
+								.hasFinishedResolution( 'canUser', [ 'update', { kind: 'root', name: 'site' } ] )
 					)
 				)
 				.toBe( true );
