@@ -9,6 +9,7 @@ test.describe( 'Global Setting', () => {
 	} );
 
 	test.afterEach( async ( { requestUtils } ) => {
+		// Restore the default settings.
 		await requestUtils.rest( {
 			method: 'DELETE',
 			path: '/flexible-table-block/v1/options',
