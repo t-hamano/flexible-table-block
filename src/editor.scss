@@ -307,6 +307,10 @@ $row-column-inserter-dot-size: 6px;
 		padding: 0;
 		border: 0;
 
+		&:focus {
+			z-index: 1;
+		}
+
 		&:not([aria-pressed="true"]) {
 			--wp-ui-button-background-color: #{colors.$gray-200};
 			--wp-ui-button-background-color-active: #{colors.$gray-300};
