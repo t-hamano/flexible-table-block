@@ -8,14 +8,13 @@ import type { Property } from 'csstype';
  */
 import { __ } from '@wordpress/i18n';
 import {
-	Button,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { Fieldset, InputControl, SelectControl, Stack } from '@wordpress/ui';
+import { Button, Fieldset, InputControl, SelectControl, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -211,7 +210,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				className="ftb-table-cell-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>
-				<Button variant="link" isDestructive onClick={ onResetCellSettings }>
+				<Button variant="minimal" size="compact" onClick={ onResetCellSettings }>
 					{ __( 'Clear cell settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>

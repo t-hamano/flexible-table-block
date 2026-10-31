@@ -10,13 +10,12 @@ import type { Dispatch, SetStateAction } from 'react';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import {
-	Button,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { SelectControl, Stack, SwitchControl } from '@wordpress/ui';
+import { Button, SelectControl, Stack, SwitchControl } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -224,7 +223,7 @@ export default function TableSettings( {
 				className="ftb-table-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>
-				<Button variant="link" isDestructive onClick={ onResetTableSettings }>
+				<Button variant="minimal" size="compact" onClick={ onResetTableSettings }>
 					{ __( 'Clear table settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>

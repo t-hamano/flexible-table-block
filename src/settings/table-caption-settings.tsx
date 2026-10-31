@@ -8,14 +8,13 @@ import type { Property, Properties } from 'csstype';
  */
 import { __ } from '@wordpress/i18n';
 import {
-	Button,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { InputControl, Stack } from '@wordpress/ui';
+import { Button, InputControl, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -103,7 +102,7 @@ export default function TableCaptionSettings( {
 				className="ftb-table-caption-settings-clear"
 				style={ { marginBottom: '16px' } }
 			>
-				<Button variant="link" isDestructive onClick={ onResetSettings }>
+				<Button variant="minimal" size="compact" onClick={ onResetSettings }>
 					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>
