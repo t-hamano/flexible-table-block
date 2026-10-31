@@ -354,13 +354,10 @@ describe( 'table-state', () => {
 			} );
 		} );
 
-		it( 'should restore the original table attributes', () => {
-			expect( toTableAttributes( toVirtualTable( attributes ) ) ).toEqual( attributes );
-		} );
-
-		it( 'should be stable when converted repeatedly', () => {
+		it( 'should restore the original table attributes and be stable when converted repeatedly', () => {
 			const once = toTableAttributes( toVirtualTable( attributes ) );
 			const twice = toTableAttributes( toVirtualTable( once ) );
+			expect( once ).toEqual( attributes );
 			expect( twice ).toStrictEqual( once );
 		} );
 	} );
