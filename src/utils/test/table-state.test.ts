@@ -389,73 +389,213 @@ describe( 'table-state', () => {
 				foot: [],
 			} );
 
-		// Convert the body to a compact layout, e.g. `A(2x2)` for a cell with rowspan 2 and colspan 2.
-		const toLayout = ( newVTable: VTable ) =>
-			toTableAttributes( newVTable ).body.map( ( row ) =>
-				row.cells.map( ( { content, rowSpan, colSpan } ) =>
-					rowSpan || colSpan ? `${ content }(${ rowSpan ?? 1 }x${ colSpan ?? 1 })` : content
-				)
-			);
-
 		it( 'should expand the rowspan when inserting a row inside a merged cell', () => {
-			expect(
-				toLayout( insertRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) )
-			).toStrictEqual( [ [ 'A(3x2)', 'B' ], [ '' ], [ 'C' ], [ 'D', 'E', 'F' ] ] );
+			const { body } = toTableAttributes(
+				insertRow( createVTable(), { sectionName: 'body', rowIndex: 1 } )
+			);
+			// | A | A | B |
+			// | A | A |   |
+			// | A | A | C |
+			// | D | E | F |
+			expect( body ).toEqual( [
+				{
+					cells: [
+						{ content: 'A', tag: 'td', rowSpan: '3', colSpan: '2' },
+						{ content: 'B', tag: 'td' },
+					],
+				},
+				{ cells: [ { content: '', tag: 'td' } ] },
+				{ cells: [ { content: 'C', tag: 'td' } ] },
+				{
+					cells: [
+						{ content: 'D', tag: 'td' },
+						{ content: 'E', tag: 'td' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
+			] );
 		} );
 
 		it( 'should not expand the rowspan when inserting a row right after a merged cell', () => {
-			expect(
-				toLayout( insertRow( createVTable(), { sectionName: 'body', rowIndex: 2 } ) )
-			).toStrictEqual( [ [ 'A(2x2)', 'B' ], [ 'C' ], [ '', '', '' ], [ 'D', 'E', 'F' ] ] );
+			const { body } = toTableAttributes(
+				insertRow( createVTable(), { sectionName: 'body', rowIndex: 2 } )
+			);
+			// | A | A | B |
+			// | A | A | C |
+			// |   |   |   |
+			// | D | E | F |
+			expect( body ).toEqual( [
+				{
+					cells: [
+						{ content: 'A', tag: 'td', rowSpan: '2', colSpan: '2' },
+						{ content: 'B', tag: 'td' },
+					],
+				},
+				{ cells: [ { content: 'C', tag: 'td' } ] },
+				{
+					cells: [
+						{ content: '', tag: 'td' },
+						{ content: '', tag: 'td' },
+						{ content: '', tag: 'td' },
+					],
+				},
+				{
+					cells: [
+						{ content: 'D', tag: 'td' },
+						{ content: 'E', tag: 'td' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
+			] );
 		} );
 
 		it( 'should expand the colspan when inserting a column inside a merged cell', () => {
-			expect( toLayout( insertColumn( createVTable(), { vColIndex: 1 } ) ) ).toStrictEqual( [
-				[ 'A(2x3)', 'B' ],
-				[ 'C' ],
-				[ 'D', '', 'E', 'F' ],
+			const { body } = toTableAttributes( insertColumn( createVTable(), { vColIndex: 1 } ) );
+			// | A | A | A | B |
+			// | A | A | A | C |
+			// | D |   | E | F |
+			expect( body ).toEqual( [
+				{
+					cells: [
+						{ content: 'A', tag: 'td', rowSpan: '2', colSpan: '3' },
+						{ content: 'B', tag: 'td' },
+					],
+				},
+				{ cells: [ { content: 'C', tag: 'td' } ] },
+				{
+					cells: [
+						{ content: 'D', tag: 'td' },
+						{ content: '', tag: 'td' },
+						{ content: 'E', tag: 'td' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
 			] );
 		} );
 
 		it( 'should not expand the colspan when inserting a column right after a merged cell', () => {
-			expect( toLayout( insertColumn( createVTable(), { vColIndex: 2 } ) ) ).toStrictEqual( [
-				[ 'A(2x2)', '', 'B' ],
-				[ '', 'C' ],
-				[ 'D', 'E', '', 'F' ],
+			const { body } = toTableAttributes( insertColumn( createVTable(), { vColIndex: 2 } ) );
+			// | A | A |   | B |
+			// | A | A |   | C |
+			// | D | E |   | F |
+			expect( body ).toEqual( [
+				{
+					cells: [
+						{ content: 'A', tag: 'td', rowSpan: '2', colSpan: '2' },
+						{ content: '', tag: 'td' },
+						{ content: 'B', tag: 'td' },
+					],
+				},
+				{
+					cells: [
+						{ content: '', tag: 'td' },
+						{ content: 'C', tag: 'td' },
+					],
+				},
+				{
+					cells: [
+						{ content: 'D', tag: 'td' },
+						{ content: 'E', tag: 'td' },
+						{ content: '', tag: 'td' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
 			] );
 		} );
 
 		it( 'should split the merged cell when deleting the row where it starts', () => {
-			expect(
-				toLayout( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 0 } ) )
-			).toStrictEqual( [
-				[ '', '', 'C' ],
-				[ 'D', 'E', 'F' ],
+			const { body } = toTableAttributes(
+				deleteRow( createVTable(), { sectionName: 'body', rowIndex: 0 } )
+			);
+			// |   |   | C |
+			// | D | E | F |
+			expect( body ).toEqual( [
+				{
+					cells: [
+						{ content: '', tag: 'td' },
+						{ content: '', tag: 'td' },
+						{ content: 'C', tag: 'td' },
+					],
+				},
+				{
+					cells: [
+						{ content: 'D', tag: 'td' },
+						{ content: 'E', tag: 'td' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
 			] );
 		} );
 
 		it( 'should contract the rowspan when deleting a row inside a merged cell', () => {
-			expect(
-				toLayout( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) )
-			).toStrictEqual( [
-				[ 'A(1x2)', 'B' ],
-				[ 'D', 'E', 'F' ],
+			const { body } = toTableAttributes(
+				deleteRow( createVTable(), { sectionName: 'body', rowIndex: 1 } )
+			);
+			// | A | A | B |
+			// | D | E | F |
+			expect( body ).toEqual( [
+				{
+					cells: [
+						{ content: 'A', tag: 'td', colSpan: '2' },
+						{ content: 'B', tag: 'td' },
+					],
+				},
+				{
+					cells: [
+						{ content: 'D', tag: 'td' },
+						{ content: 'E', tag: 'td' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
 			] );
 		} );
 
 		it( 'should split the merged cell when deleting the column where it starts', () => {
-			expect( toLayout( deleteColumn( createVTable(), { vColIndex: 0 } ) ) ).toStrictEqual( [
-				[ '', 'B' ],
-				[ '', 'C' ],
-				[ 'E', 'F' ],
+			const { body } = toTableAttributes( deleteColumn( createVTable(), { vColIndex: 0 } ) );
+			// |   | B |
+			// |   | C |
+			// | E | F |
+			expect( body ).toEqual( [
+				{
+					cells: [
+						{ content: '', tag: 'td' },
+						{ content: 'B', tag: 'td' },
+					],
+				},
+				{
+					cells: [
+						{ content: '', tag: 'td' },
+						{ content: 'C', tag: 'td' },
+					],
+				},
+				{
+					cells: [
+						{ content: 'E', tag: 'td' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
 			] );
 		} );
 
 		it( 'should contract the colspan when deleting a column inside a merged cell', () => {
-			expect( toLayout( deleteColumn( createVTable(), { vColIndex: 1 } ) ) ).toStrictEqual( [
-				[ 'A(2x1)', 'B' ],
-				[ 'C' ],
-				[ 'D', 'F' ],
+			const { body } = toTableAttributes( deleteColumn( createVTable(), { vColIndex: 1 } ) );
+			// | A | B |
+			// | A | C |
+			// | D | F |
+			expect( body ).toEqual( [
+				{
+					cells: [
+						{ content: 'A', tag: 'td', rowSpan: '2' },
+						{ content: 'B', tag: 'td' },
+					],
+				},
+				{ cells: [ { content: 'C', tag: 'td' } ] },
+				{
+					cells: [
+						{ content: 'D', tag: 'td' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
 			] );
 		} );
 	} );
