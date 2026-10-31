@@ -39,6 +39,7 @@ const select = ( vTable: VTable, from: string, to: string ) =>
 		.map( ( cell ) => cell.content )
 		.sort();
 
+// In the table diagrams below, merged cells repeat the same name.
 describe( 'toRectangledSelectedCells', () => {
 	it( 'should return an empty array when the cells are in different sections', () => {
 		const vTable = createVTable();
@@ -79,8 +80,8 @@ describe( 'toRectangledSelectedCells', () => {
 	} );
 
 	it( 'should expand to the left when a merged cell crosses the left edge', () => {
-		// | A     A | B |
-		// | C | D   | E |
+		// | A | A | B |
+		// | C | D | E |
 		const vTable = toVirtualTable( {
 			head: [],
 			body: [
@@ -94,8 +95,8 @@ describe( 'toRectangledSelectedCells', () => {
 	} );
 
 	it( 'should expand to the right when a merged cell crosses the right edge', () => {
-		// | A | B     B |
-		// | C | D | E   |
+		// | A | B | B |
+		// | C | D | E |
 		const vTable = toVirtualTable( {
 			head: [],
 			body: [
@@ -143,9 +144,9 @@ describe( 'toRectangledSelectedCells', () => {
 	} );
 
 	it( 'should keep expanding while a newly included merged cell crosses an edge', () => {
-		// | A | B     B |
-		// | C | D | E   |
-		// | F | G | E   |
+		// | A | B | B |
+		// | C | D | E |
+		// | F | G | E |
 		// Selecting A to D pulls in B (right), and then E, which crosses the new bottom edge.
 		const vTable = toVirtualTable( {
 			head: [],
