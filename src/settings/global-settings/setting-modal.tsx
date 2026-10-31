@@ -57,8 +57,6 @@ interface EditorStyle {
 	[ key: string ]: unknown;
 }
 
-type BlockStyle = StoreOptions[ 'block_style' ];
-
 interface NoticeInfo {
 	status?: 'warning' | 'success' | 'error' | 'info';
 	message?: string;
@@ -77,13 +75,14 @@ export default function SettingModal( {
 	const registry = useRegistry();
 	const tableWidthUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
 
-	// Update a single top-level option.
 	function setOption< K extends keyof StoreOptions >( key: K, value: StoreOptions[ K ] ) {
 		setCurrentOptions( ( prevOptions ) => ( { ...prevOptions, [ key ]: value } ) );
 	}
 
-	// Update a single default block style.
-	function setBlockStyle< K extends keyof BlockStyle >( key: K, value: BlockStyle[ K ] ) {
+	function setBlockStyle< K extends keyof StoreOptions[ 'block_style' ] >(
+		key: K,
+		value: StoreOptions[ 'block_style' ][ K ]
+	) {
 		setCurrentOptions( ( prevOptions ) => ( {
 			...prevOptions,
 			block_style: { ...prevOptions.block_style, [ key ]: value },
