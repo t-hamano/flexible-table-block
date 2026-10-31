@@ -32,12 +32,16 @@ type Props = {
 export default function PaddingControl( {
 	label = __( 'Padding', 'flexible-table-block' ),
 	className,
-	...props
+	help,
+	onChange,
+	values,
 }: Props ) {
 	return (
 		<LinkedUnitControl
-			{ ...props }
 			label={ label }
+			help={ help }
+			values={ values }
+			onChange={ onChange }
 			className={ clsx( 'ftb-padding-control', className ) }
 			items={ SIDE_CONTROLS }
 			layout="sides"

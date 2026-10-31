@@ -32,12 +32,16 @@ type Props = {
 export default function BorderRadiusControl( {
 	label = __( 'Border radius', 'flexible-table-block' ),
 	className,
-	...props
+	help,
+	onChange,
+	values,
 }: Props ) {
 	return (
 		<LinkedUnitControl
-			{ ...props }
 			label={ label }
+			help={ help }
+			values={ values }
+			onChange={ onChange }
 			className={ clsx( 'ftb-border-radius-control', className ) }
 			items={ CORNER_CONTROLS }
 			layout="corners"

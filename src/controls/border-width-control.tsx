@@ -36,12 +36,16 @@ export default function BorderWidthControl( {
 	allowSides = true,
 	hasIndicator = true,
 	className,
-	...props
+	help,
+	onChange,
+	values,
 }: Props ) {
 	return (
 		<LinkedUnitControl
-			{ ...props }
 			label={ label }
+			help={ help }
+			values={ values }
+			onChange={ onChange }
 			className={ clsx( 'ftb-border-width-control', className ) }
 			items={ SIDE_CONTROLS }
 			layout="sides"

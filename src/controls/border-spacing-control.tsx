@@ -22,12 +22,16 @@ type Props = {
 
 export default function BorderSpacingControl( {
 	label = __( 'Border spacing', 'flexible-table-block' ),
-	...props
+	help,
+	onChange,
+	values,
 }: Props ) {
 	return (
 		<LinkedUnitControl
-			{ ...props }
 			label={ label }
+			help={ help }
+			values={ values }
+			onChange={ onChange }
 			className="ftb-border-spacing-control"
 			items={ DIRECTION_CONTROLS }
 			layout="directions"
