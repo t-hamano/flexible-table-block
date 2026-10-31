@@ -273,6 +273,35 @@ describe( 'style-updater', () => {
 				borderSpacing: '10px 20px',
 			} );
 		} );
+
+		it( 'should fall back to 0 if only horizontal value is set', () => {
+			expect( updateBorderSpacing( {}, { horizontal: '5px' } ) ).toStrictEqual( {
+				borderSpacing: '5px 0',
+			} );
+		} );
+
+		it( 'should fall back to 0 if only vertical value is set', () => {
+			expect( updateBorderSpacing( {}, { vertical: '5px' } ) ).toStrictEqual( {
+				borderSpacing: '0 5px',
+			} );
+		} );
+
+		it( 'should fall back to 0 if one value is invalid', () => {
+			expect( updateBorderSpacing( {}, { horizontal: 'abc', vertical: '5px' } ) ).toStrictEqual( {
+				borderSpacing: '0 5px',
+			} );
+		} );
+
+		it( 'should remove borderSpacing props if all values are invalid', () => {
+			expect(
+				updateBorderSpacing(
+					{ borderSpacing: '10px', color: 'red' },
+					{ horizontal: 'abc', vertical: '' }
+				)
+			).toStrictEqual( {
+				color: 'red',
+			} );
+		} );
 	} );
 
 	describe( 'updateBorderRadius', () => {

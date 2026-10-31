@@ -239,12 +239,21 @@ export function updateBorderSpacing(
 
 	const { borderSpacing, ...newStyles } = styles;
 
-	const horizontal = values.horizontal ? sanitizeUnitValue( values.horizontal ) : undefined;
-	const vertical = values.vertical ? sanitizeUnitValue( values.vertical ) : undefined;
+	const horizontal = values.horizontal ? sanitizeUnitValue( values.horizontal ) : '';
+	const vertical = values.vertical ? sanitizeUnitValue( values.vertical ) : '';
 
-	if ( horizontal === undefined && vertical === undefined ) {
+	if ( ! horizontal && ! vertical ) {
 		return newStyles;
 	}
+
+	// If only one direction is set, fall back to the initial value (0) for the other direction.
+	if ( ! horizontal || ! vertical ) {
+		return {
+			...newStyles,
+			borderSpacing: `${ horizontal || '0' } ${ vertical || '0' }`,
+		};
+	}
+
 	if ( horizontal === vertical ) {
 		return {
 			...newStyles,
