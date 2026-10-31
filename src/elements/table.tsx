@@ -17,18 +17,12 @@ import {
 } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
-import { store as noticesStore } from '@wordpress/notices';
-import { useDispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL } from '../constants';
 import {
-	insertRow,
-	deleteRow,
-	insertColumn,
-	deleteColumn,
 	toRectangledSelectedCells,
 	toVirtualRows,
 	toTableAttributes,
@@ -40,6 +34,7 @@ import {
 	type VSelectedCells,
 } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
+import { useTableOperations, useWarningNotice } from '../hooks';
 
 import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
@@ -94,63 +89,19 @@ export default function Table( {
 	useEffect( () => setIsReady( true ), [] );
 
 	const tableRef = useRef( null );
-	const { createWarningNotice } = useDispatch( noticesStore );
+	const showWarningNotice = useWarningNotice();
+	const { onInsertRow, onDeleteRow, onInsertColumn, onDeleteColumn } = useTableOperations( {
+		vTable,
+		setAttributes,
+		setSelectedCells,
+		setSelectedLine,
+	} );
 
 	// Use a ref so the flag survives re-renders and the focus handler reads the latest value.
 	const isTabMoveRef = useRef( false );
 
 	const isRowSelected = selectedLine && 'sectionName' in selectedLine && 'rowIndex' in selectedLine;
 	const isColumnSelected = selectedLine && 'vColIndex' in selectedLine;
-
-	const onInsertRow = ( sectionName: SectionName, rowIndex: number ) => {
-		const newVTable = insertRow( vTable, { sectionName, rowIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
-	};
-
-	const onDeleteRow = ( sectionName: SectionName, rowIndex: number ) => {
-		// Do not allow tbody to be empty for table with thead /tfoot sections.
-		if (
-			sectionName === 'body' &&
-			vTable.body.length === 1 &&
-			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
-		) {
-			createWarningNotice(
-				__( 'The table body must have one or more rows.', 'flexible-table-block' ),
-				{
-					id: 'flexible-table-block-body-row',
-					type: 'snackbar',
-				}
-			);
-			return;
-		}
-
-		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
-	};
-
-	const onInsertColumn = ( vTargetCell: VCell, offset: number ) => {
-		// Calculate column index to be inserted considering colspan of the target cell.
-		const vColIndex =
-			offset === 0
-				? vTargetCell.vColIndex
-				: vTargetCell.vColIndex + offset + vTargetCell.colSpan - 1;
-
-		const newVTable = insertColumn( vTable, { vColIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
-	};
-
-	const onDeleteColumn = ( vColIndex: number ) => {
-		const newVTable = deleteColumn( vTable, { vColIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
-	};
 
 	const onSelectSectionCells = ( sectionName: SectionName ) => {
 		setSelectedCells(
@@ -343,12 +294,9 @@ export default function Table( {
 				}
 
 				if ( fromCell.sectionName !== sectionName ) {
-					createWarningNotice(
+					showWarningNotice(
 						__( 'Cannot select range cells from difference sections.', 'flexible-table-block' ),
-						{
-							id: 'flexible-table-block-range-sections',
-							type: 'snackbar',
-						}
+						'flexible-table-block-range-sections'
 					);
 					return;
 				}
@@ -366,12 +314,9 @@ export default function Table( {
 			} );
 
 			if ( newSelectedCells.length && sectionName !== newSelectedCells[ 0 ].sectionName ) {
-				createWarningNotice(
+				showWarningNotice(
 					__( 'Cannot select multi cells from difference sections.', 'flexible-table-block' ),
-					{
-						id: 'flexible-table-block-multi-sections',
-						type: 'snackbar',
-					}
+					'flexible-table-block-multi-sections'
 				);
 				return;
 			}
@@ -501,7 +446,7 @@ export default function Table( {
 														icon={ plus }
 														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
-															onInsertRow( sectionName, rowIndex );
+															onInsertRow( cell, 0 );
 															event.stopPropagation();
 														} }
 													/>
@@ -593,7 +538,7 @@ export default function Table( {
 														icon={ plus }
 														iconSize={ 18 }
 														onClick={ ( event: MouseEvent ) => {
-															onInsertRow( sectionName, rowIndex + rowSpan );
+															onInsertRow( cell, 1 );
 															event.stopPropagation();
 														} }
 													/>

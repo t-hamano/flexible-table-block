@@ -8,7 +8,7 @@ import clsx from 'clsx';
  */
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import {
 	InspectorControls,
 	BlockControls,
@@ -27,7 +27,6 @@ import {
 	tableColumnDelete,
 	tableRowDelete,
 } from '@wordpress/icons';
-import { store as noticesStore } from '@wordpress/notices';
 import type { BlockEditProps } from '@wordpress/blocks';
 
 /**
@@ -39,15 +38,10 @@ import { STORE_NAME, type StoreOptions } from './store';
 import { TableSettings, TableCaptionSettings, TableCellSettings, GlobalSettings } from './settings';
 import { Table, TablePlaceholder, TableCaption } from './elements';
 import {
-	insertRow,
-	deleteRow,
-	insertColumn,
-	deleteColumn,
 	mergeCells,
 	splitMergedCells,
 	hasMergedCells,
 	isRectangleSelected,
-	toTableAttributes,
 	toVirtualTable,
 	isEmptySection,
 	type VTable,
@@ -55,6 +49,7 @@ import {
 	type VSelectedCells,
 } from './utils/table-state';
 import { convertToObject } from './utils/style-converter';
+import { useTableOperations } from './hooks';
 import { tableMergeCell, tableSplitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
 
@@ -76,7 +71,6 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		const { getOptions }: { getOptions: () => StoreOptions } = select( STORE_NAME );
 		return getOptions();
 	}, [] );
-	const { createWarningNotice } = useDispatch( noticesStore );
 	const blockEditingMode = useBlockEditingMode();
 	const isContentOnlyMode = blockEditingMode === 'contentOnly';
 
@@ -91,99 +85,23 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	// Create virtual table object with the cells placed in positions based on how they actually look.
 	const vTable: VTable = toVirtualTable( attributes );
 
+	const { updateTable, onInsertRow, onDeleteRow, onInsertColumn, onDeleteColumn } =
+		useTableOperations( { vTable, setAttributes, setSelectedCells, setSelectedLine } );
+
 	const onChangeContentJustification = ( value: ContentJustifyValue ) => {
 		const newValue = contentJustification === value ? undefined : value;
 		setAttributes( { contentJustification: newValue } );
 	};
 
-	const onInsertRow = ( offset: number ) => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) {
-			return;
-		}
-
-		const { sectionName, rowIndex, rowSpan } = selectedCells[ 0 ];
-
-		// Calculate row index to be inserted considering rowspan of the selected cell.
-		const insertRowIndex = offset === 0 ? rowIndex : rowIndex + offset + rowSpan - 1;
-
-		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
-
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
-	};
-
-	const onDeleteRow = () => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) {
-			return;
-		}
-
-		const { sectionName, rowIndex } = selectedCells[ 0 ];
-
-		// Do not allow tbody to be empty for table with thead /tfoot sections.
-		if (
-			sectionName === 'body' &&
-			vTable.body.length === 1 &&
-			( ! isEmptySection( vTable.head ) || ! isEmptySection( vTable.foot ) )
-		) {
-			createWarningNotice(
-				__( 'The table body must have one or more rows.', 'flexible-table-block' ),
-				{
-					id: 'flexible-table-block-body-row',
-					type: 'snackbar',
-				}
-			);
-			return;
-		}
-
-		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
-	};
-
-	const onInsertColumn = ( offset: number ) => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) {
-			return;
-		}
-
-		const { vColIndex, colSpan } = selectedCells[ 0 ];
-
-		// Calculate column index to be inserted considering colspan of the selected cell.
-		const insertVColIndex = offset === 0 ? vColIndex : vColIndex + offset + colSpan - 1;
-
-		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
-
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
-	};
-
-	const onDeleteColumn = () => {
-		if ( ! selectedCells || selectedCells.length !== 1 ) {
-			return;
-		}
-
-		const { vColIndex } = selectedCells[ 0 ];
-
-		const newVTable = deleteColumn( vTable, { vColIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
-	};
+	// Row and column operations from the toolbar require exactly one selected cell.
+	const selectedCell = selectedCells?.length === 1 ? selectedCells[ 0 ] : undefined;
 
 	const onMergeCells = () => {
-		const newVTable = mergeCells( vTable, selectedCells, options.merge_content );
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
+		updateTable( mergeCells( vTable, selectedCells, options.merge_content ) );
 	};
 
 	const onSplitMergedCells = () => {
-		const newVTable = splitMergedCells( vTable, selectedCells );
-		setAttributes( toTableAttributes( newVTable ) );
-		setSelectedCells( undefined );
-		setSelectedLine( undefined );
+		updateTable( splitMergedCells( vTable, selectedCells ) );
 	};
 
 	const TableJustifyControls = CONTENT_JUSTIFY_CONTROLS.map( ( { icon, label, value } ) => ( {
@@ -198,38 +116,38 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		{
 			icon: tableRowBefore,
 			title: __( 'Insert row before', 'flexible-table-block' ),
-			isDisabled: ( selectedCells || [] ).length !== 1,
-			onClick: () => onInsertRow( 0 ),
+			isDisabled: ! selectedCell,
+			onClick: () => selectedCell && onInsertRow( selectedCell, 0 ),
 		},
 		{
 			icon: tableRowAfter,
 			title: __( 'Insert row after', 'flexible-table-block' ),
-			isDisabled: ( selectedCells || [] ).length !== 1,
-			onClick: () => onInsertRow( 1 ),
+			isDisabled: ! selectedCell,
+			onClick: () => selectedCell && onInsertRow( selectedCell, 1 ),
 		},
 		{
 			icon: tableRowDelete,
 			title: __( 'Delete row', 'flexible-table-block' ),
-			isDisabled: ( selectedCells || [] ).length !== 1,
-			onClick: () => onDeleteRow(),
+			isDisabled: ! selectedCell,
+			onClick: () => selectedCell && onDeleteRow( selectedCell.sectionName, selectedCell.rowIndex ),
 		},
 		{
 			icon: tableColumnBefore,
 			title: __( 'Insert column before', 'flexible-table-block' ),
-			isDisabled: ( selectedCells || [] ).length !== 1,
-			onClick: () => onInsertColumn( 0 ),
+			isDisabled: ! selectedCell,
+			onClick: () => selectedCell && onInsertColumn( selectedCell, 0 ),
 		},
 		{
 			icon: tableColumnAfter,
 			title: __( 'Insert column after', 'flexible-table-block' ),
-			isDisabled: ( selectedCells || [] ).length !== 1,
-			onClick: () => onInsertColumn( 1 ),
+			isDisabled: ! selectedCell,
+			onClick: () => selectedCell && onInsertColumn( selectedCell, 1 ),
 		},
 		{
 			icon: tableColumnDelete,
 			title: __( 'Delete column', 'flexible-table-block' ),
-			isDisabled: ( selectedCells || [] ).length !== 1,
-			onClick: () => onDeleteColumn(),
+			isDisabled: ! selectedCell,
+			onClick: () => selectedCell && onDeleteColumn( selectedCell.vColIndex ),
 		},
 		{
 			icon: tableSplitCell,
