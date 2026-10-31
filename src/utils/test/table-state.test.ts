@@ -141,6 +141,54 @@ const createMergedVTable = () =>
 		],
 	} );
 
+// Every section mixes rowspan and colspan cells.
+// body (4x4), merged cells repeat the same letter:
+// | A | A | B | C |
+// | A | A | D | C |
+// | E | E | F | C |
+// | G | H | I | I |
+const mixedSpanAttributes: TableAttributes = {
+	head: [
+		{
+			cells: [
+				{ content: 'h-0', tag: 'th', colSpan: '3', scope: 'colgroup' },
+				{ content: 'h-1', tag: 'th', id: 'head-id' },
+			],
+		},
+	],
+	body: [
+		{
+			cells: [
+				{ content: 'A', tag: 'td', rowSpan: '2', colSpan: '2', styles: 'color:red;' },
+				{ content: 'B', tag: 'th', scope: 'row' },
+				{ content: 'C', tag: 'td', rowSpan: '3', className: 'is-c' },
+			],
+		},
+		{ cells: [ { content: 'D', tag: 'td', headers: 'head-id' } ] },
+		{
+			cells: [
+				{ content: 'E', tag: 'td', colSpan: '2' },
+				{ content: 'F', tag: 'td' },
+			],
+		},
+		{
+			cells: [
+				{ content: 'G', tag: 'td' },
+				{ content: 'H', tag: 'td' },
+				{ content: 'I', tag: 'td', colSpan: '2' },
+			],
+		},
+	],
+	foot: [
+		{
+			cells: [
+				{ content: 'f-0', tag: 'td' },
+				{ content: 'f-1', tag: 'td', colSpan: '3' },
+			],
+		},
+	],
+};
+
 describe( 'table-state', () => {
 	describe( 'createTable', () => {
 		it( 'should create the right virtual table', () => {
@@ -997,59 +1045,9 @@ describe( 'table-state', () => {
 				],
 			] );
 		} );
-	} );
-
-	describe( 'toVirtualTable / toTableAttributes round-trip', () => {
-		// Every section mixes rowspan and colspan cells.
-		// body (4x4), merged cells repeat the same letter:
-		// | A | A | B | C |
-		// | A | A | D | C |
-		// | E | E | F | C |
-		// | G | H | I | I |
-		const attributes: TableAttributes = {
-			head: [
-				{
-					cells: [
-						{ content: 'h-0', tag: 'th', colSpan: '3', scope: 'colgroup' },
-						{ content: 'h-1', tag: 'th', id: 'head-id' },
-					],
-				},
-			],
-			body: [
-				{
-					cells: [
-						{ content: 'A', tag: 'td', rowSpan: '2', colSpan: '2', styles: 'color:red;' },
-						{ content: 'B', tag: 'th', scope: 'row' },
-						{ content: 'C', tag: 'td', rowSpan: '3', className: 'is-c' },
-					],
-				},
-				{ cells: [ { content: 'D', tag: 'td', headers: 'head-id' } ] },
-				{
-					cells: [
-						{ content: 'E', tag: 'td', colSpan: '2' },
-						{ content: 'F', tag: 'td' },
-					],
-				},
-				{
-					cells: [
-						{ content: 'G', tag: 'td' },
-						{ content: 'H', tag: 'td' },
-						{ content: 'I', tag: 'td', colSpan: '2' },
-					],
-				},
-			],
-			foot: [
-				{
-					cells: [
-						{ content: 'f-0', tag: 'td' },
-						{ content: 'f-1', tag: 'td', colSpan: '3' },
-					],
-				},
-			],
-		};
 
 		it( 'should place cells and hidden cells at the right virtual positions', () => {
-			const vTable = toVirtualTable( attributes );
+			const vTable = toVirtualTable( mixedSpanAttributes );
 			// Hidden cells are the virtual cells covered by a merged cell.
 			expect( vTable ).toMatchObject( {
 				head: [
@@ -1108,11 +1106,13 @@ describe( 'table-state', () => {
 				],
 			} );
 		} );
+	} );
 
+	describe( 'toVirtualTable / toTableAttributes round-trip', () => {
 		it( 'should restore the original table attributes and be stable when converted repeatedly', () => {
-			const once = toTableAttributes( toVirtualTable( attributes ) );
+			const once = toTableAttributes( toVirtualTable( mixedSpanAttributes ) );
 			const twice = toTableAttributes( toVirtualTable( once ) );
-			expect( once ).toEqual( attributes );
+			expect( once ).toEqual( mixedSpanAttributes );
 			expect( twice ).toStrictEqual( once );
 		} );
 	} );
