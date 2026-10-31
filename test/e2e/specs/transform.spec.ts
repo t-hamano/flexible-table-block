@@ -52,6 +52,43 @@ test.describe( 'Transform from core table block', () => {
 
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
+
+	test( 'should be transformed to flexible table block keeping merged cells and caption', async ( {
+		editor,
+	} ) => {
+		await editor.insertBlock( {
+			name: 'core/table',
+			attributes: {
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th', colspan: '2' },
+							{ content: 'Header 3', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td', rowspan: '2' },
+							{ content: 'Cell 2', tag: 'td' },
+							{ content: 'Cell 3', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 4', tag: 'td' },
+							{ content: 'Cell 5', tag: 'td' },
+						],
+					},
+				],
+				caption: 'Table <strong>caption</strong>',
+			},
+		} );
+		await editor.transformBlockTo( 'flexible-table-block/table' );
+
+		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+	} );
 } );
 
 test.describe( 'Transform from flexible table block', () => {
