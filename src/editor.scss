@@ -326,12 +326,13 @@ $row-column-inserter-dot-size: 6px;
 	.ftb-row-remover,
 	.ftb-column-remover {
 		--wp-ui-button-background-color: #{colors.$white};
+		--wp-ui-button-border-color: #{colors.$gray-900};
+		--wp-ui-button-border-color-active: #{colors.$gray-900};
 
 		position: absolute;
 		z-index: 1;
-		border: 0;
 		border-radius: variables.$radius-small;
-		box-shadow: 0 0 0 variables.$border-width colors.$gray-900, variables.$elevation-x-small;
+		box-shadow: variables.$elevation-x-small;
 	}
 
 	.ftb-row-remover {
