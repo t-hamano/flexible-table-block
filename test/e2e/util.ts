@@ -74,16 +74,6 @@ export default class FlexibleTableBlockUtils {
 		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 	}
 
-	getGlobalSettingModal() {
-		return this.page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
-	}
-
-	async openGlobalSetting() {
-		await this.editor.openDocumentSettingsSidebar();
-		await this.page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
-		await this.page.getByRole( 'button', { name: 'Edit global setting' } ).click();
-	}
-
 	/**
 	 * Returns the CSS that the global setting injects into the editor styles.
 	 */

@@ -9,20 +9,22 @@ test.describe( 'Global Setting', () => {
 	} );
 
 	test( 'should update editor styles reflecting the settings', async ( {
+		editor,
 		page,
 		pageUtils,
 		fsbUtils,
 	} ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.openGlobalSetting();
+		// Open the global setting.
+		await editor.openDocumentSettingsSidebar();
+		await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+		await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
+		const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
 		// Restore settings.
 		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
 		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-		await expect(
-			fsbUtils.getGlobalSettingModal().getByText( 'Global setting restored.', { exact: true } )
-		).toBeVisible();
-		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
-		const modal = fsbUtils.getGlobalSettingModal();
+		await expect( modal.getByText( 'Global setting restored.', { exact: true } ) ).toBeVisible();
+		await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
 		// Change table width.
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '90' );
 		// Change table max width.
@@ -70,10 +72,8 @@ test.describe( 'Global Setting', () => {
 		await page.getByRole( 'button', { name: 'Align bottom' } ).click();
 		// Save settings.
 		await page.getByRole( 'button', { name: 'Save settings' } ).click();
-		await expect(
-			fsbUtils.getGlobalSettingModal().getByText( 'Global setting saved.', { exact: true } )
-		).toBeVisible();
-		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
+		await expect( modal.getByText( 'Global setting saved.', { exact: true } ) ).toBeVisible();
+		await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
 
 		const selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
 		const savedRules = [
@@ -93,10 +93,8 @@ test.describe( 'Global Setting', () => {
 		// Restore settings.
 		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
 		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-		await expect(
-			fsbUtils.getGlobalSettingModal().getByText( 'Global setting restored.', { exact: true } )
-		).toBeVisible();
-		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
+		await expect( modal.getByText( 'Global setting restored.', { exact: true } ) ).toBeVisible();
+		await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
 
 		const defaultRules = [
 			`${ selector }>table{width:100%;max-width:100%;border-collapse:collapse;}`,

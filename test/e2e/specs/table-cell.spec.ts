@@ -10,24 +10,24 @@ test.describe( 'Flexible table cell', () => {
 
 	test( 'allows cell movement with tab key.', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		await fsbUtils.openGlobalSetting();
+		// Open the global setting.
+		await editor.openDocumentSettingsSidebar();
+		await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+		await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
+		const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
 		// Restore settings.
 		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
 		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-		await expect(
-			fsbUtils.getGlobalSettingModal().getByText( 'Global setting restored.', { exact: true } )
-		).toBeVisible();
-		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
+		await expect( modal.getByText( 'Global setting restored.', { exact: true } ) ).toBeVisible();
+		await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
 
 		// Update Editor Option.
 		await page.getByRole( 'tab', { name: 'Editor options' } ).click();
 		await page.getByRole( 'switch', { name: 'Use the tab key to move cells' } ).check();
 		await page.getByRole( 'button', { name: 'Save settings' } ).click();
-		await expect(
-			fsbUtils.getGlobalSettingModal().getByText( 'Global setting saved.', { exact: true } )
-		).toBeVisible();
-		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
-		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Close' } ).click();
+		await expect( modal.getByText( 'Global setting saved.', { exact: true } ) ).toBeVisible();
+		await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
+		await modal.getByRole( 'button', { name: 'Close' } ).click();
 		// Try to move within cells.
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
