@@ -1,11 +1,15 @@
 /**
  * Internal dependencies
  */
-import { test, expect } from '../util';
+import { test, expect, resetOptions } from '../util';
 
 test.describe( 'Global Setting', () => {
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
+	} );
+
+	test.afterEach( async ( { requestUtils } ) => {
+		await resetOptions( requestUtils );
 	} );
 
 	test( 'should update editor styles reflecting the settings', async ( {

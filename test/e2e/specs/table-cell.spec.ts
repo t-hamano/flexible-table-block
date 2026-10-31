@@ -1,11 +1,15 @@
 /**
  * Internal dependencies
  */
-import { test, expect } from '../util';
+import { test, expect, resetOptions } from '../util';
 
 test.describe( 'Flexible table cell', () => {
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
+	} );
+
+	test.afterEach( async ( { requestUtils } ) => {
+		await resetOptions( requestUtils );
 	} );
 
 	test( 'allows cell movement with tab key.', async ( { editor, page, pageUtils, fsbUtils } ) => {
