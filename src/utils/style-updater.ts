@@ -239,8 +239,8 @@ export function updateBorderSpacing(
 
 	const { borderSpacing, ...newStyles } = styles;
 
-	const horizontal = values.horizontal ? sanitizeUnitValue( values.horizontal ) : '';
-	const vertical = values.vertical ? sanitizeUnitValue( values.vertical ) : '';
+	const horizontal = values.horizontal || '';
+	const vertical = values.vertical || '';
 
 	if ( ! horizontal && ! vertical ) {
 		return newStyles;

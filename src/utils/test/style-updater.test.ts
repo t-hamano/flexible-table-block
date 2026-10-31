@@ -286,17 +286,19 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should fall back to 0 if one value is invalid', () => {
-			expect( updateBorderSpacing( {}, { horizontal: 'abc', vertical: '5px' } ) ).toStrictEqual( {
-				borderSpacing: '0 5px',
+		it( 'should keep values such as var() as they are', () => {
+			expect(
+				updateBorderSpacing( {}, { horizontal: 'var(--wp--preset--spacing--20)', vertical: '5px' } )
+			).toStrictEqual( {
+				borderSpacing: 'var(--wp--preset--spacing--20) 5px',
 			} );
 		} );
 
-		it( 'should remove borderSpacing props if all values are invalid', () => {
+		it( 'should remove borderSpacing props if all values are empty', () => {
 			expect(
 				updateBorderSpacing(
 					{ borderSpacing: '10px', color: 'red' },
-					{ horizontal: 'abc', vertical: '' }
+					{ horizontal: '', vertical: '' }
 				)
 			).toStrictEqual( {
 				color: 'red',
