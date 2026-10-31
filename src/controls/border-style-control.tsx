@@ -11,11 +11,10 @@ import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import {
-	Button,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Fieldset, Stack } from '@wordpress/ui';
+import { Fieldset, IconButton, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -143,10 +142,12 @@ export default function BorderStyleControl( {
 					</Stack>
 				) }
 				{ allowSides && (
-					<Button
+					<IconButton
 						label={ linkedLabel }
 						onClick={ toggleLinked }
 						icon={ isLinked ? link : linkOff }
+						variant="minimal"
+						tone="neutral"
 						size="small"
 						style={ { marginTop: '6px' } }
 					/>

@@ -10,8 +10,7 @@ import type { Property } from 'csstype';
 import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
-import { Button } from '@wordpress/components';
-import { Fieldset, Stack } from '@wordpress/ui';
+import { Fieldset, IconButton, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
@@ -150,10 +149,12 @@ export default function BorderColorControl( {
 						) ) }
 					</Stack>
 				) }
-				<Button
+				<IconButton
 					label={ linkedLabel }
 					onClick={ toggleLinked }
 					icon={ isLinked ? link : linkOff }
+					variant="minimal"
+					tone="neutral"
 					size="small"
 				/>
 			</Stack>

@@ -3,26 +3,22 @@
 
 // Color indicator button styles.
 .ftb-color-indicator-button {
-	position: relative;
-	justify-content: center;
 
 	.ftb-color-indicator-button__indicator {
-		position: relative;
 		flex: 1;
 		height: 100%;
-		margin: 0;
-		border-radius: variables.$radius-round;
 	}
 
 	&:not(.is-mixed) {
-		width: variables.$button-size-small;
+		width: var(--wp-ui-button-height);
+		min-width: 0;
+		height: var(--wp-ui-button-height);
 		padding: 0;
+		border: 0;
 		border-radius: variables.$radius-round;
-	}
-
-	&.is-mixed {
-		padding-right: variables.$grid-unit-05;
-		padding-left: variables.$grid-unit-05;
+		// The indicator covers the whole button, so the hover background is only
+		// visible behind the transparent pattern and would hide it.
+		background-color: transparent;
 	}
 
 	&.is-none,
