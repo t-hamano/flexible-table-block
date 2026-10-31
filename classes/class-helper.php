@@ -175,6 +175,11 @@ class Helper {
 	/**
 	 * Re-allow CSS color functions in safecss_filter_attr().
 	 *
+	 * This method and its tests can be removed once core allows CSS color
+	 * functions and the minimum supported WordPress version includes that change.
+	 *
+	 * @see https://core.trac.wordpress.org/ticket/66387
+	 *
 	 * @param bool   $allow_css       Default decision from core.
 	 * @param string $css_test_string Normalized value under test.
 	 * @return bool Whether the value is safe.
