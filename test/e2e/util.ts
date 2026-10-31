@@ -6,6 +6,7 @@ import type { Page } from '@playwright/test';
 /**
  * WordPress dependencies
  */
+import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
 import type { Editor } from '@wordpress/e2e-test-utils-playwright';
 
 export default class FlexibleTableBlockUtils {
@@ -72,4 +73,27 @@ export default class FlexibleTableBlockUtils {
 
 		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 	}
+
+	/**
+	 * Returns the CSS that the global setting injects into the editor styles.
+	 */
+	async getGlobalSettingCss() {
+		return this.page.evaluate( () => {
+			const blockStyle = window.wp.data
+				.select( 'core/editor' )
+				.getEditorSettings()
+				.styles.find(
+					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
+				);
+			return blockStyle ? blockStyle.css : '';
+		} );
+	}
 }
+
+export const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
+	fsbUtils: async ( { page, editor }, use ) => {
+		await use( new FlexibleTableBlockUtils( { page, editor } ) );
+	},
+} );
+
+export { expect };

@@ -1,18 +1,7 @@
 /**
- * WordPress dependencies
- */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
-
-/**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 test.describe( 'Transform from core table block', () => {
 	test.beforeEach( async ( { admin } ) => {

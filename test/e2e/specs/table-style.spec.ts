@@ -6,19 +6,12 @@ import type { Page } from '@playwright/test';
 /**
  * WordPress dependencies
  */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
 import type { PageUtils } from '@wordpress/e2e-test-utils-playwright';
 
 /**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	// Font Size, Line Hiehgt, Width styles.
@@ -34,6 +27,7 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	await page.getByRole( 'button', { name: 'Cell background color', exact: true } ).click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '333333' );
+	await pageUtils.pressKeys( 'Escape', { times: 2 } );
 
 	// Padding, Border Radius, Border Width styles.
 	const styles = [
@@ -65,14 +59,24 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	}
 
 	// Boder Style styles.
-	await page
-		.getByRole( 'group', { name: 'Cell border style' } )
-		.getByRole( 'button', { name: 'Unlink sides' } )
+	const cellBorderStyle = page.getByRole( 'group', { name: 'Cell border style' } );
+	await cellBorderStyle.getByRole( 'button', { name: 'Unlink sides' } ).click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Top', exact: true } )
+		.getByRole( 'button', { name: 'Solid', exact: true } )
 		.click();
-	await page.getByRole( 'button', { name: 'Solid' } ).nth( 0 ).click();
-	await page.getByRole( 'button', { name: 'Dotted' } ).nth( 1 ).click();
-	await page.getByRole( 'button', { name: 'Dashed' } ).nth( 2 ).click();
-	await page.getByRole( 'button', { name: 'Double' } ).nth( 3 ).click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Right', exact: true } )
+		.getByRole( 'button', { name: 'Dotted', exact: true } )
+		.click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Bottom', exact: true } )
+		.getByRole( 'button', { name: 'Dashed', exact: true } )
+		.click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Left', exact: true } )
+		.getByRole( 'button', { name: 'Double', exact: true } )
+		.click();
 
 	// Border Color styles.
 	await page
@@ -85,13 +89,13 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 		{ color: '333333', label: 'Bottom' },
 		{ color: '444444', label: 'Left' },
 	];
-	for ( let i = 0; i < colors.length; i++ ) {
+	for ( const { color, label } of colors ) {
 		await page
 			.getByRole( 'group', { name: 'Cell border color' } )
-			.getByRole( 'button', { name: colors[ i ].label } )
+			.getByRole( 'button', { name: label } )
 			.click();
 		await pageUtils.pressKeys( 'Enter' );
-		await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( colors[ i ].color );
+		await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
 		await pageUtils.pressKeys( 'Escape', { times: 2 } );
 	}
 	// Cell Alignment styles.
@@ -168,14 +172,24 @@ test.describe( 'Styles', () => {
 		}
 
 		// Boder Style styles.
-		await page
-			.getByRole( 'group', { name: 'Table border style' } )
-			.getByRole( 'button', { name: 'Unlink sides' } )
+		const tableBorderStyle = page.getByRole( 'group', { name: 'Table border style' } );
+		await tableBorderStyle.getByRole( 'button', { name: 'Unlink sides' } ).click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Top', exact: true } )
+			.getByRole( 'button', { name: 'Solid', exact: true } )
 			.click();
-		await page.getByRole( 'button', { name: 'Solid' } ).nth( 0 ).click();
-		await page.getByRole( 'button', { name: 'Dotted' } ).nth( 1 ).click();
-		await page.getByRole( 'button', { name: 'Dashed' } ).nth( 2 ).click();
-		await page.getByRole( 'button', { name: 'Double' } ).nth( 3 ).click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Right', exact: true } )
+			.getByRole( 'button', { name: 'Dotted', exact: true } )
+			.click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Bottom', exact: true } )
+			.getByRole( 'button', { name: 'Dashed', exact: true } )
+			.click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Left', exact: true } )
+			.getByRole( 'button', { name: 'Double', exact: true } )
+			.click();
 
 		// Border Color styles.
 		await page
@@ -188,13 +202,13 @@ test.describe( 'Styles', () => {
 			{ color: '333333', label: 'Bottom' },
 			{ color: '444444', label: 'Left' },
 		];
-		for ( let i = 0; i < colors.length; i++ ) {
+		for ( const { color, label } of colors ) {
 			await page
 				.getByRole( 'group', { name: 'Table border color' } )
-				.getByRole( 'button', { name: colors[ i ].label } )
+				.getByRole( 'button', { name: label } )
 				.click();
 			await pageUtils.pressKeys( 'Enter' );
-			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( colors[ i ].color );
+			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
 			await pageUtils.pressKeys( 'Escape', { times: 2 } );
 		}
 

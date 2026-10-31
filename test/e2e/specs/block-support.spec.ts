@@ -1,18 +1,7 @@
 /**
- * WordPress dependencies
- */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
-
-/**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 test.describe( 'Block Support', () => {
 	test.beforeAll( async ( { requestUtils } ) => {
@@ -89,7 +78,7 @@ test.describe( 'Block Support', () => {
 		await page.getByRole( 'button', { name: 'Unlink' } ).click();
 		// Change margin values.
 		for ( let i = 0; i < 4; i++ ) {
-			await page.getByRole( 'button', { name: 'Set custom value' } ).nth( 0 ).click();
+			await page.getByRole( 'button', { name: 'Set custom value' } ).first().click();
 		}
 		await page.getByRole( 'spinbutton', { name: 'Top margin' } ).fill( '10' );
 		await page.getByRole( 'spinbutton', { name: 'Right margin' } ).fill( '20' );

@@ -1,18 +1,7 @@
 /**
- * WordPress dependencies
- */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
-
-/**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 test.describe( 'Flexible table', () => {
 	test.beforeEach( async ( { admin } ) => {
@@ -182,7 +171,7 @@ test.describe( 'Flexible table', () => {
 				name: 'Dismiss this notice',
 			} );
 			await expect( snackbar ).toHaveText( 'The table body must have one or more rows.' );
-			snackbar.click();
+			await snackbar.click();
 			await expect( snackbar ).toBeHidden();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await editor.clickBlockToolbarButton( 'Edit table' );
@@ -226,7 +215,7 @@ test.describe( 'Flexible table', () => {
 				page.getByRole( 'button', {
 					name: 'Dismiss this notice',
 				} )
-			).toBeVisible();
+			).toHaveText( 'Cannot select multi cells from difference sections.' );
 		} );
 	} );
 } );
