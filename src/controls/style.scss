@@ -18,11 +18,6 @@
 		border-radius: variables.$radius-round;
 	}
 
-	&.is-mixed {
-		padding-right: variables.$grid-unit-05;
-		padding-left: variables.$grid-unit-05;
-	}
-
 	&.is-none,
 	&.is-transparent {
 
