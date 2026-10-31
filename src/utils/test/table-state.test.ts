@@ -47,70 +47,70 @@ const getRow = (
 	};
 };
 
-// | head   | head   | head   |
-// | body-0 | body-0 | body-0 |
-// | body-1 | body-1 | body-1 |
-// | body-2 | body-2 | body-2 |
-// | foot   | foot   | foot   |
+// | head-0   | head-1   | head-2   |
+// | body-0-0 | body-0-1 | body-0-2 |
+// | body-1-0 | body-1-1 | body-1-2 |
+// | body-2-0 | body-2-1 | body-2-2 |
+// | foot-0   | foot-1   | foot-2   |
 const createVTable = () =>
 	toVirtualTable( {
 		head: [
 			{
 				cells: [
-					{ content: 'head', tag: 'th' },
-					{ content: 'head', tag: 'th' },
-					{ content: 'head', tag: 'th' },
+					{ content: 'head-0', tag: 'th' },
+					{ content: 'head-1', tag: 'th' },
+					{ content: 'head-2', tag: 'th' },
 				],
 			},
 		],
 		body: [
 			{
 				cells: [
-					{ content: 'body-0', tag: 'td' },
-					{ content: 'body-0', tag: 'td' },
-					{ content: 'body-0', tag: 'td' },
+					{ content: 'body-0-0', tag: 'td' },
+					{ content: 'body-0-1', tag: 'td' },
+					{ content: 'body-0-2', tag: 'td' },
 				],
 			},
 			{
 				cells: [
-					{ content: 'body-1', tag: 'td' },
-					{ content: 'body-1', tag: 'td' },
-					{ content: 'body-1', tag: 'td' },
+					{ content: 'body-1-0', tag: 'td' },
+					{ content: 'body-1-1', tag: 'td' },
+					{ content: 'body-1-2', tag: 'td' },
 				],
 			},
 			{
 				cells: [
-					{ content: 'body-2', tag: 'td' },
-					{ content: 'body-2', tag: 'td' },
-					{ content: 'body-2', tag: 'td' },
+					{ content: 'body-2-0', tag: 'td' },
+					{ content: 'body-2-1', tag: 'td' },
+					{ content: 'body-2-2', tag: 'td' },
 				],
 			},
 		],
 		foot: [
 			{
 				cells: [
-					{ content: 'foot', tag: 'td' },
-					{ content: 'foot', tag: 'td' },
-					{ content: 'foot', tag: 'td' },
+					{ content: 'foot-0', tag: 'td' },
+					{ content: 'foot-1', tag: 'td' },
+					{ content: 'foot-2', tag: 'td' },
 				],
 			},
 		],
 	} );
 
 // Merged cells repeat the same name.
-// | head     | head     | head     |
+// | head-0   | head-1   | head-2   |
 // | body-0-0 | body-0-0 | body-0-2 |
 // | body-0-0 | body-0-0 | body-1-2 |
 // | body-2-0 | body-2-1 | body-2-2 |
-// | foot     | foot     | foot     |
+// | foot-0   | foot-1   | foot-2   |
 const createMergedVTable = () =>
 	toVirtualTable( {
 		head: [
 			{
 				cells: [
-					{ content: 'head', tag: 'th' },
-					{ content: 'head', tag: 'th' },
-					{ content: 'head', tag: 'th' },
+					{ content: 'head-0', tag: 'th' },
+					{ content: 'head-1', tag: 'th' },
+					{ content: 'head-2', tag: 'th' },
 				],
 			},
 		],
@@ -133,9 +133,9 @@ const createMergedVTable = () =>
 		foot: [
 			{
 				cells: [
-					{ content: 'foot', tag: 'td' },
-					{ content: 'foot', tag: 'td' },
-					{ content: 'foot', tag: 'td' },
+					{ content: 'foot-0', tag: 'td' },
+					{ content: 'foot-1', tag: 'td' },
+					{ content: 'foot-2', tag: 'td' },
 				],
 			},
 		],
@@ -174,30 +174,30 @@ describe( 'table-state', () => {
 
 	describe( 'insertRow', () => {
 		it( 'should return the table with the correct number of rows', () => {
-			// | head   | head   | head   |
-			// | body-0 | body-0 | body-0 |
-			// |        |        |        |
-			// | body-1 | body-1 | body-1 |
-			// | body-2 | body-2 | body-2 |
-			// | foot   | foot   | foot   |
+			// | head-0   | head-1   | head-2   |
+			// | body-0-0 | body-0-1 | body-0-2 |
+			// |          |          |          |
+			// | body-1-0 | body-1-1 | body-1-2 |
+			// | body-2-0 | body-2-1 | body-2-2 |
+			// | foot-0   | foot-1   | foot-2   |
 			expect(
 				toTableAttributes( insertRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) )
 			).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
 				body: [
 					{
 						cells: [
-							{ content: 'body-0', tag: 'td' },
-							{ content: 'body-0', tag: 'td' },
-							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0-0', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td' },
+							{ content: 'body-0-2', tag: 'td' },
 						],
 					},
 					{
@@ -209,67 +209,67 @@ describe( 'table-state', () => {
 					},
 					{
 						cells: [
-							{ content: 'body-1', tag: 'td' },
-							{ content: 'body-1', tag: 'td' },
-							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1-0', tag: 'td' },
+							{ content: 'body-1-1', tag: 'td' },
+							{ content: 'body-1-2', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2-0', tag: 'td' },
+							{ content: 'body-2-1', tag: 'td' },
+							{ content: 'body-2-2', tag: 'td' },
 						],
 					},
 				],
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
 			} );
-			// | head   | head   | head   |
-			// | body-0 | body-0 | body-0 |
-			// | body-1 | body-1 | body-1 |
-			// | body-2 | body-2 | body-2 |
-			// |        |        |        |
-			// | foot   | foot   | foot   |
+			// | head-0   | head-1   | head-2   |
+			// | body-0-0 | body-0-1 | body-0-2 |
+			// | body-1-0 | body-1-1 | body-1-2 |
+			// | body-2-0 | body-2-1 | body-2-2 |
+			// |          |          |          |
+			// | foot-0   | foot-1   | foot-2   |
 			expect(
 				toTableAttributes( insertRow( createVTable(), { sectionName: 'body', rowIndex: 3 } ) )
 			).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
 				body: [
 					{
 						cells: [
-							{ content: 'body-0', tag: 'td' },
-							{ content: 'body-0', tag: 'td' },
-							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0-0', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td' },
+							{ content: 'body-0-2', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-1', tag: 'td' },
-							{ content: 'body-1', tag: 'td' },
-							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1-0', tag: 'td' },
+							{ content: 'body-1-1', tag: 'td' },
+							{ content: 'body-1-2', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2-0', tag: 'td' },
+							{ content: 'body-2-1', tag: 'td' },
+							{ content: 'body-2-2', tag: 'td' },
 						],
 					},
 					{
@@ -283,9 +283,9 @@ describe( 'table-state', () => {
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
@@ -293,21 +293,21 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should expand the rowspan when inserting a row inside a merged cell', () => {
-			// | head     | head     | head     |
+			// | head-0   | head-1   | head-2   |
 			// | body-0-0 | body-0-0 | body-0-2 |
 			// | body-0-0 | body-0-0 |          |
 			// | body-0-0 | body-0-0 | body-1-2 |
 			// | body-2-0 | body-2-1 | body-2-2 |
-			// | foot     | foot     | foot     |
+			// | foot-0   | foot-1   | foot-2   |
 			expect(
 				toTableAttributes( insertRow( createMergedVTable(), { sectionName: 'body', rowIndex: 1 } ) )
 			).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
@@ -331,9 +331,9 @@ describe( 'table-state', () => {
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
@@ -341,21 +341,21 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should not expand the rowspan when inserting a row right after a merged cell', () => {
-			// | head     | head     | head     |
+			// | head-0   | head-1   | head-2   |
 			// | body-0-0 | body-0-0 | body-0-2 |
 			// | body-0-0 | body-0-0 | body-1-2 |
 			// |          |          |          |
 			// | body-2-0 | body-2-1 | body-2-2 |
-			// | foot     | foot     | foot     |
+			// | foot-0   | foot-1   | foot-2   |
 			expect(
 				toTableAttributes( insertRow( createMergedVTable(), { sectionName: 'body', rowIndex: 2 } ) )
 			).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
@@ -385,9 +385,9 @@ describe( 'table-state', () => {
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
@@ -397,86 +397,86 @@ describe( 'table-state', () => {
 
 	describe( 'deleteRow', () => {
 		it( 'should return the table with the correct number of rows', () => {
-			// | head   | head   | head   |
-			// | body-1 | body-1 | body-1 |
-			// | body-2 | body-2 | body-2 |
-			// | foot   | foot   | foot   |
+			// | head-0   | head-1   | head-2   |
+			// | body-1-0 | body-1-1 | body-1-2 |
+			// | body-2-0 | body-2-1 | body-2-2 |
+			// | foot-0   | foot-1   | foot-2   |
 			expect(
 				toTableAttributes( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 0 } ) )
 			).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
 				body: [
 					{
 						cells: [
-							{ content: 'body-1', tag: 'td' },
-							{ content: 'body-1', tag: 'td' },
-							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1-0', tag: 'td' },
+							{ content: 'body-1-1', tag: 'td' },
+							{ content: 'body-1-2', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2-0', tag: 'td' },
+							{ content: 'body-2-1', tag: 'td' },
+							{ content: 'body-2-2', tag: 'td' },
 						],
 					},
 				],
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
 			} );
-			// | head   | head   | head   |
-			// | body-0 | body-0 | body-0 |
-			// | body-2 | body-2 | body-2 |
-			// | foot   | foot   | foot   |
+			// | head-0   | head-1   | head-2   |
+			// | body-0-0 | body-0-1 | body-0-2 |
+			// | body-2-0 | body-2-1 | body-2-2 |
+			// | foot-0   | foot-1   | foot-2   |
 			expect(
 				toTableAttributes( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) )
 			).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
 				body: [
 					{
 						cells: [
-							{ content: 'body-0', tag: 'td' },
-							{ content: 'body-0', tag: 'td' },
-							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0-0', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td' },
+							{ content: 'body-0-2', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2-0', tag: 'td' },
+							{ content: 'body-2-1', tag: 'td' },
+							{ content: 'body-2-2', tag: 'td' },
 						],
 					},
 				],
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
@@ -484,19 +484,19 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should split the merged cell when deleting the row where it starts', () => {
-			// | head     | head     | head     |
+			// | head-0   | head-1   | head-2   |
 			// |          |          | body-1-2 |
 			// | body-2-0 | body-2-1 | body-2-2 |
-			// | foot     | foot     | foot     |
+			// | foot-0   | foot-1   | foot-2   |
 			expect(
 				toTableAttributes( deleteRow( createMergedVTable(), { sectionName: 'body', rowIndex: 0 } ) )
 			).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
@@ -519,9 +519,9 @@ describe( 'table-state', () => {
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
@@ -529,19 +529,19 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should contract the rowspan when deleting a row inside a merged cell', () => {
-			// | head     | head     | head     |
+			// | head-0   | head-1   | head-2   |
 			// | body-0-0 | body-0-0 | body-0-2 |
 			// | body-2-0 | body-2-1 | body-2-2 |
-			// | foot     | foot     | foot     |
+			// | foot-0   | foot-1   | foot-2   |
 			expect(
 				toTableAttributes( deleteRow( createMergedVTable(), { sectionName: 'body', rowIndex: 1 } ) )
 			).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
@@ -563,9 +563,9 @@ describe( 'table-state', () => {
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
@@ -575,88 +575,88 @@ describe( 'table-state', () => {
 
 	describe( 'deleteColumn', () => {
 		it( 'should return the table with the correct number of columns', () => {
-			// | head   | head   |
-			// | body-0 | body-0 |
-			// | body-1 | body-1 |
-			// | body-2 | body-2 |
-			// | foot   | foot   |
+			// | head-1   | head-2   |
+			// | body-0-1 | body-0-2 |
+			// | body-1-1 | body-1-2 |
+			// | body-2-1 | body-2-2 |
+			// | foot-1   | foot-2   |
 			expect( toTableAttributes( deleteColumn( createVTable(), { vColIndex: 0 } ) ) ).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
+							{ content: 'head-2', tag: 'th' },
 						],
 					},
 				],
 				body: [
 					{
 						cells: [
-							{ content: 'body-0', tag: 'td' },
-							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td' },
+							{ content: 'body-0-2', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-1', tag: 'td' },
-							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1-1', tag: 'td' },
+							{ content: 'body-1-2', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2-1', tag: 'td' },
+							{ content: 'body-2-2', tag: 'td' },
 						],
 					},
 				],
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
+							{ content: 'foot-2', tag: 'td' },
 						],
 					},
 				],
 			} );
-			// | head   | head   |
-			// | body-0 | body-0 |
-			// | body-1 | body-1 |
-			// | body-2 | body-2 |
-			// | foot   | foot   |
+			// | head-0   | head-1   |
+			// | body-0-0 | body-0-1 |
+			// | body-1-0 | body-1-1 |
+			// | body-2-0 | body-2-1 |
+			// | foot-0   | foot-1   |
 			expect( toTableAttributes( deleteColumn( createVTable(), { vColIndex: 2 } ) ) ).toEqual( {
 				head: [
 					{
 						cells: [
-							{ content: 'head', tag: 'th' },
-							{ content: 'head', tag: 'th' },
+							{ content: 'head-0', tag: 'th' },
+							{ content: 'head-1', tag: 'th' },
 						],
 					},
 				],
 				body: [
 					{
 						cells: [
-							{ content: 'body-0', tag: 'td' },
-							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0-0', tag: 'td' },
+							{ content: 'body-0-1', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-1', tag: 'td' },
-							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1-0', tag: 'td' },
+							{ content: 'body-1-1', tag: 'td' },
 						],
 					},
 					{
 						cells: [
-							{ content: 'body-2', tag: 'td' },
-							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2-0', tag: 'td' },
+							{ content: 'body-2-1', tag: 'td' },
 						],
 					},
 				],
 				foot: [
 					{
 						cells: [
-							{ content: 'foot', tag: 'td' },
-							{ content: 'foot', tag: 'td' },
+							{ content: 'foot-0', tag: 'td' },
+							{ content: 'foot-1', tag: 'td' },
 						],
 					},
 				],
@@ -664,18 +664,18 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should split the merged cell when deleting the column where it starts', () => {
-			// | head     | head     |
+			// | head-1   | head-2   |
 			// |          | body-0-2 |
 			// |          | body-1-2 |
 			// | body-2-1 | body-2-2 |
-			// | foot     | foot     |
+			// | foot-1   | foot-2   |
 			expect( toTableAttributes( deleteColumn( createMergedVTable(), { vColIndex: 0 } ) ) ).toEqual(
 				{
 					head: [
 						{
 							cells: [
-								{ content: 'head', tag: 'th' },
-								{ content: 'head', tag: 'th' },
+								{ content: 'head-1', tag: 'th' },
+								{ content: 'head-2', tag: 'th' },
 							],
 						},
 					],
@@ -702,8 +702,8 @@ describe( 'table-state', () => {
 					foot: [
 						{
 							cells: [
-								{ content: 'foot', tag: 'td' },
-								{ content: 'foot', tag: 'td' },
+								{ content: 'foot-1', tag: 'td' },
+								{ content: 'foot-2', tag: 'td' },
 							],
 						},
 					],
@@ -712,18 +712,18 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should contract the colspan when deleting a column inside a merged cell', () => {
-			// | head     | head     |
+			// | head-0   | head-2   |
 			// | body-0-0 | body-0-2 |
 			// | body-0-0 | body-1-2 |
 			// | body-2-0 | body-2-2 |
-			// | foot     | foot     |
+			// | foot-0   | foot-2   |
 			expect( toTableAttributes( deleteColumn( createMergedVTable(), { vColIndex: 1 } ) ) ).toEqual(
 				{
 					head: [
 						{
 							cells: [
-								{ content: 'head', tag: 'th' },
-								{ content: 'head', tag: 'th' },
+								{ content: 'head-0', tag: 'th' },
+								{ content: 'head-2', tag: 'th' },
 							],
 						},
 					],
@@ -745,8 +745,8 @@ describe( 'table-state', () => {
 					foot: [
 						{
 							cells: [
-								{ content: 'foot', tag: 'td' },
-								{ content: 'foot', tag: 'td' },
+								{ content: 'foot-0', tag: 'td' },
+								{ content: 'foot-2', tag: 'td' },
 							],
 						},
 					],
@@ -759,31 +759,31 @@ describe( 'table-state', () => {
 		it( 'should give the correct virtual column index to the cell inserted after the last column', () => {
 			const vTable = toVirtualTable( {
 				head: [],
-				body: [ { cells: [ { content: 'body-0', tag: 'td' } ] } ],
+				body: [ { cells: [ { content: 'body-0-0', tag: 'td' } ] } ],
 				foot: [],
 			} );
 			const newVTable = insertColumn( vTable, { vColIndex: 1 } );
-			// | body-0 |        |
+			// | body-0-0 |          |
 			expect( newVTable.body[ 0 ].cells.map( ( cell ) => cell.vColIndex ) ).toStrictEqual( [
 				0, 1,
 			] );
 		} );
 
 		it( 'should expand the colspan when inserting a column inside a merged cell', () => {
-			// | head     |          | head     | head     |
+			// | head-0   |          | head-1   | head-2   |
 			// | body-0-0 | body-0-0 | body-0-0 | body-0-2 |
 			// | body-0-0 | body-0-0 | body-0-0 | body-1-2 |
 			// | body-2-0 |          | body-2-1 | body-2-2 |
-			// | foot     |          | foot     | foot     |
+			// | foot-0   |          | foot-1   | foot-2   |
 			expect( toTableAttributes( insertColumn( createMergedVTable(), { vColIndex: 1 } ) ) ).toEqual(
 				{
 					head: [
 						{
 							cells: [
-								{ content: 'head', tag: 'th' },
+								{ content: 'head-0', tag: 'th' },
 								{ content: '', tag: 'th' },
-								{ content: 'head', tag: 'th' },
-								{ content: 'head', tag: 'th' },
+								{ content: 'head-1', tag: 'th' },
+								{ content: 'head-2', tag: 'th' },
 							],
 						},
 					],
@@ -807,10 +807,10 @@ describe( 'table-state', () => {
 					foot: [
 						{
 							cells: [
-								{ content: 'foot', tag: 'td' },
+								{ content: 'foot-0', tag: 'td' },
 								{ content: '', tag: 'td' },
-								{ content: 'foot', tag: 'td' },
-								{ content: 'foot', tag: 'td' },
+								{ content: 'foot-1', tag: 'td' },
+								{ content: 'foot-2', tag: 'td' },
 							],
 						},
 					],
@@ -819,20 +819,20 @@ describe( 'table-state', () => {
 		} );
 
 		it( 'should not expand the colspan when inserting a column right after a merged cell', () => {
-			// | head     | head     |          | head     |
+			// | head-0   | head-1   |          | head-2   |
 			// | body-0-0 | body-0-0 |          | body-0-2 |
 			// | body-0-0 | body-0-0 |          | body-1-2 |
 			// | body-2-0 | body-2-1 |          | body-2-2 |
-			// | foot     | foot     |          | foot     |
+			// | foot-0   | foot-1   |          | foot-2   |
 			expect( toTableAttributes( insertColumn( createMergedVTable(), { vColIndex: 2 } ) ) ).toEqual(
 				{
 					head: [
 						{
 							cells: [
-								{ content: 'head', tag: 'th' },
-								{ content: 'head', tag: 'th' },
+								{ content: 'head-0', tag: 'th' },
+								{ content: 'head-1', tag: 'th' },
 								{ content: '', tag: 'th' },
-								{ content: 'head', tag: 'th' },
+								{ content: 'head-2', tag: 'th' },
 							],
 						},
 					],
@@ -862,10 +862,10 @@ describe( 'table-state', () => {
 					foot: [
 						{
 							cells: [
-								{ content: 'foot', tag: 'td' },
-								{ content: 'foot', tag: 'td' },
+								{ content: 'foot-0', tag: 'td' },
+								{ content: 'foot-1', tag: 'td' },
 								{ content: '', tag: 'td' },
-								{ content: 'foot', tag: 'td' },
+								{ content: 'foot-2', tag: 'td' },
 							],
 						},
 					],
