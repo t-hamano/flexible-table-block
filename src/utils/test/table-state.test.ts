@@ -1050,26 +1050,62 @@ describe( 'table-state', () => {
 
 		it( 'should place cells and hidden cells at the right virtual positions', () => {
 			const vTable = toVirtualTable( attributes );
-			const toLayout = ( section: VRow[] ) =>
-				section.map( ( row ) =>
-					row.cells.map( ( cell ) => ( cell.isHidden ? null : cell.content ) )
-				);
-
-			expect( toLayout( vTable.head ) ).toStrictEqual( [ [ 'h-0', null, null, 'h-1' ] ] );
-			expect( toLayout( vTable.body ) ).toStrictEqual( [
-				[ 'A', null, 'B', 'C' ],
-				[ null, null, 'D', null ],
-				[ 'E', null, 'F', null ],
-				[ 'G', 'H', 'I', null ],
-			] );
-			expect( toLayout( vTable.foot ) ).toStrictEqual( [ [ 'f-0', 'f-1', null, null ] ] );
-
-			const { rowIndex, vColIndex, rowSpan, colSpan } = vTable.body[ 1 ].cells[ 2 ];
-			expect( { rowIndex, vColIndex, rowSpan, colSpan } ).toStrictEqual( {
-				rowIndex: 1,
-				vColIndex: 2,
-				rowSpan: 1,
-				colSpan: 1,
+			// Hidden cells are the virtual cells covered by a merged cell.
+			expect( vTable ).toMatchObject( {
+				head: [
+					{
+						cells: [
+							{ content: 'h-0', rowSpan: 1, colSpan: 3, isHidden: false },
+							{ isHidden: true },
+							{ isHidden: true },
+							{ content: 'h-1', rowSpan: 1, colSpan: 1, isHidden: false },
+						],
+					},
+				],
+				body: [
+					{
+						cells: [
+							{ content: 'A', rowSpan: 2, colSpan: 2, isHidden: false },
+							{ isHidden: true },
+							{ content: 'B', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'C', rowSpan: 3, colSpan: 1, isHidden: false },
+						],
+					},
+					{
+						cells: [
+							{ isHidden: true },
+							{ isHidden: true },
+							{ content: 'D', rowSpan: 1, colSpan: 1, isHidden: false, rowIndex: 1, vColIndex: 2 },
+							{ isHidden: true },
+						],
+					},
+					{
+						cells: [
+							{ content: 'E', rowSpan: 1, colSpan: 2, isHidden: false },
+							{ isHidden: true },
+							{ content: 'F', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ isHidden: true },
+						],
+					},
+					{
+						cells: [
+							{ content: 'G', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'H', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'I', rowSpan: 1, colSpan: 2, isHidden: false },
+							{ isHidden: true },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'f-0', rowSpan: 1, colSpan: 1, isHidden: false },
+							{ content: 'f-1', rowSpan: 1, colSpan: 3, isHidden: false },
+							{ isHidden: true },
+							{ isHidden: true },
+						],
+					},
+				],
 			} );
 		} );
 
