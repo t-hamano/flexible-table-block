@@ -3,7 +3,6 @@
  * @package Flexible_Table_Block
  */
 
-use Flexible_Table_Block\Option;
 use Flexible_Table_Block\Settings;
 
 /**
@@ -85,7 +84,7 @@ class Test_Api extends WP_UnitTestCase {
 	 * @param int         $expected_status     Expected HTTP status code.
 	 */
 	public function test_permissions( $method, $show_global_setting, $role, $expected_status ) {
-		update_option( Option::OPTION_NAMES['show_global_setting'], $show_global_setting ? 1 : 0 );
+		update_option( Settings::OPTION_PREFIX . 'show_global_setting', $show_global_setting ? 1 : 0 );
 		$this->login_as( $role );
 
 		$params   = 'POST' === $method ? array() : null;
@@ -162,7 +161,7 @@ class Test_Api extends WP_UnitTestCase {
 
 		$this->assertFalse( get_option( 'flexible_table_block_unknown_key' ) );
 		$this->assertFalse( get_option( 'unknown_key' ) );
-		$this->assertSame( 1, (int) get_option( Option::OPTION_NAMES['tab_move'] ) );
+		$this->assertSame( 1, (int) get_option( Settings::OPTION_PREFIX . 'tab_move' ) );
 	}
 
 	/**
@@ -178,7 +177,7 @@ class Test_Api extends WP_UnitTestCase {
 
 		$this->request( 'POST', array( 'show_dot_on_th' => $value ) );
 
-		$this->assertSame( $expected, (int) get_option( Option::OPTION_NAMES['show_dot_on_th'] ) );
+		$this->assertSame( $expected, (int) get_option( Settings::OPTION_PREFIX . 'show_dot_on_th' ) );
 	}
 
 	/**
@@ -211,7 +210,7 @@ class Test_Api extends WP_UnitTestCase {
 
 		$this->request( 'POST', array( 'breakpoint' => $value ) );
 
-		$this->assertSame( $expected, (int) get_option( Option::OPTION_NAMES['breakpoint'] ) );
+		$this->assertSame( $expected, (int) get_option( Settings::OPTION_PREFIX . 'breakpoint' ) );
 	}
 
 	/**
@@ -265,7 +264,7 @@ class Test_Api extends WP_UnitTestCase {
 					'left' => '2em',
 				),
 			),
-			get_option( Option::OPTION_NAMES['block_style'] )
+			get_option( Settings::OPTION_PREFIX . 'block_style' )
 		);
 	}
 
@@ -286,7 +285,7 @@ class Test_Api extends WP_UnitTestCase {
 
 		$this->assertSame(
 			array( 'table_width' => array() ),
-			get_option( Option::OPTION_NAMES['block_style'] )
+			get_option( Settings::OPTION_PREFIX . 'block_style' )
 		);
 	}
 
@@ -299,12 +298,12 @@ class Test_Api extends WP_UnitTestCase {
 	 */
 	public function test_update_options_ignores_invalid_array_types( $value ) {
 		$stored = array( 'table_width' => '50%' );
-		update_option( Option::OPTION_NAMES['block_style'], $stored );
+		update_option( Settings::OPTION_PREFIX . 'block_style', $stored );
 		$this->login_as( 'administrator' );
 
 		$this->request( 'POST', array( 'block_style' => $value ) );
 
-		$this->assertSame( $stored, get_option( Option::OPTION_NAMES['block_style'] ) );
+		$this->assertSame( $stored, get_option( Settings::OPTION_PREFIX . 'block_style' ) );
 	}
 
 	/**
@@ -325,14 +324,15 @@ class Test_Api extends WP_UnitTestCase {
 	 * Tests that DELETE removes all options and returns the defaults.
 	 */
 	public function test_delete_options_restores_defaults() {
-		update_option( Option::OPTION_NAMES['tab_move'], 1 );
-		update_option( Option::OPTION_NAMES['breakpoint'], 1000 );
-		update_option( Option::OPTION_NAMES['block_style'], array( 'table_width' => '50%' ) );
+		update_option( Settings::OPTION_PREFIX . 'tab_move', 1 );
+		update_option( Settings::OPTION_PREFIX . 'breakpoint', 1000 );
+		update_option( Settings::OPTION_PREFIX . 'block_style', array( 'table_width' => '50%' ) );
 		$this->login_as( 'administrator' );
 
 		$data = $this->request( 'DELETE' )->get_data();
 
-		foreach ( Option::OPTION_NAMES as $option_name ) {
+		foreach ( array_keys( Settings::OPTIONS ) as $key ) {
+			$option_name = Settings::OPTION_PREFIX . $key;
 			$this->assertFalse( get_option( $option_name ), "{$option_name} should be deleted." );
 		}
 
