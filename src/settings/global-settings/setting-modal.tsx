@@ -33,7 +33,7 @@ import {
 	MAX_RESPONSIVE_BREAKPOINT,
 	TEXT_ALIGNMENT_CONTROLS,
 	VERTICAL_ALIGNMENT_CONTROLS,
-	TABLE_WIDTH_UNITS,
+	SIZE_UNITS,
 	STORE_NAME,
 	REST_API_ROUTE,
 } from '../../constants';
@@ -74,7 +74,7 @@ export default function SettingModal( {
 
 	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
 	const registry = useRegistry();
-	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
+	const tableWidthUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
 
 	// Force focus on the modal as it loses focus when saving or restoring settings.
 	function focusModal() {
