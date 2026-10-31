@@ -39,6 +39,9 @@ export default function ColorControl( {
 	className,
 }: Props ) {
 	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
+	// Pass the anchor explicitly so that the popover doesn't render a fallback anchor element,
+	// which would add an extra gap inside the field.
+	const [ popoverAnchor, setPopoverAnchor ] = useState< HTMLDivElement | null >( null );
 
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
 
@@ -47,7 +50,7 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<Field.Root className={ clsx( 'ftb-color-control', className ) }>
+		<Field.Root ref={ setPopoverAnchor } className={ clsx( 'ftb-color-control', className ) }>
 			<Field.VisualLabel>{ label }</Field.VisualLabel>
 			<ColorIndicatorButton
 				label={ label }
@@ -63,6 +66,7 @@ export default function ColorControl( {
 					colors={ colorsProp }
 					onChange={ handleOnChange }
 					onClose={ handleOnPickerClose }
+					anchor={ popoverAnchor }
 				/>
 			) }
 			{ help && <Field.Description>{ help }</Field.Description> }
