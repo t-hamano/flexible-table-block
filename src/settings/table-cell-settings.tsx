@@ -7,25 +7,21 @@ import type { Property } from 'csstype';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { createInterpolateElement } from '@wordpress/element';
 import {
 	Button,
-	SelectControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
-	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { Fieldset, InputControl, Stack } from '@wordpress/ui';
+import { Fieldset, InputControl, SelectControl, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
  */
 import {
-	FONT_SIZE_UNITS,
-	CELL_WIDTH_UNITS,
+	SIZE_UNITS,
 	CELL_TAG_CONTROLS,
 	CELL_SCOPE_CONTROLS,
 	TEXT_ALIGNMENT_CONTROLS,
@@ -38,6 +34,7 @@ import {
 	BorderColorControl,
 	PaddingControl,
 	ColorControl,
+	PercentageWidthControl,
 } from '../controls';
 import {
 	toTableAttributes,
@@ -64,8 +61,6 @@ import type {
 	BlockAttributes,
 } from '../BlockAttributes';
 
-const PERCENTAGE_WIDTHS = [ 25, 50, 75, 100 ];
-
 type Props = {
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
 	vTable: VTable;
@@ -73,8 +68,7 @@ type Props = {
 };
 
 export default function TableCellSettings( { setAttributes, vTable, selectedCells = [] }: Props ) {
-	const cellWidthUnits = useCustomUnits( { availableUnits: CELL_WIDTH_UNITS } );
-	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
+	const sizeUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
 
 	if ( ! selectedCells.length ) {
 		return null;
@@ -98,9 +92,6 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 	}, [] );
 
 	const cellStylesObj = convertToObject( targetCell.styles );
-	const [ parsedWidthQuantity, parsedWidthUnit ] = parseQuantityAndUnitFromRawValue(
-		cellStylesObj?.width
-	);
 
 	const updateCellsState = ( state: CellState ) => {
 		const newVTable = updateCells( vTable, state, selectedCells );
@@ -229,7 +220,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 					<UnitControl
 						label={ __( 'Cell font size', 'flexible-table-block' ) }
 						value={ cellStylesObj?.fontSize }
-						units={ fontSizeUnits }
+						units={ sizeUnits }
 						min={ 0 }
 						onChange={ onChangeFontSize }
 					/>
@@ -250,35 +241,17 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				className="ftb-table-cell-settings-width"
 				label={ __( 'Cell width', 'flexible-table-block' ) }
 				value={ cellStylesObj?.width }
-				units={ cellWidthUnits }
+				units={ sizeUnits }
 				min={ 0 }
 				onChange={ onChangeWidth }
 				__unstableInputWidth="calc(50% - 4px)"
 			/>
-			<ToggleGroupControl
+			<PercentageWidthControl
 				className="ftb-table-cell-settings-percentage-width"
-				hideLabelFromVision
 				label={ __( 'Cell percentage width', 'flexible-table-block' ) }
-				isBlock
-				value={
-					parsedWidthQuantity &&
-					PERCENTAGE_WIDTHS.includes( parsedWidthQuantity ) &&
-					parsedWidthUnit === '%'
-						? cellStylesObj?.width
-						: undefined
-				}
-				onChange={ ( value ) => onChangeWidth( value as Property.Width ) }
-			>
-				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
-					return (
-						<ToggleGroupControlOption
-							key={ perWidth }
-							label={ `${ perWidth }%` }
-							value={ `${ perWidth }%` }
-						/>
-					);
-				} ) }
-			</ToggleGroupControl>
+				value={ cellStylesObj?.width }
+				onChange={ onChangeWidth }
+			/>
 			<hr />
 			<ColorControl
 				className="ftb-table-cell-settings-text-color"
@@ -392,36 +365,37 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			{ selectedCellTags.length === 1 && (
 				<>
 					<hr />
-					{ selectedCellTags.includes( 'th' ) && (
+					<Stack direction="column" gap="lg">
+						{ selectedCellTags.includes( 'th' ) && (
+							<InputControl
+								className="ftb-table-cell-settings-id"
+								label={ __( 'id attribute', 'flexible-table-block' ) }
+								autoComplete="off"
+								value={ targetCell.id || '' }
+								onValueChange={ onChangeId }
+							/>
+						) }
 						<InputControl
-							className="ftb-table-cell-settings-id"
-							label={ __( 'id attribute', 'flexible-table-block' ) }
+							className="ftb-table-cell-settings-headers"
+							label={ __( 'headers attribute', 'flexible-table-block' ) }
 							autoComplete="off"
-							value={ targetCell.id || '' }
-							onValueChange={ onChangeId }
+							value={ targetCell.headers || '' }
+							onValueChange={ onChangeHeaders }
 						/>
-					) }
-					<InputControl
-						className="ftb-table-cell-settings-headers"
-						label={ __( 'headers attribute', 'flexible-table-block' ) }
-						autoComplete="off"
-						value={ targetCell.headers || '' }
-						onValueChange={ onChangeHeaders }
-					/>
-					{ selectedCellTags.includes( 'th' ) && (
-						<SelectControl
-							className="ftb-table-cell-settings-scope"
-							label={ createInterpolateElement(
-								__( '<code>scope</code> attribute', 'flexible-table-block' ),
-								{ code: <code /> }
-							) }
-							value={ targetCell.scope }
-							options={ CELL_SCOPE_CONTROLS.map( ( { label, value } ) => {
-								return { label, value };
-							} ) }
-							onChange={ ( value ) => onChangeScope( value as CellScopeValue ) }
-						/>
-					) }
+						{ selectedCellTags.includes( 'th' ) && (
+							<SelectControl
+								className="ftb-table-cell-settings-scope"
+								label={ __( 'scope attribute', 'flexible-table-block' ) }
+								items={ [ ...CELL_SCOPE_CONTROLS ] }
+								value={
+									CELL_SCOPE_CONTROLS.find(
+										( control ) => control.value === ( targetCell.scope ?? 'none' )
+									) ?? null
+								}
+								onValueChange={ ( item ) => onChangeScope( item?.value as CellScopeValue ) }
+							/>
+						) }
+					</Stack>
 				</>
 			) }
 		</>

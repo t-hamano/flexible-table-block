@@ -35,6 +35,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+          check-latest: true
           cache: 'npm'
 
       - name: Npm install
@@ -62,6 +63,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+          check-latest: true
           cache: 'npm'
 
       - name: Npm install
@@ -95,6 +97,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+          check-latest: true
           cache: 'npm'
 
       - name: Npm install
@@ -158,6 +161,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+          check-latest: true
           cache: 'npm'
 
       - name: Npm install and build
