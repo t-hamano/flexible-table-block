@@ -86,9 +86,7 @@ test.describe( 'Global Setting', () => {
 			`${ selector }>table tr th{color:#333333;background-color:#555555;}`,
 			`${ selector }>table tr td{color:#444444;background-color:#666666;}`,
 		];
-		for ( const rule of savedRules ) {
-			await expect.poll( () => fsbUtils.getGlobalSettingCss() ).toContain( rule );
-		}
+		await expect.poll( () => fsbUtils.getGlobalSettingCss() ).toBe( savedRules.join( '' ) );
 
 		// Restore settings.
 		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
@@ -106,8 +104,6 @@ test.describe( 'Global Setting', () => {
 			`${ selector }>table tr th{background-color:#f0f0f1;}`,
 			`${ selector }>table tr td{background-color:#ffffff;}`,
 		];
-		for ( const rule of defaultRules ) {
-			await expect.poll( () => fsbUtils.getGlobalSettingCss() ).toContain( rule );
-		}
+		await expect.poll( () => fsbUtils.getGlobalSettingCss() ).toBe( defaultRules.join( '' ) );
 	} );
 } );
