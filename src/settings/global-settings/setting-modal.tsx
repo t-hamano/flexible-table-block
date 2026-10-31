@@ -57,6 +57,8 @@ interface EditorStyle {
 	[ key: string ]: unknown;
 }
 
+type BlockStyle = StoreOptions[ 'block_style' ];
+
 interface NoticeInfo {
 	status?: 'warning' | 'success' | 'error' | 'info';
 	message?: string;
@@ -74,6 +76,19 @@ export default function SettingModal( {
 	const { setOptions: setStoreOptions } = useDispatch( ftbStore );
 	const registry = useRegistry();
 	const tableWidthUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
+
+	// Update a single top-level option.
+	function setOption< K extends keyof StoreOptions >( key: K, value: StoreOptions[ K ] ) {
+		setCurrentOptions( ( prevOptions ) => ( { ...prevOptions, [ key ]: value } ) );
+	}
+
+	// Update a single default block style.
+	function setBlockStyle< K extends keyof BlockStyle >( key: K, value: BlockStyle[ K ] ) {
+		setCurrentOptions( ( prevOptions ) => ( {
+			...prevOptions,
+			block_style: { ...prevOptions.block_style, [ key ]: value },
+		} ) );
+	}
 
 	// Force focus on the modal as it loses focus when saving or restoring settings.
 	function focusModal() {
@@ -228,15 +243,9 @@ export default function SettingModal( {
 									units={ tableWidthUnits }
 									value={ currentOptions.block_style?.table_width }
 									min={ 0 }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												table_width: sanitizeUnitValue( value ),
-											},
-										} );
-									} }
+									onChange={ ( value ) =>
+										setBlockStyle( 'table_width', sanitizeUnitValue( value ) )
+									}
 									__unstableInputWidth="100px"
 								/>
 							</div>
@@ -246,15 +255,9 @@ export default function SettingModal( {
 									units={ tableWidthUnits }
 									value={ currentOptions.block_style?.table_max_width }
 									min={ 0 }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												table_max_width: sanitizeUnitValue( value ),
-											},
-										} );
-									} }
+									onChange={ ( value ) =>
+										setBlockStyle( 'table_max_width', sanitizeUnitValue( value ) )
+									}
 									__unstableInputWidth="100px"
 								/>
 							</div>
@@ -268,18 +271,12 @@ export default function SettingModal( {
 											_value: any
 										): _value is Properties[ 'borderCollapse' ] => {
 											return (
-												! value ||
+												! _value ||
 												BORDER_COLLAPSE_CONTROLS.some( ( control ) => control.value === _value )
 											);
 										};
 										if ( isAllowedValue( value ) ) {
-											setCurrentOptions( {
-												...currentOptions,
-												block_style: {
-													...currentOptions.block_style,
-													table_border_collapse: value,
-												},
-											} );
+											setBlockStyle( 'table_border_collapse', value );
 										}
 									} }
 								>
@@ -305,15 +302,7 @@ export default function SettingModal( {
 										'flexible-table-block'
 									) }
 									value={ currentOptions.block_style?.row_odd_color }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												row_odd_color: value,
-											},
-										} );
-									} }
+									onChange={ ( value ) => setBlockStyle( 'row_odd_color', value ) }
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
@@ -323,15 +312,7 @@ export default function SettingModal( {
 										'flexible-table-block'
 									) }
 									value={ currentOptions.block_style?.row_even_color }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												row_even_color: value,
-											},
-										} );
-									} }
+									onChange={ ( value ) => setBlockStyle( 'row_even_color', value ) }
 								/>
 							</div>
 						</div>
@@ -347,75 +328,37 @@ export default function SettingModal( {
 								<ColorControl
 									label={ __( 'Cell text color ( th tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_text_color_th }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_text_color_th: value,
-											},
-										} );
-									} }
+									onChange={ ( value ) => setBlockStyle( 'cell_text_color_th', value ) }
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __( 'Cell text color ( td tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_text_color_td }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_text_color_td: value,
-											},
-										} );
-									} }
+									onChange={ ( value ) => setBlockStyle( 'cell_text_color_td', value ) }
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __( 'Cell background color ( th tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_background_color_th }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_background_color_th: value,
-											},
-										} );
-									} }
+									onChange={ ( value ) => setBlockStyle( 'cell_background_color_th', value ) }
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __( 'Cell background color ( td tag )', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_background_color_td }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_background_color_td: value,
-											},
-										} );
-									} }
+									onChange={ ( value ) => setBlockStyle( 'cell_background_color_td', value ) }
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<PaddingControl
 									label={ __( 'Cell padding', 'flexible-table-block' ) }
 									values={ currentOptions?.block_style.cell_padding || {} }
-									onChange={ ( values ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_padding: cleanEmptyObject( values ),
-											},
-										} );
-									} }
+									onChange={ ( values ) =>
+										setBlockStyle( 'cell_padding', cleanEmptyObject( values ) )
+									}
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
@@ -424,15 +367,9 @@ export default function SettingModal( {
 									values={ { top: currentOptions.block_style?.cell_border_width } }
 									allowSides={ false }
 									hasIndicator={ false }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_border_width: sanitizeUnitValue( value.top ),
-											},
-										} );
-									} }
+									onChange={ ( value ) =>
+										setBlockStyle( 'cell_border_width', sanitizeUnitValue( value.top ) )
+									}
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
@@ -441,30 +378,14 @@ export default function SettingModal( {
 									values={ { top: currentOptions.block_style?.cell_border_style } }
 									allowSides={ false }
 									hasIndicator={ false }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_border_style: value.top,
-											},
-										} );
-									} }
+									onChange={ ( value ) => setBlockStyle( 'cell_border_style', value.top ) }
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
 								<ColorControl
 									label={ __( 'Cell border color', 'flexible-table-block' ) }
 									value={ currentOptions.block_style?.cell_border_color }
-									onChange={ ( value ) => {
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_border_color: value,
-											},
-										} );
-									} }
+									onChange={ ( value ) => setBlockStyle( 'cell_border_color', value ) }
 								/>
 							</div>
 							<div className="ftb-global-setting-modal__styles-item">
@@ -476,13 +397,7 @@ export default function SettingModal( {
 										if ( typeof value !== 'string' && value !== undefined ) {
 											return;
 										}
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_text_align: value,
-											},
-										} );
+										setBlockStyle( 'cell_text_align', value );
 									} }
 								>
 									{ TEXT_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
@@ -504,13 +419,7 @@ export default function SettingModal( {
 										if ( typeof value !== 'string' && value !== undefined ) {
 											return;
 										}
-										setCurrentOptions( {
-											...currentOptions,
-											block_style: {
-												...currentOptions.block_style,
-												cell_vertical_align: value,
-											},
-										} );
+										setBlockStyle( 'cell_vertical_align', value );
 									} }
 								>
 									{ VERTICAL_ALIGNMENT_CONTROLS.map( ( { icon, label, value } ) => (
@@ -546,12 +455,9 @@ export default function SettingModal( {
 									: DEFAULT_RESPONSIVE_BREAKPOINT
 							}
 							allowReset
-							onChange={ ( value ) => {
-								setCurrentOptions( {
-									...currentOptions,
-									breakpoint: value ? value : DEFAULT_RESPONSIVE_BREAKPOINT,
-								} );
-							} }
+							onChange={ ( value ) =>
+								setOption( 'breakpoint', value ? value : DEFAULT_RESPONSIVE_BREAKPOINT )
+							}
 						/>
 					</Stack>
 				</Tabs.Panel>
@@ -564,12 +470,7 @@ export default function SettingModal( {
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.show_label_on_section }
-							onCheckedChange={ ( value ) => {
-								setCurrentOptions( {
-									...currentOptions,
-									show_label_on_section: value,
-								} );
-							} }
+							onCheckedChange={ ( value ) => setOption( 'show_label_on_section', value ) }
 						/>
 						<SwitchControl
 							label={ __( 'Show control buttons', 'flexible-table-block' ) }
@@ -578,12 +479,7 @@ export default function SettingModal( {
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.show_control_button }
-							onCheckedChange={ ( value ) => {
-								setCurrentOptions( {
-									...currentOptions,
-									show_control_button: value,
-								} );
-							} }
+							onCheckedChange={ ( value ) => setOption( 'show_control_button', value ) }
 						/>
 						{ ( currentOptions.show_label_on_section || currentOptions.show_control_button ) && (
 							<SwitchControl
@@ -596,12 +492,7 @@ export default function SettingModal( {
 									'flexible-table-block'
 								) }
 								checked={ !! currentOptions.focus_control_button }
-								onCheckedChange={ ( value ) => {
-									setCurrentOptions( {
-										...currentOptions,
-										focus_control_button: value,
-									} );
-								} }
+								onCheckedChange={ ( value ) => setOption( 'focus_control_button', value ) }
 							/>
 						) }
 						<SwitchControl
@@ -611,12 +502,7 @@ export default function SettingModal( {
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.show_dot_on_th }
-							onCheckedChange={ ( value ) => {
-								setCurrentOptions( {
-									...currentOptions,
-									show_dot_on_th: value,
-								} );
-							} }
+							onCheckedChange={ ( value ) => setOption( 'show_dot_on_th', value ) }
 						/>
 						<SwitchControl
 							label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
@@ -625,12 +511,7 @@ export default function SettingModal( {
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.tab_move }
-							onCheckedChange={ ( value ) => {
-								setCurrentOptions( {
-									...currentOptions,
-									tab_move: value,
-								} );
-							} }
+							onCheckedChange={ ( value ) => setOption( 'tab_move', value ) }
 						/>
 						<SwitchControl
 							label={ __( 'Keep all contents when merging cells', 'flexible-table-block' ) }
@@ -639,12 +520,7 @@ export default function SettingModal( {
 								'flexible-table-block'
 							) }
 							checked={ !! currentOptions.merge_content }
-							onCheckedChange={ ( value ) => {
-								setCurrentOptions( {
-									...currentOptions,
-									merge_content: value,
-								} );
-							} }
+							onCheckedChange={ ( value ) => setOption( 'merge_content', value ) }
 						/>
 						{ canManageOptions && (
 							<SwitchControl
@@ -657,12 +533,7 @@ export default function SettingModal( {
 									'flexible-table-block'
 								) }
 								checked={ !! currentOptions.show_global_setting }
-								onCheckedChange={ ( value ) => {
-									setCurrentOptions( {
-										...currentOptions,
-										show_global_setting: value,
-									} );
-								} }
+								onCheckedChange={ ( value ) => setOption( 'show_global_setting', value ) }
 							/>
 						) }
 					</Stack>
