@@ -13,12 +13,13 @@ import {
 	insertColumn,
 	insertRow,
 	splitMergedCells,
+	toTableAttributes,
 	toVirtualTable,
 	type VTable,
 	type VRow,
 	type VCell,
 } from '../table-state';
-import type { SectionName } from '../../BlockAttributes';
+import type { SectionName, TableAttributes } from '../../BlockAttributes';
 
 const getRow = (
 	cells: number,
@@ -276,6 +277,91 @@ describe( 'table-state', () => {
 					{ rowSpan: 1, colSpan: 1, isHidden: true },
 				],
 			] );
+		} );
+	} );
+
+	describe( 'toVirtualTable / toTableAttributes round-trip', () => {
+		// Every section mixes rowspan and colspan cells.
+		// body (4x4):
+		// | A A | B | C |
+		// | A A | D | C |
+		// | E E | F | C |
+		// | G | H | I I |
+		const attributes: TableAttributes = {
+			head: [
+				{
+					cells: [
+						{ content: 'h-0', tag: 'th', colSpan: '3', scope: 'colgroup' },
+						{ content: 'h-1', tag: 'th', id: 'head-id' },
+					],
+				},
+			],
+			body: [
+				{
+					cells: [
+						{ content: 'A', tag: 'td', rowSpan: '2', colSpan: '2', styles: 'color:red;' },
+						{ content: 'B', tag: 'th', scope: 'row' },
+						{ content: 'C', tag: 'td', rowSpan: '3', className: 'is-c' },
+					],
+				},
+				{ cells: [ { content: 'D', tag: 'td', headers: 'head-id' } ] },
+				{
+					cells: [
+						{ content: 'E', tag: 'td', colSpan: '2' },
+						{ content: 'F', tag: 'td' },
+					],
+				},
+				{
+					cells: [
+						{ content: 'G', tag: 'td' },
+						{ content: 'H', tag: 'td' },
+						{ content: 'I', tag: 'td', colSpan: '2' },
+					],
+				},
+			],
+			foot: [
+				{
+					cells: [
+						{ content: 'f-0', tag: 'td' },
+						{ content: 'f-1', tag: 'td', colSpan: '3' },
+					],
+				},
+			],
+		};
+
+		it( 'should place cells and hidden cells at the right virtual positions', () => {
+			const vTable = toVirtualTable( attributes );
+			const toLayout = ( section: VRow[] ) =>
+				section.map( ( row ) =>
+					row.cells.map( ( cell ) => ( cell.isHidden ? null : cell.content ) )
+				);
+
+			expect( toLayout( vTable.head ) ).toStrictEqual( [ [ 'h-0', null, null, 'h-1' ] ] );
+			expect( toLayout( vTable.body ) ).toStrictEqual( [
+				[ 'A', null, 'B', 'C' ],
+				[ null, null, 'D', null ],
+				[ 'E', null, 'F', null ],
+				[ 'G', 'H', 'I', null ],
+			] );
+			expect( toLayout( vTable.foot ) ).toStrictEqual( [ [ 'f-0', 'f-1', null, null ] ] );
+
+			const { rowIndex, vColIndex, rowSpan, colSpan } = vTable.body[ 1 ].cells[ 2 ];
+			expect( { rowIndex, vColIndex, rowSpan, colSpan } ).toStrictEqual( {
+				rowIndex: 1,
+				vColIndex: 2,
+				rowSpan: 1,
+				colSpan: 1,
+			} );
+		} );
+
+		it( 'should restore the original table attributes', () => {
+			expect( toTableAttributes( toVirtualTable( attributes ) ) ).toEqual( attributes );
+		} );
+
+		it( 'should be stable when converted repeatedly', () => {
+			const once = toTableAttributes( toVirtualTable( attributes ) );
+			const twice = toTableAttributes( toVirtualTable( once ) );
+			expect( twice ).toStrictEqual( once );
 		} );
 	} );
 } );
