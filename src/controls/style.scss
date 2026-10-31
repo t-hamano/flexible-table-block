@@ -15,7 +15,7 @@
 	}
 
 	&:not(.is-mixed) {
-		width: variables.$button-size-small;
+		width: var(--wp-ui-button-height);
 		min-width: 0;
 		height: var(--wp-ui-button-height);
 		padding: 0;
