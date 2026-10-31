@@ -10,8 +10,8 @@ import type { FormEvent } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
 import { BlockIcon } from '@wordpress/block-editor';
-import { Button, Placeholder } from '@wordpress/components';
-import { InputControl, Stack, SwitchControl, Text } from '@wordpress/ui';
+import { Placeholder } from '@wordpress/components';
+import { Button, InputControl, Stack, SwitchControl, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
 /**
@@ -195,13 +195,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 						value={ rowCount || '' }
 						onValueChange={ onChangeRowCount }
 					/>
-					<Button
-						variant="primary"
-						type="submit"
-						disabled={ ! rowCount || ! colCount }
-						accessibleWhenDisabled
-						__next40pxDefaultSize
-					>
+					<Button type="submit" disabled={ ! rowCount || ! colCount }>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</Stack>
