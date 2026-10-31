@@ -49,15 +49,6 @@ class Test_Api extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Logs in as a user with the given role, or logs out when null.
-	 *
-	 * @param string|null $role User role.
-	 */
-	private function login_as( $role ) {
-		wp_set_current_user( $role ? self::$users[ $role ] : 0 );
-	}
-
-	/**
 	 * Tests that the route is registered with GET, POST and DELETE methods.
 	 */
 	public function test_route_is_registered() {
@@ -85,7 +76,7 @@ class Test_Api extends WP_UnitTestCase {
 	 */
 	public function test_permissions( $method, $show_global_setting, $role, $expected_status ) {
 		update_option( Settings::OPTION_PREFIX . 'show_global_setting', $show_global_setting ? 1 : 0 );
-		$this->login_as( $role );
+		wp_set_current_user( $role ? self::$users[ $role ] : 0 );
 
 		$params   = 'POST' === $method ? array() : null;
 		$response = $this->request( $method, $params );
@@ -119,7 +110,7 @@ class Test_Api extends WP_UnitTestCase {
 	 * Tests that GET returns all options with their defaults and the block CSS.
 	 */
 	public function test_get_options_returns_defaults() {
-		$this->login_as( 'editor' );
+		wp_set_current_user( self::$users['editor'] );
 
 		$data = $this->request( 'GET' )->get_data();
 
@@ -136,7 +127,7 @@ class Test_Api extends WP_UnitTestCase {
 	 * Tests that POST returns a success response with the block CSS.
 	 */
 	public function test_update_options_response() {
-		$this->login_as( 'administrator' );
+		wp_set_current_user( self::$users['administrator'] );
 
 		$data = $this->request( 'POST', array( 'tab_move' => true ) )->get_data();
 
@@ -149,7 +140,7 @@ class Test_Api extends WP_UnitTestCase {
 	 * Tests that unknown keys are not saved.
 	 */
 	public function test_update_options_drops_unknown_keys() {
-		$this->login_as( 'administrator' );
+		wp_set_current_user( self::$users['administrator'] );
 
 		$this->request(
 			'POST',
@@ -173,7 +164,7 @@ class Test_Api extends WP_UnitTestCase {
 	 * @param int   $expected Expected stored value.
 	 */
 	public function test_update_options_coerces_booleans( $value, $expected ) {
-		$this->login_as( 'administrator' );
+		wp_set_current_user( self::$users['administrator'] );
 
 		$this->request( 'POST', array( 'show_dot_on_th' => $value ) );
 
@@ -206,7 +197,7 @@ class Test_Api extends WP_UnitTestCase {
 	 * @param int   $expected Expected stored value.
 	 */
 	public function test_update_options_clamps_breakpoint( $value, $expected ) {
-		$this->login_as( 'administrator' );
+		wp_set_current_user( self::$users['administrator'] );
 
 		$this->request( 'POST', array( 'breakpoint' => $value ) );
 
@@ -237,7 +228,7 @@ class Test_Api extends WP_UnitTestCase {
 	 * Tests that unknown keys in array options are dropped, including nested arrays.
 	 */
 	public function test_update_options_filters_array_keys() {
-		$this->login_as( 'administrator' );
+		wp_set_current_user( self::$users['administrator'] );
 
 		$this->request(
 			'POST',
@@ -272,7 +263,7 @@ class Test_Api extends WP_UnitTestCase {
 	 * Tests that a nested array is dropped for a key whose default is not an array.
 	 */
 	public function test_update_options_drops_nested_values_for_scalar_keys() {
-		$this->login_as( 'administrator' );
+		wp_set_current_user( self::$users['administrator'] );
 
 		$this->request(
 			'POST',
@@ -299,7 +290,7 @@ class Test_Api extends WP_UnitTestCase {
 	public function test_update_options_ignores_invalid_array_types( $value ) {
 		$stored = array( 'table_width' => '50%' );
 		update_option( Settings::OPTION_PREFIX . 'block_style', $stored );
-		$this->login_as( 'administrator' );
+		wp_set_current_user( self::$users['administrator'] );
 
 		$this->request( 'POST', array( 'block_style' => $value ) );
 
@@ -327,7 +318,7 @@ class Test_Api extends WP_UnitTestCase {
 		update_option( Settings::OPTION_PREFIX . 'tab_move', 1 );
 		update_option( Settings::OPTION_PREFIX . 'breakpoint', 1000 );
 		update_option( Settings::OPTION_PREFIX . 'block_style', array( 'table_width' => '50%' ) );
-		$this->login_as( 'administrator' );
+		wp_set_current_user( self::$users['administrator'] );
 
 		$data = $this->request( 'DELETE' )->get_data();
 
