@@ -1,41 +1,47 @@
 /**
+ * External dependencies
+ */
+import type { Page } from '@playwright/test';
+
+/**
+ * WordPress dependencies
+ */
+import type { Editor } from '@wordpress/e2e-test-utils-playwright';
+
+/**
  * Internal dependencies
  */
 import { test, expect } from '../util';
 
 const BLOCK_CLASS = 'wp-block-flexible-table-block-table';
 const INLINE_CSS_SELECTOR = 'style#flexible-table-block-table-view-style-inline-css';
-// A past date keeps the post from being scheduled.
-const PUBLISHED_DATE = '2000-01-01T00:00:00';
+
+// A table with a header row and two body rows.
+const TABLE_ATTRIBUTES = {
+	head: [
+		{
+			cells: [
+				{ content: 'Header 1', tag: 'th' },
+				{ content: 'Header 2', tag: 'th' },
+			],
+		},
+	],
+	body: [
+		{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
+		{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+	],
+};
 
 /**
- * Returns the serialized markup of a block with a header row and two body rows.
+ * Publishes the current post and visits it on the front end.
  *
- * @param {Object}   options               Options.
- * @param {Object}   options.attributes    Block attributes in the block comment.
- * @param {string[]} options.figureClasses Extra classes for the `figure` element.
- * @param {string[]} options.tableClasses  Extra classes for the `table` element.
+ * @param {Object} root0        Fixtures.
+ * @param {Editor} root0.editor Editor utils.
+ * @param {Page}   root0.page   Page.
  */
-function getBlockMarkup( {
-	attributes = {},
-	figureClasses = [],
-	tableClasses = [],
-}: {
-	attributes?: Record< string, unknown >;
-	figureClasses?: string[];
-	tableClasses?: string[];
-} = {} ) {
-	const comment = Object.keys( attributes ).length ? ` ${ JSON.stringify( attributes ) }` : '';
-	const figureClass = [ BLOCK_CLASS, ...figureClasses ].join( ' ' );
-	const tableClass = [ 'has-fixed-layout', ...tableClasses ].join( ' ' );
-	return [
-		`<!-- wp:flexible-table-block/table${ comment } -->`,
-		`<figure class="${ figureClass }"><table class="${ tableClass }">`,
-		'<thead><tr><th>Header 1</th><th>Header 2</th></tr></thead>',
-		'<tbody><tr><td>Cell 1</td><td>Cell 2</td></tr><tr><td>Cell 3</td><td>Cell 4</td></tr></tbody>',
-		'</table></figure>',
-		'<!-- /wp:flexible-table-block/table -->',
-	].join( '' );
+async function visitPublishedPost( { editor, page }: { editor: Editor; page: Page } ) {
+	const postId = await editor.publishPost();
+	await page.goto( `/?p=${ postId }` );
 }
 
 test.describe( 'Front end', () => {
@@ -49,6 +55,8 @@ test.describe( 'Front end', () => {
 	} );
 
 	test( 'should output block CSS reflecting the global settings', async ( {
+		admin,
+		editor,
 		page,
 		requestUtils,
 	} ) => {
@@ -75,13 +83,12 @@ test.describe( 'Front end', () => {
 				},
 			},
 		} );
-		const post = await requestUtils.createPost( {
-			title: 'Global setting',
-			content: getBlockMarkup(),
-			status: 'publish',
-			date_gmt: PUBLISHED_DATE,
+		await admin.createNewPost();
+		await editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: TABLE_ATTRIBUTES,
 		} );
-		await page.goto( post.link );
+		await visitPublishedPost( { editor, page } );
 
 		const selector = `.${ BLOCK_CLASS }.${ BLOCK_CLASS }`;
 		const expectedRules = [
@@ -113,6 +120,8 @@ test.describe( 'Front end', () => {
 	} );
 
 	test( 'should output responsive CSS reflecting the breakpoint option', async ( {
+		admin,
+		editor,
 		page,
 		requestUtils,
 	} ) => {
@@ -121,26 +130,20 @@ test.describe( 'Front end', () => {
 			path: '/flexible-table-block/v1/options',
 			data: { breakpoint: 600 },
 		} );
-		const post = await requestUtils.createPost( {
-			title: 'Breakpoint',
-			content: [
-				getBlockMarkup( {
-					attributes: { isScrollOnPc: true },
-					figureClasses: [ 'is-scroll-on-pc' ],
-				} ),
-				getBlockMarkup( {
-					attributes: { isScrollOnMobile: true },
-					figureClasses: [ 'is-scroll-on-mobile' ],
-				} ),
-				getBlockMarkup( {
-					attributes: { isStackedOnMobile: true },
-					tableClasses: [ 'is-stacked-on-mobile' ],
-				} ),
-			].join( '\n\n' ),
-			status: 'publish',
-			date_gmt: PUBLISHED_DATE,
+		await admin.createNewPost();
+		await editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: { ...TABLE_ATTRIBUTES, isScrollOnPc: true },
 		} );
-		await page.goto( post.link );
+		await editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: { ...TABLE_ATTRIBUTES, isScrollOnMobile: true },
+		} );
+		await editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: { ...TABLE_ATTRIBUTES, isStackedOnMobile: true },
+		} );
+		await visitPublishedPost( { editor, page } );
 
 		const inlineCss = await page.locator( INLINE_CSS_SELECTOR ).textContent();
 		expect( inlineCss ).toContain( '@media screen and (min-width:601px){' );
@@ -163,27 +166,21 @@ test.describe( 'Front end', () => {
 		await expect( stackedCell ).toHaveCSS( 'display', 'block' );
 	} );
 
-	test( 'should make the header and the first column sticky', async ( { page, requestUtils } ) => {
-		const post = await requestUtils.createPost( {
-			title: 'Sticky',
-			content: [
-				getBlockMarkup( {
-					attributes: { sticky: 'header' },
-					tableClasses: [ 'is-sticky-header' ],
-				} ),
-				getBlockMarkup( {
-					attributes: { sticky: 'first-column' },
-					tableClasses: [ 'is-sticky-first-column' ],
-				} ),
-				getBlockMarkup( {
-					attributes: { isStackedOnMobile: true, sticky: 'header' },
-					tableClasses: [ 'is-stacked-on-mobile', 'is-sticky-header' ],
-				} ),
-			].join( '\n\n' ),
-			status: 'publish',
-			date_gmt: PUBLISHED_DATE,
+	test( 'should make the header and the first column sticky', async ( { admin, editor, page } ) => {
+		await admin.createNewPost();
+		await editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: { ...TABLE_ATTRIBUTES, sticky: 'header' },
 		} );
-		await page.goto( post.link );
+		await editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: { ...TABLE_ATTRIBUTES, sticky: 'first-column' },
+		} );
+		await editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: { ...TABLE_ATTRIBUTES, isStackedOnMobile: true, sticky: 'header' },
+		} );
+		await visitPublishedPost( { editor, page } );
 
 		// Sticky header.
 		await expect(
