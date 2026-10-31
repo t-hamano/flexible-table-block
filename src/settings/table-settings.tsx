@@ -11,26 +11,17 @@ import { __, _x, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import {
 	Button,
-	SelectControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
-	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
-	__experimentalParseQuantityAndUnitFromRawValue as parseQuantityAndUnitFromRawValue,
 } from '@wordpress/components';
-import { Stack, SwitchControl } from '@wordpress/ui';
+import { SelectControl, Stack, SwitchControl } from '@wordpress/ui';
 
 /**
  * Internal dependencies
  */
-import {
-	STORE_NAME,
-	TABLE_WIDTH_UNITS,
-	TABLE_HEIGHT_UNITS,
-	BORDER_COLLAPSE_CONTROLS,
-	STICKY_CONTROLS,
-} from '../constants';
+import { STORE_NAME, SIZE_UNITS, BORDER_COLLAPSE_CONTROLS, STICKY_CONTROLS } from '../constants';
 import {
 	BorderRadiusControl,
 	BorderWidthControl,
@@ -38,6 +29,7 @@ import {
 	BorderColorControl,
 	BorderSpacingControl,
 	PaddingControl,
+	PercentageWidthControl,
 } from '../controls';
 import {
 	toggleSection,
@@ -69,8 +61,6 @@ import {
 import type { StickyValue, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
 
-const PERCENTAGE_WIDTHS = [ 25, 50, 75, 100 ];
-
 type Props = {
 	attributes: BlockAttributes;
 	setAttributes: ( attrs: Partial< BlockAttributes > ) => void;
@@ -96,18 +86,7 @@ export default function TableSettings( {
 		return getOptions();
 	}, [] );
 
-	const tableWidthUnits = useCustomUnits( { availableUnits: TABLE_WIDTH_UNITS } );
-	const tableHeightUnits = useCustomUnits( { availableUnits: TABLE_HEIGHT_UNITS } );
-
-	const [ parsedWidthQuantity, parsedWidthUnit ] = parseQuantityAndUnitFromRawValue(
-		tableStylesObj?.width
-	);
-	const [ parsedMaxWidthQuantity, parsedMaxWidthUnit ] = parseQuantityAndUnitFromRawValue(
-		tableStylesObj?.maxWidth
-	);
-	const [ parsedMinWidthQuantity, parsedMinWidthUnit ] = parseQuantityAndUnitFromRawValue(
-		tableStylesObj?.minWidth
-	);
+	const sizeUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
 
 	const onChangeHasFixedLayout = () => {
 		setAttributes( { hasFixedLayout: ! hasFixedLayout } );
@@ -125,7 +104,7 @@ export default function TableSettings( {
 		setAttributes( { isScrollOnMobile: ! isScrollOnMobile } );
 	};
 
-	const onChangeSticky = ( value: string ) => {
+	const onChangeSticky = ( value?: string | null ) => {
 		const isAllowedValue = ( _value: any ): _value is StickyValue => {
 			return ! value || STICKY_CONTROLS.some( ( control ) => control.value === _value );
 		};
@@ -265,7 +244,7 @@ export default function TableSettings( {
 				/>
 			</Stack>
 			<hr />
-			<Stack direction="column" gap="lg" style={ { marginBottom: '16px' } }>
+			<Stack direction="column" gap="lg">
 				<SwitchControl
 					className="ftb-table-settings-fixed-width"
 					label={ __( 'Fixed width table cells', 'flexible-table-block' ) }
@@ -317,141 +296,85 @@ export default function TableSettings( {
 					}
 					onCheckedChange={ onChangeIsStackedOnMobile }
 				/>
+				<SelectControl
+					className="ftb-table-settings-fixed-control"
+					label={ __( 'Fixed control', 'flexible-table-block' ) }
+					items={ [ ...STICKY_CONTROLS ] }
+					value={
+						STICKY_CONTROLS.find( ( control ) => control.value === ( sticky ?? 'none' ) ) ?? null
+					}
+					description={
+						isStackedOnMobile && sticky
+							? __(
+									'Fixed control is only enabled for desktop view because "Stack on mobile" is enabled.',
+									'flexible-table-block'
+								)
+							: undefined
+					}
+					onValueChange={ ( item ) => onChangeSticky( item?.value ) }
+				/>
 			</Stack>
-			<SelectControl
-				className="ftb-table-settings-fixed-control"
-				label={ __( 'Fixed control', 'flexible-table-block' ) }
-				value={ sticky }
-				options={ STICKY_CONTROLS.map( ( { label, value } ) => {
-					return { label, value };
-				} ) }
-				help={
-					isStackedOnMobile &&
-					sticky &&
-					__(
-						'Fixed control is only enabled for desktop view because "Stack on mobile" is enabled.',
-						'flexible-table-block'
-					)
-				}
-				onChange={ onChangeSticky }
-			/>
 			<hr />
 			<UnitControl
 				className="ftb-table-settings-width"
 				label={ __( 'Table width', 'flexible-table-block' ) }
 				value={ tableStylesObj?.width }
-				units={ tableWidthUnits }
+				units={ sizeUnits }
 				disabled={ tableStylesObj?.width === 'auto' }
 				min={ 0 }
 				onChange={ onChangeWidth }
 				__unstableInputWidth="50%"
 			/>
-			<ToggleGroupControl
-				hideLabelFromVision
+			<PercentageWidthControl
 				className="ftb-table-settings-percentage-width"
 				label={ __( 'Table percentage width', 'flexible-table-block' ) }
-				isBlock
-				value={
-					tableStylesObj?.width === 'auto' ||
-					( parsedWidthQuantity &&
-						PERCENTAGE_WIDTHS.includes( parsedWidthQuantity ) &&
-						parsedWidthUnit === '%' )
-						? tableStylesObj?.width
-						: undefined
-				}
-				onChange={ ( value ) => onChangeWidth( value as Property.Width ) }
-			>
-				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
-					return (
-						<ToggleGroupControlOption
-							key={ perWidth }
-							label={ `${ perWidth }%` }
-							value={ `${ perWidth }%` }
-						/>
-					);
-				} ) }
-				<ToggleGroupControlOption
-					label={ _x( 'auto', 'width', 'flexible-table-block' ) }
-					value="auto"
-				/>
-			</ToggleGroupControl>
+				value={ tableStylesObj?.width }
+				additionalOption={ {
+					label: _x( 'auto', 'width', 'flexible-table-block' ),
+					value: 'auto',
+				} }
+				onChange={ onChangeWidth }
+			/>
 			<UnitControl
 				className="ftb-table-settings-max-width"
 				label={ __( 'Table max width', 'flexible-table-block' ) }
 				value={ tableStylesObj?.maxWidth }
-				units={ tableWidthUnits }
+				units={ sizeUnits }
 				disabled={ tableStylesObj?.maxWidth === 'none' }
 				min={ 0 }
 				onChange={ onChangeMaxWidth }
 				__unstableInputWidth="50%"
 			/>
-			<ToggleGroupControl
-				hideLabelFromVision
+			<PercentageWidthControl
 				className="ftb-table-settings-percentage-max-width"
 				label={ __( 'Table percentage max width', 'flexible-table-block' ) }
-				isBlock
-				value={
-					tableStylesObj?.maxWidth === 'none' ||
-					( parsedMaxWidthQuantity &&
-						PERCENTAGE_WIDTHS.includes( parsedMaxWidthQuantity ) &&
-						parsedMaxWidthUnit === '%' )
-						? tableStylesObj?.maxWidth
-						: undefined
-				}
-				onChange={ ( value ) => onChangeMaxWidth( value as Property.MaxWidth ) }
-			>
-				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
-					return (
-						<ToggleGroupControlOption
-							key={ perWidth }
-							label={ `${ perWidth }%` }
-							value={ `${ perWidth }%` }
-						/>
-					);
-				} ) }
-				<ToggleGroupControlOption
-					label={ _x( 'none', 'width', 'flexible-table-block' ) }
-					value="none"
-				/>
-			</ToggleGroupControl>
+				value={ tableStylesObj?.maxWidth }
+				additionalOption={ {
+					label: _x( 'none', 'width', 'flexible-table-block' ),
+					value: 'none',
+				} }
+				onChange={ onChangeMaxWidth }
+			/>
 			<UnitControl
 				className="ftb-table-settings-min-width"
 				label={ __( 'Table min width', 'flexible-table-block' ) }
 				value={ tableStylesObj?.minWidth }
-				units={ tableWidthUnits }
+				units={ sizeUnits }
 				min={ 0 }
 				onChange={ onChangeMinWidth }
 				__unstableInputWidth="50%"
 			/>
-			<ToggleGroupControl
-				hideLabelFromVision
+			<PercentageWidthControl
 				className="ftb-table-settings-percentage-min-width"
 				label={ __( 'Table percentage min width', 'flexible-table-block' ) }
-				isBlock
-				value={
-					parsedMinWidthQuantity &&
-					PERCENTAGE_WIDTHS.includes( parsedMinWidthQuantity ) &&
-					parsedMinWidthUnit === '%'
-						? tableStylesObj?.minWidth
-						: undefined
-				}
-				onChange={ ( value ) => onChangeMinWidth( value as Property.MinWidth ) }
-			>
-				{ PERCENTAGE_WIDTHS.map( ( perWidth ) => {
-					return (
-						<ToggleGroupControlOption
-							key={ perWidth }
-							label={ `${ perWidth }%` }
-							value={ `${ perWidth }%` }
-						/>
-					);
-				} ) }
-			</ToggleGroupControl>
+				value={ tableStylesObj?.minWidth }
+				onChange={ onChangeMinWidth }
+			/>
 			<UnitControl
 				className="ftb-table-settings-min-height"
 				label={ __( 'Table min height', 'flexible-table-block' ) }
 				value={ tableStylesObj?.minHeight }
-				units={ tableHeightUnits }
+				units={ sizeUnits }
 				min={ 0 }
 				onChange={ onChangeMinHeight }
 				__unstableInputWidth="50%"

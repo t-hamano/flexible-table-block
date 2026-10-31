@@ -109,7 +109,8 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	// id, headers, scope getBlockAttributes.
 	await page.getByRole( 'textbox', { name: 'id attribute' } ).fill( 'id' );
 	await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
-	await page.getByRole( 'combobox', { name: 'scope attribute' } ).selectOption( 'row' );
+	await page.getByRole( 'combobox', { name: 'scope attribute' } ).click();
+	await page.getByRole( 'option', { name: 'row', exact: true } ).click();
 }
 
 test.describe( 'Styles', () => {
@@ -131,9 +132,8 @@ test.describe( 'Styles', () => {
 		await page.getByRole( 'switch', { name: 'Scroll on desktop view' } ).check();
 		await page.getByRole( 'switch', { name: 'Scroll on mobile view' } ).check();
 		await page.getByRole( 'switch', { name: 'Stack on mobile' } ).check();
-		await page
-			.getByRole( 'combobox', { name: 'Fixed control' } )
-			.selectOption( 'Fixed first column' );
+		await page.getByRole( 'combobox', { name: 'Fixed control' } ).click();
+		await page.getByRole( 'option', { name: 'Fixed first column' } ).click();
 
 		// Width styles.
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '500' );
