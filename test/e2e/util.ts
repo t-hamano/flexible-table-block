@@ -7,7 +7,7 @@ import type { Page } from '@playwright/test';
  * WordPress dependencies
  */
 import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
-import type { Editor, RequestUtils } from '@wordpress/e2e-test-utils-playwright';
+import type { Editor } from '@wordpress/e2e-test-utils-playwright';
 
 export default class FlexibleTableBlockUtils {
 	editor: Editor;
@@ -88,18 +88,6 @@ export default class FlexibleTableBlockUtils {
 			return blockStyle ? blockStyle.css : '';
 		} );
 	}
-}
-
-/**
- * Resets all plugin options to their defaults via the REST API.
- *
- * @param requestUtils Request utils.
- */
-export async function resetOptions( requestUtils: RequestUtils ) {
-	await requestUtils.rest( {
-		method: 'DELETE',
-		path: '/flexible-table-block/v1/options',
-	} );
 }
 
 export const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {

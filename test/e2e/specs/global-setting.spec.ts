@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { test, expect, resetOptions } from '../util';
+import { test, expect } from '../util';
 
 test.describe( 'Global Setting', () => {
 	test.beforeEach( async ( { admin } ) => {
@@ -9,7 +9,10 @@ test.describe( 'Global Setting', () => {
 	} );
 
 	test.afterEach( async ( { requestUtils } ) => {
-		await resetOptions( requestUtils );
+		await requestUtils.rest( {
+			method: 'DELETE',
+			path: '/flexible-table-block/v1/options',
+		} );
 	} );
 
 	test( 'should update editor styles reflecting the settings', async ( {

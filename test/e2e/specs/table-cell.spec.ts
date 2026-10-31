@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { test, expect, resetOptions } from '../util';
+import { test, expect } from '../util';
 
 test.describe( 'Flexible table cell', () => {
 	test.beforeEach( async ( { admin } ) => {
@@ -9,7 +9,10 @@ test.describe( 'Flexible table cell', () => {
 	} );
 
 	test.afterEach( async ( { requestUtils } ) => {
-		await resetOptions( requestUtils );
+		await requestUtils.rest( {
+			method: 'DELETE',
+			path: '/flexible-table-block/v1/options',
+		} );
 	} );
 
 	test( 'allows cell movement with tab key.', async ( { editor, page, pageUtils, fsbUtils } ) => {
