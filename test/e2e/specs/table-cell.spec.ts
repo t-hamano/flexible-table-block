@@ -8,45 +8,6 @@ test.describe( 'Flexible table cell', () => {
 		await admin.createNewPost();
 	} );
 
-	test.afterEach( async ( { requestUtils } ) => {
-		// Restore the default settings.
-		await requestUtils.rest( {
-			method: 'DELETE',
-			path: '/flexible-table-block/v1/options',
-		} );
-	} );
-
-	test( 'allows cell movement with tab key.', async ( { editor, page, pageUtils, fsbUtils } ) => {
-		await fsbUtils.createFlexibleTableBlock();
-		// Open the global setting.
-		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
-		await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
-		const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
-		// Restore settings.
-		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
-		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-		await expect( modal.getByText( 'Global setting restored.', { exact: true } ) ).toBeVisible();
-		await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
-
-		// Update Editor Option.
-		await page.getByRole( 'tab', { name: 'Editor options' } ).click();
-		await page.getByRole( 'switch', { name: 'Use the tab key to move cells' } ).check();
-		await page.getByRole( 'button', { name: 'Save settings' } ).click();
-		await expect( modal.getByText( 'Global setting saved.', { exact: true } ) ).toBeVisible();
-		await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
-		await modal.getByRole( 'button', { name: 'Close' } ).click();
-		// Try to move within cells.
-		await editor.canvas
-			.getByRole( 'textbox', { name: 'Body cell text' } )
-			.nth( 0 )
-			.fill( 'Cell 1' );
-		await pageUtils.pressKeys( 'Tab', { times: 2 } );
-		await pageUtils.pressKeys( 'shift+Tab' );
-		await page.keyboard.type( 'Cell 2' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
-	} );
-
 	test( 'allows keyboard operation within the link popover', async ( {
 		editor,
 		page,

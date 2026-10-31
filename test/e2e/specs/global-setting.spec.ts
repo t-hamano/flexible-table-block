@@ -232,6 +232,31 @@ test.describe( 'Global Setting', () => {
 			} );
 		} );
 
+		test.describe( 'Use the tab key to move cells', () => {
+			test( 'should move focus between cells with the tab key when enabled', async ( {
+				admin,
+				editor,
+				page,
+				pageUtils,
+				requestUtils,
+				fsbUtils,
+			} ) => {
+				await updateOptions( requestUtils, { tab_move: true } );
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
+				await editor.canvas
+					.getByRole( 'textbox', { name: 'Body cell text' } )
+					.nth( 0 )
+					.fill( 'Cell 1' );
+				await pageUtils.pressKeys( 'Tab', { times: 2 } );
+				await pageUtils.pressKeys( 'shift+Tab' );
+				await page.keyboard.type( 'Cell 2' );
+				expect( await editor.getEditedPostContent() ).toContain(
+					'<tr><td>Cell 1</td><td>Cell 2</td><td></td></tr>'
+				);
+			} );
+		} );
+
 		test.describe( 'Keep all contents when merging cells', () => {
 			async function mergeFirstTwoCells( { editor, page }: { editor: Editor; page: Page } ) {
 				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
