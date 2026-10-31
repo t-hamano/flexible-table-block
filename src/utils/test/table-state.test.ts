@@ -15,7 +15,6 @@ import {
 	splitMergedCells,
 	toTableAttributes,
 	toVirtualTable,
-	type VTable,
 	type VRow,
 	type VCell,
 } from '../table-state';
@@ -976,19 +975,14 @@ describe( 'table-state', () => {
 	} );
 
 	describe( 'toVirtualTable', () => {
-		const getSpans = ( vTable: VTable ) =>
-			vTable.body.map( ( row ) =>
-				row.cells.map( ( { rowSpan, colSpan, isHidden } ) => ( { rowSpan, colSpan, isHidden } ) )
-			);
-
 		it( 'should clamp rowspan that overflows the section', () => {
 			const vTable = toVirtualTable( {
 				head: [],
 				body: [ { cells: [ { content: '', tag: 'td', rowSpan: '2' } ] } ],
 				foot: [],
 			} );
-			expect( getSpans( vTable ) ).toStrictEqual( [
-				[ { rowSpan: 1, colSpan: 1, isHidden: false } ],
+			expect( vTable.body ).toMatchObject( [
+				{ cells: [ { rowSpan: 1, colSpan: 1, isHidden: false } ] },
 			] );
 		} );
 
@@ -1006,15 +1000,19 @@ describe( 'table-state', () => {
 				],
 				foot: [],
 			} );
-			expect( getSpans( vTable ) ).toStrictEqual( [
-				[
-					{ rowSpan: 1, colSpan: 1, isHidden: false },
-					{ rowSpan: 1, colSpan: 1, isHidden: false },
-				],
-				[
-					{ rowSpan: 1, colSpan: 2, isHidden: false },
-					{ rowSpan: 1, colSpan: 1, isHidden: true },
-				],
+			expect( vTable.body ).toMatchObject( [
+				{
+					cells: [
+						{ rowSpan: 1, colSpan: 1, isHidden: false },
+						{ rowSpan: 1, colSpan: 1, isHidden: false },
+					],
+				},
+				{
+					cells: [
+						{ rowSpan: 1, colSpan: 2, isHidden: false },
+						{ rowSpan: 1, colSpan: 1, isHidden: true },
+					],
+				},
 			] );
 		} );
 
@@ -1032,17 +1030,21 @@ describe( 'table-state', () => {
 				],
 				foot: [],
 			} );
-			expect( getSpans( vTable ) ).toStrictEqual( [
-				[
-					{ rowSpan: 1, colSpan: 1, isHidden: false },
-					{ rowSpan: 2, colSpan: 2, isHidden: false },
-					{ rowSpan: 1, colSpan: 1, isHidden: true },
-				],
-				[
-					{ rowSpan: 1, colSpan: 1, isHidden: false },
-					{ rowSpan: 1, colSpan: 1, isHidden: true },
-					{ rowSpan: 1, colSpan: 1, isHidden: true },
-				],
+			expect( vTable.body ).toMatchObject( [
+				{
+					cells: [
+						{ rowSpan: 1, colSpan: 1, isHidden: false },
+						{ rowSpan: 2, colSpan: 2, isHidden: false },
+						{ rowSpan: 1, colSpan: 1, isHidden: true },
+					],
+				},
+				{
+					cells: [
+						{ rowSpan: 1, colSpan: 1, isHidden: false },
+						{ rowSpan: 1, colSpan: 1, isHidden: true },
+						{ rowSpan: 1, colSpan: 1, isHidden: true },
+					],
+				},
 			] );
 		} );
 
