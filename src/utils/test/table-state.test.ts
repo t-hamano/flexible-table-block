@@ -282,11 +282,11 @@ describe( 'table-state', () => {
 
 	describe( 'toVirtualTable / toTableAttributes round-trip', () => {
 		// Every section mixes rowspan and colspan cells.
-		// body (4x4):
-		// | A A | B | C |
-		// | A A | D | C |
-		// | E E | F | C |
-		// | G | H | I I |
+		// body (4x4), merged cells repeat the same letter:
+		// | A | A | B | C |
+		// | A | A | D | C |
+		// | E | E | F | C |
+		// | G | H | I | I |
 		const attributes: TableAttributes = {
 			head: [
 				{
