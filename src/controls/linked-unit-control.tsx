@@ -26,17 +26,11 @@ type Props< K extends string > = {
 	className?: string;
 	onChange: ( values: Record< K, string > ) => void;
 	values: Partial< Record< K, string | number > >;
-	// The sides, corners or directions to control.
 	items: readonly { label: string; value: K }[];
-	// `sides` and `corners` show the unlinked inputs in a grid below the "All" input,
-	// `directions` replaces the "All" input with a list of inputs.
 	layout: 'sides' | 'corners' | 'directions';
 	availableUnits: string[];
-	// Maximum number for each unit.
 	maxValues?: Record< string, number >;
-	// Renders the indicator icon for the focused item, or for all items if no item is given.
 	indicator?: ( item?: K ) => ReactNode;
-	// Whether the values can be unlinked and edited individually.
 	allowUnlink?: boolean;
 };
 
