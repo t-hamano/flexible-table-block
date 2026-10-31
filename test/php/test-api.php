@@ -75,18 +75,78 @@ class Test_Api extends WP_UnitTestCase {
 	 */
 	public function data_permissions() {
 		return array(
-			'GET: logged out'                            => array( 'GET', false, null, 401 ),
-			'GET: subscriber'                            => array( 'GET', false, 'subscriber', 403 ),
-			'GET: editor'                                => array( 'GET', false, 'editor', 200 ),
-			'GET: administrator'                         => array( 'GET', false, 'administrator', 200 ),
-			'POST: logged out'                           => array( 'POST', true, null, 401 ),
-			'POST: subscriber, global setting shown'     => array( 'POST', true, 'subscriber', 403 ),
-			'POST: editor, global setting shown'         => array( 'POST', true, 'editor', 200 ),
-			'POST: editor, global setting hidden'        => array( 'POST', false, 'editor', 403 ),
-			'POST: administrator, global setting hidden' => array( 'POST', false, 'administrator', 200 ),
-			'DELETE: logged out'                         => array( 'DELETE', false, null, 401 ),
-			'DELETE: editor, global setting shown'       => array( 'DELETE', true, 'editor', 403 ),
-			'DELETE: administrator'                      => array( 'DELETE', false, 'administrator', 200 ),
+			'logged out user cannot get options'    => array(
+				'method'              => 'GET',
+				'show_global_setting' => false,
+				'role'                => null,
+				'expected_status'     => 401,
+			),
+			'subscriber cannot get options'         => array(
+				'method'              => 'GET',
+				'show_global_setting' => false,
+				'role'                => 'subscriber',
+				'expected_status'     => 403,
+			),
+			'editor can get options'                => array(
+				'method'              => 'GET',
+				'show_global_setting' => false,
+				'role'                => 'editor',
+				'expected_status'     => 200,
+			),
+			'administrator can get options'         => array(
+				'method'              => 'GET',
+				'show_global_setting' => false,
+				'role'                => 'administrator',
+				'expected_status'     => 200,
+			),
+			'logged out user cannot update options' => array(
+				'method'              => 'POST',
+				'show_global_setting' => true,
+				'role'                => null,
+				'expected_status'     => 401,
+			),
+			'subscriber cannot update options even if global setting is shown' => array(
+				'method'              => 'POST',
+				'show_global_setting' => true,
+				'role'                => 'subscriber',
+				'expected_status'     => 403,
+			),
+			'editor can update options if global setting is shown' => array(
+				'method'              => 'POST',
+				'show_global_setting' => true,
+				'role'                => 'editor',
+				'expected_status'     => 200,
+			),
+			'editor cannot update options if global setting is hidden' => array(
+				'method'              => 'POST',
+				'show_global_setting' => false,
+				'role'                => 'editor',
+				'expected_status'     => 403,
+			),
+			'administrator can update options if global setting is hidden' => array(
+				'method'              => 'POST',
+				'show_global_setting' => false,
+				'role'                => 'administrator',
+				'expected_status'     => 200,
+			),
+			'logged out user cannot delete options' => array(
+				'method'              => 'DELETE',
+				'show_global_setting' => false,
+				'role'                => null,
+				'expected_status'     => 401,
+			),
+			'editor cannot delete options even if global setting is shown' => array(
+				'method'              => 'DELETE',
+				'show_global_setting' => true,
+				'role'                => 'editor',
+				'expected_status'     => 403,
+			),
+			'administrator can delete options'      => array(
+				'method'              => 'DELETE',
+				'show_global_setting' => false,
+				'role'                => 'administrator',
+				'expected_status'     => 200,
+			),
 		);
 	}
 
