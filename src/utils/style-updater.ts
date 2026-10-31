@@ -54,10 +54,10 @@ export function updatePadding(
 		return styles;
 	}
 
-	const top = sanitizeUnitValue( values.top ) || undefined;
-	const right = sanitizeUnitValue( values.right ) || undefined;
-	const bottom = sanitizeUnitValue( values.bottom ) || undefined;
-	const left = sanitizeUnitValue( values.left ) || undefined;
+	const top = values.top || undefined;
+	const right = values.right || undefined;
+	const bottom = values.bottom || undefined;
+	const left = values.left || undefined;
 
 	const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...newStyles } = styles;
 
@@ -94,10 +94,10 @@ export function updateBorderWidth(
 		return styles;
 	}
 
-	const top = sanitizeUnitValue( values.top ) || undefined;
-	const right = sanitizeUnitValue( values.right ) || undefined;
-	const bottom = sanitizeUnitValue( values.bottom ) || undefined;
-	const left = sanitizeUnitValue( values.left ) || undefined;
+	const top = values.top || undefined;
+	const right = values.right || undefined;
+	const bottom = values.bottom || undefined;
+	const left = values.left || undefined;
 
 	const {
 		borderWidth,
@@ -273,10 +273,10 @@ export function updateBorderRadius(
 		return styles;
 	}
 
-	const topLeft = sanitizeUnitValue( values.topLeft ) || undefined;
-	const topRight = sanitizeUnitValue( values.topRight ) || undefined;
-	const bottomRight = sanitizeUnitValue( values.bottomRight ) || undefined;
-	const bottomLeft = sanitizeUnitValue( values.bottomLeft ) || undefined;
+	const topLeft = values.topLeft || undefined;
+	const topRight = values.topRight || undefined;
+	const bottomRight = values.bottomRight || undefined;
+	const bottomLeft = values.bottomLeft || undefined;
 
 	const {
 		borderRadius,
