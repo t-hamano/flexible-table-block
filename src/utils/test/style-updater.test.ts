@@ -17,6 +17,12 @@ import {
 
 describe( 'style-updater', () => {
 	describe( 'updatePadding', () => {
+		it( 'should drop empty values and keep other values as they are', () => {
+			expect(
+				updatePadding( {}, { top: 'var(--wp--preset--spacing--20)', right: '1px', bottom: '' } )
+			).toStrictEqual( { paddingTop: 'var(--wp--preset--spacing--20)', paddingRight: '1px' } );
+		} );
+
 		it( 'should pass through if 2nd arg is undefined', () => {
 			expect( updatePadding( { padding: '15px', color: 'red' }, undefined ) ).toStrictEqual( {
 				padding: '15px',
@@ -70,6 +76,12 @@ describe( 'style-updater', () => {
 	} );
 
 	describe( 'updateBorderWidth', () => {
+		it( 'should drop empty values and keep other values as they are', () => {
+			expect(
+				updateBorderWidth( {}, { top: 'calc(1px + 1em)', right: '1px', bottom: '' } )
+			).toStrictEqual( { borderTopWidth: 'calc(1px + 1em)', borderRightWidth: '1px' } );
+		} );
+
 		it( 'should pass through if 2nd arg is undefined', () => {
 			expect( updateBorderWidth( { borderWidth: '15px', color: 'red' }, undefined ) ).toStrictEqual(
 				{
@@ -264,6 +276,18 @@ describe( 'style-updater', () => {
 	} );
 
 	describe( 'updateBorderRadius', () => {
+		it( 'should drop empty values and keep other values as they are', () => {
+			expect(
+				updateBorderRadius(
+					{},
+					{ topLeft: 'var(--wp--preset--spacing--20)', topRight: '1px', bottomRight: '' }
+				)
+			).toStrictEqual( {
+				borderTopLeftRadius: 'var(--wp--preset--spacing--20)',
+				borderTopRightRadius: '1px',
+			} );
+		} );
+
 		it( 'should pass through if 2nd arg is undefined', () => {
 			expect(
 				updateBorderRadius( { borderRadius: '15px', color: 'red' }, undefined )
