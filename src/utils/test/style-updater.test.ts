@@ -17,6 +17,12 @@ import {
 
 describe( 'style-updater', () => {
 	describe( 'updatePadding', () => {
+		it( 'should drop invalid values', () => {
+			expect(
+				updatePadding( {}, { top: 'abc', right: '1px', bottom: '', left: '-1px' } )
+			).toStrictEqual( { paddingRight: '1px' } );
+		} );
+
 		it( 'should pass through if 2nd arg is undefined', () => {
 			expect( updatePadding( { padding: '15px', color: 'red' }, undefined ) ).toStrictEqual( {
 				padding: '15px',
@@ -70,6 +76,12 @@ describe( 'style-updater', () => {
 	} );
 
 	describe( 'updateBorderWidth', () => {
+		it( 'should drop invalid values', () => {
+			expect(
+				updateBorderWidth( {}, { top: 'abc', right: '1px', bottom: '', left: '-1px' } )
+			).toStrictEqual( { borderRightWidth: '1px' } );
+		} );
+
 		it( 'should pass through if 2nd arg is undefined', () => {
 			expect( updateBorderWidth( { borderWidth: '15px', color: 'red' }, undefined ) ).toStrictEqual(
 				{
@@ -264,6 +276,15 @@ describe( 'style-updater', () => {
 	} );
 
 	describe( 'updateBorderRadius', () => {
+		it( 'should drop invalid values', () => {
+			expect(
+				updateBorderRadius(
+					{},
+					{ topLeft: 'abc', topRight: '1px', bottomRight: '', bottomLeft: '-1px' }
+				)
+			).toStrictEqual( { borderTopRightRadius: '1px' } );
+		} );
+
 		it( 'should pass through if 2nd arg is undefined', () => {
 			expect(
 				updateBorderRadius( { borderRadius: '15px', color: 'red' }, undefined )
