@@ -229,6 +229,22 @@ test.describe( 'Global Setting', () => {
 		} );
 
 		test.describe( 'Use the tab key to move cells', () => {
+			test( 'should move focus out of the table with the tab key when disabled', async ( {
+				admin,
+				editor,
+				pageUtils,
+				fsbUtils,
+			} ) => {
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).click();
+				await pageUtils.pressKeys( 'Tab' );
+				// The block editor moves focus to the first tabbable element after the canvas.
+				await expect( cells.nth( 0 ) ).not.toBeFocused();
+				await expect( cells.nth( 1 ) ).not.toBeFocused();
+			} );
+
 			test( 'should move focus between cells with the tab key when enabled', async ( {
 				admin,
 				editor,
