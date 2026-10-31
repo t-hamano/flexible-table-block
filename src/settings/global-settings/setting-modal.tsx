@@ -12,16 +12,15 @@ import { useState } from '@wordpress/element';
 import { useDispatch, useRegistry } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import {
-	Button,
+	Dropdown,
 	Modal,
-	Popover,
 	RangeControl,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Notice, Spinner, Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
+import { Button, Notice, Spinner, Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -70,7 +69,6 @@ export default function SettingModal( {
 	setIsSettingModalOpen,
 }: Props ) {
 	const [ noticeInfo, setNoticeInfo ] = useState< NoticeInfo | undefined >( undefined );
-	const [ isResetPopup, setIsResetPopup ] = useState( false );
 	const [ isWaiting, setIsWaiting ] = useState( false );
 	const [ currentOptions, setCurrentOptions ] = useState< StoreOptions >( options );
 
@@ -688,49 +686,46 @@ export default function SettingModal( {
 				gap="sm"
 				className="ftb-global-setting-modal__buttons"
 			>
-				<Button
-					variant="primary"
-					disabled={ isWaiting }
-					accessibleWhenDisabled
-					onClick={ handleUpdateOptions }
-					__next40pxDefaultSize
-				>
+				<Button disabled={ isWaiting } onClick={ handleUpdateOptions }>
 					{ __( 'Save settings', 'flexible-table-block' ) }
 				</Button>
 				{ canManageOptions && (
-					<Button
-						isDestructive
-						disabled={ isWaiting }
-						accessibleWhenDisabled
-						onClick={ () => setIsResetPopup( ! isResetPopup ) }
-						__next40pxDefaultSize
-					>
-						{ __( 'Restore default settings', 'flexible-table-block' ) }
-						{ isResetPopup && (
-							<Popover
-								className="ftb-global-setting-modal__confirm-popover"
-								focusOnMount="firstElement"
-								placement="top"
-								onClose={ () => setIsResetPopup( false ) }
+					<Dropdown
+						focusOnMount="firstElement"
+						popoverProps={ {
+							className: 'ftb-global-setting-modal__confirm-popover',
+							placement: 'top',
+						} }
+						renderToggle={ ( { isOpen, onToggle } ) => (
+							<Button
+								variant="minimal"
+								disabled={ isWaiting }
+								aria-expanded={ isOpen }
+								onClick={ onToggle }
 							>
-								<Stack direction="column" gap="lg" style={ { padding: '8px' } }>
-									<Text render={ <p /> }>{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
-									<Stack align="center" justify="space-between" gap="sm">
-										<Button isDestructive onClick={ handleResetOptions } size="compact">
-											{ __( 'Restore', 'flexible-table-block' ) }
-										</Button>
-										<Button
-											variant="secondary"
-											onClick={ () => setIsResetPopup( false ) }
-											size="compact"
-										>
-											{ __( 'Cancel', 'flexible-table-block' ) }
-										</Button>
-									</Stack>
-								</Stack>
-							</Popover>
+								{ __( 'Restore default settings', 'flexible-table-block' ) }
+							</Button>
 						) }
-					</Button>
+						renderContent={ ( { onClose } ) => (
+							<Stack direction="column" gap="lg" style={ { padding: '8px' } }>
+								<Text render={ <p /> }>{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
+								<Stack align="center" justify="space-between" gap="sm">
+									<Button
+										onClick={ () => {
+											onClose();
+											handleResetOptions();
+										} }
+										size="compact"
+									>
+										{ __( 'Restore', 'flexible-table-block' ) }
+									</Button>
+									<Button variant="outline" onClick={ onClose } size="compact">
+										{ __( 'Cancel', 'flexible-table-block' ) }
+									</Button>
+								</Stack>
+							</Stack>
+						) }
+					/>
 				) }
 			</Stack>
 		</Modal>

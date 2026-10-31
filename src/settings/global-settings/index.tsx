@@ -5,8 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
-import { Button } from '@wordpress/components';
-import { Spinner, Stack } from '@wordpress/ui';
+import { Button, IconButton, Spinner, Stack } from '@wordpress/ui';
 import { help } from '@wordpress/icons';
 
 /**
@@ -46,13 +45,13 @@ export default function GlobalSettings() {
 			<Stack align="center" justify="space-between" gap="sm">
 				{ ! hasResolved && <Spinner /> }
 				{ hasResolved && showGlobalSetting && (
-					<Button variant="primary" onClick={ () => setIsSettingModalOpen( true ) } size="compact">
+					<Button onClick={ () => setIsSettingModalOpen( true ) } size="compact">
 						{ __( 'Edit global setting', 'flexible-table-block' ) }
 					</Button>
 				) }
-				<Button
+				<IconButton
 					icon={ help }
-					variant="link"
+					variant="minimal"
 					onClick={ () => setIsHelpModalOpen( true ) }
 					label={ __( 'Help', 'flexible-table-block' ) }
 					size="compact"
