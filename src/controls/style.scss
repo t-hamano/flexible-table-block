@@ -16,6 +16,9 @@
 		padding: 0;
 		border: 0;
 		border-radius: variables.$radius-round;
+		// The indicator covers the whole button, so the hover background is only
+		// visible behind the transparent pattern and would hide it.
+		background-color: transparent;
 	}
 
 	&.is-none,
