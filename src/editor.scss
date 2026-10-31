@@ -249,8 +249,8 @@ $row-column-inserter-dot-size: 6px;
 		border-radius: variables.$radius-round;
 
 		svg {
-			width: 18px;
-			height: 18px;
+			width: $row-column-inserter-button-size;
+			height: $row-column-inserter-button-size;
 			margin: 0;
 		}
 
