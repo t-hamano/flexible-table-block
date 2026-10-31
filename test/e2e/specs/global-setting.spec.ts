@@ -206,15 +206,14 @@ test.describe( 'Global Setting', () => {
 		} );
 
 		test.describe( 'Show dot on th tag', () => {
-			const getDotContent = ( th: HTMLElement ) =>
-				window.getComputedStyle( th, '::before' ).content;
-
 			test( 'should show a dot on th cells when enabled', async ( { admin, editor, fsbUtils } ) => {
 				await admin.createNewPost();
 				await fsbUtils.createFlexibleTableBlock( { header: true } );
 				await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 				const th = editor.canvas.locator( 'th' ).first();
-				expect( await th.evaluate( getDotContent ) ).toBe( '""' );
+				expect(
+					await th.evaluate( ( el ) => window.getComputedStyle( el, '::before' ).content )
+				).toBe( '""' );
 			} );
 
 			test( 'should not show a dot on th cells when disabled', async ( {
@@ -228,7 +227,9 @@ test.describe( 'Global Setting', () => {
 				await fsbUtils.createFlexibleTableBlock( { header: true } );
 				await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 				const th = editor.canvas.locator( 'th' ).first();
-				expect( await th.evaluate( getDotContent ) ).toBe( 'none' );
+				expect(
+					await th.evaluate( ( el ) => window.getComputedStyle( el, '::before' ).content )
+				).toBe( 'none' );
 			} );
 		} );
 
