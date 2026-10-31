@@ -16,22 +16,6 @@ import { test, expect } from '../util';
 const BLOCK_CLASS = 'wp-block-flexible-table-block-table';
 const INLINE_CSS_SELECTOR = 'style#flexible-table-block-table-view-style-inline-css';
 
-// A table with a header row and two body rows.
-const TABLE_ATTRIBUTES = {
-	head: [
-		{
-			cells: [
-				{ content: 'Header 1', tag: 'th' },
-				{ content: 'Header 2', tag: 'th' },
-			],
-		},
-	],
-	body: [
-		{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
-		{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
-	],
-};
-
 /**
  * Publishes the current post and visits it on the front end.
  *
@@ -86,7 +70,20 @@ test.describe( 'Front end', () => {
 		await admin.createNewPost();
 		await editor.insertBlock( {
 			name: 'flexible-table-block/table',
-			attributes: TABLE_ATTRIBUTES,
+			attributes: {
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th' },
+							{ content: 'Header 2', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
+					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+				],
+			},
 		} );
 		await visitPublishedPost( { editor, page } );
 
@@ -133,15 +130,57 @@ test.describe( 'Front end', () => {
 		await admin.createNewPost();
 		await editor.insertBlock( {
 			name: 'flexible-table-block/table',
-			attributes: { ...TABLE_ATTRIBUTES, isScrollOnPc: true },
+			attributes: {
+				isScrollOnPc: true,
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th' },
+							{ content: 'Header 2', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
+					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+				],
+			},
 		} );
 		await editor.insertBlock( {
 			name: 'flexible-table-block/table',
-			attributes: { ...TABLE_ATTRIBUTES, isScrollOnMobile: true },
+			attributes: {
+				isScrollOnMobile: true,
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th' },
+							{ content: 'Header 2', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
+					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+				],
+			},
 		} );
 		await editor.insertBlock( {
 			name: 'flexible-table-block/table',
-			attributes: { ...TABLE_ATTRIBUTES, isStackedOnMobile: true },
+			attributes: {
+				isStackedOnMobile: true,
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th' },
+							{ content: 'Header 2', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
+					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+				],
+			},
 		} );
 		await visitPublishedPost( { editor, page } );
 
@@ -170,15 +209,58 @@ test.describe( 'Front end', () => {
 		await admin.createNewPost();
 		await editor.insertBlock( {
 			name: 'flexible-table-block/table',
-			attributes: { ...TABLE_ATTRIBUTES, sticky: 'header' },
+			attributes: {
+				sticky: 'header',
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th' },
+							{ content: 'Header 2', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
+					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+				],
+			},
 		} );
 		await editor.insertBlock( {
 			name: 'flexible-table-block/table',
-			attributes: { ...TABLE_ATTRIBUTES, sticky: 'first-column' },
+			attributes: {
+				sticky: 'first-column',
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th' },
+							{ content: 'Header 2', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
+					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+				],
+			},
 		} );
 		await editor.insertBlock( {
 			name: 'flexible-table-block/table',
-			attributes: { ...TABLE_ATTRIBUTES, isStackedOnMobile: true, sticky: 'header' },
+			attributes: {
+				isStackedOnMobile: true,
+				sticky: 'header',
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th' },
+							{ content: 'Header 2', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{ cells: [ { content: 'Cell 1' }, { content: 'Cell 2' } ] },
+					{ cells: [ { content: 'Cell 3' }, { content: 'Cell 4' } ] },
+				],
+			},
 		} );
 		await visitPublishedPost( { editor, page } );
 
