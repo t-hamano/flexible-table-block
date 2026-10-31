@@ -248,7 +248,6 @@ test.describe( 'Global Setting', () => {
 			test( 'should move focus between cells with the tab key when enabled', async ( {
 				admin,
 				editor,
-				page,
 				pageUtils,
 				requestUtils,
 				fsbUtils,
@@ -256,16 +255,12 @@ test.describe( 'Global Setting', () => {
 				await updateOptions( requestUtils, { tab_move: true } );
 				await admin.createNewPost();
 				await fsbUtils.createFlexibleTableBlock();
-				await editor.canvas
-					.getByRole( 'textbox', { name: 'Body cell text' } )
-					.nth( 0 )
-					.fill( 'Cell 1' );
-				await pageUtils.pressKeys( 'Tab', { times: 2 } );
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).click();
+				await pageUtils.pressKeys( 'Tab' );
+				await expect( cells.nth( 1 ) ).toBeFocused();
 				await pageUtils.pressKeys( 'shift+Tab' );
-				await page.keyboard.type( 'Cell 2' );
-				expect( await editor.getEditedPostContent() ).toContain(
-					'<tr><td>Cell 1</td><td>Cell 2</td><td></td></tr>'
-				);
+				await expect( cells.nth( 0 ) ).toBeFocused();
 			} );
 		} );
 
