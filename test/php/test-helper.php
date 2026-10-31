@@ -298,7 +298,7 @@ class Test_Helper extends WP_UnitTestCase {
 	 */
 	public function test_get_block_css_with_custom_option() {
 		update_option(
-			Settings::get_option_name( 'block_style' ),
+			Settings::OPTION_PREFIX . 'block_style',
 			array(
 				'table_width'              => '80%',
 				'row_odd_color'            => 'oklch(70% 0.1 200)',
@@ -329,7 +329,7 @@ class Test_Helper extends WP_UnitTestCase {
 	 */
 	public function test_get_block_css_drops_unsafe_values() {
 		update_option(
-			Settings::get_option_name( 'block_style' ),
+			Settings::OPTION_PREFIX . 'block_style',
 			array(
 				'table_width'       => '100%</style><script>alert(1)</script>',
 				'table_max_width'   => 'expression(alert(1))',
@@ -349,7 +349,7 @@ class Test_Helper extends WP_UnitTestCase {
 	 * Tests that empty options generate no block CSS.
 	 */
 	public function test_get_block_css_with_empty_option() {
-		update_option( Settings::get_option_name( 'block_style' ), array() );
+		update_option( Settings::OPTION_PREFIX . 'block_style', array() );
 
 		$this->assertSame( '', Helper::get_block_css() );
 	}

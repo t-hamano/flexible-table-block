@@ -88,16 +88,6 @@ class Settings {
 	);
 
 	/**
-	 * Get the name of the option stored in the database
-	 *
-	 * @param string $key Option key defined in OPTIONS.
-	 * @return string
-	 */
-	public static function get_option_name( $key ) {
-		return self::OPTION_PREFIX . $key;
-	}
-
-	/**
 	 * Get options
 	 *
 	 * @return array
@@ -106,7 +96,7 @@ class Settings {
 		$options = array();
 
 		foreach ( self::OPTIONS as $key => $value ) {
-			$options[ $key ] = get_option( self::get_option_name( $key ), self::OPTIONS[ $key ]['default'] );
+			$options[ $key ] = get_option( self::OPTION_PREFIX . $key, self::OPTIONS[ $key ]['default'] );
 
 			if ( 'boolean' === self::OPTIONS[ $key ]['type'] ) {
 				$options[ $key ] = (bool) $options[ $key ];
