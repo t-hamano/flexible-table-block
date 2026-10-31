@@ -11,12 +11,22 @@ test.describe( 'Flexible table cell', () => {
 	test( 'allows cell movement with tab key.', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await fsbUtils.openGlobalSetting();
-		await fsbUtils.restoreGlobalSetting();
+		// Restore settings.
+		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
+		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
+		await expect(
+			fsbUtils.getGlobalSettingModal().getByText( 'Global setting restored.', { exact: true } )
+		).toBeVisible();
+		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
 
 		// Update Editor Option.
 		await page.getByRole( 'tab', { name: 'Editor options' } ).click();
 		await page.getByRole( 'switch', { name: 'Use the tab key to move cells' } ).check();
-		await fsbUtils.saveGlobalSetting();
+		await page.getByRole( 'button', { name: 'Save settings' } ).click();
+		await expect(
+			fsbUtils.getGlobalSettingModal().getByText( 'Global setting saved.', { exact: true } )
+		).toBeVisible();
+		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
 		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Close' } ).click();
 		// Try to move within cells.
 		await editor.canvas

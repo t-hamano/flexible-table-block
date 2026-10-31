@@ -70,7 +70,8 @@ test.describe( 'Flexible table', () => {
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
-			await fsbUtils.clickEditTableMenuItem( 'Split merged cells' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Split merged cells' } ).click();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 
@@ -82,17 +83,23 @@ test.describe( 'Flexible table', () => {
 			await expect( mergeButton ).toBeDisabled();
 		} );
 
-		test( 'allows all cells side by side to be merge', async ( { editor, fsbUtils } ) => {
+		test( 'allows all cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
 			await editor.canvas.getByRole( 'button', { name: 'Select row' } ).nth( 0 ).click();
-			await fsbUtils.clickEditTableMenuItem( 'Merge cells' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 
-		test( 'allows all cells in a vertical line to be merge', async ( { editor, fsbUtils } ) => {
+		test( 'allows all cells in a vertical line to be merge', async ( {
+			editor,
+			page,
+			fsbUtils,
+		} ) => {
 			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
 			await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
-			await fsbUtils.clickEditTableMenuItem( 'Merge cells' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 		} );
 	} );
@@ -167,7 +174,8 @@ test.describe( 'Flexible table', () => {
 			await snackbar.click();
 			await expect( snackbar ).toBeHidden();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
-			await fsbUtils.clickEditTableMenuItem( 'Delete row' );
+			await editor.clickBlockToolbarButton( 'Edit table' );
+			await page.getByRole( 'menuitem', { name: 'Delete row' } ).click();
 			await expect(
 				page.getByRole( 'button', {
 					name: 'Dismiss this notice',

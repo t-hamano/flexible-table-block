@@ -8,10 +8,20 @@ test.describe( 'Global Setting', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'should update editor styles reflecting the settings', async ( { page, fsbUtils } ) => {
+	test( 'should update editor styles reflecting the settings', async ( {
+		page,
+		pageUtils,
+		fsbUtils,
+	} ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await fsbUtils.openGlobalSetting();
-		await fsbUtils.restoreGlobalSetting();
+		// Restore settings.
+		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
+		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
+		await expect(
+			fsbUtils.getGlobalSettingModal().getByText( 'Global setting restored.', { exact: true } )
+		).toBeVisible();
+		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
 		const modal = fsbUtils.getGlobalSettingModal();
 		// Change table width.
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '90' );
@@ -24,7 +34,10 @@ test.describe( 'Global Setting', () => {
 			{ color: '222222', label: 'Striped style background color ( even rows )' },
 		];
 		for ( const { color, label } of tableColors ) {
-			await fsbUtils.pickColor( modal.getByRole( 'button', { name: label, exact: true } ), color );
+			await modal.getByRole( 'button', { name: label, exact: true } ).click();
+			await pageUtils.pressKeys( 'Enter' );
+			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
+			await pageUtils.pressKeys( 'Escape', { times: 2 } );
 		}
 		// Apply cell styles.
 		await page.getByRole( 'tab', { name: 'Cell styles' } ).click();
@@ -37,7 +50,10 @@ test.describe( 'Global Setting', () => {
 			{ color: '777777', label: 'Cell border color' },
 		];
 		for ( const { color, label } of cellColors ) {
-			await fsbUtils.pickColor( modal.getByRole( 'button', { name: label, exact: true } ), color );
+			await modal.getByRole( 'button', { name: label, exact: true } ).click();
+			await pageUtils.pressKeys( 'Enter' );
+			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
+			await pageUtils.pressKeys( 'Escape', { times: 2 } );
 		}
 		// Change cell padding.
 		await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
@@ -53,7 +69,11 @@ test.describe( 'Global Setting', () => {
 		await page.getByRole( 'button', { name: 'Align center' } ).click();
 		await page.getByRole( 'button', { name: 'Align bottom' } ).click();
 		// Save settings.
-		await fsbUtils.saveGlobalSetting();
+		await page.getByRole( 'button', { name: 'Save settings' } ).click();
+		await expect(
+			fsbUtils.getGlobalSettingModal().getByText( 'Global setting saved.', { exact: true } )
+		).toBeVisible();
+		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
 
 		const selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
 		const savedRules = [
@@ -71,7 +91,12 @@ test.describe( 'Global Setting', () => {
 		}
 
 		// Restore settings.
-		await fsbUtils.restoreGlobalSetting();
+		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
+		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
+		await expect(
+			fsbUtils.getGlobalSettingModal().getByText( 'Global setting restored.', { exact: true } )
+		).toBeVisible();
+		await fsbUtils.getGlobalSettingModal().getByRole( 'button', { name: 'Dismiss' } ).click();
 
 		const defaultRules = [
 			`${ selector }>table{width:100%;max-width:100%;border-collapse:collapse;}`,

@@ -4,26 +4,30 @@
 import type { Page } from '@playwright/test';
 
 /**
+ * WordPress dependencies
+ */
+import type { PageUtils } from '@wordpress/e2e-test-utils-playwright';
+
+/**
  * Internal dependencies
  */
 import { test, expect } from '../util';
-import type FlexibleTableBlockUtils from '../util';
 
-async function applyCellStyles( page: Page, fsbUtils: FlexibleTableBlockUtils ) {
+async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	// Font Size, Line Hiehgt, Width styles.
 	await page.getByRole( 'spinbutton', { name: 'Cell font size' } ).fill( '20' );
 	await page.getByRole( 'spinbutton', { name: 'Cell line height' } ).fill( '2' );
 	await page.getByRole( 'spinbutton', { name: 'Cell width' } ).fill( '100' );
 
 	// Text Color, Background Color styles.
-	await fsbUtils.pickColor(
-		page.getByRole( 'button', { name: 'Cell text color', exact: true } ),
-		'111111'
-	);
-	await fsbUtils.pickColor(
-		page.getByRole( 'button', { name: 'Cell background color', exact: true } ),
-		'333333'
-	);
+	await page.getByRole( 'button', { name: 'Cell text color', exact: true } ).click();
+	await pageUtils.pressKeys( 'Enter' );
+	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '111111' );
+	await pageUtils.pressKeys( 'Escape', { times: 2 } );
+	await page.getByRole( 'button', { name: 'Cell background color', exact: true } ).click();
+	await pageUtils.pressKeys( 'Enter' );
+	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '333333' );
+	await pageUtils.pressKeys( 'Escape', { times: 2 } );
 
 	// Padding, Border Radius, Border Width styles.
 	const styles = [
@@ -82,12 +86,13 @@ async function applyCellStyles( page: Page, fsbUtils: FlexibleTableBlockUtils ) 
 		{ color: '444444', label: 'Left' },
 	];
 	for ( const { color, label } of colors ) {
-		await fsbUtils.pickColor(
-			page
-				.getByRole( 'group', { name: 'Cell border color' } )
-				.getByRole( 'button', { name: label } ),
-			color
-		);
+		await page
+			.getByRole( 'group', { name: 'Cell border color' } )
+			.getByRole( 'button', { name: label } )
+			.click();
+		await pageUtils.pressKeys( 'Enter' );
+		await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
+		await pageUtils.pressKeys( 'Escape', { times: 2 } );
 	}
 	// Cell Alignment styles.
 	await page.getByRole( 'button', { name: 'Align center' } ).click();
@@ -108,7 +113,7 @@ test.describe( 'Styles', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'table styles should be applied', async ( { editor, page, fsbUtils } ) => {
+	test( 'table styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
 		await page
@@ -190,12 +195,13 @@ test.describe( 'Styles', () => {
 			{ color: '444444', label: 'Left' },
 		];
 		for ( const { color, label } of colors ) {
-			await fsbUtils.pickColor(
-				page
-					.getByRole( 'group', { name: 'Table border color' } )
-					.getByRole( 'button', { name: label } ),
-				color
-			);
+			await page
+				.getByRole( 'group', { name: 'Table border color' } )
+				.getByRole( 'button', { name: label } )
+				.click();
+			await pageUtils.pressKeys( 'Enter' );
+			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
+			await pageUtils.pressKeys( 'Escape', { times: 2 } );
 		}
 
 		// Border Spacing styles.
@@ -206,7 +212,7 @@ test.describe( 'Styles', () => {
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'cell styles should be applied', async ( { editor, page, fsbUtils } ) => {
+	test( 'cell styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 		await editor.openDocumentSettingsSidebar();
@@ -215,11 +221,16 @@ test.describe( 'Styles', () => {
 			.getByRole( 'tab', { name: 'Settings' } )
 			.click();
 		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
-		await applyCellStyles( page, fsbUtils );
+		await applyCellStyles( page, pageUtils );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
-	test( 'cell styles should be applied to multiple cells', async ( { editor, page, fsbUtils } ) => {
+	test( 'cell styles should be applied to multiple cells', async ( {
+		editor,
+		page,
+		pageUtils,
+		fsbUtils,
+	} ) => {
 		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
 		await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
 		await editor.openDocumentSettingsSidebar();
@@ -228,7 +239,7 @@ test.describe( 'Styles', () => {
 			.getByRole( 'tab', { name: 'Settings' } )
 			.click();
 		await page.getByRole( 'button', { name: 'Multi cells settings' } ).click();
-		await applyCellStyles( page, fsbUtils );
+		await applyCellStyles( page, pageUtils );
 		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
 	} );
 
