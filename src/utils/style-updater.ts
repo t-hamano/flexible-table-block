@@ -246,7 +246,6 @@ export function updateBorderSpacing(
 		return newStyles;
 	}
 
-	// If only one direction is set, fall back to the initial value (0) for the other direction.
 	if ( ! horizontal || ! vertical ) {
 		return {
 			...newStyles,
