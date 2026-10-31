@@ -194,6 +194,7 @@ test.describe( 'Flexible table', () => {
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
 			await editor.canvas.getByRole( 'textbox', { name: 'Header cell text' } ).nth( 0 ).click();
+			await page.keyboard.up( 'Shift' );
 
 			await expect(
 				page.getByRole( 'button', {
@@ -211,6 +212,7 @@ test.describe( 'Flexible table', () => {
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Control' );
 			await editor.canvas.getByRole( 'textbox', { name: 'Header cell text' } ).nth( 0 ).click();
+			await page.keyboard.up( 'Control' );
 			await expect(
 				page.getByRole( 'button', {
 					name: 'Dismiss this notice',

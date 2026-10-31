@@ -18,6 +18,7 @@ test.describe( 'Transform from core table block', () => {
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
 			.fill( 'Core Table Block' );
+		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
