@@ -232,6 +232,7 @@ test.describe( 'Global Setting', () => {
 			test( 'should move focus out of the table with the tab key when disabled', async ( {
 				admin,
 				editor,
+				page,
 				pageUtils,
 				fsbUtils,
 			} ) => {
@@ -241,7 +242,8 @@ test.describe( 'Global Setting', () => {
 				await cells.nth( 0 ).click();
 				await pageUtils.pressKeys( 'Tab' );
 				// The block editor moves focus to the first tabbable element after the canvas.
-				await expect( cells.nth( 0 ) ).not.toBeFocused();
+				// Firefox keeps the active element inside the canvas iframe, so check the iframe itself.
+				await expect( page.locator( 'iframe[name="editor-canvas"]' ) ).not.toBeFocused();
 				await expect( cells.nth( 1 ) ).not.toBeFocused();
 			} );
 
