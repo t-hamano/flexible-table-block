@@ -61,15 +61,50 @@ const deepFreeze = < T >( object: T ): T => {
 // | body-1 | body-1 | body-1 |
 // | body-2 | body-2 | body-2 |
 // | foot   | foot   | foot   |
-const createVTable = (): VTable => ( {
-	head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
-	body: [
-		getRow( 3, 'body', 0, 'td', 'body-0' ),
-		getRow( 3, 'body', 1, 'td', 'body-1' ),
-		getRow( 3, 'body', 2, 'td', 'body-2' ),
-	],
-	foot: [ getRow( 3, 'foot', 0, 'td', 'foot' ) ],
-} );
+const createVTable = () =>
+	toVirtualTable( {
+		head: [
+			{
+				cells: [
+					{ content: 'head', tag: 'th' },
+					{ content: 'head', tag: 'th' },
+					{ content: 'head', tag: 'th' },
+				],
+			},
+		],
+		body: [
+			{
+				cells: [
+					{ content: 'body-0', tag: 'td' },
+					{ content: 'body-0', tag: 'td' },
+					{ content: 'body-0', tag: 'td' },
+				],
+			},
+			{
+				cells: [
+					{ content: 'body-1', tag: 'td' },
+					{ content: 'body-1', tag: 'td' },
+					{ content: 'body-1', tag: 'td' },
+				],
+			},
+			{
+				cells: [
+					{ content: 'body-2', tag: 'td' },
+					{ content: 'body-2', tag: 'td' },
+					{ content: 'body-2', tag: 'td' },
+				],
+			},
+		],
+		foot: [
+			{
+				cells: [
+					{ content: 'foot', tag: 'td' },
+					{ content: 'foot', tag: 'td' },
+					{ content: 'foot', tag: 'td' },
+				],
+			},
+		],
+	} );
 
 // Merged cells repeat the same letter.
 // | A | A | B |
@@ -136,15 +171,57 @@ describe( 'table-state', () => {
 			// | body-1 | body-1 | body-1 |
 			// | body-2 | body-2 | body-2 |
 			// | foot   | foot   | foot   |
-			expect( insertRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
-				head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
-				body: [
-					getRow( 3, 'body', 0, 'td', 'body-0' ),
-					getRow( 3, 'body', 1, 'td', '' ),
-					getRow( 3, 'body', 2, 'td', 'body-1' ),
-					getRow( 3, 'body', 3, 'td', 'body-2' ),
+			expect(
+				toTableAttributes( insertRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) )
+			).toEqual( {
+				head: [
+					{
+						cells: [
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+						],
+					},
 				],
-				foot: [ getRow( 3, 'foot', 0, 'td', 'foot' ) ],
+				body: [
+					{
+						cells: [
+							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: '', tag: 'td' },
+							{ content: '', tag: 'td' },
+							{ content: '', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+						],
+					},
+				],
 			} );
 			// | head   | head   | head   |
 			// | body-0 | body-0 | body-0 |
@@ -152,15 +229,57 @@ describe( 'table-state', () => {
 			// | body-2 | body-2 | body-2 |
 			// |        |        |        |
 			// | foot   | foot   | foot   |
-			expect( insertRow( createVTable(), { sectionName: 'body', rowIndex: 3 } ) ).toStrictEqual( {
-				head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
-				body: [
-					getRow( 3, 'body', 0, 'td', 'body-0' ),
-					getRow( 3, 'body', 1, 'td', 'body-1' ),
-					getRow( 3, 'body', 2, 'td', 'body-2' ),
-					getRow( 3, 'body', 3, 'td', '' ),
+			expect(
+				toTableAttributes( insertRow( createVTable(), { sectionName: 'body', rowIndex: 3 } ) )
+			).toEqual( {
+				head: [
+					{
+						cells: [
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+						],
+					},
 				],
-				foot: [ getRow( 3, 'foot', 0, 'td', 'foot' ) ],
+				body: [
+					{
+						cells: [
+							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: '', tag: 'td' },
+							{ content: '', tag: 'td' },
+							{ content: '', tag: 'td' },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+						],
+					},
+				],
 			} );
 		} );
 
@@ -231,19 +350,85 @@ describe( 'table-state', () => {
 			// | body-1 | body-1 | body-1 |
 			// | body-2 | body-2 | body-2 |
 			// | foot   | foot   | foot   |
-			expect( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 0 } ) ).toStrictEqual( {
-				head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
-				body: [ getRow( 3, 'body', 0, 'td', 'body-1' ), getRow( 3, 'body', 1, 'td', 'body-2' ) ],
-				foot: [ getRow( 3, 'foot', 0, 'td', 'foot' ) ],
+			expect(
+				toTableAttributes( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 0 } ) )
+			).toEqual( {
+				head: [
+					{
+						cells: [
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{
+						cells: [
+							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+						],
+					},
+				],
 			} );
 			// | head   | head   | head   |
 			// | body-0 | body-0 | body-0 |
 			// | body-2 | body-2 | body-2 |
 			// | foot   | foot   | foot   |
-			expect( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) ).toStrictEqual( {
-				head: [ getRow( 3, 'head', 0, 'th', 'head' ) ],
-				body: [ getRow( 3, 'body', 0, 'td', 'body-0' ), getRow( 3, 'body', 1, 'td', 'body-2' ) ],
-				foot: [ getRow( 3, 'foot', 0, 'td', 'foot' ) ],
+			expect(
+				toTableAttributes( deleteRow( createVTable(), { sectionName: 'body', rowIndex: 1 } ) )
+			).toEqual( {
+				head: [
+					{
+						cells: [
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{
+						cells: [
+							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+						],
+					},
+				],
 			} );
 		} );
 
@@ -302,28 +487,86 @@ describe( 'table-state', () => {
 			// | body-1 | body-1 |
 			// | body-2 | body-2 |
 			// | foot   | foot   |
-			expect( deleteColumn( createVTable(), { vColIndex: 0 } ) ).toStrictEqual( {
-				head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
-				body: [
-					getRow( 2, 'body', 0, 'td', 'body-0' ),
-					getRow( 2, 'body', 1, 'td', 'body-1' ),
-					getRow( 2, 'body', 2, 'td', 'body-2' ),
+			expect( toTableAttributes( deleteColumn( createVTable(), { vColIndex: 0 } ) ) ).toEqual( {
+				head: [
+					{
+						cells: [
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+						],
+					},
 				],
-				foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
+				body: [
+					{
+						cells: [
+							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+						],
+					},
+				],
 			} );
 			// | head   | head   |
 			// | body-0 | body-0 |
 			// | body-1 | body-1 |
 			// | body-2 | body-2 |
 			// | foot   | foot   |
-			expect( deleteColumn( createVTable(), { vColIndex: 2 } ) ).toStrictEqual( {
-				head: [ getRow( 2, 'head', 0, 'th', 'head' ) ],
-				body: [
-					getRow( 2, 'body', 0, 'td', 'body-0' ),
-					getRow( 2, 'body', 1, 'td', 'body-1' ),
-					getRow( 2, 'body', 2, 'td', 'body-2' ),
+			expect( toTableAttributes( deleteColumn( createVTable(), { vColIndex: 2 } ) ) ).toEqual( {
+				head: [
+					{
+						cells: [
+							{ content: 'head', tag: 'th' },
+							{ content: 'head', tag: 'th' },
+						],
+					},
 				],
-				foot: [ getRow( 2, 'foot', 0, 'td', 'foot' ) ],
+				body: [
+					{
+						cells: [
+							{ content: 'body-0', tag: 'td' },
+							{ content: 'body-0', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-1', tag: 'td' },
+							{ content: 'body-1', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'body-2', tag: 'td' },
+							{ content: 'body-2', tag: 'td' },
+						],
+					},
+				],
+				foot: [
+					{
+						cells: [
+							{ content: 'foot', tag: 'td' },
+							{ content: 'foot', tag: 'td' },
+						],
+					},
+				],
 			} );
 		} );
 
@@ -379,11 +622,13 @@ describe( 'table-state', () => {
 
 	describe( 'insertColumn', () => {
 		it( 'should give the correct virtual column index to the cell inserted after the last column', () => {
-			const vTable = deepFreeze( {
-				head: [],
-				body: [ getRow( 1, 'body', 0, 'td', 'body-0' ) ],
-				foot: [],
-			} );
+			const vTable = deepFreeze(
+				toVirtualTable( {
+					head: [],
+					body: [ { cells: [ { content: 'body-0', tag: 'td' } ] } ],
+					foot: [],
+				} )
+			);
 			const newVTable = insertColumn( vTable, { vColIndex: 1 } );
 			// | body-0 |        |
 			expect( newVTable.body[ 0 ].cells.map( ( cell ) => cell.vColIndex ) ).toStrictEqual( [
