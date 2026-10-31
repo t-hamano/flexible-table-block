@@ -17,6 +17,7 @@
 	&:not(.is-mixed) {
 		width: variables.$button-size-small;
 		min-width: 0;
+		height: variables.$button-size-small;
 		padding: 0;
 		border: 0;
 		border-radius: variables.$radius-round;
