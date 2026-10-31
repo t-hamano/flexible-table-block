@@ -34,7 +34,6 @@ import {
 	TEXT_ALIGNMENT_CONTROLS,
 	VERTICAL_ALIGNMENT_CONTROLS,
 	SIZE_UNITS,
-	STORE_NAME,
 	REST_API_ROUTE,
 } from '../../constants';
 import {
@@ -44,7 +43,7 @@ import {
 	PaddingControl,
 } from '../../controls';
 import { sanitizeUnitValue, cleanEmptyObject } from '../../utils/helper';
-import type { ApiResponse, StoreOptions } from '../../store';
+import { store as ftbStore, type ApiResponse, type StoreOptions } from '../../store';
 
 type Props = {
 	options: StoreOptions;
@@ -72,7 +71,7 @@ export default function SettingModal( {
 	const [ isWaiting, setIsWaiting ] = useState( false );
 	const [ currentOptions, setCurrentOptions ] = useState< StoreOptions >( options );
 
-	const { setOptions: setStoreOptions } = useDispatch( STORE_NAME );
+	const { setOptions: setStoreOptions } = useDispatch( ftbStore );
 	const registry = useRegistry();
 	const tableWidthUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
 

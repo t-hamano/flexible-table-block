@@ -11,23 +11,20 @@ import { help } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../../constants';
 import HelpModal from './help-modal';
 import SettingModal from './setting-modal';
-import type { StoreOptions } from '../../store';
+import { store as ftbStore } from '../../store';
 
 export default function GlobalSettings() {
 	const { options, canManageOptions, hasResolved } = useSelect( ( select ) => {
 		return {
-			// @ts-expect-error Selectors of a store accessed by name are not typed.
-			options: select( STORE_NAME ).getOptions() as StoreOptions,
+			options: select( ftbStore ).getOptions(),
 			canManageOptions: !! select( coreStore ).canUser( 'update', {
 				kind: 'root',
 				name: 'site',
 			} ),
 			hasResolved:
-				// @ts-expect-error Selectors of a store accessed by name are not typed.
-				select( STORE_NAME ).hasFinishedResolution( 'getOptions' ) &&
+				select( ftbStore ).hasFinishedResolution( 'getOptions' ) &&
 				select( coreStore ).hasFinishedResolution( 'canUser', [
 					'update',
 					{ kind: 'root', name: 'site' },
