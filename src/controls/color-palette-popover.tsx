@@ -20,7 +20,6 @@ type Props = {
 	onChange: ( value: Property.Color | undefined ) => void;
 	onClose: () => void;
 	colors?: Color[];
-	anchor?: Element | null;
 };
 
 export default function ColorPalettePopover( {
@@ -28,12 +27,11 @@ export default function ColorPalettePopover( {
 	onChange,
 	onClose,
 	colors: colorsProp = [],
-	anchor,
 }: Props ) {
 	const [ palette ]: ( Color[] | undefined )[] = useSettings( 'color.palette' );
 
 	return (
-		<Popover placement="left-start" shift offset={ 36 } onClose={ onClose } anchor={ anchor }>
+		<Popover placement="left-start" shift offset={ 36 } onClose={ onClose }>
 			<div style={ { padding: '16px' } }>
 				<ColorPalette
 					colors={ [ ...( palette ?? [] ), ...colorsProp ] }
