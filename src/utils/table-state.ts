@@ -1028,14 +1028,14 @@ export function toRectangledSelectedCells(
 		} )
 		.filter( ( cell: VCell ) => ! cell.isHidden );
 
-	// Expand the rectangle if there is a combined cell that passes through each edge.
+	// Expand the rectangle while a merged cell overlaps the range and sticks out of an edge.
+	// A cell overlaps the range on an axis when it starts before the range end and ends after the range start.
 	while ( ! isRectangled ) {
 		// Extend the virtual range to top if there are cells that overlap to top.
 		const topCells = VCells.filter( ( cell: VCell ) => {
 			return (
-				( ( cell.vColIndex + cell.colSpan - 1 >= minColIndex &&
-					cell.vColIndex + cell.colSpan - 1 <= maxColIndex ) ||
-					( cell.vColIndex >= minColIndex && cell.vColIndex <= maxColIndex ) ) &&
+				cell.vColIndex <= maxColIndex &&
+				cell.vColIndex + cell.colSpan - 1 >= minColIndex &&
 				cell.rowIndex < minRowIndex &&
 				cell.rowIndex + cell.rowSpan - 1 >= minRowIndex &&
 				cell.rowSpan > 1
@@ -1050,9 +1050,8 @@ export function toRectangledSelectedCells(
 		// Extend the virtual range to right if there are cells that overlap to right.
 		const rightCells = VCells.filter( ( cell: VCell ) => {
 			return (
-				( ( cell.rowIndex + cell.rowSpan - 1 >= minRowIndex &&
-					cell.rowIndex + cell.rowSpan - 1 <= maxRowIndex ) ||
-					( cell.rowIndex >= minRowIndex && cell.rowIndex <= maxRowIndex ) ) &&
+				cell.rowIndex <= maxRowIndex &&
+				cell.rowIndex + cell.rowSpan - 1 >= minRowIndex &&
 				cell.vColIndex <= maxColIndex &&
 				cell.vColIndex + cell.colSpan - 1 > maxColIndex &&
 				cell.colSpan > 1
@@ -1067,12 +1066,11 @@ export function toRectangledSelectedCells(
 		// Extend the virtual range to bottom if there are cells that overlap to bottom.
 		const bottomCells = VCells.filter( ( cell: VCell ) => {
 			return (
-				( ( cell.vColIndex + cell.colSpan - 1 >= minColIndex &&
-					cell.vColIndex + cell.colSpan - 1 <= maxColIndex ) ||
-					( cell.vColIndex >= minColIndex && cell.vColIndex <= maxColIndex ) ) &&
+				cell.vColIndex <= maxColIndex &&
+				cell.vColIndex + cell.colSpan - 1 >= minColIndex &&
 				cell.rowIndex <= maxRowIndex &&
 				cell.rowIndex + cell.rowSpan - 1 > maxRowIndex &&
-				cell.rowSpan - 1
+				cell.rowSpan > 1
 			);
 		} );
 
@@ -1084,16 +1082,15 @@ export function toRectangledSelectedCells(
 		// Extend the virtual range to left if there are cells that overlap to left.
 		const leftCells = VCells.filter( ( cell: VCell ) => {
 			return (
-				( ( cell.rowIndex + cell.rowSpan - 1 >= minRowIndex &&
-					cell.rowIndex + cell.rowSpan - 1 <= maxRowIndex ) ||
-					( cell.rowIndex >= minRowIndex && cell.rowIndex <= maxRowIndex ) ) &&
+				cell.rowIndex <= maxRowIndex &&
+				cell.rowIndex + cell.rowSpan - 1 >= minRowIndex &&
 				cell.vColIndex < minColIndex &&
 				cell.vColIndex + cell.colSpan - 1 >= minColIndex &&
 				cell.colSpan > 1
 			);
 		} );
 
-		const isLeftFixed = maxColIndex === colCount - 1 || ! leftCells.length;
+		const isLeftFixed = minColIndex === 0 || ! leftCells.length;
 		if ( ! isLeftFixed ) {
 			minColIndex--;
 		}
