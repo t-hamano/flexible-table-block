@@ -75,10 +75,11 @@ $row-column-inserter-dot-size: 6px;
 		}
 
 		&.show-control-button:not(.is-content-only) {
-			padding-left: variables.$grid-unit-50;
+			// Space for the row and column control buttons. There is no 40px padding token, so use the gap token.
+			padding-left: var(--wpds-dimension-gap-3xl);
 
 			&.is-caption-side-bottom {
-				padding-top: variables.$grid-unit-50;
+				padding-top: var(--wpds-dimension-gap-3xl);
 			}
 
 			&.is-caption-side-top > table {
