@@ -9,7 +9,7 @@ import type { Dispatch, SetStateAction, MouseEvent, KeyboardEvent } from 'react'
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect, useRef } from '@wordpress/element';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from '@wordpress/element';
 import {
 	// @ts-expect-error Not exported in the type definitions.
 	__experimentalUseColorProps as useColorProps,
@@ -388,22 +388,50 @@ export default function Table( {
 		setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
 	};
 
-	const handlers: CellHandlers = {
-		onClickCell: ( event, sectionName, rowIndex, vColIndex ) =>
-			onClickCell( event, vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
-		onFocusCell: ( sectionName, rowIndex, vColIndex ) =>
-			onFocusCell( vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
-		onChangeCellContent: ( content, sectionName, rowIndex, vColIndex ) =>
-			onChangeCellContent( content, vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
-		onSelectSectionCells,
-		onInsertRow,
-		onDeleteRow,
-		onSelectRow,
-		onInsertColumn: ( sectionName, rowIndex, vColIndex, offset ) =>
-			onInsertColumn( vTable[ sectionName ][ rowIndex ].cells[ vColIndex ], offset ),
-		onDeleteColumn,
-		onSelectColumn,
-	};
+	// Keep the latest handlers in a ref and pass stable functions to the cells,
+	// so that memoized cells are not re-rendered just because the handlers were recreated.
+	const handlersRef = useRef< CellHandlers | null >( null );
+	useLayoutEffect( () => {
+		handlersRef.current = {
+			onClickCell: ( event, sectionName, rowIndex, vColIndex ) =>
+				onClickCell( event, vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
+			onFocusCell: ( sectionName, rowIndex, vColIndex ) =>
+				onFocusCell( vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
+			onChangeCellContent: ( content, sectionName, rowIndex, vColIndex ) =>
+				onChangeCellContent( content, vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
+			onSelectSectionCells,
+			onInsertRow,
+			onDeleteRow,
+			onSelectRow,
+			onInsertColumn: ( sectionName, rowIndex, vColIndex, offset ) =>
+				onInsertColumn( vTable[ sectionName ][ rowIndex ].cells[ vColIndex ], offset ),
+			onDeleteColumn,
+			onSelectColumn,
+		};
+	} );
+	const handlers = useMemo( (): CellHandlers => {
+		const call =
+			< K extends keyof CellHandlers >( name: K ) =>
+			( ...args: Parameters< CellHandlers[ K ] > ) => {
+				// The ref is set in a layout effect, so a cell (e.g. RichText) may call a handler
+				// before it is ready. Ignore such calls, as `onChangeCellContent` already does.
+				const handler = handlersRef.current?.[ name ] as
+					( ( ...a: Parameters< CellHandlers[ K ] > ) => void ) | undefined;
+				handler?.( ...args );
+			};
+		return {
+			onClickCell: call( 'onClickCell' ),
+			onFocusCell: call( 'onFocusCell' ),
+			onChangeCellContent: call( 'onChangeCellContent' ),
+			onSelectSectionCells: call( 'onSelectSectionCells' ),
+			onInsertRow: call( 'onInsertRow' ),
+			onDeleteRow: call( 'onDeleteRow' ),
+			onSelectRow: call( 'onSelectRow' ),
+			onInsertColumn: call( 'onInsertColumn' ),
+			onDeleteColumn: call( 'onDeleteColumn' ),
+			onSelectColumn: call( 'onSelectColumn' ),
+		};
+	}, [] );
 
 	const showSectionLabel = !! (
 		isSelected &&
