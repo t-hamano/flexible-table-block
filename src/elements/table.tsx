@@ -35,7 +35,7 @@ import {
 	type VSelectedLine,
 	type VSelectedCells,
 } from '../utils/table-state';
-import TableCell, { type CellHandlers, type CellPosition } from './table-cell';
+import TableCell, { type CellHandlers } from './table-cell';
 
 import type { SectionName, BlockAttributes } from '../BlockAttributes';
 import type { StoreOptions } from '../store';
@@ -388,20 +388,19 @@ export default function Table( {
 		setSelectedCells( [ { ...cell, isFirstSelected: true } ] );
 	};
 
-	// Find the cell on the virtual table from its position.
-	const getCell = ( { sectionName, rowIndex, vColIndex }: CellPosition ): VCell =>
-		vTable[ sectionName ][ rowIndex ].cells[ vColIndex ];
-
 	const handlers: CellHandlers = {
-		onClickCell: ( event, position ) => onClickCell( event, getCell( position ) ),
-		onFocusCell: ( position ) => onFocusCell( getCell( position ) ),
-		onChangeCellContent: ( content, position ) =>
-			onChangeCellContent( content, getCell( position ) ),
+		onClickCell: ( event, { sectionName, rowIndex, vColIndex } ) =>
+			onClickCell( event, vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
+		onFocusCell: ( { sectionName, rowIndex, vColIndex } ) =>
+			onFocusCell( vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
+		onChangeCellContent: ( content, { sectionName, rowIndex, vColIndex } ) =>
+			onChangeCellContent( content, vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
 		onSelectSectionCells,
 		onInsertRow,
 		onDeleteRow,
 		onSelectRow,
-		onInsertColumn: ( position, offset ) => onInsertColumn( getCell( position ), offset ),
+		onInsertColumn: ( { sectionName, rowIndex, vColIndex }, offset ) =>
+			onInsertColumn( vTable[ sectionName ][ rowIndex ].cells[ vColIndex ], offset ),
 		onDeleteColumn,
 		onSelectColumn,
 	};
