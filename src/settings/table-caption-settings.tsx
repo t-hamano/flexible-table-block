@@ -22,7 +22,7 @@ import { Button, InputControl, Stack } from '@wordpress/ui';
 import { SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS, CAPTION_SIDE_CONTROLS } from '../constants';
 import { PaddingControl } from '../controls';
 import { convertToInline } from '../utils/style-converter';
-import { pickPadding, type DirectionProps } from '../utils/style-picker';
+import { pickFourSides, PADDING_STYLE, type DirectionProps } from '../utils/style-picker';
 import { updatePadding } from '../utils/style-updater';
 import { sanitizeUnitValue } from '../utils/helper';
 import type { CaptionSideValue, BlockAttributes } from '../BlockAttributes';
@@ -131,7 +131,7 @@ export default function TableCaptionSettings( {
 			<PaddingControl
 				className="ftb-table-caption-settings-padding"
 				label={ __( 'Caption padding', 'flexible-table-block' ) }
-				values={ pickPadding( captionStylesObj ) }
+				values={ pickFourSides( captionStylesObj, PADDING_STYLE ) }
 				onChange={ onChangePadding }
 			/>
 			<ToggleGroupControl

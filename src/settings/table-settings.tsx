@@ -39,11 +39,12 @@ import {
 } from '../utils/table-state';
 import { convertToInline } from '../utils/style-converter';
 import {
-	pickPadding,
-	pickBorderWidth,
-	pickBorderRadius,
-	pickBorderStyle,
-	pickBorderColor,
+	pickFourSides,
+	BORDER_COLOR_STYLE,
+	BORDER_RADIUS_STYLE,
+	BORDER_STYLE_STYLE,
+	BORDER_WIDTH_STYLE,
+	PADDING_STYLE,
 	pickBorderSpacing,
 	type CornerProps,
 	type DirectionProps,
@@ -385,14 +386,14 @@ export default function TableSettings( {
 					'Table padding is only enabled when "Cell Borders" is set to "Separate".',
 					'flexible-table-block'
 				) }
-				values={ pickPadding( tableStylesObj ) }
+				values={ pickFourSides( tableStylesObj, PADDING_STYLE ) }
 				onChange={ onChangePadding }
 			/>
 			<hr />
 			<BorderRadiusControl
 				className="ftb-table-settings-border-radius"
 				label={ __( 'Table border radius', 'flexible-table-block' ) }
-				values={ pickBorderRadius( tableStylesObj ) }
+				values={ pickFourSides( tableStylesObj, BORDER_RADIUS_STYLE ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
@@ -402,19 +403,19 @@ export default function TableSettings( {
 					'Table border width is only enabled when "Cell Borders" is set to "Separate".',
 					'flexible-table-block'
 				) }
-				values={ pickBorderWidth( tableStylesObj ) }
+				values={ pickFourSides( tableStylesObj, BORDER_WIDTH_STYLE ) }
 				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
 				className="ftb-table-settings-border-style"
 				label={ __( 'Table border style', 'flexible-table-block' ) }
-				values={ pickBorderStyle( tableStylesObj ) }
+				values={ pickFourSides( tableStylesObj, BORDER_STYLE_STYLE ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
 				className="ftb-table-settings-border-color"
 				label={ __( 'Table border color', 'flexible-table-block' ) }
-				values={ pickBorderColor( tableStylesObj ) }
+				values={ pickFourSides( tableStylesObj, BORDER_COLOR_STYLE ) }
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />

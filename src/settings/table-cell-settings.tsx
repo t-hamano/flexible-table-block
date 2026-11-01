@@ -44,11 +44,12 @@ import {
 } from '../utils/table-state';
 import { convertToObject } from '../utils/style-converter';
 import {
-	pickPadding,
-	pickBorderWidth,
-	pickBorderRadius,
-	pickBorderStyle,
-	pickBorderColor,
+	pickFourSides,
+	BORDER_COLOR_STYLE,
+	BORDER_RADIUS_STYLE,
+	BORDER_STYLE_STYLE,
+	BORDER_WIDTH_STYLE,
+	PADDING_STYLE,
 	type CornerProps,
 	type DirectionProps,
 } from '../utils/style-picker';
@@ -275,32 +276,32 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 			<PaddingControl
 				className="ftb-table-cell-settings-padding"
 				label={ __( 'Cell padding', 'flexible-table-block' ) }
-				values={ pickPadding( cellStylesObj ) }
+				values={ pickFourSides( cellStylesObj, PADDING_STYLE ) }
 				onChange={ onChangePadding }
 			/>
 			<hr />
 			<BorderRadiusControl
 				className="ftb-table-cell-settings-border-radius"
 				label={ __( 'Cell border radius', 'flexible-table-block' ) }
-				values={ pickBorderRadius( cellStylesObj ) }
+				values={ pickFourSides( cellStylesObj, BORDER_RADIUS_STYLE ) }
 				onChange={ onChangeBorderRadius }
 			/>
 			<BorderWidthControl
 				className="ftb-table-cell-settings-border-width"
 				label={ __( 'Cell border width', 'flexible-table-block' ) }
-				values={ pickBorderWidth( cellStylesObj ) }
+				values={ pickFourSides( cellStylesObj, BORDER_WIDTH_STYLE ) }
 				onChange={ onChangeBorderWidth }
 			/>
 			<BorderStyleControl
 				className="ftb-table-cell-settings-border-style"
 				label={ __( 'Cell border style', 'flexible-table-block' ) }
-				values={ pickBorderStyle( cellStylesObj ) }
+				values={ pickFourSides( cellStylesObj, BORDER_STYLE_STYLE ) }
 				onChange={ onChangeBorderStyle }
 			/>
 			<BorderColorControl
 				className="ftb-table-cell-settings-border-color"
 				label={ __( 'Cell border color', 'flexible-table-block' ) }
-				values={ pickBorderColor( cellStylesObj ) }
+				values={ pickFourSides( cellStylesObj, BORDER_COLOR_STYLE ) }
 				onChange={ onChangeBorderColor }
 			/>
 			<hr />
