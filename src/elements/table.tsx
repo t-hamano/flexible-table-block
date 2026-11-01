@@ -13,6 +13,7 @@ import { useState, useEffect, useLayoutEffect, useMemo, useRef } from '@wordpres
 import {
 	// @ts-expect-error Not exported in the type definitions.
 	__experimentalUseColorProps as useColorProps,
+	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { store as noticesStore } from '@wordpress/notices';
 import { useDispatch } from '@wordpress/data';
@@ -85,6 +86,10 @@ export default function Table( {
 
 	const tableRef = useRef( null );
 	const { createWarningNotice } = useDispatch( noticesStore );
+	const {
+		// @ts-expect-error Not exported in the type definitions.
+		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
+	} = useDispatch( blockEditorStore );
 
 	// Use a ref so the flag survives re-renders and the focus handler reads the latest value.
 	const isTabMoveRef = useRef( false );
@@ -94,7 +99,12 @@ export default function Table( {
 
 	const onInsertRow = ( sectionName: SectionName, rowIndex: number ) => {
 		const newVTable = insertRow( vTable, { sectionName, rowIndex } );
+
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -117,7 +127,12 @@ export default function Table( {
 		}
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
+
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -130,14 +145,24 @@ export default function Table( {
 				: vTargetCell.vColIndex + offset + vTargetCell.colSpan - 1;
 
 		const newVTable = insertColumn( vTable, { vColIndex } );
+
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onDeleteColumn = ( vColIndex: number ) => {
 		const newVTable = deleteColumn( vTable, { vColIndex } );
+
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
