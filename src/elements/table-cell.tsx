@@ -26,37 +26,59 @@ function Cell( props: any ) {
 	return <TagName { ...restProps } />;
 }
 
-// Position of a cell on the virtual table.
-export type CellPosition = Pick< VCell, 'sectionName' | 'rowIndex' | 'vColIndex' >;
-
 export type CellHandlers = {
-	onClickCell: ( event: MouseEvent, position: CellPosition ) => void;
-	onFocusCell: ( position: CellPosition ) => void;
-	onChangeCellContent: ( content: string, position: CellPosition ) => void;
+	onClickCell: (
+		event: MouseEvent,
+		sectionName: SectionName,
+		rowIndex: number,
+		vColIndex: number
+	) => void;
+	onFocusCell: ( sectionName: SectionName, rowIndex: number, vColIndex: number ) => void;
+	onChangeCellContent: (
+		content: string,
+		sectionName: SectionName,
+		rowIndex: number,
+		vColIndex: number
+	) => void;
 	onSelectSectionCells: ( sectionName: SectionName ) => void;
 	onInsertRow: ( sectionName: SectionName, rowIndex: number ) => void;
 	onDeleteRow: ( sectionName: SectionName, rowIndex: number ) => void;
 	onSelectRow: ( sectionName: SectionName, rowIndex: number ) => void;
-	onInsertColumn: ( position: CellPosition, offset: number ) => void;
+	onInsertColumn: (
+		sectionName: SectionName,
+		rowIndex: number,
+		vColIndex: number,
+		offset: number
+	) => void;
 	onDeleteColumn: ( vColIndex: number ) => void;
 	onSelectColumn: ( vColIndex: number ) => void;
 };
 
 type TableCellProps = Pick<
 	VCell,
-	'content' | 'tag' | 'className' | 'id' | 'headers' | 'scope' | 'styles' | 'rowSpan' | 'colSpan'
-> &
-	CellPosition & {
-		sectionIndex: number;
-		isCellSelected: boolean;
-		isCurrentRowSelected: boolean;
-		isCurrentColumnSelected: boolean;
-		hasNextSection: boolean;
-		showSectionLabel: boolean;
-		showControlButtons: boolean;
-		controlTabIndex: number;
-		handlers: CellHandlers;
-	};
+	| 'content'
+	| 'tag'
+	| 'className'
+	| 'id'
+	| 'headers'
+	| 'scope'
+	| 'styles'
+	| 'rowSpan'
+	| 'colSpan'
+	| 'sectionName'
+	| 'rowIndex'
+	| 'vColIndex'
+> & {
+	sectionIndex: number;
+	isCellSelected: boolean;
+	isCurrentRowSelected: boolean;
+	isCurrentColumnSelected: boolean;
+	hasNextSection: boolean;
+	showSectionLabel: boolean;
+	showControlButtons: boolean;
+	controlTabIndex: number;
+	handlers: CellHandlers;
+};
 
 export default function TableCell( {
 	content,
@@ -81,8 +103,6 @@ export default function TableCell( {
 	controlTabIndex,
 	handlers,
 }: TableCellProps ) {
-	const position: CellPosition = { sectionName, rowIndex, vColIndex };
-
 	return (
 		<Cell
 			name={ tag }
@@ -93,7 +113,9 @@ export default function TableCell( {
 			id={ id }
 			headers={ headers }
 			scope={ scope }
-			onClick={ ( event: MouseEvent ) => handlers.onClickCell( event, position ) }
+			onClick={ ( event: MouseEvent ) =>
+				handlers.onClickCell( event, sectionName, rowIndex, vColIndex )
+			}
 		>
 			{ showSectionLabel && rowIndex === 0 && vColIndex === 0 && (
 				<Button
@@ -166,7 +188,7 @@ export default function TableCell( {
 							tabIndex={ controlTabIndex }
 							icon={ plus }
 							onClick={ ( event: MouseEvent ) => {
-								handlers.onInsertColumn( position, 0 );
+								handlers.onInsertColumn( sectionName, rowIndex, vColIndex, 0 );
 								event.stopPropagation();
 							} }
 						/>
@@ -224,8 +246,10 @@ export default function TableCell( {
 			<RichText
 				key={ vColIndex }
 				value={ content }
-				onChange={ ( value ) => handlers.onChangeCellContent( value, position ) }
-				onFocus={ () => handlers.onFocusCell( position ) }
+				onChange={ ( value ) =>
+					handlers.onChangeCellContent( value, sectionName, rowIndex, vColIndex )
+				}
+				onFocus={ () => handlers.onFocusCell( sectionName, rowIndex, vColIndex ) }
 				aria-label={ CELL_ARIA_LABEL[ sectionName as SectionName ] }
 			/>
 			{ showControlButtons && sectionIndex === 0 && rowIndex === 0 && (
@@ -236,7 +260,7 @@ export default function TableCell( {
 					tabIndex={ controlTabIndex }
 					icon={ plus }
 					onClick={ ( event: MouseEvent ) => {
-						handlers.onInsertColumn( position, 1 );
+						handlers.onInsertColumn( sectionName, rowIndex, vColIndex, 1 );
 						event.stopPropagation();
 					} }
 				/>

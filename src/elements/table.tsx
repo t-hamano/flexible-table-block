@@ -389,17 +389,17 @@ export default function Table( {
 	};
 
 	const handlers: CellHandlers = {
-		onClickCell: ( event, { sectionName, rowIndex, vColIndex } ) =>
+		onClickCell: ( event, sectionName, rowIndex, vColIndex ) =>
 			onClickCell( event, vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
-		onFocusCell: ( { sectionName, rowIndex, vColIndex } ) =>
+		onFocusCell: ( sectionName, rowIndex, vColIndex ) =>
 			onFocusCell( vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
-		onChangeCellContent: ( content, { sectionName, rowIndex, vColIndex } ) =>
+		onChangeCellContent: ( content, sectionName, rowIndex, vColIndex ) =>
 			onChangeCellContent( content, vTable[ sectionName ][ rowIndex ].cells[ vColIndex ] ),
 		onSelectSectionCells,
 		onInsertRow,
 		onDeleteRow,
 		onSelectRow,
-		onInsertColumn: ( { sectionName, rowIndex, vColIndex }, offset ) =>
+		onInsertColumn: ( sectionName, rowIndex, vColIndex, offset ) =>
 			onInsertColumn( vTable[ sectionName ][ rowIndex ].cells[ vColIndex ], offset ),
 		onDeleteColumn,
 		onSelectColumn,
