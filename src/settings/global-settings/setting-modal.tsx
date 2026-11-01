@@ -208,7 +208,8 @@ export default function SettingModal( {
 				 * assistive technology and treated as outside clicks.
 				 */ }
 				<SlotFillProvider>
-					<Dialog.Header className="ftb-global-setting-modal__header">
+					{ /* Keep the header height constant regardless of the content length. */ }
+					<Dialog.Header style={ { flexShrink: 0 } }>
 						<Dialog.Title>
 							{ __( 'Flexible Table Block Global setting', 'flexible-table-block' ) }
 						</Dialog.Title>
