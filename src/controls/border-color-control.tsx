@@ -62,6 +62,7 @@ export default function BorderColorControl( {
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
 	const [ pickerIndex, setPickerIndex ] = useState< number | undefined >( undefined );
+	const [ popoverAnchor, setPopoverAnchor ] = useState< HTMLFieldSetElement | null >( null );
 
 	const linkedLabel = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
@@ -102,7 +103,10 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<Fieldset.Root className={ clsx( 'ftb-border-color-control', className ) }>
+		<Fieldset.Root
+			ref={ setPopoverAnchor }
+			className={ clsx( 'ftb-border-color-control', className ) }
+		>
 			<Fieldset.Legend>{ label }</Fieldset.Legend>
 			<Stack align="flex-start" justify="space-between" gap="sm">
 				{ isLinked ? (
@@ -119,9 +123,11 @@ export default function BorderColorControl( {
 						/>
 						{ isPickerOpen && pickerIndex === undefined && (
 							<ColorPalettePopover
+								label={ label }
 								value={ allInputValue }
 								onChange={ handleOnChangeAll }
 								onClose={ handleOnPickerClose }
+								anchor={ popoverAnchor }
 							/>
 						) }
 					</Stack>
@@ -140,9 +146,11 @@ export default function BorderColorControl( {
 								/>
 								{ isPickerOpen && pickerIndex === index && (
 									<ColorPalettePopover
+										label={ label }
 										value={ values[ item.value ] }
 										onChange={ ( value ) => handleOnChange( value, item.value ) }
 										onClose={ handleOnPickerClose }
+										anchor={ popoverAnchor }
 									/>
 								) }
 							</Stack>
