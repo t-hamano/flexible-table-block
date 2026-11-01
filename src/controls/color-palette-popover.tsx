@@ -54,11 +54,13 @@ export default function ColorPalettePopover( {
 				}
 			>
 				<VisuallyHidden render={ <Popover.Title /> }>{ label }</VisuallyHidden>
-				<ColorPalette
-					colors={ [ ...( palette ?? [] ), ...colorsProp ] }
-					value={ value || '' }
-					onChange={ onChange }
-				/>
+				<div className="ftb-color-palette-popover__content">
+					<ColorPalette
+						colors={ [ ...( palette ?? [] ), ...colorsProp ] }
+						value={ value || '' }
+						onChange={ onChange }
+					/>
+				</div>
 			</Popover.Popup>
 		</Popover.Root>
 	);

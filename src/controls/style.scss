@@ -80,6 +80,12 @@
 	gap: var(--wpds-dimension-gap-sm);
 }
 
+// Match the width of the color popover in block supports,
+// which fits six swatches (28px) and five gaps (12px) per row.
+.ftb-color-palette-popover__content {
+	width: 228px;
+}
+
 // Keep the spacing that `BaseControl` had in the block inspector.
 .ftb-border-color-control,
 .ftb-border-style-control,
