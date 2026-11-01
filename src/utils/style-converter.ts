@@ -133,12 +133,18 @@ export function convertToObject( inlineStyles: string | undefined ): Properties 
  * @return Inline CSS styles
  */
 export function convertToInline( stylesObj: Properties ): string {
-	return Object.entries( stylesObj )
-		.filter(
-			( [ , value ] ) =>
-				( typeof value === 'string' && value !== '' ) ||
-				( typeof value === 'number' && Number.isFinite( value ) )
-		)
-		.map( ( [ key, value ] ) => `${ toCssProperty( key ) }:${ value };` )
-		.join( '' );
+	const lines = Object.keys( stylesObj ).reduce< string[] >( ( result, key ) => {
+		const property = toCssProperty( key );
+		const value = stylesObj[ key as keyof Properties ];
+
+		if (
+			( typeof value === 'string' && value !== '' ) ||
+			( typeof value === 'number' && Number.isFinite( value ) )
+		) {
+			result.push( `${ property }:${ value };` );
+		}
+		return result;
+	}, [] );
+
+	return lines.join( '' );
 }
