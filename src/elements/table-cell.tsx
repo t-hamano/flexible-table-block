@@ -8,6 +8,7 @@ import type { MouseEvent } from 'react';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { memo } from '@wordpress/element';
 import { RichText } from '@wordpress/block-editor';
 import { Button, IconButton } from '@wordpress/ui';
 import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
@@ -80,7 +81,7 @@ type TableCellProps = Pick<
 	handlers: CellHandlers;
 };
 
-export default function TableCell( {
+function TableCell( {
 	content,
 	tag,
 	className,
@@ -268,3 +269,6 @@ export default function TableCell( {
 		</Cell>
 	);
 }
+
+// Skip re-rendering cells whose props have not changed, e.g. other cells while typing in a cell.
+export default memo( TableCell );
