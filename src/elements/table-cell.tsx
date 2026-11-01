@@ -171,7 +171,6 @@ function TableCell( {
 							/>
 							{ isCurrentRowSelected && (
 								<TableRemovePopover
-									className="ftb-row-remover"
 									label={ __( 'Delete row', 'flexible-table-block' ) }
 									anchor={ rowSelector }
 									side="left"
@@ -215,7 +214,6 @@ function TableCell( {
 							/>
 							{ isCurrentColumnSelected && (
 								<TableRemovePopover
-									className="ftb-column-remover"
 									label={ __( 'Delete column', 'flexible-table-block' ) }
 									anchor={ columnSelector }
 									side="top"

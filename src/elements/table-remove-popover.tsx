@@ -12,7 +12,6 @@ import { focus } from '@wordpress/dom';
 import { trash } from '@wordpress/icons';
 
 type Props = {
-	className: string;
 	label: string;
 	anchor: HTMLElement | null;
 	side: 'top' | 'left';
@@ -37,7 +36,7 @@ function findNextTabbable( element: HTMLElement ) {
 
 // Render the remover in a popover so that it is not cut off by the edge of the editor canvas,
 // e.g. when the table is full width.
-export default function TableRemovePopover( { className, label, anchor, side, onClick }: Props ) {
+export default function TableRemovePopover( { label, anchor, side, onClick }: Props ) {
 	const buttonRef = useRef< HTMLButtonElement >( null );
 
 	// The popover is rendered outside the editor canvas, so it is not reachable in the tab order.
@@ -65,7 +64,7 @@ export default function TableRemovePopover( { className, label, anchor, side, on
 	return (
 		<Popover.Root open>
 			<Popover.Popup
-				className={ className }
+				className="ftb-remove-popover"
 				// Don't move focus when the popover opens, because selecting a row or column
 				// doesn't always mean that the user wants to delete it.
 				initialFocus={ false }

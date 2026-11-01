@@ -318,8 +318,7 @@ $row-column-inserter-dot-size: 6px;
 // The removers are rendered in a popover outside the editor canvas,
 // so these styles are not nested under `.editor-styles-wrapper`.
 // Reduce the popover padding to fit a single button.
-.ftb-row-remover,
-.ftb-column-remover {
+.ftb-remove-popover {
 
 	> div {
 		display: flex;
