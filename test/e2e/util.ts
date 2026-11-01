@@ -51,10 +51,11 @@ export default class FlexibleTableBlockUtils {
 		} );
 	}
 
-	async createCoreTableBlock( options: Pick< TableOptions, 'col' | 'row' > = {} ) {
+	async createCoreTableBlock( { col = 2, row = 2 }: Pick< TableOptions, 'col' | 'row' > = {} ) {
 		await this.editor.insertBlock( {
 			name: 'core/table',
-			attributes: createTableAttributes( options ),
+			// The core table block placeholder defaults to 2 x 2.
+			attributes: createTableAttributes( { col, row } ),
 		} );
 	}
 
