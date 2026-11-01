@@ -32,7 +32,7 @@ $footer-height: variables.$grid-unit-70; // 56px
 		width: 190px;
 		position: sticky;
 		top: 0;
-		background: colors.$white;
+		background: var(--wpds-color-background-surface-neutral-strong);
 		z-index: 1;
 
 		@media screen and (max-width: 782px) {
@@ -69,7 +69,7 @@ $footer-height: variables.$grid-unit-70; // 56px
 	height: $footer-height;
 	padding-right: variables.$grid-unit-30; // 24px
 	padding-left: variables.$grid-unit-30; // 24px
-	background: colors.$white;
+	background: var(--wpds-color-background-surface-neutral-strong);
 	z-index: 2;
 }
 

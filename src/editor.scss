@@ -124,14 +124,14 @@ $row-column-inserter-dot-size: 6px;
 			margin: 0;
 			font-family: variables.$font-family-mono;
 			font-size: inherit;
-			background: colors.$gray-100;
+			background: var(--wpds-color-background-surface-neutral-weak);
 		}
 	}
 
 	.ftb-placeholder__table-wrap {
 		width: 100%;
 		padding: variables.$grid-unit-20;
-		background-color: colors.$gray-100;
+		background-color: var(--wpds-color-background-surface-neutral-weak);
 		box-sizing: border-box;
 	}
 
@@ -155,7 +155,7 @@ $row-column-inserter-dot-size: 6px;
 
 		tbody td,
 		tfoot td {
-			background-color: colors.$white;
+			background-color: var(--wpds-color-background-surface-neutral-strong);
 			border: variables.$border-width colors.$gray-900 solid;
 		}
 
@@ -322,7 +322,7 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-row-remover,
 	.ftb-column-remover {
-		--wp-ui-button-background-color: #{colors.$white};
+		--wp-ui-button-background-color: var(--wpds-color-background-surface-neutral-strong);
 		--wp-ui-button-border-color: #{colors.$gray-900};
 		--wp-ui-button-border-color-active: #{colors.$gray-900};
 
