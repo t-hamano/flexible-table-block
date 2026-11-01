@@ -14,23 +14,28 @@ export function convertToObject( inlineStyles: string | undefined ): Properties 
 		return {};
 	}
 
-	return inlineStyles
-		.split( ';' )
-		.filter( ( style ) => style.split( ':' )[ 0 ] && style.split( ':' )[ 1 ] )
-		.map( ( style ) => [
-			style
-				.split( ':' )[ 0 ]
-				.trim()
-				.replace( /-./g, ( c ) => c.slice( 1 ).toUpperCase() ),
-			style.split( ':' )[ 1 ].trim(),
-		] )
-		.reduce(
-			( styleObj, style ) => ( {
-				...styleObj,
-				[ style[ 0 ] ]: style[ 1 ],
-			} ),
-			{}
-		);
+	return Object.fromEntries(
+		inlineStyles
+			.split( ';' )
+			.map( ( style ) => {
+				const separatorIndex = style.indexOf( ':' );
+				if ( separatorIndex === -1 ) {
+					return [ '', '' ];
+				}
+				return [
+					style.slice( 0, separatorIndex ).trim(),
+					style.slice( separatorIndex + 1 ).trim(),
+				];
+			} )
+			.filter( ( [ property, value ] ) => property && value )
+			.map( ( [ property, value ] ) => [
+				// Keep custom properties as is.
+				property.startsWith( '--' )
+					? property
+					: property.toLowerCase().replace( /-([a-z])/g, ( _, c: string ) => c.toUpperCase() ),
+				value,
+			] )
+	);
 }
 
 /**
@@ -41,10 +46,15 @@ export function convertToObject( inlineStyles: string | undefined ): Properties 
  */
 export function convertToInline( stylesObj: Properties ): string {
 	const lines = Object.keys( stylesObj ).reduce< string[] >( ( result, key ) => {
-		const property = key.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
+		const property = key.startsWith( '--' )
+			? key
+			: key.replace( /[A-Z]/g, ( c ) => `-${ c.toLowerCase() }` );
 		const value = stylesObj[ key as keyof Properties ];
 
-		if ( value !== undefined && ( typeof value === 'string' || value === 0 ) ) {
+		if (
+			( typeof value === 'string' && value !== '' ) ||
+			( typeof value === 'number' && Number.isFinite( value ) )
+		) {
 			result.push( `${ property }:${ value };` );
 		}
 		return result;

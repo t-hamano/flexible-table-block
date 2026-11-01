@@ -216,7 +216,8 @@ export default function SettingModal( {
 				 * assistive technology and treated as outside clicks.
 				 */ }
 				<SlotFillProvider>
-					<Dialog.Header>
+					{ /* Keep the header height constant regardless of the content length. */ }
+					<Dialog.Header style={ { flexShrink: 0 } }>
 						<Dialog.Title>
 							{ __( 'Flexible Table Block Global setting', 'flexible-table-block' ) }
 						</Dialog.Title>
