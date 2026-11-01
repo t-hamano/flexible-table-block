@@ -39,8 +39,6 @@ export default function ColorControl( {
 	className,
 }: Props ) {
 	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
-	// Pass the anchor explicitly so that the popover doesn't render a fallback anchor element,
-	// which would add an extra gap inside the field.
 	const [ popoverAnchor, setPopoverAnchor ] = useState< HTMLDivElement | null >( null );
 
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
@@ -62,6 +60,7 @@ export default function ColorControl( {
 			/>
 			{ isPickerOpen && (
 				<ColorPalettePopover
+					label={ label }
 					value={ value }
 					colors={ colorsProp }
 					onChange={ handleOnChange }
