@@ -8,8 +8,9 @@ test.describe( 'Flexible table', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'should create block', async ( { editor, fsbUtils } ) => {
-		await fsbUtils.createFlexibleTableBlock();
+	test( 'should create block', async ( { editor } ) => {
+		await editor.insertBlock( { name: 'flexible-table-block/table' } );
+		await editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:flexible-table-block/table -->
 <figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
@@ -17,8 +18,13 @@ test.describe( 'Flexible table', () => {
 		);
 	} );
 
-	test( 'should create block with option', async ( { editor, fsbUtils } ) => {
-		await fsbUtils.createFlexibleTableBlock( { row: 4, col: 4, header: true, footer: true } );
+	test( 'should create block with option', async ( { editor } ) => {
+		await editor.insertBlock( { name: 'flexible-table-block/table' } );
+		await editor.canvas.getByRole( 'switch', { name: 'Header section' } ).check();
+		await editor.canvas.getByRole( 'switch', { name: 'Footer section' } ).check();
+		await editor.canvas.getByRole( 'spinbutton', { name: 'Column count' } ).fill( '4' );
+		await editor.canvas.getByRole( 'spinbutton', { name: 'Row count' } ).fill( '4' );
+		await editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:flexible-table-block/table -->
 <figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td><td></td></tr></tfoot></table></figure>
