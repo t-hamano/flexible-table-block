@@ -104,7 +104,7 @@ class Settings {
 		}
 
 		// Convert cell padding of string values to array.
-		if ( is_string( $options['block_style']['cell_padding'] ) ) {
+		if ( isset( $options['block_style']['cell_padding'] ) && is_string( $options['block_style']['cell_padding'] ) ) {
 			$padding_value = $options['block_style']['cell_padding'];
 
 			$options['block_style']['cell_padding'] = array(
