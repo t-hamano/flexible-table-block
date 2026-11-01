@@ -71,6 +71,13 @@
 	padding: var(--wpds-dimension-padding-sm);
 }
 
+.ftb-global-setting-modal__preview-styles {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--wpds-dimension-gap-sm);
+	max-width: 600px;
+}
+
 .ftb-global-setting-modal__preview-content {
 	// Same as the preview viewport width, so that the preview is not scaled up.
 	max-width: 600px;
