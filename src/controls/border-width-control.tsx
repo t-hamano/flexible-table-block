@@ -43,7 +43,7 @@ export default function BorderWidthControl( {
 			help={ help }
 			values={ values }
 			onChange={ onChange }
-			className={ clsx( 'ftb-border-width-control', className ) }
+			className={ clsx( 'ftb-control', 'ftb-border-width-control', className ) }
 			items={ SIDE_CONTROLS }
 			layout="sides"
 			availableUnits={ BORDER_UNITS }

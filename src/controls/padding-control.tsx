@@ -41,7 +41,7 @@ export default function PaddingControl( {
 			help={ help }
 			values={ values }
 			onChange={ onChange }
-			className={ clsx( 'ftb-padding-control', className ) }
+			className={ clsx( 'ftb-control', 'ftb-padding-control', className ) }
 			items={ SIDE_CONTROLS }
 			layout="sides"
 			availableUnits={ PADDING_UNITS }

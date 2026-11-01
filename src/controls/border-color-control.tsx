@@ -102,7 +102,7 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<Fieldset.Root className={ clsx( 'ftb-border-color-control', className ) }>
+		<Fieldset.Root className={ clsx( 'ftb-control', 'ftb-border-color-control', className ) }>
 			<Fieldset.Legend>{ label }</Fieldset.Legend>
 			<Stack align="flex-start" justify="space-between" gap="sm">
 				{ isLinked ? (
