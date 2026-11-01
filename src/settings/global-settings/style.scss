@@ -1,25 +1,10 @@
-@use "~@wordpress/base-styles/variables" as variables;
-
-$footer-height: variables.$grid-unit-70; // 56px
-
 .ftb-global-setting-modal {
-
-	@media (min-width: 600px) {
-		height: calc(100% - variables.$grid-unit-80 * 2); // 100% - 160px
-	}
-
-	@media (min-width: 960px) {
-		height: 75%;
-	}
-
-	.components-modal__content {
-		margin-bottom: 100px;
-	}
+	// Keep the dialog height constant when switching tabs.
+	height: 75vh;
 }
 
 .ftb-global-setting-modal__tab-panel {
 	display: flex;
-	flex-wrap: wrap;
 	align-items: flex-start;
 	gap: var(--wpds-dimension-gap-xl);
 
@@ -28,6 +13,7 @@ $footer-height: variables.$grid-unit-70; // 56px
 	}
 
 	[role="tablist"] {
+		flex-shrink: 0;
 		width: 190px;
 		position: sticky;
 		top: 0;
@@ -60,33 +46,6 @@ $footer-height: variables.$grid-unit-70; // 56px
 	padding: var(--wpds-dimension-padding-sm);
 }
 
-.ftb-global-setting-modal__buttons {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: $footer-height;
-	padding-right: var(--wpds-dimension-padding-2xl);
-	padding-left: var(--wpds-dimension-padding-2xl);
-	background: var(--wpds-color-background-surface-neutral-strong);
-	z-index: 2;
-}
-
-.ftb-global-setting-modal__confirm-popover {
-	white-space: nowrap;
-}
-
 .ftb-global-setting-modal__notice {
-	position: absolute !important;
-	right: var(--wpds-dimension-padding-2xl);
-	bottom: $footer-height;
-	left: var(--wpds-dimension-padding-2xl);
-	z-index: 6;
-}
-
-.ftb-global-setting-modal__loading {
-	position: absolute;
-	inset: 0;
-	z-index: 5;
-	background: color-mix(in srgb, var(--wpds-color-foreground-content-neutral) 20%, transparent);
+	margin-inline: var(--wpds-dimension-padding-2xl);
 }
