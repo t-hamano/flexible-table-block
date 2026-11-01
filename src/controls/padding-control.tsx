@@ -14,7 +14,6 @@ import { __ } from '@wordpress/i18n';
  */
 import { PADDING_UNITS, SIDE_CONTROLS } from '../constants';
 import LinkedUnitControl from './linked-unit-control';
-import { SideIndicatorControl } from './indicator-control';
 
 type Props = {
 	label: string;
@@ -46,7 +45,6 @@ export default function PaddingControl( {
 			items={ SIDE_CONTROLS }
 			layout="sides"
 			availableUnits={ PADDING_UNITS }
-			indicator={ ( side ) => <SideIndicatorControl side={ side } /> }
 		/>
 	);
 }

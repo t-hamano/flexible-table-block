@@ -14,7 +14,6 @@ import { __ } from '@wordpress/i18n';
  */
 import { BORDER_UNITS, MAX_BORDER_WIDTH, SIDE_CONTROLS } from '../constants';
 import LinkedUnitControl from './linked-unit-control';
-import { SideIndicatorControl } from './indicator-control';
 
 type Props = {
 	label: string;
@@ -51,7 +50,7 @@ export default function BorderWidthControl( {
 			layout="sides"
 			availableUnits={ BORDER_UNITS }
 			maxValues={ MAX_BORDER_WIDTH }
-			indicator={ hasIndicator ? ( side ) => <SideIndicatorControl side={ side } /> : undefined }
+			hasIndicator={ hasIndicator }
 			allowUnlink={ allowSides }
 		/>
 	);

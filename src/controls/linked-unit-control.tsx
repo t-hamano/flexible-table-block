@@ -1,9 +1,4 @@
 /**
- * External dependencies
- */
-import type { ReactNode } from 'react';
-
-/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -19,6 +14,12 @@ import { Fieldset, IconButton, Stack } from '@wordpress/ui';
  * Internal dependencies
  */
 import { parseUnit, sanitizeUnitValue } from '../utils/helper';
+import {
+	CornerIndicatorControl,
+	DirectionIndicatorControl,
+	SideIndicatorControl,
+} from './indicator-control';
+import type { CornerValue, DirectionValue, SideValue } from '../BlockAttributes';
 
 type Props< K extends string > = {
 	label: string;
@@ -30,7 +31,7 @@ type Props< K extends string > = {
 	layout: 'sides' | 'corners' | 'directions';
 	availableUnits: string[];
 	maxValues?: Record< string, number >;
-	indicator?: ( item?: K ) => ReactNode;
+	hasIndicator?: boolean;
 	allowUnlink?: boolean;
 };
 
@@ -44,7 +45,7 @@ export default function LinkedUnitControl< K extends string >( {
 	layout,
 	availableUnits,
 	maxValues,
-	indicator,
+	hasIndicator = true,
 	allowUnlink = true,
 }: Props< K > ) {
 	const values = Object.fromEntries(
@@ -73,6 +74,19 @@ export default function LinkedUnitControl< K extends string >( {
 	const sanitize = ( inputValue: string | undefined ) => {
 		const [ , unit ] = parseUnit( inputValue ?? '' );
 		return sanitizeUnitValue( inputValue, { maxNum: maxValues?.[ unit ] } );
+	};
+
+	const renderIndicator = ( item?: K ) => {
+		if ( ! hasIndicator ) {
+			return null;
+		}
+		if ( layout === 'corners' ) {
+			return <CornerIndicatorControl corner={ item as CornerValue | undefined } />;
+		}
+		if ( layout === 'directions' ) {
+			return <DirectionIndicatorControl direction={ item as DirectionValue | undefined } />;
+		}
+		return <SideIndicatorControl side={ item as SideValue | undefined } />;
 	};
 
 	const toggleLinked = () => {
@@ -141,14 +155,14 @@ export default function LinkedUnitControl< K extends string >( {
 				<Stack align="flex-start" justify="space-between" gap="sm">
 					{ showAllInput ? (
 						<Stack align="center" gap="sm">
-							{ indicator?.() }
+							{ renderIndicator() }
 							{ allInput }
 						</Stack>
 					) : (
 						<Stack direction="column" gap="xs">
 							{ items.map( ( item ) => (
 								<Stack align="center" gap="sm" key={ item.value }>
-									{ indicator?.( item.value ) }
+									{ renderIndicator( item.value ) }
 									{ renderItemInput( item ) }
 								</Stack>
 							) ) }
@@ -168,7 +182,7 @@ export default function LinkedUnitControl< K extends string >( {
 			<Fieldset.Legend>{ label }</Fieldset.Legend>
 			<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
 				<Stack align="center" gap="sm">
-					{ indicator?.( focusedItem ) }
+					{ renderIndicator( focusedItem ) }
 					{ showAllInput && <div>{ allInput }</div> }
 				</Stack>
 				{ linkButton }

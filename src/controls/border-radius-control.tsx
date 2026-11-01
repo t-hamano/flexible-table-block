@@ -14,7 +14,6 @@ import { __ } from '@wordpress/i18n';
  */
 import { BORDER_UNITS, MAX_BORDER_RADIUS, CORNER_CONTROLS } from '../constants';
 import LinkedUnitControl from './linked-unit-control';
-import { CornerIndicatorControl } from './indicator-control';
 
 type Props = {
 	label: string;
@@ -47,7 +46,6 @@ export default function BorderRadiusControl( {
 			layout="corners"
 			availableUnits={ BORDER_UNITS }
 			maxValues={ MAX_BORDER_RADIUS }
-			indicator={ ( corner ) => <CornerIndicatorControl corner={ corner } /> }
 		/>
 	);
 }
