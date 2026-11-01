@@ -18,18 +18,11 @@ type TableOptions = {
 
 /**
  * Builds the same table attributes as the "Create Table" button in the placeholder.
- * @param root0
- * @param root0.col
- * @param root0.row
- * @param root0.header
- * @param root0.footer
+ *
+ * @param options Table size and sections.
  */
-function createTableAttributes( {
-	col = 3,
-	row = 3,
-	header = false,
-	footer = false,
-}: TableOptions ) {
+function createTableAttributes( options: TableOptions ) {
+	const { col = 3, row = 3, header = false, footer = false } = options;
 	const createRows = ( rowCount: number, tag: 'th' | 'td' ) =>
 		Array.from( { length: rowCount }, () => ( {
 			cells: Array.from( { length: col }, () => ( { content: '', tag } ) ),
