@@ -31,7 +31,6 @@ type Props< K extends string > = {
 	layout: 'sides' | 'corners' | 'directions';
 	availableUnits: string[];
 	maxValues?: Record< string, number >;
-	hasIndicator?: boolean;
 	allowUnlink?: boolean;
 };
 
@@ -45,7 +44,6 @@ export default function LinkedUnitControl< K extends string >( {
 	layout,
 	availableUnits,
 	maxValues,
-	hasIndicator = true,
 	allowUnlink = true,
 }: Props< K > ) {
 	const values = Object.fromEntries(
@@ -77,9 +75,6 @@ export default function LinkedUnitControl< K extends string >( {
 	};
 
 	const renderIndicator = ( item?: K ) => {
-		if ( ! hasIndicator ) {
-			return null;
-		}
 		if ( layout === 'corners' ) {
 			return <CornerIndicatorControl corner={ item as CornerValue | undefined } />;
 		}

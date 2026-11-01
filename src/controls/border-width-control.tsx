@@ -26,14 +26,12 @@ type Props = {
 		left?: Property.BorderLeftWidth;
 	};
 	allowSides?: boolean;
-	hasIndicator?: boolean;
 	className?: string;
 };
 
 export default function BorderWidthControl( {
 	label = __( 'Border width', 'flexible-table-block' ),
 	allowSides = true,
-	hasIndicator = true,
 	className,
 	help,
 	onChange,
@@ -50,7 +48,6 @@ export default function BorderWidthControl( {
 			layout="sides"
 			availableUnits={ BORDER_UNITS }
 			maxValues={ MAX_BORDER_WIDTH }
-			hasIndicator={ hasIndicator }
 			allowUnlink={ allowSides }
 		/>
 	);

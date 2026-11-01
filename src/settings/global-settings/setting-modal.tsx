@@ -365,7 +365,6 @@ export default function SettingModal( {
 									label={ __( 'Cell border width', 'flexible-table-block' ) }
 									values={ { top: currentOptions.block_style?.cell_border_width } }
 									allowSides={ false }
-									hasIndicator={ false }
 									onChange={ ( value ) =>
 										setBlockStyle( 'cell_border_width', sanitizeUnitValue( value.top ) )
 									}
