@@ -313,29 +313,12 @@ $row-column-inserter-dot-size: 6px;
 			margin: 0;
 		}
 	}
+}
 
-	.ftb-row-remover,
-	.ftb-column-remover {
-		--wp-ui-button-background-color: var(--wpds-color-background-interactive-neutral);
-		--wp-ui-button-border-color: var(--wpds-color-stroke-interactive-neutral);
-		--wp-ui-button-border-color-active: var(--wpds-color-stroke-interactive-neutral-active);
-
-		position: absolute;
-		z-index: 1;
-		border-radius: var(--wpds-border-radius-sm);
-	}
-
-	.ftb-row-remover {
-		top: 50%;
-		left: -56px;
-		// Shift back by half the compact button height to center the button.
-		margin-top: calc(var(--wpds-dimension-size-md) / 2 * -1);
-	}
-
-	.ftb-column-remover {
-		top: -56px;
-		left: 50%;
-		// Shift back by half the compact button height to center the button.
-		margin-left: calc(var(--wpds-dimension-size-md) / 2 * -1);
-	}
+// The removers are rendered in a popover outside the editor canvas,
+// so these styles are not nested under `.editor-styles-wrapper`.
+// Reduce the popover padding to fit a single button.
+.ftb-remove-popover > div {
+	display: flex;
+	padding: var(--wpds-dimension-padding-xs);
 }
