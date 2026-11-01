@@ -10,12 +10,12 @@ namespace Flexible_Table_Block;
 class Helper {
 
 	/**
-	 * Get default block style
+	 * Get block CSS from the block style option
 	 *
-	 * @param array|null $option Block style option. Defaults to the saved option.
+	 * @param mixed $option Block style option, saved or unsaved.
 	 * @return string
 	 */
-	public static function get_block_css( $option = null ) {
+	public static function get_block_css( $option ) {
 		// The doubled class increases specificity. The block editor scopes this CSS by itself.
 		$selector = '.' . FTB_BLOCK_CLASS . '.' . FTB_BLOCK_CLASS;
 
@@ -31,8 +31,8 @@ class Helper {
 			"{$selector} > table tr td" => '',
 		);
 
-		if ( null === $option ) {
-			$option = get_option( Settings::OPTION_PREFIX . 'block_style', Settings::OPTIONS['block_style']['default'] );
+		if ( ! is_array( $option ) ) {
+			return '';
 		}
 
 		// Genelate styles based on Global setting.

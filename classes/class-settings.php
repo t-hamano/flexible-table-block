@@ -88,6 +88,16 @@ class Settings {
 	);
 
 	/**
+	 * Get an option
+	 *
+	 * @param string $key Option key.
+	 * @return mixed
+	 */
+	public static function get_option( $key ) {
+		return get_option( self::OPTION_PREFIX . $key, self::OPTIONS[ $key ]['default'] );
+	}
+
+	/**
 	 * Get options
 	 *
 	 * @return array
@@ -96,7 +106,7 @@ class Settings {
 		$options = array();
 
 		foreach ( self::OPTIONS as $key => $value ) {
-			$options[ $key ] = get_option( self::OPTION_PREFIX . $key, self::OPTIONS[ $key ]['default'] );
+			$options[ $key ] = self::get_option( $key );
 
 			if ( 'boolean' === self::OPTIONS[ $key ]['type'] ) {
 				$options[ $key ] = (bool) $options[ $key ];
