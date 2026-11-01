@@ -113,7 +113,7 @@ $row-column-inserter-dot-size: 6px;
 	.ftb-placeholder {
 		// Reset typography support styles
 		font-style: normal;
-		font-weight: 400;
+		font-weight: var(--wpds-typography-font-weight-default);
 		line-height: initial;
 		text-transform: none;
 		letter-spacing: 0;
@@ -121,7 +121,7 @@ $row-column-inserter-dot-size: 6px;
 		code {
 			padding: calc(var(--wpds-dimension-padding-xs) / 2) var(--wpds-dimension-padding-xs);
 			margin: 0;
-			font-family: variables.$font-family-mono;
+			font-family: var(--wpds-typography-font-family-mono);
 			font-size: inherit;
 			background: var(--wpds-color-background-surface-neutral-weak);
 		}
@@ -166,7 +166,7 @@ $row-column-inserter-dot-size: 6px;
 
 			&::before {
 				display: block;
-				font-weight: 400;
+				font-weight: var(--wpds-typography-font-weight-default);
 				line-height: 0;
 				content: "...";
 			}
@@ -200,8 +200,8 @@ $row-column-inserter-dot-size: 6px;
 		z-index: 1;
 		min-height: 0;
 		padding: 0 var(--wpds-dimension-padding-xs);
-		font-size: variables.$font-size-x-small;
-		line-height: variables.$font-line-height-x-small;
+		font-size: var(--wpds-typography-font-size-xs);
+		line-height: var(--wpds-typography-line-height-xs);
 	}
 
 	.ftb-row-before-inserter {
