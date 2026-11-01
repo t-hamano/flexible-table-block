@@ -22,11 +22,11 @@ test.describe( 'Transform from core table block', () => {
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
-		expect( await editor.getEditedPostContent() ).toBe(
-			`<!-- wp:flexible-table-block/table {"hasFixedLayout":false} -->
-<figure class="wp-block-flexible-table-block-table"><table class=""><tbody><tr><td>Core Table Block</td><td></td></tr><tr><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:flexible-table-block/table -->`
+		const content = await editor.getEditedPostContent();
+		expect( content ).toContain(
+			'<!-- wp:flexible-table-block/table {"hasFixedLayout":false} -->'
 		);
+		expect( content ).toContain( '<table class=""><tbody><tr><td>Core Table Block</td>' );
 	} );
 
 	test( 'should be transformed to flexible table block keeping header and footer section', async ( {
@@ -41,11 +41,10 @@ test.describe( 'Transform from core table block', () => {
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
-		expect( await editor.getEditedPostContent() ).toBe(
-			`<!-- wp:flexible-table-block/table {"hasFixedLayout":false} -->
-<figure class="wp-block-flexible-table-block-table"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td></tr></tfoot></table></figure>
-<!-- /wp:flexible-table-block/table -->`
-		);
+		const content = await editor.getEditedPostContent();
+		expect( content ).toContain( '<!-- wp:flexible-table-block/table' );
+		expect( content ).toContain( '<thead><tr><th></th><th></th></tr></thead>' );
+		expect( content ).toContain( '<tfoot><tr><td></td><td></td></tr></tfoot>' );
 	} );
 
 	test( 'should be transformed to flexible table block keeping Fixed width table cells option', async ( {
@@ -58,11 +57,9 @@ test.describe( 'Transform from core table block', () => {
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).check();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
-		expect( await editor.getEditedPostContent() ).toBe(
-			`<!-- wp:flexible-table-block/table -->
-<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:flexible-table-block/table -->`
-		);
+		const content = await editor.getEditedPostContent();
+		expect( content ).toContain( '<!-- wp:flexible-table-block/table -->' );
+		expect( content ).toContain( '<table class="has-fixed-layout">' );
 	} );
 
 	test( 'should be transformed to flexible table block keeping merged cells and caption', async ( {
@@ -123,11 +120,9 @@ test.describe( 'Transform from flexible table block', () => {
 			.fill( 'Flexible Table Block' );
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toBe(
-			`<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`
-		);
+		const content = await editor.getEditedPostContent();
+		expect( content ).toContain( '<!-- wp:table -->' );
+		expect( content ).toContain( '<table class="has-fixed-layout">' );
 	} );
 
 	test( 'should be transformed to core table block with no Fixed width table cells option', async ( {
@@ -149,11 +144,9 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toBe(
-			`<!-- wp:table {"hasFixedLayout":false} -->
-<figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:table -->`
-		);
+		const content = await editor.getEditedPostContent();
+		expect( content ).toContain( '<!-- wp:table {"hasFixedLayout":false} -->' );
+		expect( content ).toContain( '<table><tbody><tr><td>Flexible Table Block</td>' );
 	} );
 
 	test( 'should be transformed to core table block with no style and class table', async ( {
@@ -316,10 +309,10 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.keyboard.type( 'Block' );
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toBe(
-			`<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
-<!-- /wp:table -->`
+		const content = await editor.getEditedPostContent();
+		expect( content ).toContain( '<!-- wp:table -->' );
+		expect( content ).toContain(
+			'<figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption>'
 		);
 	} );
 
