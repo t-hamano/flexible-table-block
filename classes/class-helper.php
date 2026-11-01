@@ -12,9 +12,10 @@ class Helper {
 	/**
 	 * Get default block style
 	 *
+	 * @param array|null $option Block style option. Defaults to the saved option.
 	 * @return string
 	 */
-	public static function get_block_css() {
+	public static function get_block_css( $option = null ) {
 		// The doubled class increases specificity. The block editor scopes this CSS by itself.
 		$selector = '.' . FTB_BLOCK_CLASS . '.' . FTB_BLOCK_CLASS;
 
@@ -30,7 +31,9 @@ class Helper {
 			"{$selector} > table tr td" => '',
 		);
 
-		$option = get_option( Settings::OPTION_PREFIX . 'block_style', Settings::OPTIONS['block_style']['default'] );
+		if ( null === $option ) {
+			$option = get_option( Settings::OPTION_PREFIX . 'block_style', Settings::OPTIONS['block_style']['default'] );
+		}
 
 		// Genelate styles based on Global setting.
 		foreach ( $option as $key => $value ) {

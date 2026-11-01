@@ -39,15 +39,7 @@ class Api {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'update_options' ),
-					'permission_callback' => function () {
-						$show_global_setting = get_option( Settings::OPTION_PREFIX . 'show_global_setting', Settings::OPTIONS['show_global_setting']['default'] );
-
-						if ( $show_global_setting ) {
-							return current_user_can( 'edit_posts' );
-						} else {
-							return current_user_can( 'manage_options' );
-						}
-					},
+					'permission_callback' => array( $this, 'can_update_options' ),
 				),
 				array(
 					'methods'             => 'DELETE',
@@ -58,6 +50,33 @@ class Api {
 				),
 			)
 		);
+
+		register_rest_route(
+			FTB_NAMESPACE . '/v1',
+			'/options/preview',
+			array(
+				array(
+					'methods'             => 'POST',
+					'callback'            => array( $this, 'preview_options' ),
+					'permission_callback' => array( $this, 'can_update_options' ),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Check if the current user can update options
+	 *
+	 * @return bool
+	 */
+	public function can_update_options() {
+		$show_global_setting = get_option( Settings::OPTION_PREFIX . 'show_global_setting', Settings::OPTIONS['show_global_setting']['default'] );
+
+		if ( $show_global_setting ) {
+			return current_user_can( 'edit_posts' );
+		}
+
+		return current_user_can( 'manage_options' );
 	}
 
 	/**
@@ -94,31 +113,7 @@ class Api {
 					continue;
 				}
 
-				$default = Settings::OPTIONS[ $key ]['default'];
-
-				// Keep only known keys; values are validated at output time.
-				$new_value = array();
-				foreach ( $value as $array_key => $array_value ) {
-					if ( ! array_key_exists( $array_key, $default ) ) {
-						continue;
-					}
-
-					if ( is_array( $array_value ) ) {
-						// Nested values such as cell_padding.
-						$sub_default = is_array( $default[ $array_key ] ) ? $default[ $array_key ] : array();
-						$sub_value   = array();
-						foreach ( $array_value as $sub_key => $sub_item ) {
-							if ( array_key_exists( $sub_key, $sub_default ) ) {
-								$sub_value[ $sub_key ] = $sub_item;
-							}
-						}
-						$new_value[ $array_key ] = $sub_value;
-					} else {
-						$new_value[ $array_key ] = $array_value;
-					}
-				}
-
-				$value = $new_value;
+				$value = self::filter_array_option( $key, $value );
 			}
 
 			if ( isset( Settings::OPTIONS[ $key ]['range'] ) ) {
@@ -137,6 +132,60 @@ class Api {
 				'block_css' => Helper::minify_css( Helper::get_block_css() ),
 			)
 		);
+	}
+
+	/**
+	 * Get the block CSS for unsaved options without saving them
+	 *
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function preview_options( $request ) {
+		$params      = $request->get_json_params();
+		$block_style = is_array( $params ) && isset( $params['block_style'] ) && is_array( $params['block_style'] )
+			? self::filter_array_option( 'block_style', $params['block_style'] )
+			: array();
+
+		return rest_ensure_response(
+			array(
+				'block_css' => Helper::minify_css( Helper::get_block_css( $block_style ) ),
+			)
+		);
+	}
+
+	/**
+	 * Keep only known keys of an array option
+	 *
+	 * Values are validated at output time.
+	 *
+	 * @param string $key   Option key.
+	 * @param array  $value Option value.
+	 * @return array
+	 */
+	private static function filter_array_option( $key, $value ) {
+		$default   = Settings::OPTIONS[ $key ]['default'];
+		$new_value = array();
+
+		foreach ( $value as $array_key => $array_value ) {
+			if ( ! array_key_exists( $array_key, $default ) ) {
+				continue;
+			}
+
+			if ( is_array( $array_value ) ) {
+				// Nested values such as cell_padding.
+				$sub_default = is_array( $default[ $array_key ] ) ? $default[ $array_key ] : array();
+				$sub_value   = array();
+				foreach ( $array_value as $sub_key => $sub_item ) {
+					if ( array_key_exists( $sub_key, $sub_default ) ) {
+						$sub_value[ $sub_key ] = $sub_item;
+					}
+				}
+				$new_value[ $array_key ] = $sub_value;
+			} else {
+				$new_value[ $array_key ] = $array_value;
+			}
+		}
+
+		return $new_value;
 	}
 
 	/**

@@ -353,4 +353,16 @@ class Test_Helper extends WP_UnitTestCase {
 
 		$this->assertSame( '', Helper::get_block_css() );
 	}
+
+	/**
+	 * Tests that the given option is used instead of the saved option.
+	 */
+	public function test_get_block_css_with_given_option() {
+		update_option( Settings::OPTION_PREFIX . 'block_style', array( 'table_width' => '50%' ) );
+
+		$selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
+		$expected = "{$selector} > table tr th { color: red; }";
+
+		$this->assertSame( $expected, Helper::get_block_css( array( 'cell_text_color_th' => 'red' ) ) );
+	}
 }

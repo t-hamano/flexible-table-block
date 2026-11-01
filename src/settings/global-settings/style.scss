@@ -19,30 +19,54 @@ $footer-height: variables.$grid-unit-70; // 56px
 }
 
 .ftb-global-setting-modal__tab-panel {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-start;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	align-items: start;
 	gap: variables.$grid-unit-30;
 
-	@media screen and (max-width: 782px) {
-		flex-direction: column;
+	@media screen and (min-width: 783px) {
+		grid-template-columns: 190px minmax(0, 1fr);
 	}
 
 	[role="tablist"] {
-		width: 190px;
 		position: sticky;
 		top: 0;
 		background: colors.$white;
 		z-index: 1;
-
-		@media screen and (max-width: 782px) {
-			width: 100%;
-		}
 	}
 
-	[role="tabpanel"] {
-		flex: 1;
-		width: 100%;
+	&.has-preview {
+
+		// Stack the preview under the controls.
+		@media screen and (min-width: 783px) {
+
+			[role="tablist"] {
+				grid-row: span 2;
+			}
+
+			.ftb-global-setting-modal__preview {
+				grid-column: 2;
+			}
+		}
+
+		// Show the preview next to the controls.
+		@media screen and (min-width: 1080px) {
+			grid-template-columns: 190px minmax(0, 1fr) minmax(0, 1fr);
+
+			[role="tablist"] {
+				grid-row: auto;
+			}
+
+			.ftb-global-setting-modal__preview {
+				grid-column: 3;
+				position: sticky;
+				top: 0;
+			}
+
+			.ftb-global-setting-modal__styles {
+				grid-template-columns: 1fr;
+			}
+		}
 	}
 }
 
@@ -59,6 +83,12 @@ $footer-height: variables.$grid-unit-70; // 56px
 .ftb-global-setting-modal__styles-item {
 	border: variables.$border-width var(--wp-admin-theme-color) solid;
 	padding: variables.$grid-unit-10;
+}
+
+.ftb-global-setting-modal__preview-content {
+	// Same as the preview viewport width, so that the preview is not scaled up.
+	max-width: 600px;
+	border: variables.$border-width colors.$gray-300 solid;
 }
 
 .ftb-global-setting-modal__buttons {
