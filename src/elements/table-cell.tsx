@@ -175,7 +175,6 @@ function TableCell( {
 									label={ __( 'Delete row', 'flexible-table-block' ) }
 									anchor={ rowSelector }
 									side="left"
-									tabIndex={ controlTabIndex }
 									onClick={ ( event: MouseEvent ) => {
 										handlers.onDeleteRow( sectionName, rowIndex );
 										event.stopPropagation();
@@ -220,7 +219,6 @@ function TableCell( {
 									label={ __( 'Delete column', 'flexible-table-block' ) }
 									anchor={ columnSelector }
 									side="top"
-									tabIndex={ controlTabIndex }
 									onClick={ ( event: MouseEvent ) => {
 										handlers.onDeleteColumn( vColIndex );
 										event.stopPropagation();
