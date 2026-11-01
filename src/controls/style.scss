@@ -1,6 +1,3 @@
-@use "~@wordpress/base-styles/colors" as colors;
-@use "~@wordpress/base-styles/variables" as variables;
-
 // Color indicator button styles.
 .ftb-color-indicator-button {
 
@@ -15,7 +12,7 @@
 		height: var(--wp-ui-button-height);
 		padding: 0;
 		border: 0;
-		border-radius: variables.$radius-round;
+		border-radius: 50%;
 		// The indicator covers the whole button, so the hover background is only
 		// visible behind the transparent pattern and would hide it.
 		background-color: transparent;
@@ -31,13 +28,13 @@
 			bottom: 1px;
 			left: 1px;
 			content: "";
-			border-radius: variables.$radius-round;
+			border-radius: 50%;
 		}
 	}
 
 	&.is-none .ftb-color-indicator-button__indicator::before {
-		background-color: colors.$white;
-		background-image: linear-gradient(to left top, transparent 48%, colors.$alert-red calc(48% + 1px), colors.$alert-red calc(52% - 1px), transparent 52%);
+		background-color: var(--wpds-color-background-surface-neutral-strong);
+		background-image: linear-gradient(to left top, transparent 48%, var(--wpds-color-stroke-interactive-error) calc(48% + 1px), var(--wpds-color-stroke-interactive-error) calc(52% - 1px), transparent 52%);
 	}
 
 	&.is-transparent .ftb-color-indicator-button__indicator::before {
@@ -52,7 +49,7 @@
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: repeat(3, 1fr);
-	gap: variables.$grid-unit-10;
+	gap: var(--wpds-dimension-gap-sm);
 }
 
 .ftb-side-controls__item {
@@ -78,19 +75,16 @@
 .ftb-corner-controls {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	gap: variables.$grid-unit-10;
+	gap: var(--wpds-dimension-gap-sm);
 }
 
 // Keep the spacing that `BaseControl` had in the block inspector.
 .ftb-border-color-control,
-.ftb-border-radius-control,
-.ftb-border-spacing-control,
 .ftb-border-style-control,
-.ftb-border-width-control,
 .ftb-color-control,
-.ftb-padding-control {
+.ftb-linked-unit-control {
 
 	&:where(:not(:last-child)) {
-		margin-bottom: variables.$grid-unit-20;
+		margin-bottom: var(--wpds-dimension-gap-lg);
 	}
 }

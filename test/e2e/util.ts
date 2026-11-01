@@ -19,8 +19,8 @@ export default class FlexibleTableBlockUtils {
 	}
 
 	async createFlexibleTableBlock( {
-		col,
-		row,
+		col = 3,
+		row = 3,
 		header = false,
 		footer = false,
 	}: {
@@ -29,49 +29,31 @@ export default class FlexibleTableBlockUtils {
 		header?: boolean;
 		footer?: boolean;
 	} = {} ) {
-		await this.editor.insertBlock( { name: 'flexible-table-block/table' } );
-
-		if ( header ) {
-			await this.editor.canvas.getByRole( 'switch', { name: 'Header section' } ).check();
-		}
-		if ( footer ) {
-			await this.editor.canvas.getByRole( 'switch', { name: 'Footer section' } ).check();
-		}
-		if ( col ) {
-			await this.editor.canvas
-				.getByRole( 'spinbutton', { name: 'Column count' } )
-				.fill( String( col ) );
-		}
-		if ( row ) {
-			await this.editor.canvas
-				.getByRole( 'spinbutton', { name: 'Row count' } )
-				.fill( String( row ) );
-		}
-
-		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
+		await this.editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: {
+				head: header
+					? [ { cells: Array.from( { length: col }, () => ( { content: '', tag: 'th' } ) ) } ]
+					: [],
+				body: Array.from( { length: row }, () => ( {
+					cells: Array.from( { length: col }, () => ( { content: '', tag: 'td' } ) ),
+				} ) ),
+				foot: footer
+					? [ { cells: Array.from( { length: col }, () => ( { content: '', tag: 'td' } ) ) } ]
+					: [],
+			},
+		} );
 	}
 
-	async createCoreTableBlock( {
-		col,
-		row,
-	}: {
-		col?: number;
-		row?: number;
-	} = {} ) {
-		await this.editor.insertBlock( { name: 'core/table' } );
-
-		if ( col ) {
-			await this.editor.canvas
-				.getByRole( 'spinbutton', { name: 'Column count' } )
-				.fill( String( col ) );
-		}
-		if ( row ) {
-			await this.editor.canvas
-				.getByRole( 'spinbutton', { name: 'Row count' } )
-				.fill( String( row ) );
-		}
-
-		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
+	async createCoreTableBlock( { col = 2, row = 2 }: { col?: number; row?: number } = {} ) {
+		await this.editor.insertBlock( {
+			name: 'core/table',
+			attributes: {
+				body: Array.from( { length: row }, () => ( {
+					cells: Array.from( { length: col }, () => ( { content: '', tag: 'td' } ) ),
+				} ) ),
+			},
+		} );
 	}
 
 	/**
