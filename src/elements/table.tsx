@@ -39,6 +39,7 @@ import {
 	type VSelectedLine,
 	type VSelectedCells,
 } from '../utils/table-state';
+import { useStructuralTableChange } from '../hooks/use-structural-table-change';
 import { convertToObject } from '../utils/style-converter';
 
 import type { SectionName, CellTagValue, BlockAttributes } from '../BlockAttributes';
@@ -95,6 +96,7 @@ export default function Table( {
 
 	const tableRef = useRef( null );
 	const { createWarningNotice } = useDispatch( noticesStore );
+	const applyStructuralChange = useStructuralTableChange( setAttributes );
 
 	// Use a ref so the flag survives re-renders and the focus handler reads the latest value.
 	const isTabMoveRef = useRef( false );
@@ -104,7 +106,7 @@ export default function Table( {
 
 	const onInsertRow = ( sectionName: SectionName, rowIndex: number ) => {
 		const newVTable = insertRow( vTable, { sectionName, rowIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -127,7 +129,7 @@ export default function Table( {
 		}
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -140,14 +142,14 @@ export default function Table( {
 				: vTargetCell.vColIndex + offset + vTargetCell.colSpan - 1;
 
 		const newVTable = insertColumn( vTable, { vColIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onDeleteColumn = ( vColIndex: number ) => {
 		const newVTable = deleteColumn( vTable, { vColIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};

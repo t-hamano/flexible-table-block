@@ -47,13 +47,13 @@ import {
 	splitMergedCells,
 	hasMergedCells,
 	isRectangleSelected,
-	toTableAttributes,
 	toVirtualTable,
 	isEmptySection,
 	type VTable,
 	type VSelectedLine,
 	type VSelectedCells,
 } from './utils/table-state';
+import { useStructuralTableChange } from './hooks/use-structural-table-change';
 import { convertToObject } from './utils/style-converter';
 import { tableMergeCell, tableSplitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
@@ -76,6 +76,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		return select( ftbStore ).getOptions();
 	}, [] );
 	const { createWarningNotice } = useDispatch( noticesStore );
+	const applyStructuralChange = useStructuralTableChange( setAttributes );
 	const blockEditingMode = useBlockEditingMode();
 	const isContentOnlyMode = blockEditingMode === 'contentOnly';
 
@@ -107,7 +108,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
 
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -136,7 +137,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		}
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -153,7 +154,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
 
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -166,21 +167,21 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		const { vColIndex } = selectedCells[ 0 ];
 
 		const newVTable = deleteColumn( vTable, { vColIndex } );
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onMergeCells = () => {
 		const newVTable = mergeCells( vTable, selectedCells, options.merge_content );
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onSplitMergedCells = () => {
 		const newVTable = splitMergedCells( vTable, selectedCells );
-		setAttributes( toTableAttributes( newVTable ) );
+		applyStructuralChange( newVTable );
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};

@@ -26,7 +26,8 @@ import {
 	THRESHOLD_PREVIEW_TABLE_COL,
 	THRESHOLD_PREVIEW_TABLE_ROW,
 } from '../constants';
-import { createTable, toTableAttributes, type VTable } from '../utils/table-state';
+import { createTable, type VTable } from '../utils/table-state';
+import { useStructuralTableChange } from '../hooks/use-structural-table-change';
 import { blockIcon as icon } from '../icons';
 import type { BlockAttributes } from '../BlockAttributes';
 
@@ -35,6 +36,7 @@ type Props = {
 };
 
 export default function TablePlaceholder( { setAttributes }: Props ) {
+	const applyStructuralChange = useStructuralTableChange( setAttributes );
 	const [ rowCount, setRowCount ] = useState< number | undefined >( DEFAULT_PREVIEW_ROWS );
 	const [ colCount, setColCount ] = useState< number | undefined >( DEFAULT_PREVIEW_COLUMNS );
 	const [ headerSection, setHeaderSection ] = useState( false );
@@ -61,7 +63,7 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			footerSection,
 		} );
 
-		setAttributes( toTableAttributes( vTable ) );
+		applyStructuralChange( vTable );
 	};
 
 	const onChangeColumnCount = ( value: string ) => {
