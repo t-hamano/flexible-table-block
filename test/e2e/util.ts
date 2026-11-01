@@ -9,32 +9,6 @@ import type { Page } from '@playwright/test';
 import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
 import type { Editor } from '@wordpress/e2e-test-utils-playwright';
 
-type TableOptions = {
-	col?: number;
-	row?: number;
-	header?: boolean;
-	footer?: boolean;
-};
-
-/**
- * Builds the same table attributes as the "Create Table" button in the placeholder.
- *
- * @param options Table size and sections.
- */
-function createTableAttributes( options: TableOptions ) {
-	const { col = 3, row = 3, header = false, footer = false } = options;
-	const createRows = ( rowCount: number, tag: 'th' | 'td' ) =>
-		Array.from( { length: rowCount }, () => ( {
-			cells: Array.from( { length: col }, () => ( { content: '', tag } ) ),
-		} ) );
-
-	return {
-		head: header ? createRows( 1, 'th' ) : [],
-		body: createRows( row, 'td' ),
-		foot: footer ? createRows( 1, 'td' ) : [],
-	};
-}
-
 export default class FlexibleTableBlockUtils {
 	editor: Editor;
 	page: Page;
@@ -44,17 +18,38 @@ export default class FlexibleTableBlockUtils {
 		this.page = page;
 	}
 
-	async createFlexibleTableBlock( options: TableOptions = {} ) {
+	async createFlexibleTableBlock( {
+		col = 3,
+		row = 3,
+		header = false,
+		footer = false,
+	}: {
+		col?: number;
+		row?: number;
+		header?: boolean;
+		footer?: boolean;
+	} = {} ) {
+		const cells = ( tag: 'th' | 'td' ) =>
+			Array.from( { length: col }, () => ( { content: '', tag } ) );
+
 		await this.editor.insertBlock( {
 			name: 'flexible-table-block/table',
-			attributes: createTableAttributes( options ),
+			attributes: {
+				head: header ? [ { cells: cells( 'th' ) } ] : [],
+				body: Array.from( { length: row }, () => ( { cells: cells( 'td' ) } ) ),
+				foot: footer ? [ { cells: cells( 'td' ) } ] : [],
+			},
 		} );
 	}
 
-	async createCoreTableBlock( { col = 2, row = 2 }: Pick< TableOptions, 'col' | 'row' > = {} ) {
+	async createCoreTableBlock( { col = 2, row = 2 }: { col?: number; row?: number } = {} ) {
 		await this.editor.insertBlock( {
 			name: 'core/table',
-			attributes: createTableAttributes( { col, row } ),
+			attributes: {
+				body: Array.from( { length: row }, () => ( {
+					cells: Array.from( { length: col }, () => ( { content: '', tag: 'td' } ) ),
+				} ) ),
+			},
 		} );
 	}
 
