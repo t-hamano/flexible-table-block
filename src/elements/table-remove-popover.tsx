@@ -64,6 +64,9 @@ export default function TableRemovePopover( {
 						// The popover stays open while the row or column is selected,
 						// so only move focus back to the anchor.
 						if ( event.key === 'Escape' ) {
+							// Focus the canvas window first, because Firefox does not move
+							// window focus when focusing an element in another document.
+							anchor.ownerDocument.defaultView?.focus();
 							anchor.focus();
 							event.stopPropagation();
 						}
