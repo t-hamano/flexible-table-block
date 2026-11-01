@@ -9,9 +9,10 @@ import type { FormEvent } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
-import { BlockIcon } from '@wordpress/block-editor';
-import { Button, Placeholder, TextControl, ToggleControl } from '@wordpress/components';
-import { Stack, Text } from '@wordpress/ui';
+import { useDispatch } from '@wordpress/data';
+import { BlockIcon, store as blockEditorStore } from '@wordpress/block-editor';
+import { Placeholder } from '@wordpress/components';
+import { Button, InputControl, Stack, SwitchControl, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
 
 /**
@@ -35,6 +36,10 @@ type Props = {
 };
 
 export default function TablePlaceholder( { setAttributes }: Props ) {
+	const {
+		// @ts-expect-error Not exported in the type definitions.
+		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
+	} = useDispatch( blockEditorStore );
 	const [ rowCount, setRowCount ] = useState< number | undefined >( DEFAULT_PREVIEW_ROWS );
 	const [ colCount, setColCount ] = useState< number | undefined >( DEFAULT_PREVIEW_COLUMNS );
 	const [ headerSection, setHeaderSection ] = useState( false );
@@ -61,7 +66,10 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			footerSection,
 		} );
 
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( vTable ) );
+		markLastChangeAsPersistent();
 	};
 
 	const onChangeColumnCount = ( value: string ) => {
@@ -164,43 +172,38 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			</Stack>
 			<Stack direction="column" render={ <form /> } gap="sm" onSubmit={ onCreateTable }>
 				<Stack wrap="wrap" align="center" gap="sm">
-					<ToggleControl
+					<SwitchControl
 						label={ __( 'Header section', 'flexible-table-block' ) }
 						checked={ !! headerSection }
-						onChange={ onToggleHeaderSection }
+						onCheckedChange={ onToggleHeaderSection }
 					/>
-					<ToggleControl
+					<SwitchControl
 						label={ __( 'Footer section', 'flexible-table-block' ) }
 						checked={ !! footerSection }
-						onChange={ onToggleFooterSection }
+						onCheckedChange={ onToggleFooterSection }
 					/>
 				</Stack>
 
 				<Stack wrap="wrap" align="flex-end" gap="sm">
-					<TextControl
+					<InputControl
 						label={ __( 'Column count', 'flexible-table-block' ) }
 						className="ftb-placeholder__input"
 						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_COL }
 						value={ colCount || '' }
-						onChange={ onChangeColumnCount }
+						onValueChange={ onChangeColumnCount }
 					/>
-					<TextControl
+					<InputControl
 						label={ __( 'Row count', 'flexible-table-block' ) }
 						className="ftb-placeholder__input"
 						type="number"
 						min="1"
 						max={ MAX_PREVIEW_TABLE_ROW }
 						value={ rowCount || '' }
-						onChange={ onChangeRowCount }
+						onValueChange={ onChangeRowCount }
 					/>
-					<Button
-						variant="primary"
-						type="submit"
-						disabled={ ! rowCount || ! colCount }
-						__next40pxDefaultSize
-					>
+					<Button type="submit" disabled={ ! rowCount || ! colCount }>
 						{ __( 'Create Table', 'flexible-table-block' ) }
 					</Button>
 				</Stack>

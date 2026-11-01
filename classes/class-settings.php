@@ -9,6 +9,9 @@ namespace Flexible_Table_Block;
 
 class Settings {
 
+	// Prefix of the option names this plugin stores.
+	const OPTION_PREFIX = 'flexible_table_block_';
+
 	// Default options.
 	const OPTIONS = array(
 
@@ -93,7 +96,7 @@ class Settings {
 		$options = array();
 
 		foreach ( self::OPTIONS as $key => $value ) {
-			$options[ $key ] = get_option( Option::OPTION_NAMES[ $key ], self::OPTIONS[ $key ]['default'] );
+			$options[ $key ] = get_option( self::OPTION_PREFIX . $key, self::OPTIONS[ $key ]['default'] );
 
 			if ( 'boolean' === self::OPTIONS[ $key ]['type'] ) {
 				$options[ $key ] = (bool) $options[ $key ];

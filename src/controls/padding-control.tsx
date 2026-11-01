@@ -1,39 +1,18 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { link, linkOff } from '@wordpress/icons';
-import { useState } from '@wordpress/element';
-import {
-	BaseControl,
-	Button,
-	__experimentalGrid as Grid,
-	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits,
-} from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
  */
 import { PADDING_UNITS, SIDE_CONTROLS } from '../constants';
-import { sanitizeUnitValue } from '../utils/helper';
-import { SideIndicatorControl } from './indicator-control';
-import type { SideValue } from '../BlockAttributes';
-
-const DEFAULT_VALUES = {
-	top: '',
-	right: '',
-	bottom: '',
-	left: '',
-};
+import LinkedUnitControl from './linked-unit-control';
 
 type Props = {
 	label: string;
@@ -48,118 +27,23 @@ type Props = {
 	className?: string;
 };
 
-type ValuesKey = keyof typeof DEFAULT_VALUES;
-
 export default function PaddingControl( {
 	label = __( 'Padding', 'flexible-table-block' ),
+	className,
 	help,
 	onChange,
-	values: valuesProp,
-	className,
+	values,
 }: Props ) {
-	const values = { ...DEFAULT_VALUES, ...valuesProp };
-	const instanceId = useInstanceId( PaddingControl, 'ftb-padding-control' );
-
-	const isMixed = ! (
-		values.top === values.right &&
-		values.top === values.bottom &&
-		values.top === values.left
-	);
-
-	const paddingUnits = useCustomUnits( { availableUnits: PADDING_UNITS } );
-
-	const [ isLinked, setIsLinked ] = useState( true );
-	const [ side, setSide ] = useState< SideValue | undefined >( undefined );
-
-	const linkedLabel = isLinked
-		? __( 'Unlink sides', 'flexible-table-block' )
-		: __( 'Link sides', 'flexible-table-block' );
-
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
-	const allInputValue: string | 0 = isMixed ? '' : values.top;
-
-	const toggleLinked = () => {
-		setIsLinked( ! isLinked );
-		setSide( undefined );
-	};
-
-	const handleOnFocus = ( focusSide: SideValue ) => setSide( focusSide );
-
-	const handleOnChangeAll = ( inputValue: string | undefined ) => {
-		const sanitizedValue = sanitizeUnitValue( inputValue );
-		onChange( {
-			top: sanitizedValue,
-			right: sanitizedValue,
-			bottom: sanitizedValue,
-			left: sanitizedValue,
-		} );
-	};
-
-	const handleOnChange = ( inputValue: string | undefined, targetSide: SideValue ) => {
-		onChange( {
-			...values,
-			[ targetSide ]: sanitizeUnitValue( inputValue ),
-		} );
-	};
-
 	return (
-		<BaseControl className={ clsx( 'ftb-padding-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
-					<Stack align="center" gap="sm">
-						<SideIndicatorControl side={ side } />
-						{ isLinked && (
-							<div>
-								<UnitControl
-									placeholder={ allInputPlaceholder }
-									aria-label={ __( 'All', 'flexible-table-block' ) }
-									onChange={ handleOnChangeAll }
-									value={ allInputValue }
-									units={ paddingUnits }
-									__unstableInputWidth="100px"
-								/>
-							</div>
-						) }
-					</Stack>
-					<Button
-						label={ linkedLabel }
-						onClick={ toggleLinked }
-						icon={ isLinked ? link : linkOff }
-						size="small"
-					/>
-				</Stack>
-				{ ! isLinked && (
-					<Grid gap={ 2 } columns={ 2 } rows={ 3 }>
-						{ SIDE_CONTROLS.map( ( item ) => {
-							const gridStyles = ( value: SideValue ) => {
-								if ( value === 'top' || value === 'bottom' ) {
-									return {
-										gridColumn: 'span 2',
-										margin: '0 auto',
-									};
-								}
-								if ( value === 'right' ) {
-									return { gridColumn: 2, display: 'flex', justifyContent: 'flex-end' };
-								}
-								return { gridRow: 2 };
-							};
-							return (
-								<div key={ item.value } style={ gridStyles( item.value ) }>
-									<UnitControl
-										aria-label={ item.label }
-										value={ values[ item.value as ValuesKey ] }
-										units={ paddingUnits }
-										onFocus={ () => handleOnFocus( item.value ) }
-										onChange={ ( value ) => handleOnChange( value, item.value ) }
-										__unstableInputWidth="100px"
-									/>
-								</div>
-							);
-						} ) }
-					</Grid>
-				) }
-			</Stack>
-		</BaseControl>
+		<LinkedUnitControl
+			label={ label }
+			help={ help }
+			values={ values }
+			onChange={ onChange }
+			className={ className }
+			items={ SIDE_CONTROLS }
+			layout="sides"
+			availableUnits={ PADDING_UNITS }
+		/>
 	);
 }

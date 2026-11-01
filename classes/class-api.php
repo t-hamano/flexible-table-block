@@ -40,7 +40,7 @@ class Api {
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'update_options' ),
 					'permission_callback' => function () {
-						$show_global_setting = get_option( Option::OPTION_NAMES['show_global_setting'], Settings::OPTIONS['show_global_setting']['default'] );
+						$show_global_setting = get_option( Settings::OPTION_PREFIX . 'show_global_setting', Settings::OPTIONS['show_global_setting']['default'] );
 
 						if ( $show_global_setting ) {
 							return current_user_can( 'edit_posts' );
@@ -127,7 +127,7 @@ class Api {
 				$value = min( max( (int) $value, $min ), $max );
 			}
 
-			update_option( Option::OPTION_NAMES[ $key ], $value );
+			update_option( Settings::OPTION_PREFIX . $key, $value );
 		}
 
 		return rest_ensure_response(
@@ -146,7 +146,7 @@ class Api {
 	 */
 	public function delete_options() {
 		foreach ( Settings::OPTIONS as $key => $value ) {
-			delete_option( Option::OPTION_NAMES[ $key ] );
+			delete_option( Settings::OPTION_PREFIX . $key );
 		}
 
 		return rest_ensure_response(

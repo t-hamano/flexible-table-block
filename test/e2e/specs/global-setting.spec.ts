@@ -1,134 +1,403 @@
 /**
+ * External dependencies
+ */
+import type { Page } from '@playwright/test';
+
+/**
  * WordPress dependencies
  */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
+import type { RequestUtils } from '@wordpress/e2e-test-utils-playwright';
 
 /**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
+import { test, expect } from '../util';
 
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+async function updateOptions( requestUtils: RequestUtils, options: Record< string, boolean > ) {
+	await requestUtils.rest( {
+		method: 'POST',
+		path: '/flexible-table-block/v1/options',
+		data: options,
+	} );
+}
+
+const EDITOR_USER = {
+	username: 'ftb-editor',
+	email: 'ftb-editor@example.com',
+	password: 'password',
+	roles: [ 'editor' ],
+};
+
+async function loginAsEditor( page: Page ) {
+	await page.context().clearCookies();
+	await page.goto( 'wp-login.php' );
+	await page.locator( '#user_login' ).fill( EDITOR_USER.username );
+	await page.locator( '#user_pass' ).fill( EDITOR_USER.password );
+	await page.locator( '#wp-submit' ).click();
+	await page.waitForURL( '**/wp-admin/**' );
+}
 
 test.describe( 'Global Setting', () => {
-	test.beforeEach( async ( { admin } ) => {
-		await admin.createNewPost();
+	test.afterEach( async ( { requestUtils } ) => {
+		// Restore the default settings.
+		await requestUtils.rest( {
+			method: 'DELETE',
+			path: '/flexible-table-block/v1/options',
+		} );
 	} );
 
-	test( 'should update editor styles reflecting the settings', async ( {
-		editor,
-		page,
-		pageUtils,
-		fsbUtils,
-	} ) => {
-		await fsbUtils.createFlexibleTableBlock();
-		// Open the global setting.
-		await editor.openDocumentSettingsSidebar();
-		await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
-		await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
-		// Restore settings.
-		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
-		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
-			'Global setting restored.'
-		);
-		await page.locator( '.ftb-global-setting-modal__notice' ).getByRole( 'button' ).click();
-		// Change table width.
-		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '90' );
-		// Change table max width.
-		await page.getByRole( 'spinbutton', { name: 'Table max width' } ).fill( '110' );
-		await page.getByRole( 'button', { name: 'Separate' } ).click();
-		// Change striped colors.
-		const tableColors = [
-			{ color: '111111', label: 'Striped style background color ( odd rows )' },
-			{ color: '222222', label: 'Striped style background color ( even rows )' },
-		];
-		for ( let i = 0; i < tableColors.length; i++ ) {
-			const { color, label } = tableColors[ i ];
-			await page
-				.getByRole( 'group', { name: label } )
-				.getByRole( 'button', { name: 'Color' } )
-				.click();
-			await pageUtils.pressKeys( 'Enter' );
-			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
-			await pageUtils.pressKeys( 'Escape', { times: 2 } );
-		}
-		// Apply cell styles.
-		await page.getByRole( 'tab', { name: 'Cell styles' } ).click();
-		// Change cell colors.
-		const cellColors = [
-			{ color: '333333', selector: 'text-color-th' },
-			{ color: '444444', selector: 'text-color-td' },
-			{ color: '555555', selector: 'background-color-th' },
-			{ color: '666666', selector: 'background-color-td' },
-			{ color: '777777', selector: 'border-color' },
-		];
-		for ( let i = 0; i < cellColors.length; i++ ) {
-			await page
-				.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } )
-				.getByRole( 'button', { name: 'Color' } )
-				.nth( i )
-				.click();
-			await pageUtils.pressKeys( 'Enter' );
-			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( cellColors[ i ].color );
-			await pageUtils.pressKeys( 'Escape', { times: 2 } );
-		}
-		// Change cell padding.
-		await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
-		await page.getByRole( 'spinbutton', { name: 'Top' } ).fill( '1' );
-		await page.getByRole( 'spinbutton', { name: 'Right' } ).fill( '2' );
-		await page.getByRole( 'spinbutton', { name: 'Bottom' } ).fill( '3' );
-		await page.getByRole( 'spinbutton', { name: 'Left' } ).fill( '4' );
-		// Change cell border width.
-		await page.getByRole( 'spinbutton', { name: 'All' } ).fill( '2' );
-		// Change cell border style.
-		await page.getByRole( 'button', { name: 'Dotted' } ).click();
-		// Change cell alignments.
-		await page.getByRole( 'button', { name: 'Align center' } ).click();
-		await page.getByRole( 'button', { name: 'Align bottom' } ).click();
-		// Save settings.
-		await page.getByRole( 'button', { name: 'Save settings' } ).click();
-		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
-			'Global setting saved.'
-		);
-		const styleTagContent = await page.evaluate( () => {
-			const blockStyle = window.wp.data
-				.select( 'core/editor' )
-				.getEditorSettings()
-				.styles.find(
-					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
-				);
-			return blockStyle ? blockStyle.css : '';
+	test.describe( 'Styles', () => {
+		test.beforeEach( async ( { admin } ) => {
+			await admin.createNewPost();
 		} );
 
-		expect( styleTagContent ).toBe(
-			`.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table{width:90%;max-width:110%;border-collapse:separate;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th,.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th{color:#333333;background-color:#555555;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{color:#444444;background-color:#666666;}`
-		);
+		test( 'should update editor styles reflecting the settings', async ( {
+			editor,
+			page,
+			pageUtils,
+			fsbUtils,
+		} ) => {
+			await fsbUtils.createFlexibleTableBlock();
+			// Open the global setting.
+			await editor.openDocumentSettingsSidebar();
+			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+			await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
+			const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
+			// Restore settings.
+			await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
+			await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
+			await expect( modal.getByText( 'Global setting restored.', { exact: true } ) ).toBeVisible();
+			await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
+			// Change table width.
+			await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '90' );
+			// Change table max width.
+			await page.getByRole( 'spinbutton', { name: 'Table max width' } ).fill( '110' );
+			await page.getByRole( 'button', { name: 'Separate' } ).click();
+			// Change striped colors.
+			const tableColors = [
+				{ color: '111111', label: 'Striped style background color ( odd rows )' },
+				{ color: '222222', label: 'Striped style background color ( even rows )' },
+			];
+			for ( const { color, label } of tableColors ) {
+				await modal.getByRole( 'button', { name: label, exact: true } ).click();
+				await pageUtils.pressKeys( 'Enter' );
+				await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
+				await pageUtils.pressKeys( 'Escape', { times: 2 } );
+			}
+			// Apply cell styles.
+			await page.getByRole( 'tab', { name: 'Cell styles' } ).click();
+			// Change cell colors.
+			const cellColors = [
+				{ color: '333333', label: 'Cell text color ( th tag )' },
+				{ color: '444444', label: 'Cell text color ( td tag )' },
+				{ color: '555555', label: 'Cell background color ( th tag )' },
+				{ color: '666666', label: 'Cell background color ( td tag )' },
+				{ color: '777777', label: 'Cell border color' },
+			];
+			for ( const { color, label } of cellColors ) {
+				await modal.getByRole( 'button', { name: label, exact: true } ).click();
+				await pageUtils.pressKeys( 'Enter' );
+				await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
+				await pageUtils.pressKeys( 'Escape', { times: 2 } );
+			}
+			// Change cell padding.
+			await page.getByRole( 'button', { name: 'Unlink sides' } ).click();
+			await page.getByRole( 'spinbutton', { name: 'Top' } ).fill( '1' );
+			await page.getByRole( 'spinbutton', { name: 'Right' } ).fill( '2' );
+			await page.getByRole( 'spinbutton', { name: 'Bottom' } ).fill( '3' );
+			await page.getByRole( 'spinbutton', { name: 'Left' } ).fill( '4' );
+			// Change cell border width.
+			await page.getByRole( 'spinbutton', { name: 'All' } ).fill( '2' );
+			// Change cell border style.
+			await page.getByRole( 'button', { name: 'Dotted' } ).click();
+			// Change cell alignments.
+			await page.getByRole( 'button', { name: 'Align center' } ).click();
+			await page.getByRole( 'button', { name: 'Align bottom' } ).click();
+			// Save settings.
+			await page.getByRole( 'button', { name: 'Save settings' } ).click();
+			await expect( modal.getByText( 'Global setting saved.', { exact: true } ) ).toBeVisible();
+			await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
 
-		// Restore settings.
-		await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
-		await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-		await expect( page.locator( '.ftb-global-setting-modal__notice' ) ).toContainText(
-			'Global setting restored.'
-		);
-		await page.locator( '.ftb-global-setting-modal__notice ' ).getByRole( 'button' ).click();
+			const selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
+			const savedRules = [
+				`${ selector }>table{width:90%;max-width:110%;border-collapse:separate;}`,
+				`${ selector }.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}`,
+				`${ selector }.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}`,
+				`${ selector }.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}`,
+				`${ selector }.is-style-stripes tbody tr:nth-child(even) td{background-color:#222222;}`,
+				`${ selector }>table tr th,${ selector }>table tr td{padding:1em 2em 3em 4em;border-width:2px;border-style:dotted;border-color:#777777;text-align:center;vertical-align:bottom;}`,
+				`${ selector }>table tr th{color:#333333;background-color:#555555;}`,
+				`${ selector }>table tr td{color:#444444;background-color:#666666;}`,
+			];
+			await expect.poll( () => fsbUtils.getGlobalSettingCss() ).toBe( savedRules.join( '' ) );
 
-		const defaultStyleTagContent = await page.evaluate( () => {
-			const blockStyle = window.wp.data
-				.select( 'core/editor' )
-				.getEditorSettings()
-				.styles.find(
-					( style: { flexibleTableBlock?: boolean; css: string } ) => style.flexibleTableBlock
-				);
-			return blockStyle ? blockStyle.css : '';
+			// Restore settings.
+			await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
+			await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
+			await expect( modal.getByText( 'Global setting restored.', { exact: true } ) ).toBeVisible();
+			await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
+
+			const defaultRules = [
+				`${ selector }>table{width:100%;max-width:100%;border-collapse:collapse;}`,
+				`${ selector }.is-style-stripes tbody tr:nth-child(odd) th{background-color:#f0f0f1;}`,
+				`${ selector }.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}`,
+				`${ selector }.is-style-stripes tbody tr:nth-child(even) th{background-color:#ffffff;}`,
+				`${ selector }.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}`,
+				`${ selector }>table tr th,${ selector }>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}`,
+				`${ selector }>table tr th{background-color:#f0f0f1;}`,
+				`${ selector }>table tr td{background-color:#ffffff;}`,
+			];
+			await expect.poll( () => fsbUtils.getGlobalSettingCss() ).toBe( defaultRules.join( '' ) );
+		} );
+	} );
+
+	test.describe( 'Editor options', () => {
+		test.describe( 'Show section labels', () => {
+			test( 'should show section labels when enabled', async ( { admin, editor, fsbUtils } ) => {
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
+				await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+				for ( const label of [ 'thead', 'tbody', 'tfoot' ] ) {
+					await expect(
+						editor.canvas.getByRole( 'button', { name: label, exact: true } )
+					).toBeVisible();
+				}
+			} );
+
+			test( 'should hide section labels when disabled', async ( {
+				admin,
+				editor,
+				requestUtils,
+				fsbUtils,
+			} ) => {
+				await updateOptions( requestUtils, { show_label_on_section: false } );
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
+				await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+				for ( const label of [ 'thead', 'tbody', 'tfoot' ] ) {
+					await expect(
+						editor.canvas.getByRole( 'button', { name: label, exact: true } )
+					).toBeHidden();
+				}
+			} );
 		} );
 
-		expect( defaultStyleTagContent ).toBe(
-			`.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table{width:100%;max-width:100%;border-collapse:collapse;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) th{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(odd) td{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) th{background-color:#ffffff;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table.is-style-stripes tbody tr:nth-child(even) td{background-color:#ffffff;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th,.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{padding:0.5em;border-width:1px;border-style:solid;border-color:#000000;text-align:left;vertical-align:middle;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr th{background-color:#f0f0f1;}.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table>table tr td{background-color:#ffffff;}`
-		);
+		test.describe( 'Show control buttons', () => {
+			const controlButtons = [
+				'Insert row before',
+				'Insert row after',
+				'Insert column before',
+				'Insert column after',
+				'Select row',
+				'Select column',
+			];
+
+			test( 'should show control buttons when enabled', async ( { admin, editor, fsbUtils } ) => {
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
+				await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+				for ( const label of controlButtons ) {
+					await expect(
+						editor.canvas.getByRole( 'button', { name: label, exact: true } ).first()
+					).toBeVisible();
+				}
+			} );
+
+			test( 'should hide control buttons when disabled', async ( {
+				admin,
+				editor,
+				requestUtils,
+				fsbUtils,
+			} ) => {
+				await updateOptions( requestUtils, { show_control_button: false } );
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
+				await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+				for ( const label of controlButtons ) {
+					await expect(
+						editor.canvas.getByRole( 'button', { name: label, exact: true } )
+					).toHaveCount( 0 );
+				}
+			} );
+		} );
+
+		test.describe( 'Show dot on th tag', () => {
+			test( 'should show a dot on th cells when enabled', async ( { admin, editor, fsbUtils } ) => {
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock( { header: true } );
+				await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+				const th = editor.canvas.locator( 'th' ).first();
+				expect(
+					await th.evaluate( ( el ) => window.getComputedStyle( el, '::before' ).content )
+				).toBe( '""' );
+			} );
+
+			test( 'should not show a dot on th cells when disabled', async ( {
+				admin,
+				editor,
+				requestUtils,
+				fsbUtils,
+			} ) => {
+				await updateOptions( requestUtils, { show_dot_on_th: false } );
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock( { header: true } );
+				await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+				const th = editor.canvas.locator( 'th' ).first();
+				expect(
+					await th.evaluate( ( el ) => window.getComputedStyle( el, '::before' ).content )
+				).toBe( 'none' );
+			} );
+		} );
+
+		test.describe( 'Use the tab key to move cells', () => {
+			test( 'should not move focus to the next cell with the tab key when disabled', async ( {
+				admin,
+				editor,
+				pageUtils,
+				fsbUtils,
+			} ) => {
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).click();
+				await pageUtils.pressKeys( 'Tab' );
+				// Where focus goes is up to the block editor and differs between browsers,
+				// so only check that it does not move to the next cell.
+				await expect( cells.nth( 1 ) ).not.toBeFocused();
+			} );
+
+			test( 'should move focus between cells with the tab key when enabled', async ( {
+				admin,
+				editor,
+				pageUtils,
+				requestUtils,
+				fsbUtils,
+			} ) => {
+				await updateOptions( requestUtils, { tab_move: true } );
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).click();
+				await pageUtils.pressKeys( 'Tab' );
+				await expect( cells.nth( 1 ) ).toBeFocused();
+				await pageUtils.pressKeys( 'shift+Tab' );
+				await expect( cells.nth( 0 ) ).toBeFocused();
+			} );
+		} );
+
+		test.describe( 'Keep all contents when merging cells', () => {
+			test( 'should keep only the first cell content when disabled', async ( {
+				admin,
+				editor,
+				page,
+				fsbUtils,
+			} ) => {
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).fill( 'Cell 1' );
+				await cells.nth( 1 ).fill( 'Cell 2' );
+				await cells.nth( 0 ).click();
+				await page.keyboard.down( 'Shift' );
+				await cells.nth( 1 ).click();
+				await page.keyboard.up( 'Shift' );
+				await editor.clickBlockToolbarButton( 'Edit table' );
+				await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
+				expect( await editor.getEditedPostContent() ).toContain( '<td colspan="2">Cell 1</td>' );
+			} );
+
+			test( 'should keep all cell contents when enabled', async ( {
+				admin,
+				editor,
+				page,
+				requestUtils,
+				fsbUtils,
+			} ) => {
+				await updateOptions( requestUtils, { merge_content: true } );
+				await admin.createNewPost();
+				await fsbUtils.createFlexibleTableBlock();
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).fill( 'Cell 1' );
+				await cells.nth( 1 ).fill( 'Cell 2' );
+				await cells.nth( 0 ).click();
+				await page.keyboard.down( 'Shift' );
+				await cells.nth( 1 ).click();
+				await page.keyboard.up( 'Shift' );
+				await editor.clickBlockToolbarButton( 'Edit table' );
+				await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
+				expect( await editor.getEditedPostContent() ).toContain(
+					'<td colspan="2">Cell 1<br>Cell 2</td>'
+				);
+			} );
+		} );
+	} );
+
+	test.describe( 'Permissions', () => {
+		test.beforeEach( async ( { requestUtils } ) => {
+			await requestUtils.createUser( EDITOR_USER );
+		} );
+
+		test.afterEach( async ( { requestUtils } ) => {
+			await requestUtils.deleteAllUsers();
+		} );
+
+		test( 'should hide the global setting from non-administrators by default', async ( {
+			admin,
+			editor,
+			page,
+			fsbUtils,
+		} ) => {
+			await loginAsEditor( page );
+			await admin.createNewPost();
+			await fsbUtils.createFlexibleTableBlock();
+			await editor.openDocumentSettingsSidebar();
+			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+			// Wait until the options and the user capability are resolved before checking that the button is hidden.
+			await expect
+				.poll( () =>
+					page.evaluate(
+						() =>
+							window.wp.data
+								.select( 'flexible-table-block' )
+								.hasFinishedResolution( 'getOptions' ) &&
+							window.wp.data
+								.select( 'core' )
+								.hasFinishedResolution( 'canUser', [ 'update', { kind: 'root', name: 'site' } ] )
+					)
+				)
+				.toBe( true );
+			await expect( page.getByRole( 'button', { name: 'Edit global setting' } ) ).toBeHidden();
+		} );
+
+		test( 'should allow non-administrators to save the global setting when enabled', async ( {
+			admin,
+			editor,
+			page,
+			requestUtils,
+			fsbUtils,
+		} ) => {
+			await updateOptions( requestUtils, { show_global_setting: true } );
+			await loginAsEditor( page );
+			await admin.createNewPost();
+			await fsbUtils.createFlexibleTableBlock();
+			await editor.openDocumentSettingsSidebar();
+			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+			await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
+			const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
+			// Administrator-only controls are not shown.
+			await expect(
+				modal.getByRole( 'button', { name: 'Restore default settings' } )
+			).toBeHidden();
+			await modal.getByRole( 'tab', { name: 'Editor options' } ).click();
+			await expect(
+				modal.getByRole( 'switch', {
+					name: 'Show Global setting button to non-administrative users',
+				} )
+			).toBeHidden();
+			// Settings can still be saved.
+			await modal.getByRole( 'switch', { name: 'Use the tab key to move cells' } ).check();
+			await modal.getByRole( 'button', { name: 'Save settings' } ).click();
+			await expect( modal.getByText( 'Global setting saved.', { exact: true } ) ).toBeVisible();
+		} );
 	} );
 } );

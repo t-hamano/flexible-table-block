@@ -1,0 +1,99 @@
+[
+	{
+		"name": "flexible-table-block/table",
+		"isValid": true,
+		"attributes": {
+			"contentJustification": "center",
+			"hasFixedLayout": true,
+			"isScrollOnPc": true,
+			"isScrollOnMobile": true,
+			"isStackedOnMobile": true,
+			"sticky": "header",
+			"tableStyles": "border-collapse:collapse;width:80%",
+			"captionSide": "top",
+			"caption": "Table <strong>caption</strong>",
+			"captionStyles": "padding:4px;text-align:left",
+			"head": [
+				{
+					"cells": [
+						{
+							"content": "Header A",
+							"styles": "border-width:1px;border-style:solid",
+							"tag": "th",
+							"id": "col-a",
+							"scope": "col"
+						},
+						{
+							"content": "Header B",
+							"tag": "th",
+							"id": "col-b",
+							"scope": "col",
+							"colSpan": "2"
+						}
+					]
+				}
+			],
+			"body": [
+				{
+					"cells": [
+						{
+							"content": "Cell <a href=\"https://example.com\">link</a>",
+							"tag": "td",
+							"className": "is-highlighted",
+							"headers": "col-a",
+							"rowSpan": "2"
+						},
+						{
+							"content": "Cell 2",
+							"tag": "td",
+							"headers": "col-b"
+						},
+						{
+							"content": "Cell 3",
+							"styles": "text-align:right",
+							"tag": "td"
+						}
+					]
+				},
+				{
+					"cells": [
+						{
+							"content": "Cell 4",
+							"tag": "td"
+						},
+						{
+							"content": "",
+							"tag": "td"
+						}
+					]
+				}
+			],
+			"foot": [
+				{
+					"cells": [
+						{
+							"content": "Footer",
+							"tag": "td",
+							"colSpan": "3"
+						}
+					]
+				}
+			],
+			"backgroundColor": "pale-cyan-blue",
+			"textColor": "vivid-red",
+			"style": {
+				"elements": {
+					"link": {
+						"color": {
+							"text": "var:preset|color|vivid-green-cyan"
+						}
+					}
+				},
+				"typography": {
+					"fontSize": "20px"
+				}
+			}
+		},
+		"innerBlocks": []
+	}
+]

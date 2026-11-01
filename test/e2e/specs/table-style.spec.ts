@@ -6,19 +6,12 @@ import type { Page } from '@playwright/test';
 /**
  * WordPress dependencies
  */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
 import type { PageUtils } from '@wordpress/e2e-test-utils-playwright';
 
 /**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	// Font Size, Line Hiehgt, Width styles.
@@ -27,19 +20,14 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	await page.getByRole( 'spinbutton', { name: 'Cell width' } ).fill( '100' );
 
 	// Text Color, Background Color styles.
-	await page
-		.getByRole( 'group', { name: 'Cell text color' } )
-		.getByRole( 'button', { name: 'Color' } )
-		.click();
+	await page.getByRole( 'button', { name: 'Cell text color', exact: true } ).click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '111111' );
 	await pageUtils.pressKeys( 'Escape', { times: 2 } );
-	await page
-		.getByRole( 'group', { name: 'Cell background color' } )
-		.getByRole( 'button', { name: 'Color' } )
-		.click();
+	await page.getByRole( 'button', { name: 'Cell background color', exact: true } ).click();
 	await pageUtils.pressKeys( 'Enter' );
 	await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( '333333' );
+	await pageUtils.pressKeys( 'Escape', { times: 2 } );
 
 	// Padding, Border Radius, Border Width styles.
 	const styles = [
@@ -71,14 +59,24 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	}
 
 	// Boder Style styles.
-	await page
-		.getByRole( 'group', { name: 'Cell border style' } )
-		.getByRole( 'button', { name: 'Unlink sides' } )
+	const cellBorderStyle = page.getByRole( 'group', { name: 'Cell border style' } );
+	await cellBorderStyle.getByRole( 'button', { name: 'Unlink sides' } ).click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Top', exact: true } )
+		.getByRole( 'button', { name: 'Solid', exact: true } )
 		.click();
-	await page.getByRole( 'button', { name: 'Solid' } ).nth( 0 ).click();
-	await page.getByRole( 'button', { name: 'Dotted' } ).nth( 1 ).click();
-	await page.getByRole( 'button', { name: 'Dashed' } ).nth( 2 ).click();
-	await page.getByRole( 'button', { name: 'Double' } ).nth( 3 ).click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Right', exact: true } )
+		.getByRole( 'button', { name: 'Dotted', exact: true } )
+		.click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Bottom', exact: true } )
+		.getByRole( 'button', { name: 'Dashed', exact: true } )
+		.click();
+	await cellBorderStyle
+		.getByRole( 'group', { name: 'Left', exact: true } )
+		.getByRole( 'button', { name: 'Double', exact: true } )
+		.click();
 
 	// Border Color styles.
 	await page
@@ -91,13 +89,13 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 		{ color: '333333', label: 'Bottom' },
 		{ color: '444444', label: 'Left' },
 	];
-	for ( let i = 0; i < colors.length; i++ ) {
+	for ( const { color, label } of colors ) {
 		await page
 			.getByRole( 'group', { name: 'Cell border color' } )
-			.getByRole( 'button', { name: colors[ i ].label } )
+			.getByRole( 'button', { name: label } )
 			.click();
 		await pageUtils.pressKeys( 'Enter' );
-		await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( colors[ i ].color );
+		await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
 		await pageUtils.pressKeys( 'Escape', { times: 2 } );
 	}
 	// Cell Alignment styles.
@@ -111,7 +109,8 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	// id, headers, scope getBlockAttributes.
 	await page.getByRole( 'textbox', { name: 'id attribute' } ).fill( 'id' );
 	await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
-	await page.getByRole( 'combobox', { name: 'scope attribute' } ).selectOption( 'row' );
+	await page.getByRole( 'combobox', { name: 'scope attribute' } ).click();
+	await page.getByRole( 'option', { name: 'row', exact: true } ).click();
 }
 
 test.describe( 'Styles', () => {
@@ -129,13 +128,12 @@ test.describe( 'Styles', () => {
 		await page.getByRole( 'button', { name: 'Table settings' } ).click();
 
 		// Toggle settings.
-		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
-		await page.getByRole( 'checkbox', { name: 'Scroll on desktop view' } ).check();
-		await page.getByRole( 'checkbox', { name: 'Scroll on mobile view' } ).check();
-		await page.getByRole( 'checkbox', { name: 'Stack on mobile' } ).check();
-		await page
-			.getByRole( 'combobox', { name: 'Fixed control' } )
-			.selectOption( 'Fixed first column' );
+		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
+		await page.getByRole( 'switch', { name: 'Scroll on desktop view' } ).check();
+		await page.getByRole( 'switch', { name: 'Scroll on mobile view' } ).check();
+		await page.getByRole( 'switch', { name: 'Stack on mobile' } ).check();
+		await page.getByRole( 'combobox', { name: 'Fixed control' } ).click();
+		await page.getByRole( 'option', { name: 'Fixed first column' } ).click();
 
 		// Width styles.
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '500' );
@@ -174,14 +172,24 @@ test.describe( 'Styles', () => {
 		}
 
 		// Boder Style styles.
-		await page
-			.getByRole( 'group', { name: 'Table border style' } )
-			.getByRole( 'button', { name: 'Unlink sides' } )
+		const tableBorderStyle = page.getByRole( 'group', { name: 'Table border style' } );
+		await tableBorderStyle.getByRole( 'button', { name: 'Unlink sides' } ).click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Top', exact: true } )
+			.getByRole( 'button', { name: 'Solid', exact: true } )
 			.click();
-		await page.getByRole( 'button', { name: 'Solid' } ).nth( 0 ).click();
-		await page.getByRole( 'button', { name: 'Dotted' } ).nth( 1 ).click();
-		await page.getByRole( 'button', { name: 'Dashed' } ).nth( 2 ).click();
-		await page.getByRole( 'button', { name: 'Double' } ).nth( 3 ).click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Right', exact: true } )
+			.getByRole( 'button', { name: 'Dotted', exact: true } )
+			.click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Bottom', exact: true } )
+			.getByRole( 'button', { name: 'Dashed', exact: true } )
+			.click();
+		await tableBorderStyle
+			.getByRole( 'group', { name: 'Left', exact: true } )
+			.getByRole( 'button', { name: 'Double', exact: true } )
+			.click();
 
 		// Border Color styles.
 		await page
@@ -194,13 +202,13 @@ test.describe( 'Styles', () => {
 			{ color: '333333', label: 'Bottom' },
 			{ color: '444444', label: 'Left' },
 		];
-		for ( let i = 0; i < colors.length; i++ ) {
+		for ( const { color, label } of colors ) {
 			await page
 				.getByRole( 'group', { name: 'Table border color' } )
-				.getByRole( 'button', { name: colors[ i ].label } )
+				.getByRole( 'button', { name: label } )
 				.click();
 			await pageUtils.pressKeys( 'Enter' );
-			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( colors[ i ].color );
+			await page.getByRole( 'textbox', { name: 'Hex color' } ).fill( color );
 			await pageUtils.pressKeys( 'Escape', { times: 2 } );
 		}
 
@@ -209,7 +217,11 @@ test.describe( 'Styles', () => {
 		await page.getByRole( 'button', { name: 'Unlink directions' } ).click();
 		await page.getByRole( 'spinbutton', { name: 'Horizontal' } ).fill( '10' );
 		await page.getByRole( 'spinbutton', { name: 'Vertical' } ).fill( '20' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"hasFixedLayout":false,"isScrollOnPc":true,"isScrollOnMobile":true,"isStackedOnMobile":true,"sticky":"first-column"} -->
+<figure class="wp-block-flexible-table-block-table is-scroll-on-pc is-scroll-on-mobile"><table class="is-stacked-on-mobile is-sticky-first-column" style="width:500px;max-width:600px;min-width:400px;min-height:300px;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;border-collapse:separate;border-spacing:10px 20px"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test( 'cell styles should be applied', async ( { editor, page, pageUtils, fsbUtils } ) => {
@@ -222,7 +234,11 @@ test.describe( 'Styles', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
 		await applyCellStyles( page, pageUtils );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><th class="custom" id="id" headers="headers" scope="row" style="font-size:20px;line-height:2;width:100px;color:#111111;background-color:#333333;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;text-align:center;vertical-align:middle"></th><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test( 'cell styles should be applied to multiple cells', async ( {
@@ -231,7 +247,7 @@ test.describe( 'Styles', () => {
 		pageUtils,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true } );
+		await fsbUtils.createFlexibleTableBlock( { header: true, footer: true, row: 1 } );
 		await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
 		await editor.openDocumentSettingsSidebar();
 		await page
@@ -240,7 +256,11 @@ test.describe( 'Styles', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Multi cells settings' } ).click();
 		await applyCellStyles( page, pageUtils );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th class="custom" id="id" headers="headers" scope="row" style="font-size:20px;line-height:2;width:100px;color:#111111;background-color:#333333;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;text-align:center;vertical-align:middle"></th></tr></thead><tbody><tr><td></td><td></td><th class="custom" id="id" headers="headers" scope="row" style="font-size:20px;line-height:2;width:100px;color:#111111;background-color:#333333;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;text-align:center;vertical-align:middle"></th></tr></tbody><tfoot><tr><td></td><td></td><th class="custom" id="id" headers="headers" scope="row" style="font-size:20px;line-height:2;width:100px;color:#111111;background-color:#333333;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;text-align:center;vertical-align:middle"></th></tr></tfoot></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test( 'caption styles should be applied', async ( { editor, page, fsbUtils } ) => {
@@ -264,6 +284,10 @@ test.describe( 'Styles', () => {
 		await page.getByRole( 'spinbutton', { name: 'Left' } ).fill( '4' );
 		await page.getByRole( 'radio', { name: 'Top' } ).click();
 		await page.getByRole( 'button', { name: 'Align center' } ).click();
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"captionSide":"top"} -->
+<figure class="wp-block-flexible-table-block-table"><figcaption style="font-size:20px;line-height:2;padding:1px 2px 3px 4px;text-align:center">Flexible Table Block</figcaption><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 } );

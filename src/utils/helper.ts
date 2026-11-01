@@ -17,10 +17,11 @@ interface SanitizeOptions {
 }
 
 /**
- * Removed falsy values from nested object.
+ * Remove undefined values from nested object.
+ * Nested objects that become empty are also removed.
  *
  * @param object Nested object.
- * @return Object cleaned from falsy values.
+ * @return Object cleaned from undefined values, or undefined if nothing is left.
  */
 export function cleanEmptyObject( object: {} ): {} | undefined {
 	if ( object === null || typeof object !== 'object' || Array.isArray( object ) ) {

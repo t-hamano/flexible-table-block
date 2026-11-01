@@ -2,149 +2,39 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { link, linkOff } from '@wordpress/icons';
-import { useState } from '@wordpress/element';
-import {
-	BaseControl,
-	Button,
-	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits,
-} from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
  */
-import { BORDER_SPACING_UNITS, MAX_BORDER_SPACING, DIRECTION_CONTROLS } from '../constants';
-import { DirectionIndicatorControl } from './indicator-control';
-import { parseUnit, sanitizeUnitValue } from '../utils/helper';
-import type { DirectionValue } from '../BlockAttributes';
-
-const DEFAULT_VALUES = {
-	horizontal: '',
-	vertical: '',
-};
+import { BORDER_UNITS, MAX_BORDER_SPACING, DIRECTION_CONTROLS } from '../constants';
+import LinkedUnitControl from './linked-unit-control';
 
 type Props = {
 	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
-	values: typeof DEFAULT_VALUES;
+	values: {
+		horizontal?: string;
+		vertical?: string;
+	};
 };
-
-type ValuesKey = keyof typeof DEFAULT_VALUES;
-type MaxBorderSpacingKey = keyof typeof MAX_BORDER_SPACING;
 
 export default function BorderSpacingControl( {
 	label = __( 'Border spacing', 'flexible-table-block' ),
 	help,
 	onChange,
-	values: valuesProp,
+	values,
 }: Props ) {
-	const values = {
-		...DEFAULT_VALUES,
-		...valuesProp,
-	};
-	const instanceId = useInstanceId( BorderSpacingControl, 'ftb-border-spacing-control' );
-
-	const isMixed = ! ( values.horizontal === values.vertical );
-
-	const borderSpacingUnits = useCustomUnits( { availableUnits: BORDER_SPACING_UNITS } );
-
-	const [ isLinked, setIsLinked ] = useState( true );
-
-	const linkedLabel = isLinked
-		? __( 'Unlink directions', 'flexible-table-block' )
-		: __( 'Link directions', 'flexible-table-block' );
-
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
-	const allInputValue: string | 0 = isMixed ? '' : values.horizontal;
-
-	const toggleLinked = () => {
-		setIsLinked( ! isLinked );
-	};
-
-	const handleOnChangeAll = ( inputValue: string | undefined ) => {
-		if ( inputValue ) {
-			const [ , unit ] = parseUnit( inputValue );
-			const sanitizedValue = sanitizeUnitValue( inputValue, {
-				maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
-			} );
-
-			onChange( {
-				horizontal: sanitizedValue,
-				vertical: sanitizedValue,
-			} );
-		} else {
-			onChange( {
-				horizontal: undefined,
-				vertical: undefined,
-			} );
-		}
-	};
-
-	const handleOnChange = ( inputValue: string | undefined, targetDirection: DirectionValue ) => {
-		if ( inputValue ) {
-			const [ , unit ] = parseUnit( inputValue );
-			const sanitizedValue = sanitizeUnitValue( inputValue, {
-				maxNum: MAX_BORDER_SPACING[ unit as MaxBorderSpacingKey ],
-			} );
-
-			onChange( {
-				...values,
-				[ targetDirection ]: sanitizedValue,
-			} );
-		} else {
-			onChange( {
-				...values,
-				[ targetDirection ]: undefined,
-			} );
-		}
-	};
-
 	return (
-		<BaseControl className="ftb-border-spacing-control" help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<Stack align="flex-start" justify="space-between" gap="sm">
-					{ isLinked ? (
-						<Stack align="center" gap="sm">
-							<DirectionIndicatorControl />
-							<UnitControl
-								aria-label={ __( 'All', 'flexible-table-block' ) }
-								value={ allInputValue }
-								units={ borderSpacingUnits }
-								placeholder={ allInputPlaceholder }
-								onChange={ handleOnChangeAll }
-								__unstableInputWidth="100px"
-							/>
-						</Stack>
-					) : (
-						<Stack direction="column" gap="xs">
-							{ DIRECTION_CONTROLS.map( ( item ) => (
-								<Stack align="center" gap="sm" key={ item.value }>
-									<DirectionIndicatorControl direction={ item.value } />
-									<UnitControl
-										aria-label={ item.label }
-										value={ values[ item.value as ValuesKey ] }
-										units={ borderSpacingUnits }
-										onChange={ ( value ) => handleOnChange( value, item.value ) }
-										__unstableInputWidth="100px"
-									/>
-								</Stack>
-							) ) }
-						</Stack>
-					) }
-					<Button
-						label={ linkedLabel }
-						icon={ isLinked ? link : linkOff }
-						onClick={ toggleLinked }
-						size="small"
-						style={ { marginTop: '8px' } }
-					/>
-				</Stack>
-			</Stack>
-		</BaseControl>
+		<LinkedUnitControl
+			label={ label }
+			help={ help }
+			values={ values }
+			onChange={ onChange }
+			items={ DIRECTION_CONTROLS }
+			layout="directions"
+			availableUnits={ BORDER_UNITS }
+			maxValues={ MAX_BORDER_SPACING }
+		/>
 	);
 }

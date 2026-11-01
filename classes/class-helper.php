@@ -30,7 +30,7 @@ class Helper {
 			"{$selector} > table tr td" => '',
 		);
 
-		$option = get_option( Option::OPTION_NAMES['block_style'], Settings::OPTIONS['block_style']['default'] );
+		$option = get_option( Settings::OPTION_PREFIX . 'block_style', Settings::OPTIONS['block_style']['default'] );
 
 		// Genelate styles based on Global setting.
 		foreach ( $option as $key => $value ) {
@@ -110,7 +110,7 @@ class Helper {
 	 */
 	public static function get_responsive_css( $prefix = '' ) {
 		$selector   = "{$prefix}." . FTB_BLOCK_CLASS;
-		$breakpoint = get_option( Option::OPTION_NAMES['breakpoint'], Settings::OPTIONS['breakpoint']['default'] );
+		$breakpoint = get_option( Settings::OPTION_PREFIX . 'breakpoint', Settings::OPTIONS['breakpoint']['default'] );
 		$max_width  = $breakpoint;
 		$min_width  = $max_width + 1;
 
@@ -174,6 +174,11 @@ class Helper {
 
 	/**
 	 * Re-allow CSS color functions in safecss_filter_attr().
+	 *
+	 * This method and its tests can be removed once core allows CSS color
+	 * functions and the minimum supported WordPress version includes that change.
+	 *
+	 * @see https://core.trac.wordpress.org/ticket/66387
 	 *
 	 * @param bool   $allow_css       Default decision from core.
 	 * @param string $css_test_string Normalized value under test.

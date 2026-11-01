@@ -1,18 +1,7 @@
 /**
- * WordPress dependencies
- */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
-
-/**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 test.describe( 'Transform from core table block', () => {
 	test.beforeEach( async ( { admin } ) => {
@@ -29,10 +18,15 @@ test.describe( 'Transform from core table block', () => {
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
 			.fill( 'Core Table Block' );
+		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"hasFixedLayout":false} -->
+<figure class="wp-block-flexible-table-block-table"><table class=""><tbody><tr><td>Core Table Block</td><td></td></tr><tr><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test( 'should be transformed to flexible table block keeping header and footer section', async ( {
@@ -47,7 +41,11 @@ test.describe( 'Transform from core table block', () => {
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"hasFixedLayout":false} -->
+<figure class="wp-block-flexible-table-block-table"><table class=""><thead><tr><th></th><th></th></tr></thead><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td></tr></tfoot></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test( 'should be transformed to flexible table block keeping Fixed width table cells option', async ( {
@@ -55,12 +53,57 @@ test.describe( 'Transform from core table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createCoreTableBlock( { col: 6, row: 6 } );
+		await fsbUtils.createCoreTableBlock();
 		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).check();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
+	} );
+
+	test( 'should be transformed to flexible table block keeping merged cells and caption', async ( {
+		editor,
+	} ) => {
+		await editor.insertBlock( {
+			name: 'core/table',
+			attributes: {
+				head: [
+					{
+						cells: [
+							{ content: 'Header 1', tag: 'th', colspan: '2' },
+							{ content: 'Header 3', tag: 'th' },
+						],
+					},
+				],
+				body: [
+					{
+						cells: [
+							{ content: 'Cell 1', tag: 'td', rowspan: '2' },
+							{ content: 'Cell 2', tag: 'td' },
+							{ content: 'Cell 3', tag: 'td' },
+						],
+					},
+					{
+						cells: [
+							{ content: 'Cell 4', tag: 'td' },
+							{ content: 'Cell 5', tag: 'td' },
+						],
+					},
+				],
+				caption: 'Table <strong>caption</strong>',
+			},
+		} );
+		await editor.transformBlockTo( 'flexible-table-block/table' );
+
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><thead><tr><th colspan="2">Header 1</th><th>Header 3</th></tr></thead><tbody><tr><td rowspan="2">Cell 1</td><td>Cell 2</td><td>Cell 3</td></tr><tr><td>Cell 4</td><td>Cell 5</td></tr></tbody></table><figcaption>Table <strong>caption</strong></figcaption></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 } );
 
@@ -73,14 +116,18 @@ test.describe( 'Transform from flexible table block', () => {
 		editor,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { col: 3, row: 6 } );
+		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 3 )
 			.fill( 'Flexible Table Block' );
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`
+		);
 	} );
 
 	test( 'should be transformed to core table block with no Fixed width table cells option', async ( {
@@ -88,7 +135,7 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { col: 6, row: 3 } );
+		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
@@ -99,10 +146,14 @@ test.describe( 'Transform from flexible table block', () => {
 			.getByRole( 'tab', { name: 'Settings' } )
 			.click();
 		await page.getByRole( 'button', { name: 'Table settings' } ).click();
-		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).uncheck();
+		await page.getByRole( 'switch', { name: 'Fixed width table cells' } ).uncheck();
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table {"hasFixedLayout":false} -->
+<figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`
+		);
 	} );
 
 	test( 'should be transformed to core table block with no style and class table', async ( {
@@ -110,14 +161,14 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { col: 6, row: 3 } );
+		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
 		await page
 			.getByRole( 'region', { name: 'Editor settings' } )
 			.getByRole( 'tab', { name: 'Settings' } )
 			.click();
 		await page.getByRole( 'button', { name: 'Table settings' } ).click();
-		await page.getByRole( 'checkbox', { name: 'Scroll on desktop view' } ).uncheck();
+		await page.getByRole( 'switch', { name: 'Scroll on desktop view' } ).uncheck();
 		await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '500' );
 		await page
 			.getByRole( 'group', { name: 'Table padding' } )
@@ -127,7 +178,11 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'button', { name: 'Separate' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`
+		);
 	} );
 
 	test( 'should be transformed to core table block with rowspan / colspan cells', async ( {
@@ -135,7 +190,7 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
@@ -152,7 +207,11 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`
+		);
 	} );
 
 	test( 'should be transformed to core table block with no style and class cells', async ( {
@@ -180,7 +239,11 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`
+		);
 	} );
 
 	test( 'should be transformed to core table block with no unnecessary attributes cells', async ( {
@@ -199,10 +262,15 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await page.getByRole( 'textbox', { name: 'id attribute' } ).fill( 'id' );
 		await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
-		await page.getByRole( 'combobox', { name: 'scope attribute' } ).selectOption( 'row' );
+		await page.getByRole( 'combobox', { name: 'scope attribute' } ).click();
+		await page.getByRole( 'option', { name: 'row', exact: true } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:table -->`
+		);
 	} );
 
 	test( 'should be transformed to core table block with appropriate tag cells', async ( {
@@ -225,7 +293,11 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'TH' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td></tr></tfoot></table></figure>
+<!-- /wp:table -->`
+		);
 	} );
 
 	test( 'should be transformed to core table block keeping caption text', async ( {
@@ -244,7 +316,11 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.keyboard.type( 'Block' );
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible<br>Table<br>Block</figcaption></figure>
+<!-- /wp:table -->`
+		);
 	} );
 
 	test( 'should be transformed to core table block with no option caption text', async ( {
@@ -271,6 +347,10 @@ test.describe( 'Transform from flexible table block', () => {
 		await page.getByRole( 'radio', { name: 'Top' } ).click();
 		await editor.transformBlockTo( 'core/table' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:table -->
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><figcaption class="wp-element-caption">Flexible Table Block</figcaption></figure>
+<!-- /wp:table -->`
+		);
 	} );
 } );

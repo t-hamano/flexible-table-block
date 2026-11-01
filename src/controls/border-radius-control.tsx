@@ -1,39 +1,18 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { link, linkOff } from '@wordpress/icons';
-import { useState } from '@wordpress/element';
-import {
-	BaseControl,
-	Button,
-	__experimentalGrid as Grid,
-	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits,
-} from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { useInstanceId } from '@wordpress/compose';
 
 /**
  * Internal dependencies
  */
-import { BORDER_RADIUS_UNITS, MAX_BORDER_RADIUS, CORNER_CONTROLS } from '../constants';
-import { CornerIndicatorControl } from './indicator-control';
-import { parseUnit, sanitizeUnitValue } from '../utils/helper';
-import type { CornerValue } from '../BlockAttributes';
-
-const DEFAULT_VALUES = {
-	topLeft: '',
-	topRight: '',
-	bottomRight: '',
-	bottomLeft: '',
-};
+import { BORDER_UNITS, MAX_BORDER_RADIUS, CORNER_CONTROLS } from '../constants';
+import LinkedUnitControl from './linked-unit-control';
 
 type Props = {
 	label: string;
@@ -48,136 +27,24 @@ type Props = {
 	className?: string;
 };
 
-type ValuesKey = keyof typeof DEFAULT_VALUES;
-type MaxBorderRadiusKey = keyof typeof MAX_BORDER_RADIUS;
-
 export default function BorderRadiusControl( {
 	label = __( 'Border radius', 'flexible-table-block' ),
+	className,
 	help,
 	onChange,
-	values: valuesProp,
-	className,
+	values,
 }: Props ) {
-	const values = {
-		...DEFAULT_VALUES,
-		...valuesProp,
-	};
-	const instanceId = useInstanceId( BorderRadiusControl, 'ftb-border-radius-control' );
-
-	const isMixed = ! (
-		values.topLeft === values.topRight &&
-		values.topLeft === values.bottomRight &&
-		values.topLeft === values.bottomLeft
-	);
-
-	const borderRadiusUnits = useCustomUnits( { availableUnits: BORDER_RADIUS_UNITS } );
-
-	const [ isLinked, setIsLinked ] = useState( true );
-	const [ corner, setCorner ] = useState< CornerValue | undefined >( undefined );
-
-	const linkedLabel = isLinked
-		? __( 'Unlink sides', 'flexible-table-block' )
-		: __( 'Link sides', 'flexible-table-block' );
-
-	const allInputPlaceholder = isMixed ? __( 'Mixed', 'flexible-table-block' ) : '';
-	const allInputValue: string | 0 = isMixed ? '' : values.topLeft;
-
-	const toggleLinked = () => {
-		setIsLinked( ! isLinked );
-		setCorner( undefined );
-	};
-
-	const handleOnFocus = ( focusCorner: CornerValue ) => setCorner( focusCorner );
-
-	const handleOnChangeAll = ( inputValue: string | undefined ) => {
-		if ( inputValue ) {
-			const [ , unit ] = parseUnit( inputValue );
-			const sanitizedValue = sanitizeUnitValue( inputValue, {
-				maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
-			} );
-
-			onChange( {
-				topLeft: sanitizedValue,
-				topRight: sanitizedValue,
-				bottomRight: sanitizedValue,
-				bottomLeft: sanitizedValue,
-			} );
-		} else {
-			onChange( {
-				topLeft: undefined,
-				topRight: undefined,
-				bottomRight: undefined,
-				bottomLeft: undefined,
-			} );
-		}
-	};
-
-	const handleOnChange = ( inputValue: string | undefined, targetCorner: CornerValue ) => {
-		if ( inputValue ) {
-			const [ , unit ] = parseUnit( inputValue );
-			const sanitizedValue = sanitizeUnitValue( inputValue, {
-				maxNum: MAX_BORDER_RADIUS[ unit as MaxBorderRadiusKey ],
-			} );
-
-			onChange( {
-				...values,
-				[ targetCorner ]: sanitizedValue,
-			} );
-		} else {
-			onChange( {
-				...values,
-				[ targetCorner ]: undefined,
-			} );
-		}
-	};
-
 	return (
-		<BaseControl className={ clsx( 'ftb-border-radius-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
-					<Stack align="center" gap="sm">
-						<CornerIndicatorControl corner={ corner } />
-						{ isLinked && (
-							<div>
-								<UnitControl
-									hideLabelFromVision
-									label={ __( 'All', 'flexible-table-block' ) }
-									placeholder={ allInputPlaceholder }
-									onChange={ handleOnChangeAll }
-									value={ allInputValue }
-									units={ borderRadiusUnits }
-									min={ 0 }
-									__unstableInputWidth="100px"
-								/>
-							</div>
-						) }
-					</Stack>
-					<Button
-						label={ linkedLabel }
-						onClick={ toggleLinked }
-						icon={ isLinked ? link : linkOff }
-						size="small"
-					/>
-				</Stack>
-				{ ! isLinked && (
-					<Grid gap={ 2 }>
-						{ CORNER_CONTROLS.map( ( item ) => (
-							<div key={ item.value }>
-								<UnitControl
-									aria-label={ item.label }
-									value={ values[ item.value as ValuesKey ] }
-									units={ borderRadiusUnits }
-									min={ 0 }
-									onFocus={ () => handleOnFocus( item.value ) }
-									onChange={ ( value ) => handleOnChange( value, item.value ) }
-									style={ { marginBottom: 0 } }
-								/>
-							</div>
-						) ) }
-					</Grid>
-				) }
-			</Stack>
-		</BaseControl>
+		<LinkedUnitControl
+			label={ label }
+			help={ help }
+			values={ values }
+			onChange={ onChange }
+			className={ className }
+			items={ CORNER_CONTROLS }
+			layout="corners"
+			availableUnits={ BORDER_UNITS }
+			maxValues={ MAX_BORDER_RADIUS }
+		/>
 	);
 }

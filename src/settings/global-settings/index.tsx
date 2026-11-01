@@ -5,30 +5,26 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
-import { Button, Spinner } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
+import { Button, IconButton, Spinner, Stack } from '@wordpress/ui';
 import { help } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../../constants';
 import HelpModal from './help-modal';
 import SettingModal from './setting-modal';
-import type { StoreOptions } from '../../store';
+import { store as ftbStore } from '../../store';
 
 export default function GlobalSettings() {
 	const { options, canManageOptions, hasResolved } = useSelect( ( select ) => {
 		return {
-			// @ts-ignore
-			options: select( STORE_NAME ).getOptions() as StoreOptions,
+			options: select( ftbStore ).getOptions(),
 			canManageOptions: !! select( coreStore ).canUser( 'update', {
 				kind: 'root',
 				name: 'site',
 			} ),
 			hasResolved:
-				// @ts-ignore
-				select( STORE_NAME ).hasFinishedResolution( 'getOptions' ) &&
+				select( ftbStore ).hasFinishedResolution( 'getOptions' ) &&
 				select( coreStore ).hasFinishedResolution( 'canUser', [
 					'update',
 					{ kind: 'root', name: 'site' },
@@ -46,13 +42,13 @@ export default function GlobalSettings() {
 			<Stack align="center" justify="space-between" gap="sm">
 				{ ! hasResolved && <Spinner /> }
 				{ hasResolved && showGlobalSetting && (
-					<Button variant="primary" onClick={ () => setIsSettingModalOpen( true ) } size="compact">
+					<Button onClick={ () => setIsSettingModalOpen( true ) } size="compact">
 						{ __( 'Edit global setting', 'flexible-table-block' ) }
 					</Button>
 				) }
-				<Button
+				<IconButton
 					icon={ help }
-					variant="link"
+					variant="minimal"
 					onClick={ () => setIsHelpModalOpen( true ) }
 					label={ __( 'Help', 'flexible-table-block' ) }
 					size="compact"

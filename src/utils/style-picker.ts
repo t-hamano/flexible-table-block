@@ -28,29 +28,78 @@ export interface CrossProps {
 }
 
 /**
+ * Map of each side (or corner) to its longhand CSS property, in the same order as the shorthand.
+ */
+export type FourSideLonghands< T > = Record< keyof T & string, keyof Properties >;
+
+export const PADDING_LONGHANDS: FourSideLonghands< DirectionProps > = {
+	top: 'paddingTop',
+	right: 'paddingRight',
+	bottom: 'paddingBottom',
+	left: 'paddingLeft',
+};
+
+export const BORDER_WIDTH_LONGHANDS: FourSideLonghands< DirectionProps > = {
+	top: 'borderTopWidth',
+	right: 'borderRightWidth',
+	bottom: 'borderBottomWidth',
+	left: 'borderLeftWidth',
+};
+
+export const BORDER_STYLE_LONGHANDS: FourSideLonghands< DirectionProps > = {
+	top: 'borderTopStyle',
+	right: 'borderRightStyle',
+	bottom: 'borderBottomStyle',
+	left: 'borderLeftStyle',
+};
+
+export const BORDER_COLOR_LONGHANDS: FourSideLonghands< DirectionProps > = {
+	top: 'borderTopColor',
+	right: 'borderRightColor',
+	bottom: 'borderBottomColor',
+	left: 'borderLeftColor',
+};
+
+export const BORDER_RADIUS_LONGHANDS: FourSideLonghands< CornerProps > = {
+	topLeft: 'borderTopLeftRadius',
+	topRight: 'borderTopRightRadius',
+	bottomRight: 'borderBottomRightRadius',
+	bottomLeft: 'borderBottomLeftRadius',
+};
+
+/**
+ * Pick a four-side style as object from style object.
+ *
+ * @param stylesObj styles object.
+ * @param shorthand Shorthand CSS property name.
+ * @param longhands Map of each side to its longhand CSS property name.
+ * @return Four-side styles object.
+ */
+function pickFourSides< K extends string >(
+	stylesObj: Properties,
+	shorthand: keyof Properties,
+	longhands: Record< K, keyof Properties >
+): Record< K, string > {
+	const sides = Object.keys( longhands ) as K[];
+	const shorthandValue = stylesObj[ shorthand ];
+	const values = shorthandValue
+		? parseCssValue( String( shorthandValue ) )
+		: sides.map( ( side ) => String( stylesObj[ longhands[ side ] ] || '' ) );
+
+	return Object.fromEntries( sides.map( ( side, index ) => [ side, values[ index ] ] ) ) as Record<
+		K,
+		string
+	>;
+}
+
+/**
  * Pick padding style as object from style object.
  *
  * @param stylesObj styles object.
  * @return padding styles object.
  */
 export function pickPadding( stylesObj: Properties ): DirectionProps {
-	if ( stylesObj.padding ) {
-		const paddingValues = parseCssValue( stylesObj.padding );
-
-		return {
-			top: paddingValues[ 0 ],
-			right: paddingValues[ 1 ],
-			bottom: paddingValues[ 2 ],
-			left: paddingValues[ 3 ],
-		};
-	}
-
-	return {
-		top: stylesObj?.paddingTop || '',
-		right: stylesObj?.paddingRight || '',
-		bottom: stylesObj?.paddingBottom || '',
-		left: stylesObj?.paddingLeft || '',
-	};
+	return pickFourSides( stylesObj, 'padding', PADDING_LONGHANDS );
 }
 
 /**
@@ -60,23 +109,7 @@ export function pickPadding( stylesObj: Properties ): DirectionProps {
  * @return border-width styles object.
  */
 export function pickBorderWidth( stylesObj: Properties ): DirectionProps {
-	if ( stylesObj.borderWidth ) {
-		const borderWidthValues = parseCssValue( stylesObj.borderWidth );
-
-		return {
-			top: borderWidthValues[ 0 ],
-			right: borderWidthValues[ 1 ],
-			bottom: borderWidthValues[ 2 ],
-			left: borderWidthValues[ 3 ],
-		};
-	}
-
-	return {
-		top: stylesObj?.borderTopWidth || '',
-		right: stylesObj?.borderRightWidth || '',
-		bottom: stylesObj?.borderBottomWidth || '',
-		left: stylesObj?.borderLeftWidth || '',
-	};
+	return pickFourSides( stylesObj, 'borderWidth', BORDER_WIDTH_LONGHANDS );
 }
 
 /**
@@ -86,23 +119,7 @@ export function pickBorderWidth( stylesObj: Properties ): DirectionProps {
  * @return border-color styles object.
  */
 export function pickBorderColor( stylesObj: Properties ): DirectionProps {
-	if ( stylesObj.borderColor ) {
-		const borderColorValues = parseCssValue( stylesObj.borderColor );
-
-		return {
-			top: borderColorValues[ 0 ],
-			right: borderColorValues[ 1 ],
-			bottom: borderColorValues[ 2 ],
-			left: borderColorValues[ 3 ],
-		};
-	}
-
-	return {
-		top: stylesObj?.borderTopColor || '',
-		right: stylesObj?.borderRightColor || '',
-		bottom: stylesObj?.borderBottomColor || '',
-		left: stylesObj?.borderLeftColor || '',
-	};
+	return pickFourSides( stylesObj, 'borderColor', BORDER_COLOR_LONGHANDS );
 }
 
 /**
@@ -112,53 +129,17 @@ export function pickBorderColor( stylesObj: Properties ): DirectionProps {
  * @return border-style styles object.
  */
 export function pickBorderStyle( stylesObj: Properties ): DirectionProps {
-	if ( stylesObj.borderStyle ) {
-		const borderStyleValues = parseCssValue( stylesObj.borderStyle );
-
-		return {
-			top: borderStyleValues[ 0 ],
-			right: borderStyleValues[ 1 ],
-			bottom: borderStyleValues[ 2 ],
-			left: borderStyleValues[ 3 ],
-		};
-	}
-
-	return {
-		top: stylesObj?.borderTopStyle || '',
-		right: stylesObj?.borderRightStyle || '',
-		bottom: stylesObj?.borderBottomStyle || '',
-		left: stylesObj?.borderLeftStyle || '',
-	};
+	return pickFourSides( stylesObj, 'borderStyle', BORDER_STYLE_LONGHANDS );
 }
 
 /**
  * Pick border-radius style as object from style object.
  *
- * @param stylesObj                         styles object.
- * @param stylesObj.borderRadius
- * @param stylesObj.borderTopLeftRadius
- * @param stylesObj.borderTopRightRadius
- * @param stylesObj.borderBottomRightRadius
- * @param stylesObj.borderBottomLeftRadius
+ * @param stylesObj styles object.
  * @return border-radius styles object.
  */
 export function pickBorderRadius( stylesObj: Properties ): CornerProps {
-	if ( stylesObj.borderRadius ) {
-		const borderRadiusValues = parseCssValue( stylesObj.borderRadius );
-		return {
-			topLeft: borderRadiusValues[ 0 ],
-			topRight: borderRadiusValues[ 1 ],
-			bottomRight: borderRadiusValues[ 2 ],
-			bottomLeft: borderRadiusValues[ 3 ],
-		};
-	}
-
-	return {
-		topLeft: stylesObj?.borderTopLeftRadius || '',
-		topRight: stylesObj?.borderTopRightRadius || '',
-		bottomRight: stylesObj?.borderBottomRightRadius || '',
-		bottomLeft: stylesObj?.borderBottomLeftRadius || '',
-	};
+	return pickFourSides( stylesObj, 'borderRadius', BORDER_RADIUS_LONGHANDS );
 }
 
 /**

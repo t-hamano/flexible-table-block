@@ -3,26 +3,22 @@
  */
 import clsx from 'clsx';
 import type { Property } from 'csstype';
-import type { ReactElement } from 'react';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import { BaseControl, Popover, ColorPalette } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { store as blockEditorStore } from '@wordpress/block-editor';
-import { useInstanceId } from '@wordpress/compose';
+import { Field } from '@wordpress/ui';
 
 /**
  * Internal dependencies
  */
 import ColorIndicatorButton from './color-indicator-button';
+import ColorPalettePopover from './color-palette-popover';
 
 type Props = {
-	label: string | ReactElement;
+	label: string;
 	help?: string;
 	onChange: ( event: any ) => void;
 	colors?: {
@@ -42,14 +38,8 @@ export default function ColorControl( {
 	value,
 	className,
 }: Props ) {
-	const instanceId = useInstanceId( ColorControl, 'ftb-color-control' );
-
-	const colors = useSelect( ( select ) => {
-		const settings = select( blockEditorStore ).getSettings();
-		return settings?.colors ?? [];
-	}, [] );
-
 	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
+	const [ popoverAnchor, setPopoverAnchor ] = useState< HTMLDivElement | null >( null );
 
 	const handleOnChange = ( inputValue: Property.Color | undefined ) => onChange( inputValue );
 
@@ -58,28 +48,27 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<BaseControl className={ clsx( 'ftb-color-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<ColorIndicatorButton
-					label={ __( 'Color', 'flexible-table-block' ) }
-					value={ value }
-					onClick={ handleOnPickerOpen }
-					isNone={ ! value }
-					isTransparent={ value === 'transparent' }
-				/>
-			</Stack>
+		<Field.Root ref={ setPopoverAnchor } className={ clsx( 'ftb-color-control', className ) }>
+			<Field.VisualLabel>{ label }</Field.VisualLabel>
+			<ColorIndicatorButton
+				label={ label }
+				value={ value }
+				onClick={ handleOnPickerOpen }
+				isNone={ ! value }
+				isTransparent={ value === 'transparent' }
+				isExpanded={ isPickerOpen }
+			/>
 			{ isPickerOpen && (
-				<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-					<div style={ { padding: '16px' } }>
-						<ColorPalette
-							colors={ [ ...colors, ...colorsProp ] }
-							value={ value || '' }
-							onChange={ handleOnChange }
-						/>
-					</div>
-				</Popover>
+				<ColorPalettePopover
+					label={ label }
+					value={ value }
+					colors={ colorsProp }
+					onChange={ handleOnChange }
+					onClose={ handleOnPickerClose }
+					anchor={ popoverAnchor }
+				/>
 			) }
-		</BaseControl>
+			{ help && <Field.Description>{ help }</Field.Description> }
+		</Field.Root>
 	);
 }

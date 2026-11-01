@@ -9,17 +9,14 @@ import type { Property } from 'csstype';
  */
 import { __ } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
-import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
-import { BaseControl, Button, Popover, ColorPalette } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
-import { store as blockEditorStore } from '@wordpress/block-editor';
-import { useInstanceId } from '@wordpress/compose';
+import { Fieldset, IconButton, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
  */
 import ColorIndicatorButton from './color-indicator-button';
+import ColorPalettePopover from './color-palette-popover';
 import { SideIndicatorControl } from './indicator-control';
 import { SIDE_CONTROLS } from '../constants';
 import type { SideValue } from '../BlockAttributes';
@@ -55,7 +52,6 @@ export default function BorderColorControl( {
 		...DEFAULT_VALUES,
 		...valuesProp,
 	};
-	const instanceId = useInstanceId( BorderColorControl, 'ftb-border-color-control' );
 
 	const isMixed = ! (
 		values.top === values.right &&
@@ -63,22 +59,22 @@ export default function BorderColorControl( {
 		values.top === values.left
 	);
 
-	const colors = useSelect( ( select ) => {
-		const settings = select( blockEditorStore ).getSettings();
-		return settings?.colors ?? [];
-	}, [] );
-
 	const [ isLinked, setIsLinked ] = useState( true );
 	const [ isPickerOpen, setIsPickerOpen ] = useState( false );
 	const [ pickerIndex, setPickerIndex ] = useState< number | undefined >( undefined );
+	const [ popoverAnchor, setPopoverAnchor ] = useState< HTMLFieldSetElement | null >( null );
 
 	const linkedLabel = isLinked
 		? __( 'Unlink sides', 'flexible-table-block' )
 		: __( 'Link sides', 'flexible-table-block' );
 
-	const allInputValue: string | 0 = isMixed ? '' : values.top;
+	const allInputValue: string = isMixed ? '' : values.top;
 
-	const toggleLinked = () => setIsLinked( ! isLinked );
+	const toggleLinked = () => {
+		setIsLinked( ! isLinked );
+		setIsPickerOpen( false );
+		setPickerIndex( undefined );
+	};
 
 	const handleOnChangeAll = ( inputValue: string | undefined ) => {
 		onChange( {
@@ -107,73 +103,70 @@ export default function BorderColorControl( {
 	};
 
 	return (
-		<BaseControl className={ clsx( 'ftb-border-color-control', className ) } help={ help }>
-			<Stack direction="column" gap="sm" role="group" aria-labelledby={ instanceId }>
-				<BaseControl.VisualLabel id={ instanceId }>{ label }</BaseControl.VisualLabel>
-				<Stack align="flex-start" justify="space-between" gap="sm">
-					{ isLinked ? (
-						<Stack align="center" gap="md">
-							<SideIndicatorControl />
-							<ColorIndicatorButton
-								label={ __( 'All', 'flexible-table-block' ) }
+		<Fieldset.Root
+			ref={ setPopoverAnchor }
+			className={ clsx( 'ftb-border-color-control', className ) }
+		>
+			<Fieldset.Legend>{ label }</Fieldset.Legend>
+			<Stack align="flex-start" justify="space-between" gap="sm">
+				{ isLinked ? (
+					<Stack align="center" gap="md">
+						<SideIndicatorControl />
+						<ColorIndicatorButton
+							label={ __( 'All', 'flexible-table-block' ) }
+							value={ allInputValue }
+							onClick={ () => handleOnPickerOpen( undefined ) }
+							isNone={ ! allInputValue && ! isMixed }
+							isTransparent={ allInputValue === 'transparent' }
+							isMixed={ isMixed }
+							isExpanded={ isPickerOpen && pickerIndex === undefined }
+						/>
+						{ isPickerOpen && pickerIndex === undefined && (
+							<ColorPalettePopover
+								label={ label }
 								value={ allInputValue }
-								onClick={ () => handleOnPickerOpen( undefined ) }
-								isNone={ ! allInputValue && ! isMixed }
-								isTransparent={ allInputValue === 'transparent' }
-								isMixed={ isMixed }
+								onChange={ handleOnChangeAll }
+								onClose={ handleOnPickerClose }
+								anchor={ popoverAnchor }
 							/>
-							{ isPickerOpen && ! pickerIndex && (
-								<Popover placement="left-start" shift offset={ 36 } onClose={ handleOnPickerClose }>
-									<div style={ { padding: '16px' } }>
-										<ColorPalette
-											colors={ colors }
-											value={ allInputValue || '' }
-											onChange={ handleOnChangeAll }
-										/>
-									</div>
-								</Popover>
-							) }
-						</Stack>
-					) : (
-						<Stack direction="column" gap="sm">
-							{ SIDE_CONTROLS.map( ( item, index ) => (
-								<Stack align="center" gap="md" key={ item.value }>
-									<SideIndicatorControl side={ item.value } />
-									<ColorIndicatorButton
-										label={ item.label }
+						) }
+					</Stack>
+				) : (
+					<Stack direction="column" gap="sm">
+						{ SIDE_CONTROLS.map( ( item, index ) => (
+							<Stack align="center" gap="md" key={ item.value }>
+								<SideIndicatorControl side={ item.value } />
+								<ColorIndicatorButton
+									label={ item.label }
+									value={ values[ item.value ] }
+									onClick={ () => handleOnPickerOpen( index ) }
+									isNone={ ! values[ item.value ] }
+									isTransparent={ values[ item.value ] === 'transparent' }
+									isExpanded={ isPickerOpen && pickerIndex === index }
+								/>
+								{ isPickerOpen && pickerIndex === index && (
+									<ColorPalettePopover
+										label={ label }
 										value={ values[ item.value ] }
-										onClick={ () => handleOnPickerOpen( index ) }
-										isNone={ ! values[ item.value ] }
-										isTransparent={ values[ item.value ] === 'transparent' }
+										onChange={ ( value ) => handleOnChange( value, item.value ) }
+										onClose={ handleOnPickerClose }
+										anchor={ popoverAnchor }
 									/>
-									{ isPickerOpen && pickerIndex === index && (
-										<Popover
-											placement="left-start"
-											shift
-											offset={ 36 }
-											onClose={ handleOnPickerClose }
-										>
-											<div style={ { padding: '16px' } }>
-												<ColorPalette
-													colors={ colors }
-													value={ values[ item.value ] || '' }
-													onChange={ ( value ) => handleOnChange( value, item.value ) }
-												/>
-											</div>
-										</Popover>
-									) }
-								</Stack>
-							) ) }
-						</Stack>
-					) }
-					<Button
-						label={ linkedLabel }
-						onClick={ toggleLinked }
-						icon={ isLinked ? link : linkOff }
-						size="small"
-					/>
-				</Stack>
+								) }
+							</Stack>
+						) ) }
+					</Stack>
+				) }
+				<IconButton
+					label={ linkedLabel }
+					onClick={ toggleLinked }
+					icon={ isLinked ? link : linkOff }
+					variant="minimal"
+					tone="neutral"
+					size="small"
+				/>
 			</Stack>
-		</BaseControl>
+			{ help && <Fieldset.Description>{ help }</Fieldset.Description> }
+		</Fieldset.Root>
 	);
 }

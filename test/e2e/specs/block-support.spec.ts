@@ -1,26 +1,28 @@
 /**
- * WordPress dependencies
- */
-import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
-
-/**
  * Internal dependencies
  */
-import FlexibleTableBlockUtils from '../util';
-
-const test = testBase.extend< { fsbUtils: FlexibleTableBlockUtils } >( {
-	fsbUtils: async ( { page, editor }, use ) => {
-		await use( new FlexibleTableBlockUtils( { page, editor } ) );
-	},
-} );
+import { test, expect } from '../util';
 
 test.describe( 'Block Support', () => {
+	let previousTheme: string | undefined;
+
 	test.beforeAll( async ( { requestUtils } ) => {
+		const themes = await requestUtils.rest< { stylesheet: string }[] >( {
+			path: '/wp/v2/themes',
+			params: { status: 'active' },
+		} );
+		previousTheme = themes[ 0 ]?.stylesheet;
 		await requestUtils.activateTheme( 'twentytwentyfour' );
 	} );
 
 	test.beforeEach( async ( { admin } ) => {
 		await admin.createNewPost();
+	} );
+
+	test.afterAll( async ( { requestUtils } ) => {
+		if ( previousTheme ) {
+			await requestUtils.activateTheme( previousTheme );
+		}
 	} );
 
 	test( 'typography settings should be applied', async ( { editor, page, fsbUtils } ) => {
@@ -67,7 +69,11 @@ test.describe( 'Block Support', () => {
 		// Change letter spacing.
 		await page.getByRole( 'spinbutton', { name: 'Letter spacing' } ).fill( '10' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"style":{"typography":{"fontStyle":"normal","fontWeight":"500","lineHeight":"3","textTransform":"lowercase","letterSpacing":"10px"}},"fontSize":"large","fontFamily":"system-sans-serif"} -->
+<figure class="wp-block-flexible-table-block-table has-system-sans-serif-font-family has-large-font-size" style="font-style:normal;font-weight:500;letter-spacing:10px;line-height:3;text-transform:lowercase"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test( 'dimensions settings should be applied', async ( { editor, page, fsbUtils } ) => {
@@ -89,13 +95,17 @@ test.describe( 'Block Support', () => {
 		await page.getByRole( 'button', { name: 'Unlink' } ).click();
 		// Change margin values.
 		for ( let i = 0; i < 4; i++ ) {
-			await page.getByRole( 'button', { name: 'Set custom value' } ).nth( 0 ).click();
+			await page.getByRole( 'button', { name: 'Set custom value' } ).first().click();
 		}
 		await page.getByRole( 'spinbutton', { name: 'Top margin' } ).fill( '10' );
 		await page.getByRole( 'spinbutton', { name: 'Right margin' } ).fill( '20' );
 		await page.getByRole( 'spinbutton', { name: 'Bottom margin' } ).fill( '30' );
 		await page.getByRole( 'spinbutton', { name: 'Left margin' } ).fill( '40' );
 
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"style":{"spacing":{"margin":{"top":"10px","right":"20px","bottom":"30px","left":"40px"}}}} -->
+<figure class="wp-block-flexible-table-block-table" style="margin-top:10px;margin-right:20px;margin-bottom:30px;margin-left:40px"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 } );
