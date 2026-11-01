@@ -1,6 +1,5 @@
 @use "sass:math";
 @use "~@wordpress/base-styles/variables" as variables;
-@use "~@wordpress/base-styles/colors" as colors;
 @use "settings/global-settings/style" as globalSettings;
 @use "controls/style" as controls;
 
@@ -34,7 +33,7 @@ $row-column-inserter-dot-size: 6px;
 					left: 2px;
 					pointer-events: none;
 					content: "";
-					border: 2px solid var(--wp-admin-theme-color);
+					border: var(--wpds-border-width-sm) solid var(--wp-admin-theme-color);
 				}
 
 				.block-editor-rich-text__editable {
@@ -58,7 +57,7 @@ $row-column-inserter-dot-size: 6px;
 			td {
 
 				.block-editor-rich-text__editable {
-					border: variables.$border-width dotted colors.$gray-400;
+					border: var(--wpds-border-width-xs) dotted var(--wpds-color-stroke-surface-neutral);
 				}
 			}
 		}
@@ -83,7 +82,7 @@ $row-column-inserter-dot-size: 6px;
 			}
 
 			&.is-caption-side-top > table {
-				margin-top: variables.$grid-unit-50;
+				margin-top: var(--wpds-dimension-gap-3xl);
 			}
 		}
 	}
@@ -114,24 +113,24 @@ $row-column-inserter-dot-size: 6px;
 	.ftb-placeholder {
 		// Reset typography support styles
 		font-style: normal;
-		font-weight: 400;
+		font-weight: var(--wpds-typography-font-weight-default);
 		line-height: initial;
 		text-transform: none;
 		letter-spacing: 0;
 
 		code {
-			padding: math.div(variables.$grid-unit-05, 2) variables.$grid-unit-05;
+			padding: calc(var(--wpds-dimension-padding-xs) / 2) var(--wpds-dimension-padding-xs);
 			margin: 0;
-			font-family: variables.$font-family-mono;
+			font-family: var(--wpds-typography-font-family-mono);
 			font-size: inherit;
-			background: colors.$gray-100;
+			background: var(--wpds-color-background-surface-neutral-weak);
 		}
 	}
 
 	.ftb-placeholder__table-wrap {
 		width: 100%;
-		padding: variables.$grid-unit-20;
-		background-color: colors.$gray-100;
+		padding: var(--wpds-dimension-padding-lg);
+		background-color: var(--wpds-color-background-surface-neutral-weak);
 		box-sizing: border-box;
 	}
 
@@ -140,7 +139,7 @@ $row-column-inserter-dot-size: 6px;
 		max-width: variables.$grid-unit-80 * 5; // 320px
 		vertical-align: middle;
 		table-layout: fixed;
-		border-spacing: variables.$grid-unit-05;
+		border-spacing: var(--wpds-dimension-gap-xs);
 		border-collapse: separate;
 
 		th,
@@ -150,13 +149,13 @@ $row-column-inserter-dot-size: 6px;
 
 		thead th {
 			background-color: var(--wp-admin-theme-color);
-			border: variables.$border-width colors.$gray-900 solid;
+			border: var(--wpds-border-width-xs) var(--wpds-color-stroke-surface-neutral-strong) solid;
 		}
 
 		tbody td,
 		tfoot td {
-			background-color: colors.$white;
-			border: variables.$border-width colors.$gray-900 solid;
+			background-color: var(--wpds-color-background-surface-neutral-strong);
+			border: var(--wpds-border-width-xs) var(--wpds-color-stroke-surface-neutral-strong) solid;
 		}
 
 		&.is-overflow-col tr *:nth-last-child(2) {
@@ -167,7 +166,7 @@ $row-column-inserter-dot-size: 6px;
 
 			&::before {
 				display: block;
-				font-weight: 400;
+				font-weight: var(--wpds-typography-font-weight-default);
 				line-height: 0;
 				content: "...";
 			}
@@ -200,9 +199,9 @@ $row-column-inserter-dot-size: 6px;
 		left: 0;
 		z-index: 1;
 		min-height: 0;
-		padding: 0 variables.$grid-unit-05;
-		font-size: variables.$font-size-x-small;
-		line-height: variables.$font-line-height-x-small;
+		padding: 0 var(--wpds-dimension-padding-xs);
+		font-size: var(--wpds-typography-font-size-xs);
+		line-height: var(--wpds-typography-line-height-xs);
 	}
 
 	.ftb-row-before-inserter {
@@ -260,24 +259,19 @@ $row-column-inserter-dot-size: 6px;
 			left: 50%;
 			width: $row-column-inserter-dot-size;
 			height: $row-column-inserter-dot-size;
-			padding: 0;
 			content: "";
-			background: colors.$gray-200;
+			background: var(--wpds-color-background-track-neutral);
 			border-radius: variables.$radius-round;
 			transform: translate(-50%, -50%);
 		}
 
 		&:hover,
 		&:focus {
-			color: colors.$white;
+			color: var(--wpds-color-foreground-interactive-brand-strong);
 			background: var(--wp-admin-theme-color);
 
 			&::before {
 				content: none;
-			}
-
-			&:active {
-				color: colors.$white;
 			}
 		}
 	}
@@ -287,7 +281,7 @@ $row-column-inserter-dot-size: 6px;
 		left: ($row-column-selector-size + 2) * -1;
 		width: $row-column-selector-size;
 		height: calc(100% - 2px);
-		border-radius: variables.$radius-small 0 0 variables.$radius-small;
+		border-radius: var(--wpds-border-radius-sm) 0 0 var(--wpds-border-radius-sm);
 	}
 
 	.ftb-column-selector {
@@ -295,7 +289,7 @@ $row-column-inserter-dot-size: 6px;
 		left: 1px;
 		width: calc(100% - 2px);
 		height: $row-column-selector-size;
-		border-radius: variables.$radius-small variables.$radius-small 0 0;
+		border-radius: var(--wpds-border-radius-sm) var(--wpds-border-radius-sm) 0 0;
 	}
 
 	.ftb-row-selector,
@@ -309,8 +303,8 @@ $row-column-inserter-dot-size: 6px;
 		}
 
 		&:not([aria-pressed="true"]) {
-			--wp-ui-button-background-color: #{colors.$gray-200};
-			--wp-ui-button-background-color-active: #{colors.$gray-300};
+			--wp-ui-button-background-color: var(--wpds-color-background-interactive-neutral-weak-active);
+			--wp-ui-button-background-color-active: var(--wpds-color-background-track-neutral);
 		}
 
 		svg {
@@ -322,25 +316,27 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-row-remover,
 	.ftb-column-remover {
-		--wp-ui-button-background-color: #{colors.$white};
-		--wp-ui-button-border-color: #{colors.$gray-900};
-		--wp-ui-button-border-color-active: #{colors.$gray-900};
+		--wp-ui-button-background-color: var(--wpds-color-background-interactive-neutral);
+		--wp-ui-button-border-color: var(--wpds-color-stroke-interactive-neutral-strong);
+		--wp-ui-button-border-color-active: var(--wpds-color-stroke-interactive-neutral-active);
 
 		position: absolute;
 		z-index: 1;
-		border-radius: variables.$radius-small;
+		border-radius: var(--wpds-border-radius-sm);
 		box-shadow: variables.$elevation-x-small;
 	}
 
 	.ftb-row-remover {
 		top: 50%;
 		left: variables.$grid-unit-70 * -1; // -56px
-		margin-top: math.div(variables.$button-size-compact, 2) * -1; // -16px
+		// Shift back by half the compact button height to center the button.
+		margin-top: calc(var(--wpds-dimension-size-md) / 2 * -1);
 	}
 
 	.ftb-column-remover {
 		top: variables.$grid-unit-70 * -1; // -56px
 		left: 50%;
-		margin-left: math.div(variables.$button-size-compact, 2) * -1; // -16px
+		// Shift back by half the compact button height to center the button.
+		margin-left: calc(var(--wpds-dimension-size-md) / 2 * -1);
 	}
 }

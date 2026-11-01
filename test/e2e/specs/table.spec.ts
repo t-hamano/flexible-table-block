@@ -8,8 +8,9 @@ test.describe( 'Flexible table', () => {
 		await admin.createNewPost();
 	} );
 
-	test( 'should create block', async ( { editor, fsbUtils } ) => {
-		await fsbUtils.createFlexibleTableBlock();
+	test( 'should create block', async ( { editor } ) => {
+		await editor.insertBlock( { name: 'flexible-table-block/table' } );
+		await editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:flexible-table-block/table -->
 <figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
@@ -17,8 +18,13 @@ test.describe( 'Flexible table', () => {
 		);
 	} );
 
-	test( 'should create block with option', async ( { editor, fsbUtils } ) => {
-		await fsbUtils.createFlexibleTableBlock( { row: 4, col: 4, header: true, footer: true } );
+	test( 'should create block with option', async ( { editor } ) => {
+		await editor.insertBlock( { name: 'flexible-table-block/table' } );
+		await editor.canvas.getByRole( 'switch', { name: 'Header section' } ).check();
+		await editor.canvas.getByRole( 'switch', { name: 'Footer section' } ).check();
+		await editor.canvas.getByRole( 'spinbutton', { name: 'Column count' } ).fill( '4' );
+		await editor.canvas.getByRole( 'spinbutton', { name: 'Row count' } ).fill( '4' );
+		await editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:flexible-table-block/table -->
 <figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td><td></td></tr></tfoot></table></figure>
@@ -262,6 +268,100 @@ test.describe( 'Flexible table', () => {
 					name: 'Dismiss this notice',
 				} )
 			).toHaveText( 'Cannot select multi cells from difference sections.' );
+		} );
+	} );
+
+	test.describe( 'Inserting Rows and Columns', () => {
+		const insertCases = [
+			{
+				label: 'Insert row before',
+				expected: `<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Cell 1</td><td>Cell 2</td><td></td></tr><tr><td>Cell 3</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`,
+			},
+			{
+				label: 'Insert row after',
+				expected: `<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td>Cell 1</td><td>Cell 2</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>Cell 3</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`,
+			},
+			{
+				label: 'Insert column before',
+				expected: `<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td>Cell 1</td><td>Cell 2</td><td></td></tr><tr><td></td><td>Cell 3</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`,
+			},
+			{
+				label: 'Insert column after',
+				expected: `<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td>Cell 1</td><td></td><td>Cell 2</td><td></td></tr><tr><td>Cell 3</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`,
+			},
+		];
+
+		for ( const { label, expected } of insertCases ) {
+			test( `allows to ${ label.toLowerCase() } from the toolbar`, async ( {
+				editor,
+				page,
+				fsbUtils,
+			} ) => {
+				await fsbUtils.createFlexibleTableBlock();
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).fill( 'Cell 1' );
+				await cells.nth( 1 ).fill( 'Cell 2' );
+				await cells.nth( 3 ).fill( 'Cell 3' );
+				await cells.nth( 0 ).click();
+				await editor.clickBlockToolbarButton( 'Edit table' );
+				await page.getByRole( 'menuitem', { name: label } ).click();
+				expect( await editor.getEditedPostContent() ).toBe( expected );
+			} );
+
+			test( `allows to ${ label.toLowerCase() } from the button in the table`, async ( {
+				editor,
+				fsbUtils,
+			} ) => {
+				await fsbUtils.createFlexibleTableBlock();
+				const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
+				await cells.nth( 0 ).fill( 'Cell 1' );
+				await cells.nth( 1 ).fill( 'Cell 2' );
+				await cells.nth( 3 ).fill( 'Cell 3' );
+				await cells.nth( 0 ).click();
+				await editor.canvas.getByRole( 'button', { name: label, exact: true } ).first().click();
+				expect( await editor.getEditedPostContent() ).toBe( expected );
+			} );
+		}
+	} );
+
+	test.describe( 'Table Justification', () => {
+		test( 'allows to change and reset the table justification', async ( {
+			editor,
+			page,
+			fsbUtils,
+		} ) => {
+			await fsbUtils.createFlexibleTableBlock();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
+			await editor.clickBlockToolbarButton( 'Change table justification' );
+			await page.getByRole( 'menuitem', { name: 'Justify table center' } ).click();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table {"contentJustification":"center"} -->
+<figure class="wp-block-flexible-table-block-table is-content-justification-center"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
+			await editor.clickBlockToolbarButton( 'Change table justification' );
+			await page.getByRole( 'menuitem', { name: 'Justify table right' } ).click();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table {"contentJustification":"right"} -->
+<figure class="wp-block-flexible-table-block-table is-content-justification-right"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
+			// Selecting the active justification again resets it.
+			await editor.clickBlockToolbarButton( 'Change table justification' );
+			await page.getByRole( 'menuitem', { name: 'Justify table right' } ).click();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 	} );
 } );
