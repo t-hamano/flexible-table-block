@@ -34,7 +34,7 @@ export default function ColorPalettePopover( {
 
 	return (
 		<Popover placement="left-start" shift offset={ 36 } onClose={ onClose } anchor={ anchor }>
-			<div style={ { padding: '16px' } }>
+			<div style={ { padding: 'var(--wpds-dimension-padding-lg)' } }>
 				<ColorPalette
 					colors={ [ ...( palette ?? [] ), ...colorsProp ] }
 					value={ value || '' }

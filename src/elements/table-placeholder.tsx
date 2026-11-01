@@ -9,7 +9,8 @@ import type { FormEvent } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
-import { BlockIcon } from '@wordpress/block-editor';
+import { useDispatch } from '@wordpress/data';
+import { BlockIcon, store as blockEditorStore } from '@wordpress/block-editor';
 import { Placeholder } from '@wordpress/components';
 import { Button, InputControl, Stack, SwitchControl, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
@@ -35,6 +36,10 @@ type Props = {
 };
 
 export default function TablePlaceholder( { setAttributes }: Props ) {
+	const {
+		// @ts-expect-error Not exported in the type definitions.
+		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
+	} = useDispatch( blockEditorStore );
 	const [ rowCount, setRowCount ] = useState< number | undefined >( DEFAULT_PREVIEW_ROWS );
 	const [ colCount, setColCount ] = useState< number | undefined >( DEFAULT_PREVIEW_COLUMNS );
 	const [ headerSection, setHeaderSection ] = useState( false );
@@ -61,7 +66,10 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			footerSection,
 		} );
 
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( vTable ) );
+		markLastChangeAsPersistent();
 	};
 
 	const onChangeColumnCount = ( value: string ) => {

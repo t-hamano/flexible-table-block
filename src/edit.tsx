@@ -14,6 +14,7 @@ import {
 	BlockControls,
 	useBlockProps,
 	useBlockEditingMode,
+	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import { Text } from '@wordpress/ui';
@@ -76,6 +77,10 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		return select( ftbStore ).getOptions();
 	}, [] );
 	const { createWarningNotice } = useDispatch( noticesStore );
+	const {
+		// @ts-expect-error Not exported in the type definitions.
+		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
+	} = useDispatch( blockEditorStore );
 	const blockEditingMode = useBlockEditingMode();
 	const isContentOnlyMode = blockEditingMode === 'contentOnly';
 
@@ -107,7 +112,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
 
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -136,7 +145,12 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		}
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
+
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -153,7 +167,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
 
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -166,21 +184,36 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		const { vColIndex } = selectedCells[ 0 ];
 
 		const newVTable = deleteColumn( vTable, { vColIndex } );
+
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onMergeCells = () => {
 		const newVTable = mergeCells( vTable, selectedCells, options.merge_content );
+
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onSplitMergedCells = () => {
 		const newVTable = splitMergedCells( vTable, selectedCells );
+
+		// Keep this structural change as its own undo level.
+		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
+		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
