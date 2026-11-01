@@ -8,6 +8,7 @@ import type { KeyboardEvent, MouseEvent } from 'react';
  */
 import { IconButton, Popover, VisuallyHidden } from '@wordpress/ui';
 import { useEffect, useRef } from '@wordpress/element';
+import { focus } from '@wordpress/dom';
 import { trash } from '@wordpress/icons';
 
 type Props = {
@@ -25,22 +26,13 @@ function focusElement( element: HTMLElement ) {
 	element.focus();
 }
 
-// Find the next tabbable element after the given element in the same document.
+// Find the next tabbable element after the given element, skipping the focus guards inserted by the popover.
 function findNextTabbable( element: HTMLElement ) {
-	const candidates = element.ownerDocument.querySelectorAll< HTMLElement >(
-		'button, [href], input, select, textarea, [contenteditable="true"], [tabindex]'
-	);
-	return Array.from( candidates ).find(
-		( candidate ) =>
-			( candidate.tabIndex >= 0 || candidate.isContentEditable ) &&
-			// Skip the focus guards inserted by the popover.
-			! candidate.hasAttribute( 'data-base-ui-focus-guard' ) &&
-			! candidate.hasAttribute( 'disabled' ) &&
-			!! candidate.getClientRects().length &&
-			// eslint-disable-next-line no-bitwise
-			!! ( element.compareDocumentPosition( candidate ) & Node.DOCUMENT_POSITION_FOLLOWING ) &&
-			! element.contains( candidate )
-	);
+	let next = focus.tabbable.findNext( element );
+	while ( next?.hasAttribute( 'data-base-ui-focus-guard' ) ) {
+		next = focus.tabbable.findNext( next );
+	}
+	return next as HTMLElement | undefined;
 }
 
 // Render the remover in a popover so that it is not cut off by the edge of the editor canvas,
