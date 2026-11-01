@@ -40,6 +40,8 @@ $footer-height: variables.$grid-unit-70; // 56px
 	}
 
 	[role="tabpanel"] {
+		// Keep the controls in the panel below the sticky tab list.
+		isolation: isolate;
 		flex: 1;
 		width: 100%;
 	}
