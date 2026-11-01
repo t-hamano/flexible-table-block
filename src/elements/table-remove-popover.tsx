@@ -32,12 +32,6 @@ export default function TableRemovePopover( {
 		return null;
 	}
 
-	// Keep the remover inside the editor canvas, e.g. not behind the admin menu.
-	const collisionBoundary =
-		anchor.ownerDocument.defaultView?.frameElement ??
-		anchor.closest( '.editor-styles-wrapper' ) ??
-		'clipping-ancestors';
-
 	// When control buttons are focusable, move focus to the remover so that keyboard users can reach it.
 	const isFocusable = tabIndex === 0;
 
@@ -52,7 +46,8 @@ export default function TableRemovePopover( {
 						anchor={ anchor }
 						side={ side }
 						sideOffset={ 8 }
-						collisionBoundary={ collisionBoundary }
+						// Keep the remover inside the editor canvas iframe, e.g. not behind the admin menu.
+						collisionBoundary={ anchor.ownerDocument.defaultView?.frameElement ?? undefined }
 					/>
 				}
 			>
