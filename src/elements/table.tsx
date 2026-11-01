@@ -109,11 +109,12 @@ export default function Table( {
 
 	const onInsertRow = ( sectionName: SectionName, rowIndex: number ) => {
 		const newVTable = insertRow( vTable, { sectionName, rowIndex } );
-		// Finish the previous edit so it is not merged into this structural change.
+
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -136,11 +137,12 @@ export default function Table( {
 		}
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
-		// Finish the previous edit so it is not merged into this structural change.
+
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -153,22 +155,24 @@ export default function Table( {
 				: vTargetCell.vColIndex + offset + vTargetCell.colSpan - 1;
 
 		const newVTable = insertColumn( vTable, { vColIndex } );
-		// Finish the previous edit so it is not merged into this structural change.
+
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onDeleteColumn = ( vColIndex: number ) => {
 		const newVTable = deleteColumn( vTable, { vColIndex } );
-		// Finish the previous edit so it is not merged into this structural change.
+
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};

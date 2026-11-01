@@ -112,11 +112,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
 
-		// Finish the previous edit so it is not merged into this structural change.
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -145,11 +145,12 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		}
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
-		// Finish the previous edit so it is not merged into this structural change.
+
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -166,11 +167,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
 
-		// Finish the previous edit so it is not merged into this structural change.
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -183,33 +184,36 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		const { vColIndex } = selectedCells[ 0 ];
 
 		const newVTable = deleteColumn( vTable, { vColIndex } );
-		// Finish the previous edit so it is not merged into this structural change.
+
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onMergeCells = () => {
 		const newVTable = mergeCells( vTable, selectedCells, options.merge_content );
-		// Finish the previous edit so it is not merged into this structural change.
+
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onSplitMergedCells = () => {
 		const newVTable = splitMergedCells( vTable, selectedCells );
-		// Finish the previous edit so it is not merged into this structural change.
+
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( newVTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
+
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};

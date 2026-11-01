@@ -66,10 +66,9 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			footerSection,
 		} );
 
-		// Finish the previous edit so it is not merged into this structural change.
+		// Keep this structural change as its own undo level.
 		markLastChangeAsPersistent();
 		setAttributes( toTableAttributes( vTable ) );
-		// Keep the following edits out of this undo level.
 		markLastChangeAsPersistent();
 	};
 
