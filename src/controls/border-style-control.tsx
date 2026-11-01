@@ -40,7 +40,6 @@ type Props = {
 		left?: PropertyValue< string >;
 	};
 	allowSides?: boolean;
-	hasIndicator?: boolean;
 	className?: string;
 };
 
@@ -52,7 +51,6 @@ export default function BorderStyleControl( {
 	onChange,
 	values: valuesProp,
 	allowSides = true,
-	hasIndicator = true,
 	className,
 }: Props ) {
 	const values = {
@@ -98,7 +96,7 @@ export default function BorderStyleControl( {
 			<Stack align="flex-start" justify="space-between" gap="sm">
 				{ isLinked ? (
 					<Stack align="center" gap="sm">
-						{ hasIndicator && <SideIndicatorControl /> }
+						<SideIndicatorControl />
 						<ToggleGroupControl
 							hideLabelFromVision
 							label={ label }
@@ -120,7 +118,7 @@ export default function BorderStyleControl( {
 					<Stack direction="column" gap="xs">
 						{ SIDE_CONTROLS.map( ( item ) => (
 							<Stack align="center" gap="sm" key={ item.value }>
-								{ hasIndicator && <SideIndicatorControl side={ item.value } /> }
+								<SideIndicatorControl side={ item.value } />
 								<ToggleGroupControl
 									hideLabelFromVision
 									label={ item.label }
