@@ -1,4 +1,3 @@
-@use "~@wordpress/base-styles/variables" as variables;
 @use "settings/global-settings/style" as globalSettings;
 @use "controls/style" as controls;
 
@@ -188,7 +187,7 @@ $row-column-inserter-dot-size: 6px;
 	}
 
 	.ftb-placeholder__input {
-		width: variables.$grid-unit-10 * 14; // 112px
+		width: 112px;
 	}
 
 	.ftb-table-cell-label {
@@ -328,13 +327,13 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-row-remover {
 		top: 50%;
-		left: variables.$grid-unit-70 * -1; // -56px
+		left: -56px;
 		// Shift back by half the compact button height to center the button.
 		margin-top: calc(var(--wpds-dimension-size-md) / 2 * -1);
 	}
 
 	.ftb-column-remover {
-		top: variables.$grid-unit-70 * -1; // -56px
+		top: -56px;
 		left: 50%;
 		// Shift back by half the compact button height to center the button.
 		margin-left: calc(var(--wpds-dimension-size-md) / 2 * -1);
