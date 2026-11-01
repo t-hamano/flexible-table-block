@@ -128,35 +128,32 @@ export function insertRow(
 	// Number of columns in the row to be inserted.
 	const newRowColCount = vTable.body[ 0 ].cells.length;
 
-	const vRows = toVirtualRows( vTable );
+	// Virtual column indexes covered by a cell with rowspan from the previous rows.
+	// Only the target section can contain such cells.
+	const rowSpanColIndexes = new Set< number >();
+	vTable[ sectionName ].forEach( ( { cells } ) => {
+		cells.forEach( ( cell ) => {
+			if ( cell.rowIndex < rowIndex && cell.rowIndex + cell.rowSpan - 1 >= rowIndex ) {
+				for ( let i = 0; i < cell.colSpan; i++ ) {
+					rowSpanColIndexes.add( cell.vColIndex + i );
+				}
+			}
+		} );
+	} );
 
 	// Row state to be inserted.
 	const newRow: VRow = {
-		cells: Array.from( { length: newRowColCount } ).map( ( _, vColIndex ): VCell => {
-			// Find the cell with rowspan that covers the cell in the inserted row.
-			const rowSpanCells = vRows
-				.flatMap( ( row ) => row.cells )
-				.filter(
-					( cell: VCell ) =>
-						cell.sectionName === sectionName &&
-						cell.rowIndex < rowIndex &&
-						cell.rowIndex + cell.rowSpan - 1 >= rowIndex &&
-						cell.vColIndex <= vColIndex &&
-						vColIndex <= cell.vColIndex + cell.colSpan - 1
-				);
-
-			return {
-				content: '',
-				tag: 'head' === sectionName ? 'th' : 'td',
-				rowSpan: 1,
-				colSpan: 1,
-				sectionName,
-				rowIndex,
-				vColIndex,
-				isFirstSelected: false,
-				isHidden: !! rowSpanCells.length,
-			};
-		} ),
+		cells: Array.from( { length: newRowColCount } ).map( ( _, vColIndex ): VCell => ( {
+			content: '',
+			tag: 'head' === sectionName ? 'th' : 'td',
+			rowSpan: 1,
+			colSpan: 1,
+			sectionName,
+			rowIndex,
+			vColIndex,
+			isFirstSelected: false,
+			isHidden: rowSpanColIndexes.has( vColIndex ),
+		} ) ),
 	};
 
 	return {
@@ -264,13 +261,28 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 	// Whether to add a column after the last column.
 	const isLastColumnInsert = vTable.body[ 0 ].cells.length === vColIndex;
 
-	const vRows = toVirtualRows( vTable );
-
 	return Object.entries( vTable ).reduce(
 		( newVTable: VTable, [ sectionName, section ] ) => {
 			if ( ! section.length ) {
 				return newVTable;
 			}
+
+			// Row indexes in this section where the inserted cell is covered by a cell with colspan.
+			const colSpanRowIndexes = new Set< number >();
+			section.forEach( ( { cells } ) => {
+				cells.forEach( ( cell ) => {
+					if (
+						cell.colSpan > 1 &&
+						cell.vColIndex < vColIndex &&
+						vColIndex <= cell.vColIndex + cell.colSpan - 1
+					) {
+						for ( let i = 0; i < cell.rowSpan; i++ ) {
+							colSpanRowIndexes.add( cell.rowIndex + i );
+						}
+					}
+				} );
+			} );
+
 			newVTable[ sectionName as SectionName ] = section.map( ( { cells }, cRowIndex ) => ( {
 				cells: cells.reduce( ( newCells: VCell[], cell, cVColIndex ) => {
 					// Expand cells with colspan in the before columns.
@@ -303,19 +315,6 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 
 					// Insert cell (between columns).
 					if ( cVColIndex === vColIndex ) {
-						// Whether the cell to be inserted is a virtual cell filled with colSpan.
-						const colSpanCells = vRows
-							.flatMap( ( row ) => row.cells )
-							.filter(
-								( colSpancell: VCell ) =>
-									colSpancell.sectionName === sectionName &&
-									colSpancell.colSpan > 1 &&
-									colSpancell.rowIndex <= cRowIndex &&
-									colSpancell.rowIndex + colSpancell.rowSpan - 1 >= cRowIndex &&
-									colSpancell.vColIndex < vColIndex &&
-									vColIndex <= colSpancell.vColIndex + colSpancell.colSpan - 1
-							);
-
 						newCells.push(
 							{
 								content: '',
@@ -325,7 +324,8 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 								sectionName: cell.sectionName,
 								rowIndex: cell.rowIndex,
 								vColIndex,
-								isHidden: !! colSpanCells.length,
+								// Whether the cell to be inserted is a virtual cell filled with colSpan.
+								isHidden: colSpanRowIndexes.has( cRowIndex ),
 							},
 							{
 								...cell,
@@ -593,6 +593,8 @@ export function updateCells(
 	cellState: CellState,
 	selectedCells: VCell[]
 ): VTable {
+	const selectedCellKeys = toCellKeySet( selectedCells );
+
 	return Object.entries( vTable ).reduce(
 		( newVTable: VTable, [ sectionName, section ] ) => {
 			if ( ! section.length ) {
@@ -601,11 +603,8 @@ export function updateCells(
 			newVTable[ sectionName as SectionName ] = section.map( ( { cells }, cRowIndex ) => ( {
 				cells: cells.map( ( cell, cVColIndex ) => {
 					// Refer to the selected cell to determine if it is the target cell to update.
-					const isTargetCell = selectedCells.some(
-						( targetCell ) =>
-							targetCell.sectionName === sectionName &&
-							targetCell.rowIndex === cRowIndex &&
-							targetCell.vColIndex === cVColIndex
+					const isTargetCell = selectedCellKeys.has(
+						toCellKey( sectionName as SectionName, cRowIndex, cVColIndex )
 					);
 
 					if ( ! isTargetCell ) {
@@ -673,6 +672,32 @@ function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
 }
 
 /**
+ * Creates a key that identifies a cell position on the virtual table.
+ *
+ * @param sectionName Section name of the cell.
+ * @param rowIndex    Row index of the cell.
+ * @param vColIndex   Virtual column index of the cell.
+ * @return Cell key.
+ */
+export function toCellKey( sectionName: SectionName, rowIndex: number, vColIndex: number ): string {
+	return `${ sectionName }:${ rowIndex }:${ vColIndex }`;
+}
+
+/**
+ * Creates a set of cell keys from cells, so that whether a cell is included can be checked in constant time.
+ *
+ * @param cells Cells to convert.
+ * @return Set of cell keys.
+ */
+export function toCellKeySet( cells: VSelectedCells ): Set< string > {
+	return new Set(
+		( cells || [] ).map( ( { sectionName, rowIndex, vColIndex } ) =>
+			toCellKey( sectionName, rowIndex, vColIndex )
+		)
+	);
+}
+
+/**
  * Create virtual table object with the cells placed in positions based on how they actually look.
  * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
  *
@@ -717,9 +742,17 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 
 			// Mapping the actual section cells on the virtual section cell.
 			section.forEach( ( row: Row, cRowIndex: number ) => {
+				const vCells = vSection[ cRowIndex ].cells;
+				// Cells before this cursor are already marked as "filled", so the search for the next
+				// empty cell can continue from here instead of starting over from the first column.
+				let cursor = 0;
+
 				row.cells.forEach( ( cell ) => {
+					while ( cursor < colCount && vCells[ cursor ].isFilled ) {
+						cursor++;
+					}
 					// Colmun index on the virtual section excluding cells already marked as "filled".
-					const vColIndex = vSection[ cRowIndex ].cells.findIndex( ( { isFilled } ) => ! isFilled );
+					const vColIndex = cursor < colCount ? cursor : -1;
 					// Clamp rowspan / colspan so that the cell does not overflow the section.
 					// Spans below 1 (e.g. a negative rowspan in the saved markup) are treated as 1.
 					const rowSpan = Math.max(
