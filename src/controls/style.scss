@@ -51,7 +51,7 @@
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: repeat(3, 1fr);
-	gap: variables.$grid-unit-10;
+	gap: var(--wpds-dimension-gap-sm);
 }
 
 .ftb-side-controls__item {
@@ -77,7 +77,7 @@
 .ftb-corner-controls {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	gap: variables.$grid-unit-10;
+	gap: var(--wpds-dimension-gap-sm);
 }
 
 // Keep the spacing that `BaseControl` had in the block inspector.
@@ -87,6 +87,6 @@
 .ftb-linked-unit-control {
 
 	&:where(:not(:last-child)) {
-		margin-bottom: variables.$grid-unit-20;
+		margin-bottom: var(--wpds-dimension-gap-lg);
 	}
 }
