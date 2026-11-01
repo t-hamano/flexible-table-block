@@ -9,7 +9,8 @@ import type { FormEvent } from 'react';
  */
 import { __ } from '@wordpress/i18n';
 import { useState, createInterpolateElement } from '@wordpress/element';
-import { BlockIcon } from '@wordpress/block-editor';
+import { useDispatch } from '@wordpress/data';
+import { BlockIcon, store as blockEditorStore } from '@wordpress/block-editor';
 import { Placeholder } from '@wordpress/components';
 import { Button, InputControl, Stack, SwitchControl, Text } from '@wordpress/ui';
 import { isAppleOS } from '@wordpress/keycodes';
@@ -26,8 +27,7 @@ import {
 	THRESHOLD_PREVIEW_TABLE_COL,
 	THRESHOLD_PREVIEW_TABLE_ROW,
 } from '../constants';
-import { createTable, type VTable } from '../utils/table-state';
-import { useStructuralTableChange } from '../hooks/use-structural-table-change';
+import { createTable, toTableAttributes, type VTable } from '../utils/table-state';
 import { blockIcon as icon } from '../icons';
 import type { BlockAttributes } from '../BlockAttributes';
 
@@ -36,7 +36,10 @@ type Props = {
 };
 
 export default function TablePlaceholder( { setAttributes }: Props ) {
-	const applyStructuralChange = useStructuralTableChange( setAttributes );
+	const {
+		// @ts-expect-error Not exported in the type definitions.
+		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
+	} = useDispatch( blockEditorStore );
 	const [ rowCount, setRowCount ] = useState< number | undefined >( DEFAULT_PREVIEW_ROWS );
 	const [ colCount, setColCount ] = useState< number | undefined >( DEFAULT_PREVIEW_COLUMNS );
 	const [ headerSection, setHeaderSection ] = useState( false );
@@ -63,7 +66,11 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 			footerSection,
 		} );
 
-		applyStructuralChange( vTable );
+		// Finish the previous edit so it is not merged into this structural change.
+		markLastChangeAsPersistent();
+		setAttributes( toTableAttributes( vTable ) );
+		// Keep the following edits out of this undo level.
+		markLastChangeAsPersistent();
 	};
 
 	const onChangeColumnCount = ( value: string ) => {

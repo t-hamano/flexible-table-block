@@ -14,6 +14,7 @@ import {
 	BlockControls,
 	useBlockProps,
 	useBlockEditingMode,
+	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { ToolbarDropdownMenu, PanelBody } from '@wordpress/components';
 import { Text } from '@wordpress/ui';
@@ -47,13 +48,13 @@ import {
 	splitMergedCells,
 	hasMergedCells,
 	isRectangleSelected,
+	toTableAttributes,
 	toVirtualTable,
 	isEmptySection,
 	type VTable,
 	type VSelectedLine,
 	type VSelectedCells,
 } from './utils/table-state';
-import { useStructuralTableChange } from './hooks/use-structural-table-change';
 import { convertToObject } from './utils/style-converter';
 import { tableMergeCell, tableSplitCell } from './icons';
 import type { BlockAttributes, SectionName, ContentJustifyValue } from './BlockAttributes';
@@ -76,7 +77,10 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		return select( ftbStore ).getOptions();
 	}, [] );
 	const { createWarningNotice } = useDispatch( noticesStore );
-	const applyStructuralChange = useStructuralTableChange( setAttributes );
+	const {
+		// @ts-expect-error Not exported in the type definitions.
+		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
+	} = useDispatch( blockEditorStore );
 	const blockEditingMode = useBlockEditingMode();
 	const isContentOnlyMode = blockEditingMode === 'contentOnly';
 
@@ -108,7 +112,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
 
-		applyStructuralChange( newVTable );
+		// Finish the previous edit so it is not merged into this structural change.
+		markLastChangeAsPersistent();
+		setAttributes( toTableAttributes( newVTable ) );
+		// Keep the following edits out of this undo level.
+		markLastChangeAsPersistent();
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -137,7 +145,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		}
 
 		const newVTable = deleteRow( vTable, { sectionName, rowIndex } );
-		applyStructuralChange( newVTable );
+		// Finish the previous edit so it is not merged into this structural change.
+		markLastChangeAsPersistent();
+		setAttributes( toTableAttributes( newVTable ) );
+		// Keep the following edits out of this undo level.
+		markLastChangeAsPersistent();
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -154,7 +166,11 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
 
-		applyStructuralChange( newVTable );
+		// Finish the previous edit so it is not merged into this structural change.
+		markLastChangeAsPersistent();
+		setAttributes( toTableAttributes( newVTable ) );
+		// Keep the following edits out of this undo level.
+		markLastChangeAsPersistent();
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
@@ -167,21 +183,33 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		const { vColIndex } = selectedCells[ 0 ];
 
 		const newVTable = deleteColumn( vTable, { vColIndex } );
-		applyStructuralChange( newVTable );
+		// Finish the previous edit so it is not merged into this structural change.
+		markLastChangeAsPersistent();
+		setAttributes( toTableAttributes( newVTable ) );
+		// Keep the following edits out of this undo level.
+		markLastChangeAsPersistent();
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onMergeCells = () => {
 		const newVTable = mergeCells( vTable, selectedCells, options.merge_content );
-		applyStructuralChange( newVTable );
+		// Finish the previous edit so it is not merged into this structural change.
+		markLastChangeAsPersistent();
+		setAttributes( toTableAttributes( newVTable ) );
+		// Keep the following edits out of this undo level.
+		markLastChangeAsPersistent();
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
 
 	const onSplitMergedCells = () => {
 		const newVTable = splitMergedCells( vTable, selectedCells );
-		applyStructuralChange( newVTable );
+		// Finish the previous edit so it is not merged into this structural change.
+		markLastChangeAsPersistent();
+		setAttributes( toTableAttributes( newVTable ) );
+		// Keep the following edits out of this undo level.
+		markLastChangeAsPersistent();
 		setSelectedCells( undefined );
 		setSelectedLine( undefined );
 	};
