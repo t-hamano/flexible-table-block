@@ -10,12 +10,20 @@ test.describe( 'Flexible table', () => {
 
 	test( 'should create block', async ( { editor, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock();
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test( 'should create block with option', async ( { editor, fsbUtils } ) => {
 		await fsbUtils.createFlexibleTableBlock( { row: 4, col: 4, header: true, footer: true } );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody><tfoot><tr><td></td><td></td><td></td><td></td></tr></tfoot></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test( 'should be inserted', async ( { editor, fsbUtils } ) => {
@@ -24,55 +32,75 @@ test.describe( 'Flexible table', () => {
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
 			.fill( 'Flexible Table Block' );
-		expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test.describe( 'Merging and Splitting Cells', () => {
 		test( 'allows cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
-			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 1 ).click();
 			await page.keyboard.up( 'Shift' );
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
-			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2"></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 
 		test( 'allows cells in a vertical line to be merge', async ( { editor, page, fsbUtils } ) => {
-			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
-			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 5 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 3 ).click();
 			await page.keyboard.up( 'Shift' );
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
-			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td rowspan="2"></td><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 
 		test( 'allows cells to be merge', async ( { editor, page, fsbUtils } ) => {
-			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
-			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 8 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 4 ).click();
 			await page.keyboard.up( 'Shift' );
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
-			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td rowspan="2" colspan="2"></td><td></td></tr><tr><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 
 		test( 'allows merged cells to be split', async ( { editor, page, fsbUtils } ) => {
-			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
-			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 8 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 4 ).click();
 			await page.keyboard.up( 'Shift' );
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Split merged cells' } ).click();
-			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 
 		test( 'disallows merging across sections', async ( { editor, page, fsbUtils } ) => {
@@ -84,11 +112,15 @@ test.describe( 'Flexible table', () => {
 		} );
 
 		test( 'allows all cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
-			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'button', { name: 'Select row' } ).nth( 0 ).click();
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
-			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="3"></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 
 		test( 'allows all cells in a vertical line to be merge', async ( {
@@ -96,11 +128,15 @@ test.describe( 'Flexible table', () => {
 			page,
 			fsbUtils,
 		} ) => {
-			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
-			await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 2 ).click();
+			await fsbUtils.createFlexibleTableBlock();
+			await editor.canvas.getByRole( 'button', { name: 'Select column' } ).nth( 1 ).click();
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
-			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td rowspan="3"></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 	} );
 
@@ -110,10 +146,10 @@ test.describe( 'Flexible table', () => {
 			page,
 			fsbUtils,
 		} ) => {
-			await fsbUtils.createFlexibleTableBlock( { col: 10, row: 10 } );
-			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 11 ).click();
+			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 6 ).click();
 			await page.keyboard.down( 'Shift' );
-			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 44 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 18 ).click();
 			await page.keyboard.up( 'Shift' );
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
@@ -122,7 +158,11 @@ test.describe( 'Flexible table', () => {
 			await selectRowButton.click();
 			await expect( selectRowButton ).toHaveAttribute( 'aria-pressed', 'true' );
 			await editor.canvas.getByRole( 'button', { name: 'Delete row' } ).click();
-			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan="2" colspan="3"></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 
 		test( 'allows to delete column even if they contain merged cells.', async ( {
@@ -130,10 +170,10 @@ test.describe( 'Flexible table', () => {
 			page,
 			fsbUtils,
 		} ) => {
-			await fsbUtils.createFlexibleTableBlock( { col: 10, row: 10 } );
-			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 11 ).click();
+			await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 6 ).click();
 			await page.keyboard.down( 'Shift' );
-			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 44 ).click();
+			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 18 ).click();
 			await page.keyboard.up( 'Shift' );
 			await editor.clickBlockToolbarButton( 'Edit table' );
 			await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
@@ -144,7 +184,11 @@ test.describe( 'Flexible table', () => {
 			await selectColumnButton.click();
 			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'true' );
 			await editor.canvas.getByRole( 'button', { name: 'Delete column' } ).click();
-			expect( await editor.getEditedPostContent() ).toMatchSnapshot();
+			expect( await editor.getEditedPostContent() ).toBe(
+				`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan="3" colspan="2"></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+			);
 		} );
 
 		test( 'allows to select and deselect the first column', async ( { editor, fsbUtils } ) => {
