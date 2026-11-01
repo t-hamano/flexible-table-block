@@ -12,6 +12,8 @@ class Test_Api extends WP_UnitTestCase {
 
 	const ROUTE = '/flexible-table-block/v1/options';
 
+	const PREVIEW_ROUTE = '/flexible-table-block/v1/options/preview';
+
 	/**
 	 * User IDs keyed by role.
 	 *
@@ -35,10 +37,11 @@ class Test_Api extends WP_UnitTestCase {
 	 *
 	 * @param string     $method HTTP method.
 	 * @param array|null $params JSON body parameters.
+	 * @param string     $route  REST route.
 	 * @return WP_REST_Response
 	 */
-	private function request( $method, $params = null ) {
-		$request = new WP_REST_Request( $method, self::ROUTE );
+	private function request( $method, $params = null, $route = self::ROUTE ) {
+		$request = new WP_REST_Request( $method, $route );
 
 		if ( null !== $params ) {
 			$request->set_header( 'Content-Type', 'application/json' );
@@ -377,5 +380,99 @@ class Test_Api extends WP_UnitTestCase {
 		foreach ( Settings::OPTIONS as $key => $option ) {
 			$this->assertSame( $option['default'], $data['options'][ $key ] );
 		}
+	}
+
+	/**
+	 * Tests the permission of the preview endpoint.
+	 *
+	 * @dataProvider data_preview_permissions
+	 *
+	 * @param bool        $show_global_setting Value of the show_global_setting option.
+	 * @param string|null $role                User role, or null for logged out users.
+	 * @param int         $expected_status     Expected HTTP status code.
+	 */
+	public function test_preview_options_permissions( $show_global_setting, $role, $expected_status ) {
+		update_option( Settings::OPTION_PREFIX . 'show_global_setting', $show_global_setting ? 1 : 0 );
+		wp_set_current_user( $role ? self::$users[ $role ] : 0 );
+
+		$response = $this->request( 'POST', array(), self::PREVIEW_ROUTE );
+
+		$this->assertSame( $expected_status, $response->get_status() );
+	}
+
+	/**
+	 * Data provider for test_preview_options_permissions().
+	 *
+	 * @return array[]
+	 */
+	public function data_preview_permissions() {
+		return array(
+			'logged out user cannot preview options' => array(
+				'show_global_setting' => true,
+				'role'                => null,
+				'expected_status'     => 401,
+			),
+			'subscriber cannot preview options'      => array(
+				'show_global_setting' => true,
+				'role'                => 'subscriber',
+				'expected_status'     => 403,
+			),
+			'editor can preview options if global setting is shown' => array(
+				'show_global_setting' => true,
+				'role'                => 'editor',
+				'expected_status'     => 200,
+			),
+			'editor cannot preview options if global setting is hidden' => array(
+				'show_global_setting' => false,
+				'role'                => 'editor',
+				'expected_status'     => 403,
+			),
+			'administrator can preview options'      => array(
+				'show_global_setting' => false,
+				'role'                => 'administrator',
+				'expected_status'     => 200,
+			),
+		);
+	}
+
+	/**
+	 * Tests that the preview endpoint returns the block CSS of the posted options without saving them.
+	 */
+	public function test_preview_options_returns_css_without_saving() {
+		update_option( Settings::OPTION_PREFIX . 'block_style', array( 'table_width' => '50%' ) );
+		wp_set_current_user( self::$users['administrator'] );
+
+		$data = $this->request(
+			'POST',
+			array(
+				'block_style' => array(
+					'table_width'  => '80%',
+					'unknown_key'  => '10px',
+					'cell_padding' => array(
+						'top'     => '1px',
+						'unknown' => '2px',
+					),
+				),
+			),
+			self::PREVIEW_ROUTE
+		)->get_data();
+
+		$selector = '.' . FTB_BLOCK_CLASS . '.' . FTB_BLOCK_CLASS;
+		$this->assertSame(
+			"{$selector}>table{width:80%;}{$selector}>table tr th,{$selector}>table tr td{padding-top:1px;}",
+			$data['block_css']
+		);
+		$this->assertSame( array( 'table_width' => '50%' ), get_option( Settings::OPTION_PREFIX . 'block_style' ) );
+	}
+
+	/**
+	 * Tests that the preview endpoint returns empty CSS for invalid parameters.
+	 */
+	public function test_preview_options_ignores_invalid_block_style() {
+		wp_set_current_user( self::$users['administrator'] );
+
+		$data = $this->request( 'POST', array( 'block_style' => 'invalid' ), self::PREVIEW_ROUTE )->get_data();
+
+		$this->assertSame( '', $data['block_css'] );
 	}
 }

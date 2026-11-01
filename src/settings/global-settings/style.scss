@@ -5,17 +5,16 @@
 }
 
 .ftb-global-setting-modal__tab-panel {
-	display: flex;
-	align-items: flex-start;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	align-items: start;
 	gap: var(--wpds-dimension-gap-xl);
 
-	@media screen and (max-width: 782px) {
-		flex-direction: column;
+	@media screen and (min-width: 783px) {
+		grid-template-columns: 190px minmax(0, 1fr);
 	}
 
 	[role="tablist"] {
-		flex-shrink: 0;
-		width: 190px;
 		position: sticky;
 		// Stick to the very top of the scroll area so that scrolled content
 		// doesn't show through the dialog content's top padding.
@@ -25,17 +24,46 @@
 		padding-block-start: calc(var(--wpds-border-width-focus) * 2);
 		background: var(--wpds-color-background-surface-neutral-strong);
 		z-index: 1;
-
-		@media screen and (max-width: 782px) {
-			width: 100%;
-		}
 	}
 
-	[role="tabpanel"] {
-		// Keep the controls in the panel below the sticky tab list.
+	[role="tabpanel"],
+	.ftb-global-setting-modal__preview {
+		// Keep the controls in the panel and the preview below the sticky tab list.
 		isolation: isolate;
-		flex: 1;
-		width: 100%;
+	}
+
+	&.has-preview {
+
+		// Stack the preview under the controls.
+		@media screen and (min-width: 783px) {
+
+			[role="tablist"] {
+				grid-row: span 2;
+			}
+
+			.ftb-global-setting-modal__preview {
+				grid-column: 2;
+			}
+		}
+
+		// Show the preview next to the controls.
+		@media screen and (min-width: 1080px) {
+			grid-template-columns: 190px minmax(0, 1fr) minmax(0, 1fr);
+
+			[role="tablist"] {
+				grid-row: auto;
+			}
+
+			.ftb-global-setting-modal__preview {
+				grid-column: 3;
+				position: sticky;
+				top: 0;
+			}
+
+			.ftb-global-setting-modal__styles {
+				grid-template-columns: 1fr;
+			}
+		}
 	}
 }
 
@@ -52,6 +80,25 @@
 .ftb-global-setting-modal__styles-item {
 	border: var(--wpds-border-width-xs) var(--wp-admin-theme-color) solid;
 	padding: var(--wpds-dimension-padding-sm);
+}
+
+.ftb-global-setting-modal__preview-styles {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--wpds-dimension-gap-sm);
+	max-width: 600px;
+	// Scroll the style buttons when there are many block styles,
+	// so that the table preview below them stays visible.
+	max-height: 160px;
+	overflow-y: auto;
+	// Keep the focus ring of the buttons visible.
+	padding: 2px;
+}
+
+.ftb-global-setting-modal__preview-content {
+	// Same as the preview viewport width, so that the preview is not scaled up.
+	max-width: 600px;
+	border: var(--wpds-border-width-xs) var(--wpds-color-stroke-surface-neutral) solid;
 }
 
 .ftb-global-setting-modal__notice {
