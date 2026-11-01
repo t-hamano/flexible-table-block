@@ -163,7 +163,7 @@ test.describe( 'Flexible table', () => {
 			await expect( selectRowButton ).toHaveAttribute( 'aria-pressed', 'false' );
 			await selectRowButton.click();
 			await expect( selectRowButton ).toHaveAttribute( 'aria-pressed', 'true' );
-			await editor.canvas.getByRole( 'button', { name: 'Delete row' } ).click();
+			await page.getByRole( 'button', { name: 'Delete row' } ).click();
 			expect( await editor.getEditedPostContent() ).toBe(
 				`<!-- wp:flexible-table-block/table -->
 <figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan="2" colspan="3"></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
@@ -189,7 +189,7 @@ test.describe( 'Flexible table', () => {
 			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'false' );
 			await selectColumnButton.click();
 			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'true' );
-			await editor.canvas.getByRole( 'button', { name: 'Delete column' } ).click();
+			await page.getByRole( 'button', { name: 'Delete column' } ).click();
 			expect( await editor.getEditedPostContent() ).toBe(
 				`<!-- wp:flexible-table-block/table -->
 <figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td rowspan="3" colspan="2"></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
@@ -216,7 +216,7 @@ test.describe( 'Flexible table', () => {
 		} ) => {
 			await fsbUtils.createFlexibleTableBlock( { header: true, footer: true, row: 1 } );
 			await editor.canvas.getByRole( 'button', { name: 'Select row' } ).nth( 1 ).click();
-			await editor.canvas.getByRole( 'button', { name: 'Delete row' } ).click();
+			await page.getByRole( 'button', { name: 'Delete row' } ).click();
 			const snackbar = page.getByRole( 'button', {
 				name: 'Dismiss this notice',
 			} );

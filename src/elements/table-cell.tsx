@@ -8,15 +8,16 @@ import type { MouseEvent } from 'react';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
+import { memo, useState } from '@wordpress/element';
 import { RichText } from '@wordpress/block-editor';
 import { Button, IconButton } from '@wordpress/ui';
-import { plus, trash, chevronRight, chevronDown } from '@wordpress/icons';
+import { plus, chevronRight, chevronDown } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL } from '../constants';
+import TableRemover from './table-remover';
 import { convertToObject } from '../utils/style-converter';
 import type { VCell } from '../utils/table-state';
 import type { SectionName, CellTagValue } from '../BlockAttributes';
@@ -104,6 +105,9 @@ function TableCell( {
 	controlTabIndex,
 	handlers,
 }: TableCellProps ) {
+	const [ rowSelector, setRowSelector ] = useState< HTMLButtonElement | null >( null );
+	const [ columnSelector, setColumnSelector ] = useState< HTMLButtonElement | null >( null );
+
 	return (
 		<Cell
 			name={ tag }
@@ -154,6 +158,7 @@ function TableCell( {
 								variant="minimal"
 								tone="neutral"
 								size="small"
+								ref={ setRowSelector }
 								className="ftb-row-selector"
 								label={ __( 'Select row', 'flexible-table-block' ) }
 								tabIndex={ controlTabIndex }
@@ -165,14 +170,12 @@ function TableCell( {
 								} }
 							/>
 							{ isCurrentRowSelected && (
-								<IconButton
-									variant="minimal"
-									tone="neutral"
+								<TableRemover
 									className="ftb-row-remover"
 									label={ __( 'Delete row', 'flexible-table-block' ) }
+									anchor={ rowSelector }
+									side="left"
 									tabIndex={ controlTabIndex }
-									size="compact"
-									icon={ trash }
 									onClick={ ( event: MouseEvent ) => {
 										handlers.onDeleteRow( sectionName, rowIndex );
 										event.stopPropagation();
@@ -200,6 +203,7 @@ function TableCell( {
 								variant="minimal"
 								tone="neutral"
 								size="small"
+								ref={ setColumnSelector }
 								className="ftb-column-selector"
 								label={ __( 'Select column', 'flexible-table-block' ) }
 								tabIndex={ controlTabIndex }
@@ -211,14 +215,12 @@ function TableCell( {
 								} }
 							/>
 							{ isCurrentColumnSelected && (
-								<IconButton
-									variant="minimal"
-									tone="neutral"
+								<TableRemover
 									className="ftb-column-remover"
 									label={ __( 'Delete column', 'flexible-table-block' ) }
+									anchor={ columnSelector }
+									side="top"
 									tabIndex={ controlTabIndex }
-									size="compact"
-									icon={ trash }
 									onClick={ ( event: MouseEvent ) => {
 										handlers.onDeleteColumn( vColIndex );
 										event.stopPropagation();
