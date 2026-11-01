@@ -1,4 +1,3 @@
-@use "~@wordpress/base-styles/colors" as colors;
 @use "~@wordpress/base-styles/variables" as variables;
 
 $footer-height: variables.$grid-unit-70; // 56px
@@ -32,7 +31,7 @@ $footer-height: variables.$grid-unit-70; // 56px
 		width: 190px;
 		position: sticky;
 		top: 0;
-		background: colors.$white;
+		background: var(--wpds-color-background-surface-neutral-strong);
 		z-index: 1;
 
 		@media screen and (max-width: 782px) {
@@ -69,7 +68,7 @@ $footer-height: variables.$grid-unit-70; // 56px
 	height: $footer-height;
 	padding-right: variables.$grid-unit-30; // 24px
 	padding-left: variables.$grid-unit-30; // 24px
-	background: colors.$white;
+	background: var(--wpds-color-background-surface-neutral-strong);
 	z-index: 2;
 }
 
@@ -89,5 +88,5 @@ $footer-height: variables.$grid-unit-70; // 56px
 	position: absolute;
 	inset: 0;
 	z-index: 5;
-	background: rgba(colors.$black, 0.2);
+	background: color-mix(in srgb, var(--wpds-color-foreground-content-neutral) 20%, transparent);
 }
