@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import type { AnyAction as Action } from 'redux';
 import type { Property } from 'csstype';
 
 /**
@@ -57,18 +56,21 @@ export interface StoreOptions {
 	};
 }
 
-const DEFAULT_STATE = {
+type State = {
+	options: StoreOptions | Record< string, never >;
+};
+
+type SetOptionsAction = {
+	type: 'SET_OPTIONS';
+	options: StoreOptions;
+};
+
+const DEFAULT_STATE: State = {
 	options: {},
 };
 
 const actions = {
-	getOptions( path: string ) {
-		return {
-			type: 'GET_OPTIONS',
-			path,
-		};
-	},
-	setOptions( options: StoreOptions ) {
+	setOptions( options: StoreOptions ): SetOptionsAction {
 		return {
 			type: 'SET_OPTIONS',
 			options,
@@ -76,7 +78,7 @@ const actions = {
 	},
 };
 
-const reducer = ( state = DEFAULT_STATE, action: Action ) => {
+const reducer = ( state: State = DEFAULT_STATE, action: SetOptionsAction ): State => {
 	switch ( action.type ) {
 		case 'SET_OPTIONS': {
 			return {
@@ -91,33 +93,25 @@ const reducer = ( state = DEFAULT_STATE, action: Action ) => {
 };
 
 const selectors = {
-	getOptions( state: { options: StoreOptions } ) {
-		const { options } = state;
-		return options;
-	},
-};
-
-const controls = {
-	GET_OPTIONS( action: Action ) {
-		return apiFetch< ApiResponse >( { path: action.path } );
+	getOptions( state: State ): StoreOptions {
+		return state.options as StoreOptions;
 	},
 };
 
 const resolvers = {
-	*getOptions() {
-		const options: StoreOptions = yield actions.getOptions( REST_API_ROUTE );
-		return actions.setOptions( options );
-	},
+	getOptions:
+		() =>
+		async ( { dispatch }: { dispatch: { setOptions: typeof actions.setOptions } } ) => {
+			const options = await apiFetch< StoreOptions >( { path: REST_API_ROUTE } );
+			dispatch.setOptions( options );
+		},
 };
 
-const store = createReduxStore( STORE_NAME, {
+export const store = createReduxStore( STORE_NAME, {
 	reducer,
-	controls,
 	selectors,
 	resolvers,
 	actions,
 } );
 
 register( store );
-
-export { STORE_NAME };

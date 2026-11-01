@@ -22,7 +22,6 @@ define( 'FTB_BLOCK_CLASS', 'wp-block-flexible-table-block-table' );
 define( 'FTB_NAMESPACE', 'flexible-table-block' );
 define( 'FTB_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 
-require_once __DIR__ . '/classes/class-option.php';
 require_once __DIR__ . '/classes/class-helper.php';
 require_once __DIR__ . '/classes/class-settings.php';
 require_once __DIR__ . '/classes/class-enqueue.php';

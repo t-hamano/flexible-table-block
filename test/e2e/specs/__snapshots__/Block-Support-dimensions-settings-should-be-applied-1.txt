@@ -1,3 +1,0 @@
-<!-- wp:flexible-table-block/table {"style":{"spacing":{"margin":{"top":"10px","right":"20px","bottom":"30px","left":"40px"}}}} -->
-<figure class="wp-block-flexible-table-block-table" style="margin-top:10px;margin-right:20px;margin-bottom:30px;margin-left:40px"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:flexible-table-block/table -->

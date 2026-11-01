@@ -6,3 +6,4 @@ vendor/
 .wp-env.override.json
 *.tsbuildinfo
 *.zip
+.phpunit.result.cache

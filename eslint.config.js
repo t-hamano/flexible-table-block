@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+const reactHooksPlugin = require( 'eslint-plugin-react-hooks' );
+
+/**
  * WordPress dependencies
  */
 const defaultConfig = require( '@wordpress/eslint-plugin' );
@@ -7,6 +12,8 @@ module.exports = [
 	{
 		ignores: [ '**/node_modules/**', '**/vendor/**', '**/build/**' ],
 	},
+	// React Compiler rules. `@wordpress/eslint-plugin` overrides the classic hooks rules below.
+	reactHooksPlugin.configs.flat[ 'recommended-latest' ],
 	...defaultConfig.configs.recommended,
 	{
 		linterOptions: {
@@ -22,6 +29,16 @@ module.exports = [
 			'@wordpress/components-no-unsafe-button-disabled': 'error',
 			'@wordpress/components-no-missing-40px-size-prop': 'error',
 			'@wordpress/react-no-unsafe-timeout': 'error',
+			'@wordpress/use-recommended-components': [ 'error', { allowUseWithCaution: true } ],
+			'react-hooks/config': [
+				'error',
+				{
+					environment: {
+						enableTreatRefLikeIdentifiersAsRefs: true,
+						validateRefAccessDuringRender: false,
+					},
+				},
+			],
 			'@wordpress/dependency-group': 'error',
 			'@wordpress/no-unsafe-wp-apis': 'off',
 			'@wordpress/use-import-as': [
@@ -82,6 +99,12 @@ module.exports = [
 					],
 				},
 			],
+		},
+	},
+	{
+		files: [ 'src/**' ],
+		rules: {
+			'import/no-extraneous-dependencies': 'error',
 		},
 	},
 	...defaultConfig.configs[ 'test-unit' ].map( ( config ) => ( {

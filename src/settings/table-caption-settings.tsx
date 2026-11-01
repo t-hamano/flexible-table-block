@@ -8,20 +8,18 @@ import type { Property, Properties } from 'csstype';
  */
 import { __ } from '@wordpress/i18n';
 import {
-	Button,
-	TextControl,
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 	__experimentalUnitControl as UnitControl,
 	__experimentalUseCustomUnits as useCustomUnits,
 } from '@wordpress/components';
-import { Stack } from '@wordpress/ui';
+import { Button, InputControl, Stack } from '@wordpress/ui';
 
 /**
  * Internal dependencies
  */
-import { FONT_SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS, CAPTION_SIDE_CONTROLS } from '../constants';
+import { SIZE_UNITS, TEXT_ALIGNMENT_CONTROLS, CAPTION_SIDE_CONTROLS } from '../constants';
 import { PaddingControl } from '../controls';
 import { convertToInline } from '../utils/style-converter';
 import { pickPadding, type DirectionProps } from '../utils/style-picker';
@@ -42,7 +40,7 @@ export default function TableCaptionSettings( {
 }: Props ) {
 	const { captionSide } = attributes;
 
-	const fontSizeUnits = useCustomUnits( { availableUnits: FONT_SIZE_UNITS } );
+	const fontSizeUnits = useCustomUnits( { availableUnits: SIZE_UNITS } );
 
 	const onChangeFontSize = ( value: Property.FontSize | undefined ) => {
 		const newStylesObj = {
@@ -102,13 +100,18 @@ export default function TableCaptionSettings( {
 				align="center"
 				justify="flex-end"
 				className="ftb-table-caption-settings-clear"
-				style={ { marginBottom: '16px' } }
+				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
 			>
-				<Button variant="link" isDestructive onClick={ onResetSettings }>
+				<Button variant="minimal" size="small" onClick={ onResetSettings }>
 					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>
-			<Stack align="flex-end" justify="space-between" gap="sm" style={ { marginBottom: '16px' } }>
+			<Stack
+				align="flex-end"
+				justify="space-between"
+				gap="sm"
+				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
+			>
 				<div className="ftb-table-caption-settings-font-size" style={ { flex: 1 } }>
 					<UnitControl
 						label={ __( 'Caption font size', 'flexible-table-block' ) }
@@ -119,10 +122,10 @@ export default function TableCaptionSettings( {
 					/>
 				</div>
 				<div className="ftb-table-caption-settings-line-height" style={ { flex: 1 } }>
-					<TextControl
+					<InputControl
 						label={ __( 'Caption line height', 'flexible-table-block' ) }
 						autoComplete="off"
-						onChange={ onChangeLineHeight }
+						onValueChange={ onChangeLineHeight }
 						step={ 0.1 }
 						type="number"
 						value={ captionStylesObj?.lineHeight || '' }
