@@ -315,12 +315,13 @@ $row-column-inserter-dot-size: 6px;
 	}
 }
 
-// The removers are rendered in a popover outside the editor canvas.
+// The removers are rendered in a popover outside the editor canvas,
+// so these styles are not nested under `.editor-styles-wrapper`.
+// Reduce the popover padding to fit a single button.
 .ftb-row-remover,
 .ftb-column-remover {
-	--wp-ui-button-background-color: var(--wpds-color-background-interactive-neutral);
-	--wp-ui-button-border-color: var(--wpds-color-stroke-interactive-neutral);
-	--wp-ui-button-border-color-active: var(--wpds-color-stroke-interactive-neutral-active);
 
-	border-radius: var(--wpds-border-radius-sm);
+	> div {
+		padding: var(--wpds-dimension-padding-xs);
+	}
 }

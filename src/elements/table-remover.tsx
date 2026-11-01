@@ -44,7 +44,7 @@ export default function TableRemover( {
 	return (
 		<Popover.Root open>
 			<Popover.Popup
-				variant="unstyled"
+				className={ className }
 				initialFocus={ isFocusable }
 				finalFocus={ false }
 				positioner={
@@ -60,7 +60,6 @@ export default function TableRemover( {
 				<IconButton
 					variant="minimal"
 					tone="neutral"
-					className={ className }
 					label={ label }
 					tabIndex={ tabIndex }
 					size="compact"
