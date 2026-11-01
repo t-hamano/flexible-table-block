@@ -17,7 +17,7 @@ import { plus, chevronRight, chevronDown } from '@wordpress/icons';
  * Internal dependencies
  */
 import { CELL_ARIA_LABEL } from '../constants';
-import TableRemover from './table-remover';
+import TableRemovePopover from './table-remove-popover';
 import { convertToObject } from '../utils/style-converter';
 import type { VCell } from '../utils/table-state';
 import type { SectionName, CellTagValue } from '../BlockAttributes';
@@ -170,7 +170,7 @@ function TableCell( {
 								} }
 							/>
 							{ isCurrentRowSelected && (
-								<TableRemover
+								<TableRemovePopover
 									className="ftb-row-remover"
 									label={ __( 'Delete row', 'flexible-table-block' ) }
 									anchor={ rowSelector }
@@ -215,7 +215,7 @@ function TableCell( {
 								} }
 							/>
 							{ isCurrentColumnSelected && (
-								<TableRemover
+								<TableRemovePopover
 									className="ftb-column-remover"
 									label={ __( 'Delete column', 'flexible-table-block' ) }
 									anchor={ columnSelector }

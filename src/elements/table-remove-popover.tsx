@@ -20,7 +20,7 @@ type Props = {
 
 // Render the remover in a popover so that it is not cut off by the edge of the editor canvas,
 // e.g. when the table is full width.
-export default function TableRemover( {
+export default function TableRemovePopover( {
 	className,
 	label,
 	anchor,
