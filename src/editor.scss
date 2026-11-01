@@ -329,12 +329,12 @@ $row-column-inserter-dot-size: 6px;
 	.ftb-row-remover {
 		top: 50%;
 		left: variables.$grid-unit-70 * -1; // -56px
-		margin-top: calc(var(--wpds-dimension-size-md) / -2);
+		margin-top: calc(var(--wpds-dimension-size-md) / 2 * -1);
 	}
 
 	.ftb-column-remover {
 		top: variables.$grid-unit-70 * -1; // -56px
 		left: 50%;
-		margin-left: calc(var(--wpds-dimension-size-md) / -2);
+		margin-left: calc(var(--wpds-dimension-size-md) / 2 * -1);
 	}
 }
