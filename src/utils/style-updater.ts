@@ -6,7 +6,7 @@ import type { Properties } from 'csstype';
 /**
  * Internal dependencies
  */
-import { cleanEmptyObject, sanitizeUnitValue } from './helper';
+import { cleanEmptyObject } from './helper';
 import type { CornerProps, CrossProps, DirectionProps } from './style-picker';
 
 function getCssPropertyWithFourDirection(
@@ -239,12 +239,20 @@ export function updateBorderSpacing(
 
 	const { borderSpacing, ...newStyles } = styles;
 
-	const horizontal = values.horizontal ? sanitizeUnitValue( values.horizontal ) : undefined;
-	const vertical = values.vertical ? sanitizeUnitValue( values.vertical ) : undefined;
+	const horizontal = values.horizontal || '';
+	const vertical = values.vertical || '';
 
-	if ( horizontal === undefined && vertical === undefined ) {
+	if ( ! horizontal && ! vertical ) {
 		return newStyles;
 	}
+
+	if ( ! horizontal || ! vertical ) {
+		return {
+			...newStyles,
+			borderSpacing: `${ horizontal || '0' } ${ vertical || '0' }`,
+		};
+	}
+
 	if ( horizontal === vertical ) {
 		return {
 			...newStyles,
