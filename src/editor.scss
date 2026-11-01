@@ -75,14 +75,14 @@ $row-column-inserter-dot-size: 6px;
 		}
 
 		&.show-control-button:not(.is-content-only) {
-			padding-left: var(--wpds-dimension-gap-3xl);
+			padding-left: variables.$grid-unit-50;
 
 			&.is-caption-side-bottom {
-				padding-top: var(--wpds-dimension-gap-3xl);
+				padding-top: variables.$grid-unit-50;
 			}
 
 			&.is-caption-side-top > table {
-				margin-top: var(--wpds-dimension-gap-3xl);
+				margin-top: variables.$grid-unit-50;
 			}
 		}
 	}
@@ -119,7 +119,7 @@ $row-column-inserter-dot-size: 6px;
 		letter-spacing: 0;
 
 		code {
-			padding: calc(var(--wpds-dimension-padding-xs) / 2) var(--wpds-dimension-padding-xs);
+			padding: math.div(variables.$grid-unit-05, 2) variables.$grid-unit-05;
 			margin: 0;
 			font-family: variables.$font-family-mono;
 			font-size: inherit;
@@ -129,7 +129,7 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-placeholder__table-wrap {
 		width: 100%;
-		padding: var(--wpds-dimension-padding-lg);
+		padding: variables.$grid-unit-20;
 		background-color: var(--wpds-color-background-surface-neutral-weak);
 		box-sizing: border-box;
 	}
@@ -199,14 +199,14 @@ $row-column-inserter-dot-size: 6px;
 		left: 0;
 		z-index: 1;
 		min-height: 0;
-		padding: 0 var(--wpds-dimension-padding-xs);
+		padding: 0 variables.$grid-unit-05;
 		font-size: variables.$font-size-x-small;
 		line-height: variables.$font-line-height-x-small;
 	}
 
 	.ftb-row-before-inserter {
 		top: math.div($row-column-inserter-button-size, 2) * -1; // -9px
-		left: calc(var(--wpds-dimension-gap-3xl) * -1);
+		left: variables.$grid-unit-50 * -1; // -40px;
 
 		&.has-prev-section {
 			top: 0;
@@ -215,7 +215,7 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-row-after-inserter {
 		bottom: math.div($row-column-inserter-button-size, 2) * -1;
-		left: calc(var(--wpds-dimension-gap-3xl) * -1);
+		left: variables.$grid-unit-50 * -1; // -40px;
 
 		&.has-next-section {
 			bottom: 0;
@@ -223,12 +223,12 @@ $row-column-inserter-dot-size: 6px;
 	}
 
 	.ftb-column-before-inserter {
-		top: calc(var(--wpds-dimension-gap-3xl) * -1);
+		top: variables.$grid-unit-50 * -1; // -40px
 		left: math.div($row-column-inserter-button-size, 2) * -1; // -10px
 	}
 
 	.ftb-column-after-inserter {
-		top: calc(var(--wpds-dimension-gap-3xl) * -1);
+		top: variables.$grid-unit-50 * -1; // -40px
 		right: math.div($row-column-inserter-button-size, 2) * -1; // -10px
 	}
 
