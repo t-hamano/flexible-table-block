@@ -247,6 +247,15 @@ export default function Table( {
 		const { key } = event;
 
 		if ( key === 'Shift' || key === 'Control' || key === 'Meta' ) {
+			// Ignore key events from outside the table, e.g. the remove popover,
+			// because the key up event from there is also ignored.
+			const isInsideTableBlock =
+				( event.target as HTMLElement ).closest( '.wp-block-flexible-table-block-table' ) !== null;
+
+			if ( ! isInsideTableBlock ) {
+				return;
+			}
+
 			// range-select mode or multi-select mode.
 			setIsSelectMode( true );
 		} else if ( key === 'Tab' && options.tab_move && tableRef.current ) {
