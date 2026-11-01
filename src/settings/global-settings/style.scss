@@ -47,5 +47,10 @@
 }
 
 .ftb-global-setting-modal__notice {
+	margin-block: var(--wpds-dimension-gap-lg);
 	margin-inline: var(--wpds-dimension-padding-2xl);
+}
+
+.ftb-global-setting-modal__footer {
+	justify-content: space-between;
 }

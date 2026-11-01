@@ -546,7 +546,14 @@ export default function SettingModal( {
 							<Notice.CloseIconButton onClick={ () => setNoticeInfo( undefined ) } />
 						</Notice.Root>
 					) }
-					<Dialog.Footer>
+					<Dialog.Footer className="ftb-global-setting-modal__footer">
+						<Button
+							disabled={ isWaiting }
+							loading={ waitingAction === 'update' }
+							onClick={ handleUpdateOptions }
+						>
+							{ __( 'Save settings', 'flexible-table-block' ) }
+						</Button>
 						{ canManageOptions && (
 							<Popover.Root open={ isResetConfirmOpen } onOpenChange={ setIsResetConfirmOpen }>
 								<Popover.Trigger
@@ -581,13 +588,6 @@ export default function SettingModal( {
 								</Popover.Popup>
 							</Popover.Root>
 						) }
-						<Button
-							disabled={ isWaiting }
-							loading={ waitingAction === 'update' }
-							onClick={ handleUpdateOptions }
-						>
-							{ __( 'Save settings', 'flexible-table-block' ) }
-						</Button>
 					</Dialog.Footer>
 					<ComponentsPopover.Slot />
 				</SlotFillProvider>
