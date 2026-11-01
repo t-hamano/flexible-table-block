@@ -322,7 +322,6 @@ $row-column-inserter-dot-size: 6px;
 .ftb-column-remover {
 
 	> div {
-		// Prevent the line height from adding extra space below the inline button.
 		display: flex;
 		padding: var(--wpds-dimension-padding-xs);
 	}
