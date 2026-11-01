@@ -4,6 +4,11 @@
 	height: min(75vh, 720px);
 }
 
+.ftb-global-setting-modal__header {
+	// Keep the header height constant regardless of the content length.
+	flex-shrink: 0;
+}
+
 .ftb-global-setting-modal__tab-panel {
 	display: flex;
 	align-items: flex-start;

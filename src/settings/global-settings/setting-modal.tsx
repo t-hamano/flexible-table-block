@@ -208,7 +208,7 @@ export default function SettingModal( {
 				 * assistive technology and treated as outside clicks.
 				 */ }
 				<SlotFillProvider>
-					<Dialog.Header>
+					<Dialog.Header className="ftb-global-setting-modal__header">
 						<Dialog.Title>
 							{ __( 'Flexible Table Block Global setting', 'flexible-table-block' ) }
 						</Dialog.Title>
