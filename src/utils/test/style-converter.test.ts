@@ -52,7 +52,7 @@ describe( 'style-converter', () => {
 		it( 'should convert vendor prefixes', () => {
 			expect( convertToObject( '-webkit-box-shadow:none;-ms-transform:none' ) ).toStrictEqual( {
 				WebkitBoxShadow: 'none',
-				msTransform: 'none',
+				MsTransform: 'none',
 			} );
 		} );
 	} );
@@ -89,7 +89,7 @@ describe( 'style-converter', () => {
 				convertToInline( {
 					'--my-color': 'red',
 					WebkitBoxShadow: 'none',
-					msTransform: 'none',
+					MsTransform: 'none',
 				} as Parameters< typeof convertToInline >[ 0 ] )
 			).toBe( '--my-color:red;-webkit-box-shadow:none;-ms-transform:none;' );
 		} );

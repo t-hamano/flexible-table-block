@@ -29,13 +29,10 @@ export function convertToObject( inlineStyles: string | undefined ): Properties 
 			} )
 			.filter( ( [ property, value ] ) => property && value )
 			.map( ( [ property, value ] ) => [
-				// Keep custom properties as is, and convert `-ms-` prefix to lowercase `ms` following React's convention.
+				// Keep custom properties as is.
 				property.startsWith( '--' )
 					? property
-					: property
-							.toLowerCase()
-							.replace( /^-ms-/, 'ms-' )
-							.replace( /-([a-z])/g, ( _, c: string ) => c.toUpperCase() ),
+					: property.toLowerCase().replace( /-([a-z])/g, ( _, c: string ) => c.toUpperCase() ),
 				value,
 			] )
 	);
@@ -51,7 +48,7 @@ export function convertToInline( stylesObj: Properties ): string {
 	const lines = Object.keys( stylesObj ).reduce< string[] >( ( result, key ) => {
 		const property = key.startsWith( '--' )
 			? key
-			: key.replace( /^ms(?=[A-Z])/, '-ms' ).replace( /[A-Z]/g, ( c ) => `-${ c.toLowerCase() }` );
+			: key.replace( /[A-Z]/g, ( c ) => `-${ c.toLowerCase() }` );
 		const value = stylesObj[ key as keyof Properties ];
 
 		if (
