@@ -29,15 +29,18 @@ export default class FlexibleTableBlockUtils {
 		header?: boolean;
 		footer?: boolean;
 	} = {} ) {
-		const cells = ( tag: 'th' | 'td' ) =>
-			Array.from( { length: col }, () => ( { content: '', tag } ) );
-
 		await this.editor.insertBlock( {
 			name: 'flexible-table-block/table',
 			attributes: {
-				head: header ? [ { cells: cells( 'th' ) } ] : [],
-				body: Array.from( { length: row }, () => ( { cells: cells( 'td' ) } ) ),
-				foot: footer ? [ { cells: cells( 'td' ) } ] : [],
+				head: header
+					? [ { cells: Array.from( { length: col }, () => ( { content: '', tag: 'th' } ) ) } ]
+					: [],
+				body: Array.from( { length: row }, () => ( {
+					cells: Array.from( { length: col }, () => ( { content: '', tag: 'td' } ) ),
+				} ) ),
+				foot: footer
+					? [ { cells: Array.from( { length: col }, () => ( { content: '', tag: 'td' } ) ) } ]
+					: [],
 			},
 		} );
 	}
