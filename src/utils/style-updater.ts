@@ -8,13 +8,13 @@ import type { Properties } from 'csstype';
  */
 import { cleanEmptyObject } from './helper';
 import {
-	BORDER_COLOR_STYLE,
-	BORDER_RADIUS_STYLE,
-	BORDER_STYLE_STYLE,
-	BORDER_WIDTH_STYLE,
-	PADDING_STYLE,
+	BORDER_COLOR_LONGHANDS,
+	BORDER_RADIUS_LONGHANDS,
+	BORDER_STYLE_LONGHANDS,
+	BORDER_WIDTH_LONGHANDS,
+	PADDING_LONGHANDS,
 } from './style-picker';
-import type { CornerProps, CrossProps, DirectionProps, FourSideStyle } from './style-picker';
+import type { CornerProps, CrossProps, DirectionProps } from './style-picker';
 
 function getCssPropertyWithFourDirection(
 	property: keyof Properties,
@@ -52,17 +52,17 @@ function getCssPropertyWithFourDirection(
  * If all four values are set, the shorthand property is used. Otherwise, only the set values are
  * output as longhand properties.
  *
- * @param styles                  Styles object.
- * @param values                  Four-side values object.
- * @param fourSideStyle           Four-side style definition.
- * @param fourSideStyle.shorthand Shorthand CSS property name.
- * @param fourSideStyle.longhands Map of each side to its longhand CSS property name.
+ * @param styles    Styles object.
+ * @param values    Four-side values object.
+ * @param shorthand Shorthand CSS property name.
+ * @param longhands Map of each side to its longhand CSS property name.
  * @return New Styles object.
  */
 function updateFourSides< K extends string >(
 	styles: Properties,
 	values: Partial< Record< K, string > > | undefined,
-	{ shorthand, longhands }: FourSideStyle< K >
+	shorthand: keyof Properties,
+	longhands: Record< K, keyof Properties >
 ): Properties {
 	if ( ! values ) {
 		return styles;
@@ -108,7 +108,7 @@ export function updatePadding(
 	styles: Properties,
 	values: Partial< DirectionProps > | undefined
 ): Properties {
-	return updateFourSides( styles, values, PADDING_STYLE );
+	return updateFourSides( styles, values, 'padding', PADDING_LONGHANDS );
 }
 
 /**
@@ -122,7 +122,7 @@ export function updateBorderWidth(
 	styles: Properties,
 	values: Partial< DirectionProps > | undefined
 ): Properties {
-	return updateFourSides( styles, values, BORDER_WIDTH_STYLE );
+	return updateFourSides( styles, values, 'borderWidth', BORDER_WIDTH_LONGHANDS );
 }
 
 /**
@@ -136,7 +136,7 @@ export function updateBorderStyle(
 	styles: Properties,
 	values: Partial< DirectionProps > | undefined
 ): Properties {
-	return updateFourSides( styles, values, BORDER_STYLE_STYLE );
+	return updateFourSides( styles, values, 'borderStyle', BORDER_STYLE_LONGHANDS );
 }
 
 /**
@@ -150,7 +150,7 @@ export function updateBorderColor(
 	styles: Properties,
 	values: Partial< DirectionProps > | undefined
 ): Properties {
-	return updateFourSides( styles, values, BORDER_COLOR_STYLE );
+	return updateFourSides( styles, values, 'borderColor', BORDER_COLOR_LONGHANDS );
 }
 
 /**
@@ -210,5 +210,5 @@ export function updateBorderRadius(
 	styles: Properties,
 	values: Partial< CornerProps > | undefined
 ): Properties {
-	return updateFourSides( styles, values, BORDER_RADIUS_STYLE );
+	return updateFourSides( styles, values, 'borderRadius', BORDER_RADIUS_LONGHANDS );
 }

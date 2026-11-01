@@ -28,76 +28,57 @@ export interface CrossProps {
 }
 
 /**
- * Definition of a four-side style: the shorthand CSS property and the longhand CSS property of each
- * side (or corner), in the same order as the shorthand.
+ * Map of each side (or corner) to its longhand CSS property, in the same order as the shorthand.
  */
-export interface FourSideStyle< K extends string > {
-	shorthand: keyof Properties;
-	longhands: Record< K, keyof Properties >;
-}
+export type FourSideLonghands< T > = Record< keyof T & string, keyof Properties >;
 
-export const PADDING_STYLE: FourSideStyle< keyof DirectionProps > = {
-	shorthand: 'padding',
-	longhands: {
-		top: 'paddingTop',
-		right: 'paddingRight',
-		bottom: 'paddingBottom',
-		left: 'paddingLeft',
-	},
+export const PADDING_LONGHANDS: FourSideLonghands< DirectionProps > = {
+	top: 'paddingTop',
+	right: 'paddingRight',
+	bottom: 'paddingBottom',
+	left: 'paddingLeft',
 };
 
-export const BORDER_WIDTH_STYLE: FourSideStyle< keyof DirectionProps > = {
-	shorthand: 'borderWidth',
-	longhands: {
-		top: 'borderTopWidth',
-		right: 'borderRightWidth',
-		bottom: 'borderBottomWidth',
-		left: 'borderLeftWidth',
-	},
+export const BORDER_WIDTH_LONGHANDS: FourSideLonghands< DirectionProps > = {
+	top: 'borderTopWidth',
+	right: 'borderRightWidth',
+	bottom: 'borderBottomWidth',
+	left: 'borderLeftWidth',
 };
 
-export const BORDER_STYLE_STYLE: FourSideStyle< keyof DirectionProps > = {
-	shorthand: 'borderStyle',
-	longhands: {
-		top: 'borderTopStyle',
-		right: 'borderRightStyle',
-		bottom: 'borderBottomStyle',
-		left: 'borderLeftStyle',
-	},
+export const BORDER_STYLE_LONGHANDS: FourSideLonghands< DirectionProps > = {
+	top: 'borderTopStyle',
+	right: 'borderRightStyle',
+	bottom: 'borderBottomStyle',
+	left: 'borderLeftStyle',
 };
 
-export const BORDER_COLOR_STYLE: FourSideStyle< keyof DirectionProps > = {
-	shorthand: 'borderColor',
-	longhands: {
-		top: 'borderTopColor',
-		right: 'borderRightColor',
-		bottom: 'borderBottomColor',
-		left: 'borderLeftColor',
-	},
+export const BORDER_COLOR_LONGHANDS: FourSideLonghands< DirectionProps > = {
+	top: 'borderTopColor',
+	right: 'borderRightColor',
+	bottom: 'borderBottomColor',
+	left: 'borderLeftColor',
 };
 
-export const BORDER_RADIUS_STYLE: FourSideStyle< keyof CornerProps > = {
-	shorthand: 'borderRadius',
-	longhands: {
-		topLeft: 'borderTopLeftRadius',
-		topRight: 'borderTopRightRadius',
-		bottomRight: 'borderBottomRightRadius',
-		bottomLeft: 'borderBottomLeftRadius',
-	},
+export const BORDER_RADIUS_LONGHANDS: FourSideLonghands< CornerProps > = {
+	topLeft: 'borderTopLeftRadius',
+	topRight: 'borderTopRightRadius',
+	bottomRight: 'borderBottomRightRadius',
+	bottomLeft: 'borderBottomLeftRadius',
 };
 
 /**
  * Pick a four-side style as object from style object.
  *
- * @param stylesObj               styles object.
- * @param fourSideStyle           Four-side style definition.
- * @param fourSideStyle.shorthand Shorthand CSS property name.
- * @param fourSideStyle.longhands Map of each side to its longhand CSS property name.
+ * @param stylesObj styles object.
+ * @param shorthand Shorthand CSS property name.
+ * @param longhands Map of each side to its longhand CSS property name.
  * @return Four-side styles object.
  */
-export function pickFourSides< K extends string >(
+function pickFourSides< K extends string >(
 	stylesObj: Properties,
-	{ shorthand, longhands }: FourSideStyle< K >
+	shorthand: keyof Properties,
+	longhands: Record< K, keyof Properties >
 ): Record< K, string > {
 	const sides = Object.keys( longhands ) as K[];
 	const shorthandValue = stylesObj[ shorthand ];
@@ -109,6 +90,56 @@ export function pickFourSides< K extends string >(
 		K,
 		string
 	>;
+}
+
+/**
+ * Pick padding style as object from style object.
+ *
+ * @param stylesObj styles object.
+ * @return padding styles object.
+ */
+export function pickPadding( stylesObj: Properties ): DirectionProps {
+	return pickFourSides( stylesObj, 'padding', PADDING_LONGHANDS );
+}
+
+/**
+ * Pick border-width style as object from style object.
+ *
+ * @param stylesObj styles object.
+ * @return border-width styles object.
+ */
+export function pickBorderWidth( stylesObj: Properties ): DirectionProps {
+	return pickFourSides( stylesObj, 'borderWidth', BORDER_WIDTH_LONGHANDS );
+}
+
+/**
+ * Pick border-color style as object from style object.
+ *
+ * @param stylesObj styles object.
+ * @return border-color styles object.
+ */
+export function pickBorderColor( stylesObj: Properties ): DirectionProps {
+	return pickFourSides( stylesObj, 'borderColor', BORDER_COLOR_LONGHANDS );
+}
+
+/**
+ * Pick border-style style as object from style object.
+ *
+ * @param stylesObj styles object.
+ * @return border-style styles object.
+ */
+export function pickBorderStyle( stylesObj: Properties ): DirectionProps {
+	return pickFourSides( stylesObj, 'borderStyle', BORDER_STYLE_LONGHANDS );
+}
+
+/**
+ * Pick border-radius style as object from style object.
+ *
+ * @param stylesObj styles object.
+ * @return border-radius styles object.
+ */
+export function pickBorderRadius( stylesObj: Properties ): CornerProps {
+	return pickFourSides( stylesObj, 'borderRadius', BORDER_RADIUS_LONGHANDS );
 }
 
 /**
