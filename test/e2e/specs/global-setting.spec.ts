@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import type { Page } from '@playwright/test';
+
+/**
  * WordPress dependencies
  */
 import type { RequestUtils } from '@wordpress/e2e-test-utils-playwright';
@@ -14,6 +19,22 @@ async function updateOptions( requestUtils: RequestUtils, options: Record< strin
 		path: '/flexible-table-block/v1/options',
 		data: options,
 	} );
+}
+
+const EDITOR_USER = {
+	username: 'ftb-editor',
+	email: 'ftb-editor@example.com',
+	password: 'password',
+	roles: [ 'editor' ],
+};
+
+async function loginAsEditor( page: Page ) {
+	await page.context().clearCookies();
+	await page.goto( 'wp-login.php' );
+	await page.locator( '#user_login' ).fill( EDITOR_USER.username );
+	await page.locator( '#user_pass' ).fill( EDITOR_USER.password );
+	await page.locator( '#wp-submit' ).click();
+	await page.waitForURL( '**/wp-admin/**' );
 }
 
 test.describe( 'Global Setting', () => {
@@ -308,6 +329,75 @@ test.describe( 'Global Setting', () => {
 					'<td colspan="2">Cell 1<br>Cell 2</td>'
 				);
 			} );
+		} );
+	} );
+
+	test.describe( 'Permissions', () => {
+		test.beforeEach( async ( { requestUtils } ) => {
+			await requestUtils.createUser( EDITOR_USER );
+		} );
+
+		test.afterEach( async ( { requestUtils } ) => {
+			await requestUtils.deleteAllUsers();
+		} );
+
+		test( 'should hide the global setting from non-administrators by default', async ( {
+			admin,
+			editor,
+			page,
+			fsbUtils,
+		} ) => {
+			await loginAsEditor( page );
+			await admin.createNewPost();
+			await fsbUtils.createFlexibleTableBlock();
+			await editor.openDocumentSettingsSidebar();
+			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+			// Wait until the options and the user capability are resolved before checking that the button is hidden.
+			await expect
+				.poll( () =>
+					page.evaluate(
+						() =>
+							window.wp.data
+								.select( 'flexible-table-block' )
+								.hasFinishedResolution( 'getOptions' ) &&
+							window.wp.data
+								.select( 'core' )
+								.hasFinishedResolution( 'canUser', [ 'update', { kind: 'root', name: 'site' } ] )
+					)
+				)
+				.toBe( true );
+			await expect( page.getByRole( 'button', { name: 'Edit global setting' } ) ).toBeHidden();
+		} );
+
+		test( 'should allow non-administrators to save the global setting when enabled', async ( {
+			admin,
+			editor,
+			page,
+			requestUtils,
+			fsbUtils,
+		} ) => {
+			await updateOptions( requestUtils, { show_global_setting: true } );
+			await loginAsEditor( page );
+			await admin.createNewPost();
+			await fsbUtils.createFlexibleTableBlock();
+			await editor.openDocumentSettingsSidebar();
+			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+			await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
+			const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
+			// Administrator-only controls are not shown.
+			await expect(
+				modal.getByRole( 'button', { name: 'Restore default settings' } )
+			).toBeHidden();
+			await modal.getByRole( 'tab', { name: 'Editor options' } ).click();
+			await expect(
+				modal.getByRole( 'switch', {
+					name: 'Show Global setting button to non-administrative users',
+				} )
+			).toBeHidden();
+			// Settings can still be saved.
+			await modal.getByRole( 'switch', { name: 'Use the tab key to move cells' } ).check();
+			await modal.getByRole( 'button', { name: 'Save settings' } ).click();
+			await expect( modal.getByText( 'Global setting saved.', { exact: true } ) ).toBeVisible();
 		} );
 	} );
 } );
