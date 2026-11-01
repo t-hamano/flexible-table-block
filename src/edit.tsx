@@ -7,7 +7,7 @@ import clsx from 'clsx';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useMemo, useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import {
 	InspectorControls,
@@ -66,8 +66,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		// @ts-expect-error `insertBlocksAfter` is missing from the type definitions.
 		insertBlocksAfter,
 	} = props;
-	const { contentJustification, tableStyles, captionStyles, captionSide, head, body, foot } =
-		attributes;
+	const { contentJustification, tableStyles, captionStyles, captionSide } = attributes;
 	const [ selectedCells, setSelectedCells ] = useState< VSelectedCells >( undefined );
 	const [ selectedLine, setSelectedLine ] = useState< VSelectedLine >( undefined );
 
@@ -89,11 +88,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 	}, [ isSingleSelected ] );
 
 	// Create virtual table object with the cells placed in positions based on how they actually look.
-	// Rebuild it only when the table sections change, not on every render.
-	const vTable: VTable = useMemo(
-		() => toVirtualTable( { head, body, foot } ),
-		[ head, body, foot ]
-	);
+	const vTable: VTable = toVirtualTable( attributes );
 
 	const onChangeContentJustification = ( value: ContentJustifyValue ) => {
 		const newValue = contentJustification === value ? undefined : value;

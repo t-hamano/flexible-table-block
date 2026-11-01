@@ -128,32 +128,35 @@ export function insertRow(
 	// Number of columns in the row to be inserted.
 	const newRowColCount = vTable.body[ 0 ].cells.length;
 
-	// Virtual column indexes covered by a cell with rowspan from the previous rows.
-	// Only the target section can contain such cells.
-	const rowSpanColIndexes = new Set< number >();
-	vTable[ sectionName ].forEach( ( { cells } ) => {
-		cells.forEach( ( cell ) => {
-			if ( cell.rowIndex < rowIndex && cell.rowIndex + cell.rowSpan - 1 >= rowIndex ) {
-				for ( let i = 0; i < cell.colSpan; i++ ) {
-					rowSpanColIndexes.add( cell.vColIndex + i );
-				}
-			}
-		} );
-	} );
+	const vRows = toVirtualRows( vTable );
 
 	// Row state to be inserted.
 	const newRow: VRow = {
-		cells: Array.from( { length: newRowColCount } ).map( ( _, vColIndex ): VCell => ( {
-			content: '',
-			tag: 'head' === sectionName ? 'th' : 'td',
-			rowSpan: 1,
-			colSpan: 1,
-			sectionName,
-			rowIndex,
-			vColIndex,
-			isFirstSelected: false,
-			isHidden: rowSpanColIndexes.has( vColIndex ),
-		} ) ),
+		cells: Array.from( { length: newRowColCount } ).map( ( _, vColIndex ): VCell => {
+			// Find the cell with rowspan that covers the cell in the inserted row.
+			const rowSpanCells = vRows
+				.flatMap( ( row ) => row.cells )
+				.filter(
+					( cell: VCell ) =>
+						cell.sectionName === sectionName &&
+						cell.rowIndex < rowIndex &&
+						cell.rowIndex + cell.rowSpan - 1 >= rowIndex &&
+						cell.vColIndex <= vColIndex &&
+						vColIndex <= cell.vColIndex + cell.colSpan - 1
+				);
+
+			return {
+				content: '',
+				tag: 'head' === sectionName ? 'th' : 'td',
+				rowSpan: 1,
+				colSpan: 1,
+				sectionName,
+				rowIndex,
+				vColIndex,
+				isFirstSelected: false,
+				isHidden: !! rowSpanCells.length,
+			};
+		} ),
 	};
 
 	return {
@@ -261,28 +264,13 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 	// Whether to add a column after the last column.
 	const isLastColumnInsert = vTable.body[ 0 ].cells.length === vColIndex;
 
+	const vRows = toVirtualRows( vTable );
+
 	return Object.entries( vTable ).reduce(
 		( newVTable: VTable, [ sectionName, section ] ) => {
 			if ( ! section.length ) {
 				return newVTable;
 			}
-
-			// Row indexes in this section where the inserted cell is covered by a cell with colspan.
-			const colSpanRowIndexes = new Set< number >();
-			section.forEach( ( { cells } ) => {
-				cells.forEach( ( cell ) => {
-					if (
-						cell.colSpan > 1 &&
-						cell.vColIndex < vColIndex &&
-						vColIndex <= cell.vColIndex + cell.colSpan - 1
-					) {
-						for ( let i = 0; i < cell.rowSpan; i++ ) {
-							colSpanRowIndexes.add( cell.rowIndex + i );
-						}
-					}
-				} );
-			} );
-
 			newVTable[ sectionName as SectionName ] = section.map( ( { cells }, cRowIndex ) => ( {
 				cells: cells.reduce( ( newCells: VCell[], cell, cVColIndex ) => {
 					// Expand cells with colspan in the before columns.
@@ -315,6 +303,19 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 
 					// Insert cell (between columns).
 					if ( cVColIndex === vColIndex ) {
+						// Whether the cell to be inserted is a virtual cell filled with colSpan.
+						const colSpanCells = vRows
+							.flatMap( ( row ) => row.cells )
+							.filter(
+								( colSpancell: VCell ) =>
+									colSpancell.sectionName === sectionName &&
+									colSpancell.colSpan > 1 &&
+									colSpancell.rowIndex <= cRowIndex &&
+									colSpancell.rowIndex + colSpancell.rowSpan - 1 >= cRowIndex &&
+									colSpancell.vColIndex < vColIndex &&
+									vColIndex <= colSpancell.vColIndex + colSpancell.colSpan - 1
+							);
+
 						newCells.push(
 							{
 								content: '',
@@ -324,8 +325,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 								sectionName: cell.sectionName,
 								rowIndex: cell.rowIndex,
 								vColIndex,
-								// Whether the cell to be inserted is a virtual cell filled with colSpan.
-								isHidden: colSpanRowIndexes.has( cRowIndex ),
+								isHidden: !! colSpanCells.length,
 							},
 							{
 								...cell,
@@ -924,10 +924,8 @@ export function toRectangledSelectedCells(
 	const VCells = currentSection
 		.flatMap( ( row ) => row.cells )
 		.map( ( cell: VCell ) => {
-			// Return a copy so that the anchor is not left on the original virtual table,
-			// which is reused across renders.
 			if ( cell.rowIndex === fromCell.rowIndex && cell.vColIndex === fromCell.vColIndex ) {
-				return { ...cell, isFirstSelected: true };
+				cell.isFirstSelected = true;
 			}
 			return cell;
 		} )
