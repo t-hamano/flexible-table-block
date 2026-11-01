@@ -69,11 +69,6 @@ export default function LinkedUnitControl< K extends string >( {
 			: __( 'Link sides', 'flexible-table-block' );
 	}
 
-	const sanitize = ( inputValue: string | undefined ) => {
-		const [ , unit ] = parseUnit( inputValue ?? '' );
-		return sanitizeUnitValue( inputValue, { maxNum: maxValues?.[ unit ] } );
-	};
-
 	const renderIndicator = ( item?: K ) => {
 		if ( layout === 'corners' ) {
 			return <CornerIndicatorControl corner={ item as CornerValue | undefined } />;
@@ -89,21 +84,14 @@ export default function LinkedUnitControl< K extends string >( {
 		setFocusedItem( undefined );
 	};
 
-	const handleOnChangeAll = ( inputValue: string | undefined ) => {
-		const sanitizedValue = sanitize( inputValue );
-		onChange(
-			Object.fromEntries( items.map( ( { value } ) => [ value, sanitizedValue ] ) ) as Record<
-				K,
-				string
-			>
-		);
-	};
-
-	const handleOnChange = ( inputValue: string | undefined, targetItem: K ) => {
-		onChange( {
-			...values,
-			[ targetItem ]: sanitize( inputValue ),
-		} as Record< K, string > );
+	// Update all items if no target item is given.
+	const handleOnChange = ( inputValue: string | undefined, targetItem?: K ) => {
+		const [ , unit ] = parseUnit( inputValue ?? '' );
+		const sanitizedValue = sanitizeUnitValue( inputValue, { maxNum: maxValues?.[ unit ] } );
+		const newValues = targetItem
+			? { ...values, [ targetItem ]: sanitizedValue }
+			: Object.fromEntries( items.map( ( { value } ) => [ value, sanitizedValue ] ) );
+		onChange( newValues as Record< K, string > );
 	};
 
 	const allInput = (
@@ -113,7 +101,7 @@ export default function LinkedUnitControl< K extends string >( {
 			units={ units }
 			placeholder={ isMixed ? __( 'Mixed', 'flexible-table-block' ) : '' }
 			min={ 0 }
-			onChange={ handleOnChangeAll }
+			onChange={ ( value ) => handleOnChange( value ) }
 			__unstableInputWidth="100px"
 		/>
 	);
