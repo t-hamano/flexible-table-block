@@ -37,6 +37,8 @@ test.describe( 'Undo', () => {
 		await page.keyboard.up( 'Shift' );
 		await editor.clickBlockToolbarButton( 'Edit table' );
 		await page.getByRole( 'menuitem', { name: 'Merge cells' } ).click();
+		// |      Cell 1     |
+		// |        |        |
 		expect( await editor.getEditedPostContent() ).toBe(
 			table( '<tr><td colspan="2">Cell 1</td></tr><tr><td></td><td></td></tr>' )
 		);
