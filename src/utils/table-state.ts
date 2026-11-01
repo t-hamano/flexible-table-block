@@ -593,8 +593,6 @@ export function updateCells(
 	cellState: CellState,
 	selectedCells: VCell[]
 ): VTable {
-	const selectedCellKeys = toCellKeySet( selectedCells );
-
 	return Object.entries( vTable ).reduce(
 		( newVTable: VTable, [ sectionName, section ] ) => {
 			if ( ! section.length ) {
@@ -603,8 +601,11 @@ export function updateCells(
 			newVTable[ sectionName as SectionName ] = section.map( ( { cells }, cRowIndex ) => ( {
 				cells: cells.map( ( cell, cVColIndex ) => {
 					// Refer to the selected cell to determine if it is the target cell to update.
-					const isTargetCell = selectedCellKeys.has(
-						toCellKey( sectionName as SectionName, cRowIndex, cVColIndex )
+					const isTargetCell = selectedCells.some(
+						( targetCell ) =>
+							targetCell.sectionName === sectionName &&
+							targetCell.rowIndex === cRowIndex &&
+							targetCell.vColIndex === cVColIndex
 					);
 
 					if ( ! isTargetCell ) {
@@ -669,32 +670,6 @@ export function isEmptySection( section: VSection ): boolean {
  */
 function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
 	return new Set( selectedCells.map( ( { sectionName } ) => sectionName ) ).size > 1;
-}
-
-/**
- * Creates a key that identifies a cell position on the virtual table.
- *
- * @param sectionName Section name of the cell.
- * @param rowIndex    Row index of the cell.
- * @param vColIndex   Virtual column index of the cell.
- * @return Cell key.
- */
-export function toCellKey( sectionName: SectionName, rowIndex: number, vColIndex: number ): string {
-	return `${ sectionName }:${ rowIndex }:${ vColIndex }`;
-}
-
-/**
- * Creates a set of cell keys from cells, so that whether a cell is included can be checked in constant time.
- *
- * @param cells Cells to convert.
- * @return Set of cell keys.
- */
-export function toCellKeySet( cells: VSelectedCells ): Set< string > {
-	return new Set(
-		( cells || [] ).map( ( { sectionName, rowIndex, vColIndex } ) =>
-			toCellKey( sectionName, rowIndex, vColIndex )
-		)
-	);
 }
 
 /**

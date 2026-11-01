@@ -33,8 +33,6 @@ import {
 	toVirtualRows,
 	toTableAttributes,
 	isEmptySection,
-	toCellKey,
-	toCellKeySet,
 	type VTable,
 	type VCell,
 	type VRow,
@@ -347,9 +345,6 @@ export default function Table( {
 
 	// Use a ref so the flag survives re-renders and the focus handler reads the latest value.
 	const isTabMoveRef = useRef( false );
-
-	// Keys of the selected cells, to check whether each cell is selected in constant time.
-	const selectedCellKeys = useMemo( () => toCellKeySet( selectedCells ), [ selectedCells ] );
 
 	const isRowSelected = selectedLine && 'sectionName' in selectedLine && 'rowIndex' in selectedLine;
 	const isColumnSelected = selectedLine && 'vColIndex' in selectedLine;
@@ -744,8 +739,11 @@ export default function Table( {
 										sectionName={ sectionName }
 										sectionIndex={ sectionIndex }
 										rowIndex={ rowIndex }
-										isCellSelected={ selectedCellKeys.has(
-											toCellKey( sectionName, rowIndex, vColIndex )
+										isCellSelected={ ( selectedCells || [] ).some(
+											( targetCell ) =>
+												targetCell.sectionName === sectionName &&
+												targetCell.rowIndex === rowIndex &&
+												targetCell.vColIndex === vColIndex
 										) }
 										isCurrentRowSelected={
 											!! (
