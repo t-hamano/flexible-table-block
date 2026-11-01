@@ -1,10 +1,7 @@
-@use "sass:math";
 @use "~@wordpress/base-styles/variables" as variables;
 @use "settings/global-settings/style" as globalSettings;
 @use "controls/style" as controls;
 
-$row-column-selector-size: variables.$grid-unit-20; // 16px
-$row-column-inserter-button-size: variables.$grid-unit-20 + variables.$grid-unit-05; // 20px
 $row-column-inserter-dot-size: 6px;
 
 .editor-styles-wrapper .wp-block-flexible-table-block-table {
@@ -75,7 +72,7 @@ $row-column-inserter-dot-size: 6px;
 		}
 
 		&.show-control-button:not(.is-content-only) {
-			// Space for the row and column control buttons. There is no 40px padding token, so use the gap token.
+			// Room for the control buttons. No 40px padding token, so use gap.
 			padding-left: var(--wpds-dimension-gap-3xl);
 
 			&.is-caption-side-bottom {
@@ -137,7 +134,7 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-placeholder__table {
 		width: 100%;
-		max-width: variables.$grid-unit-80 * 5; // 320px
+		max-width: var(--wpds-dimension-surface-width-sm);
 		vertical-align: middle;
 		table-layout: fixed;
 		border-spacing: var(--wpds-dimension-gap-xs);
@@ -205,9 +202,10 @@ $row-column-inserter-dot-size: 6px;
 		line-height: var(--wpds-typography-line-height-xs);
 	}
 
+	// Center the inserters on the table edge.
 	.ftb-row-before-inserter {
-		top: math.div($row-column-inserter-button-size, 2) * -1; // -9px
-		left: variables.$grid-unit-50 * -1; // -40px;
+		top: calc(var(--wpds-dimension-size-xs) / 2 * -1);
+		left: calc(var(--wpds-dimension-gap-3xl) * -1);
 
 		&.has-prev-section {
 			top: 0;
@@ -215,8 +213,8 @@ $row-column-inserter-dot-size: 6px;
 	}
 
 	.ftb-row-after-inserter {
-		bottom: math.div($row-column-inserter-button-size, 2) * -1;
-		left: variables.$grid-unit-50 * -1; // -40px;
+		bottom: calc(var(--wpds-dimension-size-xs) / 2 * -1);
+		left: calc(var(--wpds-dimension-gap-3xl) * -1);
 
 		&.has-next-section {
 			bottom: 0;
@@ -224,13 +222,13 @@ $row-column-inserter-dot-size: 6px;
 	}
 
 	.ftb-column-before-inserter {
-		top: variables.$grid-unit-50 * -1; // -40px
-		left: math.div($row-column-inserter-button-size, 2) * -1; // -10px
+		top: calc(var(--wpds-dimension-gap-3xl) * -1);
+		left: calc(var(--wpds-dimension-size-xs) / 2 * -1);
 	}
 
 	.ftb-column-after-inserter {
-		top: variables.$grid-unit-50 * -1; // -40px
-		right: math.div($row-column-inserter-button-size, 2) * -1; // -10px
+		top: calc(var(--wpds-dimension-gap-3xl) * -1);
+		right: calc(var(--wpds-dimension-size-xs) / 2 * -1);
 	}
 
 	.ftb-row-before-inserter,
@@ -241,8 +239,8 @@ $row-column-inserter-dot-size: 6px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: $row-column-inserter-button-size;
-		height: $row-column-inserter-button-size;
+		width: var(--wpds-dimension-size-xs);
+		height: var(--wpds-dimension-size-xs);
 		color: transparent;
 		cursor: pointer;
 		background: transparent;
@@ -279,17 +277,17 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-row-selector {
 		top: 1px;
-		left: ($row-column-selector-size + 2) * -1;
-		width: $row-column-selector-size;
+		left: calc((var(--wpds-dimension-size-2xs) + 2px) * -1);
+		width: var(--wpds-dimension-size-2xs);
 		height: calc(100% - 2px);
 		border-radius: var(--wpds-border-radius-sm) 0 0 var(--wpds-border-radius-sm);
 	}
 
 	.ftb-column-selector {
-		top: ($row-column-selector-size + 2) * -1;
+		top: calc((var(--wpds-dimension-size-2xs) + 2px) * -1);
 		left: 1px;
 		width: calc(100% - 2px);
-		height: $row-column-selector-size;
+		height: var(--wpds-dimension-size-2xs);
 		border-radius: var(--wpds-border-radius-sm) var(--wpds-border-radius-sm) 0 0;
 	}
 
