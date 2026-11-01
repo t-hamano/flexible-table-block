@@ -76,6 +76,12 @@
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: var(--wpds-dimension-gap-sm);
 	max-width: 600px;
+	// Scroll the style buttons when there are many block styles,
+	// so that the table preview below them stays visible.
+	max-height: 160px;
+	overflow-y: auto;
+	// Keep the focus ring of the buttons visible.
+	padding: 2px;
 }
 
 .ftb-global-setting-modal__preview-content {
