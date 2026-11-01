@@ -82,6 +82,15 @@
 }
 
 // Keep the spacing that `BaseControl` had in the block inspector.
-.ftb-control:where(:not(:last-child)) {
-	margin-bottom: variables.$grid-unit-20;
+.ftb-border-color-control,
+.ftb-border-radius-control,
+.ftb-border-spacing-control,
+.ftb-border-style-control,
+.ftb-border-width-control,
+.ftb-color-control,
+.ftb-padding-control {
+
+	&:where(:not(:last-child)) {
+		margin-bottom: variables.$grid-unit-20;
+	}
 }

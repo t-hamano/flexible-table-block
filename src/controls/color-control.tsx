@@ -50,10 +50,7 @@ export default function ColorControl( {
 	const handleOnPickerClose = () => setIsPickerOpen( false );
 
 	return (
-		<Field.Root
-			ref={ setPopoverAnchor }
-			className={ clsx( 'ftb-control', 'ftb-color-control', className ) }
-		>
+		<Field.Root ref={ setPopoverAnchor } className={ clsx( 'ftb-color-control', className ) }>
 			<Field.VisualLabel>{ label }</Field.VisualLabel>
 			<ColorIndicatorButton
 				label={ label }

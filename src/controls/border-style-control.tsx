@@ -89,7 +89,7 @@ export default function BorderStyleControl( {
 	};
 
 	return (
-		<Fieldset.Root className={ clsx( 'ftb-control', 'ftb-border-style-control', className ) }>
+		<Fieldset.Root className={ clsx( 'ftb-border-style-control', className ) }>
 			<Fieldset.Legend>
 				{ isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label }
 			</Fieldset.Legend>

@@ -41,7 +41,7 @@ export default function BorderRadiusControl( {
 			help={ help }
 			values={ values }
 			onChange={ onChange }
-			className={ clsx( 'ftb-control', 'ftb-border-radius-control', className ) }
+			className={ clsx( 'ftb-border-radius-control', className ) }
 			items={ CORNER_CONTROLS }
 			layout="corners"
 			availableUnits={ BORDER_UNITS }
