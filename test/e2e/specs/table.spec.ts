@@ -32,7 +32,11 @@ test.describe( 'Flexible table', () => {
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
 			.fill( 'Flexible Table Block' );
-		expect( await editor.getEditedPostContent() ).toContain( '<td>Flexible Table Block</td>' );
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 	} );
 
 	test.describe( 'Merging and Splitting Cells', () => {

@@ -217,8 +217,10 @@ test.describe( 'Styles', () => {
 		await page.getByRole( 'button', { name: 'Unlink directions' } ).click();
 		await page.getByRole( 'spinbutton', { name: 'Horizontal' } ).fill( '10' );
 		await page.getByRole( 'spinbutton', { name: 'Vertical' } ).fill( '20' );
-		expect( await editor.getEditedPostContent() ).toContain(
-			'<figure class="wp-block-flexible-table-block-table is-scroll-on-pc is-scroll-on-mobile"><table class="is-stacked-on-mobile is-sticky-first-column" style="width:500px;max-width:600px;min-width:400px;min-height:300px;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;border-collapse:separate;border-spacing:10px 20px">'
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"hasFixedLayout":false,"isScrollOnPc":true,"isScrollOnMobile":true,"isStackedOnMobile":true,"sticky":"first-column"} -->
+<figure class="wp-block-flexible-table-block-table is-scroll-on-pc is-scroll-on-mobile"><table class="is-stacked-on-mobile is-sticky-first-column" style="width:500px;max-width:600px;min-width:400px;min-height:300px;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;border-collapse:separate;border-spacing:10px 20px"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
 		);
 	} );
 
@@ -232,8 +234,10 @@ test.describe( 'Styles', () => {
 			.click();
 		await page.getByRole( 'button', { name: 'Cell settings' } ).click();
 		await applyCellStyles( page, pageUtils );
-		expect( await editor.getEditedPostContent() ).toContain(
-			'<th class="custom" id="id" headers="headers" scope="row" style="font-size:20px;line-height:2;width:100px;color:#111111;background-color:#333333;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;text-align:center;vertical-align:middle"></th>'
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><th class="custom" id="id" headers="headers" scope="row" style="font-size:20px;line-height:2;width:100px;color:#111111;background-color:#333333;padding:1px 2px 3px 4px;border-radius:1px 2px 3px 4px;border-width:1px 2px 3px 4px;border-style:solid dotted dashed double;border-color:#111111 #222222 #333333 #444444;text-align:center;vertical-align:middle"></th><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
 		);
 	} );
 
@@ -280,8 +284,10 @@ test.describe( 'Styles', () => {
 		await page.getByRole( 'spinbutton', { name: 'Left' } ).fill( '4' );
 		await page.getByRole( 'radio', { name: 'Top' } ).click();
 		await page.getByRole( 'button', { name: 'Align center' } ).click();
-		expect( await editor.getEditedPostContent() ).toContain(
-			'<figure class="wp-block-flexible-table-block-table"><figcaption style="font-size:20px;line-height:2;padding:1px 2px 3px 4px;text-align:center">Flexible Table Block</figcaption><table'
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"captionSide":"top"} -->
+<figure class="wp-block-flexible-table-block-table"><figcaption style="font-size:20px;line-height:2;padding:1px 2px 3px 4px;text-align:center">Flexible Table Block</figcaption><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
 		);
 	} );
 } );

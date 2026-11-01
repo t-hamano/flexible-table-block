@@ -23,7 +23,11 @@ test.describe( 'Flexible table cell', () => {
 		await page.keyboard.type( '#anchor' );
 		await pageUtils.pressKeys( 'Enter' );
 
-		expect( await editor.getEditedPostContent() ).toContain( '<a href="#anchor">Link</a>' );
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td><a href="#anchor">Link</a></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
+		);
 
 		// Edit the link.
 		await pageUtils.pressKeys( 'Tab' );
@@ -42,8 +46,10 @@ test.describe( 'Flexible table cell', () => {
 		await page.getByRole( 'checkbox', { name: 'Open in new tab' } ).click();
 		await page.getByRole( 'button', { name: 'Apply', exact: true } ).click();
 
-		expect( await editor.getEditedPostContent() ).toContain(
-			'<a href="#anchor-updated" target="_blank" rel="noopener">Link</a>'
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table -->
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td><a href="#anchor-updated" target="_blank" rel="noopener">Link</a></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
 		);
 	} );
 } );

@@ -69,8 +69,10 @@ test.describe( 'Block Support', () => {
 		// Change letter spacing.
 		await page.getByRole( 'spinbutton', { name: 'Letter spacing' } ).fill( '10' );
 
-		expect( await editor.getEditedPostContent() ).toContain(
-			'<figure class="wp-block-flexible-table-block-table has-system-sans-serif-font-family has-large-font-size" style="font-style:normal;font-weight:500;letter-spacing:10px;line-height:3;text-transform:lowercase">'
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"style":{"typography":{"fontStyle":"normal","fontWeight":"500","lineHeight":"3","textTransform":"lowercase","letterSpacing":"10px"}},"fontSize":"large","fontFamily":"system-sans-serif"} -->
+<figure class="wp-block-flexible-table-block-table has-system-sans-serif-font-family has-large-font-size" style="font-style:normal;font-weight:500;letter-spacing:10px;line-height:3;text-transform:lowercase"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
 		);
 	} );
 
@@ -100,8 +102,10 @@ test.describe( 'Block Support', () => {
 		await page.getByRole( 'spinbutton', { name: 'Bottom margin' } ).fill( '30' );
 		await page.getByRole( 'spinbutton', { name: 'Left margin' } ).fill( '40' );
 
-		expect( await editor.getEditedPostContent() ).toContain(
-			'<figure class="wp-block-flexible-table-block-table" style="margin-top:10px;margin-right:20px;margin-bottom:30px;margin-left:40px">'
+		expect( await editor.getEditedPostContent() ).toBe(
+			`<!-- wp:flexible-table-block/table {"style":{"spacing":{"margin":{"top":"10px","right":"20px","bottom":"30px","left":"40px"}}}} -->
+<figure class="wp-block-flexible-table-block-table" style="margin-top:10px;margin-right:20px;margin-bottom:30px;margin-left:40px"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<!-- /wp:flexible-table-block/table -->`
 		);
 	} );
 } );
