@@ -363,8 +363,11 @@ test.describe( 'Flexible table', () => {
 		test( 'allows to undo merging cells', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock();
 			const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
-			await cells.nth( 0 ).fill( 'Cell 1' );
-			await cells.nth( 1 ).fill( 'Cell 2' );
+			// Type the content like a user, so that each edit gets its own undo level.
+			await cells.nth( 0 ).click();
+			await page.keyboard.type( 'Cell 1' );
+			await cells.nth( 1 ).click();
+			await page.keyboard.type( 'Cell 2' );
 			await cells.nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
 			await cells.nth( 1 ).click();
