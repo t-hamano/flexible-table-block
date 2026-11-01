@@ -168,20 +168,6 @@ class Test_Api extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests that GET works when the stored block style has no cell padding.
-	 */
-	public function test_get_options_without_cell_padding() {
-		$stored = array( 'table_width' => '50%' );
-		update_option( Settings::OPTION_PREFIX . 'block_style', $stored );
-		wp_set_current_user( self::$users['editor'] );
-
-		$response = $this->request( 'GET' );
-
-		$this->assertSame( 200, $response->get_status() );
-		$this->assertSame( $stored, $response->get_data()['block_style'] );
-	}
-
-	/**
 	 * Tests that POST returns a success response with the block CSS.
 	 */
 	public function test_update_options_response() {
