@@ -124,7 +124,7 @@ export default function LinkedUnitControl< K extends string >( {
 		/>
 	);
 
-	const linkButton = allowUnlink && (
+	const linkButton = (
 		<IconButton
 			label={ linkedLabel }
 			icon={ isLinked ? link : linkOff }
@@ -156,7 +156,7 @@ export default function LinkedUnitControl< K extends string >( {
 							) ) }
 						</Stack>
 					) }
-					{ linkButton }
+					{ allowUnlink && linkButton }
 				</Stack>
 				{ help && <Fieldset.Description>{ help }</Fieldset.Description> }
 			</Fieldset.Root>
@@ -173,7 +173,7 @@ export default function LinkedUnitControl< K extends string >( {
 					{ renderIndicator( focusedItem ) }
 					{ showAllInput && <div>{ allInput }</div> }
 				</Stack>
-				{ linkButton }
+				{ allowUnlink && linkButton }
 			</Stack>
 			{ ! showAllInput && (
 				<div className={ itemsClassName }>
