@@ -87,6 +87,6 @@
 .ftb-linked-unit-control {
 
 	&:where(:not(:last-child)) {
-		margin-bottom: variables.$grid-unit-20;
+		margin-bottom: var(--wpds-dimension-gap-lg);
 	}
 }
