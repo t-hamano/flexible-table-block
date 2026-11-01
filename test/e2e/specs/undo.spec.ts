@@ -11,7 +11,6 @@ test.describe( 'Undo', () => {
 	test( 'should undo cell edits and table operations one by one in reverse order', async ( {
 		editor,
 		page,
-		fsbUtils,
 	} ) => {
 		const undo = () =>
 			page
@@ -23,7 +22,11 @@ test.describe( 'Undo', () => {
 <figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody>${ rows }</tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->`;
 
-		await fsbUtils.createFlexibleTableBlock( { col: 2, row: 1 } );
+		// Create the table through the placeholder so that creating it is also undoable.
+		await editor.insertBlock( { name: 'flexible-table-block/table' } );
+		await editor.canvas.getByRole( 'spinbutton', { name: 'Column count' } ).fill( '2' );
+		await editor.canvas.getByRole( 'spinbutton', { name: 'Row count' } ).fill( '1' );
+		await editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
 		const cells = editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } );
 
 		// Type in a cell, insert a row, type in another cell and merge cells.
