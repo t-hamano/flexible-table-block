@@ -17,7 +17,12 @@
 		flex-shrink: 0;
 		width: 190px;
 		position: sticky;
-		top: 0;
+		// Stick to the very top of the scroll area so that scrolled content
+		// doesn't show through the dialog content's top padding.
+		// The negative margin cancels out the padding in the initial layout.
+		top: calc(var(--wpds-border-width-focus) * -2);
+		margin-block-start: calc(var(--wpds-border-width-focus) * -2);
+		padding-block-start: calc(var(--wpds-border-width-focus) * 2);
 		background: var(--wpds-color-background-surface-neutral-strong);
 		z-index: 1;
 
@@ -27,6 +32,8 @@
 	}
 
 	[role="tabpanel"] {
+		// Keep the controls in the panel below the sticky tab list.
+		isolation: isolate;
 		flex: 1;
 		width: 100%;
 	}
