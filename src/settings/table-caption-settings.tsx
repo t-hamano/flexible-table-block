@@ -96,34 +96,42 @@ export default function TableCaptionSettings( {
 
 	return (
 		<>
-			<Stack direction="column" gap="lg" style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }>
-				<Stack align="center" justify="flex-end" className="ftb-table-caption-settings-clear">
-					<Button variant="minimal" size="small" onClick={ onResetSettings }>
-						{ __( 'Clear caption settings', 'flexible-table-block' ) }
-					</Button>
-				</Stack>
-				<Stack align="flex-end" justify="space-between" gap="sm">
-					<div className="ftb-table-caption-settings-font-size" style={ { flex: 1 } }>
-						<UnitControl
-							label={ __( 'Caption font size', 'flexible-table-block' ) }
-							value={ captionStylesObj?.fontSize }
-							units={ fontSizeUnits }
-							min={ 0 }
-							onChange={ onChangeFontSize }
-						/>
-					</div>
-					<div className="ftb-table-caption-settings-line-height" style={ { flex: 1 } }>
-						<InputControl
-							label={ __( 'Caption line height', 'flexible-table-block' ) }
-							autoComplete="off"
-							onValueChange={ onChangeLineHeight }
-							step={ 0.1 }
-							type="number"
-							value={ captionStylesObj?.lineHeight || '' }
-							min={ 0 }
-						/>
-					</div>
-				</Stack>
+			<Stack
+				align="center"
+				justify="flex-end"
+				className="ftb-table-caption-settings-clear"
+				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
+			>
+				<Button variant="minimal" size="small" onClick={ onResetSettings }>
+					{ __( 'Clear caption settings', 'flexible-table-block' ) }
+				</Button>
+			</Stack>
+			<Stack
+				align="flex-end"
+				justify="space-between"
+				gap="sm"
+				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
+			>
+				<div className="ftb-table-caption-settings-font-size" style={ { flex: 1 } }>
+					<UnitControl
+						label={ __( 'Caption font size', 'flexible-table-block' ) }
+						value={ captionStylesObj?.fontSize }
+						units={ fontSizeUnits }
+						min={ 0 }
+						onChange={ onChangeFontSize }
+					/>
+				</div>
+				<div className="ftb-table-caption-settings-line-height" style={ { flex: 1 } }>
+					<InputControl
+						label={ __( 'Caption line height', 'flexible-table-block' ) }
+						autoComplete="off"
+						onValueChange={ onChangeLineHeight }
+						step={ 0.1 }
+						type="number"
+						value={ captionStylesObj?.lineHeight || '' }
+						min={ 0 }
+					/>
+				</div>
 			</Stack>
 			<PaddingControl
 				className="ftb-table-caption-settings-padding"
