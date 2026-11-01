@@ -1,6 +1,5 @@
 @use "sass:math";
 @use "~@wordpress/base-styles/variables" as variables;
-@use "~@wordpress/base-styles/colors" as colors;
 @use "settings/global-settings/style" as globalSettings;
 @use "controls/style" as controls;
 
@@ -58,7 +57,7 @@ $row-column-inserter-dot-size: 6px;
 			td {
 
 				.block-editor-rich-text__editable {
-					border: variables.$border-width dotted colors.$gray-400;
+					border: variables.$border-width dotted var(--wpds-color-stroke-surface-neutral);
 				}
 			}
 		}
@@ -150,13 +149,13 @@ $row-column-inserter-dot-size: 6px;
 
 		thead th {
 			background-color: var(--wp-admin-theme-color);
-			border: variables.$border-width colors.$gray-900 solid;
+			border: variables.$border-width var(--wpds-color-stroke-surface-neutral-strong) solid;
 		}
 
 		tbody td,
 		tfoot td {
 			background-color: var(--wpds-color-background-surface-neutral-strong);
-			border: variables.$border-width colors.$gray-900 solid;
+			border: variables.$border-width var(--wpds-color-stroke-surface-neutral-strong) solid;
 		}
 
 		&.is-overflow-col tr *:nth-last-child(2) {
@@ -262,14 +261,14 @@ $row-column-inserter-dot-size: 6px;
 			height: $row-column-inserter-dot-size;
 			padding: 0;
 			content: "";
-			background: colors.$gray-200;
+			background: var(--wpds-color-background-track-neutral);
 			border-radius: variables.$radius-round;
 			transform: translate(-50%, -50%);
 		}
 
 		&:hover,
 		&:focus {
-			color: colors.$white;
+			color: var(--wpds-color-foreground-interactive-brand-strong);
 			background: var(--wp-admin-theme-color);
 
 			&::before {
@@ -277,7 +276,7 @@ $row-column-inserter-dot-size: 6px;
 			}
 
 			&:active {
-				color: colors.$white;
+				color: var(--wpds-color-foreground-interactive-brand-strong);
 			}
 		}
 	}
@@ -309,8 +308,8 @@ $row-column-inserter-dot-size: 6px;
 		}
 
 		&:not([aria-pressed="true"]) {
-			--wp-ui-button-background-color: #{colors.$gray-200};
-			--wp-ui-button-background-color-active: #{colors.$gray-300};
+			--wp-ui-button-background-color: var(--wpds-color-background-interactive-neutral-weak-active);
+			--wp-ui-button-background-color-active: var(--wpds-color-background-track-neutral);
 		}
 
 		svg {
@@ -322,9 +321,9 @@ $row-column-inserter-dot-size: 6px;
 
 	.ftb-row-remover,
 	.ftb-column-remover {
-		--wp-ui-button-background-color: var(--wpds-color-background-surface-neutral-strong);
-		--wp-ui-button-border-color: #{colors.$gray-900};
-		--wp-ui-button-border-color-active: #{colors.$gray-900};
+		--wp-ui-button-background-color: var(--wpds-color-background-interactive-neutral);
+		--wp-ui-button-border-color: var(--wpds-color-stroke-interactive-neutral-strong);
+		--wp-ui-button-border-color-active: var(--wpds-color-stroke-interactive-neutral-active);
 
 		position: absolute;
 		z-index: 1;
