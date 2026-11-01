@@ -54,7 +54,8 @@ export default function ColorPalettePopover( {
 				}
 			>
 				<VisuallyHidden render={ <Popover.Title /> }>{ label }</VisuallyHidden>
-				<div className="ftb-color-palette-popover__content">
+				{ /* Match the width of the color popover in block supports, which fits six swatches (28px) and five gaps (12px) per row. */ }
+				<div style={ { width: '228px' } }>
 					<ColorPalette
 						colors={ [ ...( palette ?? [] ), ...colorsProp ] }
 						value={ value || '' }
