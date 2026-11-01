@@ -20,10 +20,9 @@
 		// Stick to the very top of the scroll area so that scrolled content
 		// doesn't show through the dialog content's top padding.
 		// The negative margin cancels out the padding in the initial layout.
-		$content-padding-top: calc(var(--wpds-border-width-focus) * 2);
-		top: calc(-1 * #{$content-padding-top});
-		margin-block-start: calc(-1 * #{$content-padding-top});
-		padding-block-start: $content-padding-top;
+		top: calc(var(--wpds-border-width-focus) * -2);
+		margin-block-start: calc(var(--wpds-border-width-focus) * -2);
+		padding-block-start: calc(var(--wpds-border-width-focus) * 2);
 		background: var(--wpds-color-background-surface-neutral-strong);
 		z-index: 1;
 
