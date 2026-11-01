@@ -31,7 +31,6 @@ export default function BorderSpacingControl( {
 			help={ help }
 			values={ values }
 			onChange={ onChange }
-			className="ftb-border-spacing-control"
 			items={ DIRECTION_CONTROLS }
 			layout="directions"
 			availableUnits={ BORDER_UNITS }

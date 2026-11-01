@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import clsx from 'clsx';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -133,7 +138,7 @@ export default function LinkedUnitControl< K extends string >( {
 
 	if ( layout === 'directions' ) {
 		return (
-			<Fieldset.Root className={ className }>
+			<Fieldset.Root className={ clsx( 'ftb-linked-unit-control', className ) }>
 				<Fieldset.Legend>{ label }</Fieldset.Legend>
 				<Stack align="flex-start" justify="space-between" gap="sm">
 					{ showAllInput ? (
@@ -161,7 +166,7 @@ export default function LinkedUnitControl< K extends string >( {
 	const itemsClassName = layout === 'corners' ? 'ftb-corner-controls' : 'ftb-side-controls';
 
 	return (
-		<Fieldset.Root className={ className }>
+		<Fieldset.Root className={ clsx( 'ftb-linked-unit-control', className ) }>
 			<Fieldset.Legend>{ label }</Fieldset.Legend>
 			<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
 				<Stack align="center" gap="sm">

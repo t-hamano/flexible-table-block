@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -43,7 +42,7 @@ export default function BorderWidthControl( {
 			help={ help }
 			values={ values }
 			onChange={ onChange }
-			className={ clsx( 'ftb-border-width-control', className ) }
+			className={ className }
 			items={ SIDE_CONTROLS }
 			layout="sides"
 			availableUnits={ BORDER_UNITS }

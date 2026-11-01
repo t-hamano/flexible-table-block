@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -41,7 +40,7 @@ export default function PaddingControl( {
 			help={ help }
 			values={ values }
 			onChange={ onChange }
-			className={ clsx( 'ftb-padding-control', className ) }
+			className={ className }
 			items={ SIDE_CONTROLS }
 			layout="sides"
 			availableUnits={ PADDING_UNITS }

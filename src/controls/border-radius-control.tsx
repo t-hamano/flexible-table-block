@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import clsx from 'clsx';
 import type { Property } from 'csstype';
 
 /**
@@ -41,7 +40,7 @@ export default function BorderRadiusControl( {
 			help={ help }
 			values={ values }
 			onChange={ onChange }
-			className={ clsx( 'ftb-border-radius-control', className ) }
+			className={ className }
 			items={ CORNER_CONTROLS }
 			layout="corners"
 			availableUnits={ BORDER_UNITS }
