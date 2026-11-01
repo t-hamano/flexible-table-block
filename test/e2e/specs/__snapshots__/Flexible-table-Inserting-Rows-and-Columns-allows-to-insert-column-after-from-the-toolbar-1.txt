@@ -1,3 +1,0 @@
-<!-- wp:flexible-table-block/table -->
-<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td>Cell 1</td><td></td><td>Cell 2</td><td></td></tr><tr><td>Cell 3</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
-<!-- /wp:flexible-table-block/table -->
