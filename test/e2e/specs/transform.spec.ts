@@ -53,14 +53,14 @@ test.describe( 'Transform from core table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createCoreTableBlock( { col: 6, row: 6 } );
+		await fsbUtils.createCoreTableBlock();
 		await editor.openDocumentSettingsSidebar();
 		await page.getByRole( 'checkbox', { name: 'Fixed width table cells' } ).check();
 		await editor.transformBlockTo( 'flexible-table-block/table' );
 
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:flexible-table-block/table -->
-<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class="wp-block-flexible-table-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:flexible-table-block/table -->`
 		);
 	} );
@@ -116,7 +116,7 @@ test.describe( 'Transform from flexible table block', () => {
 		editor,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { col: 3, row: 6 } );
+		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 3 )
@@ -125,7 +125,7 @@ test.describe( 'Transform from flexible table block', () => {
 
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
 		);
 	} );
@@ -135,7 +135,7 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { col: 6, row: 3 } );
+		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
@@ -151,7 +151,7 @@ test.describe( 'Transform from flexible table block', () => {
 
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:table {"hasFixedLayout":false} -->
-<figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class="wp-block-table"><table><tbody><tr><td>Flexible Table Block</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
 		);
 	} );
@@ -161,7 +161,7 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { col: 6, row: 3 } );
+		await fsbUtils.createFlexibleTableBlock();
 		await editor.openDocumentSettingsSidebar();
 		await page
 			.getByRole( 'region', { name: 'Editor settings' } )
@@ -180,7 +180,7 @@ test.describe( 'Transform from flexible table block', () => {
 
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
 		);
 	} );
@@ -190,7 +190,7 @@ test.describe( 'Transform from flexible table block', () => {
 		page,
 		fsbUtils,
 	} ) => {
-		await fsbUtils.createFlexibleTableBlock( { col: 5, row: 5 } );
+		await fsbUtils.createFlexibleTableBlock();
 		await editor.canvas
 			.getByRole( 'textbox', { name: 'Body cell text' } )
 			.nth( 0 )
@@ -209,7 +209,7 @@ test.describe( 'Transform from flexible table block', () => {
 
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:table -->
-<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></figure>
+<figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td colspan="2">Cell 1</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table></figure>
 <!-- /wp:table -->`
 		);
 	} );
