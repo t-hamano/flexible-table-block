@@ -9,6 +9,39 @@ import type { Page } from '@playwright/test';
 import { test as testBase, expect } from '@wordpress/e2e-test-utils-playwright';
 import type { Editor } from '@wordpress/e2e-test-utils-playwright';
 
+type TableOptions = {
+	col?: number;
+	row?: number;
+	header?: boolean;
+	footer?: boolean;
+};
+
+/**
+ * Builds the same table attributes as the "Create Table" button in the placeholder.
+ * @param root0
+ * @param root0.col
+ * @param root0.row
+ * @param root0.header
+ * @param root0.footer
+ */
+function createTableAttributes( {
+	col = 3,
+	row = 3,
+	header = false,
+	footer = false,
+}: TableOptions ) {
+	const createRows = ( rowCount: number, tag: 'th' | 'td' ) =>
+		Array.from( { length: rowCount }, () => ( {
+			cells: Array.from( { length: col }, () => ( { content: '', tag } ) ),
+		} ) );
+
+	return {
+		head: header ? createRows( 1, 'th' ) : [],
+		body: createRows( row, 'td' ),
+		foot: footer ? createRows( 1, 'td' ) : [],
+	};
+}
+
 export default class FlexibleTableBlockUtils {
 	editor: Editor;
 	page: Page;
@@ -18,60 +51,18 @@ export default class FlexibleTableBlockUtils {
 		this.page = page;
 	}
 
-	async createFlexibleTableBlock( {
-		col,
-		row,
-		header = false,
-		footer = false,
-	}: {
-		col?: number;
-		row?: number;
-		header?: boolean;
-		footer?: boolean;
-	} = {} ) {
-		await this.editor.insertBlock( { name: 'flexible-table-block/table' } );
-
-		if ( header ) {
-			await this.editor.canvas.getByRole( 'switch', { name: 'Header section' } ).check();
-		}
-		if ( footer ) {
-			await this.editor.canvas.getByRole( 'switch', { name: 'Footer section' } ).check();
-		}
-		if ( col ) {
-			await this.editor.canvas
-				.getByRole( 'spinbutton', { name: 'Column count' } )
-				.fill( String( col ) );
-		}
-		if ( row ) {
-			await this.editor.canvas
-				.getByRole( 'spinbutton', { name: 'Row count' } )
-				.fill( String( row ) );
-		}
-
-		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
+	async createFlexibleTableBlock( options: TableOptions = {} ) {
+		await this.editor.insertBlock( {
+			name: 'flexible-table-block/table',
+			attributes: createTableAttributes( options ),
+		} );
 	}
 
-	async createCoreTableBlock( {
-		col,
-		row,
-	}: {
-		col?: number;
-		row?: number;
-	} = {} ) {
-		await this.editor.insertBlock( { name: 'core/table' } );
-
-		if ( col ) {
-			await this.editor.canvas
-				.getByRole( 'spinbutton', { name: 'Column count' } )
-				.fill( String( col ) );
-		}
-		if ( row ) {
-			await this.editor.canvas
-				.getByRole( 'spinbutton', { name: 'Row count' } )
-				.fill( String( row ) );
-		}
-
-		await this.editor.canvas.getByRole( 'button', { name: 'Create Table' } ).click();
+	async createCoreTableBlock( options: Pick< TableOptions, 'col' | 'row' > = {} ) {
+		await this.editor.insertBlock( {
+			name: 'core/table',
+			attributes: createTableAttributes( options ),
+		} );
 	}
 
 	/**
