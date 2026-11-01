@@ -375,7 +375,6 @@ export default function SettingModal( {
 									label={ __( 'Cell border style', 'flexible-table-block' ) }
 									values={ { top: currentOptions.block_style?.cell_border_style } }
 									allowSides={ false }
-									hasIndicator={ false }
 									onChange={ ( value ) => setBlockStyle( 'cell_border_style', value.top ) }
 								/>
 							</div>
