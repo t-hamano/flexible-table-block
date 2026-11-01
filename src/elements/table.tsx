@@ -670,10 +670,13 @@ export default function Table( {
 	const handlers = useMemo( (): CellHandlers => {
 		const call =
 			< K extends keyof CellHandlers >( name: K ) =>
-			( ...args: Parameters< CellHandlers[ K ] > ) =>
-				( handlersRef.current?.[ name ] as ( ...a: Parameters< CellHandlers[ K ] > ) => void )(
-					...args
-				);
+			( ...args: Parameters< CellHandlers[ K ] > ) => {
+				// The ref is set in a layout effect, so a cell (e.g. RichText) may call a handler
+				// before it is ready. Ignore such calls, as `onChangeCellContent` already does.
+				const handler = handlersRef.current?.[ name ] as
+					( ( ...a: Parameters< CellHandlers[ K ] > ) => void ) | undefined;
+				handler?.( ...args );
+			};
 		return {
 			onClickCell: call( 'onClickCell' ),
 			onFocusCell: call( 'onFocusCell' ),

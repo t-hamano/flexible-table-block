@@ -178,4 +178,18 @@ describe( 'toRectangledSelectedCells', () => {
 		expect( select( vTable, 'A', 'D' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ] );
 		expect( select( vTable, 'D', 'A' ) ).toStrictEqual( [ 'A', 'B', 'C', 'D', 'E', 'F', 'G' ] );
 	} );
+
+	it( 'should not mark the anchor cell on the original virtual table', () => {
+		const vTable = toVirtualTable( {
+			head: [],
+			body: [ { cells: [ td( 'A' ), td( 'B' ), td( 'C' ), td( 'D' ) ] } ],
+			foot: [],
+		} );
+		const selectedCells = toRectangledSelectedCells( vTable, {
+			fromCell: getCell( vTable, 'B' ),
+			toCell: getCell( vTable, 'C' ),
+		} );
+		expect( selectedCells.find( ( cell ) => cell.isFirstSelected )?.content ).toBe( 'B' );
+		expect( vTable.body[ 0 ].cells.some( ( cell ) => cell.isFirstSelected ) ).toBe( false );
+	} );
 } );

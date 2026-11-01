@@ -742,17 +742,9 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 
 			// Mapping the actual section cells on the virtual section cell.
 			section.forEach( ( row: Row, cRowIndex: number ) => {
-				const vCells = vSection[ cRowIndex ].cells;
-				// Cells before this cursor are already marked as "filled", so the search for the next
-				// empty cell can continue from here instead of starting over from the first column.
-				let cursor = 0;
-
 				row.cells.forEach( ( cell ) => {
-					while ( cursor < colCount && vCells[ cursor ].isFilled ) {
-						cursor++;
-					}
 					// Colmun index on the virtual section excluding cells already marked as "filled".
-					const vColIndex = cursor < colCount ? cursor : -1;
+					const vColIndex = vSection[ cRowIndex ].cells.findIndex( ( { isFilled } ) => ! isFilled );
 					// Clamp rowspan / colspan so that the cell does not overflow the section.
 					// Spans below 1 (e.g. a negative rowspan in the saved markup) are treated as 1.
 					const rowSpan = Math.max(
@@ -957,8 +949,10 @@ export function toRectangledSelectedCells(
 	const VCells = currentSection
 		.flatMap( ( row ) => row.cells )
 		.map( ( cell: VCell ) => {
+			// Return a copy so that the anchor is not left on the original virtual table,
+			// which is reused across renders.
 			if ( cell.rowIndex === fromCell.rowIndex && cell.vColIndex === fromCell.vColIndex ) {
-				cell.isFirstSelected = true;
+				return { ...cell, isFirstSelected: true };
 			}
 			return cell;
 		} )
