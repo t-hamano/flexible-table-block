@@ -274,10 +274,6 @@ $row-column-inserter-dot-size: 6px;
 			&::before {
 				content: none;
 			}
-
-			&:active {
-				color: var(--wpds-color-foreground-interactive-brand-strong);
-			}
 		}
 	}
 
