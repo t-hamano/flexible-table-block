@@ -132,7 +132,7 @@ export default function LinkedUnitControl< K extends string >( {
 			variant="minimal"
 			tone="neutral"
 			size="small"
-			style={ layout === 'directions' ? { marginTop: '8px' } : undefined }
+			style={ layout === 'directions' ? { marginTop: 'var(--wpds-dimension-gap-sm)' } : undefined }
 		/>
 	);
 
@@ -168,7 +168,12 @@ export default function LinkedUnitControl< K extends string >( {
 	return (
 		<Fieldset.Root className={ clsx( 'ftb-linked-unit-control', className ) }>
 			<Fieldset.Legend>{ label }</Fieldset.Legend>
-			<Stack align="center" justify="space-between" gap="sm" style={ { minHeight: '40px' } }>
+			<Stack
+				align="center"
+				justify="space-between"
+				gap="sm"
+				style={ { minHeight: 'var(--wpds-dimension-size-lg)' } }
+			>
 				<Stack align="center" gap="sm">
 					{ renderIndicator( focusedItem ) }
 					{ showAllInput && <div>{ allInput }</div> }

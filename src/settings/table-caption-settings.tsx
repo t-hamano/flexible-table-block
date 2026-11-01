@@ -100,13 +100,18 @@ export default function TableCaptionSettings( {
 				align="center"
 				justify="flex-end"
 				className="ftb-table-caption-settings-clear"
-				style={ { marginBottom: '16px' } }
+				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
 			>
 				<Button variant="minimal" size="small" onClick={ onResetSettings }>
 					{ __( 'Clear caption settings', 'flexible-table-block' ) }
 				</Button>
 			</Stack>
-			<Stack align="flex-end" justify="space-between" gap="sm" style={ { marginBottom: '16px' } }>
+			<Stack
+				align="flex-end"
+				justify="space-between"
+				gap="sm"
+				style={ { marginBottom: 'var(--wpds-dimension-gap-lg)' } }
+			>
 				<div className="ftb-table-caption-settings-font-size" style={ { flex: 1 } }>
 					<UnitControl
 						label={ __( 'Caption font size', 'flexible-table-block' ) }
