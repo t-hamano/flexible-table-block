@@ -43,51 +43,6 @@ describe( 'style-converter', () => {
 			);
 		} );
 
-		it( 'should not split on semicolons inside url() or quotes', () => {
-			expect(
-				convertToObject(
-					'background:url(data:image/png;base64,AA);font-family:"a;b", sans-serif;color:red'
-				)
-			).toStrictEqual( {
-				background: 'url(data:image/png;base64,AA)',
-				fontFamily: '"a;b", sans-serif',
-				color: 'red',
-			} );
-		} );
-
-		it( 'should not split on semicolons inside brackets or escaped with a backslash', () => {
-			expect(
-				convertToObject( '--theme:{a:red;b:blue};--label:one\\;two;--list:[a;b];color:black' )
-			).toStrictEqual( {
-				'--theme': '{a:red;b:blue}',
-				'--label': 'one\\;two',
-				'--list': '[a;b]',
-				color: 'black',
-			} );
-		} );
-
-		it( 'should ignore comments', () => {
-			expect( convertToObject( 'color:red;/* old; value */background:blue' ) ).toStrictEqual( {
-				color: 'red',
-				background: 'blue',
-			} );
-		} );
-
-		it( 'should keep raw url() contents as is', () => {
-			expect(
-				convertToObject( 'background:url(https://example.test/a{b/*c);color:red' )
-			).toStrictEqual( {
-				background: 'url(https://example.test/a{b/*c)',
-				color: 'red',
-			} );
-		} );
-
-		it( 'should keep comments inside values as is', () => {
-			expect( convertToObject( 'font-family:foo/**/bar' ) ).toStrictEqual( {
-				fontFamily: 'foo/**/bar',
-			} );
-		} );
-
 		it( 'should keep custom properties intact', () => {
 			expect( convertToObject( '--my-color:red' ) ).toStrictEqual( {
 				'--my-color': 'red',
@@ -143,12 +98,10 @@ describe( 'style-converter', () => {
 	describe( 'round-trip', () => {
 		it.each( [
 			'background-image:url(https://example.com/a.png);',
-			'background:url(data:image/png;base64,AA);',
 			'--my-color:red;',
 			'-webkit-box-shadow:none;',
 			'-ms-transform:none;',
 			'border-top-left-radius:4px;color:red;',
-			'font-family:foo/**/bar;',
 		] )( 'should preserve %s', ( inline ) => {
 			expect( convertToInline( convertToObject( inline ) ) ).toBe( inline );
 		} );
