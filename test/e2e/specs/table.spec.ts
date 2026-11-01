@@ -232,6 +232,53 @@ test.describe( 'Flexible table', () => {
 				} )
 			).toHaveText( 'The table body must have one or more rows.' );
 		} );
+
+		[
+			{ type: 'row', selectLabel: 'Select row', deleteLabel: 'Delete row' },
+			{ type: 'column', selectLabel: 'Select column', deleteLabel: 'Delete column' },
+		].forEach( ( { type, selectLabel, deleteLabel } ) => {
+			test( `allows to reach the ${ type } delete button with the keyboard`, async ( {
+				editor,
+				page,
+				fsbUtils,
+			} ) => {
+				await fsbUtils.createFlexibleTableBlock();
+				const selectButton = editor.canvas.getByRole( 'button', { name: selectLabel } ).nth( 1 );
+				const deleteButton = page.getByRole( 'button', { name: deleteLabel } );
+
+				// Selecting a row or column with the keyboard does not move focus to the delete button.
+				await selectButton.focus();
+				await page.keyboard.press( 'Enter' );
+				await expect( selectButton ).toHaveAttribute( 'aria-pressed', 'true' );
+				await expect( deleteButton ).toBeVisible();
+				await expect( selectButton ).toBeFocused();
+				await expect( deleteButton ).not.toBeFocused();
+
+				// The delete button can be reached with the Tab key.
+				await page.keyboard.press( 'Tab' );
+				await expect( deleteButton ).toBeFocused();
+
+				// Shift+Tab moves focus back to the selector.
+				await page.keyboard.press( 'Shift+Tab' );
+				await expect( selectButton ).toBeFocused();
+				await expect( deleteButton ).not.toBeFocused();
+
+				// Escape moves focus back to the selector.
+				await page.keyboard.press( 'Tab' );
+				await expect( deleteButton ).toBeFocused();
+				await page.keyboard.press( 'Escape' );
+				await expect( selectButton ).toBeFocused();
+				await expect( deleteButton ).not.toBeFocused();
+				await expect( deleteButton ).toBeVisible();
+
+				// The delete button can be pressed with the keyboard.
+				await page.keyboard.press( 'Tab' );
+				await page.keyboard.press( 'Enter' );
+				await expect(
+					editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } )
+				).toHaveCount( 6 );
+			} );
+		} );
 	} );
 
 	test.describe( 'Selecting Cells', () => {
