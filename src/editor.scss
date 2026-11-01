@@ -318,17 +318,12 @@ $row-column-inserter-dot-size: 6px;
 	.ftb-row-remover,
 	.ftb-column-remover {
 		--wp-ui-button-background-color: var(--wpds-color-background-interactive-neutral);
-		--wp-ui-button-border-color: var(--wpds-color-stroke-interactive-neutral-strong);
+		--wp-ui-button-border-color: var(--wpds-color-stroke-interactive-neutral);
 		--wp-ui-button-border-color-active: var(--wpds-color-stroke-interactive-neutral-active);
 
 		position: absolute;
 		z-index: 1;
 		border-radius: var(--wpds-border-radius-sm);
-		box-shadow:
-			0 1px 1px rgba(0, 0, 0, 0.03),
-			0 1px 2px rgba(0, 0, 0, 0.02),
-			0 3px 3px rgba(0, 0, 0, 0.02),
-			0 4px 4px rgba(0, 0, 0, 0.01);
 	}
 
 	.ftb-row-remover {
