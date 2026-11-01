@@ -21,7 +21,7 @@ $footer-height: variables.$grid-unit-70; // 56px
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;
-	gap: variables.$grid-unit-30;
+	gap: var(--wpds-dimension-gap-xl);
 
 	@media screen and (max-width: 782px) {
 		flex-direction: column;
@@ -48,7 +48,7 @@ $footer-height: variables.$grid-unit-70; // 56px
 .ftb-global-setting-modal__styles {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: variables.$grid-unit-10;
+	gap: var(--wpds-dimension-gap-sm);
 
 	@media (min-width: 40em) {
 		grid-template-columns: repeat(2, 1fr);
@@ -78,9 +78,9 @@ $footer-height: variables.$grid-unit-70; // 56px
 
 .ftb-global-setting-modal__notice {
 	position: absolute !important;
-	right: variables.$grid-unit-30;
+	right: var(--wpds-dimension-padding-2xl);
 	bottom: $footer-height;
-	left: variables.$grid-unit-30;
+	left: var(--wpds-dimension-padding-2xl);
 	z-index: 6;
 }
 
