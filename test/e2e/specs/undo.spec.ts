@@ -43,24 +43,38 @@ test.describe( 'Undo', () => {
 
 		// Undo merging cells.
 		await undo();
+		/**
+		 * | Cell 1 | Cell 2 |
+		 * |        |        |
+		 */
 		expect( await editor.getEditedPostContent() ).toBe(
 			table( '<tr><td>Cell 1</td><td>Cell 2</td></tr><tr><td></td><td></td></tr>' )
 		);
 
 		// Undo typing in the second cell.
 		await undo();
+		/**
+		 * | Cell 1 |        |
+		 * |        |        |
+		 */
 		expect( await editor.getEditedPostContent() ).toBe(
 			table( '<tr><td>Cell 1</td><td></td></tr><tr><td></td><td></td></tr>' )
 		);
 
 		// Undo inserting a row.
 		await undo();
+		/**
+		 * | Cell 1 |        |
+		 */
 		expect( await editor.getEditedPostContent() ).toBe(
 			table( '<tr><td>Cell 1</td><td></td></tr>' )
 		);
 
 		// Undo typing in the first cell.
 		await undo();
+		/**
+		 * |        |        |
+		 */
 		expect( await editor.getEditedPostContent() ).toBe( table( '<tr><td></td><td></td></tr>' ) );
 
 		// Undo creating the table.
