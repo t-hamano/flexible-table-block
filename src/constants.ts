@@ -99,34 +99,34 @@ export const CONTENT_JUSTIFY_CONTROLS = [
 export const BORDER_COLLAPSE_CONTROLS = [
 	{
 		icon: borderCollapseIcon,
-		label: __( 'Share', 'flexible-table-block' ),
+		label: _x( 'Share', 'border-collapse value', 'flexible-table-block' ),
 		value: 'collapse',
 	},
 	{
 		icon: borderSeparateIcon,
-		label: __( 'Separate', 'flexible-table-block' ),
+		label: _x( 'Separate', 'border-collapse value', 'flexible-table-block' ),
 		value: 'separate',
 	},
 ] as const;
 
 export const BORDER_STYLE_CONTROLS = [
 	{
-		label: __( 'Solid', 'flexible-table-block' ),
+		label: _x( 'Solid', 'border style', 'flexible-table-block' ),
 		value: 'solid',
 		icon: borderSolid,
 	},
 	{
-		label: __( 'Dotted', 'flexible-table-block' ),
+		label: _x( 'Dotted', 'border style', 'flexible-table-block' ),
 		value: 'dotted',
 		icon: borderDotted,
 	},
 	{
-		label: __( 'Dashed', 'flexible-table-block' ),
+		label: _x( 'Dashed', 'border style', 'flexible-table-block' ),
 		value: 'dashed',
 		icon: borderDashed,
 	},
 	{
-		label: __( 'Double', 'flexible-table-block' ),
+		label: _x( 'Double', 'border style', 'flexible-table-block' ),
 		value: 'double',
 		icon: borderDouble,
 	},
@@ -185,11 +185,11 @@ export const STICKY_CONTROLS = [
 
 export const CELL_TAG_CONTROLS = [
 	{
-		label: __( 'TH', 'flexible-table-block' ),
+		label: _x( 'TH', 'HTML tag name', 'flexible-table-block' ),
 		value: 'th',
 	},
 	{
-		label: __( 'TD', 'flexible-table-block' ),
+		label: _x( 'TD', 'HTML tag name', 'flexible-table-block' ),
 		value: 'td',
 	},
 ] as const;
@@ -200,30 +200,30 @@ export const CELL_SCOPE_CONTROLS = [
 		value: 'none',
 	},
 	{
-		label: __( 'row', 'flexible-table-block' ),
+		label: _x( 'row', 'scope attribute value', 'flexible-table-block' ),
 		value: 'row',
 	},
 	{
-		label: __( 'col', 'flexible-table-block' ),
+		label: _x( 'col', 'scope attribute value', 'flexible-table-block' ),
 		value: 'col',
 	},
 	{
-		label: __( 'rowgroup', 'flexible-table-block' ),
+		label: _x( 'rowgroup', 'scope attribute value', 'flexible-table-block' ),
 		value: 'rowgroup',
 	},
 	{
-		label: __( 'colgroup', 'flexible-table-block' ),
+		label: _x( 'colgroup', 'scope attribute value', 'flexible-table-block' ),
 		value: 'colgroup',
 	},
 ] as const;
 
 export const CAPTION_SIDE_CONTROLS = [
 	{
-		label: __( 'Top', 'flexible-table-block' ),
+		label: _x( 'Top', 'caption position', 'flexible-table-block' ),
 		value: 'top',
 	},
 	{
-		label: __( 'Bottom', 'flexible-table-block' ),
+		label: _x( 'Bottom', 'caption position', 'flexible-table-block' ),
 		value: 'bottom',
 	},
 ] as const;
@@ -249,30 +249,30 @@ export const CORNER_CONTROLS = [
 
 export const DIRECTION_CONTROLS = [
 	{
-		label: __( 'Vertical', 'flexible-table-block' ),
+		label: _x( 'Vertical', 'direction', 'flexible-table-block' ),
 		value: 'vertical',
 	},
 	{
-		label: __( 'Horizontal', 'flexible-table-block' ),
+		label: _x( 'Horizontal', 'direction', 'flexible-table-block' ),
 		value: 'horizontal',
 	},
 ] as const;
 
 export const SIDE_CONTROLS = [
 	{
-		label: __( 'Top', 'flexible-table-block' ),
+		label: _x( 'Top', 'side', 'flexible-table-block' ),
 		value: 'top',
 	},
 	{
-		label: __( 'Right', 'flexible-table-block' ),
+		label: _x( 'Right', 'side', 'flexible-table-block' ),
 		value: 'right',
 	},
 	{
-		label: __( 'Bottom', 'flexible-table-block' ),
+		label: _x( 'Bottom', 'side', 'flexible-table-block' ),
 		value: 'bottom',
 	},
 	{
-		label: __( 'Left', 'flexible-table-block' ),
+		label: _x( 'Left', 'side', 'flexible-table-block' ),
 		value: 'left',
 	},
 ] as const;

@@ -9,7 +9,7 @@ import type { Property } from 'csstype';
  */
 import { ColorIndicator } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
-import { __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 import { Button, VisuallyHidden } from '@wordpress/ui';
 
 type Props = {
@@ -33,11 +33,11 @@ export default function ColorIndicatorButton( {
 }: Props ) {
 	let description: string;
 	if ( isMixed ) {
-		description = __( 'Mixed', 'flexible-table-block' );
+		description = _x( 'Mixed', 'color value', 'flexible-table-block' );
 	} else if ( isNone ) {
 		description = __( 'No color selected', 'flexible-table-block' );
 	} else if ( isTransparent ) {
-		description = __( 'Transparent', 'flexible-table-block' );
+		description = _x( 'Transparent', 'color value', 'flexible-table-block' );
 	} else {
 		description = value || '';
 	}
@@ -64,7 +64,7 @@ export default function ColorIndicatorButton( {
 				onClick={ onClick }
 			>
 				{ isMixed ? (
-					__( 'Mixed', 'flexible-table-block' )
+					_x( 'Mixed', 'color value', 'flexible-table-block' )
 				) : (
 					<ColorIndicator
 						colorValue={ value || '' }

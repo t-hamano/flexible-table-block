@@ -6,7 +6,7 @@ import clsx from 'clsx';
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import {
@@ -104,7 +104,7 @@ export default function LinkedUnitControl< K extends string >( {
 			aria-label={ __( 'All', 'flexible-table-block' ) }
 			value={ isMixed ? '' : values[ items[ 0 ].value ] }
 			units={ units }
-			placeholder={ isMixed ? __( 'Mixed', 'flexible-table-block' ) : '' }
+			placeholder={ isMixed ? _x( 'Mixed', 'unit value', 'flexible-table-block' ) : '' }
 			min={ 0 }
 			onChange={ ( value ) => handleOnChange( value ) }
 			__unstableInputWidth="100px"
