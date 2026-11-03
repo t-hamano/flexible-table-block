@@ -7,7 +7,7 @@ import type { PropertyValue } from 'csstype';
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { link, linkOff } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import {
@@ -91,7 +91,13 @@ export default function BorderStyleControl( {
 	return (
 		<Fieldset.Root className={ clsx( 'ftb-border-style-control', className ) }>
 			<Fieldset.Legend>
-				{ isMixed && isLinked ? `${ label } ${ __( '(Mixed)', 'flexible-table-block' ) }` : label }
+				{ isMixed && isLinked
+					? sprintf(
+							/* translators: %s: Control label, e.g. "Border style". */
+							__( '%s (Mixed)', 'flexible-table-block' ),
+							label
+						)
+					: label }
 			</Fieldset.Legend>
 			<Stack align="flex-start" justify="space-between" gap="sm">
 				{ isLinked ? (

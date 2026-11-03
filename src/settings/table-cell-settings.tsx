@@ -6,7 +6,7 @@ import type { Property } from 'csstype';
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -264,7 +264,7 @@ export default function TableCellSettings( { setAttributes, vTable, selectedCell
 				value={ cellStylesObj.backgroundColor }
 				colors={ [
 					{
-						name: __( 'Transparent', 'flexible-table-block' ),
+						name: _x( 'Transparent', 'color value', 'flexible-table-block' ),
 						slug: 'transparent',
 						color: 'transparent',
 					},
