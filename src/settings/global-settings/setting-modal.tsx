@@ -3,6 +3,7 @@
  */
 import type { Properties } from 'csstype';
 import type { Dispatch, SetStateAction } from 'react';
+import clsx from 'clsx';
 
 /**
  * WordPress dependencies
@@ -44,6 +45,10 @@ import {
 } from '../../controls';
 import { sanitizeUnitValue, cleanEmptyObject } from '../../utils/helper';
 import { store as ftbStore, type ApiResponse, type StoreOptions } from '../../store';
+import TablePreview from './table-preview';
+
+// Tabs that show the table preview.
+const PREVIEW_TABS = [ 'table', 'cell' ];
 
 type Props = {
 	options: StoreOptions;
@@ -74,6 +79,7 @@ export default function SettingModal( {
 	const [ isResetConfirmOpen, setIsResetConfirmOpen ] = useState( false );
 	const isWaiting = !! waitingAction;
 	const [ currentOptions, setCurrentOptions ] = useState< StoreOptions >( options );
+	const [ selectedTab, setSelectedTab ] = useState( 'table' );
 
 	const { setOptions: setStoreOptions } = useDispatch( ftbStore );
 	const registry = useRegistry();
@@ -199,6 +205,8 @@ export default function SettingModal( {
 			} );
 	};
 
+	const hasPreview = PREVIEW_TABS.includes( selectedTab );
+
 	return (
 		<Dialog.Root open onOpenChange={ ( open ) => ! open && setIsSettingModalOpen( false ) }>
 			<Dialog.Popup size="large" className="ftb-global-setting-modal">
@@ -217,9 +225,12 @@ export default function SettingModal( {
 					</Dialog.Header>
 					<Dialog.Content>
 						<Tabs.Root
-							className="ftb-global-setting-modal__tab-panel"
+							className={ clsx( 'ftb-global-setting-modal__tab-panel', {
+								'has-preview': hasPreview,
+							} ) }
 							orientation="vertical"
-							defaultValue="table"
+							value={ selectedTab }
+							onValueChange={ ( value ) => setSelectedTab( String( value ) ) }
 						>
 							<Tabs.List>
 								<Tabs.Tab value="table">{ __( 'Table styles', 'flexible-table-block' ) }</Tabs.Tab>
@@ -539,6 +550,7 @@ export default function SettingModal( {
 									) }
 								</Stack>
 							</Tabs.Panel>
+							{ hasPreview && <TablePreview blockStyle={ currentOptions.block_style } /> }
 						</Tabs.Root>
 					</Dialog.Content>
 					{ noticeInfo?.status && noticeInfo?.message && (

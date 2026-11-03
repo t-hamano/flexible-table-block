@@ -290,28 +290,25 @@ class Test_Helper extends WP_UnitTestCase {
 			. "{$selector} > table tr th { background-color: #f0f0f1; }"
 			. "{$selector} > table tr td { background-color: #ffffff; }";
 
-		$this->assertSame( $expected, Helper::get_block_css() );
+		$this->assertSame( $expected, Helper::get_block_css( Settings::OPTIONS['block_style']['default'] ) );
 	}
 
 	/**
 	 * Tests the block CSS generated from customized options.
 	 */
 	public function test_get_block_css_with_custom_option() {
-		update_option(
-			Settings::OPTION_PREFIX . 'block_style',
-			array(
-				'table_width'              => '80%',
-				'row_odd_color'            => 'oklch(70% 0.1 200)',
-				'cell_text_color_th'       => 'rgb(255 0 0)',
-				'cell_text_color_td'       => null,
-				'cell_background_color_th' => '',
-				'cell_padding'             => array(
-					'top'    => '1px',
-					'right'  => '2px',
-					'bottom' => '1px',
-					'left'   => '2px',
-				),
-			)
+		$option = array(
+			'table_width'              => '80%',
+			'row_odd_color'            => 'oklch(70% 0.1 200)',
+			'cell_text_color_th'       => 'rgb(255 0 0)',
+			'cell_text_color_td'       => null,
+			'cell_background_color_th' => '',
+			'cell_padding'             => array(
+				'top'    => '1px',
+				'right'  => '2px',
+				'bottom' => '1px',
+				'left'   => '2px',
+			),
 		);
 
 		$selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
@@ -321,36 +318,55 @@ class Test_Helper extends WP_UnitTestCase {
 			. "{$selector} > table tr th, {$selector} > table tr td { padding: 1px 2px; }"
 			. "{$selector} > table tr th { color: rgb(255 0 0); }";
 
-		$this->assertSame( $expected, Helper::get_block_css() );
+		$this->assertSame( $expected, Helper::get_block_css( $option ) );
 	}
 
 	/**
 	 * Tests that unsafe option values are dropped from the block CSS.
 	 */
 	public function test_get_block_css_drops_unsafe_values() {
-		update_option(
-			Settings::OPTION_PREFIX . 'block_style',
-			array(
-				'table_width'       => '100%</style><script>alert(1)</script>',
-				'table_max_width'   => 'expression(alert(1))',
-				'row_even_color'    => 'url(javascript:alert(1))',
-				'cell_border_color' => 'red}body{display:none',
-				'cell_border_style' => 'solid',
-			)
+		$option = array(
+			'table_width'       => '100%</style><script>alert(1)</script>',
+			'table_max_width'   => 'expression(alert(1))',
+			'row_even_color'    => 'url(javascript:alert(1))',
+			'cell_border_color' => 'red}body{display:none',
+			'cell_border_style' => 'solid',
 		);
 
 		$selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
 		$expected = "{$selector} > table tr th, {$selector} > table tr td { border-style: solid; }";
 
-		$this->assertSame( $expected, Helper::get_block_css() );
+		$this->assertSame( $expected, Helper::get_block_css( $option ) );
 	}
 
 	/**
 	 * Tests that empty options generate no block CSS.
 	 */
 	public function test_get_block_css_with_empty_option() {
-		update_option( Settings::OPTION_PREFIX . 'block_style', array() );
+		$this->assertSame( '', Helper::get_block_css( array() ) );
+	}
 
-		$this->assertSame( '', Helper::get_block_css() );
+	/**
+	 * Tests that a non-array option generates no block CSS.
+	 *
+	 * @dataProvider data_get_block_css_with_invalid_option
+	 *
+	 * @param mixed $option Invalid option value.
+	 */
+	public function test_get_block_css_with_invalid_option( $option ) {
+		$this->assertSame( '', Helper::get_block_css( $option ) );
+	}
+
+	/**
+	 * Data provider for test_get_block_css_with_invalid_option().
+	 *
+	 * @return array[]
+	 */
+	public function data_get_block_css_with_invalid_option() {
+		return array(
+			'null'   => array( null ),
+			'false'  => array( false ),
+			'string' => array( 'width: 100%' ),
+		);
 	}
 }

@@ -31,6 +31,7 @@ export const STORE_NAME = 'flexible-table-block' as const;
 
 // Rest API routes.
 export const REST_API_ROUTE = '/flexible-table-block/v1/options' as const;
+export const REST_API_PREVIEW_ROUTE = '/flexible-table-block/v1/options/preview' as const;
 
 // Table placeholder default settings.
 export const DEFAULT_PREVIEW_ROWS = 3 as const;
