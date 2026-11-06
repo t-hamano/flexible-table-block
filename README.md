@@ -44,6 +44,10 @@ npm install
 npm run build
 ```
 
+## Credits
+
+The photo in the banner image: "[city](https://www.flickr.com/photos/75487768@N04/26656266535)" by [barnyz](https://www.flickr.com/photos/75487768@N04) is licensed under [CC BY-NC-ND 2.0](https://creativecommons.org/licenses/by-nc-nd/2.0/).
+
 ## Author
 
 [Aki Hamano (Github)](https://github.com/t-hamano)
