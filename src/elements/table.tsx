@@ -497,8 +497,6 @@ export default function Table( {
 	return (
 		// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
 		<table
-			// The `is-sticky-*` class is only added on the front end,
-			// so that the front-end style doesn't make the cells sticky in the editor.
 			className={ clsx( colorProps.className, {
 				'has-fixed-layout': hasFixedLayout,
 				'is-stacked-on-mobile': isStackedOnMobile,
