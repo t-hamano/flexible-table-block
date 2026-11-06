@@ -106,7 +106,7 @@ test.describe( 'Front end', () => {
 			`${ selector }>table tr td{color:#444444;background-color:#666666;}`,
 		];
 		const inlineCss = await page
-			.locator( 'style#flexible-table-block-table-view-style-inline-css' )
+			.locator( 'style#flexible-table-block-table-style-inline-css' )
 			.textContent();
 		expect( inlineCss ).toContain( expectedRules.join( '' ) );
 
@@ -224,7 +224,7 @@ test.describe( 'Front end', () => {
 		await visitPublishedPost( { editor, page } );
 
 		const inlineCss = await page
-			.locator( 'style#flexible-table-block-table-view-style-inline-css' )
+			.locator( 'style#flexible-table-block-table-style-inline-css' )
 			.textContent();
 		expect( inlineCss ).toContain( '@media screen and (min-width:601px){' );
 		expect( inlineCss ).toContain( '@media screen and (max-width:600px){' );
@@ -250,7 +250,11 @@ test.describe( 'Front end', () => {
 		await expect( stackedCell ).toHaveCSS( 'display', 'block' );
 	} );
 
-	test( 'should make the header and the first column sticky', async ( { admin, editor, page } ) => {
+	test( 'should make the header and the first column sticky only on the front end', async ( {
+		admin,
+		editor,
+		page,
+	} ) => {
 		await admin.createNewPost();
 		await editor.insertBlock( {
 			name: 'flexible-table-block/table',
@@ -337,6 +341,18 @@ test.describe( 'Front end', () => {
 				],
 			},
 		} );
+		// The front-end style is also loaded in the editor, but sticky should not be applied there.
+		const editorTables = editor.canvas.locator( '.wp-block-flexible-table-block-table > table' );
+		await expect( editorTables ).toHaveCount( 3 );
+		await expect( editorTables.nth( 0 ).locator( 'thead' ) ).toHaveCSS( 'position', 'static' );
+		const editorFirstColumnRows = editorTables.nth( 1 ).locator( 'tr' );
+		await expect( editorFirstColumnRows ).toHaveCount( 3 );
+		for ( const row of await editorFirstColumnRows.all() ) {
+			const firstCell = row.locator( 'th, td' ).first();
+			await expect( firstCell ).toHaveCSS( 'position', 'relative' );
+			await expect( firstCell ).toHaveCSS( 'z-index', 'auto' );
+		}
+
 		await visitPublishedPost( { editor, page } );
 
 		// Sticky header.

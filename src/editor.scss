@@ -4,13 +4,8 @@
 $row-column-inserter-dot-size: 6px;
 
 .editor-styles-wrapper .wp-block-flexible-table-block-table {
-	box-sizing: border-box;
 
 	> table {
-
-		&.has-fixed-layout {
-			table-layout: fixed;
-		}
 
 		thead,
 		tbody,
@@ -82,29 +77,6 @@ $row-column-inserter-dot-size: 6px;
 				margin-top: var(--wpds-dimension-gap-3xl);
 			}
 		}
-	}
-
-	&.is-content-justification-left,
-	&.is-content-justification-center,
-	&.is-content-justification-right {
-		display: flex;
-		flex-flow: column;
-
-		figcaption {
-			align-self: stretch;
-		}
-	}
-
-	&.is-content-justification-left {
-		align-items: flex-start;
-	}
-
-	&.is-content-justification-center {
-		align-items: center;
-	}
-
-	&.is-content-justification-right {
-		align-items: flex-end;
 	}
 
 	.ftb-placeholder {

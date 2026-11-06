@@ -74,7 +74,7 @@ export default function Table( {
 	setSelectedLine,
 	isContentOnlyMode,
 }: Props ) {
-	const { hasFixedLayout, isStackedOnMobile, sticky } = attributes;
+	const { hasFixedLayout, isStackedOnMobile } = attributes;
 
 	const colorProps = useColorProps( attributes );
 
@@ -500,7 +500,6 @@ export default function Table( {
 			className={ clsx( colorProps.className, {
 				'has-fixed-layout': hasFixedLayout,
 				'is-stacked-on-mobile': isStackedOnMobile,
-				[ `is-sticky-${ sticky }` ]: sticky,
 			} ) }
 			style={ { ...tableStylesObj, ...colorProps.style } }
 			ref={ tableRef }
