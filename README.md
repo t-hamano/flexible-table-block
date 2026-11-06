@@ -46,7 +46,7 @@ npm run build
 
 ## Credits
 
-The photo in the banner image: "[city](https://www.flickr.com/photos/75487768@N04/26656266535)" by [barnyz](https://www.flickr.com/photos/75487768@N04) is licensed under [CC BY-NC-ND 2.0](https://creativecommons.org/licenses/by-nc-nd/2.0/).
+The photo in the banner image: "[Berlin, Berlin](https://www.flickr.com/photos/56218409@N03/17005493549)" by [mripp](https://www.flickr.com/photos/56218409@N03) is licensed under [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
 
 ## Author
 
