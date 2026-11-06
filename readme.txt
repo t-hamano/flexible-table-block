@@ -13,36 +13,31 @@ Flexible Table Block is a custom block plugin for the WordPress block editor tha
 
 == Description ==
 
-**Merge and Split Cells**
+**Merge Cells and Intuitive Selection**
 
-You can merge or split cells from multiple selected cells.
+You can merge or split cells from multiple selected cells. You can also easily select a batch of cells in a section, or select, add, or delete rows and columns with the buttons.
 
-**Flexible Styling**
+**Flexible Styling and Responsive Support**
 
-You can set various styles for each tag of table, cell, and caption individually.
+You can set various styles for each tag of table, cell, and caption individually. You can also set the table to scroll horizontally on both desktop and mobile, and arrange cells vertically on mobile. The breakpoint for switching between desktop and mobile can be changed freely.
 
-**Advanced UI**
+**Global Default Styles**
 
-You can easily select a batch of cells in a section, or select, add, or delete rows and columns with the buttons.
+You can set the default styles of tables and cells for the entire site.
 
-**Responsive Support**
+**Editor Options**
 
-You can set the table to scroll horizontally on both Desktop and mobile, and arrange cells vertically on mobile.
-The breakpoints for switching between Desktop and mobile can be changed freely.
-
-**Global Setting**
-
-You can set the default styles of tables and cells, the responsive breakpoint, and editor options for the entire site.
+You can change the editor behavior, such as showing section labels and control buttons, or moving between cells with the tab key.
 
 == Installation ==
 1. Upload the `flexible-table-block` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the \'Plugins\' menu in WordPress.
 
 == Screenshots ==
-1. Merge cells and select rows, columns, and sections with buttons
-2. Settings for the table, cells, and caption
-3. Global setting: Default table styles
-4. Global setting: Editor options
+1. Merge Cells and Intuitive Selection
+2. Flexible Styling and Responsive Support
+3. Global Default Styles
+4. Editor Options
 
 == Resources ==
 
