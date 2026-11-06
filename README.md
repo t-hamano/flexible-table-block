@@ -23,15 +23,19 @@ You can set various styles for each tag of table, cell, and caption individually
 
 ### Advanced UI
 
-![Advanced UI](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/screenshot-3.jpg)
-
 You can easily select a batch of cells in a section, or select, add, or delete rows and columns with the buttons.
 
 ### Responsive Support
 
-![Responsive Support](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/screenshot-4.jpg)
-
 You can set the table to scroll horizontally on both Desktop and mobile, and arrange cells vertically on mobile. The breakpoints for switching between Desktop and mobile can be changed freely.
+
+### Global Setting
+
+![Global Setting - Table styles](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/screenshot-3.jpg)
+
+![Global Setting - Editor options](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/screenshot-4.jpg)
+
+You can set the default styles of tables and cells, the responsive breakpoint, and editor options for the entire site.
 
 ## How to build
 

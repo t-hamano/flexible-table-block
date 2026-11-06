@@ -30,15 +30,19 @@ You can easily select a batch of cells in a section, or select, add, or delete r
 You can set the table to scroll horizontally on both Desktop and mobile, and arrange cells vertically on mobile.
 The breakpoints for switching between Desktop and mobile can be changed freely.
 
+**Global Setting**
+
+You can set the default styles of tables and cells, the responsive breakpoint, and editor options for the entire site.
+
 == Installation ==
 1. Upload the `flexible-table-block` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the \'Plugins\' menu in WordPress.
 
 == Screenshots ==
-1. Merge and Split Cells
-2. Flexible Styling
-3. Advanced UI
-4. Responsive Support
+1. Merge cells and select rows, columns, and sections with buttons
+2. Settings for the table, cells, and caption
+3. Global setting: Default table styles
+4. Global setting: Editor options
 
 == Changelog ==
 
