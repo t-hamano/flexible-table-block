@@ -28,7 +28,7 @@
 	],
 	"dependencies": {
 		"@wordpress/icons": "^19.0.0",
-		"@wordpress/ui": "0.25.0",
+		"@wordpress/ui": "0.26.0",
 		"postcss-value-parser": "4.2.0"
 	},
 	"devDependencies": {
