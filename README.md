@@ -44,9 +44,13 @@ npm install
 npm run build
 ```
 
-## Credits
+## Resources
 
-The photo in the banner image: "[Berlin, Berlin](https://www.flickr.com/photos/56218409@N03/17005493549)" by [mripp](https://www.flickr.com/photos/56218409@N03) is licensed under [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
+### Image for banner
+
+- License: CC BY 2.0
+- Author: mripp
+- Source: <https://openverse.org/image/5438640e-83e1-4759-8691-1f87086fd651>
 
 ## Author
 

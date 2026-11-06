@@ -34,10 +34,6 @@ The breakpoints for switching between Desktop and mobile can be changed freely.
 
 You can set the default styles of tables and cells, the responsive breakpoint, and editor options for the entire site.
 
-**Credits**
-
-The photo in the banner image: "[Berlin, Berlin](https://www.flickr.com/photos/56218409@N03/17005493549)" by [mripp](https://www.flickr.com/photos/56218409@N03) is licensed under [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
-
 == Installation ==
 1. Upload the `flexible-table-block` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the \'Plugins\' menu in WordPress.
@@ -47,6 +43,14 @@ The photo in the banner image: "[Berlin, Berlin](https://www.flickr.com/photos/5
 2. Settings for the table, cells, and caption
 3. Global setting: Default table styles
 4. Global setting: Editor options
+
+== Resources ==
+
+= Image for banner =
+
+* License: CC BY 2.0
+* Author: mripp
+* Source: https://openverse.org/image/5438640e-83e1-4759-8691-1f87086fd651
 
 == Changelog ==
 
