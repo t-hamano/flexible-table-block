@@ -50,15 +50,6 @@ class Test_Enqueue extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Returns the inline CSS expected to be added to the style.
-	 *
-	 * @return string[]
-	 */
-	private function get_expected_inline_css() {
-		return array( Helper::minify_css( Helper::get_block_css() . Helper::get_responsive_css() ) );
-	}
-
-	/**
 	 * Tests that the front-end style is a block style, which is also printed in the head
 	 * when block assets are not loaded on demand.
 	 */
@@ -74,49 +65,14 @@ class Test_Enqueue extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests that the block CSS is added before the head when block assets are not loaded on demand.
+	 * Tests that the block CSS is added to the front-end style.
 	 */
-	public function test_block_css_is_added_in_head_when_block_assets_are_not_loaded_on_demand() {
-		add_filter( 'should_load_block_assets_on_demand', '__return_false' );
+	public function test_block_css_is_added_to_style() {
+		( new Enqueue() )->add_block_css_to_style();
 
-		( new Enqueue() )->add_block_css_to_style_in_head();
-
-		$this->assertSame( $this->get_expected_inline_css(), wp_styles()->get_data( self::STYLE_HANDLE, 'after' ) );
-	}
-
-	/**
-	 * Tests that the block CSS is not added before the head when block assets are loaded on demand.
-	 */
-	public function test_block_css_is_not_added_in_head_when_block_assets_are_loaded_on_demand() {
-		add_filter( 'should_load_block_assets_on_demand', '__return_true' );
-
-		( new Enqueue() )->add_block_css_to_style_in_head();
-
-		$this->assertFalse( wp_styles()->get_data( self::STYLE_HANDLE, 'after' ) );
-	}
-
-	/**
-	 * Tests that the block CSS is added only once when the block is rendered.
-	 */
-	public function test_block_css_is_added_once_on_render() {
-		$enqueue = new Enqueue();
-
-		$this->assertSame( '<figure></figure>', $enqueue->add_block_css_to_style_on_render( '<figure></figure>' ) );
-		$enqueue->add_block_css_to_style_on_render( '<figure></figure>' );
-
-		$this->assertSame( $this->get_expected_inline_css(), wp_styles()->get_data( self::STYLE_HANDLE, 'after' ) );
-	}
-
-	/**
-	 * Tests that the block CSS added before the head is not added again when the block is rendered.
-	 */
-	public function test_block_css_added_in_head_is_not_added_again_on_render() {
-		add_filter( 'should_load_block_assets_on_demand', '__return_false' );
-
-		$enqueue = new Enqueue();
-		$enqueue->add_block_css_to_style_in_head();
-		$enqueue->add_block_css_to_style_on_render( '<figure></figure>' );
-
-		$this->assertSame( $this->get_expected_inline_css(), wp_styles()->get_data( self::STYLE_HANDLE, 'after' ) );
+		$this->assertSame(
+			array( Helper::minify_css( Helper::get_block_css() . Helper::get_responsive_css() ) ),
+			wp_styles()->get_data( self::STYLE_HANDLE, 'after' )
+		);
 	}
 }
