@@ -20,7 +20,17 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	__experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
 } from '@wordpress/components';
-import { Button, Dialog, Notice, Popover, Stack, SwitchControl, Tabs, Text } from '@wordpress/ui';
+import {
+	Button,
+	Dialog,
+	Notice,
+	Popover,
+	Stack,
+	SwitchControl,
+	Tabs,
+	Text,
+	VisuallyHidden,
+} from '@wordpress/ui';
 import { desktop, mobile } from '@wordpress/icons';
 
 /**
@@ -563,6 +573,9 @@ export default function SettingModal( {
 									{ __( 'Restore default settings', 'flexible-table-block' ) }
 								</Popover.Trigger>
 								<Popover.Popup positioner={ <Popover.Positioner side="top" /> }>
+									<VisuallyHidden render={ <Popover.Title /> }>
+										{ __( 'Restore default settings', 'flexible-table-block' ) }
+									</VisuallyHidden>
 									<Stack direction="column" gap="lg">
 										<Text render={ <p /> }>{ __( 'Are you sure?', 'flexible-table-block' ) }</Text>
 										<Stack align="center" justify="space-between" gap="sm">
