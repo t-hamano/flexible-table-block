@@ -73,6 +73,10 @@ test.describe( 'Global Setting', () => {
 			// Change table max width.
 			await page.getByRole( 'spinbutton', { name: 'Table max width' } ).fill( '110' );
 			await page.getByRole( 'button', { name: 'Separate' } ).click();
+			// Change border spacing.
+			await page.getByRole( 'button', { name: 'Unlink directions' } ).click();
+			await page.getByRole( 'spinbutton', { name: 'Horizontal' } ).fill( '10' );
+			await page.getByRole( 'spinbutton', { name: 'Vertical' } ).fill( '20' );
 			// Change striped colors.
 			const tableColors = [
 				{ color: '111111', label: 'Background color ( odd rows )' },
@@ -120,7 +124,7 @@ test.describe( 'Global Setting', () => {
 
 			const selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
 			const savedRules = [
-				`${ selector }>table{width:90%;max-width:110%;border-collapse:separate;}`,
+				`${ selector }>table{width:90%;max-width:110%;border-collapse:separate;border-spacing:10px 20px;}`,
 				`${ selector }.is-style-stripes tbody tr:nth-child(odd) th{background-color:#111111;}`,
 				`${ selector }.is-style-stripes tbody tr:nth-child(odd) td{background-color:#111111;}`,
 				`${ selector }.is-style-stripes tbody tr:nth-child(even) th{background-color:#222222;}`,

@@ -346,6 +346,91 @@ class Test_Helper extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests that border spacing is output only when cell borders are separated.
+	 */
+	public function test_get_block_css_with_border_spacing() {
+		$selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
+
+		update_option(
+			Settings::OPTION_PREFIX . 'block_style',
+			array(
+				'table_border_collapse' => 'separate',
+				'table_border_spacing'  => array(
+					'horizontal' => '10px',
+					'vertical'   => '20px',
+				),
+			)
+		);
+		$this->assertSame( "{$selector} > table { border-collapse: separate;border-spacing: 10px 20px; }", Helper::get_block_css() );
+
+		update_option(
+			Settings::OPTION_PREFIX . 'block_style',
+			array(
+				'table_border_collapse' => 'collapse',
+				'table_border_spacing'  => array(
+					'horizontal' => '10px',
+					'vertical'   => '20px',
+				),
+			)
+		);
+		$this->assertSame( "{$selector} > table { border-collapse: collapse; }", Helper::get_block_css() );
+	}
+
+	/**
+	 * Tests the border-spacing declaration built from horizontal and vertical values.
+	 *
+	 * @dataProvider data_get_border_spacing_styles
+	 *
+	 * @param mixed  $values   Border spacing values.
+	 * @param string $expected Expected CSS declaration.
+	 */
+	public function test_get_border_spacing_styles( $values, $expected ) {
+		$this->assertSame( $expected, Helper::get_border_spacing_styles( $values ) );
+	}
+
+	/**
+	 * Data provider for test_get_border_spacing_styles().
+	 *
+	 * @return array[]
+	 */
+	public function data_get_border_spacing_styles() {
+		return array(
+			'both values'     => array(
+				array(
+					'horizontal' => '10px',
+					'vertical'   => '20px',
+				),
+				'border-spacing: 10px 20px;',
+			),
+			'same values'     => array(
+				array(
+					'horizontal' => '10px',
+					'vertical'   => '10px',
+				),
+				'border-spacing: 10px;',
+			),
+			'horizontal only' => array( array( 'horizontal' => '10px' ), 'border-spacing: 10px 0;' ),
+			'vertical only'   => array( array( 'vertical' => '20px' ), 'border-spacing: 0 20px;' ),
+			'empty values'    => array(
+				array(
+					'horizontal' => '',
+					'vertical'   => '',
+				),
+				'',
+			),
+			'not an array'    => array( '10px', '' ),
+			'non-string'      => array(
+				array(
+					'horizontal' => array( '10px' ),
+					'vertical'   => 20,
+				),
+				'',
+			),
+			'unsafe value'    => array( array( 'horizontal' => '10px</style>' ), '' ),
+		);
+	}
+
+	/**
 	 * Tests that empty options generate no block CSS.
 	 */
 	public function test_get_block_css_with_empty_option() {

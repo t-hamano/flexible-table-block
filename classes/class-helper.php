@@ -48,6 +48,12 @@ class Helper {
 				case 'table_border_collapse':
 					$styles[ "{$selector} > table" ] .= self::sanitize_css_declaration( 'border-collapse', $value );
 					break;
+				case 'table_border_spacing':
+					// Border spacing only takes effect when cell borders are separated.
+					if ( isset( $option['table_border_collapse'] ) && 'separate' === $option['table_border_collapse'] ) {
+						$styles[ "{$selector} > table" ] .= self::get_border_spacing_styles( $value );
+					}
+					break;
 				case 'row_odd_color':
 					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(odd) th" ] .= self::sanitize_css_declaration( 'background-color', $value );
 					$styles[ "{$selector}.is-style-stripes tbody tr:nth-child(odd) td" ] .= self::sanitize_css_declaration( 'background-color', $value );
@@ -263,6 +269,33 @@ class Helper {
 		}
 
 		return $styles;
+	}
+
+	/**
+	 * Get border-spacing styles from horizontal and vertical values
+	 *
+	 * @param mixed $values Array with `horizontal` and `vertical` keys.
+	 * @return string Declaration ending with `;`, or empty string if rejected.
+	 */
+	public static function get_border_spacing_styles( $values ) {
+		if ( ! is_array( $values ) ) {
+			return '';
+		}
+
+		$horizontal = isset( $values['horizontal'] ) && is_string( $values['horizontal'] ) ? trim( $values['horizontal'] ) : '';
+		$vertical   = isset( $values['vertical'] ) && is_string( $values['vertical'] ) ? trim( $values['vertical'] ) : '';
+
+		if ( '' === $horizontal && '' === $vertical ) {
+			return '';
+		}
+
+		if ( $horizontal === $vertical ) {
+			$border_spacing = $horizontal;
+		} else {
+			$border_spacing = ( '' === $horizontal ? '0' : $horizontal ) . ' ' . ( '' === $vertical ? '0' : $vertical );
+		}
+
+		return self::sanitize_css_declaration( 'border-spacing', $border_spacing );
 	}
 
 	/**

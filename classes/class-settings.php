@@ -66,6 +66,10 @@ class Settings {
 				'table_width'              => '100%',
 				'table_max_width'          => '100%',
 				'table_border_collapse'    => 'collapse',
+				'table_border_spacing'     => array(
+					'horizontal' => '',
+					'vertical'   => '',
+				),
 				'row_odd_color'            => '#f0f0f1',
 				'row_even_color'           => '#ffffff',
 				'cell_text_color_th'       => null,
