@@ -13,25 +13,25 @@ Flexible Table Block is a custom block plugin for the WordPress block editor tha
 
 ![Merge Cells and Intuitive Selection](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/screenshot-1.jpg)
 
-You can merge or split cells from multiple selected cells. You can also easily select a batch of cells in a section, or select, add, or delete rows and columns with the buttons.
+You can merge multiple selected cells or split merged cells. You can also select a range of cells within a section at once, and select, add, or delete rows and columns with buttons.
 
 ### Flexible Styling and Responsive Support
 
 ![Flexible Styling and Responsive Support](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/screenshot-2.jpg)
 
-You can set various styles for each tag of table, cell, and caption individually. You can also set the table to scroll horizontally on both desktop and mobile, and arrange cells vertically on mobile. The breakpoint for switching between desktop and mobile can be changed freely.
+You can set various styles for the table, cells, and caption individually. You can also make the table scroll horizontally on desktop, mobile, or both, and stack cells vertically on mobile. The breakpoint between desktop and mobile can be customized.
 
 ### Global Default Styles
 
 ![Global Default Styles](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/screenshot-3.jpg)
 
-You can set the default styles of tables and cells for the entire site.
+You can set the default styles for tables and cells across the entire site.
 
 ### Editor Options
 
 ![Editor Options](https://raw.githubusercontent.com/t-hamano/flexible-table-block/main/.wordpress-org/screenshot-4.jpg)
 
-You can change the editor behavior, such as showing section labels and control buttons, or moving between cells with the tab key.
+You can change the editor behavior, such as whether to show section labels and control buttons, or whether to move between cells with the Tab key.
 
 ## How to build
 
@@ -42,7 +42,7 @@ npm run build
 
 ## Resources
 
-### Image for banner
+### Banner image
 
 - License: CC BY 2.0
 - Author: mripp
@@ -50,4 +50,4 @@ npm run build
 
 ## Author
 
-[Aki Hamano (Github)](https://github.com/t-hamano)
+[Aki Hamano (GitHub)](https://github.com/t-hamano)
