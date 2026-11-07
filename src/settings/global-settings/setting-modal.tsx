@@ -299,20 +299,14 @@ export default function SettingModal( {
 									<div className="ftb-global-setting-modal__styles">
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												label={ __(
-													'Striped style background color ( odd rows )',
-													'flexible-table-block'
-												) }
+												label={ __( 'Background color ( odd rows )', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.row_odd_color }
 												onChange={ ( value ) => setBlockStyle( 'row_odd_color', value ) }
 											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												label={ __(
-													'Striped style background color ( even rows )',
-													'flexible-table-block'
-												) }
+												label={ __( 'Background color ( even rows )', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.row_even_color }
 												onChange={ ( value ) => setBlockStyle( 'row_even_color', value ) }
 											/>

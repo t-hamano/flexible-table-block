@@ -75,8 +75,8 @@ test.describe( 'Global Setting', () => {
 			await page.getByRole( 'button', { name: 'Separate' } ).click();
 			// Change striped colors.
 			const tableColors = [
-				{ color: '111111', label: 'Striped style background color ( odd rows )' },
-				{ color: '222222', label: 'Striped style background color ( even rows )' },
+				{ color: '111111', label: 'Background color ( odd rows )' },
+				{ color: '222222', label: 'Background color ( even rows )' },
 			];
 			for ( const { color, label } of tableColors ) {
 				await modal.getByRole( 'button', { name: label, exact: true } ).click();
