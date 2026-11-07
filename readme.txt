@@ -89,7 +89,7 @@ You can change the editor behavior, such as whether to show section labels and c
 = 3.4.0 =
 * Tested up to WordPress 6.7
 * Drop support for WordPress 6.4
-* Add: Caption toolbar button
+* Enhancement: Add caption toolbar button
 * Enhancement: Update icons
 * Enhancement: Improve accessibility
 * Enhancement: Improve hint text
@@ -150,7 +150,7 @@ You can change the editor behavior, such as whether to show section labels and c
 * Fix: register_block_type path
 
 = 2.7.3 =
-* Add: Loading state to the Global Settings button
+* Enhancement: Add loading state to the Global Settings button
 * Clean: Use code tags for text in the options section
 * Fix: Overflow of input field in placeholder
 * Fix: Block toolbar doesn't appear in HTML edit mode
@@ -163,14 +163,14 @@ You can change the editor behavior, such as whether to show section labels and c
 * Fix: Certain operations break the block
 
 = 2.7.0 =
-* Add: id, headers, and scope attribute controls to cell settings
+* Feature: Add id, headers, and scope attribute controls to cell settings
 * Fix: Browser warning
 * Fix: Block is not correctly transformed to the core table block
 
 = 2.6.2 =
 * Fix: Scrollable table doesn't show edges
-* Add: Help text about scrollable table
-* Add: Style to break lines in cells
+* Enhancement: Add help text about scrollable tables
+* Enhancement: Add style to break lines in cells
 
 = 2.6.1 =
 * Tested up to WordPress 6.0
@@ -178,7 +178,7 @@ You can change the editor behavior, such as whether to show section labels and c
 * Fix: Adjust indicator style
 
 = 2.6.0 =
-* Add: Margin support
+* Feature: Add margin support
 * Fix: Cell CSS class is not cleared when cell settings are cleared
 * Fix: Incorrect inline CSS output
 
@@ -190,12 +190,12 @@ You can change the editor behavior, such as whether to show section labels and c
 * Fix: Error when installing from the block directory
 
 = 2.5.0 =
-* Add: Option to move between cells with the Tab key
+* Feature: Add option to move between cells with the Tab key
 * Fix: Cell content is not updated under certain conditions
 
 = 2.4.0 =
 * Tested up to WordPress 5.9
-* Add: Block supports (link color, text-transform, font-style, font-weight, letter-spacing)
+* Feature: Add block supports (link color, text-transform, font-style, font-weight, letter-spacing)
 * Fix: Zero values are not saved correctly in global settings
 * Fix: Changes to global settings are not reflected in iframe editor instances
 
@@ -210,7 +210,7 @@ You can change the editor behavior, such as whether to show section labels and c
 * Fix: Accessibility support for controls
 
 = 2.2.0 =
-* Add: Option to merge content when merging cells
+* Feature: Add option to merge content when merging cells
 
 = 2.1.2 =
 * Fix: Global settings are not saved
@@ -220,7 +220,7 @@ You can change the editor behavior, such as whether to show section labels and c
 * Fix: Cell line height setting is not cleared
 
 = 2.1.0 =
-* Add: Cell line-height control
+* Feature: Add cell line-height control
 
 = 2.0.9 =
 * Doc: Add translation context
