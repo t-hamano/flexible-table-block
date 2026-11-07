@@ -6,7 +6,8 @@ import type { Property } from 'csstype';
 /**
  * WordPress dependencies
  */
-import { ColorPalette } from '@wordpress/components';
+import { ColorPalette, Popover as ComponentsPopover } from '@wordpress/components';
+import { useInstanceId } from '@wordpress/compose';
 import { Popover, VisuallyHidden } from '@wordpress/ui';
 import { useSettings } from '@wordpress/block-editor';
 
@@ -34,6 +35,7 @@ export default function ColorPalettePopover( {
 	anchor,
 }: Props ) {
 	const [ palette ]: ( Color[] | undefined )[] = useSettings( 'color.palette' );
+	const slotName = useInstanceId( ColorPalettePopover, 'ftb-color-palette-popover-slot' );
 
 	const handleOnOpenChange = ( open: boolean ) => {
 		if ( ! open ) {
@@ -56,12 +58,20 @@ export default function ColorPalettePopover( {
 				<VisuallyHidden render={ <Popover.Title /> }>{ label }</VisuallyHidden>
 				{ /* Match the width of the color popover in block supports, which fits six swatches (28px) and five gaps (12px) per row. */ }
 				<div style={ { width: '228px' } }>
-					<ColorPalette
-						colors={ [ ...( palette ?? [] ), ...colorsProp ] }
-						value={ value || '' }
-						onChange={ onChange }
-					/>
+					{ /*
+					 * Render the custom color picker inside this popover. Otherwise it is rendered
+					 * in a different place (e.g. inside the global setting dialog), where it is
+					 * clipped by the dialog and hidden behind this popover.
+					 */ }
+					<ComponentsPopover.__unstableSlotNameProvider value={ slotName }>
+						<ColorPalette
+							colors={ [ ...( palette ?? [] ), ...colorsProp ] }
+							value={ value || '' }
+							onChange={ onChange }
+						/>
+					</ComponentsPopover.__unstableSlotNameProvider>
 				</div>
+				<ComponentsPopover.Slot name={ slotName } />
 			</Popover.Popup>
 		</Popover.Root>
 	);
