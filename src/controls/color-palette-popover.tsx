@@ -44,6 +44,7 @@ export default function ColorPalettePopover( {
 	return (
 		<Popover.Root open onOpenChange={ handleOnOpenChange }>
 			<Popover.Popup
+				className="ftb-color-palette-popover"
 				positioner={
 					<Popover.Positioner
 						anchor={ anchor ?? undefined }

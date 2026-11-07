@@ -88,3 +88,11 @@
 		margin-bottom: var(--wpds-dimension-gap-lg);
 	}
 }
+
+// While the plugin's `@wordpress/ui` overlays are open, show
+// `@wordpress/components` tooltips above them. These overlays are rendered in
+// the compat overlay slot, whose z-index is higher than that of the tooltips.
+// See https://github.com/WordPress/gutenberg/issues/83442
+body:has([data-wp-compat-overlay-slot] :is(.ftb-color-palette-popover, .ftb-global-setting-modal)) .components-tooltip {
+	z-index: 1000000004;
+}
