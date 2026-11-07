@@ -80,7 +80,7 @@ export default function Table( {
 
 	const [ isSelectMode, setIsSelectMode ] = useState( false );
 
-	// Manage rendering status as state since some processing may be performed before rendering components.
+	// Manage the rendering status as state, since some processing may run before the components are rendered.
 	const [ isReady, setIsReady ] = useState( false );
 	useEffect( () => setIsReady( true ), [] );
 
@@ -110,7 +110,7 @@ export default function Table( {
 	};
 
 	const onDeleteRow = ( sectionName: SectionName, rowIndex: number ) => {
-		// Do not allow tbody to be empty for table with thead /tfoot sections.
+		// Do not allow tbody to be empty when the table has thead or tfoot sections.
 		if (
 			sectionName === 'body' &&
 			vTable.body.length === 1 &&
@@ -138,7 +138,7 @@ export default function Table( {
 	};
 
 	const onInsertColumn = ( vTargetCell: VCell, offset: number ) => {
-		// Calculate column index to be inserted considering colspan of the target cell.
+		// Calculate the index of the column to insert, considering the colspan of the target cell.
 		const vColIndex =
 			offset === 0
 				? vTargetCell.vColIndex
@@ -210,8 +210,8 @@ export default function Table( {
 	};
 
 	const onChangeCellContent = ( content: string, targetCell: VCell ) => {
-		// If inline highlight is applied to the RichText, this process is performed before rendering the component, causing a warning error.
-		// Therefore, nothing is performed if the component has not yet been rendered.
+		// If inline highlight is applied to the RichText, this process runs before the component is rendered, causing a warning.
+		// Therefore, do nothing if the component has not been rendered yet.
 		if ( ! isReady ) {
 			return;
 		}
@@ -241,8 +241,8 @@ export default function Table( {
 		setAttributes( toTableAttributes( newVTable ) );
 	};
 
-	// Monitor pressed key to determine whether multi-select mode or range-select mode.
-	// Also the next cell will be focused if tab key navigation is enabled.
+	// Monitor pressed keys to determine whether to use multi-select or range-select mode.
+	// Also, focus the next cell if Tab key navigation is enabled.
 	const onKeyDown = ( event: KeyboardEvent ) => {
 		const { key } = event;
 
@@ -256,7 +256,7 @@ export default function Table( {
 				return;
 			}
 
-			// range-select mode or multi-select mode.
+			// Enter range-select or multi-select mode.
 			setIsSelectMode( true );
 		} else if ( key === 'Tab' && options.tab_move && tableRef.current ) {
 			const isInsideTableBlock =
@@ -265,7 +265,7 @@ export default function Table( {
 			if ( ! isInsideTableBlock ) {
 				return;
 			}
-			// Focus on the next cell.
+			// Focus the next cell.
 			const tableElement: HTMLTableElement = tableRef.current;
 			const { ownerDocument } = tableElement;
 			const { activeElement } = ownerDocument;
@@ -302,9 +302,9 @@ export default function Table( {
 				nextCellIndex = 0;
 			}
 
-			const focusbleElement: HTMLElement = tabbableElements[ nextCellIndex ];
+			const focusableElement: HTMLElement = tabbableElements[ nextCellIndex ];
 
-			if ( ! focusbleElement ) {
+			if ( ! focusableElement ) {
 				return;
 			}
 
@@ -315,14 +315,14 @@ export default function Table( {
 			// handler runs. Focus the canvas window first, because Firefox does not move
 			// window focus when focusing an element in another document.
 			ownerDocument.defaultView?.focus();
-			focusbleElement.focus();
+			focusableElement.focus();
 
 			// Select all text if the next cell is not empty.
 			const selection = ownerDocument.getSelection();
 			const range = ownerDocument.createRange();
 
-			if ( selection && focusbleElement.innerText.trim().length ) {
-				range.selectNodeContents( focusbleElement );
+			if ( selection && focusableElement.innerText.trim().length ) {
+				range.selectNodeContents( focusableElement );
 				selection.removeAllRanges();
 				selection.addRange( range );
 			}
@@ -368,7 +368,10 @@ export default function Table( {
 
 				if ( fromCell.sectionName !== sectionName ) {
 					createWarningNotice(
-						__( 'Cannot select range cells from difference sections.', 'flexible-table-block' ),
+						__(
+							'Cannot select a range of cells across different sections.',
+							'flexible-table-block'
+						),
 						{
 							id: 'flexible-table-block-range-sections',
 							type: 'snackbar',
@@ -379,7 +382,7 @@ export default function Table( {
 				setSelectedCells( toRectangledSelectedCells( vTable, { fromCell, toCell: clickedCell } ) );
 			}
 		} else if ( ctrlKey || metaKey ) {
-			// Multple select.
+			// Multi-select.
 			const newSelectedCells = selectedCells ? [ ...selectedCells ] : [];
 			const existCellIndex = newSelectedCells.findIndex( ( cell ) => {
 				return (
@@ -391,7 +394,7 @@ export default function Table( {
 
 			if ( newSelectedCells.length && sectionName !== newSelectedCells[ 0 ].sectionName ) {
 				createWarningNotice(
-					__( 'Cannot select multi cells from difference sections.', 'flexible-table-block' ),
+					__( 'Cannot select multiple cells across different sections.', 'flexible-table-block' ),
 					{
 						id: 'flexible-table-block-multi-sections',
 						type: 'snackbar',
@@ -479,7 +482,7 @@ export default function Table( {
 	);
 	const controlTabIndex = options.focus_control_button ? 0 : -1;
 
-	// Remove cells from the virtual table that are not needed for dom rendering.
+	// Remove cells from the virtual table that are not needed for DOM rendering.
 	const filteredVTable = Object.keys( vTable ).reduce( ( result: any, sectionName ) => {
 		if ( isEmptySection( vTable[ sectionName as SectionName ] ) ) {
 			return result;

@@ -122,7 +122,7 @@ export function parseUnit( initialValue: string ): [ number, string ] {
 }
 
 // Convert string to number.
-// JSDoc is not used because parsing in eslint fails
+// JSDoc is not used because ESLint fails to parse it.
 export function toInteger( value: number | string | undefined, defaultValue = 0 ): number {
 	if ( ! value ) {
 		return defaultValue;

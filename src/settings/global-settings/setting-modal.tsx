@@ -222,7 +222,7 @@ export default function SettingModal( {
 					{ /* Keep the header height constant regardless of the content length. */ }
 					<Dialog.Header style={ { flexShrink: 0 } }>
 						<Dialog.Title>
-							{ __( 'Flexible Table Block Global setting', 'flexible-table-block' ) }
+							{ __( 'Flexible Table Block global settings', 'flexible-table-block' ) }
 						</Dialog.Title>
 						<Dialog.CloseIconButton />
 					</Dialog.Header>
@@ -236,7 +236,7 @@ export default function SettingModal( {
 								<Tabs.Tab value="table">{ __( 'Table styles', 'flexible-table-block' ) }</Tabs.Tab>
 								<Tabs.Tab value="cell">{ __( 'Cell styles', 'flexible-table-block' ) }</Tabs.Tab>
 								<Tabs.Tab value="responsive">
-									{ __( 'Responsive setting', 'flexible-table-block' ) }
+									{ __( 'Responsive settings', 'flexible-table-block' ) }
 								</Tabs.Tab>
 								<Tabs.Tab value="options">
 									{ __( 'Editor options', 'flexible-table-block' ) }
@@ -321,14 +321,14 @@ export default function SettingModal( {
 									<div className="ftb-global-setting-modal__styles">
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												label={ __( 'Background color ( odd rows )', 'flexible-table-block' ) }
+												label={ __( 'Background color (odd rows)', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.row_odd_color }
 												onChange={ ( value ) => setBlockStyle( 'row_odd_color', value ) }
 											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												label={ __( 'Background color ( even rows )', 'flexible-table-block' ) }
+												label={ __( 'Background color (even rows)', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.row_even_color }
 												onChange={ ( value ) => setBlockStyle( 'row_even_color', value ) }
 											/>
@@ -344,28 +344,28 @@ export default function SettingModal( {
 									<div className="ftb-global-setting-modal__styles">
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												label={ __( 'Cell text color ( th tag )', 'flexible-table-block' ) }
+												label={ __( 'Cell text color (th tag)', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.cell_text_color_th }
 												onChange={ ( value ) => setBlockStyle( 'cell_text_color_th', value ) }
 											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												label={ __( 'Cell text color ( td tag )', 'flexible-table-block' ) }
+												label={ __( 'Cell text color (td tag)', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.cell_text_color_td }
 												onChange={ ( value ) => setBlockStyle( 'cell_text_color_td', value ) }
 											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												label={ __( 'Cell background color ( th tag )', 'flexible-table-block' ) }
+												label={ __( 'Cell background color (th tag)', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.cell_background_color_th }
 												onChange={ ( value ) => setBlockStyle( 'cell_background_color_th', value ) }
 											/>
 										</div>
 										<div className="ftb-global-setting-modal__styles-item">
 											<ColorControl
-												label={ __( 'Cell background color ( td tag )', 'flexible-table-block' ) }
+												label={ __( 'Cell background color (td tag)', 'flexible-table-block' ) }
 												value={ currentOptions.block_style?.cell_background_color_td }
 												onChange={ ( value ) => setBlockStyle( 'cell_background_color_td', value ) }
 											/>
@@ -458,7 +458,7 @@ export default function SettingModal( {
 									</Text>
 									<RangeControl
 										help={ __(
-											'Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.',
+											'Set the screen width (breakpoint) for switching between desktop and mobile views.',
 											'flexible-table-block'
 										) }
 										beforeIcon={ mobile }
@@ -491,7 +491,7 @@ export default function SettingModal( {
 									<SwitchControl
 										label={ __( 'Show control buttons', 'flexible-table-block' ) }
 										description={ __(
-											'Show insert row/column and select row/column buttons.',
+											'Show buttons to insert and select rows and columns.',
 											'flexible-table-block'
 										) }
 										checked={ !! currentOptions.show_control_button }
@@ -501,11 +501,11 @@ export default function SettingModal( {
 										currentOptions.show_control_button ) && (
 										<SwitchControl
 											label={ __(
-												'Focus on the control button with the cursor movement keys',
+												'Focus control buttons with the Tab key',
 												'flexible-table-block'
 											) }
 											description={ __(
-												'Focus insert/select buttons, select row/column buttons, and section labels with the cursor movement keys.',
+												'Allow the Tab key to move focus to section labels and the buttons to insert and select rows and columns.',
 												'flexible-table-block'
 											) }
 											checked={ !! currentOptions.focus_control_button }
@@ -513,18 +513,18 @@ export default function SettingModal( {
 										/>
 									) }
 									<SwitchControl
-										label={ __( 'Show dot on th tag', 'flexible-table-block' ) }
+										label={ __( 'Show a dot on th cells', 'flexible-table-block' ) }
 										description={ __(
-											'Show a small dot in the upper right corner of a cell when the cell is th element.',
+											'Show a small dot in the upper right corner of th cells.',
 											'flexible-table-block'
 										) }
 										checked={ !! currentOptions.show_dot_on_th }
 										onCheckedChange={ ( value ) => setOption( 'show_dot_on_th', value ) }
 									/>
 									<SwitchControl
-										label={ __( 'Use the tab key to move cells', 'flexible-table-block' ) }
+										label={ __( 'Use the Tab key to move between cells', 'flexible-table-block' ) }
 										description={ __(
-											'Pressing the tab key moves the focus to the next cell. Holding down the shift key moves the focus to the previous cell.',
+											'Press the Tab key to move focus to the next cell, or Shift + Tab to move focus to the previous cell.',
 											'flexible-table-block'
 										) }
 										checked={ !! currentOptions.tab_move }
@@ -542,11 +542,11 @@ export default function SettingModal( {
 									{ canManageOptions && (
 										<SwitchControl
 											label={ __(
-												'Show Global setting button to non-administrative users',
+												'Show the global settings button to non-administrators',
 												'flexible-table-block'
 											) }
 											description={ __(
-												'By turning it on, you can prevent non-administrative users from changing Global setting.',
+												'Turn this off to prevent non-administrators from changing the global settings.',
 												'flexible-table-block'
 											) }
 											checked={ !! currentOptions.show_global_setting }

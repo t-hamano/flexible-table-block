@@ -36,13 +36,13 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a long hand', () => {
+		it( 'should return a longhand', () => {
 			expect( updatePadding( {}, { top: '20px' } ) ).toStrictEqual( {
 				paddingTop: '20px',
 			} );
 		} );
 
-		it( 'should return a short hand', () => {
+		it( 'should return a shorthand', () => {
 			expect(
 				updatePadding( {}, { top: '20px', right: '20px', left: '20px', bottom: '20px' } )
 			).toStrictEqual( {
@@ -50,7 +50,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 2value', () => {
+		it( 'should return a shorthand with two values', () => {
 			expect(
 				updatePadding( {}, { top: '20px', right: '30px', left: '30px', bottom: '20px' } )
 			).toStrictEqual( {
@@ -58,7 +58,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 3value', () => {
+		it( 'should return a shorthand with three values', () => {
 			expect(
 				updatePadding( {}, { top: '20px', right: '30px', left: '30px', bottom: '40px' } )
 			).toStrictEqual( {
@@ -66,7 +66,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 4value', () => {
+		it( 'should return a shorthand with four values', () => {
 			expect(
 				updatePadding( {}, { top: '20px', right: '30px', left: '40px', bottom: '50px' } )
 			).toStrictEqual( {
@@ -91,19 +91,19 @@ describe( 'style-updater', () => {
 			);
 		} );
 
-		it( 'should remove padding props', () => {
+		it( 'should remove borderWidth props', () => {
 			expect( updateBorderWidth( { borderWidth: '15px', color: 'red' }, {} ) ).toStrictEqual( {
 				color: 'red',
 			} );
 		} );
 
-		it( 'should return a long hand', () => {
+		it( 'should return a longhand', () => {
 			expect( updateBorderWidth( {}, { top: '20px' } ) ).toStrictEqual( {
 				borderTopWidth: '20px',
 			} );
 		} );
 
-		it( 'should return a short hand', () => {
+		it( 'should return a shorthand', () => {
 			expect(
 				updateBorderWidth( {}, { top: '20px', right: '20px', bottom: '20px', left: '20px' } )
 			).toStrictEqual( {
@@ -111,7 +111,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 2value', () => {
+		it( 'should return a shorthand with two values', () => {
 			expect(
 				updateBorderWidth( {}, { top: '20px', right: '30px', bottom: '20px', left: '30px' } )
 			).toStrictEqual( {
@@ -119,7 +119,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 3value', () => {
+		it( 'should return a shorthand with three values', () => {
 			expect(
 				updateBorderWidth( {}, { top: '20px', right: '30px', left: '30px', bottom: '40px' } )
 			).toStrictEqual( {
@@ -127,7 +127,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 4value', () => {
+		it( 'should return a shorthand with four values', () => {
 			expect(
 				updateBorderWidth( {}, { top: '20px', right: '30px', left: '40px', bottom: '50px' } )
 			).toStrictEqual( {
@@ -146,19 +146,19 @@ describe( 'style-updater', () => {
 			);
 		} );
 
-		it( 'should remove padding props', () => {
+		it( 'should remove borderColor props', () => {
 			expect( updateBorderColor( { borderColor: 'red', color: 'red' }, {} ) ).toStrictEqual( {
 				color: 'red',
 			} );
 		} );
 
-		it( 'should return a long hand', () => {
+		it( 'should return a longhand', () => {
 			expect( updateBorderColor( {}, { top: 'red' } ) ).toStrictEqual( {
 				borderTopColor: 'red',
 			} );
 		} );
 
-		it( 'should return a short hand', () => {
+		it( 'should return a shorthand', () => {
 			expect(
 				updateBorderColor( {}, { top: 'red', right: 'red', left: 'red', bottom: 'red' } )
 			).toStrictEqual( {
@@ -166,7 +166,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 2value', () => {
+		it( 'should return a shorthand with two values', () => {
 			expect(
 				updateBorderColor( {}, { top: 'red', right: 'blue', left: 'blue', bottom: 'red' } )
 			).toStrictEqual( {
@@ -174,7 +174,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 3value', () => {
+		it( 'should return a shorthand with three values', () => {
 			expect(
 				updateBorderColor( {}, { top: 'red', right: 'blue', left: 'blue', bottom: 'yellow' } )
 			).toStrictEqual( {
@@ -182,7 +182,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 4value', () => {
+		it( 'should return a shorthand with four values', () => {
 			expect(
 				updateBorderColor( {}, { top: 'red', right: 'blue', left: 'green', bottom: 'yellow' } )
 			).toStrictEqual( {
@@ -207,13 +207,13 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a long hand', () => {
+		it( 'should return a longhand', () => {
 			expect( updateBorderStyle( {}, { top: 'solid' } ) ).toStrictEqual( {
 				borderTopStyle: 'solid',
 			} );
 		} );
 
-		it( 'should return a short hand', () => {
+		it( 'should return a shorthand', () => {
 			expect(
 				updateBorderStyle( {}, { top: 'solid', right: 'solid', left: 'solid', bottom: 'solid' } )
 			).toStrictEqual( {
@@ -221,7 +221,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 2value', () => {
+		it( 'should return a shorthand with two values', () => {
 			expect(
 				updateBorderStyle( {}, { top: 'solid', right: 'dotted', left: 'dotted', bottom: 'solid' } )
 			).toStrictEqual( {
@@ -229,7 +229,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 3value', () => {
+		it( 'should return a shorthand with three values', () => {
 			expect(
 				updateBorderStyle( {}, { top: 'solid', right: 'dotted', left: 'dotted', bottom: 'dashed' } )
 			).toStrictEqual( {
@@ -237,7 +237,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 4value', () => {
+		it( 'should return a shorthand with four values', () => {
 			expect(
 				updateBorderStyle( {}, { top: 'solid', right: 'dotted', left: 'double', bottom: 'dashed' } )
 			).toStrictEqual( {
@@ -334,13 +334,13 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a long hand', () => {
+		it( 'should return a longhand', () => {
 			expect( updateBorderRadius( {}, { topLeft: '20px' } ) ).toStrictEqual( {
 				borderTopLeftRadius: '20px',
 			} );
 		} );
 
-		it( 'should return a short hand', () => {
+		it( 'should return a shorthand', () => {
 			expect(
 				updateBorderRadius(
 					{},
@@ -351,7 +351,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 2value', () => {
+		it( 'should return a shorthand with two values', () => {
 			expect(
 				updateBorderRadius(
 					{},
@@ -362,7 +362,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 3value', () => {
+		it( 'should return a shorthand with three values', () => {
 			expect(
 				updateBorderRadius(
 					{},
@@ -373,7 +373,7 @@ describe( 'style-updater', () => {
 			} );
 		} );
 
-		it( 'should return a short hand 4value', () => {
+		it( 'should return a shorthand with four values', () => {
 			expect(
 				updateBorderRadius(
 					{},

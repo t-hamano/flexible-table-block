@@ -29,7 +29,7 @@ test.describe( 'Transform from core table block', () => {
 		);
 	} );
 
-	test( 'should be transformed to flexible table block keeping header and footer section', async ( {
+	test( 'should be transformed to flexible table block keeping header and footer sections', async ( {
 		editor,
 		page,
 		fsbUtils,
@@ -156,7 +156,7 @@ test.describe( 'Transform from flexible table block', () => {
 		);
 	} );
 
-	test( 'should be transformed to core table block with no style and class table', async ( {
+	test( 'should be transformed to core table block dropping table styles and classes', async ( {
 		editor,
 		page,
 		fsbUtils,
@@ -214,7 +214,7 @@ test.describe( 'Transform from flexible table block', () => {
 		);
 	} );
 
-	test( 'should be transformed to core table block with no style and class cells', async ( {
+	test( 'should be transformed to core table block dropping cell styles and classes', async ( {
 		editor,
 		page,
 		fsbUtils,
@@ -246,7 +246,7 @@ test.describe( 'Transform from flexible table block', () => {
 		);
 	} );
 
-	test( 'should be transformed to core table block with no unnecessary attributes cells', async ( {
+	test( 'should be transformed to core table block dropping unnecessary cell attributes', async ( {
 		editor,
 		page,
 		fsbUtils,
@@ -273,7 +273,7 @@ test.describe( 'Transform from flexible table block', () => {
 		);
 	} );
 
-	test( 'should be transformed to core table block with appropriate tag cells', async ( {
+	test( 'should be transformed to core table block with appropriate cell tags', async ( {
 		editor,
 		page,
 		fsbUtils,
@@ -323,7 +323,7 @@ test.describe( 'Transform from flexible table block', () => {
 		);
 	} );
 
-	test( 'should be transformed to core table block with no option caption text', async ( {
+	test( 'should be transformed to core table block dropping caption settings', async ( {
 		editor,
 		page,
 		fsbUtils,

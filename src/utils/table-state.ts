@@ -166,7 +166,7 @@ export function insertRow(
 			newRow,
 			...vTable[ sectionName ].slice( rowIndex ).map( ( { cells } ) => ( {
 				cells: cells.map( ( cell ) => {
-					// increment row index.
+					// Increment the row index.
 					return {
 						...cell,
 						rowIndex: cell.rowIndex + 1,
@@ -175,7 +175,7 @@ export function insertRow(
 			} ) ),
 		].map( ( { cells }, cRowIndex ) => ( {
 			cells: cells.map( ( cell ) => {
-				// Expand cells with rowspan in the before and inserted rows.
+				// Expand cells with rowspan in the preceding rows and the inserted row.
 				if (
 					cell.sectionName === sectionName &&
 					cell.rowSpan > 1 &&
@@ -224,7 +224,7 @@ export function deleteRow(
 
 			newRows.push( {
 				cells: row.cells.map( ( cell ) => {
-					// Contract cells with rowspan in the before rows.
+					// Contract cells with rowspan in the preceding rows.
 					if (
 						cell.rowSpan > 1 &&
 						cRowIndex < rowIndex &&
@@ -236,7 +236,7 @@ export function deleteRow(
 						};
 					}
 
-					// decrement row index.
+					// Decrement the row index.
 					if ( cRowIndex > rowIndex ) {
 						return {
 							...cell,
@@ -273,7 +273,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 			}
 			newVTable[ sectionName as SectionName ] = section.map( ( { cells }, cRowIndex ) => ( {
 				cells: cells.reduce( ( newCells: VCell[], cell, cVColIndex ) => {
-					// Expand cells with colspan in the before columns.
+					// Expand cells with colspan in the preceding columns.
 					if (
 						cell.colSpan > 1 &&
 						cVColIndex < vColIndex &&
@@ -307,13 +307,13 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 						const colSpanCells = vRows
 							.flatMap( ( row ) => row.cells )
 							.filter(
-								( colSpancell: VCell ) =>
-									colSpancell.sectionName === sectionName &&
-									colSpancell.colSpan > 1 &&
-									colSpancell.rowIndex <= cRowIndex &&
-									colSpancell.rowIndex + colSpancell.rowSpan - 1 >= cRowIndex &&
-									colSpancell.vColIndex < vColIndex &&
-									vColIndex <= colSpancell.vColIndex + colSpancell.colSpan - 1
+								( colSpanCell: VCell ) =>
+									colSpanCell.sectionName === sectionName &&
+									colSpanCell.colSpan > 1 &&
+									colSpanCell.rowIndex <= cRowIndex &&
+									colSpanCell.rowIndex + colSpanCell.rowSpan - 1 >= cRowIndex &&
+									colSpanCell.vColIndex < vColIndex &&
+									vColIndex <= colSpanCell.vColIndex + colSpanCell.colSpan - 1
 							);
 
 						newCells.push(
@@ -335,7 +335,7 @@ export function insertColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 						return newCells;
 					}
 
-					// increment after column vCol index.
+					// Increment the vColIndex of the following columns.
 					if ( vColIndex <= cVColIndex ) {
 						newCells.push( {
 							...cell,
@@ -389,7 +389,7 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 						return newCells;
 					}
 
-					// Contract cells with colspan in the before columns.
+					// Contract cells with colspan in the preceding columns.
 					if (
 						cell.colSpan > 1 &&
 						cell.vColIndex < vColIndex &&
@@ -402,7 +402,7 @@ export function deleteColumn( vTable: VTable, { vColIndex }: { vColIndex: number
 						return newCells;
 					}
 
-					// decrement vCol index.
+					// Decrement the vColIndex.
 					if ( cell.vColIndex > vColIndex ) {
 						newCells.push( {
 							...cell,
@@ -449,7 +449,7 @@ export function mergeCells(
 
 	const { minRowIndex, maxRowIndex, minColIndex, maxColIndex } = vRangeIndexes;
 
-	// Split the rowspan & colspan cells in selected cells before merge cell.
+	// Split the rowspan and colspan cells in the selected cells before merging.
 	vTable = splitMergedCells( vTable, selectedCells );
 
 	// Merge the contents of the cells to be merged.
@@ -489,7 +489,7 @@ export function mergeCells(
 						};
 					}
 
-					// Cells to be merged (Mark as deletion).
+					// Cells to be merged (mark for deletion).
 					if (
 						rowIndex >= minRowIndex &&
 						rowIndex <= maxRowIndex &&
@@ -575,7 +575,7 @@ function splitMergedCell( vTable: VTable, selectedCell: VCell ): VTable {
 }
 
 /**
- * Update cells state( styles, tag ) of selected section.
+ * Update the state (styles, tag, etc.) of the selected cells.
  *
  * @param vTable              Current virtual table state.
  * @param cellState           Cell states to update.
@@ -673,8 +673,8 @@ function isMultiSectionSelected( selectedCells: VCell[] ): boolean {
 }
 
 /**
- * Create virtual table object with the cells placed in positions based on how they actually look.
- * This function is used to determine the apparent position of a cell when insert / delete row / column, or merge / split cells, etc.
+ * Create a virtual table object with the cells placed in positions based on how they actually look.
+ * This function is used to determine the apparent position of a cell when inserting or deleting rows or columns, merging or splitting cells, etc.
  *
  * @param state Current table state.
  * @return Object of virtual table.
@@ -715,10 +715,10 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 				} ) ),
 			} ) );
 
-			// Mapping the actual section cells on the virtual section cell.
+			// Map the actual section cells onto the virtual section cells.
 			section.forEach( ( row: Row, cRowIndex: number ) => {
 				row.cells.forEach( ( cell ) => {
-					// Colmun index on the virtual section excluding cells already marked as "filled".
+					// Column index on the virtual section excluding cells already marked as "filled".
 					const vColIndex = vSection[ cRowIndex ].cells.findIndex( ( { isFilled } ) => ! isFilled );
 					// Clamp rowspan / colspan so that the cell does not overflow the section.
 					// Spans below 1 (e.g. a negative rowspan in the saved markup) are treated as 1.
@@ -744,7 +744,7 @@ export function toVirtualTable( state: TableAttributes ): VTable {
 					};
 
 					// For cells with rowspan / colspan, mark cells that are visually filled as "filled".
-					// Additionaly mark it as a cell to be deleted because it does not exist in the actual section.
+					// Additionally, mark it for deletion because it does not exist in the actual section.
 					for ( let i = 0; i < rowSpan; i++ ) {
 						for ( let j = 0; j < colSpan; j++ ) {
 							if ( i === 0 && j === 0 ) {
@@ -782,7 +782,7 @@ export function toTableAttributes( vTable: VTable ): TableAttributes {
 			}
 			newTableAttributes[ sectionName as SectionName ] = section.map( ( { cells } ) => ( {
 				cells: cells
-					// Delete cells marked as deletion.
+					// Delete cells marked for deletion.
 					.filter( ( cell ) => ! cell.isHidden )
 					// Keep only the properties needed.
 					.map( ( cell ) => ( {
@@ -840,7 +840,7 @@ function getVirtualRangeIndexes( selectedCells: VCell[] ): VRangeIndexes {
 
 /**
  * Determines whether a rectangle will be formed from the selected cells in the virtual table.
- * This function is used to determines whether to allow cell merging from the selected cells.
+ * This function is used to determine whether to allow cell merging from the selected cells.
  *
  * @param selectedCells Current selected cells.
  * @return True if a rectangle will be formed from the selected cells, false otherwise.
@@ -850,7 +850,7 @@ export function isRectangleSelected( selectedCells: VSelectedCells ): boolean {
 		return false;
 	}
 
-	// No need to merge If only one or no cell is selected.
+	// No need to merge if only one or no cell is selected.
 	if ( selectedCells.length <= 1 ) {
 		return false;
 	}
@@ -889,7 +889,7 @@ export function isRectangleSelected( selectedCells: VSelectedCells ): boolean {
 }
 
 /**
- * Return a set of cells from the start cell and the end cell that will form a rectangle, taking into account the join cells.
+ * Return a set of cells from the start cell and the end cell that will form a rectangle, taking merged cells into account.
  *
  * @param vTable           Current virtual table state.
  * @param options
@@ -934,7 +934,7 @@ export function toRectangledSelectedCells(
 	// Expand the rectangle while a merged cell overlaps the range and sticks out of an edge.
 	// A cell overlaps the range on an axis when it starts before the range end and ends after the range start.
 	while ( ! isRectangled ) {
-		// Extend the virtual range to top if there are cells that overlap to top.
+		// Extend the virtual range to the top if any cell sticks out of the top edge.
 		const topCells = VCells.filter( ( cell: VCell ) => {
 			return (
 				cell.vColIndex <= maxColIndex &&
@@ -950,7 +950,7 @@ export function toRectangledSelectedCells(
 			minRowIndex--;
 		}
 
-		// Extend the virtual range to right if there are cells that overlap to right.
+		// Extend the virtual range to the right if any cell sticks out of the right edge.
 		const rightCells = VCells.filter( ( cell: VCell ) => {
 			return (
 				cell.rowIndex <= maxRowIndex &&
@@ -966,7 +966,7 @@ export function toRectangledSelectedCells(
 			maxColIndex++;
 		}
 
-		// Extend the virtual range to bottom if there are cells that overlap to bottom.
+		// Extend the virtual range to the bottom if any cell sticks out of the bottom edge.
 		const bottomCells = VCells.filter( ( cell: VCell ) => {
 			return (
 				cell.vColIndex <= maxColIndex &&
@@ -982,7 +982,7 @@ export function toRectangledSelectedCells(
 			maxRowIndex++;
 		}
 
-		// Extend the virtual range to left if there are cells that overlap to left.
+		// Extend the virtual range to the left if any cell sticks out of the left edge.
 		const leftCells = VCells.filter( ( cell: VCell ) => {
 			return (
 				cell.rowIndex <= maxRowIndex &&
@@ -1027,7 +1027,7 @@ export function hasMergedCells( selectedCells: VSelectedCells ): boolean {
 }
 
 /**
- * Toggles the existance of a section.
+ * Toggles the existence of a section.
  *
  * @param vTable      Current virtual table state.
  * @param sectionName Name of the section to toggle.

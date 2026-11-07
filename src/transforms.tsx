@@ -24,7 +24,7 @@ const transforms: Transforms = {
 				const { hasFixedLayout, head, body, foot, caption, style } =
 					attributes as CoreTableBlockAttributes;
 
-				// Mapping rowspan and colspan properties.
+				// Map rowspan and colspan properties.
 				const convertedSections = ( section: { cells: CoreTableCell[] }[] ) => {
 					if ( ! section.length ) {
 						return section;
@@ -65,7 +65,7 @@ const transforms: Transforms = {
 			transform: ( attributes ) => {
 				const blockAttributes = attributes as BlockAttributes;
 
-				// Create virtual object array with the cells placed in positions based on how they actually look.
+				// Create a virtual table with the cells placed in positions based on how they actually look.
 				const vTable = toVirtualTable( blockAttributes );
 
 				// Convert to core table block attributes.
@@ -77,7 +77,7 @@ const transforms: Transforms = {
 
 						const newSection = section.map( ( { cells } ) => ( {
 							cells: cells
-								// Delete cells marked as deletion.
+								// Delete cells marked for deletion.
 								.filter( ( cell ) => ! cell.isHidden )
 								// Keep only the properties needed.
 								.map( ( cell ) => ( {

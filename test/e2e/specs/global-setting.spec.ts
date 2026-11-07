@@ -37,7 +37,7 @@ async function loginAsEditor( page: Page ) {
 	await page.waitForURL( '**/wp-admin/**' );
 }
 
-test.describe( 'Global Setting', () => {
+test.describe( 'Global settings', () => {
 	test.afterEach( async ( { requestUtils } ) => {
 		// Restore the default settings.
 		await requestUtils.rest( {
@@ -58,15 +58,15 @@ test.describe( 'Global Setting', () => {
 			fsbUtils,
 		} ) => {
 			await fsbUtils.createFlexibleTableBlock();
-			// Open the global setting.
+			// Open the global settings.
 			await editor.openDocumentSettingsSidebar();
-			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
-			await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
-			const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
+			await page.getByRole( 'button', { name: 'Global settings', exact: true } ).click();
+			await page.getByRole( 'button', { name: 'Edit global settings' } ).click();
+			const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block global settings' } );
 			// Restore settings.
 			await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
 			await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-			await expect( modal.getByText( 'Global setting restored.', { exact: true } ) ).toBeVisible();
+			await expect( modal.getByText( 'Global settings restored.', { exact: true } ) ).toBeVisible();
 			await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
 			// Change table width.
 			await page.getByRole( 'spinbutton', { name: 'Table width' } ).fill( '90' );
@@ -79,8 +79,8 @@ test.describe( 'Global Setting', () => {
 			await page.getByRole( 'spinbutton', { name: 'Vertical' } ).fill( '20' );
 			// Change striped colors.
 			const tableColors = [
-				{ color: '111111', label: 'Background color ( odd rows )' },
-				{ color: '222222', label: 'Background color ( even rows )' },
+				{ color: '111111', label: 'Background color (odd rows)' },
+				{ color: '222222', label: 'Background color (even rows)' },
 			];
 			for ( const { color, label } of tableColors ) {
 				await modal.getByRole( 'button', { name: label, exact: true } ).click();
@@ -92,10 +92,10 @@ test.describe( 'Global Setting', () => {
 			await page.getByRole( 'tab', { name: 'Cell styles' } ).click();
 			// Change cell colors.
 			const cellColors = [
-				{ color: '333333', label: 'Cell text color ( th tag )' },
-				{ color: '444444', label: 'Cell text color ( td tag )' },
-				{ color: '555555', label: 'Cell background color ( th tag )' },
-				{ color: '666666', label: 'Cell background color ( td tag )' },
+				{ color: '333333', label: 'Cell text color (th tag)' },
+				{ color: '444444', label: 'Cell text color (td tag)' },
+				{ color: '555555', label: 'Cell background color (th tag)' },
+				{ color: '666666', label: 'Cell background color (td tag)' },
 				{ color: '777777', label: 'Cell border color' },
 			];
 			for ( const { color, label } of cellColors ) {
@@ -119,7 +119,7 @@ test.describe( 'Global Setting', () => {
 			await page.getByRole( 'button', { name: 'Align bottom' } ).click();
 			// Save settings.
 			await page.getByRole( 'button', { name: 'Save settings' } ).click();
-			await expect( modal.getByText( 'Global setting saved.', { exact: true } ) ).toBeVisible();
+			await expect( modal.getByText( 'Global settings saved.', { exact: true } ) ).toBeVisible();
 			await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
 
 			const selector = '.wp-block-flexible-table-block-table.wp-block-flexible-table-block-table';
@@ -138,7 +138,7 @@ test.describe( 'Global Setting', () => {
 			// Restore settings.
 			await page.getByRole( 'button', { name: 'Restore default settings' } ).click();
 			await page.getByRole( 'button', { name: 'Restore', exact: true } ).click();
-			await expect( modal.getByText( 'Global setting restored.', { exact: true } ) ).toBeVisible();
+			await expect( modal.getByText( 'Global settings restored.', { exact: true } ) ).toBeVisible();
 			await modal.getByRole( 'button', { name: 'Dismiss' } ).click();
 
 			const defaultRules = [
@@ -225,7 +225,7 @@ test.describe( 'Global Setting', () => {
 			} );
 		} );
 
-		test.describe( 'Show dot on th tag', () => {
+		test.describe( 'Show a dot on th cells', () => {
 			test( 'should show a dot on th cells when enabled', async ( { admin, editor, fsbUtils } ) => {
 				await admin.createNewPost();
 				await fsbUtils.createFlexibleTableBlock( { header: true } );
@@ -253,7 +253,7 @@ test.describe( 'Global Setting', () => {
 			} );
 		} );
 
-		test.describe( 'Use the tab key to move cells', () => {
+		test.describe( 'Use the Tab key to move between cells', () => {
 			test( 'should not move focus to the next cell with the tab key when disabled', async ( {
 				admin,
 				editor,
@@ -345,7 +345,7 @@ test.describe( 'Global Setting', () => {
 			await requestUtils.deleteAllUsers();
 		} );
 
-		test( 'should hide the global setting from non-administrators by default', async ( {
+		test( 'should hide the global settings from non-administrators by default', async ( {
 			admin,
 			editor,
 			page,
@@ -355,7 +355,7 @@ test.describe( 'Global Setting', () => {
 			await admin.createNewPost();
 			await fsbUtils.createFlexibleTableBlock();
 			await editor.openDocumentSettingsSidebar();
-			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
+			await page.getByRole( 'button', { name: 'Global settings', exact: true } ).click();
 			// Wait until the options and the user capability are resolved before checking that the button is hidden.
 			await expect
 				.poll( () =>
@@ -370,10 +370,10 @@ test.describe( 'Global Setting', () => {
 					)
 				)
 				.toBe( true );
-			await expect( page.getByRole( 'button', { name: 'Edit global setting' } ) ).toBeHidden();
+			await expect( page.getByRole( 'button', { name: 'Edit global settings' } ) ).toBeHidden();
 		} );
 
-		test( 'should allow non-administrators to save the global setting when enabled', async ( {
+		test( 'should allow non-administrators to save the global settings when enabled', async ( {
 			admin,
 			editor,
 			page,
@@ -385,9 +385,9 @@ test.describe( 'Global Setting', () => {
 			await admin.createNewPost();
 			await fsbUtils.createFlexibleTableBlock();
 			await editor.openDocumentSettingsSidebar();
-			await page.getByRole( 'button', { name: 'Global setting', exact: true } ).click();
-			await page.getByRole( 'button', { name: 'Edit global setting' } ).click();
-			const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block Global setting' } );
+			await page.getByRole( 'button', { name: 'Global settings', exact: true } ).click();
+			await page.getByRole( 'button', { name: 'Edit global settings' } ).click();
+			const modal = page.getByRole( 'dialog', { name: 'Flexible Table Block global settings' } );
 			// Administrator-only controls are not shown.
 			await expect(
 				modal.getByRole( 'button', { name: 'Restore default settings' } )
@@ -395,13 +395,13 @@ test.describe( 'Global Setting', () => {
 			await modal.getByRole( 'tab', { name: 'Editor options' } ).click();
 			await expect(
 				modal.getByRole( 'switch', {
-					name: 'Show Global setting button to non-administrative users',
+					name: 'Show the global settings button to non-administrators',
 				} )
 			).toBeHidden();
 			// Settings can still be saved.
-			await modal.getByRole( 'switch', { name: 'Use the tab key to move cells' } ).check();
+			await modal.getByRole( 'switch', { name: 'Use the Tab key to move between cells' } ).check();
 			await modal.getByRole( 'button', { name: 'Save settings' } ).click();
-			await expect( modal.getByText( 'Global setting saved.', { exact: true } ) ).toBeVisible();
+			await expect( modal.getByText( 'Global settings saved.', { exact: true } ) ).toBeVisible();
 		} );
 	} );
 } );

@@ -48,7 +48,7 @@ describe( 'helper', () => {
 	} );
 
 	describe( 'parseCssValue', () => {
-		it( 'should return array with four empty strings if falsy value is provided', () => {
+		it( 'should return an array with four empty strings if a falsy value is provided', () => {
 			expect( parseCssValue( undefined ) ).toStrictEqual( [ '', '', '', '' ] );
 			expect( parseCssValue( '' ) ).toStrictEqual( [ '', '', '', '' ] );
 		} );
@@ -116,7 +116,7 @@ describe( 'helper', () => {
 			expect( sanitizeUnitValue( '10CM' ) ).toBe( '10cm' );
 		} );
 
-		it( 'should return empty string if it is not a number or minus value', () => {
+		it( 'should return an empty string if it is not a number or is negative', () => {
 			expect( sanitizeUnitValue( '' ) ).toBe( '' );
 			expect( sanitizeUnitValue( '-10rem' ) ).toBe( '' );
 			expect( sanitizeUnitValue( 'red' ) ).toBe( '' );
@@ -146,7 +146,7 @@ describe( 'helper', () => {
 	} );
 
 	describe( 'parseUnit', () => {
-		it( 'should return taple', () => {
+		it( 'should return a tuple', () => {
 			expect( parseUnit( '10px' ) ).toStrictEqual( [ 10, 'px' ] );
 			expect( parseUnit( '10%' ) ).toStrictEqual( [ 10, '%' ] );
 		} );
@@ -156,7 +156,7 @@ describe( 'helper', () => {
 			expect( parseUnit( '10CM' ) ).toStrictEqual( [ 10, 'cm' ] );
 		} );
 
-		it( 'should return zero if it is not a number.', () => {
+		it( 'should return zero if it is not a number', () => {
 			expect( parseUnit( 'red' ) ).toStrictEqual( [ 0, '' ] );
 		} );
 	} );
@@ -172,7 +172,7 @@ describe( 'helper', () => {
 			expect( toInteger( '3.1415' ) ).toStrictEqual( 3 );
 		} );
 
-		it( 'should return the default value, if falsy is passed.', () => {
+		it( 'should return the default value if a falsy value is passed', () => {
 			expect( toInteger( '', 1 ) ).toStrictEqual( 1 );
 			expect( toInteger( undefined, 5 ) ).toStrictEqual( 5 );
 			expect( toInteger( 0, 5 ) ).toStrictEqual( 5 );

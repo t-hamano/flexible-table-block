@@ -39,7 +39,7 @@ export function convertToObject( inlineStyles: string | undefined ): Properties 
 }
 
 /**
- * Convert CSS styles object to Inline CSS styles.
+ * Convert a CSS styles object to inline CSS styles.
  *
  * @param stylesObj CSS styles object.
  * @return Inline CSS styles

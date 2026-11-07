@@ -92,7 +92,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		}
 	}, [ isSingleSelected ] );
 
-	// Create virtual table object with the cells placed in positions based on how they actually look.
+	// Create a virtual table object with the cells placed in positions based on how they actually look.
 	const vTable: VTable = toVirtualTable( attributes );
 
 	const onChangeContentJustification = ( value: ContentJustifyValue ) => {
@@ -107,7 +107,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const { sectionName, rowIndex, rowSpan } = selectedCells[ 0 ];
 
-		// Calculate row index to be inserted considering rowspan of the selected cell.
+		// Calculate the index of the row to insert, considering the rowspan of the selected cell.
 		const insertRowIndex = offset === 0 ? rowIndex : rowIndex + offset + rowSpan - 1;
 
 		const newVTable = insertRow( vTable, { sectionName, rowIndex: insertRowIndex } );
@@ -128,7 +128,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const { sectionName, rowIndex } = selectedCells[ 0 ];
 
-		// Do not allow tbody to be empty for table with thead /tfoot sections.
+		// Do not allow tbody to be empty when the table has thead or tfoot sections.
 		if (
 			sectionName === 'body' &&
 			vTable.body.length === 1 &&
@@ -162,7 +162,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 		const { vColIndex, colSpan } = selectedCells[ 0 ];
 
-		// Calculate column index to be inserted considering colspan of the selected cell.
+		// Calculate the index of the column to insert, considering the colspan of the selected cell.
 		const insertVColIndex = offset === 0 ? vColIndex : vColIndex + offset + colSpan - 1;
 
 		const newVTable = insertColumn( vTable, { vColIndex: insertVColIndex } );
@@ -323,7 +323,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 
 	const tableCellSettingsLabel =
 		selectedCells && selectedCells.length > 1
-			? __( 'Multi cells settings', 'flexible-table-block' )
+			? __( 'Multiple cell settings', 'flexible-table-block' )
 			: __( 'Cell settings', 'flexible-table-block' );
 
 	const tableCaptionProps = {
@@ -375,7 +375,7 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 					) }
 					<InspectorControls>
 						<PanelBody
-							title={ __( 'Global setting', 'flexible-table-block' ) }
+							title={ __( 'Global settings', 'flexible-table-block' ) }
 							initialOpen={ false }
 						>
 							<GlobalSettings />

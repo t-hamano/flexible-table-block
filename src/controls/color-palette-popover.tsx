@@ -61,7 +61,7 @@ export default function ColorPalettePopover( {
 				<div style={ { width: '228px' } }>
 					{ /*
 					 * Render the custom color picker inside this popover. Otherwise it is rendered
-					 * in a different place (e.g. inside the global setting dialog), where it is
+					 * in a different place (e.g. inside the global settings dialog), where it is
 					 * clipped by the dialog and hidden behind this popover.
 					 */ }
 					<ComponentsPopover.__unstableSlotNameProvider value={ slotName }>

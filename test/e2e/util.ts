@@ -57,7 +57,7 @@ export default class FlexibleTableBlockUtils {
 	}
 
 	/**
-	 * Returns the CSS that the global setting injects into the editor styles.
+	 * Returns the CSS that the global settings inject into the editor styles.
 	 */
 	async getGlobalSettingCss() {
 		return this.page.evaluate( () => {

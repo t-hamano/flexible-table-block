@@ -105,25 +105,25 @@ class Test_Api extends WP_UnitTestCase {
 				'role'                => null,
 				'expected_status'     => 401,
 			),
-			'subscriber cannot update options even if global setting is shown' => array(
+			'subscriber cannot update options even if global settings button is shown' => array(
 				'method'              => 'POST',
 				'show_global_setting' => true,
 				'role'                => 'subscriber',
 				'expected_status'     => 403,
 			),
-			'editor can update options if global setting is shown' => array(
+			'editor can update options if global settings button is shown' => array(
 				'method'              => 'POST',
 				'show_global_setting' => true,
 				'role'                => 'editor',
 				'expected_status'     => 200,
 			),
-			'editor cannot update options if global setting is hidden' => array(
+			'editor cannot update options if global settings button is hidden' => array(
 				'method'              => 'POST',
 				'show_global_setting' => false,
 				'role'                => 'editor',
 				'expected_status'     => 403,
 			),
-			'administrator can update options if global setting is hidden' => array(
+			'administrator can update options if global settings button is hidden' => array(
 				'method'              => 'POST',
 				'show_global_setting' => false,
 				'role'                => 'administrator',
@@ -135,7 +135,7 @@ class Test_Api extends WP_UnitTestCase {
 				'role'                => null,
 				'expected_status'     => 401,
 			),
-			'editor cannot delete options even if global setting is shown' => array(
+			'editor cannot delete options even if global settings button is shown' => array(
 				'method'              => 'DELETE',
 				'show_global_setting' => true,
 				'role'                => 'editor',

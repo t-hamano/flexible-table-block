@@ -46,7 +46,7 @@ test.describe( 'Flexible table', () => {
 	} );
 
 	test.describe( 'Merging and Splitting Cells', () => {
-		test( 'allows cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
+		test( 'allows cells side by side to be merged', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
@@ -61,7 +61,7 @@ test.describe( 'Flexible table', () => {
 			);
 		} );
 
-		test( 'allows cells in a vertical line to be merge', async ( { editor, page, fsbUtils } ) => {
+		test( 'allows cells in a vertical line to be merged', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
@@ -76,7 +76,7 @@ test.describe( 'Flexible table', () => {
 			);
 		} );
 
-		test( 'allows cells to be merge', async ( { editor, page, fsbUtils } ) => {
+		test( 'allows cells to be merged', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'textbox', { name: 'Body cell text' } ).nth( 0 ).click();
 			await page.keyboard.down( 'Shift' );
@@ -117,7 +117,7 @@ test.describe( 'Flexible table', () => {
 			await expect( mergeButton ).toBeDisabled();
 		} );
 
-		test( 'allows all cells side by side to be merge', async ( { editor, page, fsbUtils } ) => {
+		test( 'allows all cells side by side to be merged', async ( { editor, page, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock();
 			await editor.canvas.getByRole( 'button', { name: 'Select row' } ).nth( 0 ).click();
 			await editor.clickBlockToolbarButton( 'Edit table' );
@@ -129,7 +129,7 @@ test.describe( 'Flexible table', () => {
 			);
 		} );
 
-		test( 'allows all cells in a vertical line to be merge', async ( {
+		test( 'allows all cells in a vertical line to be merged', async ( {
 			editor,
 			page,
 			fsbUtils,
@@ -147,7 +147,7 @@ test.describe( 'Flexible table', () => {
 	} );
 
 	test.describe( 'Deleting Rows and Columns', () => {
-		test( 'allows to delete rows even if they contain merged cells', async ( {
+		test( 'allows deleting rows even if they contain merged cells', async ( {
 			editor,
 			page,
 			fsbUtils,
@@ -171,7 +171,7 @@ test.describe( 'Flexible table', () => {
 			);
 		} );
 
-		test( 'allows to delete column even if they contain merged cells.', async ( {
+		test( 'allows deleting columns even if they contain merged cells', async ( {
 			editor,
 			page,
 			fsbUtils,
@@ -197,7 +197,7 @@ test.describe( 'Flexible table', () => {
 			);
 		} );
 
-		test( 'allows to select and deselect the first column', async ( { editor, fsbUtils } ) => {
+		test( 'allows selecting and deselecting the first column', async ( { editor, fsbUtils } ) => {
 			await fsbUtils.createFlexibleTableBlock();
 			const selectColumnButton = editor.canvas
 				.getByRole( 'button', { name: 'Select column' } )
@@ -209,7 +209,7 @@ test.describe( 'Flexible table', () => {
 			await expect( selectColumnButton ).toHaveAttribute( 'aria-pressed', 'false' );
 		} );
 
-		test( 'disallows to delete the only row in the table body', async ( {
+		test( 'disallows deleting the only row in the table body', async ( {
 			editor,
 			page,
 			fsbUtils,
@@ -237,7 +237,7 @@ test.describe( 'Flexible table', () => {
 			{ type: 'row', selectLabel: 'Select row', deleteLabel: 'Delete row' },
 			{ type: 'column', selectLabel: 'Select column', deleteLabel: 'Delete column' },
 		].forEach( ( { type, selectLabel, deleteLabel } ) => {
-			test( `allows to reach the ${ type } delete button with the keyboard`, async ( {
+			test( `allows reaching the ${ type } delete button with the keyboard`, async ( {
 				editor,
 				page,
 				fsbUtils,
@@ -282,7 +282,7 @@ test.describe( 'Flexible table', () => {
 	} );
 
 	test.describe( 'Selecting Cells', () => {
-		test( 'disallows to select cells across sections (range select)', async ( {
+		test( 'disallows selecting cells across sections (range select)', async ( {
 			editor,
 			page,
 			fsbUtils,
@@ -297,10 +297,10 @@ test.describe( 'Flexible table', () => {
 				page.getByRole( 'button', {
 					name: 'Dismiss this notice',
 				} )
-			).toHaveText( 'Cannot select range cells from difference sections.' );
+			).toHaveText( 'Cannot select a range of cells across different sections.' );
 		} );
 
-		test( 'disallows to select cells across sections (multi select)', async ( {
+		test( 'disallows selecting cells across sections (multi-select)', async ( {
 			page,
 			editor,
 			fsbUtils,
@@ -314,7 +314,7 @@ test.describe( 'Flexible table', () => {
 				page.getByRole( 'button', {
 					name: 'Dismiss this notice',
 				} )
-			).toHaveText( 'Cannot select multi cells from difference sections.' );
+			).toHaveText( 'Cannot select multiple cells across different sections.' );
 		} );
 	} );
 
@@ -347,7 +347,7 @@ test.describe( 'Flexible table', () => {
 		];
 
 		for ( const { label, expected } of insertCases ) {
-			test( `allows to ${ label.toLowerCase() } from the toolbar`, async ( {
+			test( `should ${ label.toLowerCase() } from the toolbar`, async ( {
 				editor,
 				page,
 				fsbUtils,
@@ -363,7 +363,7 @@ test.describe( 'Flexible table', () => {
 				expect( await editor.getEditedPostContent() ).toBe( expected );
 			} );
 
-			test( `allows to ${ label.toLowerCase() } from the button in the table`, async ( {
+			test( `should ${ label.toLowerCase() } from the button in the table`, async ( {
 				editor,
 				fsbUtils,
 			} ) => {
@@ -380,7 +380,7 @@ test.describe( 'Flexible table', () => {
 	} );
 
 	test.describe( 'Table Justification', () => {
-		test( 'allows to change and reset the table justification', async ( {
+		test( 'allows changing and resetting the table justification', async ( {
 			editor,
 			page,
 			fsbUtils,

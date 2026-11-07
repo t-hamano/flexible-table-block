@@ -43,7 +43,7 @@ export default function GlobalSettings() {
 				{ ! hasResolved && <Spinner /> }
 				{ hasResolved && showGlobalSetting && (
 					<Button onClick={ () => setIsSettingModalOpen( true ) } size="compact">
-						{ __( 'Edit global setting', 'flexible-table-block' ) }
+						{ __( 'Edit global settings', 'flexible-table-block' ) }
 					</Button>
 				) }
 				<IconButton

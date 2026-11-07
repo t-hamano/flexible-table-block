@@ -29,7 +29,7 @@ import {
 // Custom store name.
 export const STORE_NAME = 'flexible-table-block' as const;
 
-// Rest API routes.
+// REST API routes.
 export const REST_API_ROUTE = '/flexible-table-block/v1/options' as const;
 
 // Table placeholder default settings.
@@ -77,7 +77,7 @@ export const CELL_ARIA_LABEL = {
 	foot: __( 'Footer cell text', 'flexible-table-block' ),
 } as const;
 
-// Controls variations.
+// Control variations.
 export const CONTENT_JUSTIFY_CONTROLS = [
 	{
 		icon: justifyLeft,
@@ -99,7 +99,7 @@ export const CONTENT_JUSTIFY_CONTROLS = [
 export const BORDER_COLLAPSE_CONTROLS = [
 	{
 		icon: borderCollapseIcon,
-		label: _x( 'Share', 'border-collapse value', 'flexible-table-block' ),
+		label: _x( 'Shared', 'border-collapse value', 'flexible-table-block' ),
 		value: 'collapse',
 	},
 	{
@@ -170,7 +170,7 @@ export const VERTICAL_ALIGNMENT_CONTROLS = [
 
 export const STICKY_CONTROLS = [
 	{
-		label: _x( 'none', 'Fixed control', 'flexible-table-block' ),
+		label: _x( 'None', 'Fixed control', 'flexible-table-block' ),
 		value: 'none',
 	},
 	{

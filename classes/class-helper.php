@@ -32,7 +32,7 @@ class Helper {
 
 		$option = get_option( Settings::OPTION_PREFIX . 'block_style', Settings::OPTIONS['block_style']['default'] );
 
-		// Genelate styles based on Global setting.
+		// Generate styles based on the global settings.
 		foreach ( $option as $key => $value ) {
 			if ( '' === $value || null === $value ) {
 				continue;

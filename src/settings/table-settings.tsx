@@ -256,7 +256,7 @@ export default function TableSettings( {
 					description={
 						options.breakpoint
 							? sprintf(
-									/* translators: %d is replaced with the number of breakpoint. */
+									/* translators: %d: Breakpoint in pixels. */
 									__( 'When the screen width is %dpx or more.', 'flexible-table-block' ),
 									Math.abs( options.breakpoint ) + 1
 								)
@@ -271,7 +271,7 @@ export default function TableSettings( {
 					description={
 						options.breakpoint
 							? sprintf(
-									/* translators: %d is replaced with the number of breakpoint. */
+									/* translators: %d: Breakpoint in pixels. */
 									__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
 									options.breakpoint
 								)
@@ -286,7 +286,7 @@ export default function TableSettings( {
 					description={
 						options.breakpoint
 							? sprintf(
-									/* translators: %d is replaced with the number of breakpoint. */
+									/* translators: %d: Breakpoint in pixels. */
 									__( 'When the screen width is %dpx or less.', 'flexible-table-block' ),
 									options.breakpoint
 								)
@@ -382,7 +382,7 @@ export default function TableSettings( {
 				className="ftb-table-settings-padding"
 				label={ __( 'Table padding', 'flexible-table-block' ) }
 				help={ __(
-					'Table padding is only enabled when "Cell Borders" is set to "Separate".',
+					'Table padding is only enabled when "Cell borders" is set to "Separate".',
 					'flexible-table-block'
 				) }
 				values={ pickPadding( tableStylesObj ) }
@@ -399,7 +399,7 @@ export default function TableSettings( {
 				className="ftb-table-settings-border-width"
 				label={ __( 'Table border width', 'flexible-table-block' ) }
 				help={ __(
-					'Table border width is only enabled when "Cell Borders" is set to "Separate".',
+					'Table border width is only enabled when "Cell borders" is set to "Separate".',
 					'flexible-table-block'
 				) }
 				values={ pickBorderWidth( tableStylesObj ) }

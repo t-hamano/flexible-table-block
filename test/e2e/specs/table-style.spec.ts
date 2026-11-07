@@ -14,7 +14,7 @@ import type { PageUtils } from '@wordpress/e2e-test-utils-playwright';
 import { test, expect } from '../util';
 
 async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
-	// Font Size, Line Hiehgt, Width styles.
+	// Font Size, Line Height, Width styles.
 	await page.getByRole( 'spinbutton', { name: 'Cell font size' } ).fill( '20' );
 	await page.getByRole( 'spinbutton', { name: 'Cell line height' } ).fill( '2' );
 	await page.getByRole( 'spinbutton', { name: 'Cell width' } ).fill( '100' );
@@ -58,7 +58,7 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 		}
 	}
 
-	// Boder Style styles.
+	// Border Style styles.
 	const cellBorderStyle = page.getByRole( 'group', { name: 'Cell border style' } );
 	await cellBorderStyle.getByRole( 'button', { name: 'Unlink sides' } ).click();
 	await cellBorderStyle
@@ -106,7 +106,7 @@ async function applyCellStyles( page: Page, pageUtils: PageUtils ) {
 	await page.getByRole( 'radio', { name: 'TH' } ).click();
 	// Cell CSS class.
 	await page.getByRole( 'textbox', { name: 'Cell CSS class(es)' } ).fill( 'custom' );
-	// id, headers, scope getBlockAttributes.
+	// id, headers, and scope attributes.
 	await page.getByRole( 'textbox', { name: 'id attribute' } ).fill( 'id' );
 	await page.getByRole( 'textbox', { name: 'headers attribute' } ).fill( 'headers' );
 	await page.getByRole( 'combobox', { name: 'scope attribute' } ).click();
@@ -171,7 +171,7 @@ test.describe( 'Styles', () => {
 			}
 		}
 
-		// Boder Style styles.
+		// Border Style styles.
 		const tableBorderStyle = page.getByRole( 'group', { name: 'Table border style' } );
 		await tableBorderStyle.getByRole( 'button', { name: 'Unlink sides' } ).click();
 		await tableBorderStyle
@@ -254,7 +254,7 @@ test.describe( 'Styles', () => {
 			.getByRole( 'region', { name: 'Editor settings' } )
 			.getByRole( 'tab', { name: 'Settings' } )
 			.click();
-		await page.getByRole( 'button', { name: 'Multi cells settings' } ).click();
+		await page.getByRole( 'button', { name: 'Multiple cell settings' } ).click();
 		await applyCellStyles( page, pageUtils );
 		expect( await editor.getEditedPostContent() ).toBe(
 			`<!-- wp:flexible-table-block/table -->

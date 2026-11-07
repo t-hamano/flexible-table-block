@@ -109,11 +109,11 @@ export default function TablePlaceholder( { setAttributes }: Props ) {
 				{ createInterpolateElement(
 					isAppleOS()
 						? __(
-								'Hint: Hold <code>Command</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
+								'Hint: Hold the <code>Command</code> key to select multiple cells. Hold the <code>Shift</code> key to select a range.',
 								'flexible-table-block'
 							)
 						: __(
-								'Hint: Hold <code>Ctrl</code> key to select multiple cells. Hold <code>Shift</code> key to select the range.',
+								'Hint: Hold the <code>Ctrl</code> key to select multiple cells. Hold the <code>Shift</code> key to select a range.',
 								'flexible-table-block'
 							),
 					{ code: <code /> }

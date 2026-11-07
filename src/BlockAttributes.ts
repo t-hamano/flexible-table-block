@@ -17,7 +17,7 @@ type NestedObject = {
 	[ key: string ]: NestedObject | null | undefined;
 };
 
-// Controls Attributes value types
+// Control attribute value types
 export type CaptionSideValue = ( typeof CAPTION_SIDE_CONTROLS )[ number ][ 'value' ];
 export type CellTagValue = ( typeof CELL_TAG_CONTROLS )[ number ][ 'value' ];
 export type CellScopeValue = ( typeof CELL_SCOPE_CONTROLS )[ number ][ 'value' ];

@@ -20,22 +20,22 @@ class Settings {
 			'type'    => 'boolean',
 			'default' => true,
 		),
-		// Show insert row/column buttons.
+		// Show buttons to insert and select rows and columns.
 		'show_control_button'   => array(
 			'type'    => 'boolean',
 			'default' => true,
 		),
-		// Focus insert/select buttons, select row/column buttons, section label from being focused when moving with the crosshairs.
+		// Allow the Tab key to move focus to section labels and the buttons to insert and select rows and columns.
 		'focus_control_button'  => array(
 			'type'    => 'boolean',
 			'default' => false,
 		),
-		// Show dot on th tag in the editor.
+		// Show a dot on th cells in the editor.
 		'show_dot_on_th'        => array(
 			'type'    => 'boolean',
 			'default' => true,
 		),
-		// Use the TAB key to move cells.
+		// Use the Tab key to move between cells.
 		'tab_move'              => array(
 			'type'    => 'boolean',
 			'default' => false,
@@ -45,12 +45,12 @@ class Settings {
 			'type'    => 'boolean',
 			'default' => false,
 		),
-		// Show Global setting button to non-administrative users.
+		// Show the global settings button to non-administrators.
 		'show_global_setting'   => array(
 			'type'    => 'boolean',
 			'default' => false,
 		),
-		// Set the screen width (breakpoint) as the basis for switching between desktop and mobile devices.
+		// Screen width (breakpoint) for switching between desktop and mobile views.
 		'breakpoint'            => array(
 			'type'    => 'number',
 			'default' => 768,
