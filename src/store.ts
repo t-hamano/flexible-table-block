@@ -38,6 +38,10 @@ export interface StoreOptions {
 		row_odd_color?: string;
 		row_even_color?: string;
 		table_border_collapse?: string;
+		table_border_spacing?: {
+			horizontal?: string;
+			vertical?: string;
+		};
 		cell_text_color_th?: string;
 		cell_text_color_td?: string;
 		cell_background_color_th?: string;

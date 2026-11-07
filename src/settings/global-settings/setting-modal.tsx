@@ -47,6 +47,7 @@ import {
 	REST_API_ROUTE,
 } from '../../constants';
 import {
+	BorderSpacingControl,
 	BorderWidthControl,
 	BorderStyleControl,
 	ColorControl,
@@ -302,6 +303,17 @@ export default function SettingModal( {
 												) ) }
 											</ToggleGroupControl>
 										</div>
+										{ 'separate' === currentOptions.block_style?.table_border_collapse && (
+											<div className="ftb-global-setting-modal__styles-item">
+												<BorderSpacingControl
+													label={ __( 'Border spacing', 'flexible-table-block' ) }
+													values={ currentOptions.block_style?.table_border_spacing || {} }
+													onChange={ ( values ) =>
+														setBlockStyle( 'table_border_spacing', cleanEmptyObject( values ) )
+													}
+												/>
+											</div>
+										) }
 									</div>
 									<Text variant="heading-md" render={ <h5 /> }>
 										{ __( 'Default striped table styles', 'flexible-table-block' ) }
