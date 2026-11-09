@@ -3,8 +3,8 @@ Contributors: wildworks, Toro_Unit
 Tags: gutenberg, block, table
 Donate link: https://www.paypal.me/thamanoJP
 Requires at least: 7.1
-Tested up to: 7.1
-Stable tag: 3.9.0
+Tested up to: 7.2
+Stable tag: 3.10.0
 Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,33 @@ You can change the editor behavior, such as whether to show section labels and c
 * Source: https://openverse.org/image/5438640e-83e1-4759-8691-1f87086fd651
 
 == Changelog ==
+
+= 3.10.0 =
+* Tested up to WordPress 7.2
+* Drop support for WordPress 7.0
+* Drop support for PHP 8.0 and 8.1
+* Feature: Add border spacing setting to the global settings
+* Enhancement: Replace UI components with @wordpress/ui
+* Enhancement: Polish UI in the Global Settings modal
+* Enhancement: Improve editing performance for large tables
+* Enhancement: Improve UI text and fix typos
+* Enhancement: Add translation context to ambiguous strings
+* Change: Register block assets via block.json. The front-end style handle is now `flexible-table-block-table-style`
+* Fix: RTL styles are not loaded
+* Fix: Undo reverts too much after changing the table structure
+* Fix: Row and column delete buttons are cut off at the edge of the editor canvas
+* Fix: Range selection does not expand to a rectangle with merged cells
+* Fix: Wrong cell positions when splitting merged cells or inserting a column after the last column
+* Fix: The first column cannot be deselected
+* Fix: Cell is not selected after moving with Shift+Tab
+* Fix: Crash when rowspan or colspan overflows the table
+* Fix: Inline styles containing url(), custom properties, or vendor prefixes are not parsed correctly
+* Fix: Values such as var() or calc() on other sides are lost when editing one side of padding, border width, or border radius
+* Fix: Border spacing is broken when only one direction is set
+* Fix: Error handling when saving or restoring global settings
+* Fix: PHP warning when the saved global settings have no cell padding
+* Security: Harden permission checks and CSS value validation in global settings
+* a11y: Improve accessible names and values of color controls
 
 = 3.9.0 =
 * Tested up to WordPress 7.1

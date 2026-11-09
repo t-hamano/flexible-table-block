@@ -4,7 +4,7 @@
  * Description: Easily create tables in any configuration.
  * Requires at least: 7.1
  * Requires PHP: 8.2
- * Version: 3.9.0
+ * Version: 3.10.0
  * Author: Aki Hamano
  * Author URI: https://github.com/t-hamano
  * License: GPL2 or later
