@@ -181,6 +181,21 @@ class Test_Api extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Tests that only administrators can change show_global_setting.
+	 */
+	public function test_update_options_show_global_setting_requires_manage_options() {
+		update_option( Settings::OPTION_PREFIX . 'show_global_setting', 1 );
+
+		wp_set_current_user( self::$users['editor'] );
+		$this->request( 'POST', array( 'show_global_setting' => false ) );
+		$this->assertSame( 1, (int) get_option( Settings::OPTION_PREFIX . 'show_global_setting' ) );
+
+		wp_set_current_user( self::$users['administrator'] );
+		$this->request( 'POST', array( 'show_global_setting' => false ) );
+		$this->assertSame( 0, (int) get_option( Settings::OPTION_PREFIX . 'show_global_setting' ) );
+	}
+
+	/**
 	 * Tests that unknown keys are not saved.
 	 */
 	public function test_update_options_drops_unknown_keys() {

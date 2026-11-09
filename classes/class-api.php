@@ -85,6 +85,11 @@ class Api {
 				continue;
 			}
 
+			// Only administrators can change who has access to Global setting.
+			if ( 'show_global_setting' === $key && ! current_user_can( 'manage_options' ) ) {
+				continue;
+			}
+
 			if ( 'boolean' === Settings::OPTIONS[ $key ]['type'] ) {
 				$value = $value ? 1 : 0;
 			}

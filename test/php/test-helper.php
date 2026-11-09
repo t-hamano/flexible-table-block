@@ -48,6 +48,11 @@ class Test_Helper extends WP_UnitTestCase {
 			'unknown function'       => array( 'color', 'foo(0 0 0)' ),
 			'unsafe color function'  => array( 'color', 'rgb(0 0 0) url(x)' ),
 			'comment after function' => array( 'color', 'rgb(0 0 0)/**/' ),
+			'quoted parenthesis'     => array( 'color', "rgb('(')}body{display:none}(')')" ),
+			'double quoted'          => array( 'color', 'rgb("(")}*{color:red}(")")' ),
+			'brace in function'      => array( 'color', 'rgb(}*{background:url(//x)})' ),
+			'quoted calc()'          => array( 'width', "calc('(')}body{display:none}(')')" ),
+			'quoted var()'           => array( 'color', "var('(')}body{display:none}(')')" ),
 		);
 	}
 
@@ -138,6 +143,8 @@ class Test_Helper extends WP_UnitTestCase {
 			'ampersand'              => array( 'color:rgb(0 0 0)&', false ),
 			'equals sign'            => array( 'color:rgb(0 0 0)=', false ),
 			'closing brace'          => array( 'color:rgb(0 0 0)}', false ),
+			'quote in function'      => array( "color:rgb('(')}*{}(')')", false ),
+			'brace in function'      => array( 'color:rgb(})', false ),
 			'comment'                => array( 'color:rgb(0 0 0)/*', false ),
 		);
 	}

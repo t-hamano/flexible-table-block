@@ -160,8 +160,10 @@ class Helper {
 		}
 
 		// safecss_filter_attr() does not remove these; reject to stay inside the
-		// surrounding <style> element.
-		if ( false !== strpos( $value, '<' ) || false !== strpos( $value, '>' ) ) {
+		// surrounding <style> element and the current CSS rule. Quotes are
+		// rejected because core counts parentheses inside strings, so a quoted
+		// `(` can hide a `}` inside functions such as calc() or var().
+		if ( false !== strpbrk( $value, '<>{}"\'' ) ) {
 			return '';
 		}
 
@@ -195,8 +197,10 @@ class Helper {
 			return $allow_css;
 		}
 
+		// Arguments may only contain numbers, units, keywords, hex colors, and
+		// separators, so that quotes or braces cannot hide inside the function.
 		$stripped = preg_replace(
-			'/\b(?:rgba|rgb|hsla|hsl|hwb|oklab|oklch|lab|lch|color-mix|color)(\((?:[^()]|(?1))*\))/i',
+			'/\b(?:rgba|rgb|hsla|hsl|hwb|oklab|oklch|lab|lch|color-mix|color)(\((?:[\w\s.,%#\/+-]|(?1))*\))/i',
 			'',
 			$css_test_string
 		);
