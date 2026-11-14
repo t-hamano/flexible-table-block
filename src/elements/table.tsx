@@ -11,7 +11,6 @@ import type { Dispatch, SetStateAction, MouseEvent, KeyboardEvent } from 'react'
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect, useLayoutEffect, useMemo, useRef } from '@wordpress/element';
 import {
-	// @ts-expect-error Not exported in the type definitions.
 	__experimentalUseColorProps as useColorProps,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
@@ -86,10 +85,8 @@ export default function Table( {
 
 	const tableRef = useRef( null );
 	const { createWarningNotice } = useDispatch( noticesStore );
-	const {
-		// @ts-expect-error Not exported in the type definitions.
-		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
-	} = useDispatch( blockEditorStore );
+	const { __unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent } =
+		useDispatch( blockEditorStore );
 
 	// Use a ref so the flag survives re-renders and the focus handler reads the latest value.
 	const isTabMoveRef = useRef( false );

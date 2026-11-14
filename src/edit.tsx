@@ -77,10 +77,8 @@ function TableEdit( props: BlockEditProps< BlockAttributes > ) {
 		return select( ftbStore ).getOptions();
 	}, [] );
 	const { createWarningNotice } = useDispatch( noticesStore );
-	const {
-		// @ts-expect-error Not exported in the type definitions.
-		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
-	} = useDispatch( blockEditorStore );
+	const { __unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent } =
+		useDispatch( blockEditorStore );
 	const blockEditingMode = useBlockEditingMode();
 	const isContentOnlyMode = blockEditingMode === 'contentOnly';
 
