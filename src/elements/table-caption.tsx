@@ -103,7 +103,6 @@ export default function TableCaption( {
 						setSelectedLine( undefined );
 						setSelectedCells( undefined );
 					} }
-					// @ts-expect-error `__unstableOnSplitAtEnd` is missing from the type definitions.
 					__unstableOnSplitAtEnd={ () => insertBlocksAfter( [ createBlock( 'core/paragraph' ) ] ) }
 				/>
 			) }

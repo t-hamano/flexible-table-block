@@ -1,4 +1,9 @@
 /**
+ * WordPress dependencies
+ */
+import type { __experimentalUseColorProps as useColorProps } from '@wordpress/block-editor';
+
+/**
  * Internal dependencies
  */
 import type {
@@ -52,20 +57,26 @@ export interface Cell {
 	colSpan?: string;
 }
 
+// Color support attributes
+type ColorAttributes = Pick<
+	Parameters< typeof useColorProps >[ 0 ],
+	'backgroundColor' | 'textColor' | 'gradient' | 'style'
+>;
+
 // Block attributes
-export type BlockAttributes = TableAttributes & {
-	contentJustification: ContentJustifyValue | undefined;
-	hasFixedLayout: boolean;
-	isScrollOnPc: boolean;
-	isScrollOnMobile: boolean;
-	isStackedOnMobile: boolean;
-	sticky: StickyValue;
-	tableStyles?: string;
-	captionStyles?: string;
-	captionSide: CaptionSideValue;
-	caption?: string;
-	style?: NestedObject;
-};
+export type BlockAttributes = TableAttributes &
+	ColorAttributes & {
+		contentJustification: ContentJustifyValue | undefined;
+		hasFixedLayout: boolean;
+		isScrollOnPc: boolean;
+		isScrollOnMobile: boolean;
+		isStackedOnMobile: boolean;
+		sticky: StickyValue;
+		tableStyles?: string;
+		captionStyles?: string;
+		captionSide: CaptionSideValue;
+		caption?: string;
+	};
 
 // Core Table Block attributes
 export type CoreTableBlockAttributes = Record< SectionName, { cells: CoreTableCell[] }[] > & {

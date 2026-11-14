@@ -36,10 +36,8 @@ type Props = {
 };
 
 export default function TablePlaceholder( { setAttributes }: Props ) {
-	const {
-		// @ts-expect-error Not exported in the type definitions.
-		__unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent,
-	} = useDispatch( blockEditorStore );
+	const { __unstableMarkLastChangeAsPersistent: markLastChangeAsPersistent } =
+		useDispatch( blockEditorStore );
 	const [ rowCount, setRowCount ] = useState< number | undefined >( DEFAULT_PREVIEW_ROWS );
 	const [ colCount, setColCount ] = useState< number | undefined >( DEFAULT_PREVIEW_COLUMNS );
 	const [ headerSection, setHeaderSection ] = useState( false );

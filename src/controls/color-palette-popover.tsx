@@ -34,7 +34,7 @@ export default function ColorPalettePopover( {
 	colors: colorsProp = [],
 	anchor,
 }: Props ) {
-	const [ palette ]: ( Color[] | undefined )[] = useSettings( 'color.palette' );
+	const [ palette ] = useSettings( 'color.palette' ) as [ Color[] | undefined ];
 	const slotName = useInstanceId( ColorPalettePopover, 'ftb-color-palette-popover-slot' );
 
 	const handleOnOpenChange = ( open: boolean ) => {
