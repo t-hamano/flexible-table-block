@@ -26,7 +26,7 @@ class Api {
 	public function register_routes() {
 
 		register_rest_route(
-			FTB_NAMESPACE . '/v1',
+			FLEXIBLE_TABLE_BLOCK_NAMESPACE . '/v1',
 			'/options',
 			array(
 				array(

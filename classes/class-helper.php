@@ -16,7 +16,7 @@ class Helper {
 	 */
 	public static function get_block_css() {
 		// The doubled class increases specificity. The block editor scopes this CSS by itself.
-		$selector = '.' . FTB_BLOCK_CLASS . '.' . FTB_BLOCK_CLASS;
+		$selector = '.' . FLEXIBLE_TABLE_BLOCK_BLOCK_CLASS . '.' . FLEXIBLE_TABLE_BLOCK_BLOCK_CLASS;
 
 		// CSS selectors.
 		$styles = array(
@@ -115,7 +115,7 @@ class Helper {
 	 * @return string
 	 */
 	public static function get_responsive_css( $prefix = '' ) {
-		$selector   = "{$prefix}." . FTB_BLOCK_CLASS;
+		$selector   = "{$prefix}." . FLEXIBLE_TABLE_BLOCK_BLOCK_CLASS;
 		$breakpoint = get_option( Settings::OPTION_PREFIX . 'breakpoint', Settings::OPTIONS['breakpoint']['default'] );
 		$max_width  = $breakpoint;
 		$min_width  = $max_width + 1;

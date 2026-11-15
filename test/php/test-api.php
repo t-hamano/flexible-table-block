@@ -164,7 +164,7 @@ class Test_Api extends WP_UnitTestCase {
 		}
 
 		$this->assertArrayHasKey( 'block_css', $data );
-		$this->assertStringContainsString( '.' . FTB_BLOCK_CLASS, $data['block_css'] );
+		$this->assertStringContainsString( '.' . FLEXIBLE_TABLE_BLOCK_BLOCK_CLASS, $data['block_css'] );
 	}
 
 	/**

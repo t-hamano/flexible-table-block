@@ -27,7 +27,7 @@ class Enqueue {
 	 * Register block
 	 */
 	public function register_block() {
-		register_block_type( FTB_PATH . '/build' );
+		register_block_type( FLEXIBLE_TABLE_BLOCK_PATH . '/build' );
 	}
 
 	/**
