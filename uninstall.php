@@ -9,6 +9,8 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
 require_once __DIR__ . '/classes/class-settings.php';
 
+// This file is loaded inside uninstall_plugin(), so the variable is not global.
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 foreach ( array_keys( Flexible_Table_Block\Settings::OPTIONS ) as $key ) {
 	delete_option( Flexible_Table_Block\Settings::OPTION_PREFIX . $key );
 }
